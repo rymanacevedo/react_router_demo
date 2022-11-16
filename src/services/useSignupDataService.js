@@ -22,11 +22,14 @@ const useSignupDataService = () => {
 			};
 
 			const signUpResponse = await axios({
-				url: `${window.KF.state.baseUri}/v2/users/${userAltKey}/initial-credentials`,
-				headers: { 'Content-Type': 'application/json' },
-				body: signupBody,
-				dataType: 'json',
 				method: 'post',
+				url: `${window.KF.state.baseUri}/v2/users/${userAltKey}/initial-credentials`,
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+				data: signupBody,
+				dataType: 'json',
 			});
 			return signUpResponse.data;
 		} catch (err) {
