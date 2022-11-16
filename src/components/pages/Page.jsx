@@ -1,4 +1,4 @@
-import ModuleIntroductionComponent from '../ui/ModuleIntroductionComponent';
+import AssignmentList from '../ui/AssignmentList';
 import { Spinner } from '@chakra-ui/react';
 import useModuleContentService from '../../services/useModuleContentService';
 
@@ -19,6 +19,7 @@ const Page = ({ id, header, content }) => {
 						size="xl"
 					/>
 				) : (
+<<<<<<< HEAD:src/components/pages/Page.jsx
 					<ModuleIntroductionComponent
 						moduleName={data.name}
 						introductionRc={data.introductionRc}
@@ -27,6 +28,9 @@ const Page = ({ id, header, content }) => {
 						testTimeText={'About 45 minutes'}
 						proceedBtnText={'lets begin'}
 					/>
+=======
+					<AssignmentList />
+>>>>>>> 7bdc82135 (Feat: create assignmentList component):main/src/components/pages/Page.jsx
 				)}
 			</main>
 		</>
