@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 import {
   HStack,
   List,
   ListItem,
   Text
 } from '@chakra-ui/react';
+=======
+import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
 const AssignmentList = () => {
 
+<<<<<<< HEAD
   const mockData = {
     "displayCurriculum": {
       "curricKey": "96WJCR6EP-1",
@@ -79,5 +84,105 @@ const AssignmentList = () => {
       {assignmentList}
     </List>)
 }
+=======
+	console.log(mockData);
+
+	const getAssignmentText = (assignment) => {
+		if (assignment.assignmentType !== 'TimedAssessment') {
+			switch (assignment.status) {
+				case 'NOT_STARTED': {
+					return (
+						<Text fontSize={'12px'}>
+							{assignment.estimatedTimeToComplete &&
+								`~${Math.floor(assignment.estimatedTimeToComplete / 60)}
+							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}`}
+						</Text>
+					);
+					break;
+				}
+				case 'IN_PROGRESS': {
+					return (
+						<Text fontSize={'12px'}>
+							{`~${Math.floor(assignment.estimatedTimeToComplete / 60)}
+							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}
+							left`}
+						</Text>
+					);
+					break;
+				}
+				case 'COMPLETED': {
+					return <Text fontSize={'12px'}>Refresher available</Text>;
+					break;
+				}
+			}
+		} else {
+			switch (assignment.status) {
+				case 'NOT_STARTED': {
+					return (
+						<Text fontSize={'12px'}>
+							{assignment.estimatedTimeToComplete &&
+								`~${Math.floor(
+									assignment.estimatedTimeToComplete / 60,
+								)} min to complete`}
+						</Text>
+					);
+					break;
+				}
+				case 'COMPLETED': {
+					return <Text fontSize={'12px'}>Attempts</Text>;
+					break;
+				}
+			}
+		}
+	};
+
+	const assignmentList = mockData.displayCurriculum.children.map(
+		(curriculum, index) => {
+			const assignment =
+				curriculum.assignments[curriculum.assignments.length - 1];
+
+			console.log(assignment);
+
+			return (
+				<ListItem height={'44px'} padding={'4px'} key={curriculum.name}>
+					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+						<Text
+							_hover={{
+								textDecoration: 'underline',
+								color: 'ampPrimary.300 ',
+								cursor: 'pointer',
+							}}
+							fontSize={'21px'}
+							fontWeight={'bold'}>
+							{curriculum.name}
+						</Text>
+						<Text>{getAssignmentText(assignment)}</Text>
+					</HStack>
+					{index !== mockData.displayCurriculum.children.length - 1 && (
+						<Divider
+							borderWidth="1px"
+							borderStyle="solid"
+							borderRadius="10"
+							borderColor="#AFB3B4"
+						/>
+					)}
+				</ListItem>
+			);
+		},
+	);
+	return (
+		<List
+			spacing={3}
+			bg="ampWhite"
+			borderRadius={'12px'}
+			padding={'16px'}
+			border={'1px'}
+			borderColor={'ampNeutral.300'}
+			width={'800px'}>
+			{assignmentList}
+		</List>
+	);
+};
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
 export default AssignmentList;
