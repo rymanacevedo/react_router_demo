@@ -73,6 +73,7 @@ const resources = {
          accountUrlErrorText: "Account not recognized. Please check the account name in the URL.",
          passcode: "Passcode",
          pleaseEnterPasscode: "Please enter your passcode.",
+<<<<<<< HEAD:src/i18n.js
          //////////////////////////////////
          //    AssignmentList.js
          //////////////////////////////////
@@ -83,6 +84,9 @@ const resources = {
          refresherAvailable: 'Refresher Available',
 
 >>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
+=======
+         usernameUnavailable: "This username is already in use. Please try another."
+>>>>>>> ec0b35609 (added error message):main/src/i18n.js
       }
    },
    fr: {

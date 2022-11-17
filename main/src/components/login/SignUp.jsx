@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Link as ReactRouterLink,
 	useNavigate,
@@ -18,6 +18,8 @@ import {
 	Heading,
 	Input,
 	Link,
+	UnorderedList,
+	ListItem,
 	Text,
 	VStack,
 } from '@chakra-ui/react';
@@ -38,15 +40,13 @@ function SignUp() {
 	const [captchaRes, setCaptchaRes] = useState(null);
 	const [showForm, setShowForm] = useState(true);
 	const [verified, setVerified] = useState(false);
-
-	const [disabled, setDisabled] = useState(true);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [formError, setFormError] = useState({
 		username: false,
 		password: false,
 		confirmPassword: false,
 	});
-	const [error] = useState('');
+	const recaptchaRef = useRef();
 
 	const { postSignupData } = useSignupDataService();
 
@@ -56,10 +56,8 @@ function SignUp() {
 
 	const handleUsernameValidation = () => {
 		if (!username) {
-			setErrorMessage(i18n('enterUsername'));
 			setFormError((prevValue) => ({ ...prevValue, username: true }));
 		} else {
-			setErrorMessage('');
 			setFormError((prevValue) => ({ ...prevValue, username: false }));
 		}
 	};
@@ -73,10 +71,8 @@ function SignUp() {
 			!password ||
 			!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)
 		) {
-			setErrorMessage(i18n('enterPassword'));
 			setFormError((prevValue) => ({ ...prevValue, password: true }));
 		} else {
-			setErrorMessage('');
 			setFormError((prevValue) => ({ ...prevValue, password: false }));
 		}
 	};
@@ -87,15 +83,15 @@ function SignUp() {
 
 	const handleConfirmPasswordValidation = () => {
 		if (!confirmPassword) {
-			setErrorMessage(i18n('reenterPasswordFormLabel'));
 			setFormError((prevValue) => ({ ...prevValue, confirmPassword: true }));
 		}
 
 		if (confirmPassword !== password) {
 			setErrorMessage(i18n('passwordsDoNotMatch'));
-		} else {
-			setErrorMessage('');
+			setFormError((prevValue) => ({ ...prevValue, confirmPassword: true }));
+		} else if (confirmPassword && confirmPassword === password) {
 			setFormError((prevValue) => ({ ...prevValue, confirmPassword: false }));
+			setErrorMessage('');
 		}
 	};
 
@@ -114,18 +110,21 @@ function SignUp() {
 		if (value) {
 			setCaptchaRes(value);
 			setVerified(true);
-			setDisabled(false);
 		}
 	};
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
+		setErrorMessage('');
 
 		if (!verified) {
 			setErrorMessage(i18n('pleaseCompleteRecaptcha'));
 		}
 
 		if (verified && password === confirmPassword) {
+			recaptchaRef.current.reset();
+			setVerified(false);
+
 			const signUpRes = await postSignupData(
 				context.accountUid,
 				userAltKey,
@@ -134,7 +133,13 @@ function SignUp() {
 				captchaRes,
 			);
 
-			if (signUpRes.status === 201) {
+			if (
+				signUpRes?.response?.data?.errorMessage === 'username is not available'
+			) {
+				setErrorMessage(i18n('usernameUnavailable'));
+			}
+
+			if (!signUpRes) {
 				handleSuccessChange();
 			}
 		}
@@ -204,26 +209,33 @@ function SignUp() {
 					</FormControl>
 
 					{context.recaptcha && (
-						<ReCAPTCHA sitekey={context.recaptcha} onChange={onChange} />
+						<ReCAPTCHA
+							sitekey={context.recaptcha}
+							onChange={onChange}
+							ref={recaptchaRef}
+						/>
 					)}
 
-					<Button w="full" type="submit" name="Login" isDisabled={disabled}>
+					<Button w="full" type="submit" name="Login">
 						{i18n('continueBtnText')}
 					</Button>
 
-					<div className="text-center">
-						<p className="error-text">{i18n(errorMessage)}</p>
-					</div>
+					{errorMessage && (
+						<Alert status="error" bg="ampError.50">
+							<AlertIcon />
+							<Text align="center" color="ampError.700">
+								{i18n(errorMessage)}
+							</Text>
+						</Alert>
+					)}
 
-					<div className="mt-20">
-						<p>{i18n('passwordRuleText')}</p>
-						<ul className="list-styled">
-							<li>{i18n('upperCaseRule')}</li>
-							<li>{i18n('lowerCaseRule')}</li>
-							<li>{i18n('digitRule')}</li>
-							<li>{i18n('specialCharacterRule')}</li>
-						</ul>
-					</div>
+					<Text>{i18n('passwordRuleText')}</Text>
+					<UnorderedList>
+						<ListItem>{i18n('upperCaseRule')}</ListItem>
+						<ListItem>{i18n('lowerCaseRule')}</ListItem>
+						<ListItem>{i18n('digitRule')}</ListItem>
+						<ListItem>{i18n('specialCharacterRule')}</ListItem>
+					</UnorderedList>
 				</VStack>
 			)}
 			{success && (
@@ -246,14 +258,6 @@ function SignUp() {
 						</Text>
 					</VStack>
 				</Center>
-			)}
-			{error && (
-				<Alert status="error" bg="ampError.50">
-					<AlertIcon />
-					<Text align="center" color="ampError.700">
-						{i18n(errorMessage)}
-					</Text>
-				</Alert>
 			)}
 		</>
 	);

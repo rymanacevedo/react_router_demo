@@ -35,6 +35,7 @@ const useSignupDataService = () => {
 		} catch (err) {
 			console.log(err);
 			setError(err);
+			return err;
 		} finally {
 			setLoading(false);
 		}
