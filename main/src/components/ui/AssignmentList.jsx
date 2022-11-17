@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {
   HStack,
 <<<<<<< HEAD
@@ -299,6 +300,9 @@ const AssignmentList = () => {
 =======
 import { HStack, List, ListItem, Text } from '@chakra-ui/react';
 >>>>>>> f7d28232c (Feat: finished first round of logic for status texts)
+=======
+import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
 const AssignmentList = () => {
 	const mockData = {
@@ -564,6 +568,7 @@ const AssignmentList = () => {
 	};
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const mockData = {
     "displayCurriculum": {
 <<<<<<< HEAD
@@ -722,20 +727,39 @@ const AssignmentList = () => {
 				}
 =======
 	console.log(mockData.displayCurriculum.children);
+=======
+	console.log(mockData);
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
 	const getAssignmentText = (assignment) => {
-		switch (assignment.status) {
-			case 'NOT_STARTED': {
-				return (
-					<Text fontSize={'12px'}>
-						~{Math.floor(assignment.estimatedTimeToComplete / 60)}{' '}
-						{Math.floor(assignment.estimatedTimeToComplete / 60) > 1
-							? 'mins'
-							: 'min'}{' '}
-					</Text>
-				);
-				break;
+		if (assignment.assignmentType !== 'TimedAssessment') {
+			switch (assignment.status) {
+				case 'NOT_STARTED': {
+					return (
+						<Text fontSize={'12px'}>
+							{assignment.estimatedTimeToComplete &&
+								`~${Math.floor(assignment.estimatedTimeToComplete / 60)}
+							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}`}
+						</Text>
+					);
+					break;
+				}
+				case 'IN_PROGRESS': {
+					return (
+						<Text fontSize={'12px'}>
+							{`~${Math.floor(assignment.estimatedTimeToComplete / 60)}
+							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}
+							left`}
+						</Text>
+					);
+					break;
+				}
+				case 'COMPLETED': {
+					return <Text fontSize={'12px'}>Refresher available</Text>;
+					break;
+				}
 			}
+<<<<<<< HEAD
 			case 'IN_PROGRESS': {
 				return (
 					<Text fontSize={'12px'}>
@@ -752,11 +776,31 @@ const AssignmentList = () => {
 				return <Text fontSize={'12px'}>Refresher available</Text>;
 				break;
 >>>>>>> f7d28232c (Feat: finished first round of logic for status texts)
+=======
+		} else {
+			switch (assignment.status) {
+				case 'NOT_STARTED': {
+					return (
+						<Text fontSize={'12px'}>
+							{assignment.estimatedTimeToComplete &&
+								`~${Math.floor(
+									assignment.estimatedTimeToComplete / 60,
+								)} min to complete`}
+						</Text>
+					);
+					break;
+				}
+				case 'COMPLETED': {
+					return <Text fontSize={'12px'}>Attempts</Text>;
+					break;
+				}
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 			}
 		}
 	};
 
 	const assignmentList = mockData.displayCurriculum.children.map(
+<<<<<<< HEAD
 <<<<<<< HEAD
 		(curriculum, index) => {
 			const assignment =
@@ -775,6 +819,9 @@ const AssignmentList = () => {
 							fontWeight={'bold'}>
 =======
 		(curriculum) => {
+=======
+		(curriculum, index) => {
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 			const assignment =
 				curriculum.assignments[curriculum.assignments.length - 1];
 
@@ -782,16 +829,31 @@ const AssignmentList = () => {
 
 			return (
 				<ListItem height={'44px'} padding={'4px'} key={curriculum.name}>
+<<<<<<< HEAD
 					<HStack
 						_hover={{ textDecoration: 'underline', color: 'ampPrimary.300 ' }}
 						justifyContent={'space-between'}>
 						<Text fontSize={'21px'} fontWeight={'bold'}>
 >>>>>>> f7d28232c (Feat: finished first round of logic for status texts)
+=======
+					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+						<Text
+							_hover={{
+								textDecoration: 'underline',
+								color: 'ampPrimary.300 ',
+								cursor: 'pointer',
+							}}
+							fontSize={'21px'}
+							fontWeight={'bold'}>
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 							{curriculum.name}
 						</Text>
 						<Text>{getAssignmentText(assignment)}</Text>
 					</HStack>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 					{index !== mockData.displayCurriculum.children.length - 1 && (
 						<Divider
 							borderWidth="1px"
@@ -800,8 +862,11 @@ const AssignmentList = () => {
 							borderColor="#AFB3B4"
 						/>
 					)}
+<<<<<<< HEAD
 =======
 >>>>>>> f7d28232c (Feat: finished first round of logic for status texts)
+=======
+>>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 				</ListItem>
 			);
 		},
