@@ -67,7 +67,22 @@ const resources = {
          toLogIn: "to log in.",
          emailLabel: "Email",
          forgotUsernameErrorText: "We could not send an email to this email address. Please check your email address and try again or contact support for assistance.",
+<<<<<<< HEAD:src/i18n.js
          accountUrlErrorText: "Account not recognized. Please check the account name in the URL."
+=======
+         accountUrlErrorText: "Account not recognized. Please check the account name in the URL.",
+         passcode: "Passcode",
+         pleaseEnterPasscode: "Please enter your passcode.",
+         //////////////////////////////////
+         //    AssignmentList.js
+         //////////////////////////////////
+         mins: 'mins',
+         min: "min",
+         minToComplete:'min to complete',
+         attempts: 'Attempts',
+         refresherAvailable: 'Refresher Available',
+
+>>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
       }
    },
    fr: {

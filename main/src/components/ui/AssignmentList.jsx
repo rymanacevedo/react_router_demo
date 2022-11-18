@@ -7,9 +7,278 @@ import {
 } from '@chakra-ui/react';
 =======
 import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
+<<<<<<< HEAD
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
 const AssignmentList = () => {
+=======
+import { useTranslation } from 'react-i18next';
+
+const AssignmentList = () => {
+	const { t: i18n } = useTranslation();
+
+	const mockData = {
+		displayCurriculum: {
+			curricKey: '96WJCR6EP-1',
+			curricUid: '53e9b430-88f3-4f87-95fd-f77430379151',
+			name: 'Math',
+			version: 1,
+			kind: 'Composite',
+			descriptionRc: '<p>Math Curriculum</p>\n',
+			locale: 'en',
+			estimatedTimeToComplete: 42,
+			estimatedTimeToCompleteRequired: 0,
+			totalLearningUnits: 28,
+			totalCompletedLearningUnits: 7,
+			totalRequiredLearningUnits: 0,
+			totalCompletedRequiredLearningUnits: 0,
+			totalCompletedAssignments: 1,
+			totalEstimatedAssignments: 1,
+			totalNotEstimatedAssignments: 0,
+			totalOtherAssignments: 0,
+			showModuleStatus: false,
+			defaultAllottedTime: 0,
+			isSingleAssignment: false,
+			children: [
+				{
+					curricKey: 'M5QF7KN4X-1',
+					curricUid: '6af13155-a5b1-4741-878c-c6e4d664f73b',
+					name: 'Addition',
+					version: 1,
+					kind: 'Module',
+					descriptionRc: '<p>Addition Module</p>\n',
+					locale: 'en',
+					estimatedTimeToComplete: 0,
+					estimatedTimeToCompleteRequired: 0,
+					learningUnitCount: 7,
+					totalLearningUnits: 7,
+					totalCompletedLearningUnits: 7,
+					totalRequiredLearningUnits: 0,
+					totalCompletedRequiredLearningUnits: 0,
+					totalCompletedAssignments: 1,
+					totalEstimatedAssignments: 0,
+					totalNotEstimatedAssignments: 0,
+					totalOtherAssignments: 0,
+					moduleStatus: 'None',
+					defaultAllottedTime: 0,
+					isSingleAssignment: false,
+					assignments: [
+						{
+							assignmentKey: 'JLB6MQSLN',
+							assignmentUid: '15d7416e-e014-40a3-a323-f28efdd598db',
+							status: 'COMPLETED',
+							assignmentType: 'Learning',
+							completionAlgorithmType: 'Correct1x',
+							learningUnitsCorrect2x: 0,
+							learningUnitsUnseen: 0,
+							learningUnitsMisinformed: 0,
+							learningUnitsUninformed: 0,
+							learningUnitsNotSure: 0,
+							learningUnitsInformed: 0,
+							learningUnitsCorrect1x: 7,
+							numCompletedLearningUnits: 7,
+							estimatedTimeToComplete: 0,
+							numLearningUnits: 7,
+							startedTimestamp: '2022-11-15 23:09:06 -0700',
+							createdTimestamp: '2022-11-15 23:08:59 -0700',
+							effectiveTimestamp: null,
+							completedTimestamp: '2022-11-15 23:09:55 -0700',
+							expiresTimestamp: null,
+							canceledTimestamp: null,
+							canCreateFocusedRefresher: false,
+							estimatedTimeToCompleteForRefresher: 105,
+							learningUnitsMastered: 0,
+							learningUnitsProficient: 7,
+						},
+						{
+							assignmentKey: 'QE37MPLTT',
+							assignmentUid: '70ba64d1-305e-4867-ac79-ab83f8fdf505',
+							status: 'IN_PROGRESS',
+							assignmentType: 'Refresher',
+							completionAlgorithmType: 'Correct1x',
+							learningUnitsCorrect2x: 0,
+							learningUnitsUnseen: 7,
+							learningUnitsMisinformed: 0,
+							learningUnitsUninformed: 0,
+							learningUnitsNotSure: 0,
+							learningUnitsInformed: 0,
+							learningUnitsCorrect1x: 0,
+							numCompletedLearningUnits: 0,
+							estimatedTimeToComplete: 105,
+							numLearningUnits: 7,
+							startedTimestamp: '2022-11-15 23:09:57 -0700',
+							createdTimestamp: '2022-11-15 23:09:57 -0700',
+							effectiveTimestamp: null,
+							completedTimestamp: null,
+							expiresTimestamp: null,
+							canceledTimestamp: null,
+							learningUnitsMastered: 0,
+							learningUnitsProficient: 0,
+						},
+					],
+					learnerProgress: 25,
+				},
+				{
+					curricKey: 'HUEA7PH68-1',
+					curricUid: '2fbb55b5-b876-435d-94d7-33ebcfa8428f',
+					name: 'Multiplication',
+					version: 1,
+					kind: 'Module',
+					descriptionRc: '<p>Multiplication Module</p>\n',
+					locale: 'en',
+					estimatedTimeToComplete: 42,
+					estimatedTimeToCompleteRequired: 0,
+					learningUnitCount: 7,
+					totalLearningUnits: 7,
+					totalCompletedLearningUnits: 0,
+					totalRequiredLearningUnits: 0,
+					totalCompletedRequiredLearningUnits: 0,
+					totalCompletedAssignments: 0,
+					totalEstimatedAssignments: 1,
+					totalNotEstimatedAssignments: 0,
+					totalOtherAssignments: 0,
+					moduleStatus: 'None',
+					defaultAllottedTime: 0,
+					isSingleAssignment: false,
+					assignments: [
+						{
+							assignmentKey: 'TYY8MFM7J',
+							assignmentUid: '1a725e54-ec60-4197-8342-b7f53d092fe4',
+							status: 'NOT_STARTED',
+							assignmentType: 'Learning',
+							completionAlgorithmType: 'Correct1x',
+							learningUnitsCorrect2x: 0,
+							learningUnitsUnseen: 7,
+							learningUnitsMisinformed: 0,
+							learningUnitsUninformed: 0,
+							learningUnitsNotSure: 0,
+							learningUnitsInformed: 0,
+							learningUnitsCorrect1x: 0,
+							numCompletedLearningUnits: 0,
+							estimatedTimeToComplete: 42,
+							numLearningUnits: 7,
+							startedTimestamp: null,
+							createdTimestamp: '2022-11-15 23:08:59 -0700',
+							effectiveTimestamp: null,
+							completedTimestamp: null,
+							expiresTimestamp: null,
+							canceledTimestamp: null,
+							canCreateFocusedRefresher: false,
+							learningUnitsMastered: 0,
+							learningUnitsProficient: 0,
+						},
+					],
+					learnerProgress: 25,
+				},
+				{
+					curricKey: 'AMKC7JGAX-1',
+					curricUid: '7b85a551-b64f-4b8f-93f4-b552b1b5138b',
+					name: 'Addition TA',
+					version: 1,
+					kind: 'Module',
+					descriptionRc: null,
+					locale: 'en',
+					estimatedTimeToComplete: 0,
+					estimatedTimeToCompleteRequired: 0,
+					learningUnitCount: 7,
+					totalLearningUnits: 7,
+					totalCompletedLearningUnits: 0,
+					totalRequiredLearningUnits: 0,
+					totalCompletedRequiredLearningUnits: 0,
+					totalCompletedAssignments: 0,
+					totalEstimatedAssignments: 0,
+					totalNotEstimatedAssignments: 0,
+					totalOtherAssignments: 0,
+					moduleStatus: 'None',
+					defaultAllottedTime: 3600,
+					isSingleAssignment: false,
+					assignments: [
+						{
+							assignmentKey: 'V4CBM956T',
+							assignmentUid: '7b3731c0-1c28-45e4-a4e4-3e20808e97b5',
+							status: 'NOT_STARTED',
+							assignmentType: 'TimedAssessment',
+							completionAlgorithmType: 'Assessment',
+							learningUnitsCorrect2x: 0,
+							learningUnitsUnseen: 7,
+							learningUnitsMisinformed: 0,
+							learningUnitsUninformed: 0,
+							learningUnitsNotSure: 0,
+							learningUnitsInformed: 0,
+							learningUnitsCorrect1x: 0,
+							numCompletedLearningUnits: 0,
+							estimatedTimeToComplete: 3600,
+							numLearningUnits: 7,
+							startedTimestamp: null,
+							createdTimestamp: '2022-11-15 23:08:59 -0700',
+							effectiveTimestamp: null,
+							completedTimestamp: null,
+							expiresTimestamp: null,
+							canceledTimestamp: null,
+							learningUnitsMastered: 0,
+							learningUnitsProficient: 0,
+						},
+					],
+					learnerProgress: 25,
+				},
+				{
+					curricKey: 'WKV97URSA-1',
+					curricUid: '30ee6759-a6ef-4edb-9029-4a1f5e416dcc',
+					name: 'Multiplication TA',
+					version: 1,
+					kind: 'Module',
+					descriptionRc: null,
+					locale: 'en',
+					estimatedTimeToComplete: 0,
+					estimatedTimeToCompleteRequired: 0,
+					learningUnitCount: 7,
+					totalLearningUnits: 7,
+					totalCompletedLearningUnits: 0,
+					totalRequiredLearningUnits: 0,
+					totalCompletedRequiredLearningUnits: 0,
+					totalCompletedAssignments: 0,
+					totalEstimatedAssignments: 0,
+					totalNotEstimatedAssignments: 0,
+					totalOtherAssignments: 0,
+					moduleStatus: 'None',
+					defaultAllottedTime: 3600,
+					isSingleAssignment: false,
+					assignments: [
+						{
+							assignmentKey: 'DBHAMHAGA',
+							assignmentUid: '7c08413d-9521-43e3-85e5-a476d957fa08',
+							status: 'NOT_STARTED',
+							assignmentType: 'TimedAssessment',
+							completionAlgorithmType: 'Assessment',
+							learningUnitsCorrect2x: 0,
+							learningUnitsUnseen: 7,
+							learningUnitsMisinformed: 0,
+							learningUnitsUninformed: 0,
+							learningUnitsNotSure: 0,
+							learningUnitsInformed: 0,
+							learningUnitsCorrect1x: 0,
+							numCompletedLearningUnits: 0,
+							estimatedTimeToComplete: 3600,
+							numLearningUnits: 7,
+							startedTimestamp: null,
+							createdTimestamp: '2022-11-15 23:08:59 -0700',
+							effectiveTimestamp: null,
+							completedTimestamp: null,
+							expiresTimestamp: null,
+							canceledTimestamp: null,
+							learningUnitsMastered: 0,
+							learningUnitsProficient: 0,
+						},
+					],
+					learnerProgress: 25,
+				},
+			],
+			learnerProgress: 25,
+		},
+		assignmentStatistics: null,
+		reviewHeaderResource: null,
+	};
+>>>>>>> d5cdc7d8e (Feat: add i18n texts)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -102,7 +371,11 @@ const AssignmentList = () => {
 										? Math.floor(assignment.estimatedTimeToComplete / 60)
 										: '1'
 								}
-							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}`}
+							${
+								Math.floor(assignment.estimatedTimeToComplete / 60) > 1
+									? i18n('mins')
+									: i18n('min')
+							}`}
 						</Text>
 					);
 					break;
@@ -115,14 +388,18 @@ const AssignmentList = () => {
 									? Math.floor(assignment.estimatedTimeToComplete / 60)
 									: '1'
 							}
-							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}
+							${
+								Math.floor(assignment.estimatedTimeToComplete / 60) > 1
+									? i18n('mins')
+									: i18n('min')
+							}
 							left`}
 						</Text>
 					);
 					break;
 				}
 				case 'COMPLETED': {
-					return <Text fontSize={'12px'}>Refresher available</Text>;
+					return <Text fontSize={'12px'}>{i18n('refresherAvailable')}</Text>;
 					break;
 				}
 			}
@@ -136,13 +413,13 @@ const AssignmentList = () => {
 									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
 										? Math.floor(assignment.estimatedTimeToComplete / 60)
 										: '1'
-								}	min to complete`}
+								}	${i18n('minToComplete')}`}
 						</Text>
 					);
 					break;
 				}
 				case 'COMPLETED': {
-					return <Text fontSize={'12px'}>Attempts</Text>;
+					return <Text fontSize={'12px'}>{i18n('attempts')}</Text>;
 					break;
 				}
 			}
