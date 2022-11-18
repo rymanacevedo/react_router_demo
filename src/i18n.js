@@ -74,6 +74,9 @@ const resources = {
          passcode: "Passcode",
          pleaseEnterPasscode: "Please enter your passcode.",
 <<<<<<< HEAD:src/i18n.js
+<<<<<<< HEAD:src/i18n.js
+=======
+>>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
          //////////////////////////////////
          //    AssignmentList.js
          //////////////////////////////////
@@ -83,10 +86,13 @@ const resources = {
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
 
+<<<<<<< HEAD:src/i18n.js
 >>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
 =======
          usernameUnavailable: "This username is already in use. Please try another."
 >>>>>>> ec0b35609 (added error message):main/src/i18n.js
+=======
+>>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
       }
    },
    fr: {

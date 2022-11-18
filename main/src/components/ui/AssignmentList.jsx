@@ -18,6 +18,7 @@ import {
 =======
 import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
 const AssignmentList = () => {
@@ -303,8 +304,13 @@ import { HStack, List, ListItem, Text } from '@chakra-ui/react';
 =======
 import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
+=======
+import { useTranslation } from 'react-i18next';
+>>>>>>> d5cdc7d8e (Feat: add i18n texts)
 
 const AssignmentList = () => {
+	const { t: i18n } = useTranslation();
+
 	const mockData = {
 		displayCurriculum: {
 			curricKey: '96WJCR6EP-1',
@@ -746,7 +752,11 @@ const AssignmentList = () => {
 										? Math.floor(assignment.estimatedTimeToComplete / 60)
 										: '1'
 								}
-							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}`}
+							${
+								Math.floor(assignment.estimatedTimeToComplete / 60) > 1
+									? i18n('mins')
+									: i18n('min')
+							}`}
 						</Text>
 					);
 					break;
@@ -759,14 +769,18 @@ const AssignmentList = () => {
 									? Math.floor(assignment.estimatedTimeToComplete / 60)
 									: '1'
 							}
-							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}
+							${
+								Math.floor(assignment.estimatedTimeToComplete / 60) > 1
+									? i18n('mins')
+									: i18n('min')
+							}
 							left`}
 						</Text>
 					);
 					break;
 				}
 				case 'COMPLETED': {
-					return <Text fontSize={'12px'}>Refresher available</Text>;
+					return <Text fontSize={'12px'}>{i18n('refresherAvailable')}</Text>;
 					break;
 				}
 			}
@@ -798,13 +812,13 @@ const AssignmentList = () => {
 									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
 										? Math.floor(assignment.estimatedTimeToComplete / 60)
 										: '1'
-								}	min to complete`}
+								}	${i18n('minToComplete')}`}
 						</Text>
 					);
 					break;
 				}
 				case 'COMPLETED': {
-					return <Text fontSize={'12px'}>Attempts</Text>;
+					return <Text fontSize={'12px'}>{i18n('attempts')}</Text>;
 					break;
 				}
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
