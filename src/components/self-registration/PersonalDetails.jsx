@@ -8,11 +8,15 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 
-const PersonalDetails = ({ handleChange }) => {
+const PersonalDetails = (props) => {
 	const { t: i18n } = useTranslation();
 	return (
 		<VStack>
-			<FormControl isRequired>
+			<FormControl
+				isRequired
+				isInvalid={
+					props.formData.firstName === '' || props.formData.firstName.length < 1
+				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('first name')}
 				</FormLabel>
@@ -20,12 +24,16 @@ const PersonalDetails = ({ handleChange }) => {
 					id="firstName"
 					placeholder="first name"
 					name="firstname"
-					onChange={handleChange('firstName')}
+					onChange={props.handleChange('firstName')}
 				/>
 				<FormErrorMessage>{i18n('enterFirstName')}</FormErrorMessage>
 			</FormControl>
 
-			<FormControl isRequired>
+			<FormControl
+				isRequired
+				isInvalid={
+					props.formData.lastName === '' || props.formData.lastName.length < 1
+				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('last name')}
 				</FormLabel>
@@ -33,12 +41,17 @@ const PersonalDetails = ({ handleChange }) => {
 					id="lastName"
 					placeholder="last name"
 					name="lastName"
-					onChange={handleChange('lastName')}
+					onChange={props.handleChange('lastName')}
 				/>
 				<FormErrorMessage>{i18n('enterLastName')}</FormErrorMessage>
 			</FormControl>
 
-			<FormControl isRequired>
+			<FormControl
+				isRequired
+				isInvalid={
+					props.formData.emailAddress === '' ||
+					props.formData.emailAddress.length < 1
+				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('email')}
 				</FormLabel>
@@ -46,7 +59,7 @@ const PersonalDetails = ({ handleChange }) => {
 					id="emailAddress"
 					placeholder="name@email.com"
 					name="emailAddress"
-					onChange={handleChange('emailAddress')}
+					onChange={props.handleChange('emailAddress')}
 				/>
 				<FormErrorMessage>{i18n('enterEmailAddress')}</FormErrorMessage>
 			</FormControl>

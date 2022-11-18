@@ -88,7 +88,6 @@ function Register() {
 
 			personalDetailsResponse.json().then((data) => {
 				setUserAltKey(data.key);
-				setStep(step + 1);
 				setTitle(i18n('signUpText'));
 				// remove recaptcha in dom
 				document.getElementById('recaptcha').style.display = 'none';
@@ -138,24 +137,6 @@ function Register() {
 		}
 	};
 
-	const getStepComponent = () => {
-		switch (step) {
-			case 1:
-				return (
-					<>
-						<HStack spacing={4}>
-							<PersonalDetails handleChange={handleChange} />{' '}
-							<UserDetails handleChange={handleChange} />
-						</HStack>
-					</>
-				);
-			case 2:
-				return <Confirmation />;
-			default:
-				return <PersonalDetails />;
-		}
-	};
-
 	const renderText = () => {
 		return (
 			<>
@@ -191,34 +172,51 @@ function Register() {
 		);
 	};
 
-	return (
-		<>
-			<VStack as="form" onSubmit={handleSubmit}>
-				<Heading>{i18n(title)}</Heading>
-				{getStepComponent()}
-				{context.recaptcha && (
-					<ReCAPTCHA
-						id="recaptcha"
-						ref={recaptchaRef}
-						sitekey={context.recaptcha}
-						onChange={onRecaptchaChange}
-					/>
-				)}
-				<Button onClick={handleSubmit} type="submit" name="Login">
-					{step === 1 ? i18n('continueBtnText') : i18n('submitBtnText')}
-				</Button>
-				{errorMessage && (
-					<Alert status="error" bg="ampError.50">
-						<AlertIcon />
-						<Text align="center" color="ampError.700">
-							{errorMessage}
-						</Text>
-					</Alert>
-				)}
-				{renderText()}
-			</VStack>
-		</>
-	);
+	const getStepComponent = () => {
+		switch (step) {
+			case 1:
+				return (
+					<>
+						<VStack as="form" onSubmit={handleSubmit}>
+							<Heading>{i18n(title)}</Heading>
+							<HStack spacing={4}>
+								<PersonalDetails
+									handleChange={handleChange}
+									formData={formData}
+								/>
+								<UserDetails handleChange={handleChange} formData={formData} />
+							</HStack>
+							{context.recaptcha && (
+								<ReCAPTCHA
+									id="recaptcha"
+									ref={recaptchaRef}
+									sitekey={context.recaptcha}
+									onChange={onRecaptchaChange}
+								/>
+							)}
+							<Button onClick={handleSubmit} type="submit" name="Login">
+								{step === 1 ? i18n('continueBtnText') : i18n('submitBtnText')}
+							</Button>
+							{errorMessage && (
+								<Alert status="error" bg="ampError.50">
+									<AlertIcon />
+									<Text align="center" color="ampError.700">
+										{errorMessage}
+									</Text>
+								</Alert>
+							)}
+							{renderText()}
+						</VStack>
+					</>
+				);
+			case 2:
+				return <Confirmation />;
+			default:
+				return <PersonalDetails />;
+		}
+	};
+
+	return <>{getStepComponent()}</>;
 }
 
 export default Register;
