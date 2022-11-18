@@ -28,11 +28,23 @@ function App() {
 					<Route index element={<ForgotUsername />} />
 				</Route>
 
+<<<<<<< HEAD:src/App.js
 				<Route path="/MultiFactor" element={<MultiFactor />} />
 				<Route path="/signup">
-					<Route index element={<SignUp />} />
-					<Route path=":abbrevName/:userAltKey" element={<SignUp />} />
+=======
+				<Route path="/MultiFactor" element={<LoginWrapper />}>
+					<Route index element={<MultiFactor />} />
 				</Route>
+				<Route
+					path="/signup/:abbrevName/:userAltKey"
+					element={<LoginWrapper />}>
+					<Route index element={<SignUp />} />
+				</Route>
+				<Route path="/signup" element={<LoginWrapper />}>
+>>>>>>> 03b8c1f30 (lint fix):main/src/App.js
+					<Route index element={<SignUp />} />
+				</Route>
+
 				<Route path="/register" element={<Register />} />
 				<Route path="/" element={<ProtectedRoute isAllowed={!!user} />}>
 					<Route
