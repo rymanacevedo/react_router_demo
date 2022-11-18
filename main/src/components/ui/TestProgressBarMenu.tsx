@@ -40,18 +40,22 @@ const TestProgressBarMenu = () => {
 						<AmpMicroChip variant="ampNeutralUnfilled" />
 					</HStack>
 				</VStack>
-				<Button variant={'outline'} borderColor={'ampPrimary.300'}>
+				<Button
+					variant={'outline'}
+					borderColor={'ampPrimary.300'}
+					bg="ampWhite">
 					<Text fontSize={'16px'} fontWeight="600">
 						{i18n('showProgress')}
 					</Text>
 				</Button>
 			</HStack>
 			<Progress
-				value={80}
+				value={20}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}
 				width="100%"
+				bg="ampNeutral.50"
 			/>
 		</Box>
 	);

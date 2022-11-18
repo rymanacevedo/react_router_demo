@@ -100,7 +100,7 @@ const resources = {
          //////////////////////////////////////////////
          theScienceOfLearning:'The Science of Learning',
          about: 'About',
-         minsleft:'mins left',
+         minsLeft:'mins left',
          questions: 'Questions',
          showProgress:'Show Progress'
 >>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/i18n.js
