@@ -15,7 +15,9 @@ const UserDetails = (props) => {
 			<FormControl
 				isRequired
 				isInvalid={
-					props.formData.userName === '' || props.formData.userName.length <= 1
+					props.formError.userName &&
+					(props.formData.userName === '' ||
+						props.formData.userName.length <= 1)
 				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('username')}
@@ -32,11 +34,12 @@ const UserDetails = (props) => {
 			<FormControl
 				isRequired
 				isInvalid={
-					props.formData.password === '' ||
-					props.formData.password.length < 5 ||
-					!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(
-						props.formData.password,
-					)
+					props.formError.password &&
+					(props.formData.password === '' ||
+						props.formData.password.length < 5 ||
+						!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(
+							props.formData.password,
+						))
 				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('password')}
@@ -53,7 +56,10 @@ const UserDetails = (props) => {
 
 			<FormControl
 				isRequired
-				isInvalid={props.formData.confirmPassword !== props.formData.password}>
+				isInvalid={
+					props.formError.password &&
+					props.formData.confirmPassword !== props.formData.password
+				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('confirmPassword')}
 				</FormLabel>

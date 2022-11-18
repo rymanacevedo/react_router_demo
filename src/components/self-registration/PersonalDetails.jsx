@@ -15,7 +15,9 @@ const PersonalDetails = (props) => {
 			<FormControl
 				isRequired
 				isInvalid={
-					props.formData.firstName === '' || props.formData.firstName.length < 1
+					props.formError.firstName &&
+					(props.formData.firstName === '' ||
+						props.formData.firstName.length < 1)
 				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('first name')}
@@ -32,7 +34,8 @@ const PersonalDetails = (props) => {
 			<FormControl
 				isRequired
 				isInvalid={
-					props.formData.lastName === '' || props.formData.lastName.length < 1
+					props.formError.lastName &&
+					(props.formData.lastName === '' || props.formData.lastName.length < 1)
 				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('last name')}
@@ -49,8 +52,9 @@ const PersonalDetails = (props) => {
 			<FormControl
 				isRequired
 				isInvalid={
-					props.formData.emailAddress === '' ||
-					props.formData.emailAddress.length < 1
+					props.formError.emailAddress &&
+					(props.formData.emailAddress === '' ||
+						props.formData.emailAddress.length < 1)
 				}>
 				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('email')}

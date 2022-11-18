@@ -30,6 +30,14 @@ function Register() {
 	const [errorMessage, setErrorMessage] = useState('');
 	const [userAltKey, setUserAltKey] = useState('');
 	const recaptchaRef = useRef();
+	const [formError, setFormError] = useState({
+		firstName: false,
+		lastName: false,
+		emailAddress: false,
+		userName: false,
+		password: false,
+		confirmPassword: false,
+	});
 
 	const { postSignupData } = useSignupDataService();
 
@@ -64,15 +72,42 @@ function Register() {
 
 		if (verified) {
 			if (formData.firstName === '' || formData.firstName.length < 1) {
-				return setErrorMessage(i18n('enterFirstName'));
+				setFormError((prevValue) => ({ ...prevValue, firstName: true }));
 			}
 
 			if (formData.lastName === '' || formData.lastName.length < 1) {
-				return setErrorMessage(i18n('enterLastName'));
+				setFormError((prevValue) => ({ ...prevValue, lastName: true }));
 			}
 
 			if (formData.emailAddress === '' || formData.emailAddress.length < 1) {
-				return setErrorMessage(i18n('enterEmailAddress'));
+				setFormError((prevValue) => ({
+					...prevValue,
+					emailAddress: true,
+				}));
+			}
+
+			////////step2 begin
+
+			if (formData.userName === '' || formData.userName.length <= 1) {
+				setFormError((prevValue) => ({ ...prevValue, userName: true }));
+			}
+
+			if (formData.password === '') {
+				setFormError((prevValue) => ({ ...prevValue, password: true }));
+			} else if (formData.password.length < 5) {
+				setFormError((prevValue) => ({ ...prevValue, password: true }));
+			}
+			// check if password has one lowercase letter, one uppercase letter one number or special character
+			else if (
+				!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(
+					formData.password,
+				)
+			) {
+				setFormError((prevValue) => ({ ...prevValue, password: true }));
+			}
+
+			if (formData.confirmPassword !== formData.password) {
+				setFormError((prevValue) => ({ ...prevValue, password: true }));
 			}
 
 			const personalDetailsResponse = await postPersonalDetails(
@@ -92,29 +127,6 @@ function Register() {
 				// remove recaptcha in dom
 				document.getElementById('recaptcha').style.display = 'none';
 			});
-			////////step2 begin
-
-			if (formData.userName === '' || formData.userName.length <= 1) {
-				return setErrorMessage(i18n('enterUsername'));
-			}
-
-			if (formData.password === '') {
-				return setErrorMessage(i18n('enterPassword'));
-			} else if (formData.password.length < 5) {
-				return setErrorMessage(i18n('enterAtLeastCharacters', { number: 5 }));
-			}
-			// check if password has one lowercase letter, one uppercase letter one number or special character
-			else if (
-				!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(
-					formData.password,
-				)
-			) {
-				return setErrorMessage(i18n('passwordMustContain'));
-			}
-
-			if (formData.confirmPassword !== formData.password) {
-				return setErrorMessage(i18n('passwordsDoNotMatch'));
-			}
 
 			const signupResponse = await postSignupData(
 				'93110891-3822-41e5-bb15-45284ebe8f96',
@@ -179,12 +191,17 @@ function Register() {
 					<>
 						<VStack as="form" onSubmit={handleSubmit}>
 							<Heading>{i18n(title)}</Heading>
-							<HStack spacing={4}>
+							<HStack spacing={5}>
 								<PersonalDetails
 									handleChange={handleChange}
 									formData={formData}
+									formError={formError}
 								/>
-								<UserDetails handleChange={handleChange} formData={formData} />
+								<UserDetails
+									handleChange={handleChange}
+									formData={formData}
+									formError={formError}
+								/>
 							</HStack>
 							{context.recaptcha && (
 								<ReCAPTCHA
