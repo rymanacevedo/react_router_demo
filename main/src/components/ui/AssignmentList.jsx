@@ -741,7 +741,11 @@ const AssignmentList = () => {
 					return (
 						<Text fontSize={'12px'}>
 							{assignment.estimatedTimeToComplete &&
-								`~${Math.floor(assignment.estimatedTimeToComplete / 60)}
+								`~${
+									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
+										? Math.floor(assignment.estimatedTimeToComplete / 60)
+										: '1'
+								}
 							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}`}
 						</Text>
 					);
@@ -750,7 +754,11 @@ const AssignmentList = () => {
 				case 'IN_PROGRESS': {
 					return (
 						<Text fontSize={'12px'}>
-							{`~${Math.floor(assignment.estimatedTimeToComplete / 60)}
+							{`~${
+								Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
+									? Math.floor(assignment.estimatedTimeToComplete / 60)
+									: '1'
+							}
 							${Math.floor(assignment.estimatedTimeToComplete / 60) > 1 ? 'mins' : 'min'}
 							left`}
 						</Text>
@@ -786,9 +794,11 @@ const AssignmentList = () => {
 					return (
 						<Text fontSize={'12px'}>
 							{assignment.estimatedTimeToComplete &&
-								`~${Math.floor(
-									assignment.estimatedTimeToComplete / 60,
-								)} min to complete`}
+								`${
+									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
+										? Math.floor(assignment.estimatedTimeToComplete / 60)
+										: '1'
+								}	min to complete`}
 						</Text>
 					);
 					break;
