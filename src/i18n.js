@@ -75,6 +75,7 @@ const resources = {
          pleaseEnterPasscode: "Please enter your passcode.",
 <<<<<<< HEAD:src/i18n.js
 <<<<<<< HEAD:src/i18n.js
+<<<<<<< HEAD:src/i18n.js
 =======
 >>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
          //////////////////////////////////
@@ -93,6 +94,16 @@ const resources = {
 >>>>>>> ec0b35609 (added error message):main/src/i18n.js
 =======
 >>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
+=======
+         /////////////////////////////////////////////
+         //   TestProgressBarMenu.tsx
+         //////////////////////////////////////////////
+         theScienceOfLearning:'The Science of Learning',
+         about: 'About',
+         minsleft:'mins left',
+         questions: 'Questions',
+         showProgress:'Show Progress'
+>>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/i18n.js
       }
    },
    fr: {

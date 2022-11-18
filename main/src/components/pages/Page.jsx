@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import AssignmentList from '../ui/AssignmentList';
 import { Spinner } from '@chakra-ui/react';
 =======
 >>>>>>> 852b1f17f (Feat: completed ui for progress bar)
 import AmpMiniChip from '../../css/AmpMiniChip';
+=======
+import AmpMicroChip from '../../css/AmpMicroChip';
+>>>>>>> 1ff658e8e (Fix: made mini chips into micro chips)
 import AmpChip from '../../css/AmpChip';
 
 const Page = ({ id, header, content }) => {
@@ -43,21 +47,21 @@ const Page = ({ id, header, content }) => {
 				<AmpChip variant="ampDarkErrorOutline" size="sm" />
 				<AmpChip variant="ampWarningOutline" size="sm" />
 				<AmpChip variant="ampNeutralFilled" size="sm" />
-				<AmpMiniChip variant="ampNeutralUnfilled" />
-				<AmpMiniChip variant="ampDarkSuccessOutline" />
-				<AmpMiniChip variant="ampDarkSuccess" />
-				<AmpMiniChip variant="ampDarkError" />
-				<AmpMiniChip variant="ampDarkErrorOutline" />
-				<AmpMiniChip variant="ampWarningOutline" />
-				<AmpMiniChip variant="ampNeutralFilled" />
-				<AmpMiniChip variant="ampSecondary" />
-				<AmpMiniChip variant="ampDarkSuccessOutlineDot" />
-				<AmpMiniChip variant="ampDarkSuccessDot" />
-				<AmpMiniChip variant="ampDarkErrorDot" />
-				<AmpMiniChip variant="ampDarkErrorOutlineDot" />
-				<AmpMiniChip variant="ampWarningOutlineDot" />
-				<AmpMiniChip variant="ampNeutralFilledDot" />
-				<AmpMiniChip variant="ampSecondaryDot" />
+				<AmpMicroChip variant="ampNeutralUnfilled" />
+				<AmpMicroChip variant="ampDarkSuccessOutline" />
+				<AmpMicroChip variant="ampDarkSuccess" />
+				<AmpMicroChip variant="ampDarkError" />
+				<AmpMicroChip variant="ampDarkErrorOutline" />
+				<AmpMicroChip variant="ampWarningOutline" />
+				<AmpMicroChip variant="ampNeutralFilled" />
+				<AmpMicroChip variant="ampSecondary" />
+				<AmpMicroChip variant="ampDarkSuccessOutlineDot" />
+				<AmpMicroChip variant="ampDarkSuccessDot" />
+				<AmpMicroChip variant="ampDarkErrorDot" />
+				<AmpMicroChip variant="ampDarkErrorOutlineDot" />
+				<AmpMicroChip variant="ampWarningOutlineDot" />
+				<AmpMicroChip variant="ampNeutralFilledDot" />
+				<AmpMicroChip variant="ampSecondaryDot" />
 			</main>
 		</>
 	);

@@ -160,5 +160,17 @@ export const ampTheme = extendTheme({
 		Badge: Badge,
 		Tag: Tag,
 		Checkbox,
+<<<<<<< HEAD:src/css/theme.ts
+=======
+		Link,
+		Divider,
+		Progress: {
+			baseStyle: {
+				filledTrack: {
+					bg: '#D3E5F0',
+				},
+			},
+		},
+>>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/css/theme.ts
 	},
 });

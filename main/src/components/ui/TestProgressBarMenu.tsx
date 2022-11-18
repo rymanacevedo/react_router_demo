@@ -1,9 +1,12 @@
 import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
-import AmpMiniChip from '../../css/AmpMiniChip';
+import AmpMicroChip from '../../css/AmpMicroChip';
+import { useTranslation } from 'react-i18next';
 
 const TestProgressBarMenu = () => {
+	const { t: i18n } = useTranslation();
+
 	return (
-		<Box width="100vw" boxSizing="border-box">
+		<Box width="100%" boxSizing="border-box">
 			<HStack
 				borderBottom={'1px'}
 				borderBottomColor="ampSecondary.300"
@@ -17,34 +20,36 @@ const TestProgressBarMenu = () => {
 				paddingRight="24px">
 				<VStack align={'left'}>
 					<Text fontSize={'21px'} fontWeight={'600'}>
-						The Science of Learning
+						{i18n('theScienceOfLearning')}
 					</Text>
-					<Text fontSize={'16px'} color="ampNeutral.400">
-						About 24 mins left
+					<Text fontSize={'16px'} color="ampNeutral.800">
+						{`${i18n('about')} 24 ${i18n('minsLeft')}`}
 					</Text>
 				</VStack>
 				<VStack>
 					<Text fontSize={'20px'} fontWeight={'600'}>
-						Round 1: Questions
+						{`Round 1: ${i18n('questions')}`}
 					</Text>
 					<HStack>
-						<AmpMiniChip variant="ampDarkSuccess" />
-						<AmpMiniChip variant="ampDarkSuccess" />
-						<AmpMiniChip variant="ampDarkSuccess" />
-						<AmpMiniChip variant="ampDarkErrorOutline" />
-						<AmpMiniChip variant="ampDarkError" />
-						<AmpMiniChip variant="ampSecondaryDot" />
-						<AmpMiniChip variant="ampNeutralUnfilled" />
+						<AmpMicroChip variant="ampDarkSuccess" />
+						<AmpMicroChip variant="ampDarkSuccess" />
+						<AmpMicroChip variant="ampDarkSuccess" />
+						<AmpMicroChip variant="ampDarkErrorOutline" />
+						<AmpMicroChip variant="ampDarkError" />
+						<AmpMicroChip variant="ampSecondaryDot" />
+						<AmpMicroChip variant="ampNeutralUnfilled" />
 					</HStack>
 				</VStack>
 				<Button variant={'outline'} borderColor={'ampPrimary.300'}>
-					<Text fontSize={'16px'}>Show Progress</Text>
+					<Text fontSize={'16px'} fontWeight="600">
+						{i18n('showProgress')}
+					</Text>
 				</Button>
 			</HStack>
 			<Progress
 				value={80}
 				height={'80px'}
-				colorScheme="linkedin"
+				colorScheme="gray"
 				zIndex={'1'}
 				width="100%"
 			/>
