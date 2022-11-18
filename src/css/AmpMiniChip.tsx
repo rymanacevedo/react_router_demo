@@ -15,8 +15,8 @@ interface InterfaceAmpChip {
 		| 'ampDarkError'
 		| 'ampDarkErrorDot'
 		| 'ampSecondary'
-		| 'ampSecondaryDot';
-	size: 'sm' | 'lg';
+		| 'ampSecondaryDot'
+		| 'ampNeutralUnfilled';
 }
 
 function AmpMiniChip({ variant }: InterfaceAmpChip): JSX.Element {
@@ -61,7 +61,7 @@ function AmpMiniChip({ variant }: InterfaceAmpChip): JSX.Element {
 						'ampDarkErrorOutline',
 				)
 					? '4px'
-					: '0px'
+					: '1px'
 			}
 			borderRadius="30"
 			variant={variant}

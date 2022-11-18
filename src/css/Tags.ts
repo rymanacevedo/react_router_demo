@@ -51,6 +51,16 @@ const Tag = defineStyleConfig({
 				},
 			};
 		},
+		ampNeutralUnfilled: () => {
+			return {
+				container: {
+					bg: 'ampWhite',
+					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampNeutral.300',
+				},
+			};
+		},
 		ampNeutralFilledDot: () => {
 			return {
 				container: {

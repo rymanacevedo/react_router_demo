@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { useAuth } from '../hooks/useAuth';
+import TestProgressBarMenu from '../components/ui/TestProgressBarMenu';
 
 const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
 	const { user } = useAuth();
@@ -11,8 +12,17 @@ const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
 
 	return (
 		<>
+<<<<<<< HEAD:src/routes/ProtectedRoute.jsx
 			<Header />
 			{children ? children : <Outlet />}
+=======
+			<HeaderNav />
+			<TestProgressBarMenu />
+
+			<Box minH="80vh" margin="16px">
+				{children ? children : <Outlet />}
+			</Box>
+>>>>>>> 852b1f17f (Feat: completed ui for progress bar):main/src/routes/ProtectedRoute.jsx
 			<Footer />
 		</>
 	);
