@@ -12,6 +12,7 @@ import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 const AssignmentList = () => {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   const mockData = {
     "displayCurriculum": {
       "curricKey": "96WJCR6EP-1",
@@ -87,6 +88,8 @@ const AssignmentList = () => {
 =======
 	console.log(mockData);
 
+=======
+>>>>>>> 527888618 (Chore: clean up console logs)
 	const getAssignmentText = (assignment) => {
 		if (assignment.assignmentType !== 'TimedAssessment') {
 			switch (assignment.status) {
@@ -140,8 +143,6 @@ const AssignmentList = () => {
 		(curriculum, index) => {
 			const assignment =
 				curriculum.assignments[curriculum.assignments.length - 1];
-
-			console.log(assignment);
 
 			return (
 				<ListItem height={'44px'} padding={'4px'} key={curriculum.name}>
