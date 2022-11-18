@@ -38,6 +38,7 @@ function App() {
 				<Route
 					path="/signup/:abbrevName/:userAltKey"
 					element={<LoginWrapper />}>
+<<<<<<< HEAD:src/App.js
 					<Route index element={<SignUp />} />
 				</Route>
 <<<<<<< HEAD:src/App.js
@@ -45,6 +46,13 @@ function App() {
 >>>>>>> 03b8c1f30 (lint fix):main/src/App.js
 					<Route index element={<SignUp />} />
 				</Route>
+=======
+					<Route index element={<SignUp />} />
+				</Route>
+				<Route path="/signup" element={<LoginWrapper />}>
+					<Route index element={<SignUp />} />
+				</Route>
+>>>>>>> 03b8c1f30 (lint fix):main/src/App.js
 
 				<Route path="/register" element={<Register />} />
 =======
