@@ -569,6 +569,7 @@ const AssignmentList = () => {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const mockData = {
     "displayCurriculum": {
 <<<<<<< HEAD
@@ -731,6 +732,8 @@ const AssignmentList = () => {
 	console.log(mockData);
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 
+=======
+>>>>>>> 527888618 (Chore: clean up console logs)
 	const getAssignmentText = (assignment) => {
 		if (assignment.assignmentType !== 'TimedAssessment') {
 			switch (assignment.status) {
