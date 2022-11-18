@@ -20,7 +20,7 @@ interface InterfaceAmpChip {
 function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 	const getIcon = () => {
 		switch (variant) {
-			case 'ampDarkSuccessOutline' || 'ampDarkSuccess': {
+			case 'ampDarkSuccessOutline': {
 				return (
 					<CheckIcon
 						height={size === 'lg' ? 40 : 20}

@@ -13,6 +13,26 @@ const Tag = defineStyleConfig({
 		},
 	},
 	variants: {
+		ampSecondary: () => {
+			return {
+				container: {
+					bg: 'ampSecondary.50',
+					color: 'ampSecondary.500',
+					border: '1px',
+					borderColor: 'ampSecondary.500',
+				},
+			};
+		},
+		ampSecondaryDot: () => {
+			return {
+				container: {
+					bg: 'ampSecondary.50',
+					color: 'ampSecondary.500',
+					border: '1px',
+					borderColor: 'ampSecondary.500',
+				},
+			};
+		},
 		ampNeutral: () => {
 			return {
 				container: {
@@ -26,6 +46,18 @@ const Tag = defineStyleConfig({
 				container: {
 					bg: 'ampNeutral.600',
 					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampNeutral.600',
+				},
+			};
+		},
+		ampNeutralFilledDot: () => {
+			return {
+				container: {
+					bg: 'ampNeutral.600',
+					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampNeutral.600',
 				},
 			};
 		},
@@ -49,7 +81,7 @@ const Tag = defineStyleConfig({
 			return {
 				container: {
 					bg: 'ampWarning.100',
-					color: 'ampWarning.800',
+					color: 'ampWarning.600',
 				},
 			};
 		},
@@ -57,9 +89,19 @@ const Tag = defineStyleConfig({
 			return {
 				container: {
 					bg: 'ampWarning.100',
-					color: 'ampWarning.800',
+					color: 'ampWarning.600',
 					border: '1px',
-					borderColor: 'ampWarning.800',
+					borderColor: 'ampWarning.600',
+				},
+			};
+		},
+		ampWarningOutlineDot: () => {
+			return {
+				container: {
+					bg: 'ampWarning.100',
+					color: 'ampWarning.600',
+					border: '1px',
+					borderColor: 'ampWarning.600',
 				},
 			};
 		},
@@ -84,10 +126,32 @@ const Tag = defineStyleConfig({
 				container: {
 					bg: 'ampSuccess.500',
 					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampSuccess.500',
+				},
+			};
+		},
+		ampDarkSuccessDot: () => {
+			return {
+				container: {
+					bg: 'ampSuccess.500',
+					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampSuccess.500',
 				},
 			};
 		},
 		ampDarkSuccessOutline: () => {
+			return {
+				container: {
+					bg: 'ampSuccess.50',
+					color: 'ampSuccess.500',
+					border: '1px',
+					borderColor: 'ampSuccess.500',
+				},
+			};
+		},
+		ampDarkSuccessOutlineDot: () => {
 			return {
 				container: {
 					bg: 'ampSuccess.50',
@@ -102,10 +166,32 @@ const Tag = defineStyleConfig({
 				container: {
 					bg: 'ampError.700',
 					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampError.700',
+				},
+			};
+		},
+		ampDarkErrorDot: () => {
+			return {
+				container: {
+					bg: 'ampError.700',
+					color: 'ampWhite',
+					border: '1px',
+					borderColor: 'ampError.700',
 				},
 			};
 		},
 		ampDarkErrorOutline: () => {
+			return {
+				container: {
+					background: 'ampError.100',
+					color: 'ampError.700',
+					border: '1px',
+					borderColor: 'ampError.700',
+				},
+			};
+		},
+		ampDarkErrorOutlineDot: () => {
 			return {
 				container: {
 					background: 'ampError.100',
