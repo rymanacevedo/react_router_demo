@@ -40,12 +40,18 @@ function App() {
 					element={<LoginWrapper />}>
 					<Route index element={<SignUp />} />
 				</Route>
+<<<<<<< HEAD:src/App.js
 				<Route path="/signup" element={<LoginWrapper />}>
 >>>>>>> 03b8c1f30 (lint fix):main/src/App.js
 					<Route index element={<SignUp />} />
 				</Route>
 
 				<Route path="/register" element={<Register />} />
+=======
+				<Route path="/register" element={<LoginWrapper />}>
+					<Route index element={<Register />} />
+				</Route>
+>>>>>>> 5a1bf56e7 (WIP lint fix):main/src/App.js
 				<Route path="/" element={<ProtectedRoute isAllowed={!!user} />}>
 					<Route
 						path="authoring"

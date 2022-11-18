@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ReactComponent as AmpLogo } from '../../ampLogo.svg';
-import { ReactComponent as HeadLogo } from '../../headLogo.svg';
+import { useEffect, useRef, useState } from 'react';
+import { Link as ReactRouterLink, useOutletContext } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import UserDetails from './UserDetails';
@@ -8,13 +7,24 @@ import PersonalDetails from './PersonalDetails';
 import Confirmation from './Confirmation';
 import useRegisterService from '../../services/useRegisterService';
 import useSignupDataService from '../../services/useSignupDataService';
-import useInitialAccountDataService from '../../services/useInitialAccountDataService';
+import {
+	Alert,
+	AlertIcon,
+	Button,
+	Heading,
+	HStack,
+	Link,
+	ListItem,
+	Text,
+	UnorderedList,
+	VStack,
+} from '@chakra-ui/react';
 
 function Register() {
 	const { t: i18n } = useTranslation();
-	const [step, setStep] = useState(3);
+	const context = useOutletContext();
+	const [step, setStep] = useState(1);
 	const [verified, setVerified] = useState(false);
-	const [recaptchaSiteKey, setRecaptchaSiteKey] = useState('');
 	const [recaptchaRes, setRecaptchaRes] = useState(null);
 	const [title, setTitle] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
@@ -22,7 +32,7 @@ function Register() {
 	const recaptchaRef = useRef();
 
 	const { postSignupData } = useSignupDataService();
-	const { fetchInitialAccountData } = useInitialAccountDataService();
+
 	const { postPersonalDetails } = useRegisterService();
 	const [formData, setFormData] = useState({
 		firstName: '',
@@ -40,24 +50,7 @@ function Register() {
 		}
 	};
 
-	const renderRecaptcha = () => {
-		if (!recaptchaSiteKey) {
-			return (
-				<ReCAPTCHA
-					id="recaptcha"
-					ref={recaptchaRef}
-					sitekey={recaptchaSiteKey}
-					onChange={onRecaptchaChange}
-				/>
-			);
-		}
-	};
-
 	useEffect(() => {
-		fetchInitialAccountData().then((response) => {
-			setRecaptchaSiteKey(response.recaptchaSiteKey);
-		});
-		renderRecaptcha();
 		setTitle(i18n('enrollCompleteFormText'));
 	}, []);
 
@@ -68,44 +61,42 @@ function Register() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setErrorMessage('');
-		if (step === 1) {
-			if (verified) {
-				if (formData.firstName === '' || formData.firstName.length < 1) {
-					return setErrorMessage(i18n('enterFirstName'));
-				}
 
-				if (formData.lastName === '' || formData.lastName.length < 1) {
-					return setErrorMessage(i18n('enterLastName'));
-				}
-
-				if (formData.emailAddress === '' || formData.emailAddress.length < 1) {
-					return setErrorMessage(i18n('enterEmailAddress'));
-				}
-
-				const response = await postPersonalDetails(
-					formData,
-					'93110891-3822-41e5-bb15-45284ebe8f96',
-					recaptchaRes,
-				);
-
-				if (!response.ok) {
-					setErrorMessage(i18n('unknown error'));
-					throw new Error(`Error! status: ${response.status}`);
-				}
-
-				response.json().then((data) => {
-					setUserAltKey(data.key);
-					setStep(step + 1);
-					setTitle(i18n('signUpText'));
-					// remove recaptcha in dom
-					document.getElementById('recaptcha').style.display = 'none';
-				});
-			} else {
-				return setErrorMessage(i18n('pleaseCompleteRecaptcha'));
+		if (verified) {
+			if (formData.firstName === '' || formData.firstName.length < 1) {
+				return setErrorMessage(i18n('enterFirstName'));
 			}
-		} else if (step === 2) {
+
+			if (formData.lastName === '' || formData.lastName.length < 1) {
+				return setErrorMessage(i18n('enterLastName'));
+			}
+
+			if (formData.emailAddress === '' || formData.emailAddress.length < 1) {
+				return setErrorMessage(i18n('enterEmailAddress'));
+			}
+
+			const personalDetailsResponse = await postPersonalDetails(
+				formData,
+				'93110891-3822-41e5-bb15-45284ebe8f96',
+				recaptchaRes,
+			);
+
+			if (!personalDetailsResponse.ok) {
+				setErrorMessage(i18n('unknown error'));
+				throw new Error(`Error! status: ${personalDetailsResponse.status}`);
+			}
+
+			personalDetailsResponse.json().then((data) => {
+				setUserAltKey(data.key);
+				setStep(step + 1);
+				setTitle(i18n('signUpText'));
+				// remove recaptcha in dom
+				document.getElementById('recaptcha').style.display = 'none';
+			});
+			////////step2 begin
+
 			if (formData.userName === '' || formData.userName.length <= 1) {
-				return setErrorMessage(i18n('enterUserName'));
+				return setErrorMessage(i18n('enterUsername'));
 			}
 
 			if (formData.password === '') {
@@ -126,7 +117,7 @@ function Register() {
 				return setErrorMessage(i18n('passwordsDoNotMatch'));
 			}
 
-			const response = await postSignupData(
+			const signupResponse = await postSignupData(
 				'93110891-3822-41e5-bb15-45284ebe8f96',
 				userAltKey,
 				formData.userName,
@@ -134,23 +125,31 @@ function Register() {
 				recaptchaRes,
 			);
 
-			if (!response.ok) {
+			if (!signupResponse.ok) {
 				setErrorMessage(i18n('unknownError'));
-				throw new Error(`Error! status: ${response.status}`);
+				throw new Error(`Error! status: ${signupResponse.status}`);
 			}
 
 			setStep(step + 1);
 			setTitle('');
+			/////////////////////// end step 2
+		} else {
+			return setErrorMessage(i18n('pleaseCompleteRecaptcha'));
 		}
 	};
 
 	const getStepComponent = () => {
 		switch (step) {
 			case 1:
-				return <PersonalDetails handleChange={handleChange} />;
+				return (
+					<>
+						<HStack spacing={4}>
+							<PersonalDetails handleChange={handleChange} />{' '}
+							<UserDetails handleChange={handleChange} />
+						</HStack>
+					</>
+				);
 			case 2:
-				return <UserDetails handleChange={handleChange} />;
-			case 3:
 				return <Confirmation />;
 			default:
 				return <PersonalDetails />;
@@ -158,62 +157,66 @@ function Register() {
 	};
 
 	const renderText = () => {
-		switch (step) {
-			case 1:
-				return (
-					<p>
-						If you are already registered, <a href="#">click here</a> to login.
-					</p>
-				);
-			case 2:
-				return (
-					<>
-						<p>
-							{i18n(
-								'passwordRequirements',
-								{ charactersNumber: 5 },
-								{ numberOfCriteria: 3 },
-							)}
-						</p>
-						<ul>
-							<li>{i18n('upperCaseRule')}</li>
-							<li>{i18n('lowerCaseRule')}</li>
-							<li>{i18n('digitRule')}</li>
-							<li>{i18n('specialCharacterRule')}</li>
-						</ul>
-					</>
-				);
-		}
+		return (
+			<>
+				<Text>
+					{i18n(
+						'passwordRequirements',
+						{ charactersNumber: 5 },
+						{ numberOfCriteria: 3 },
+					)}
+				</Text>
+				<UnorderedList>
+					<ListItem>{i18n('upperCaseRule')}</ListItem>
+					<ListItem>{i18n('lowerCaseRule')}</ListItem>
+					<ListItem>{i18n('digitRule')}</ListItem>
+					<ListItem>{i18n('specialCharacterRule')}</ListItem>
+				</UnorderedList>
+
+				<Text>
+					If you are already registered,{' '}
+					<Link
+						as={ReactRouterLink}
+						to={{
+							pathname: '/login',
+							search: `?abbrevName=${context.abbrevNameState}`,
+						}}
+						color="ampSecondary.500"
+						textDecoration="underline">
+						{i18n('clickHere')}
+					</Link>{' '}
+					{i18n('toLogIn')}
+				</Text>
+			</>
+		);
 	};
 
 	return (
 		<>
-			<div className="login-wrapper">
-				<div className="login-left">
-					<HeadLogo />
-				</div>
-				<div className="login-right">
-					<div className="login-right-content-wrapper">
-						<AmpLogo />
-						<h1>{i18n(title)}</h1>
-						<div className="form-wrapper">
-							<form className="login-form">
-								{getStepComponent()}
-								{renderRecaptcha()}
-								<button
-									onClick={handleSubmit}
-									className="primary-button"
-									type="submit"
-									name="Login">
-									{step === 1 ? i18n('continueBtnText') : i18n('submitBtnText')}
-								</button>
-								<p className="text-center error-text">{errorMessage}</p>
-								{renderText()}
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
+			<VStack as="form" onSubmit={handleSubmit}>
+				<Heading>{i18n(title)}</Heading>
+				{getStepComponent()}
+				{context.recaptcha && (
+					<ReCAPTCHA
+						id="recaptcha"
+						ref={recaptchaRef}
+						sitekey={context.recaptcha}
+						onChange={onRecaptchaChange}
+					/>
+				)}
+				<Button onClick={handleSubmit} type="submit" name="Login">
+					{step === 1 ? i18n('continueBtnText') : i18n('submitBtnText')}
+				</Button>
+				{errorMessage && (
+					<Alert status="error" bg="ampError.50">
+						<AlertIcon />
+						<Text align="center" color="ampError.700">
+							{errorMessage}
+						</Text>
+					</Alert>
+				)}
+				{renderText()}
+			</VStack>
 		</>
 	);
 }

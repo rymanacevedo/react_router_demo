@@ -1,50 +1,56 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import {
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Input,
+	VStack,
+} from '@chakra-ui/react';
 
 const PersonalDetails = ({ handleChange }) => {
 	const { t: i18n } = useTranslation();
 	return (
-		<>
-			<div className="input-stack">
-				<label className="input-stack-label" htmlFor="firstName">
+		<VStack>
+			<FormControl isRequired>
+				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('first name')}
-				</label>
-				<input
-					onChange={handleChange('firstName')}
+				</FormLabel>
+				<Input
 					id="firstName"
-					type="text"
 					placeholder="first name"
-					name="firstName"
-					required
+					name="firstname"
+					onChange={handleChange('firstName')}
 				/>
-			</div>
-			<div className="input-stack">
-				<label className="input-stack-label" htmlFor="lastName">
+				<FormErrorMessage>{i18n('enterFirstName')}</FormErrorMessage>
+			</FormControl>
+
+			<FormControl isRequired>
+				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('last name')}
-				</label>
-				<input
-					onChange={handleChange('lastName')}
+				</FormLabel>
+				<Input
 					id="lastName"
-					type="text"
 					placeholder="last name"
 					name="lastName"
-					required
+					onChange={handleChange('lastName')}
 				/>
-			</div>
-			<div className="input-stack">
-				<label className="input-stack-label" htmlFor="emailAddress">
+				<FormErrorMessage>{i18n('enterLastName')}</FormErrorMessage>
+			</FormControl>
+
+			<FormControl isRequired>
+				<FormLabel marginBottom={1} requiredIndicator>
 					{i18n('email')}
-				</label>
-				<input
-					onChange={handleChange('emailAddress')}
+				</FormLabel>
+				<Input
 					id="emailAddress"
-					type="text"
 					placeholder="name@email.com"
 					name="emailAddress"
-					required
+					onChange={handleChange('emailAddress')}
 				/>
-			</div>
-		</>
+				<FormErrorMessage>{i18n('enterEmailAddress')}</FormErrorMessage>
+			</FormControl>
+		</VStack>
 	);
 };
 
