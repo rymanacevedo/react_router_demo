@@ -23,7 +23,9 @@ function App() {
 					<Route path="forgot-password" element={<ForgotPassword />} />
 					<Route path="forgot-username" element={<ForgotUsername />} />
 					<Route path="mfa" element={<MultiFactor />} />
-					<Route path="signup" element={<SignUp />} />
+					<Route
+						path="signup/:abbrevName/:userAltKey"
+						element={<SignUp />}></Route>
 					<Route path="register" element={<Register />} />
 				</Route>
 <<<<<<< HEAD:src/App.js
@@ -68,20 +70,6 @@ function App() {
 >>>>>>> 5a1bf56e7 (WIP lint fix):main/src/App.js
 				<Route path="/" element={<ProtectedRoute isAllowed={!!user} />}>
 =======
-
-				{/*<Route*/}
-				{/*	path="/signup/:abbrevName/:userAltKey"*/}
-				{/*	element={<LoginWrapper />}>*/}
-				{/*	<Route index element={<SignUp />} />*/}
-				{/*</Route>*/}
-
-				{/*<Route path="/signup" element={<LoginWrapper />}>*/}
-				{/*	<Route index element={<SignUp />} />*/}
-				{/*</Route>*/}
-
-				{/*<Route path="/register" element={<LoginWrapper />}>*/}
-				{/*	<Route index element={<Register />} />*/}
-				{/*</Route>*/}
 
 				<Route path="/app" element={<ProtectedRoute isAllowed={!!user} />}>
 >>>>>>> 5fb45f968 (updated routing so that protected content goes to /app):main/src/App.js
