@@ -113,7 +113,7 @@ function LoginForm() {
 			);
 
 			if (initialUserData.statusMessage === 'one time passcode sent') {
-				nav('/MultiFactor', {
+				nav('/mfa', {
 					state: {
 						email: initialUserData.userContexts[0].userEmailAddress,
 						username: formData.username,
@@ -245,7 +245,7 @@ function LoginForm() {
 				<HStack spacing={6}>
 					<Link
 						as={ReactRouterLink}
-						to="/ForgotUsername"
+						to="/forgot-username"
 						state={{
 							abbrevName: context.abbrevNameState,
 							accountUid: context.accountUid,
@@ -258,7 +258,7 @@ function LoginForm() {
 
 					<Link
 						as={ReactRouterLink}
-						to="/ForgotPassword"
+						to="/forgot-password"
 						state={{
 							abbrevName: context.abbrevNameState,
 							accountUid: context.accountUid,

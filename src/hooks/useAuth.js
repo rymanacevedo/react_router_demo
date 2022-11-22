@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
 		Cookies.set('session_key', initialUserData.sessionKey, {
 			path: '/',
 		});
-		nav('/');
+		nav('/app');
 	};
 
 	const logout = () => {
