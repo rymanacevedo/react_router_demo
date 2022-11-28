@@ -112,7 +112,8 @@ function Register() {
 
 			const personalDetailsResponse = await postPersonalDetails(
 				formData,
-				'93110891-3822-41e5-bb15-45284ebe8f96',
+				context.accountUid,
+				context.accountKey,
 				recaptchaRes,
 			);
 
@@ -129,7 +130,7 @@ function Register() {
 			});
 
 			const signupResponse = await postSignupData(
-				'93110891-3822-41e5-bb15-45284ebe8f96',
+				context.accountUid,
 				userAltKey,
 				formData.userName,
 				formData.password,
