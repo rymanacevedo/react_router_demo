@@ -92,9 +92,7 @@ function Register() {
 				setFormError((prevValue) => ({ ...prevValue, userName: true }));
 			}
 
-			if (formData.password === '') {
-				setFormError((prevValue) => ({ ...prevValue, password: true }));
-			} else if (formData.password.length < 5) {
+			if (formData.password === '' || formData.password.length < 5) {
 				setFormError((prevValue) => ({ ...prevValue, password: true }));
 			}
 			// check if password has one lowercase letter, one uppercase letter one number or special character
@@ -154,11 +152,10 @@ function Register() {
 		return (
 			<>
 				<Text>
-					{i18n(
-						'passwordRequirements',
-						{ charactersNumber: 5 },
-						{ numberOfCriteria: 3 },
-					)}
+					{i18n('passwordRequirements', {
+						charactersNumber: 5,
+						numberOfCriteria: 3,
+					})}
 				</Text>
 				<UnorderedList>
 					<ListItem>{i18n('upperCaseRule')}</ListItem>
