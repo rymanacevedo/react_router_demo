@@ -26,6 +26,7 @@ function App() {
 					<Route
 						path="signup/:abbrevName/:userAltKey"
 						element={<SignUp />}></Route>
+					<Route path="signup" element={<SignUp />} />
 					<Route path="register" element={<Register />} />
 				</Route>
 <<<<<<< HEAD:src/App.js
