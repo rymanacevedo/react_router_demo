@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import { Link as ReactRouterLink, useOutletContext } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import UserDetails from './UserDetails';
-import PersonalDetails from './PersonalDetails';
-import Confirmation from './Confirmation';
 import useRegisterService from '../../services/useRegisterService';
 import useSignupDataService from '../../services/useSignupDataService';
 import {
 	Alert,
 	AlertIcon,
 	Button,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
 	Heading,
 	HStack,
+	Input,
 	Link,
 	ListItem,
 	Text,
@@ -66,48 +67,64 @@ function Register() {
 	const handleChange = (input) => (e) => {
 		setFormData({ ...formData, [input]: e.target.value });
 	};
+
+	const validateInput = (e) => {
+		let fieldName = e.target.name;
+		if (e.target.value === '' || e.target.value < 1) {
+			setFormError((prevValue) => ({
+				...prevValue,
+				[fieldName]: true,
+			}));
+		} else {
+			setFormError((prevValue) => ({
+				...prevValue,
+				[fieldName]: false,
+			}));
+		}
+	};
+
+	const validatePassword = (e) => {
+		let fieldName = e.target.name;
+		if (
+			e.target.value === '' ||
+			e.target.value < 5 ||
+			!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(e.target.value)
+		) {
+			setFormError((prevValue) => ({
+				...prevValue,
+				[fieldName]: true,
+			}));
+		} else {
+			setFormError((prevValue) => ({
+				...prevValue,
+				[fieldName]: false,
+			}));
+		}
+	};
+
+	const validateConfirmPassword = () => {
+		if (
+			formData.password !== formData.confirmPassword ||
+			formData.confirmPassword === '' ||
+			formData.confirmPassword < 1
+		) {
+			setFormError((prevValue) => ({
+				...prevValue,
+				confirmPassword: true,
+			}));
+		} else {
+			setFormError((prevValue) => ({
+				...prevValue,
+				confirmPassword: false,
+			}));
+		}
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setErrorMessage('');
 
-		if (verified) {
-			if (formData.firstName === '' || formData.firstName.length < 1) {
-				setFormError((prevValue) => ({ ...prevValue, firstName: true }));
-			}
-
-			if (formData.lastName === '' || formData.lastName.length < 1) {
-				setFormError((prevValue) => ({ ...prevValue, lastName: true }));
-			}
-
-			if (formData.emailAddress === '' || formData.emailAddress.length < 1) {
-				setFormError((prevValue) => ({
-					...prevValue,
-					emailAddress: true,
-				}));
-			}
-
-			////////step2 begin
-
-			if (formData.userName === '' || formData.userName.length <= 1) {
-				setFormError((prevValue) => ({ ...prevValue, userName: true }));
-			}
-
-			if (formData.password === '' || formData.password.length < 5) {
-				setFormError((prevValue) => ({ ...prevValue, password: true }));
-			}
-			// check if password has one lowercase letter, one uppercase letter one number or special character
-			else if (
-				!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(
-					formData.password,
-				)
-			) {
-				setFormError((prevValue) => ({ ...prevValue, password: true }));
-			}
-
-			if (formData.confirmPassword !== formData.password) {
-				setFormError((prevValue) => ({ ...prevValue, password: true }));
-			}
-
+		if (verified && !formError) {
 			const personalDetailsResponse = await postPersonalDetails(
 				formData,
 				context.accountUid,
@@ -148,15 +165,137 @@ function Register() {
 		}
 	};
 
-	const renderText = () => {
-		return (
-			<>
+	return (
+		<>
+			<VStack spacing={5} as="form" onSubmit={handleSubmit}>
+				<Heading>{i18n(title)}</Heading>
+
+				<HStack spacing={5}>
+					<VStack>
+						<FormControl isRequired isInvalid={formError.firstName}>
+							<FormLabel marginBottom={1} requiredIndicator>
+								{i18n('first name')}
+							</FormLabel>
+							<Input
+								id="firstName"
+								placeholder="first name"
+								name="firstName"
+								onChange={handleChange('firstName')}
+								value={formData.firstName}
+								onBlur={validateInput}
+							/>
+							<FormErrorMessage>{i18n('enterFirstName')}</FormErrorMessage>
+						</FormControl>
+
+						<FormControl isRequired isInvalid={formError.lastName}>
+							<FormLabel marginBottom={1} requiredIndicator>
+								{i18n('last name')}
+							</FormLabel>
+							<Input
+								id="lastName"
+								placeholder="last name"
+								name="lastName"
+								onChange={handleChange('lastName')}
+								value={formData.lastName}
+								onBlur={validateInput}
+							/>
+							<FormErrorMessage>{i18n('enterLastName')}</FormErrorMessage>
+						</FormControl>
+
+						<FormControl isRequired isInvalid={formError.emailAddress}>
+							<FormLabel marginBottom={1} requiredIndicator>
+								{i18n('email')}
+							</FormLabel>
+							<Input
+								id="emailAddress"
+								placeholder="name@email.com"
+								name="emailAddress"
+								onChange={handleChange('emailAddress')}
+								value={formData.emailAddress}
+								onBlur={validateInput}
+							/>
+							<FormErrorMessage>{i18n('enterEmailAddress')}</FormErrorMessage>
+						</FormControl>
+					</VStack>
+					<VStack>
+						<FormControl isRequired isInvalid={formError.userName}>
+							<FormLabel marginBottom={1} requiredIndicator>
+								{i18n('username')}
+							</FormLabel>
+							<Input
+								id="userName"
+								placeholder="name@email.com"
+								name="userName"
+								onChange={handleChange('userName')}
+								value={formData.userName}
+								onBlur={validateInput}
+							/>
+							<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
+						</FormControl>
+
+						<FormControl isRequired isInvalid={formError.password}>
+							<FormLabel marginBottom={1} requiredIndicator>
+								{i18n('password')}
+							</FormLabel>
+							<Input
+								id="password"
+								placeholder="password"
+								type="password"
+								name="password"
+								onChange={handleChange('password')}
+								value={formData.password}
+								onBlur={validatePassword}
+							/>
+							<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+						</FormControl>
+
+						<FormControl isRequired isInvalid={formError.password}>
+							<FormLabel marginBottom={1} requiredIndicator>
+								{i18n('confirmPassword')}
+							</FormLabel>
+							<Input
+								id="confirmPassword"
+								placeholder="confirm password"
+								type="password"
+								name="confirmPassword"
+								onChange={handleChange('confirmPassword')}
+								value={formData.confirmPassword}
+								onBlur={validateConfirmPassword}
+							/>
+							<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+						</FormControl>
+					</VStack>
+				</HStack>
+
+				{context.recaptcha && (
+					<ReCAPTCHA
+						id="recaptcha"
+						ref={recaptchaRef}
+						sitekey={context.recaptcha}
+						onChange={onRecaptchaChange}
+					/>
+				)}
+
+				<Button onClick={handleSubmit} type="submit" name="Login">
+					{step === 1 ? i18n('continueBtnText') : i18n('submitBtnText')}
+				</Button>
+
+				{errorMessage && (
+					<Alert status="error" bg="ampError.50">
+						<AlertIcon />
+						<Text align="center" color="ampError.700">
+							{errorMessage}
+						</Text>
+					</Alert>
+				)}
+
 				<Text>
 					{i18n('passwordRequirements', {
 						charactersNumber: 5,
 						numberOfCriteria: 3,
 					})}
 				</Text>
+
 				<UnorderedList>
 					<ListItem>{i18n('upperCaseRule')}</ListItem>
 					<ListItem>{i18n('lowerCaseRule')}</ListItem>
@@ -178,60 +317,9 @@ function Register() {
 					</Link>{' '}
 					{i18n('toLogIn')}
 				</Text>
-			</>
-		);
-	};
-
-	const getStepComponent = () => {
-		switch (step) {
-			case 1:
-				return (
-					<>
-						<VStack as="form" onSubmit={handleSubmit}>
-							<Heading>{i18n(title)}</Heading>
-							<HStack spacing={5}>
-								<PersonalDetails
-									handleChange={handleChange}
-									formData={formData}
-									formError={formError}
-								/>
-								<UserDetails
-									handleChange={handleChange}
-									formData={formData}
-									formError={formError}
-								/>
-							</HStack>
-							{context.recaptcha && (
-								<ReCAPTCHA
-									id="recaptcha"
-									ref={recaptchaRef}
-									sitekey={context.recaptcha}
-									onChange={onRecaptchaChange}
-								/>
-							)}
-							<Button onClick={handleSubmit} type="submit" name="Login">
-								{step === 1 ? i18n('continueBtnText') : i18n('submitBtnText')}
-							</Button>
-							{errorMessage && (
-								<Alert status="error" bg="ampError.50">
-									<AlertIcon />
-									<Text align="center" color="ampError.700">
-										{errorMessage}
-									</Text>
-								</Alert>
-							)}
-							{renderText()}
-						</VStack>
-					</>
-				);
-			case 2:
-				return <Confirmation />;
-			default:
-				return <PersonalDetails />;
-		}
-	};
-
-	return <>{getStepComponent()}</>;
+			</VStack>
+		</>
+	);
 }
 
 export default Register;
