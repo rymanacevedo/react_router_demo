@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {
   HStack,
 <<<<<<< HEAD
@@ -16,6 +17,9 @@ import {
 } from '@chakra-ui/react';
 <<<<<<< HEAD
 =======
+=======
+import { useEffect } from 'react';
+>>>>>>> 160ffbe83 (Feat: create assignment service)
 import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -24,9 +28,11 @@ import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 const AssignmentList = () => {
 =======
 import { useTranslation } from 'react-i18next';
+import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
+	const { getAssignments } = useAssignmentByUserAssociations();
 
 	const mockData = {
 		displayCurriculum: {
@@ -291,6 +297,7 @@ const AssignmentList = () => {
 	};
 >>>>>>> d5cdc7d8e (Feat: add i18n texts)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   const mockData = {
@@ -669,6 +676,13 @@ const AssignmentList = () => {
 
 =======
 >>>>>>> 527888618 (Chore: clean up console logs)
+=======
+	useEffect(() => {
+		const star = getAssignments();
+		console.log(star);
+	}, []);
+
+>>>>>>> 160ffbe83 (Feat: create assignment service)
 	const getAssignmentText = (assignment) => {
 		if (assignment.assignmentType !== 'TimedAssessment') {
 			switch (assignment.status) {
