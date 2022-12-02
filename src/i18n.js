@@ -86,6 +86,7 @@ const resources = {
          minToComplete:'min to complete',
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
+<<<<<<< HEAD:src/i18n.js
 
 <<<<<<< HEAD:src/i18n.js
 >>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
@@ -104,6 +105,15 @@ const resources = {
          questions: 'Questions',
          showProgress:'Show Progress'
 >>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/i18n.js
+=======
+         /////////////////////////////////////////////
+         //   DataServiceExceptionComponent.tsx
+         //////////////////////////////////////////////
+         appErrorTitle: 'Application Error',
+         appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
+         appErrorRestartButtonText: 'restart application',
+
+>>>>>>> bf35abd9a (added i18n):main/src/i18n.js
       }
    },
    fr: {

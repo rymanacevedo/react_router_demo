@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
 	useDisclosure,
@@ -15,6 +16,7 @@ function DataServiceExceptionComponent(props: {
 	isOpen: boolean;
 	closeOnEsc: boolean;
 }) {
+	const { t: i18n } = useTranslation();
 	const { onClose } = useDisclosure();
 	const cancelRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,16 +30,15 @@ function DataServiceExceptionComponent(props: {
 				<AlertDialogOverlay>
 					<AlertDialogContent margin="auto">
 						<AlertDialogHeader fontSize="lg" fontWeight="bold">
-							Application Error
+							{i18n('appErrorTitle')}
 						</AlertDialogHeader>
 
-						<AlertDialogBody>
-							Looks like you hit a snag in our system. Please wait a minute or
-							two and try again.
-						</AlertDialogBody>
+						<AlertDialogBody>{i18n('appErrorText')}</AlertDialogBody>
 
 						<AlertDialogFooter>
-							<Button onClick={onClose}>restart application</Button>
+							<Button onClick={onClose}>
+								{i18n('appErrorRestartButtonText')}
+							</Button>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialogOverlay>
