@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import {
+	Avatar,
+	AvatarGroup,
 	Box,
 	Button,
 	HStack,
@@ -71,12 +73,29 @@ const TestProgressBarMenu = () => {
 						padding={'24px'}
 						borderRadius={'24px'}
 						width={'375px'}>
+						<Box
+							width="325px"
+							bg="ampSuccess.50"
+							borderRadius={'12px'}
+							padding="20px">
+							<HStack>
+								{' '}
+								<AvatarGroup spacing="4px">
+									<Avatar bg="teal.500" />
+								</AvatarGroup>
+								<Text fontSize={'16px'}>
+									You’re doing a great job at knowing what you are sure and
+									unsure about.
+								</Text>
+							</HStack>
+						</Box>
 						<Button
 							variant={'outline'}
 							borderColor={'ampPrimary.300'}
 							bg="ampWhite"
 							width="325px"
-							height="40px">
+							height="40px"
+							marginTop="24px">
 							<Text fontSize={'16px'} fontWeight="600">
 								{i18n('viewMoreProgress')}
 							</Text>
