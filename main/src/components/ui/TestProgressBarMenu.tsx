@@ -1,12 +1,29 @@
-import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
+import {
+	Box,
+	Button,
+	HStack,
+	Popover,
+	PopoverArrow,
+	PopoverBody,
+	PopoverCloseButton,
+	PopoverContent,
+	PopoverHeader,
+	PopoverTrigger,
+	Progress,
+	Text,
+	VStack,
+} from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
+import { EnterIcon, ExitIcon } from '@radix-ui/react-icons';
 
 const TestProgressBarMenu = () => {
 	const { t: i18n } = useTranslation();
+	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<Box width="100%" boxSizing="border-box">
+		<Box width="100vw" boxSizing="border-box">
 			<HStack
 				borderBottom={'1px'}
 				borderBottomColor="ampSecondary.300"
@@ -40,17 +57,33 @@ const TestProgressBarMenu = () => {
 						<AmpMicroChip variant="ampNeutralUnfilled" />
 					</HStack>
 				</VStack>
-				<Button
-					variant={'outline'}
-					borderColor={'ampPrimary.300'}
-					bg="ampWhite">
-					<Text fontSize={'16px'} fontWeight="600">
-						{i18n('showProgress')}
-					</Text>
-				</Button>
+				<Popover>
+					<PopoverTrigger>
+						<Button
+							variant={'outline'}
+							borderColor={'ampPrimary.300'}
+							bg="ampWhite"
+							width="200px"
+							leftIcon={isOpen ? <ExitIcon /> : <EnterIcon />}
+							onClick={() => setIsOpen(!isOpen)}>
+							<Text fontSize={'16px'} fontWeight="600">
+								{isOpen ? i18n('hideProgress') : i18n('showProgress')}
+							</Text>
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent>
+						<PopoverArrow />
+						<PopoverCloseButton />
+						<PopoverHeader>Confirmation!</PopoverHeader>
+						<PopoverBody>
+							Are you sure you want to have that milkshake?
+						</PopoverBody>
+					</PopoverContent>
+				</Popover>
 			</HStack>
+
 			<Progress
-				value={20}
+				value={80}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}

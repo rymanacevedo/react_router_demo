@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import AssignmentList from '../ui/AssignmentList';
 import { Spinner } from '@chakra-ui/react';
 =======
@@ -10,12 +11,15 @@ import AmpMicroChip from '../../css/AmpMicroChip';
 >>>>>>> 1ff658e8e (Fix: made mini chips into micro chips)
 import AmpChip from '../../css/AmpChip';
 
+=======
+>>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar)
 const Page = ({ id, header, content }) => {
 	return (
 		<>
 			<h1>{header}</h1>
 			<main className="main" id="main">
 				<div id={id}>{content}</div>
+<<<<<<< HEAD
 <<<<<<< HEAD
 				{!true ? (
 					<Spinner
@@ -62,6 +66,8 @@ const Page = ({ id, header, content }) => {
 				<AmpMicroChip variant="ampWarningOutlineDot" />
 				<AmpMicroChip variant="ampNeutralFilledDot" />
 				<AmpMicroChip variant="ampSecondaryDot" />
+=======
+>>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar)
 			</main>
 		</>
 	);

@@ -17,12 +17,16 @@ const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
 			{children ? children : <Outlet />}
 =======
 			<HeaderNav />
+<<<<<<< HEAD:src/routes/ProtectedRoute.jsx
 			<TestProgressBarMenu />
 
 			<Box minH="80vh" margin="16px">
 				{children ? children : <Outlet />}
 			</Box>
 >>>>>>> 852b1f17f (Feat: completed ui for progress bar):main/src/routes/ProtectedRoute.jsx
+=======
+			<Box minH="80vh">{children ? children : <Outlet />}</Box>
+>>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar):main/src/routes/ProtectedRoute.jsx
 			<Footer />
 		</>
 	);

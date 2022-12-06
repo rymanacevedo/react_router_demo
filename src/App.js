@@ -5,6 +5,7 @@ import LoginForm from './components/login/LoginForm';
 
 import { Route, Routes } from 'react-router-dom';
 import Page from './components/pages/Page';
+import LearningView from './components/pages/LearningView';
 import MultiFactor from './components/login/MultiFactor';
 import SignUp from './components/login/SignUp';
 import Register from './components/self-registration/Register';
@@ -94,16 +95,7 @@ function App() {
 							/>
 						}
 					/>
-					<Route
-						path="learning"
-						element={
-							<Page
-								id={'learning-dash-main'}
-								header={'Learning'}
-								content={'under construction'}
-							/>
-						}
-					/>
+					<Route path="learning" element={<LearningView />} />
 					<Route
 						path="switch-account"
 						element={

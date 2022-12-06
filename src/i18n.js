@@ -72,6 +72,7 @@ const resources = {
 =======
          accountUrlErrorText: "Account not recognized. Please check the account name in the URL.",
          passcode: "Passcode",
+<<<<<<< HEAD:src/i18n.js
          pleaseEnterPasscode: "Please enter your passcode.",
 <<<<<<< HEAD:src/i18n.js
 <<<<<<< HEAD:src/i18n.js
@@ -79,6 +80,20 @@ const resources = {
 =======
 >>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
          //////////////////////////////////
+=======
+         pleaseEnterPasscode: "Please enter your passcode.",        
+         usernameUnavailable: "This username is already in use. Please try another.",
+         /////////////////////////////////////////////
+         //   TestProgressBarMenu.tsx
+         //////////////////////////////////////////////
+         theScienceOfLearning:'The Science of Learning',
+         about: 'About',
+         minsLeft:'mins left',
+         questions: 'Questions',
+         showProgress:'Show Progress',
+         hideProgress: 'Hide Progress',
+          //////////////////////////////////
+>>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar):main/src/i18n.js
          //    AssignmentList.js
          //////////////////////////////////
          mins: 'mins',
