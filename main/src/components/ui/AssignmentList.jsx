@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {
   HStack,
 <<<<<<< HEAD
@@ -20,6 +21,9 @@ import {
 =======
 import { useEffect } from 'react';
 >>>>>>> 160ffbe83 (Feat: create assignment service)
+=======
+import { useEffect, useState } from 'react';
+>>>>>>> 0e9687985 (Chore: clean up mock data and console logs)
 import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -33,6 +37,7 @@ import useAssignmentByUserAssociations from '../../services/useAssignmentByUserA
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
 	const { getAssignments } = useAssignmentByUserAssociations();
+<<<<<<< HEAD
 
 	const mockData = {
 		displayCurriculum: {
@@ -296,6 +301,9 @@ const AssignmentList = () => {
 		reviewHeaderResource: null,
 	};
 >>>>>>> d5cdc7d8e (Feat: add i18n texts)
+=======
+	const [assignmentListData, setAssignmentListData] = useState();
+>>>>>>> 0e9687985 (Chore: clean up mock data and console logs)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -680,7 +688,9 @@ const AssignmentList = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const star = await getAssignments();
-			console.log(star);
+			if (star.displayCurriculum) {
+				setAssignmentListData(star);
+			}
 		};
 		fetchData();
 	}, []);
@@ -843,9 +853,13 @@ const AssignmentList = () => {
 		}
 	};
 
+<<<<<<< HEAD
 	const assignmentList = mockData.displayCurriculum.children.map(
 <<<<<<< HEAD
 <<<<<<< HEAD
+=======
+	const assignmentList = assignmentListData?.displayCurriculum.children.map(
+>>>>>>> 0e9687985 (Chore: clean up mock data and console logs)
 		(curriculum, index) => {
 			const assignment =
 				curriculum.assignments[curriculum.assignments.length - 1];
@@ -896,9 +910,14 @@ const AssignmentList = () => {
 					</HStack>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 					{index !== mockData.displayCurriculum.children.length - 1 && (
+=======
+					{index !==
+						assignmentListData?.displayCurriculum.children.length - 1 && (
+>>>>>>> 0e9687985 (Chore: clean up mock data and console logs)
 						<Divider
 							borderWidth="1px"
 							borderStyle="solid"
