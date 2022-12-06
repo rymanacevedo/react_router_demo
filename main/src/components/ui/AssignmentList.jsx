@@ -678,8 +678,11 @@ const AssignmentList = () => {
 >>>>>>> 527888618 (Chore: clean up console logs)
 =======
 	useEffect(() => {
-		const star = getAssignments();
-		console.log(star);
+		const fetchData = async () => {
+			const star = await getAssignments();
+			console.log(star);
+		};
+		fetchData();
 	}, []);
 
 >>>>>>> 160ffbe83 (Feat: create assignment service)

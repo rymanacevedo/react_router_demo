@@ -5,7 +5,6 @@ import axios from 'axios';
 const useModuleContentService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
 	const { user } = useAuth();
 	let assignmentKey = '8TJTMV7NH';
 	let subaccount = '';

@@ -1,20 +1,32 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../hooks/useAuth';
 
 const useAssignmentByUserAssociations = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+	const { user } = useAuth();
+	let courseCurricKey = 'TL97F67UP';
+	let subaccount = '';
+	user.roles.forEach((role) => {
+		if (role.name === 'Learner') {
+			subaccount = role.account;
+		}
+	});
+
 	const getAssignments = async () => {
 		try {
 			setLoading(true);
 			const assignmentDataResponse = await axios({
-				url: 'v2/user-associations?courseCurricKey=P5HWFY38U&hideUnassigned=false&isWebapp=true&subaccount=D8FCK9GWY',
-
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				dataType: 'json',
 				method: 'GET',
+				url: `v2/user-associations?courseCurricKey=${courseCurricKey}&hideUnassigned=false&isWebapp=true&subaccount=${subaccount}`,
+				// baseURL: 'https://qa3api.amplifire.me:8443/v2/user-associations?courseCurricKey=TL97F67UP&hideUnassigned=false&isWebapp=true&subaccount=D8FCK9GWY',
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
 			});
 
 			return assignmentDataResponse.data;
