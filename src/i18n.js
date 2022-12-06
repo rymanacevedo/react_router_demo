@@ -92,6 +92,7 @@ const resources = {
          questions: 'Questions',
          showProgress:'Show Progress',
          hideProgress: 'Hide Progress',
+         viewMoreProgress: 'View More Progress',
           //////////////////////////////////
 >>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar):main/src/i18n.js
          //    AssignmentList.js

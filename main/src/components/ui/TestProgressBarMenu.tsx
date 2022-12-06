@@ -4,11 +4,7 @@ import {
 	Button,
 	HStack,
 	Popover,
-	PopoverArrow,
-	PopoverBody,
-	PopoverCloseButton,
 	PopoverContent,
-	PopoverHeader,
 	PopoverTrigger,
 	Progress,
 	Text,
@@ -71,17 +67,23 @@ const TestProgressBarMenu = () => {
 							</Text>
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent>
-						<PopoverArrow />
-						<PopoverCloseButton />
-						<PopoverHeader>Confirmation!</PopoverHeader>
-						<PopoverBody>
-							Are you sure you want to have that milkshake?
-						</PopoverBody>
+					<PopoverContent
+						padding={'24px'}
+						borderRadius={'24px'}
+						width={'375px'}>
+						<Button
+							variant={'outline'}
+							borderColor={'ampPrimary.300'}
+							bg="ampWhite"
+							width="325px"
+							height="40px">
+							<Text fontSize={'16px'} fontWeight="600">
+								{i18n('viewMoreProgress')}
+							</Text>
+						</Button>
 					</PopoverContent>
 				</Popover>
 			</HStack>
-
 			<Progress
 				value={80}
 				height={'80px'}
