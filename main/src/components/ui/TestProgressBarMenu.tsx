@@ -146,7 +146,21 @@ const TestProgressBarMenu = () => {
 						{isOpen ? i18n('hideProgress') : i18n('showProgress')}
 					</Text>
 				</Button>
+<<<<<<< HEAD
 >>>>>>> 4f964410d (Feat: updated logic for open close, switch from pop over to toast, added additional style logic)
+=======
+				{/* <Button
+					variant={'outline'}
+					borderColor={'ampPrimary.300'}
+					bg="ampWhite"
+					width="200px"
+					leftIcon={isOpen ? <ExitIcon /> : <EnterIcon />}
+					onClick={() => {}}>
+					<Text fontSize={'16px'} fontWeight="600">
+						{isOpen ? i18n('hideProgress') : i18n('showProgress')}
+					</Text>
+				</Button> */}
+>>>>>>> d04fcc9ff (Chore: update styling)
 			</HStack>
 			<Progress
 				value={80}
