@@ -2,33 +2,30 @@ import React, { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-	useDisclosure,
-	Button,
 	AlertDialog,
 	AlertDialogOverlay,
 	AlertDialogContent,
 	AlertDialogHeader,
 	AlertDialogBody,
 	AlertDialogFooter,
+	Button,
 } from '@chakra-ui/react';
 
-function DataServiceExceptionComponent(props: {
-	isOpen: boolean;
-	closeOnEsc: boolean;
-}) {
+const DataServiceExceptionComponent = (props: any) => {
 	const { t: i18n } = useTranslation();
-	const { onClose } = useDisclosure();
-	const cancelRef = useRef<HTMLDivElement | null>(null);
+	const cancelRef = useRef<HTMLButtonElement>(null);
 
 	return (
 		<>
 			<AlertDialog
-				isOpen={props.isOpen}
+				onClose={props.onClose}
 				leastDestructiveRef={cancelRef}
-				onClose={onClose}
-				closeOnEsc={props.closeOnEsc}>
-				<AlertDialogOverlay>
-					<AlertDialogContent margin="auto">
+				isOpen={props.isOpen}
+				isCentered
+				closeOnEsc={false}
+				closeOnOverlayClick={false}>
+				<AlertDialogOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto">
+					<AlertDialogContent>
 						<AlertDialogHeader fontSize="lg" fontWeight="bold">
 							{i18n('appErrorTitle')}
 						</AlertDialogHeader>
@@ -36,7 +33,7 @@ function DataServiceExceptionComponent(props: {
 						<AlertDialogBody>{i18n('appErrorText')}</AlertDialogBody>
 
 						<AlertDialogFooter>
-							<Button onClick={onClose}>
+							<Button onClick={props.onClose} ref={cancelRef}>
 								{i18n('appErrorRestartButtonText')}
 							</Button>
 						</AlertDialogFooter>
@@ -45,6 +42,6 @@ function DataServiceExceptionComponent(props: {
 			</AlertDialog>
 		</>
 	);
-}
+};
 
 export default DataServiceExceptionComponent;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './css/App.css';
 import LoginWrapper from './components/login/LoginWrapper';
 import LoginForm from './components/login/LoginForm';
@@ -13,11 +13,23 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import { useAuth } from './hooks/useAuth';
 import ForgotPassword from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
+import DataServiceExceptionComponent from './components/ui/DataServiceExceptionComponent';
+import DialogContext from './components/DialogProvider';
 
 function App() {
-	const { user } = useAuth();
+	const { user, logout } = useAuth();
+	const [showAlert, setShowAlert] = useState(false);
+
+	const handleCloseAlert = () => {
+		setShowAlert(false);
+		if (user) {
+			logout();
+		}
+	};
+
 	return (
 		<>
+<<<<<<< HEAD:src/App.js
 			<Routes>
 				<Route path="/" element={<LoginWrapper />}>
 					<Route index path="login" element={<LoginForm />} />
@@ -138,6 +150,101 @@ function App() {
 					/>
 				</Route>
 			</Routes>
+=======
+			<DialogContext.Provider value={{ showAlert, setShowAlert }}>
+				<Routes>
+					<Route path="/" element={<LoginWrapper />}>
+						<Route index path="login" element={<LoginForm />} />
+						<Route path="forgot-password" element={<ForgotPassword />} />
+						<Route path="forgot-username" element={<ForgotUsername />} />
+						<Route path="mfa" element={<MultiFactor />} />
+						<Route
+							path="signup/:abbrevName/:userAltKey"
+							element={<SignUp />}></Route>
+						<Route path="signup" element={<SignUp />} />
+						<Route path="register" element={<Register />} />
+					</Route>
+
+					<Route path="/app" element={<ProtectedRoute isAllowed={!!user} />}>
+						<Route
+							path="authoring"
+							element={
+								<Page
+									id={'author-dash-main'}
+									header={'Authoring'}
+									content={'under construction'}
+								/>
+							}
+						/>
+						<Route
+							path="admin"
+							element={
+								<Page
+									id={'admin-dash-main'}
+									header={'Administration'}
+									content={'under construction'}
+								/>
+							}
+						/>
+						<Route
+							path="learning"
+							element={
+								<Page
+									id={'learning-dash-main'}
+									header={'Learning'}
+									content={'under construction'}
+								/>
+							}
+						/>
+						<Route
+							path="switch-account"
+							element={
+								<Page
+									id={'switch-account'}
+									header={'Switch Account'}
+									content={'under construction'}
+								/>
+							}
+						/>
+						<Route
+							path="account"
+							element={
+								<Page
+									id={'account'}
+									header={'Account'}
+									content={'under construction'}
+								/>
+							}
+						/>
+						<Route
+							path="reporting"
+							element={
+								<Page
+									id={'reporting'}
+									header={'Reporting'}
+									content={'under construction'}
+								/>
+							}
+						/>
+						<Route
+							path="courses"
+							element={
+								<Page
+									id={'courses'}
+									header={'Courses'}
+									content={'under construction'}
+								/>
+							}
+						/>
+					</Route>
+				</Routes>
+			</DialogContext.Provider>
+
+			<DataServiceExceptionComponent
+				isOpen={showAlert}
+				onClose={() => handleCloseAlert(false)}
+			/>
+>>>>>>> 762a79be8 (added dialog provider and trigger dialog on 500 error):main/src/App.js
 		</>
 	);
 }
