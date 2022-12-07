@@ -55,6 +55,7 @@ const TestProgressBarMenu = () => {
 					</HStack>
 				</VStack>
 <<<<<<< HEAD
+<<<<<<< HEAD
 				<Popover>
 					<PopoverTrigger>
 						<Button
@@ -85,6 +86,9 @@ const TestProgressBarMenu = () => {
 					</PopoverContent>
 				</Popover>
 =======
+=======
+
+>>>>>>> 35039affb (chore: clean up code styles)
 				<Button
 					variant={'outline'}
 					borderColor={'ampPrimary.300'}
@@ -101,27 +105,32 @@ const TestProgressBarMenu = () => {
 								render: () => (
 									<Box
 										marginTop={'160px'}
-										padding={'24px'}
-										paddingRight={'400px'}
 										borderRadius={'24px'}
 <<<<<<< HEAD
+<<<<<<< HEAD
 										width={'375px'}
+=======
+										width={'475px'}
+										paddingTop="1px"
+>>>>>>> 35039affb (chore: clean up code styles)
 										marginLeft="200px"
 										bg="ampWhite">
-										<Box
-											width="325px"
-											bg="ampSuccess.50"
-											borderRadius={'12px'}
-											padding="20px">
-											<HStack>
-												<AvatarGroup spacing="4px">
-													<Avatar bg="teal.500" />
-												</AvatarGroup>
-												<Text fontSize={'16px'}>
-													You’re doing a great job at knowing what you are sure
-													and unsure about.
-												</Text>
-											</HStack>
+										<Box w="373px">
+											<Box
+												bg="ampSuccess.50"
+												borderRadius={'12px'}
+												padding="20px"
+												margin="24px">
+												<HStack>
+													<AvatarGroup spacing="4px">
+														<Avatar bg="teal.500" />
+													</AvatarGroup>
+													<Text fontSize={'16px'}>
+														You’re doing a great job at knowing what you are
+														sure and unsure about.
+													</Text>
+												</HStack>
+											</Box>
 										</Box>
 =======
 										width={'475px'}
@@ -139,7 +148,7 @@ const TestProgressBarMenu = () => {
 											bg="ampWhite"
 											width="325px"
 											height="40px"
-											marginTop="24px"
+											margin="24px"
 											onClick={() => {
 												setIsOpen(!isOpen);
 												toast.close(id);
