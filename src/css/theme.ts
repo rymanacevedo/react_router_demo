@@ -170,6 +170,15 @@ export const ampTheme = extendTheme({
 					bg: '#D3E5F0',
 				},
 			},
+			variants: {
+				ampDarkSuccess: () => {
+					return {
+						filledTrack: {
+							bg: 'ampSuccess.500',
+						},
+					};
+				},
+			},
 		},
 >>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/css/theme.ts
 	},

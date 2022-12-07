@@ -1,6 +1,7 @@
 import AssignmentList from '../ui/AssignmentList';
-import { Container } from '@chakra-ui/react';
+import { Container, HStack } from '@chakra-ui/react';
 import TestProgressBarMenu from '../ui/TestProgressBarMenu';
+import ProgressMenu from '../ui/ProgressMenu';
 
 const LearningView = () => {
 	return (
@@ -12,7 +13,10 @@ const LearningView = () => {
 					padding="0"
 					width={'100%'}>
 					<TestProgressBarMenu />
-					<AssignmentList />
+					<HStack width="100vw">
+						<AssignmentList />
+						<ProgressMenu />
+					</HStack>
 				</Container>
 			</main>
 		</>
