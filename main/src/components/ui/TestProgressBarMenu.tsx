@@ -104,6 +104,7 @@ const TestProgressBarMenu = () => {
 										padding={'24px'}
 										paddingRight={'400px'}
 										borderRadius={'24px'}
+<<<<<<< HEAD
 										width={'375px'}
 										marginLeft="200px"
 										bg="ampWhite">
@@ -122,6 +123,16 @@ const TestProgressBarMenu = () => {
 												</Text>
 											</HStack>
 										</Box>
+=======
+										width={'475px'}
+										paddingTop="1px"
+										marginLeft="200px"
+										bg="ampWhite">
+										<Box w="373px">
+											<ProgressMessageComponent />
+										</Box>
+
+>>>>>>> 6e49f98ef (Fix: fixed ui for toast)
 										<Button
 											variant={'outline'}
 											borderColor={'ampPrimary.300'}
@@ -155,7 +166,9 @@ const TestProgressBarMenu = () => {
 					bg="ampWhite"
 					width="200px"
 					leftIcon={isOpen ? <ExitIcon /> : <EnterIcon />}
-					onClick={() => {}}>
+					onClick={() => {
+						setIsOpen(!isOpen)
+					}}>
 					<Text fontSize={'16px'} fontWeight="600">
 						{isOpen ? i18n('hideProgress') : i18n('showProgress')}
 					</Text>
