@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
+
+import DialogContext from '../components/DialogProvider';
 
 const useCompleteUserAccountService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+	const { setShowAlert } = useContext(DialogContext);
 	const fetchCompleteUserAccount = async (accountKey, sessionKey) => {
 		try {
 			setLoading(true);
@@ -22,6 +25,9 @@ const useCompleteUserAccountService = () => {
 		} catch (err) {
 			console.log(err);
 			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
 		} finally {
 			setLoading(false);
 		}

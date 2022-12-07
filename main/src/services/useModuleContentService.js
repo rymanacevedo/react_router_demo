@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
+
+import DialogContext from '../components/DialogProvider';
 
 const useModuleContentService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
+=======
+	const { setShowAlert } = useContext(DialogContext);
+
+>>>>>>> e1cc55a21 (added dialog trigger to remaining services)
 	const { user } = useAuth();
 	let assignmentKey = '8TJTMV7NH';
 	let subaccount = '';
@@ -31,6 +38,9 @@ const useModuleContentService = () => {
 			return assignmentsResponse.data;
 		} catch (err) {
 			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -53,6 +63,9 @@ const useModuleContentService = () => {
 			return modalContentResponse.data;
 		} catch (err) {
 			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
 		} finally {
 			setLoading(false);
 		}

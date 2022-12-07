@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
+
+import DialogContext from '../components/DialogProvider';
 
 const useRegisterService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
+	const { setShowAlert } = useContext(DialogContext);
 	const postPersonalDetails = async (
 		{ firstName, lastName, emailAddress },
 		accountUid,
@@ -50,6 +53,9 @@ const useRegisterService = () => {
 		} catch (err) {
 			console.log(err);
 			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
 		} finally {
 			setLoading(false);
 		}
