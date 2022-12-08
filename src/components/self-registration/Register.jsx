@@ -104,6 +104,11 @@ function Register() {
 
 	const validatePassword = (e) => {
 		let fieldName = e.target.name;
+		// Password must be at least 5 characters long, and contain at least 3 of the following:
+		// Uppercase letter (A-Z)
+		// Lowercase letter (a-z)
+		// Digit (0-9)
+		// Special character (!@#$% etc.)
 		if (
 			e.target.value === '' ||
 			e.target.value < 5 ||
