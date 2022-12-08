@@ -128,7 +128,7 @@ const Header = () => {
 		});
 		return (
 			<>
-				<ButtonGroup variant="link" w="50%" boxSizing="border-box">
+				<ButtonGroup variant="link" boxSizing="border-box">
 					{tabs.length > 1 ? tabs.map((tab) => tab) : null}
 					<Menu>
 						<MenuButton

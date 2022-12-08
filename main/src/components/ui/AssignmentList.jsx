@@ -942,7 +942,8 @@ const AssignmentList = () => {
 			padding={'16px'}
 			border={'1px'}
 			borderColor={'ampNeutral.300'}
-			width={'800px'}>
+			width="100%"
+			maxWidth={'800px'}>
 			{assignmentList}
 		</List>
 	);

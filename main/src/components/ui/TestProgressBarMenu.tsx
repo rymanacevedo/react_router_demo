@@ -1,23 +1,18 @@
-import React, { useState } from 'react';
-import {
-	Box,
-	Button,
-	HStack,
-	Progress,
-	Text,
-	VStack,
-	useToast,
-} from '@chakra-ui/react';
+import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon } from '@radix-ui/react-icons';
-import ProgressMessageComponent from './ProgressMessageComponent';
 
-const TestProgressBarMenu = () => {
+interface InterfaceTestProgressBarMenu {
+	isOpen: boolean;
+	setIsOpen: (isOpen: boolean) => void;
+}
+
+const TestProgressBarMenu = ({
+	isOpen,
+	setIsOpen,
+}: InterfaceTestProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
-	const [isOpen, setIsOpen] = useState(false);
-	const toast = useToast();
-	const id = 'progress-toast';
 
 	return (
 		<Box width="100vw" boxSizing="border-box">
@@ -96,6 +91,7 @@ const TestProgressBarMenu = () => {
 					width="200px"
 					leftIcon={isOpen ? <ExitIcon /> : <EnterIcon />}
 					onClick={() => {
+<<<<<<< HEAD
 						if (!toast.isActive(id)) {
 							toast({
 								position: 'top-right',
@@ -161,11 +157,15 @@ const TestProgressBarMenu = () => {
 								),
 							});
 						}
+=======
+						setIsOpen(!isOpen);
+>>>>>>> 8a334c31f (Feat: create progressMenu, CountUpTimer, added progressToaster)
 					}}>
 					<Text fontSize={'16px'} fontWeight="600">
 						{isOpen ? i18n('hideProgress') : i18n('showProgress')}
 					</Text>
 				</Button>
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 4f964410d (Feat: updated logic for open close, switch from pop over to toast, added additional style logic)
 =======
@@ -183,6 +183,8 @@ const TestProgressBarMenu = () => {
 					</Text>
 				</Button> */}
 >>>>>>> d04fcc9ff (Chore: update styling)
+=======
+>>>>>>> 8a334c31f (Feat: create progressMenu, CountUpTimer, added progressToaster)
 			</HStack>
 			<Progress
 				value={80}
