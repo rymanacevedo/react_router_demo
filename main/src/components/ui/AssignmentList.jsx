@@ -866,7 +866,7 @@ const AssignmentList = () => {
 
 			return (
 				<ListItem height={'44px'} padding={'4px'} key={curriculum.name}>
-					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+					<HStack justifyContent={'space-between'} paddingBottom={'10px'} onClick={() => console.log(assignment.assignmentKey)}>
 						<Text
 							_hover={{
 								textDecoration: 'underline',
@@ -943,6 +943,7 @@ const AssignmentList = () => {
 			border={'1px'}
 			borderColor={'ampNeutral.300'}
 			width="100%"
+			minHeight="340px"
 			maxWidth={'800px'}>
 			{assignmentList}
 		</List>
