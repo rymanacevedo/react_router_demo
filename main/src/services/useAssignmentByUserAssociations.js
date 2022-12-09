@@ -1,11 +1,25 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../hooks/useAuth';
 
+=======
+import { useState, useContext } from 'react';
+import axios from 'axios';
+import { useAuth } from '../hooks/useAuth';
+
+import DialogContext from '../components/DialogProvider';
+
+>>>>>>> cfccbc521 (add service exception to useAssignmentByUserAssociatione)
 const useAssignmentByUserAssociations = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { user } = useAuth();
+<<<<<<< HEAD
+=======
+	const { setShowAlert } = useContext(DialogContext);
+
+>>>>>>> cfccbc521 (add service exception to useAssignmentByUserAssociatione)
 	let courseCurricKey = '3HD7FRP39';
 	let subaccount = '';
 	user.roles.forEach((role) => {
@@ -32,6 +46,12 @@ const useAssignmentByUserAssociations = () => {
 		} catch (err) {
 			console.log(err);
 			setError(err);
+<<<<<<< HEAD
+=======
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+>>>>>>> cfccbc521 (add service exception to useAssignmentByUserAssociatione)
 		} finally {
 			setLoading(false);
 		}
