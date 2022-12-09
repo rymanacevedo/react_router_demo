@@ -10,8 +10,10 @@ import {
 import ProgressMessageComponent from './ProgressMessageComponent';
 import { LapTimerIcon } from '@radix-ui/react-icons';
 import CountUpTimer from './CountUpTimer';
+import { useTranslation } from 'react-i18next';
 
 const ProgressMenu = ({ isOpen }) => {
+	const { t: i18n } = useTranslation();
 	return (
 <<<<<<< HEAD
 		<Box
@@ -80,7 +82,7 @@ const ProgressMenu = ({ isOpen }) => {
 						<HStack marginTop="12px">
 							<VStack>
 								<Text fontSize={'12px'} fontWeight="400">
-									Mastered
+									{i18n('mastered')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
 									5
@@ -88,7 +90,7 @@ const ProgressMenu = ({ isOpen }) => {
 							</VStack>
 							<VStack paddingLeft="12px">
 								<Text fontSize={'12px'} fontWeight="400">
-									Incorect
+									{i18n('incorect')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
 									4
@@ -96,7 +98,7 @@ const ProgressMenu = ({ isOpen }) => {
 							</VStack>
 							<VStack paddingLeft="12px">
 								<Text fontSize={'12px'} fontWeight="400">
-									Learning
+									{i18n('learning')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
 									7
@@ -104,7 +106,7 @@ const ProgressMenu = ({ isOpen }) => {
 							</VStack>
 							<VStack paddingLeft="12px">
 								<Text fontSize={'12px'} fontWeight="400">
-									Unseen
+									{i18n('unseen')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
 									18
@@ -120,7 +122,7 @@ const ProgressMenu = ({ isOpen }) => {
 					borderBottomRadius={'12px'}
 					padding="24px">
 					<Text fontSize={'12px'} color={'ampWhite'}>
-						Session Timer
+						{i18n('sessionTimer')}
 					</Text>
 					<HStack>
 						<LapTimerIcon

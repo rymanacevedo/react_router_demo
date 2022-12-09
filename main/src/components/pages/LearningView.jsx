@@ -18,9 +18,9 @@ const LearningView = () => {
 	const toast = useToast();
 	const { t: i18n } = useTranslation();
 	// This function will be used with future progress service call
-    // @ts-ignore
+	// @ts-ignore
 	// eslint-disable-next-line no-use-before-define
-    	const fireProgressToast = () => {
+	const fireProgressToast = () => {
 		const id = 'progress-toast';
 		if (!toast.isActive(id)) {
 			toast({

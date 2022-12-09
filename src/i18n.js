@@ -93,15 +93,21 @@ const resources = {
          showProgress:'Show Progress',
          hideProgress: 'Hide Progress',
          viewMoreProgress: 'View More Progress',
+<<<<<<< HEAD:src/i18n.js
           //////////////////////////////////
 >>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar):main/src/i18n.js
          //    AssignmentList.js
+=======
+         //////////////////////////////////
+         //    AssignmentList.jsx
+>>>>>>> 7c385ed73 (Chore: add i18n to progress 2):main/src/i18n.js
          //////////////////////////////////
          mins: 'mins',
          min: "min",
          minToComplete:'min to complete',
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
+<<<<<<< HEAD:src/i18n.js
 <<<<<<< HEAD:src/i18n.js
 
 <<<<<<< HEAD:src/i18n.js
@@ -130,6 +136,18 @@ const resources = {
          appErrorRestartButtonText: 'restart application',
 
 >>>>>>> bf35abd9a (added i18n):main/src/i18n.js
+=======
+         //////////////////////////////////
+         //    ProgressMenu.jsx
+         //////////////////////////////////
+         mastered: 'Mastered',
+         incorect: 'Incorect',
+         learning: 'Learning',
+         unseen: 'Unseen',
+         sessionTimer: 'Session Timer'
+
+
+>>>>>>> 7c385ed73 (Chore: add i18n to progress 2):main/src/i18n.js
       }
    },
    fr: {
