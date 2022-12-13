@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import AssignmentList from '../ui/AssignmentList';
 import {
 	Box,
 	Container,
@@ -13,10 +12,11 @@ import ProgressMenu from '../ui/ProgressMenu';
 import ProgressMessageComponent from '../ui/ProgressMessageComponent';
 import { useTranslation } from 'react-i18next';
 
-const LearningView = () => {
+const AssignmentView = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const toast = useToast();
 	const { t: i18n } = useTranslation();
+
 	// This function will be used with future progress service call
 	// @ts-ignore
 	// eslint-disable-next-line no-use-before-define
@@ -61,9 +61,9 @@ const LearningView = () => {
 	};
 
 	return (
-		<main id="main-learning">
+		<main id="learning-Assignment">
 			<Container
-				id={'learning-dash-main'}
+				id={'learning-Assignment'}
 				margin="0"
 				padding="0"
 				maxWidth={'100vw'}
@@ -72,8 +72,7 @@ const LearningView = () => {
 				<TestProgressBarMenu isOpen={isOpen} setIsOpen={setIsOpen} />
 				<HStack width="100vw" justifyContent={'space-between'}>
 					<HStack w="100%">
-						<AssignmentList />
-						<AssignmentList />
+						<Text>Under Construction</Text>
 					</HStack>
 					<ProgressMenu isOpen={isOpen} />
 				</HStack>
@@ -82,4 +81,4 @@ const LearningView = () => {
 	);
 };
 
-export default LearningView;
+export default AssignmentView;

@@ -1,3 +1,4 @@
+<<<<<<< HEAD:main/src/components/ui/AssignmentList.jsx
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -24,6 +25,9 @@ import { useEffect } from 'react';
 =======
 import { useEffect, useState } from 'react';
 >>>>>>> 0e9687985 (Chore: clean up mock data and console logs)
+=======
+import { Key, useEffect, useState } from 'react';
+>>>>>>> cdc1da60f (Feat: created learning, assignment,  and module intro views; refactored assignmentList, CountUpTimer, module introduction component, progressMenu, and useModuleContentService; setup new routes for the views in app.js; linked them all together.):main/src/components/ui/AssignmentList.tsx
 import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -33,11 +37,46 @@ const AssignmentList = () => {
 =======
 import { useTranslation } from 'react-i18next';
 import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
+import { useNavigate } from 'react-router-dom';
+
+interface IAssignment {
+	assignmentType: string;
+	status: string;
+	estimatedTimeToComplete: number;
+}
+
+interface IAssignmentListData {
+	displayCurriculum: {
+		children: [
+			{
+				assignments: any[];
+				name: Key | null | undefined;
+				curriculum: { name: string; assignments: any[] };
+			},
+		];
+	};
+}
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
 	const { getAssignments } = useAssignmentByUserAssociations();
+<<<<<<< HEAD:main/src/components/ui/AssignmentList.jsx
 <<<<<<< HEAD
+=======
+	const [assignmentListData, setAssignmentsListData] =
+		useState<IAssignmentListData>({
+			displayCurriculum: {
+				children: [
+					{
+						assignments: [],
+						name: '',
+						curriculum: { name: '', assignments: [] },
+					},
+				],
+			},
+		});
+	const navigate = useNavigate();
+>>>>>>> cdc1da60f (Feat: created learning, assignment,  and module intro views; refactored assignmentList, CountUpTimer, module introduction component, progressMenu, and useModuleContentService; setup new routes for the views in app.js; linked them all together.):main/src/components/ui/AssignmentList.tsx
 
 	const mockData = {
 		displayCurriculum: {
@@ -687,29 +726,35 @@ const AssignmentList = () => {
 =======
 	useEffect(() => {
 		const fetchData = async () => {
-			const star = await getAssignments();
-			if (star.displayCurriculum) {
-				setAssignmentListData(star);
+			const assignments = await getAssignments();
+			if (assignments?.displayCurriculum) {
+				setAssignmentsListData(assignments);
 			}
 		};
 		fetchData();
 	}, []);
 
+<<<<<<< HEAD:main/src/components/ui/AssignmentList.jsx
 >>>>>>> 160ffbe83 (Feat: create assignment service)
 	const getAssignmentText = (assignment) => {
 		if (assignment.assignmentType !== 'TimedAssessment') {
 			switch (assignment.status) {
+=======
+	const getAssignmentText = (assignment: IAssignment) => {
+		if (assignment?.assignmentType !== 'TimedAssessment') {
+			switch (assignment?.status) {
+>>>>>>> cdc1da60f (Feat: created learning, assignment,  and module intro views; refactored assignmentList, CountUpTimer, module introduction component, progressMenu, and useModuleContentService; setup new routes for the views in app.js; linked them all together.):main/src/components/ui/AssignmentList.tsx
 				case 'NOT_STARTED': {
 					return (
 						<Text fontSize={'12px'}>
-							{assignment.estimatedTimeToComplete &&
+							{assignment?.estimatedTimeToComplete &&
 								`~${
-									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
-										? Math.floor(assignment.estimatedTimeToComplete / 60)
+									Math.floor(assignment?.estimatedTimeToComplete / 60) >= 1
+										? Math.floor(assignment?.estimatedTimeToComplete / 60)
 										: '1'
 								}
 							${
-								Math.floor(assignment.estimatedTimeToComplete / 60) > 1
+								Math.floor(assignment?.estimatedTimeToComplete / 60) > 1
 									? i18n('mins')
 									: i18n('min')
 							}`}
@@ -721,12 +766,12 @@ const AssignmentList = () => {
 					return (
 						<Text fontSize={'12px'}>
 							{`~${
-								Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
-									? Math.floor(assignment.estimatedTimeToComplete / 60)
+								Math.floor(assignment?.estimatedTimeToComplete / 60) >= 1
+									? Math.floor(assignment?.estimatedTimeToComplete / 60)
 									: '1'
 							}
 							${
-								Math.floor(assignment.estimatedTimeToComplete / 60) > 1
+								Math.floor(assignment?.estimatedTimeToComplete / 60) > 1
 									? i18n('mins')
 									: i18n('min')
 							}
@@ -865,8 +910,16 @@ const AssignmentList = () => {
 				curriculum.assignments[curriculum.assignments.length - 1];
 
 			return (
-				<ListItem height={'44px'} padding={'4px'} key={curriculum.name}>
-					<HStack justifyContent={'space-between'} paddingBottom={'10px'} onClick={() => console.log(assignment.assignmentKey)}>
+				<ListItem
+					height={'44px'}
+					padding={'4px'}
+					key={curriculum.name}
+					onClick={() => {
+						if (assignment.assignmentType !== 'TimedAssessment') {
+							navigate(`moduleIntro/${assignment.assignmentKey}`);
+						}
+					}}>
+					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
 						<Text
 							_hover={{
 								textDecoration: 'underline',
@@ -906,7 +959,7 @@ const AssignmentList = () => {
 >>>>>>> fb3d63d20 (Feat: update to logic for practice tests)
 							{curriculum.name}
 						</Text>
-						<Text>{getAssignmentText(assignment)}</Text>
+						{getAssignmentText(assignment)}
 					</HStack>
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -940,6 +993,7 @@ const AssignmentList = () => {
 			bg="ampWhite"
 			borderRadius={'12px'}
 			padding={'16px'}
+			margin="12px"
 			border={'1px'}
 			borderColor={'ampNeutral.300'}
 			width="100%"

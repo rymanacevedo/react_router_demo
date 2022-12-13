@@ -7,8 +7,8 @@ const CountUpTimer = () => {
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setTimeState((timeState) => {
-				const [currentHours, currentMinutes, currentSeconds] = timeState;
+			setTimeState((currnetTime) => {
+				const [currentHours, currentMinutes, currentSeconds] = currnetTime;
 				let newHours = currentHours,
 					newMinutes = currentMinutes,
 					newSeconds = currentSeconds + 1;

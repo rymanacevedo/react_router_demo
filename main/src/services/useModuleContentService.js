@@ -13,7 +13,6 @@ const useModuleContentService = () => {
 
 >>>>>>> e1cc55a21 (added dialog trigger to remaining services)
 	const { user } = useAuth();
-	let assignmentKey = '8TJTMV7NH';
 	let subaccount = '';
 	user.roles.forEach((role) => {
 		if (role.name === 'Learner') {
@@ -21,7 +20,7 @@ const useModuleContentService = () => {
 		}
 	});
 
-	const fetchAssignments = async () => {
+	const fetchAssignments = async (assignmentKey) => {
 		try {
 			setLoading(true);
 			const assignmentsResponse = await axios({
@@ -46,10 +45,10 @@ const useModuleContentService = () => {
 		}
 	};
 
-	const fetchModuleContent = async () => {
+	const fetchModuleContent = async (assignmentKey) => {
 		try {
 			setLoading(true);
-			let assignmentsData = await fetchAssignments();
+			let assignmentsData = await fetchAssignments(assignmentKey);
 			const modalContentResponse = await axios({
 				method: 'GET',
 				url: assignmentsData.moduleUri,

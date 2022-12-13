@@ -1,38 +1,32 @@
 import { Box, Heading, Text, Button, Stack } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
-import useModuleContentService from '../../services/useModuleContentService';
 import RichContentComponent from './RichContentComponent';
 
-const ModuleIntroductionComponent = () => {
-	const { fetchModuleContent } = useModuleContentService();
-	const [data, setData] = useState({
-		name: '',
-		introductionRc: '',
-	});
-
-	useEffect(() => {
-		const fetchData = async () => {
-			let response = await fetchModuleContent();
-			setData(response);
-		};
-		fetchData();
-	}, []);
+interface IModuleIntroductionComponent {
+	moduleData: {
+		name: string;
+		introductionRc: any;
+	};
+	beginAssignment: () => void;
+}
+const ModuleIntroductionComponent = ({
+	moduleData,
+	beginAssignment,
+}: IModuleIntroductionComponent) => {
 	return (
 		<Box
 			style={{
 				backgroundColor: 'white',
 			}}
-			boxShadow="2xl"
 			w="990px"
 			overflow="hidden"
-			margin={'0 auto'}
+			margin={'12px auto'}
 			borderRadius={24}
 			padding={16}>
-			<Heading as="h2">{data?.name}</Heading>
+			<Heading as="h2">{moduleData?.name}</Heading>
 			<Stack paddingTop="16px" paddingBottom="16px">
-				<RichContentComponent content={data?.introductionRc} />
+				<RichContentComponent content={moduleData?.introductionRc} />
 			</Stack>
-			<Button>
+			<Button onClick={() => beginAssignment()}>
 				<Text>Let's Begin</Text>
 			</Button>
 		</Box>
