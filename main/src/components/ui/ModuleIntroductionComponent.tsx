@@ -1,17 +1,17 @@
 import { Box, Heading, Text, Button, Stack } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
 
-interface IModuleIntroductionComponent {
+type ModuleIntroductionComponentType = {
 	moduleData: {
 		name: string;
 		introductionRc: any;
 	};
 	beginAssignment: () => void;
-}
+};
 const ModuleIntroductionComponent = ({
 	moduleData,
 	beginAssignment,
-}: IModuleIntroductionComponent) => {
+}: ModuleIntroductionComponentType) => {
 	return (
 		<Box
 			style={{

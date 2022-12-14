@@ -1,6 +1,6 @@
 import { Circle, Tag } from '@chakra-ui/react';
 
-interface InterfaceAmpChip {
+type AmpChip = {
 	variant:
 		| 'ampDarkSuccessOutline'
 		| 'ampDarkSuccessOutlineDot'
@@ -17,9 +17,9 @@ interface InterfaceAmpChip {
 		| 'ampSecondary'
 		| 'ampSecondaryDot'
 		| 'ampNeutralUnfilled';
-}
+};
 
-function AmpMicroChip({ variant }: InterfaceAmpChip): JSX.Element {
+function AmpMicroChip({ variant }: AmpChip): JSX.Element {
 	const getDot = () => {
 		switch (variant) {
 			case 'ampDarkSuccessOutlineDot': {

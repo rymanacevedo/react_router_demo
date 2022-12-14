@@ -3,15 +3,12 @@ import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon } from '@radix-ui/react-icons';
 
-interface InterfaceTestProgressBarMenu {
+type ProgressBarMenu = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
-}
+};
 
-const TestProgressBarMenu = ({
-	isOpen,
-	setIsOpen,
-}: InterfaceTestProgressBarMenu) => {
+const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 
 	return (

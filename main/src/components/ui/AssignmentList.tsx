@@ -39,13 +39,13 @@ import { useTranslation } from 'react-i18next';
 import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 import { useNavigate } from 'react-router-dom';
 
-interface IAssignment {
+type AssignmentType = {
 	assignmentType: string;
 	status: string;
 	estimatedTimeToComplete: number;
-}
+};
 
-interface IAssignmentListData {
+type AssignmentListDataType = {
 	displayCurriculum: {
 		children: [
 			{
@@ -55,7 +55,7 @@ interface IAssignmentListData {
 			},
 		];
 	};
-}
+};
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
@@ -64,7 +64,7 @@ const AssignmentList = () => {
 <<<<<<< HEAD
 =======
 	const [assignmentListData, setAssignmentsListData] =
-		useState<IAssignmentListData>({
+		useState<AssignmentListDataType>({
 			displayCurriculum: {
 				children: [
 					{
@@ -734,6 +734,7 @@ const AssignmentList = () => {
 		fetchData();
 	}, []);
 
+<<<<<<< HEAD
 <<<<<<< HEAD:main/src/components/ui/AssignmentList.jsx
 >>>>>>> 160ffbe83 (Feat: create assignment service)
 	const getAssignmentText = (assignment) => {
@@ -741,6 +742,9 @@ const AssignmentList = () => {
 			switch (assignment.status) {
 =======
 	const getAssignmentText = (assignment: IAssignment) => {
+=======
+	const getAssignmentText = (assignment: AssignmentType) => {
+>>>>>>> 822d6e6b9 (Feat: created progressToast component; Fix: updated interfaces to type;)
 		if (assignment?.assignmentType !== 'TimedAssessment') {
 			switch (assignment?.status) {
 >>>>>>> cdc1da60f (Feat: created learning, assignment,  and module intro views; refactored assignmentList, CountUpTimer, module introduction component, progressMenu, and useModuleContentService; setup new routes for the views in app.js; linked them all together.):main/src/components/ui/AssignmentList.tsx

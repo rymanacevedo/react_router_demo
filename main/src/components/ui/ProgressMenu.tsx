@@ -12,11 +12,11 @@ import { LapTimerIcon } from '@radix-ui/react-icons';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
 
-interface IProgressMenu {
-	isOpen: boolean
-}
+type ProgressMenuType = {
+	isOpen: boolean;
+};
 
-const ProgressMenu = ({ isOpen }: IProgressMenu) => {
+const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
 	return (
 <<<<<<< HEAD
