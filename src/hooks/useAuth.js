@@ -3,6 +3,13 @@ import { useLocalStorage } from './useLocalStorage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useLogoutService from '../services/useLogoutService';
 import { Cookies } from 'react-cookie-consent';
+<<<<<<< HEAD:src/hooks/useAuth.js
+=======
+import {
+	useGetSessionExpirationService,
+	useKeepSessionAliveService,
+} from '../services/useSessionService';
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 
 const AuthContext = createContext(null);
 
@@ -12,6 +19,12 @@ export const AuthProvider = ({ children }) => {
 	const nav = useNavigate();
 	const { logoutService } = useLogoutService();
 	const [searchParams] = useSearchParams();
+<<<<<<< HEAD:src/hooks/useAuth.js
+=======
+	const { keepAlive } = useKeepSessionAliveService();
+	const { getSessionExpiration } = useGetSessionExpirationService();
+	let intervalID;
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 
 	const clearKFState = () => {
 		window.KF.state.activeSubModule = '';
@@ -37,6 +50,64 @@ export const AuthProvider = ({ children }) => {
 		nav(`/login?abbrevName=${state.homeAccount.acctAbbrevName}`);
 		clearKFState();
 	};
+
+	const logout = () => {
+		logoutService(user.sessionKey).then((response) => {
+			if (!response || response.status !== 200) {
+				clearState();
+				throw response === undefined
+					? Error('Network Error')
+					: Error(response.statusText);
+			}
+
+			clearState();
+			clearInterval(intervalID);
+			// release our intervalID from the variable
+			intervalID = null;
+		});
+	};
+
+	function scheduleNewCheck(millisToNextCheck, key) {
+		if (!intervalID) {
+			intervalID = setInterval(() => {
+				// eslint-disable-next-line @typescript-eslint/no-use-before-define
+				checkExpiration(key);
+			}, millisToNextCheck);
+		}
+	}
+
+	function checkExpiration(key) {
+		const sessionExpiration = getSessionExpiration(key);
+		sessionExpiration.then((res) => {
+			const now = Date.now();
+			const millisToNextCheck = res.value - now - 300000;
+
+			if (millisToNextCheck <= 300000) {
+				//leaving this in as placeholder for next story
+				const conf = window.confirm(
+					//prettier-ignore
+					'Your session is about to expire. Click \'OK\' to extend your session or \'Cancel\' to log out.',
+				);
+				if (conf) {
+					if (res.value < new Date().getTime()) {
+						// if the user clicks ok and session is expired just log them out
+						logout();
+					} else {
+						keepAlive(key);
+						clearInterval(intervalID);
+						intervalID = null;
+						scheduleNewCheck(1500000, key);
+					}
+				} else {
+					logout();
+				}
+			} else {
+				clearInterval(intervalID);
+				intervalID = null;
+				scheduleNewCheck(millisToNextCheck, key);
+			}
+		});
+	}
 
 	const login = async ({
 		initialUserData,
@@ -85,6 +156,7 @@ export const AuthProvider = ({ children }) => {
 		Cookies.set('session_key', initialUserData.sessionKey, {
 			path: '/',
 		});
+<<<<<<< HEAD:src/hooks/useAuth.js
 		nav('/app');
 	};
 
@@ -100,6 +172,12 @@ export const AuthProvider = ({ children }) => {
 			clearState();
 		});
 	};
+=======
+		checkExpiration(initialUserData.sessionKey);
+		nav('/app');
+	};
+
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 	const value = useMemo(
 		() => ({
 			user,
