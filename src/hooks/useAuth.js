@@ -4,11 +4,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import useLogoutService from '../services/useLogoutService';
 import { Cookies } from 'react-cookie-consent';
 <<<<<<< HEAD:src/hooks/useAuth.js
+<<<<<<< HEAD:src/hooks/useAuth.js
 =======
+=======
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 import {
 	useGetSessionExpirationService,
 	useKeepSessionAliveService,
 } from '../services/useSessionService';
+<<<<<<< HEAD:src/hooks/useAuth.js
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
+=======
 >>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 
 const AuthContext = createContext(null);
@@ -20,6 +26,12 @@ export const AuthProvider = ({ children }) => {
 	const { logoutService } = useLogoutService();
 	const [searchParams] = useSearchParams();
 <<<<<<< HEAD:src/hooks/useAuth.js
+<<<<<<< HEAD:src/hooks/useAuth.js
+=======
+	const { keepAlive } = useKeepSessionAliveService();
+	const { getSessionExpiration } = useGetSessionExpirationService();
+	let intervalID;
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 =======
 	const { keepAlive } = useKeepSessionAliveService();
 	const { getSessionExpiration } = useGetSessionExpirationService();
@@ -157,6 +169,7 @@ export const AuthProvider = ({ children }) => {
 			path: '/',
 		});
 <<<<<<< HEAD:src/hooks/useAuth.js
+<<<<<<< HEAD:src/hooks/useAuth.js
 		nav('/app');
 	};
 
@@ -172,6 +185,12 @@ export const AuthProvider = ({ children }) => {
 			clearState();
 		});
 	};
+=======
+		checkExpiration(initialUserData.sessionKey);
+		nav('/app');
+	};
+
+>>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 =======
 		checkExpiration(initialUserData.sessionKey);
 		nav('/app');
