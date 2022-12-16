@@ -172,7 +172,6 @@ function LoginForm() {
 				spacing="5"
 				w={{ base: '100%', md: '358px' }}
 				as="form"
-				method="post"
 				onSubmit={submitHandler}>
 				<Heading fontSize="28px">{i18n('welcomeMsg')}</Heading>
 				<FormControl
@@ -221,7 +220,6 @@ function LoginForm() {
 				<Button
 					w="full"
 					type="submit"
-					method="post"
 					name="Login"
 					isDisabled={disabled || context.fetchInitialAccountDataError}>
 					{i18n('logIn')}

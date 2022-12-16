@@ -1,7 +1,11 @@
 <<<<<<< HEAD
 import { Container } from '@chakra-ui/react';
+<<<<<<< HEAD
 import AssignmentList from '../ui/AssignmentList';
 <<<<<<< HEAD
+=======
+import WhatYouNeedToKnowComponent from '../ui/WhatYouNeedToKnowComponent';
+>>>>>>> 80e580071 (Feat: added leave feedback component to what you need to know)
 
 const LearningView = () => {
 	return (
@@ -13,7 +17,11 @@ const LearningView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<AssignmentList />
+				<WhatYouNeedToKnowComponent
+					introductionRc={
+						'<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <p/>'
+					}
+				/>
 			</Container>
 		</main>
 =======

@@ -8,7 +8,13 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const resources = {
    en: {
       translation: {
-
+         ///////////////////////////////////////
+         //           Generic
+         //////////////////////////////////////
+         cancelBtnText: "Cancel",
+         submitBtnText: "Submit",
+         yes: 'Yes',
+         no: 'No',
          ///////////////////////////////////////
          //           Login Page Text
          //////////////////////////////////////
@@ -50,8 +56,6 @@ const resources = {
          cookiesMessage: "This website uses cookies and third party services. Review our",
          privacyPolicy: "Privacy Policy",
          termsAndConditions: "Terms and Conditions",
-         cancelBtnText: "Cancel",
-         submitBtnText: "Submit",
          passwordsDoNotMatch: "Passwords do not match",
          passwordRequirements: "Password must be at least {{charactersNumber}} characters long, and contain at least {{numberOfCriteria}} of the following:",
          unknownError: "An unknown error occurred",
@@ -135,6 +139,7 @@ const resources = {
          appErrorTitle: 'Application Error',
          appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
          appErrorRestartButtonText: 'restart application',
+<<<<<<< HEAD:src/i18n.js
 
 >>>>>>> bf35abd9a (added i18n):main/src/i18n.js
 =======
@@ -149,6 +154,17 @@ const resources = {
 
 
 >>>>>>> 7c385ed73 (Chore: add i18n to progress 2):main/src/i18n.js
+=======
+         /////////////////////////////////////////////
+         //   DataServiceExceptionComponent.tsx
+         //////////////////////////////////////////////
+         leaveFeedbackText: 'Leave feedback on this question',
+         IDisagreeWithTheAnswer: 'I disagree with the answer',
+         thisQuestionCouldBeImproved: 'This question could be improved',         
+         iStillDontUnderstand: 'I still don’t understand',
+         other: 'Other (explain)',
+         placeHolderText: 'Placeholder for longer, short answer text input',
+>>>>>>> 80e580071 (Feat: added leave feedback component to what you need to know):main/src/i18n.js
       }
    },
    fr: {
