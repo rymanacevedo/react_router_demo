@@ -46,7 +46,7 @@ const WhatYouNeedToKnowComponent = ({
 			overflow="hidden"
 			borderRadius={24}
 			p={8}>
-			<Heading as="h2">What you need to know</Heading>
+			<Heading as="h2">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
 				<RichContentComponent content={introductionRc} />
 			</Stack>
@@ -55,16 +55,17 @@ const WhatYouNeedToKnowComponent = ({
 				<VStack marginTop={'16px'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
 						<Text float="left" fontSize="14px">
-							Was this explanation helpful?
+							{i18n('wasThisExplanationHelpful')}
 						</Text>
 						<Button
+							_hover={{ backgroundColor: 'white' }}
 							height="12px"
 							variant="ghost"
 							marginTop="-60px"
 							leftIcon={<Pencil1Icon style={{ color: '#257CB5' }} />}
 							onClick={onToggle}>
 							<Text fontSize={'14px'} color={'ampSecondary.500'}>
-								Leave feedback
+								{i18n('leaveFeedback')}
 							</Text>
 						</Button>
 					</HStack>

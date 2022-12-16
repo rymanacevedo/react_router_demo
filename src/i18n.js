@@ -164,7 +164,11 @@ const resources = {
          iStillDontUnderstand: 'I still don’t understand',
          other: 'Other (explain)',
          placeHolderText: 'Placeholder for longer, short answer text input',
+<<<<<<< HEAD:src/i18n.js
 >>>>>>> 80e580071 (Feat: added leave feedback component to what you need to know):main/src/i18n.js
+=======
+         whatYouNeedToKnow: 'What you need to know'
+>>>>>>> d2bf29dfd (Fix: change styles):main/src/i18n.js
       }
    },
    fr: {
@@ -180,7 +184,9 @@ const resources = {
          pleaseEnterUsername: "Veuillez saisir votre nom d''utilisateur\u00a0",
          pleaseEnterPassword: "Veuillez saisir votre mot de passe",
          accountLockedResetPassword: "Ton compte est bloqué. Veuillez réinitialiser votre mot de passe en cliquant sur \"Mot de passe oublié\".",
-         userPassIncorrect: "Votre nom d''utilisateur ou votre mot de passe est incorrect."
+         userPassIncorrect: "Votre nom d''utilisateur ou votre mot de passe est incorrect.",
+         wasThisExplanationHelpful: 'Was this explanation helpful?',
+         leaveFeedback: 'Leave feedback',
       }
    },
    de: {
