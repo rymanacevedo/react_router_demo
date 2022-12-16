@@ -19,8 +19,11 @@ const useAssignmentByUserAssociations = () => {
 =======
 	const { setShowAlert } = useContext(DialogContext);
 
+<<<<<<< HEAD
 >>>>>>> cfccbc521 (add service exception to useAssignmentByUserAssociatione)
 	let courseCurricKey = '3HD7FRP39';
+=======
+>>>>>>> 341455984 (Feat: created new useCourseCurriculaListService, refactored useAssignmentByUserAssociations, and useCourseListService, typed AssignmentList, finished logic for learning view)
 	let subaccount = '';
 	user.roles.forEach((role) => {
 		if (role.name === 'Learner') {
@@ -28,12 +31,12 @@ const useAssignmentByUserAssociations = () => {
 		}
 	});
 
-	const getAssignments = async () => {
+	const getAssignments = async (courseCurricKey) => {
 		try {
 			setLoading(true);
 			const assignmentDataResponse = await axios({
 				method: 'get',
-				url: `/v2/user-associations?courseCurricKey=${courseCurricKey}&hideUnassigned=false&isWebapp=true&subaccount=${subaccount}`,
+				url: `/v2/user-associations?courseCurricKey=${courseCurricKey}&userKey=CB59UXSUD&hideUnassigned=false&isWebapp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,

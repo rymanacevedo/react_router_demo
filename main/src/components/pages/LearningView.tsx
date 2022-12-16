@@ -17,18 +17,34 @@ const LearningView = () => {
 		</main>
 =======
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import useCourseListService from '../../services/useCourseListService';
+import useCourseListService from '../../services/coursesServices/useCourseListService';
 import { useEffect, useState } from 'react';
+
+type CourseListType = [
+	{
+		key: string;
+		name: string;
+	},
+];
 
 const LearningView = () => {
 	const { t: i18n } = useTranslation();
 	const { fetchCourseList } = useCourseListService();
-	const [courseList, setCourseList] = useState([]);
+	const [courseList, setCourseList] = useState<CourseListType>([
+		{
+			key: '',
+			name: '',
+		},
+	]);
+	const [selectedCourseKey, setSelectedCourseKey] = useState<string>('');
+	const [courseTitle, setCourseTitle] = useState<string>('');
 
 	useEffect(() => {
 		const fetchList = async () => {
 			let courseListResponse = await fetchCourseList();
-			setCourseList(courseListResponse.items);
+			setCourseList(courseListResponse?.items);
+			setSelectedCourseKey(courseListResponse?.items[0]?.key);
+			setCourseTitle(courseListResponse?.items[0]?.name);
 		};
 		fetchList();
 	}, []);
@@ -53,7 +69,7 @@ const LearningView = () => {
 				fontSize={'38px'}
 				marginBottom="24px"
 				margin="12px">
-				The Science of Learning
+				{courseTitle}
 			</Text>
 			<HStack
 				justifyContent={'space-between'}
@@ -64,23 +80,40 @@ const LearningView = () => {
 				<Text fontWeight={'600'} fontSize={'28px'}>
 					{i18n('yourAssignments')}
 				</Text>
-				<Menu closeOnSelect={false}>
-					<MenuButton
-						leftIcon={<ChevronDownIcon />}
-						as={Button}
-						variant="ampOutline">
-						<Text>{i18n('changeCourse')}</Text>
-					</MenuButton>
-					<MenuList minWidth="240px">
-						<MenuOptionGroup defaultValue="asc" type="radio">
-							{/* TODO: take course list and map it to the menuTimeOptions */}
-							<MenuItemOption value="asc">Ascending</MenuItemOption>
-							<MenuItemOption value="desc">Descending</MenuItemOption>
-						</MenuOptionGroup>
-					</MenuList>
-				</Menu>
+				{courseList?.length > 1 && (
+					<Menu isLazy>
+						<MenuButton
+							leftIcon={<ChevronDownIcon />}
+							as={Button}
+							variant="ampOutline">
+							<Text>{i18n('changeCourse')}</Text>
+						</MenuButton>
+						<MenuList minWidth="240px">
+							<MenuOptionGroup
+								onChange={(e) => {
+									return setSelectedCourseKey(e as string);
+								}}
+								defaultChecked={true}
+								defaultValue={selectedCourseKey}
+								type="radio">
+								{courseList.map((course) => {
+									return (
+										<MenuItemOption
+											key={course?.key}
+											value={course.key}
+											onClick={() => {
+												setCourseTitle(course.name);
+											}}>
+											{course?.name}
+										</MenuItemOption>
+									);
+								})}
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
+				)}
 			</HStack>
-			<AssignmentList />
+			<AssignmentList selectedCourseKey={selectedCourseKey} />
 		</Container>
 >>>>>>> b3d304be0 (Feat: create useCourseListService; and added it to learning view)
 	);

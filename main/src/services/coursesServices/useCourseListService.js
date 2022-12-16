@@ -1,8 +1,8 @@
 import { useState, useContext } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
-import DialogContext from '../components/DialogProvider';
+import DialogContext from '../../components/DialogProvider';
 
 const useCourseListService = () => {
 	const [error, setError] = useState('');
@@ -22,7 +22,7 @@ const useCourseListService = () => {
 	const fetchCourseList = async () => {
 		try {
 			setLoading(true);
-			const accountDataResponse = await axios({
+			const courseListDataResponse = await axios({
 				url: `/v2/courses?courseRole=${courseRole}&userKey=${user.userKey}&sort=name%20ASC,displayName%20ASC&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
@@ -33,7 +33,7 @@ const useCourseListService = () => {
 				method: 'get',
 			});
 
-			return accountDataResponse.data;
+			return courseListDataResponse.data;
 		} catch (err) {
 			console.log(err);
 			setError(err);

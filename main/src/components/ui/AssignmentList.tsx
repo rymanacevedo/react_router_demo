@@ -36,8 +36,9 @@ import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
 const AssignmentList = () => {
 =======
 import { useTranslation } from 'react-i18next';
-import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 import { useNavigate } from 'react-router-dom';
+import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
+import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 
 type AssignmentType = {
 	assignmentType: string;
@@ -56,9 +57,13 @@ type AssignmentListDataType = {
 		];
 	};
 };
+type SelectedCourseKeyType = {
+	selectedCourseKey: string;
+};
 
-const AssignmentList = () => {
+const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	const { t: i18n } = useTranslation();
+	const { getCurriculaCourseList } = useCourseCurriculaListService();
 	const { getAssignments } = useAssignmentByUserAssociations();
 <<<<<<< HEAD:main/src/components/ui/AssignmentList.jsx
 <<<<<<< HEAD
@@ -726,13 +731,18 @@ const AssignmentList = () => {
 =======
 	useEffect(() => {
 		const fetchData = async () => {
-			const assignments = await getAssignments();
-			if (assignments?.displayCurriculum) {
-				setAssignmentsListData(assignments);
+			const curicCourseList = await getCurriculaCourseList(selectedCourseKey);
+			if (curicCourseList.items.length) {
+				const assignments = await getAssignments(curicCourseList.items[0].key);
+				if (assignments?.displayCurriculum) {
+					setAssignmentsListData(assignments);
+				}
 			}
 		};
-		fetchData();
-	}, []);
+		if (selectedCourseKey) {
+			fetchData();
+		}
+	}, [selectedCourseKey]);
 
 <<<<<<< HEAD
 <<<<<<< HEAD:main/src/components/ui/AssignmentList.jsx
