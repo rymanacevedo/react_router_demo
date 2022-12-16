@@ -13,6 +13,7 @@ export default function LoginWrapper() {
 	const [abbrevNameState, setAbbrevNameState] = useState('');
 	const [accountUid, setAccountUid] = useState('');
 	const [recaptcha, setRecaptcha] = useState('');
+	const [selfRegistration, setSelfRegistration] = useState(null);
 	const [searchParams] = useSearchParams();
 
 	const { fetchInitialAccountData, error: fetchInitialAccountDataError } =
@@ -20,12 +21,13 @@ export default function LoginWrapper() {
 
 	const handleFetchInitialUserData = async (account: any) => {
 		const data = await fetchInitialAccountData(account);
-		const { key, abbrevName, uid } = data.accountInfo;
+		const { key, abbrevName, uid, allowSelfRegistration } = data.accountInfo;
 		const { recaptchaSiteKey } = data;
 		setAccountKey(key);
 		setAbbrevNameState(abbrevName);
 		setAccountUid(uid);
 		setRecaptcha(recaptchaSiteKey);
+		setSelfRegistration(allowSelfRegistration);
 	};
 
 	useEffect(() => {
@@ -63,6 +65,7 @@ export default function LoginWrapper() {
 								accountUid: accountUid,
 								recaptcha: recaptcha,
 								fetchInitialAccountDataError: fetchInitialAccountDataError,
+								allowSelfRegistration: selfRegistration,
 							}}
 						/>
 					</VStack>

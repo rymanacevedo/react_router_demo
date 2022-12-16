@@ -83,6 +83,7 @@ const resources = {
 =======
          pleaseEnterPasscode: "Please enter your passcode.",        
          usernameUnavailable: "This username is already in use. Please try another.",
+         selfRegisterNotAllowed: "You are not allowed to self register for this account",
          /////////////////////////////////////////////
          //   TestProgressBarMenu.tsx
          //////////////////////////////////////////////

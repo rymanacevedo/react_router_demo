@@ -48,6 +48,7 @@ function Register() {
 	const [showForm, setShowForm] = useState(true);
 	const [title, setTitle] = useState('');
 	const [verified, setVerified] = useState(false);
+	const [success, setSuccess] = useState(false);
 
 	const checkFormErrors = () => {
 		for (let errorState in formError) {
@@ -146,6 +147,7 @@ function Register() {
 
 	const showConfirmation = () => {
 		setShowForm(false);
+		setSuccess(true);
 	};
 
 	const handleSubmit = async (e) => {
@@ -179,10 +181,22 @@ function Register() {
 			clearFormData();
 		}
 	};
-
 	return (
 		<>
-			{showForm && (
+			{!context.allowSelfRegistration && !success && (
+				<Center height="100%">
+					<VStack>
+						<Alert status="error" bg="ampError.50">
+							<AlertIcon />
+							<Text align="center" color="ampError.700">
+								{i18n('selfRegisterNotAllowed')}
+							</Text>
+						</Alert>
+					</VStack>
+				</Center>
+			)}
+
+			{showForm && !success && context.allowSelfRegistration && (
 				<VStack spacing={5} as="form" onSubmit={handleSubmit}>
 					<Heading>{i18n(title)}</Heading>
 
@@ -336,7 +350,7 @@ function Register() {
 				</VStack>
 			)}
 
-			{!showForm && (
+			{!showForm && success && (
 				<Center height="100%">
 					<VStack>
 						<Text>{i18n('userCreated')}</Text>
