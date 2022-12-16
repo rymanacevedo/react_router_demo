@@ -127,7 +127,7 @@ const WhatYouNeedToKnowComponent = ({
 					</FormControl>
 
 					<ButtonGroup width="100%" marginTop={'16px'}>
-						<Button variant="ampSolid" type="submit" onClick={onToggle}>
+						<Button variant="ampSolid" type="submit">
 							<Text>{i18n('submitBtnText')}</Text>
 						</Button>
 						<Button
