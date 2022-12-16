@@ -57,14 +57,17 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const clearState = () => {
+		const currentState = JSON.parse(localStorage.getItem('state'));
 		setUser(null);
 		setState(null);
-		nav(`/login?abbrevName=${state.homeAccount.acctAbbrevName}`);
+		nav(`/login?abbrevName=${currentState.homeAccount.acctAbbrevName}`);
 		clearKFState();
 	};
 
 	const logout = () => {
-		logoutService(user.sessionKey).then((response) => {
+		const currentUser = JSON.parse(localStorage.getItem('user'));
+		const key = currentUser.sessionKey;
+		logoutService(key).then((response) => {
 			if (!response || response.status !== 200) {
 				clearState();
 				throw response === undefined
