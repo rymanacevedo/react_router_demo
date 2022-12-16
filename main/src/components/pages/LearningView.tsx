@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Container } from '@chakra-ui/react';
 import AssignmentList from '../ui/AssignmentList';
 <<<<<<< HEAD
@@ -17,10 +18,16 @@ const LearningView = () => {
 		</main>
 =======
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+=======
+import { Container, HStack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+import AssignmentList from '../ui/AssignmentList';
+>>>>>>> ebb2b6e51 (Chore: refactored courseMenu)
 import useCourseListService from '../../services/coursesServices/useCourseListService';
 import { useEffect, useState } from 'react';
+import CourseMenu from '../ui/CourseMenu';
 
-type CourseListType = [
+export type CourseListType = [
 	{
 		key: string;
 		name: string;
@@ -39,14 +46,15 @@ const LearningView = () => {
 	const [selectedCourseKey, setSelectedCourseKey] = useState<string>('');
 	const [courseTitle, setCourseTitle] = useState<string>('');
 
+	const fetchCourseListData = async () => {
+		let courseListResponse = await fetchCourseList();
+		setCourseList(courseListResponse?.items);
+		setSelectedCourseKey(courseListResponse?.items[0]?.key);
+		setCourseTitle(courseListResponse?.items[0]?.name);
+	};
+
 	useEffect(() => {
-		const fetchList = async () => {
-			let courseListResponse = await fetchCourseList();
-			setCourseList(courseListResponse?.items);
-			setSelectedCourseKey(courseListResponse?.items[0]?.key);
-			setCourseTitle(courseListResponse?.items[0]?.name);
-		};
-		fetchList();
+		fetchCourseListData();
 	}, []);
 
 	return (
@@ -80,38 +88,11 @@ const LearningView = () => {
 				<Text fontWeight={'600'} fontSize={'28px'}>
 					{i18n('yourAssignments')}
 				</Text>
-				{courseList?.length > 1 && (
-					<Menu isLazy>
-						<MenuButton
-							leftIcon={<ChevronDownIcon />}
-							as={Button}
-							variant="ampOutline">
-							<Text>{i18n('changeCourse')}</Text>
-						</MenuButton>
-						<MenuList minWidth="240px">
-							<MenuOptionGroup
-								onChange={(e) => {
-									return setSelectedCourseKey(e as string);
-								}}
-								defaultChecked={true}
-								defaultValue={selectedCourseKey}
-								type="radio">
-								{courseList.map((course) => {
-									return (
-										<MenuItemOption
-											key={course?.key}
-											value={course.key}
-											onClick={() => {
-												setCourseTitle(course.name);
-											}}>
-											{course?.name}
-										</MenuItemOption>
-									);
-								})}
-							</MenuOptionGroup>
-						</MenuList>
-					</Menu>
-				)}
+				<CourseMenu
+					courseList={courseList}
+					selectedCourseKey={selectedCourseKey}
+					setSelectedCourseKey={setSelectedCourseKey}
+				/>
 			</HStack>
 			<AssignmentList selectedCourseKey={selectedCourseKey} />
 		</Container>
