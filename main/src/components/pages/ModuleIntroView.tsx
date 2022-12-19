@@ -16,7 +16,7 @@ const ModuleIntroView = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			let response = await fetchModuleContent(assignmentKey);
-			if (Boolean(response?.introductionRc.length)) {
+			if (response?.introductionRc) {
 				setData(response);
 			} else {
 				navigate(`/app/learning/assignment/:${assignmentKey}`);
