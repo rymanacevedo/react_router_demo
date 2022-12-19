@@ -17,10 +17,14 @@ const Question = ({
 			}}
 			boxShadow="2xl"
 			maxW="xl"
-			minWidth={726}
+			m="12px"
+			w={'100%'}
+			maxWidth={726}
+			minWidth={545}
+			h="745px"
 			overflow="hidden"
 			borderRadius={24}
-			p={8}>
+			p={16}>
 			<Heading as="h2">{title}</Heading>
 			<Stack spacing="20px">
 				<RichContentComponent content={questionStem} />

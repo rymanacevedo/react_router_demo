@@ -62,6 +62,7 @@ const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 				}}
 				boxShadow="2xl"
 				h="745px"
+				marginRight="24px"
 				w={isOpen ? '345px' : '0px'}
 				borderRadius={24}
 				boxSizing="border-box"
