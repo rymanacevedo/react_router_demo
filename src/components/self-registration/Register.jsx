@@ -170,21 +170,23 @@ function Register() {
 				recaptchaRes,
 			);
 
-			if (personalDetailsResponse?.data?.items) {
+			if (personalDetailsResponse?.response?.data?.items) {
 				if (
-					personalDetailsResponse?.data?.items[0].messageCode ===
+					personalDetailsResponse?.response?.data?.items[0].messageCode ===
 					'USERS_SELF_REGISTRATION_USER_ALREADY_EXISTS_ERROR'
 				) {
 					setErrorMessage(i18n('userAlreadyExistsClickBelowToLogin'));
+				} else {
+					setErrorMessage(i18n('unknown error'));
+					throw new Error(`Error! status: ${personalDetailsResponse.status}`);
 				}
-				setErrorMessage(i18n('unknown error'));
-				throw new Error(`Error! status: ${personalDetailsResponse.status}`);
 			}
 
 			if (personalDetailsResponse.status === 201) {
 				showConfirmation();
 			}
 			clearFormData();
+			recaptchaRef.current.reset();
 		}
 	};
 	return (
