@@ -1,7 +1,8 @@
 import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
-import { EnterIcon, ExitIcon } from '@radix-ui/react-icons';
+import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import { useMediaQuery } from '@chakra-ui/react';
 
 type ProgressBarMenu = {
 	isOpen: boolean;
@@ -10,6 +11,7 @@ type ProgressBarMenu = {
 
 const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
+	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 
 	return (
 		<Box width="100vw" boxSizing="border-box">
@@ -21,10 +23,11 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				width="100%"
 				height={'80px'}
 				bg={'transparent'}
-				justify="space-between"
+				justifyContent={isSmallerThan1000 ? '' : 'space-between'}
 				paddingLeft="24px"
-				paddingRight="24px">
-				<VStack align={'left'}>
+				paddingRight="24px"
+				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
+				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
 					<Text fontSize={'21px'} fontWeight={'600'}>
 						{i18n('theScienceOfLearning')}
 					</Text>
@@ -32,7 +35,9 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 						{`${i18n('about')} 24 ${i18n('minsLeft')}`}
 					</Text>
 				</VStack>
-				<VStack>
+				<VStack
+					alignSelf={'center'}
+					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<Text fontSize={'20px'} fontWeight={'600'}>
 						{`Round 1: ${i18n('questions')}`}
 					</Text>
@@ -80,6 +85,7 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 =======
 =======
 
+<<<<<<< HEAD
 >>>>>>> 35039affb (chore: clean up code styles)
 				<Button
 					variant={'outline'}
@@ -182,6 +188,32 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 >>>>>>> d04fcc9ff (Chore: update styling)
 =======
 >>>>>>> 8a334c31f (Feat: create progressMenu, CountUpTimer, added progressToaster)
+=======
+				{isSmallerThan1000 ? (
+					<Button
+						variant={'outline'}
+						borderColor={'ampPrimary.300'}
+						bg="ampWhite"
+						alignSelf={'flex-end'}
+						style={{ marginTop: '-40px' }}>
+						{<ChevronDownIcon />}
+					</Button>
+				) : (
+					<Button
+						variant={'outline'}
+						borderColor={'ampPrimary.300'}
+						bg="ampWhite"
+						width="200px"
+						leftIcon={isOpen ? <ExitIcon /> : <EnterIcon />}
+						onClick={() => {
+							setIsOpen(!isOpen);
+						}}>
+						<Text fontSize={'16px'} fontWeight="600">
+							{isOpen ? i18n('hideProgress') : i18n('showProgress')}
+						</Text>
+					</Button>
+				)}
+>>>>>>> df9944788 (Feat: added mobile menu by adding media querries and some style refactoring)
 			</HStack>
 			<Progress
 				value={80}

@@ -159,6 +159,25 @@ const resources = {
          /////////////////////////////////////////////
          //   DataServiceExceptionComponent.tsx
          //////////////////////////////////////////////
+<<<<<<< HEAD:src/i18n.js
+=======
+         appErrorTitle: 'Application Error',
+         appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
+         appErrorRestartButtonText: 'restart application',
+         /////////////////////////////////////////////
+         //   LearningView.tsx
+         //////////////////////////////////////////////
+         yourAssignments: 'Your Assignments',
+         changeCourse: 'Change Course',
+         /////////////////////////////////////////////
+         //   LearningView.tsx
+         //////////////////////////////////////////////
+         clearSelection: 'Clear selection',
+         nextQ: 'Next Question',
+         //////////////////////////////////////////////
+         //   DataServiceExceptionComponent.tsx
+         //////////////////////////////////////////////
+>>>>>>> df9944788 (Feat: added mobile menu by adding media querries and some style refactoring):main/src/i18n.js
          leaveFeedbackText: 'Leave feedback on this question',
          IDisagreeWithTheAnswer: 'I disagree with the answer',
          thisQuestionCouldBeImproved: 'This question could be improved',         
