@@ -88,6 +88,7 @@ const resources = {
          pleaseEnterPasscode: "Please enter your passcode.",        
          usernameUnavailable: "This username is already in use. Please try another.",
          selfRegisterNotAllowed: "You are not allowed to self register for this account.",
+         userAlreadyExistsClickBelowToLogin: 'A user with this email address already exists. Please click below to log in.',
          /////////////////////////////////////////////
          //   TestProgressBarMenu.tsx
          //////////////////////////////////////////////

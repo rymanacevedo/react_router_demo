@@ -171,6 +171,12 @@ function Register() {
 			);
 
 			if (personalDetailsResponse?.data?.items) {
+				if (
+					personalDetailsResponse?.data?.items[0] ===
+					'USERS_SELF_REGISTRATION_USER_ALREADY_EXISTS_ERROR'
+				) {
+					setErrorMessage(i18n('userAlreadyExistsClickBelowToLogin'));
+				}
 				setErrorMessage(i18n('unknown error'));
 				throw new Error(`Error! status: ${personalDetailsResponse.status}`);
 			}
