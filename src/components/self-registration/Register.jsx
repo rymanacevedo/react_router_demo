@@ -172,7 +172,7 @@ function Register() {
 
 			if (personalDetailsResponse?.data?.items) {
 				if (
-					personalDetailsResponse?.data?.items[0] ===
+					personalDetailsResponse?.data?.items[0].messageCode ===
 					'USERS_SELF_REGISTRATION_USER_ALREADY_EXISTS_ERROR'
 				) {
 					setErrorMessage(i18n('userAlreadyExistsClickBelowToLogin'));
