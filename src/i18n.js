@@ -89,6 +89,7 @@ const resources = {
          usernameUnavailable: "This username is already in use. Please try another.",
          selfRegisterNotAllowed: "You are not allowed to self register for this account.",
          userAlreadyExistsClickBelowToLogin: 'A user with this email address already exists. Please click below to log in.',
+         passwordFormatRuleText: 'Your password must contain 3 or more character types',
          /////////////////////////////////////////////
          //   TestProgressBarMenu.tsx
          //////////////////////////////////////////////

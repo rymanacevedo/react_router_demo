@@ -284,7 +284,9 @@ function Register() {
 									value={formData.password}
 									onBlur={validatePassword}
 								/>
-								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+								<FormErrorMessage>
+									{i18n('passwordFormatRuleText')}
+								</FormErrorMessage>
 							</FormControl>
 
 							<FormControl isRequired isInvalid={formError.password}>
@@ -300,7 +302,9 @@ function Register() {
 									value={formData.confirmPassword}
 									onBlur={validateConfirmPassword}
 								/>
-								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+								<FormErrorMessage>
+									{i18n('passwordsDoNotMatch')}
+								</FormErrorMessage>
 							</FormControl>
 						</VStack>
 					</HStack>
