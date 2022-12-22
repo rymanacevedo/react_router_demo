@@ -289,7 +289,7 @@ function Register() {
 								</FormErrorMessage>
 							</FormControl>
 
-							<FormControl isRequired isInvalid={formError.password}>
+							<FormControl isRequired isInvalid={formError.confirmPassword}>
 								<FormLabel marginBottom={1} requiredIndicator>
 									{i18n('confirmPassword')}
 								</FormLabel>
