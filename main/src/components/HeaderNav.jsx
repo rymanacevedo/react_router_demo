@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
 	Box,
@@ -7,6 +7,7 @@ import {
 	ButtonGroup,
 	Container,
 	HStack,
+	Icon,
 	Image,
 	Text,
 	Menu,
@@ -15,9 +16,10 @@ import {
 	MenuItem,
 } from '@chakra-ui/react';
 
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon, ArrowLeftIcon } from '@radix-ui/react-icons';
 
 const Header = () => {
+	const location = useLocation();
 	const nav = useNavigate();
 	const { user, logout } = useAuth();
 
@@ -158,6 +160,27 @@ const Header = () => {
 		);
 	};
 
+	const CourseHome = () => {
+		const inLearning = location.pathname === '/app/learning';
+		return inLearning ? (
+			<HStack
+				style={{
+					color: 'white',
+					margin: '0px 8px',
+					height: '80px',
+					padding: '25px',
+					boxSizing: 'border-box',
+					fontWeight: 'bold',
+					textAlign: 'center',
+				}}>
+				<Icon as={ArrowLeftIcon} />
+				<Text>Course Home</Text>
+			</HStack>
+		) : (
+			'not'
+		);
+	};
+
 	useEffect(() => {
 		// filter tabs by priority
 		const highestPriority = Math.max(
@@ -184,6 +207,7 @@ const Header = () => {
 							width="275"
 							height="90"
 						/>
+						<CourseHome />
 						<Navigation />
 					</HStack>
 				</Container>
