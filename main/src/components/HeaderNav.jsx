@@ -22,7 +22,7 @@ const Header = () => {
 	const location = useLocation();
 	const nav = useNavigate();
 	const { user, logout } = useAuth();
-	const inLearning = location.pathname === '/app/learning';
+	const inAssignment = location.pathname.indexOf('assignment');
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const navigateAccountMap = {
@@ -187,7 +187,7 @@ const Header = () => {
 							width="275"
 							height="90"
 						/>
-						{inLearning ? <CourseHome /> : null}
+						{inAssignment > -1 ? <CourseHome /> : null}
 						<Navigation />
 					</HStack>
 				</Container>

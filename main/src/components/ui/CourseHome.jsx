@@ -8,23 +8,19 @@ const CourseHome = () => {
 	const { t: i18n } = useTranslation();
 
 	return (
-		<>
-			<HStack
-				style={{
-					color: 'white',
-					margin: '0px 8px',
-					height: '80px',
-					padding: '25px',
-					boxSizing: 'border-box',
-					fontWeight: 'bold',
-					textAlign: 'center',
-				}}>
-				<Link as={ReactRouterLink} to="/app/courses" textDecoration="underline">
-					<Icon as={ArrowLeftIcon} />
-					<Text>{i18n('courseHome')}</Text>
-				</Link>
+		<Link
+			as={ReactRouterLink}
+			to="/app/learning"
+			textDecoration="none"
+			w="full"
+			color="ampWhite"
+			h="80px"
+			py="25px">
+			<HStack>
+				<Icon as={ArrowLeftIcon} />
+				<Text>{i18n('courseHome')}</Text>
 			</HStack>
-		</>
+		</Link>
 	);
 };
 
