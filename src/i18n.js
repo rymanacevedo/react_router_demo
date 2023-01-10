@@ -186,10 +186,15 @@ const resources = {
          other: 'Other (explain)',
          placeHolderText: 'Placeholder for longer, short answer text input',
 <<<<<<< HEAD:src/i18n.js
+<<<<<<< HEAD:src/i18n.js
 >>>>>>> 80e580071 (Feat: added leave feedback component to what you need to know):main/src/i18n.js
 =======
          whatYouNeedToKnow: 'What you need to know'
 >>>>>>> d2bf29dfd (Fix: change styles):main/src/i18n.js
+=======
+         whatYouNeedToKnow: 'What you need to know',
+         courseHome: 'Course Home',
+>>>>>>> e38207587 (Separated CourseHome component):main/src/i18n.js
       }
    },
    fr: {

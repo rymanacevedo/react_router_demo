@@ -7,7 +7,6 @@ import {
 	ButtonGroup,
 	Container,
 	HStack,
-	Icon,
 	Image,
 	Text,
 	Menu,
@@ -16,12 +15,14 @@ import {
 	MenuItem,
 } from '@chakra-ui/react';
 
-import { ChevronDownIcon, ArrowLeftIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import CourseHome from './ui/CourseHome';
 
 const Header = () => {
 	const location = useLocation();
 	const nav = useNavigate();
 	const { user, logout } = useAuth();
+	const inLearning = location.pathname === '/app/learning';
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const navigateAccountMap = {
@@ -160,27 +161,6 @@ const Header = () => {
 		);
 	};
 
-	const CourseHome = () => {
-		const inLearning = location.pathname === '/app/learning';
-		return inLearning ? (
-			<HStack
-				style={{
-					color: 'white',
-					margin: '0px 8px',
-					height: '80px',
-					padding: '25px',
-					boxSizing: 'border-box',
-					fontWeight: 'bold',
-					textAlign: 'center',
-				}}>
-				<Icon as={ArrowLeftIcon} />
-				<Text>Course Home</Text>
-			</HStack>
-		) : (
-			'not'
-		);
-	};
-
 	useEffect(() => {
 		// filter tabs by priority
 		const highestPriority = Math.max(
@@ -207,7 +187,7 @@ const Header = () => {
 							width="275"
 							height="90"
 						/>
-						<CourseHome />
+						{inLearning ? <CourseHome /> : null}
 						<Navigation />
 					</HStack>
 				</Container>
