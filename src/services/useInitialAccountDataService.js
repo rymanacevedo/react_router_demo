@@ -11,7 +11,7 @@ const useInitialAccountDataService = () => {
 		try {
 			setLoading(true);
 			const accountDataResponse = await axios({
-				url: `${window.KF.state.baseUri}/v2/bootstrap/account-info?name=${abbrevName}`,
+				url: `/v2/bootstrap/account-info?name=${abbrevName}`,
 
 				headers: {
 					'Content-Type': 'application/json',

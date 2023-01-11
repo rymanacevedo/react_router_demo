@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useSearchParams } from 'react-router-dom';
+import { Outlet, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import useInitialAccountDataService from '../../services/useInitialAccountDataService';
 import { ReactComponent as AmpLogo } from '../../ampLogo.svg';
@@ -15,6 +15,7 @@ export default function LoginWrapper() {
 	const [recaptcha, setRecaptcha] = useState('');
 	const [selfRegistration, setSelfRegistration] = useState(null);
 	const [searchParams] = useSearchParams();
+	const { abbrevName: urlParamsAbbrevName } = useParams();
 
 	const { fetchInitialAccountData, error: fetchInitialAccountDataError } =
 		useInitialAccountDataService();
@@ -31,7 +32,9 @@ export default function LoginWrapper() {
 	};
 
 	useEffect(() => {
-		handleFetchInitialUserData(searchParams.get('abbrevName'));
+		handleFetchInitialUserData(
+			searchParams.get('abbrevName') || urlParamsAbbrevName,
+		);
 	}, []);
 
 	return (

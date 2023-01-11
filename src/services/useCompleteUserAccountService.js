@@ -11,7 +11,7 @@ const useCompleteUserAccountService = () => {
 		try {
 			setLoading(true);
 			const loadAccount = await axios({
-				url: `${window.KF.state.baseUri}/v2/accounts/${accountKey}`,
+				url: `/v2/accounts/${accountKey}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${sessionKey}:someotherstring`,

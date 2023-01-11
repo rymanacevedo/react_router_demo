@@ -1,48 +1,98 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
-	Link,
+	Link as ReactRouterLink,
 	useNavigate,
+	useOutletContext,
 	useParams,
-	useSearchParams,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as AmpLogo } from '../../ampLogo.svg';
-import { ReactComponent as HeadLogo } from '../../headLogo.svg';
+
+import {
+	Alert,
+	AlertIcon,
+	Button,
+	Center,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Heading,
+	Input,
+	Link,
+	UnorderedList,
+	ListItem,
+	Text,
+	VStack,
+} from '@chakra-ui/react';
+
 import ReCAPTCHA from 'react-google-recaptcha';
-import useInitialAccountDataService from '../../services/useInitialAccountDataService';
 import useSignupDataService from '../../services/useSignupDataService';
 
 function SignUp() {
+	const context = useOutletContext();
 	const params = useParams();
-	const [searchParams] = useSearchParams();
 	const nav = useNavigate();
 	const { t: i18n } = useTranslation();
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [success, setSuccess] = useState(false);
-	const [accountData, setAccountData] = useState({});
 	const [userAltKey, setUserAltKey] = useState({});
 	const [captchaRes, setCaptchaRes] = useState(null);
 	const [showForm, setShowForm] = useState(true);
 	const [verified, setVerified] = useState(false);
-
-	const [disabled, setDisabled] = useState(true);
 	const [errorMessage, setErrorMessage] = useState('');
+	const [formError, setFormError] = useState({
+		username: false,
+		password: false,
+		confirmPassword: false,
+	});
+	const recaptchaRef = useRef();
 
 	const { postSignupData } = useSignupDataService();
-	const { fetchInitialAccountData } = useInitialAccountDataService();
+
+	const handleUsernameChange = (e) => {
+		setUsername(e.target.value);
+	};
+
+	const handleUsernameValidation = () => {
+		if (!username) {
+			setFormError((prevValue) => ({ ...prevValue, username: true }));
+		} else {
+			setFormError((prevValue) => ({ ...prevValue, username: false }));
+		}
+	};
 
 	const handlePasswordChange = (e) => {
 		setPassword(e.target.value);
+	};
+
+	const handlePasswordValidation = () => {
+		if (
+			!password ||
+			!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)
+		) {
+			setFormError((prevValue) => ({ ...prevValue, password: true }));
+		} else {
+			setFormError((prevValue) => ({ ...prevValue, password: false }));
+		}
 	};
 
 	const handleConfirmPassword = (e) => {
 		setConfirmPassword(e.target.value);
 	};
 
-	const handleUsernameChange = (e) => {
-		setUsername(e.target.value);
+	const handleConfirmPasswordValidation = () => {
+		if (!confirmPassword) {
+			setFormError((prevValue) => ({ ...prevValue, confirmPassword: true }));
+		}
+
+		if (confirmPassword !== password) {
+			setErrorMessage(i18n('passwordsDoNotMatch'));
+			setFormError((prevValue) => ({ ...prevValue, confirmPassword: true }));
+		} else if (confirmPassword && confirmPassword === password) {
+			setFormError((prevValue) => ({ ...prevValue, confirmPassword: false }));
+			setErrorMessage('');
+		}
 	};
 
 	const handleSuccessChange = () => {
@@ -53,14 +103,6 @@ function SignUp() {
 	useEffect(() => {
 		setUserAltKey(params.userAltKey);
 
-		async function getAccountData() {
-			const accountDataResponse = await fetchInitialAccountData(
-				searchParams.get('abbrevName'),
-			);
-			setAccountData(accountDataResponse);
-		}
-
-		getAccountData();
 		nav('/signup', { replace: true });
 	}, []);
 
@@ -68,32 +110,36 @@ function SignUp() {
 		if (value) {
 			setCaptchaRes(value);
 			setVerified(true);
-			setDisabled(false);
 		}
 	};
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
-
-		if (confirmPassword !== password) {
-			setErrorMessage('Password mismatch');
-		}
+		setErrorMessage('');
 
 		if (!verified) {
-			setErrorMessage('Please complete Recaptcha');
+			setErrorMessage(i18n('pleaseCompleteRecaptcha'));
 		}
 
 		if (verified && password === confirmPassword) {
+			recaptchaRef.current.reset();
+			setVerified(false);
+
 			const signUpRes = await postSignupData(
-				accountData.accountInfo.uid,
+				context.accountUid,
 				userAltKey,
 				username,
 				password,
 				captchaRes,
 			);
-			const signUpResJson = signUpRes.json();
 
-			if (signUpResJson.statusMessage === 'not authorized') {
+			if (
+				signUpRes?.response?.data?.errorMessage === 'username is not available'
+			) {
+				setErrorMessage(i18n('usernameUnavailable'));
+			}
+
+			if (!signUpRes) {
 				handleSuccessChange();
 			}
 		}
@@ -101,126 +147,118 @@ function SignUp() {
 
 	return (
 		<>
-			<div className="login-wrapper">
-				<div className="login-left">
-					<HeadLogo />
-				</div>
+			{showForm && (
+				<VStack
+					spacing="5"
+					w={{ base: '100%', md: '358px' }}
+					as="form"
+					method="post"
+					onSubmit={submitHandler}
+					noValidate>
+					<Heading align="center" fontSize="28px">
+						<p>{i18n('signUpText')}</p>
+					</Heading>
 
-				<div className="login-right">
-					<AmpLogo />
-					<div className="login-right-content-wrapper">
-						{showForm && (
-							<div className="form-wrapper">
-								<div className="welcome">
-									<p>{i18n('signUpText')}</p>
-								</div>
+					<FormControl isRequired isInvalid={formError.username}>
+						<FormLabel marginBottom={1} requiredIndicator>
+							{i18n('username')}
+						</FormLabel>
+						<Input
+							id="username"
+							autoFocus
+							placeholder="name@email.com"
+							name="username"
+							value={username}
+							onChange={handleUsernameChange}
+							onBlur={handleUsernameValidation}
+							maxLength="100"
+						/>
+						<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
+					</FormControl>
 
-								<form className="login-form" onSubmit={submitHandler}>
-									<div className="input-stack">
-										<div className="input-stack-label">
-											<label htmlFor="username">{i18n('username')}</label>
-										</div>
-										<input
-											onInvalid={(e) =>
-												e.target.setCustomValidity(i18n('enterUsername'))
-											}
-											onInput={(e) => e.target.setCustomValidity('')}
-											id="username"
-											type="text"
-											maxLength="100"
-											autoFocus
-											placeholder="name@email.com"
-											name="username"
-											required
-											value={username}
-											onChange={handleUsernameChange}
-										/>
-									</div>
+					<FormControl isRequired isInvalid={formError.password}>
+						<FormLabel marginBottom={1} requiredIndicator>
+							{i18n('password')}
+						</FormLabel>
+						<Input
+							id="newPassword"
+							type="password"
+							placeholder={i18n('password')}
+							name="password"
+							value={password}
+							onChange={handlePasswordChange}
+							onBlur={handlePasswordValidation}
+						/>
+						<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+					</FormControl>
 
-									<div className="input-stack">
-										<div className="input-stack-label">
-											<label htmlFor="password">{i18n('password')}</label>
-										</div>
-										<input
-											onInvalid={(e) =>
-												e.target.setCustomValidity(i18n('enterPassword'))
-											}
-											onInput={(e) => e.target.setCustomValidity('')}
-											type="password"
-											id="newPassword"
-											placeholder={i18n('password')}
-											name="password"
-											required
-											value={password}
-											onChange={handlePasswordChange}
-										/>
-									</div>
+					<FormControl isRequired isInvalid={formError.confirmPassword}>
+						<FormLabel marginBottom={1} requiredIndicator>
+							{i18n('reenterPasswordFormLabel')}
+						</FormLabel>
+						<Input
+							id="newPassword2"
+							type="password"
+							placeholder={i18n('reenterPasswordFormLabel')}
+							name="confirmPassword"
+							value={confirmPassword}
+							onChange={handleConfirmPassword}
+							onBlur={handleConfirmPasswordValidation}
+						/>
+						<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+					</FormControl>
 
-									<div className="input-stack">
-										<div className="input-stack-label">
-											<label htmlFor="confirmPassword">
-												{i18n('reenterPasswordFormLabel')}
-											</label>
-										</div>
-										<input
-											onInvalid={(e) =>
-												e.target.setCustomValidity(
-													i18n('reenterPasswordFormLabel'),
-												)
-											}
-											onInput={(e) => e.target.setCustomValidity('')}
-											type="password"
-											id="newPassword2"
-											placeholder={i18n('reenterPasswordFormLabel')}
-											name="confirmPassword"
-											required
-											value={confirmPassword}
-											onChange={handleConfirmPassword}
-										/>
-									</div>
-									{accountData.recaptchaSiteKey && (
-										<ReCAPTCHA
-											sitekey={accountData.recaptchaSiteKey}
-											onChange={onChange}
-										/>
-									)}
-									<button
-										className="primary-button"
-										type="submit"
-										name="Login"
-										disabled={disabled}>
-										{i18n('continueBtnText')}
-									</button>
+					{context.recaptcha && (
+						<ReCAPTCHA
+							sitekey={context.recaptcha}
+							onChange={onChange}
+							ref={recaptchaRef}
+						/>
+					)}
 
-									<div className="text-center">
-										<p className="error-text">{i18n(errorMessage)}</p>
-									</div>
+					<Button w="full" type="submit" name="Login">
+						{i18n('continueBtnText')}
+					</Button>
 
-									<div className="mt-20">
-										<p>{i18n('passwordRuleText')}</p>
-										<ul className="list-styled">
-											<li>{i18n('upperCaseRule')}</li>
-											<li>{i18n('lowerCaseRule')}</li>
-											<li>{i18n('digitRule')}</li>
-											<li>{i18n('specialCharacterRule')}</li>
-										</ul>
-									</div>
-								</form>
-							</div>
-						)}
-						{success && (
-							<div className="text-center">
-								<p>{i18n('userCreated')}.</p>
-								<p>
-									{i18n('please')} <Link to="/">{i18n('clickHere')}</Link>{' '}
-									{i18n('toLogIn')}
-								</p>
-								'
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
+					{errorMessage && (
+						<Alert status="error" bg="ampError.50">
+							<AlertIcon />
+							<Text align="center" color="ampError.700">
+								{i18n(errorMessage)}
+							</Text>
+						</Alert>
+					)}
+
+					<Text>{i18n('passwordRuleText')}</Text>
+					<UnorderedList>
+						<ListItem>{i18n('upperCaseRule')}</ListItem>
+						<ListItem>{i18n('lowerCaseRule')}</ListItem>
+						<ListItem>{i18n('digitRule')}</ListItem>
+						<ListItem>{i18n('specialCharacterRule')}</ListItem>
+					</UnorderedList>
+				</VStack>
+			)}
+			{success && (
+				<Center height="100%">
+					<VStack>
+						<Text>{i18n('userCreated')}</Text>
+						<Text>
+							{i18n('please')}{' '}
+							<Link
+								as={ReactRouterLink}
+								to={{
+									pathname: '/login',
+									search: `?abbrevName=${context.abbrevNameState}`,
+								}}
+								color="ampSecondary.500"
+								textDecoration="underline">
+								{i18n('clickHere')}
+							</Link>{' '}
+							{i18n('toLogIn')}
+						</Text>
+					</VStack>
+				</Center>
+			)}
 		</>
 	);
 }

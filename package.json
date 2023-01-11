@@ -38,7 +38,7 @@
     "build": "DISABLE_ESLINT_PLUGIN='true' react-scripts build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
     "fix": "eslint --fix --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
-    "prepare": "husky install .husky",
+    "prepare": "cd .. && husky install main/.husky",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prestart": "rm -rf node_modules/.cache/"
@@ -114,5 +114,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0"
-  }
+  },
+  "proxy": "http://mybob.amplifire.me:8080"
 }

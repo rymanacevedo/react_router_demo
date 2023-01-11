@@ -18,7 +18,7 @@ const useForgotPasswordService = () => {
 
 			const forgotPasswordResponse = await axios({
 				method: 'post',
-				url: `${window.KF.state.baseUri}/v2/bootstrap/forgot-password`,
+				url: '/v2/bootstrap/forgot-password',
 				data: forgotPasswordBody,
 				headers: { 'Content-Type': 'application/json' },
 			});

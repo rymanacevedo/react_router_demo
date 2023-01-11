@@ -23,6 +23,12 @@ const Checkbox = defineStyleConfig({
 				_hover: {},
 			},
 		},
+		formCheckbox: {
+			control: {
+				border: '2px solid',
+				borderRadius: 'sm',
+			},
+		},
 	},
 });
 

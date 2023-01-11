@@ -11,7 +11,7 @@ const useLogoutService = () => {
 		try {
 			setLoading(true);
 			const logoutResponse = await axios({
-				url: `${window.KF.state.baseUri}/v2/session/logout`,
+				url: '/v2/session/logout',
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${sessionKey}:someotherstring`,

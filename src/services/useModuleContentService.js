@@ -1,22 +1,72 @@
+import { useState, useContext } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import useAxios from '../hooks/useAxios';
+import axios from 'axios';
+
+import DialogContext from '../components/DialogProvider';
 
 const useModuleContentService = () => {
-	const { user, state } = useAuth();
-	const moduleId = '6af13155-a5b1-4741-878c-c6e4d664f73b';
-	const headers = {
-		Authorization: `Basic ${window.base64.encode(
-			`${user.sessionKey}:someotherstring`,
-		)}`,
-		'Content-type': 'application/json',
+	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
+	const { setShowAlert } = useContext(DialogContext);
+
+	const { user } = useAuth();
+	let subaccount = '';
+	user.roles.forEach((role) => {
+		if (role.name === 'Learner') {
+			subaccount = role.account;
+		}
+	});
+
+	const fetchAssignments = async (assignmentKey) => {
+		try {
+			setLoading(true);
+			const assignmentsResponse = await axios({
+				method: 'GET',
+				url: `/v2/assignments/${assignmentKey}?includeTimePerLU=true&subaccount=${subaccount}`,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+			});
+
+			return assignmentsResponse.data;
+		} catch (err) {
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
 	};
-	const { data, error, loading } = useAxios(
-		`${state.baseUri}/v2/curricula/modules/${moduleId}/version/1`,
-		'GET',
-		headers,
-	);
 
-	return { data, error, loading };
+	const fetchModuleContent = async (assignmentKey) => {
+		try {
+			setLoading(true);
+			let assignmentsData = await fetchAssignments(assignmentKey);
+			const modalContentResponse = await axios({
+				method: 'GET',
+				url: assignmentsData.moduleUri,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+			});
+			return modalContentResponse.data;
+		} catch (err) {
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return { error, loading, fetchModuleContent, fetchAssignments };
 };
-
 export default useModuleContentService;

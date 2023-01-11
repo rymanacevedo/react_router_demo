@@ -1,46 +1,34 @@
-import { Box, Heading, HStack, Text, Button, Stack } from '@chakra-ui/react';
+import { Box, Heading, Text, Button, Stack } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
 
+type ModuleIntroductionComponentType = {
+	moduleData: {
+		name: string;
+		introductionRc: any;
+	};
+	beginAssignment: () => void;
+};
 const ModuleIntroductionComponent = ({
-	moduleName,
-	introductionRc,
-	descriptionRc,
-	numOfQuestionsText,
-	testTimeText,
-	proceedBtnText,
-}: {
-	moduleName: string;
-	introductionRc: any;
-	descriptionRc: any;
-	numOfQuestionsText?: string;
-	testTimeText?: string;
-	proceedBtnText?: String;
-}) => {
+	moduleData,
+	beginAssignment,
+}: ModuleIntroductionComponentType) => {
 	return (
 		<Box
 			style={{
 				backgroundColor: 'white',
 			}}
-			boxShadow="2xl"
-			w="100%"
-			minH="60vh"
+			w="990px"
 			overflow="hidden"
+			margin={'12px auto'}
 			borderRadius={24}
-			p={8}>
-			<Heading as="h2">{moduleName}</Heading>
-			<Stack>
-				<RichContentComponent content={introductionRc} />
-				<RichContentComponent content={descriptionRc} />
+			padding={16}>
+			<Heading as="h2">{moduleData?.name}</Heading>
+			<Stack paddingTop="16px" paddingBottom="16px">
+				<RichContentComponent content={moduleData?.introductionRc} />
 			</Stack>
-			<HStack spacing="20px">
-				<Text float="left" fontSize="12px">
-					{numOfQuestionsText}
-				</Text>
-				<Text float="right" fontSize="12px">
-					{testTimeText}
-				</Text>
-			</HStack>
-			{proceedBtnText && <Button>{proceedBtnText}</Button>}
+			<Button onClick={() => beginAssignment()}>
+				<Text>Let's Begin</Text>
+			</Button>
 		</Box>
 	);
 };

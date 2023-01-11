@@ -19,7 +19,7 @@ const useForgotUsernameService = () => {
 
 			const forgotUsernameResponse = await axios({
 				method: 'post',
-				url: `${window.KF.state.baseUri}/v2/bootstrap/forgot-username`,
+				url: '/v2/bootstrap/forgot-username',
 				data: forgotUsernameBody,
 				headers: { 'Content-Type': 'application/json' },
 			});

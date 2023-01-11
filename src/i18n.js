@@ -71,20 +71,8 @@ const resources = {
          toLogIn: "to log in.",
          emailLabel: "Email",
          forgotUsernameErrorText: "We could not send an email to this email address. Please check your email address and try again or contact support for assistance.",
-<<<<<<< HEAD:src/i18n.js
-         accountUrlErrorText: "Account not recognized. Please check the account name in the URL."
-=======
          accountUrlErrorText: "Account not recognized. Please check the account name in the URL.",
          passcode: "Passcode",
-<<<<<<< HEAD:src/i18n.js
-         pleaseEnterPasscode: "Please enter your passcode.",
-<<<<<<< HEAD:src/i18n.js
-<<<<<<< HEAD:src/i18n.js
-<<<<<<< HEAD:src/i18n.js
-=======
->>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
-         //////////////////////////////////
-=======
          pleaseEnterPasscode: "Please enter your passcode.",        
          usernameUnavailable: "This username is already in use. Please try another.",
          selfRegisterNotAllowed: "You are not allowed to self register for this account.",
@@ -100,51 +88,14 @@ const resources = {
          showProgress:'Show Progress',
          hideProgress: 'Hide Progress',
          viewMoreProgress: 'View More Progress',
-<<<<<<< HEAD:src/i18n.js
-          //////////////////////////////////
->>>>>>> 44b1afbb3 (Feat: create learning view route, create learning view component, added pop over to test progress bar):main/src/i18n.js
-         //    AssignmentList.js
-=======
          //////////////////////////////////
          //    AssignmentList.jsx
->>>>>>> 7c385ed73 (Chore: add i18n to progress 2):main/src/i18n.js
          //////////////////////////////////
          mins: 'mins',
          min: "min",
          minToComplete:'min to complete',
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
-<<<<<<< HEAD:src/i18n.js
-<<<<<<< HEAD:src/i18n.js
-
-<<<<<<< HEAD:src/i18n.js
->>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
-=======
-         usernameUnavailable: "This username is already in use. Please try another."
->>>>>>> ec0b35609 (added error message):main/src/i18n.js
-=======
->>>>>>> d5cdc7d8e (Feat: add i18n texts):main/src/i18n.js
-=======
-         /////////////////////////////////////////////
-         //   TestProgressBarMenu.tsx
-         //////////////////////////////////////////////
-         theScienceOfLearning:'The Science of Learning',
-         about: 'About',
-         minsLeft:'mins left',
-         questions: 'Questions',
-         showProgress:'Show Progress'
->>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/i18n.js
-=======
-         /////////////////////////////////////////////
-         //   DataServiceExceptionComponent.tsx
-         //////////////////////////////////////////////
-         appErrorTitle: 'Application Error',
-         appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
-         appErrorRestartButtonText: 'restart application',
-<<<<<<< HEAD:src/i18n.js
-
->>>>>>> bf35abd9a (added i18n):main/src/i18n.js
-=======
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
@@ -152,16 +103,10 @@ const resources = {
          incorect: 'Incorect',
          learning: 'Learning',
          unseen: 'Unseen',
-         sessionTimer: 'Session Timer'
-
-
->>>>>>> 7c385ed73 (Chore: add i18n to progress 2):main/src/i18n.js
-=======
+         sessionTimer: 'Session Timer',
          /////////////////////////////////////////////
          //   DataServiceExceptionComponent.tsx
          //////////////////////////////////////////////
-<<<<<<< HEAD:src/i18n.js
-=======
          appErrorTitle: 'Application Error',
          appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
          appErrorRestartButtonText: 'restart application',
@@ -178,23 +123,14 @@ const resources = {
          //////////////////////////////////////////////
          //   DataServiceExceptionComponent.tsx
          //////////////////////////////////////////////
->>>>>>> df9944788 (Feat: added mobile menu by adding media querries and some style refactoring):main/src/i18n.js
          leaveFeedbackText: 'Leave feedback on this question',
          IDisagreeWithTheAnswer: 'I disagree with the answer',
          thisQuestionCouldBeImproved: 'This question could be improved',         
          iStillDontUnderstand: 'I still don’t understand',
          other: 'Other (explain)',
          placeHolderText: 'Placeholder for longer, short answer text input',
-<<<<<<< HEAD:src/i18n.js
-<<<<<<< HEAD:src/i18n.js
->>>>>>> 80e580071 (Feat: added leave feedback component to what you need to know):main/src/i18n.js
-=======
-         whatYouNeedToKnow: 'What you need to know'
->>>>>>> d2bf29dfd (Fix: change styles):main/src/i18n.js
-=======
          whatYouNeedToKnow: 'What you need to know',
          courseHome: 'Course Home',
->>>>>>> e38207587 (Separated CourseHome component):main/src/i18n.js
       }
    },
    fr: {

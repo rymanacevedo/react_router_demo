@@ -26,7 +26,7 @@ const useSignupDataService = () => {
 
 			const signUpResponse = await axios({
 				method: 'post',
-				url: `${window.KF.state.baseUri}/v2/users/${userAltKey}/initial-credentials`,
+				url: `/v2/users/${userAltKey}/initial-credentials`,
 				headers: {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',

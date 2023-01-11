@@ -16,7 +16,7 @@ const useInitialUserDataService = () => {
 		try {
 			setLoading(true);
 
-			const initialRequestDefaultHeaders = {
+			let initialRequestDefaultHeaders = {
 				'amp-username': username,
 				'amp-password': password,
 				'amp-account': accountKey,
@@ -24,14 +24,14 @@ const useInitialUserDataService = () => {
 			};
 
 			if (rememberedDeviceUid !== null) {
-				initialRequestDefaultHeaders.append(
-					'amp-remembered-device-uid',
-					rememberedDeviceUid,
-				);
+				initialRequestDefaultHeaders = {
+					...initialRequestDefaultHeaders,
+					'amp-remembered-device-uid': rememberedDeviceUid,
+				};
 			}
 
 			const initDataResponse = await axios({
-				url: `${window.KF.state.baseUri}/v2/authenticate`,
+				url: '/v2/authenticate',
 				headers: initialRequestDefaultHeaders,
 				dataType: 'json',
 				method: 'post',

@@ -11,7 +11,7 @@ const useUserRolesService = () => {
 		try {
 			setLoading(true);
 			const response = await axios({
-				url: `${window.KF.state.baseUri}/v2/users/${userKey}/roles`,
+				url: `/v2/users/${userKey}/roles`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${sessionKey}:someotherstring`,

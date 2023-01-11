@@ -11,7 +11,7 @@ const useCompleteUserDataService = () => {
 		try {
 			setLoading(true);
 			const response = await axios({
-				url: `${window.KF.state.baseUri}/v2/users/${userKey}`,
+				url: `/v2/users/${userKey}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${sessionKey}:someotherstring`,

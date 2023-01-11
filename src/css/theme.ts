@@ -3,6 +3,8 @@ import { Button } from './Buttons';
 import { Badge } from './Badges';
 import { Tag } from './Tags';
 import { Checkbox } from './Checkbox';
+import { Link } from './Link';
+import { Divider } from './Divider';
 
 export const ampTheme = extendTheme({
 	styles: {
@@ -156,12 +158,10 @@ export const ampTheme = extendTheme({
 		},
 	},
 	components: {
-		Button: Button,
-		Badge: Badge,
-		Tag: Tag,
+		Button,
+		Badge,
+		Tag,
 		Checkbox,
-<<<<<<< HEAD:src/css/theme.ts
-=======
 		Link,
 		Divider,
 		Progress: {
@@ -180,6 +180,5 @@ export const ampTheme = extendTheme({
 				},
 			},
 		},
->>>>>>> 1ff658e8e (Fix: made mini chips into micro chips):main/src/css/theme.ts
 	},
 });

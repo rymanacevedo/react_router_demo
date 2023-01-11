@@ -3,19 +3,10 @@ import { useLocalStorage } from './useLocalStorage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useLogoutService from '../services/useLogoutService';
 import { Cookies } from 'react-cookie-consent';
-<<<<<<< HEAD:src/hooks/useAuth.js
-<<<<<<< HEAD:src/hooks/useAuth.js
-=======
-=======
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 import {
 	useGetSessionExpirationService,
 	useKeepSessionAliveService,
 } from '../services/useSessionService';
-<<<<<<< HEAD:src/hooks/useAuth.js
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
-=======
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 
 const AuthContext = createContext(null);
 
@@ -25,18 +16,9 @@ export const AuthProvider = ({ children }) => {
 	const nav = useNavigate();
 	const { logoutService } = useLogoutService();
 	const [searchParams] = useSearchParams();
-<<<<<<< HEAD:src/hooks/useAuth.js
-<<<<<<< HEAD:src/hooks/useAuth.js
-=======
 	const { keepAlive } = useKeepSessionAliveService();
 	const { getSessionExpiration } = useGetSessionExpirationService();
 	let intervalID;
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
-=======
-	const { keepAlive } = useKeepSessionAliveService();
-	const { getSessionExpiration } = useGetSessionExpirationService();
-	let intervalID;
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 
 	const clearKFState = () => {
 		window.KF.state.activeSubModule = '';
@@ -171,35 +153,10 @@ export const AuthProvider = ({ children }) => {
 		Cookies.set('session_key', initialUserData.sessionKey, {
 			path: '/',
 		});
-<<<<<<< HEAD:src/hooks/useAuth.js
-<<<<<<< HEAD:src/hooks/useAuth.js
-		nav('/app');
-	};
-
-	const logout = () => {
-		logoutService(user.sessionKey).then((response) => {
-			if (!response || response.status !== 200) {
-				clearState();
-				throw response === undefined
-					? Error('Network Error')
-					: Error(response.statusText);
-			}
-
-			clearState();
-		});
-	};
-=======
 		checkExpiration(initialUserData.sessionKey);
 		nav('/app');
 	};
 
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
-=======
-		checkExpiration(initialUserData.sessionKey);
-		nav('/app');
-	};
-
->>>>>>> 8b7dcb3cb (added session timeout check, removed idle timer library):main/src/hooks/useAuth.js
 	const value = useMemo(
 		() => ({
 			user,

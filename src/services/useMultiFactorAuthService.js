@@ -18,7 +18,7 @@ const useMultiFactorAuthService = () => {
 		try {
 			setLoading(true);
 			const initDataResponse = await axios({
-				url: `${window.KF.state.baseUri}/v2/authenticate?remember=${remember}`,
+				url: `/v2/authenticate?remember=${remember}`,
 				headers: {
 					'amp-username': username,
 					'amp-password': password,
