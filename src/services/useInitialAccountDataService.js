@@ -1,12 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
-import DialogContext from '../components/DialogProvider';
+import { useDialogContext } from '../components/DialogProvider';
 
 const useInitialAccountDataService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { setShowAlert } = useContext(DialogContext);
+	const { setShowAlert } = useDialogContext();
 	const fetchInitialAccountData = async (abbrevName) => {
 		try {
 			setLoading(true);

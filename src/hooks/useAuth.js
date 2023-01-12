@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo } from 'react';
+import {
+	createContext,
+	useContext,
+	useMemo,
+	useState,
+	useEffect,
+	useRef,
+} from 'react';
 import { useLocalStorage } from './useLocalStorage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useLogoutService from '../services/useLogoutService';
@@ -7,6 +14,7 @@ import {
 	useGetSessionExpirationService,
 	useKeepSessionAliveService,
 } from '../services/useSessionService';
+import SessionDialogComponent from '../components/ui/SessionDialogComponent';
 
 const AuthContext = createContext(null);
 
@@ -18,7 +26,13 @@ export const AuthProvider = ({ children }) => {
 	const [searchParams] = useSearchParams();
 	const { keepAlive } = useKeepSessionAliveService();
 	const { getSessionExpiration } = useGetSessionExpirationService();
-	let intervalID;
+	const [showSessionDialog, setShowSessionDialog] = useState(false);
+	const [staySignedIn, setStaySignedIn] = useState(false);
+	const [isSignedIn, setIsSignedIn] = useState(false);
+	const [expiration, setExpiration] = useState(null);
+	const FIVE_MINS = 300000;
+	const checkExpirationTimeoutRef = useRef(null);
+	const autoLogoutTimeoutRef = useRef(null);
 
 	const clearKFState = () => {
 		window.KF.state.activeSubModule = '';
@@ -58,53 +72,18 @@ export const AuthProvider = ({ children }) => {
 			}
 
 			clearState();
-			clearInterval(intervalID);
-			// release our intervalID from the variable
-			intervalID = null;
 		});
 	};
 
-	function scheduleNewCheck(millisToNextCheck, key) {
-		if (!intervalID) {
-			intervalID = setInterval(() => {
-				// eslint-disable-next-line @typescript-eslint/no-use-before-define
-				checkExpiration(key);
-			}, millisToNextCheck);
+	const handleCloseSession = () => {
+		setShowSessionDialog(false);
+		setIsSignedIn(false);
+		setStaySignedIn(false);
+		setExpiration(null);
+		if (user) {
+			logout();
 		}
-	}
-
-	function checkExpiration(key) {
-		const sessionExpiration = getSessionExpiration(key);
-		sessionExpiration.then((res) => {
-			const now = Date.now();
-			const millisToNextCheck = res.value - now - 300000;
-
-			if (millisToNextCheck <= 300000) {
-				//leaving this in as placeholder for next story
-				const conf = window.confirm(
-					//prettier-ignore
-					'Your session is about to expire. Click \'OK\' to extend your session or \'Cancel\' to log out.',
-				);
-				if (conf) {
-					if (res.value < new Date().getTime()) {
-						// if the user clicks ok and session is expired just log them out
-						logout();
-					} else {
-						keepAlive(key);
-						clearInterval(intervalID);
-						intervalID = null;
-						scheduleNewCheck(1500000, key);
-					}
-				} else {
-					logout();
-				}
-			} else {
-				clearInterval(intervalID);
-				intervalID = null;
-				scheduleNewCheck(millisToNextCheck, key);
-			}
-		});
-	}
+	};
 
 	const login = async ({
 		initialUserData,
@@ -153,9 +132,68 @@ export const AuthProvider = ({ children }) => {
 		Cookies.set('session_key', initialUserData.sessionKey, {
 			path: '/',
 		});
-		checkExpiration(initialUserData.sessionKey);
+		setIsSignedIn(true);
 		nav('/app');
 	};
+
+	const handleStaySignedIn = () => {
+		setStaySignedIn(true);
+	};
+
+	const getExpiration = () => {
+		getSessionExpiration(user.sessionKey).then((res) => {
+			setExpiration(res.value);
+		});
+	};
+
+	const checkExpiration = () => {
+		if (expiration !== null && expiration < new Date().getTime()) {
+			handleCloseSession();
+		}
+
+		const now = Date.now();
+		const nextCheck = expiration - now - FIVE_MINS;
+		if (nextCheck <= FIVE_MINS) {
+			setShowSessionDialog(true);
+			setStaySignedIn(false);
+		} else {
+			getExpiration();
+		}
+	};
+
+	useEffect(() => {
+		if (isSignedIn) {
+			getExpiration();
+		}
+	}, [isSignedIn]);
+
+	useEffect(() => {
+		if (expiration !== null) {
+			const now = Date.now();
+			const secondsToNext = expiration - now - FIVE_MINS;
+			const secondsToAutoLogout = expiration - now;
+
+			checkExpirationTimeoutRef.current = setTimeout(() => {
+				checkExpiration();
+			}, secondsToNext);
+
+			autoLogoutTimeoutRef.current = setTimeout(() => {
+				handleCloseSession();
+			}, secondsToAutoLogout);
+		}
+		return () => {
+			clearTimeout(checkExpirationTimeoutRef.current);
+			clearTimeout(autoLogoutTimeoutRef.current);
+		};
+	}, [expiration]);
+
+	useEffect(() => {
+		if (staySignedIn) {
+			keepAlive(user.sessionKey);
+			setShowSessionDialog(false);
+			getExpiration();
+		}
+	}, [staySignedIn]);
 
 	const value = useMemo(
 		() => ({
@@ -167,7 +205,16 @@ export const AuthProvider = ({ children }) => {
 		[user, state],
 	);
 
-	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={value}>
+			{children}
+			<SessionDialogComponent
+				isOpen={showSessionDialog}
+				onClose={() => handleCloseSession()}
+				handleStaySignedIn={handleStaySignedIn}
+			/>
+		</AuthContext.Provider>
+	);
 };
 
 export const useAuth = () => {
