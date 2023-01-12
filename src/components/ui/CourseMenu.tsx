@@ -9,18 +9,19 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import { CourseListType } from '../pages/LearningView';
 
 type Props = {
-	courseList: CourseListType;
-	selectedCourseKey: string;
-	setSelectedCourseKey: (key: string) => void;
+    courseList: { key: string; name: string }[];
+    selectedCourseKey: string;
+    setSelectedCourseKey: (key: string) => void;
+    setCourseTitle: (title: string) => void;
 };
 
 const CourseMenu = ({
 	courseList,
 	selectedCourseKey,
 	setSelectedCourseKey,
+	setCourseTitle
 }: Props) => {
 	const { t: i18n } = useTranslation();
 
@@ -38,9 +39,10 @@ const CourseMenu = ({
 			</MenuButton>
 			<MenuList minWidth="240px">
 				<MenuOptionGroup
-					onChange={(e) => {
-						return setSelectedCourseKey(e as string);
-					}}
+					onChange={(value) => {
+						setSelectedCourseKey(value as string);
+						setCourseTitle(courseList.find((course) => course.key === value)?.name as string);
+				   }}
 					defaultChecked={true}
 					defaultValue={selectedCourseKey}>
 					{courseList?.map((course) => (
