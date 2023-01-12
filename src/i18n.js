@@ -111,6 +111,13 @@ const resources = {
          appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
          appErrorRestartButtonText: 'restart application',
          /////////////////////////////////////////////
+          //   SessionDialogComponent.tsx
+          //////////////////////////////////////////////
+          sessionExpiring: 'Your session is about to expire',
+          staySignedInQuestion: 'Do you want to stay signed in?',
+          staySignedInButton: 'Stay Signed In',
+          logOutButton: 'Logout Now',
+         /////////////////////////////////////////////
          //   LearningView.tsx
          //////////////////////////////////////////////
          yourAssignments: 'Your Assignments',

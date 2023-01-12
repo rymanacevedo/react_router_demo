@@ -1,13 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
-import DialogContext from '../../components/DialogProvider';
+import { useDialogContext } from '../../components/DialogProvider';
 
 const useCourseCurriculaListService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { setShowAlert } = useContext(DialogContext);
+	const { setShowAlert } = useDialogContext();
 
 	const { user } = useAuth();
 	let subaccount = '';

@@ -1,12 +1,12 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
-import DialogContext from '../components/DialogProvider';
+import { useDialogContext } from '../components/DialogProvider';
 
 const useKeepSessionAliveService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { setShowAlert } = useContext(DialogContext);
+	const { setShowAlert } = useDialogContext();
 	const keepAlive = async (sessionKey) => {
 		try {
 			setLoading(true);
@@ -27,6 +27,7 @@ const useKeepSessionAliveService = () => {
 			if (err.response.status >= 500) {
 				setShowAlert(true);
 			}
+			return err;
 		} finally {
 			setLoading(false);
 		}
@@ -38,7 +39,7 @@ const useKeepSessionAliveService = () => {
 const useGetSessionExpirationService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-	const { setShowAlert } = useContext(DialogContext);
+	const { setShowAlert } = useDialogContext();
 	const getSessionExpiration = async (sessionKey) => {
 		try {
 			setLoading(true);
@@ -59,6 +60,7 @@ const useGetSessionExpirationService = () => {
 			if (err.response.status >= 500) {
 				setShowAlert(true);
 			}
+			return err;
 		} finally {
 			setLoading(false);
 		}

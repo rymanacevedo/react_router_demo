@@ -1,15 +1,15 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../hooks/useAuth';
 
-import DialogContext from '../components/DialogProvider';
+import { useDialogContext } from '../components/DialogProvider';
 
 const useAssignmentByUserAssociations = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 	const { user } = useAuth();
 
-	const { setShowAlert } = useContext(DialogContext);
+	const { setShowAlert } = useDialogContext();
 
 	let subaccount = '';
 	user.roles.forEach((role) => {

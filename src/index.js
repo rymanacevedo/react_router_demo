@@ -7,6 +7,7 @@ import './css/index.css';
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
+import DialogProvider from './components/DialogProvider';
 import { AuthProvider } from './hooks/useAuth';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -18,7 +19,9 @@ root.render(
 	<ChakraProvider theme={ampTheme}>
 		<BrowserRouter basename="/main">
 			<AuthProvider>
-				<App />
+				<DialogProvider>
+					<App />
+				</DialogProvider>
 			</AuthProvider>
 		</BrowserRouter>
 	</ChakraProvider>,
