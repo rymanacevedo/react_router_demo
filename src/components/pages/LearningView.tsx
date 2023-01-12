@@ -70,6 +70,7 @@ const LearningView = () => {
 					courseList={courseList}
 					selectedCourseKey={selectedCourseKey}
 					setSelectedCourseKey={setSelectedCourseKey}
+					setCourseTitle={setCourseTitle}
 				/>
 			</HStack>
 			<AssignmentList selectedCourseKey={selectedCourseKey} />
