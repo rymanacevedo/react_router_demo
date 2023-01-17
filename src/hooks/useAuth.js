@@ -173,6 +173,9 @@ export const AuthProvider = ({ children }) => {
 			const secondsToNext = expiration - now - FIVE_MINS;
 			const secondsToAutoLogout = expiration - now;
 
+			clearTimeout(checkExpirationTimeoutRef.current);
+			clearTimeout(autoLogoutTimeoutRef.current);
+
 			checkExpirationTimeoutRef.current = setTimeout(() => {
 				checkExpiration();
 			}, secondsToNext);
@@ -189,9 +192,10 @@ export const AuthProvider = ({ children }) => {
 
 	useEffect(() => {
 		if (staySignedIn) {
-			keepAlive(user.sessionKey);
+			keepAlive(user.sessionKey).then(() => {
+				getExpiration();
+			});
 			setShowSessionDialog(false);
-			getExpiration();
 		}
 	}, [staySignedIn]);
 
