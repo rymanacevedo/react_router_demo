@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { ampTheme } from './css/theme';
 
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from './hooks/useAuth';
 import DialogProvider from './components/DialogProvider';
 import App from './App';
@@ -15,19 +15,19 @@ beforeEach(() => {
 	useTranslation.mockReturnValue({ t: (key: any) => key });
 });
 
-test('renders cookiesMessage', () => {
+test('renders welcomeMessage', async () => {
 	render(
 		<ChakraProvider theme={ampTheme}>
-			<BrowserRouter basename="/main">
+			<MemoryRouter initialEntries={['/login?abbrevName=automation_10']}>
 				<AuthProvider>
 					<DialogProvider>
 						<App />
 					</DialogProvider>
 				</AuthProvider>
-			</BrowserRouter>
+			</MemoryRouter>
 		</ChakraProvider>,
 	);
 
-	const linkElement = screen.getByText(/cookiesMessage/i);
-	expect(linkElement).toBeInTheDocument();
+	const welcomeText = screen.getByText(/welcomeMsg/i);
+	expect(welcomeText).toBeInTheDocument();
 });
