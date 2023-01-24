@@ -1,5 +1,14 @@
 import { Key, useEffect, useState } from 'react';
-import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
+import {
+	Alert,
+	AlertIcon,
+	Divider,
+	HStack,
+	List,
+	ListItem,
+	Spinner,
+	Text,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
@@ -42,6 +51,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 				],
 			},
 		});
+	const [courseDataLoaded, setCourseDataLoaded] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -51,6 +61,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 				const assignments = await getAssignments(curicCourseList.items[0].key);
 				if (assignments?.displayCurriculum) {
 					setAssignmentsListData(assignments);
+					setCourseDataLoaded(true);
 				}
 			}
 		};
@@ -167,7 +178,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			);
 		},
 	);
-	return (
+	return assignmentListData.displayCurriculum.children[0].assignments.length ? (
 		<List
 			spacing={3}
 			bg="ampWhite"
@@ -184,6 +195,13 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			}>
 			{assignmentList}
 		</List>
+	) : courseDataLoaded ? (
+		<Alert maxWidth={'650px'} status="warning">
+			<AlertIcon />
+			{i18n('noCoursesAssigned')}
+		</Alert>
+	) : (
+		<Spinner />
 	);
 };
 
