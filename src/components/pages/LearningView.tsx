@@ -66,7 +66,7 @@ const LearningView = () => {
 				<Text fontWeight={'600'} fontSize={'28px'}>
 					{i18n('yourAssignments')}
 				</Text>
-				{courseList.length >= 1 && (
+				{courseList.length > 0 && (
 					<CourseMenu
 						courseList={courseList}
 						selectedCourseKey={selectedCourseKey}
