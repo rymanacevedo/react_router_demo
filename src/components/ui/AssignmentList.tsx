@@ -1,5 +1,13 @@
 import { Key, useEffect, useState } from 'react';
-import { Divider, HStack, List, ListItem, Text } from '@chakra-ui/react';
+import {
+	Alert,
+	AlertIcon,
+	Divider,
+	HStack,
+	List,
+	ListItem,
+	Text,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
@@ -167,7 +175,13 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			);
 		},
 	);
-	return (
+
+	return !selectedCourseKey ? (
+		<Alert maxWidth={'650px'} status="warning">
+			<AlertIcon />
+			{i18n('noCoursesAssigned')}
+		</Alert>
+	) : (
 		<List
 			spacing={3}
 			bg="ampWhite"

@@ -66,12 +66,14 @@ const LearningView = () => {
 				<Text fontWeight={'600'} fontSize={'28px'}>
 					{i18n('yourAssignments')}
 				</Text>
-				<CourseMenu
-					courseList={courseList}
-					selectedCourseKey={selectedCourseKey}
-					setSelectedCourseKey={setSelectedCourseKey}
-					setCourseTitle={setCourseTitle}
-				/>
+				{courseList.length > 0 && (
+					<CourseMenu
+						courseList={courseList}
+						selectedCourseKey={selectedCourseKey}
+						setSelectedCourseKey={setSelectedCourseKey}
+						setCourseTitle={setCourseTitle}
+					/>
+				)}
 			</HStack>
 			<AssignmentList selectedCourseKey={selectedCourseKey} />
 		</Container>
