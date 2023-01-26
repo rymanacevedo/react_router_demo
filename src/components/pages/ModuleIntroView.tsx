@@ -1,7 +1,7 @@
 import { Container } from '@chakra-ui/react';
 import ModuleIntroductionComponent from '../ui/ModuleIntroductionComponent';
 import { useParams, useNavigate } from 'react-router-dom';
-import useModuleContentService from '../../services/useModuleContentService';
+import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import { useEffect, useState } from 'react';
 
 const ModuleIntroView = () => {

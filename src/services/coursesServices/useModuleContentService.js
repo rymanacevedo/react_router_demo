@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
-import { useDialogContext } from '../components/DialogProvider';
+import { useDialogContext } from '../../components/DialogProvider';
 
 const useModuleContentService = () => {
 	const [error, setError] = useState('');
@@ -67,6 +67,37 @@ const useModuleContentService = () => {
 		}
 	};
 
-	return { error, loading, fetchModuleContent, fetchAssignments };
+	const fetchModuleQuestions = async (assignmentKey) => {
+		try {
+			setLoading(true);
+			let moduleContent = await fetchModuleContent(assignmentKey);
+			const modalContentQuestionResponse = await axios({
+				method: 'GET',
+				url: `${moduleContent.self}?deep=true&subaccount=${subaccount}`,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+			});
+			return modalContentQuestionResponse.data;
+		} catch (err) {
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return {
+		error,
+		loading,
+		fetchModuleContent,
+		fetchAssignments,
+		fetchModuleQuestions,
+	};
 };
 export default useModuleContentService;
