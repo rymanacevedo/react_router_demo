@@ -18,6 +18,7 @@ import {
 	MenuButton,
 	MenuList,
 	MenuItem,
+	useMediaQuery,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
@@ -28,6 +29,7 @@ const Header = () => {
 	const nav = useNavigate();
 	const { user, logout } = useAuth();
 	const inAssignment = location.pathname.indexOf('assignment');
+	const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)');
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const navigateAccountMap = {
@@ -98,8 +100,8 @@ const Header = () => {
 	};
 
 	const tabs = [];
-
-	const Navigation = () => {
+	const Navigation = (
+	) => {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
 		for (const { name } of user.roles) {
 			rolesMap[name].forEach((role) => {
@@ -127,7 +129,7 @@ const Header = () => {
 				}
 			});
 		}
-
+	
 		// sort tabs by navigateAccountMap order
 		tabs.sort((a, b) => {
 			return navigateAccountMap[a.key].order < navigateAccountMap[b.key].order
@@ -137,45 +139,46 @@ const Header = () => {
 		return (
 			<>
 				<ButtonGroup variant="link" boxSizing="border-box">
-					<Box display={['none', 'none', 'none', 'flex', 'flex']}>
+					<Box display={['none', 'none', 'none', 'none', 'flex', 'flex']}>
 						{tabs.length > 1 ? tabs.map((tab) => tab) : null}
 					</Box>
-					<Menu>
+					<Menu isLazy>
 						<MenuButton
-							as={Button}
+							as={isLargerThan1280 ? Button : IconButton}
+							icon={isLargerThan1280 ? null : <HamburgerMenuIcon />}
 							_hover={{}}
 							color={'ampWhite'}
 							padding="25px"
 							height="75px"
-							width={'100%'}
 							id="header-composite-profile-button"
-							rightIcon={<ChevronDownIcon />}
-							display={['none', 'none', 'none', 'flex', 'flex']}>
-							<Text textDecoration="none" fontWeight="bold">
+							rightIcon={isLargerThan1280 ? <ChevronDownIcon /> : null}>
+							<Text
+								display={['none', 'none', 'none', 'none', 'flex', 'flex']}
+								textDecoration="none"
+								fontWeight="bold">
 								{`${user.firstName} ${user.lastName}`}
 							</Text>
 						</MenuButton>
-						<MenuButton
-							as={IconButton}
-							aria-label="Options"
-							icon={<HamburgerMenuIcon />}
-							variant="outline"
-							display={['flex', 'flex', 'flex', 'none', 'none']}
-						/>
-						<MenuList zIndex={'10'}>
+	
+						<MenuList zIndex={'10'} right={'0'}>
 							<MenuItem
 								onClick={logout}
 								width={'100%'}
 								id="header-composite-logout-button">
 								<Text fontWeight="bold">Logout</Text>
 							</MenuItem>
-
-							{tabs.length > 1
+							{inAssignment > -1 && !isLargerThan1280 ? (
+								<MenuItem width={'100%'}>
+									<ReactRouterNavLink to="/app/learning">
+										<Text fontWeight="bold">Course Home</Text>
+									</ReactRouterNavLink>
+								</MenuItem>
+							) : null}
+	
+							{tabs.length > 1 && !isLargerThan1280
 								? tabs.map((tab) => {
 										return (
-											<MenuItem
-												key={tab.key}
-												id={navigateAccountMap[tab.key].id}>
+											<MenuItem key={tab.key} id={navigateAccountMap[tab.key].id}>
 												<ReactRouterNavLink
 													to={navigateAccountMap[tab.key].navlink}>
 													<Text fontWeight="bold" textAlign={'center'}>
@@ -192,7 +195,6 @@ const Header = () => {
 			</>
 		);
 	};
-
 	useEffect(() => {
 		// filter tabs by priority
 		const highestPriority = Math.max(
@@ -219,7 +221,7 @@ const Header = () => {
 							width="275"
 							height="90"
 						/>
-						{inAssignment > -1 ? <CourseHome /> : null}
+						{inAssignment > -1 && isLargerThan1280 ? <CourseHome /> : null}
 						<Navigation />
 					</HStack>
 				</Container>
