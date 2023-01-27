@@ -100,8 +100,7 @@ const Header = () => {
 	};
 
 	const tabs = [];
-	const Navigation = (
-	) => {
+	const Navigation = () => {
 		// eslint-disable-next-line @typescript-eslint/no-shadow
 		for (const { name } of user.roles) {
 			rolesMap[name].forEach((role) => {
