@@ -1,5 +1,9 @@
 import { memo, useEffect } from 'react';
-import { useNavigate, NavLink, useLocation } from 'react-router-dom';
+import {
+	useNavigate,
+	NavLink as ReactRouterNavLink,
+	useLocation,
+} from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
 	Box,
@@ -7,6 +11,7 @@ import {
 	ButtonGroup,
 	Container,
 	HStack,
+	IconButton,
 	Image,
 	Text,
 	Menu,
@@ -15,7 +20,7 @@ import {
 	MenuItem,
 } from '@chakra-ui/react';
 
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
 
 const Header = () => {
@@ -100,7 +105,7 @@ const Header = () => {
 			rolesMap[name].forEach((role) => {
 				if (!tabs.some((tab) => tab.key === role)) {
 					tabs.push(
-						<NavLink
+						<ReactRouterNavLink
 							style={({ isActive }) => {
 								return {
 									borderBottom: isActive ? '5px solid white' : '',
@@ -117,7 +122,7 @@ const Header = () => {
 							<Text fontWeight="bold" textAlign={'center'}>
 								{navigateAccountMap[role].name}
 							</Text>
-						</NavLink>,
+						</ReactRouterNavLink>,
 					);
 				}
 			});
@@ -132,7 +137,9 @@ const Header = () => {
 		return (
 			<>
 				<ButtonGroup variant="link" boxSizing="border-box">
-					{tabs.length > 1 ? tabs.map((tab) => tab) : null}
+					<Box display={['none', 'none', 'none', 'flex', 'flex']}>
+						{tabs.length > 1 ? tabs.map((tab) => tab) : null}
+					</Box>
 					<Menu>
 						<MenuButton
 							as={Button}
@@ -142,11 +149,19 @@ const Header = () => {
 							height="75px"
 							width={'100%'}
 							id="header-composite-profile-button"
-							rightIcon={<ChevronDownIcon />}>
+							rightIcon={<ChevronDownIcon />}
+							display={['none', 'none', 'none', 'flex', 'flex']}>
 							<Text textDecoration="none" fontWeight="bold">
 								{`${user.firstName} ${user.lastName}`}
 							</Text>
 						</MenuButton>
+						<MenuButton
+							as={IconButton}
+							aria-label="Options"
+							icon={<HamburgerMenuIcon />}
+							variant="outline"
+							display={['flex', 'flex', 'flex', 'none', 'none']}
+						/>
 						<MenuList zIndex={'10'}>
 							<MenuItem
 								onClick={logout}
@@ -154,6 +169,23 @@ const Header = () => {
 								id="header-composite-logout-button">
 								<Text fontWeight="bold">Logout</Text>
 							</MenuItem>
+
+							{tabs.length > 1
+								? tabs.map((tab) => {
+										return (
+											<MenuItem
+												key={tab.key}
+												id={navigateAccountMap[tab.key].id}>
+												<ReactRouterNavLink
+													to={navigateAccountMap[tab.key].navlink}>
+													<Text fontWeight="bold" textAlign={'center'}>
+														{navigateAccountMap[tab.key].name}
+													</Text>
+												</ReactRouterNavLink>
+											</MenuItem>
+										);
+								  })
+								: null}
 						</MenuList>
 					</Menu>
 				</ButtonGroup>
