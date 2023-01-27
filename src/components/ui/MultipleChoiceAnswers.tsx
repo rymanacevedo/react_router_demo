@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Box, Heading, Divider } from '@chakra-ui/react';
-import AnswerInput from './AnsweInput/AnswerInput';
+import AnswerInput from './AnswerInput/AnswerInput';
 import { AnswerObject } from '../pages/AssignmentView';
 
 interface Answer {
