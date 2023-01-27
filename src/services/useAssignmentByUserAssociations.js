@@ -17,13 +17,13 @@ const useAssignmentByUserAssociations = () => {
 			subaccount = role.account;
 		}
 	});
-
+	console.log('user useAssignmentByUserAssociations', user)
 	const getAssignments = async (courseCurricKey) => {
 		try {
 			setLoading(true);
 			const assignmentDataResponse = await axios({
 				method: 'get',
-				url: `/v2/user-associations?courseCurricKey=${courseCurricKey}&userKey=CB59UXSUD&hideUnassigned=false&isWebapp=true&subaccount=${subaccount}`,
+				url: `/v2/user-associations?courseCurricKey=${courseCurricKey}&userKey=${user.userKey}&hideUnassigned=false&isWebapp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,
