@@ -17,7 +17,7 @@ const useAssignmentByUserAssociations = () => {
 			subaccount = role.account;
 		}
 	});
-	console.log('user useAssignmentByUserAssociations', user)
+
 	const getAssignments = async (courseCurricKey) => {
 		try {
 			setLoading(true);
