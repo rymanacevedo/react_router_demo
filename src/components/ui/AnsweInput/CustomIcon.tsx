@@ -1,6 +1,3 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Badge, Checkbox, Slide, SlideFade } from '@chakra-ui/react';
-
 interface IAnswerInputProps {
 	isIndeterminate: boolean;
 	isChecked: boolean;
@@ -102,62 +99,4 @@ const CustomIcon = ({ isIndeterminate, isChecked }: IAnswerInputProps) => {
 	);
 };
 
-const AnswerInput = () => {
-	const [status, setStatus] = useState('unchecked');
-	const [text, setText] = useState('');
-	const [isEnabled, setIsEnabled] = useState(false);
-	const [variant, setVariant] = useState('');
-	const isIndeterminate = status === 'indeterminate';
-	const isChecked = status === 'checked';
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const checkStatus = ({ target }: ChangeEvent) => {
-		switch (status) {
-			case 'unchecked':
-				setStatus('indeterminate');
-				setText('I am unsure');
-				setIsEnabled(true);
-				setVariant('ampSecondary');
-				break;
-			case 'indeterminate':
-				setStatus('checked');
-				setText('I am sure');
-				setVariant('ampPrimary');
-				break;
-			case 'checked':
-				setIsEnabled(false);
-				setText('');
-				setStatus('unchecked');
-		}
-	};
-	return (
-		<>
-			<Checkbox
-				className={'label-hover-effect'}
-				variant={'answer'}
-				colorScheme={'transparent'}
-				size={'4rem'}
-				icon={
-					<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
-				}
-				isChecked={isChecked}
-				isIndeterminate={isIndeterminate}
-				onChange={(e) => checkStatus(e)}>
-				<SlideFade in={isEnabled}>
-					<Badge variant={variant}>{text}</Badge>
-				</SlideFade>
-				<Slide
-					in={isEnabled}
-					direction="top"
-					style={{
-						position: 'relative',
-						top: `${!isEnabled ? '10px' : ''}`,
-					}}>
-					<span id={'answer-content'}>Biology</span>
-				</Slide>
-			</Checkbox>
-		</>
-	);
-};
-
-export default AnswerInput;
+export default CustomIcon;

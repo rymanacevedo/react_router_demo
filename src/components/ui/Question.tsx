@@ -3,24 +3,21 @@ import RichContentComponent from './RichContentComponent';
 import { useMediaQuery } from '@chakra-ui/react';
 
 const Question = ({
-	title,
-	questionStem,
-	questionIntro,
+	questionInFocus,
 }: {
-	title: string;
-	questionIntro: any;
-	questionStem: any;
+	questionInFocus: { questionRc: any };
 }) => {
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const title = 'Question';
 
 	return (
 		<Box
 			style={{
 				backgroundColor: 'white',
+				margin: '6px',
 			}}
 			boxShadow="2xl"
 			maxW="xl"
-			m="12px"
 			w="100%"
 			maxWidth={726}
 			h={isSmallerThan1000 ? '' : '745px'}
@@ -29,8 +26,7 @@ const Question = ({
 			p={'72px'}>
 			<Heading as="h2">{title}</Heading>
 			<Stack spacing="20px" marginTop="34px">
-				<RichContentComponent content={questionStem} />
-				<RichContentComponent content={questionIntro} />
+				<RichContentComponent content={questionInFocus?.questionRc} />
 			</Stack>
 		</Box>
 	);

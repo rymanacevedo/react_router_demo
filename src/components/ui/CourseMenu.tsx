@@ -11,17 +11,17 @@ import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-    courseList: { key: string; name: string }[];
-    selectedCourseKey: string;
-    setSelectedCourseKey: (key: string) => void;
-    setCourseTitle: (title: string) => void;
+	courseList: { key: string; name: string }[];
+	selectedCourseKey: string;
+	setSelectedCourseKey: (key: string) => void;
+	setCourseTitle: (title: string) => void;
 };
 
 const CourseMenu = ({
 	courseList,
 	selectedCourseKey,
 	setSelectedCourseKey,
-	setCourseTitle
+	setCourseTitle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
 
@@ -41,8 +41,10 @@ const CourseMenu = ({
 				<MenuOptionGroup
 					onChange={(value) => {
 						setSelectedCourseKey(value as string);
-						setCourseTitle(courseList.find((course) => course.key === value)?.name as string);
-				   }}
+						setCourseTitle(
+							courseList.find((course) => course.key === value)?.name as string,
+						);
+					}}
 					defaultChecked={true}
 					defaultValue={selectedCourseKey}>
 					{courseList?.map((course) => (
