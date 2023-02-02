@@ -15,12 +15,13 @@ const Question = ({
 			style={{
 				backgroundColor: 'white',
 				margin: '6px',
+				minHeight: '745px',
 			}}
 			boxShadow="2xl"
 			maxW="xl"
 			w="100%"
 			maxWidth={726}
-			h={isSmallerThan1000 ? '' : '745px'}
+			h={isSmallerThan1000 ? '' : '100%'}
 			overflow="hidden"
 			borderRadius={24}
 			p={'72px'}>

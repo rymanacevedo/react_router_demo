@@ -93,10 +93,11 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 							style={{
 								backgroundColor: 'white',
 								margin: '6px',
+								minHeight: '745px',
 							}}
 							boxShadow="2xl"
 							maxW="xl"
-							h={isSmallerThan1000 ? '' : '745px'}
+							h={isSmallerThan1000 ? '' : '100%'}
 							display={'flex'}
 							flexDirection="column"
 							justifyContent={'space-between'}
