@@ -122,8 +122,9 @@ const MultipleChoiceAnswers = ({
 				justifyContent="space-between"
 				h="100%">
 				<>
-					{questionInFocus?.answers?.map(
-						(answer: { answerRc: string; id: string | number }) => {
+					{questionInFocus?.answers
+						?.slice(0, 10)
+						.map((answer: { answerRc: string; id: string | number }) => {
 							return (
 								<AnswerInput
 									key={answer.id}
@@ -134,10 +135,9 @@ const MultipleChoiceAnswers = ({
 									IDK={false}
 								/>
 							);
-						},
-					)}
+						})}
 					<AnswerInput
-					/* eslint-disable */
+						/* eslint-disable */
 						questionText={'I don\'t know yet'}
 						/* eslint-enable */
 						questionAnswerId={''}
