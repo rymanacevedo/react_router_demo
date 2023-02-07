@@ -49,14 +49,12 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 	useEffect(() => {
 		const fetchModuleQuestionsData = async () => {
 			try {
-				let currnetRoundQuestionsResponse = await getCurrentRound(
-					assignmentKey?.slice(1),
-				);
-				let moduleQuestionsResponse = await fetchModuleQuestions(
-					assignmentKey?.slice(1),
-				);
+				let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
+					await getCurrentRound(assignmentKey?.slice(1)),
+					await fetchModuleQuestions(assignmentKey?.slice(1)),
+				];
 				setQuestionData(moduleQuestionsResponse);
-				setCurrentRoundQuestionData(currnetRoundQuestionsResponse);
+				setCurrentRoundQuestionData(currentRoundQuestionsResponse);
 			} catch (error) {
 				console.error(error);
 			}
@@ -88,7 +86,21 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 						p="12px"
 						justifyContent={'center'}
 						flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
-						<Question questionInFocus={questionInFocus} />
+						<Box
+							style={{
+								backgroundColor: 'white',
+								margin: '6px',
+							}}
+							boxShadow="2xl"
+							maxW="xl"
+							w="100%"
+							maxWidth={726}
+							h={isSmallerThan1000 ? '' : '745px'}
+							overflow="hidden"
+							borderRadius={24}
+							p={'72px'}>
+							<Question questionInFocus={questionInFocus} />
+						</Box>
 						<Box
 							style={{
 								backgroundColor: 'white',
