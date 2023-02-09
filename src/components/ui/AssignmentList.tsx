@@ -145,8 +145,13 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 					padding={'4px'}
 					key={curriculum.name}
 					onClick={() => {
-						if (assignment.assignmentType !== 'TimedAssessment') {
+						if (
+							assignment.assignmentType !== 'TimedAssessment' &&
+							assignment.status !== 'IN_PROGRESS'
+						) {
 							navigate(`moduleIntro/${assignment.assignmentKey}`);
+						} else {
+							navigate(`assignment/${assignment.assignmentKey}`);
 						}
 					}}>
 					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
