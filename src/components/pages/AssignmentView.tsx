@@ -50,8 +50,8 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 		const fetchModuleQuestionsData = async () => {
 			try {
 				let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-					await getCurrentRound(assignmentKey?.slice(1)),
-					await fetchModuleQuestions(assignmentKey?.slice(1)),
+					await getCurrentRound(assignmentKey),
+					await fetchModuleQuestions(assignmentKey),
 				];
 				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionData(currentRoundQuestionsResponse);
