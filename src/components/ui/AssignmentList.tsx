@@ -150,6 +150,11 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 							assignment.status !== 'IN_PROGRESS'
 						) {
 							navigate(`moduleIntro/${assignment.assignmentKey}`);
+						} else if (
+							assignment.assignmentType !== 'TimedAssessment' &&
+							assignment.status === 'NOT_STARTED'
+						) {
+							navigate(`moduleIntro/${assignment.assignmentKey}`);
 						} else {
 							navigate(`assignment/${assignment.assignmentKey}`);
 						}
