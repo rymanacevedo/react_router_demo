@@ -11,6 +11,7 @@ type ProgressBarMenu = {
 	timeLeft: string;
 	assignmentType: string;
 	progress: number;
+	roundNumber: number;
 };
 
 //refactor to accept assignment type, title, time left, progress props
@@ -22,6 +23,7 @@ const TestProgressBarMenu = ({
 	timeLeft,
 	assignmentType,
 	progress,
+	roundNumber
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -43,8 +45,7 @@ const TestProgressBarMenu = ({
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
 					<Text fontSize={'21px'} fontWeight={'600'}>
 						{/* {i18n('theScienceOfLearning')} */}
-						{title}
-						{assignmentType}
+						{assignmentType} : {title}
 					</Text>
 					<Text fontSize={'16px'} color="ampNeutral.800">
 						{`${i18n('about')} ${timeLeft} ${i18n('minsLeft')}`}
@@ -54,7 +55,7 @@ const TestProgressBarMenu = ({
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<Text fontSize={'20px'} fontWeight={'600'}>
-						{`Round 1: ${i18n('questions')}`}
+						{`Round ${roundNumber}: ${i18n('questions')}`}
 					</Text>
 					<HStack>
 						<AmpMicroChip variant="ampDarkSuccess" />

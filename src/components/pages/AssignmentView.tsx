@@ -23,15 +23,23 @@ export interface AnswerObject {
 	self: any;
 }
 
+export interface QuestionType1 {
+	totalQuestionCount: number;
+	masteredQuestionCount: number;
+	roundNumber: number | any;
+}
+
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isOpen, setIsOpen] = useState(false);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
+		kind: '',
+		name: '',
 	});
 /* eslint-disable */
-const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
+const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<QuestionType1>();
 	/* eslint-enable */
 
 	const [questionInFocus, setQuestionInFocus] = useState({
@@ -70,6 +78,11 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 		}
 	}, [questionData]);
 
+	const progressPercent = currentRoundQuestionData
+		? currentRoundQuestionData.totalQuestionCount /
+		  currentRoundQuestionData.masteredQuestionCount
+		: 0;
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -80,13 +93,15 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
 				<TestProgressBarMenu
-					assignmentType={'learn'}
-					title={'course title'}
+					assignmentType={questionData.kind}
+					title={questionData.name}
 					timeLeft={'50'}
-					progress={5}
+					progress={progressPercent}
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
+					roundNumber={currentRoundQuestionData?.roundNumber}
 				/>
+				<pre>{JSON.stringify(currentRoundQuestionData, null, 2)}</pre>
 				<HStack width="100%">
 					<HStack
 						w="100%"
