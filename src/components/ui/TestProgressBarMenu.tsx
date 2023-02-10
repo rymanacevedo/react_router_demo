@@ -7,9 +7,22 @@ import { useMediaQuery } from '@chakra-ui/react';
 type ProgressBarMenu = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
+	title: string;
+	timeLeft: string;
+	assignmentType: string;
+	progress: number;
 };
 
-const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
+//refactor to accept assignment type, title, time left, progress props
+
+const TestProgressBarMenu = ({
+	isOpen,
+	setIsOpen,
+	title,
+	timeLeft,
+	assignmentType,
+	progress,
+}: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 
@@ -29,10 +42,12 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
 					<Text fontSize={'21px'} fontWeight={'600'}>
-						{i18n('theScienceOfLearning')}
+						{/* {i18n('theScienceOfLearning')} */}
+						{title}
+						{assignmentType}
 					</Text>
 					<Text fontSize={'16px'} color="ampNeutral.800">
-						{`${i18n('about')} 24 ${i18n('minsLeft')}`}
+						{`${i18n('about')} ${timeLeft} ${i18n('minsLeft')}`}
 					</Text>
 				</VStack>
 				<VStack
@@ -78,7 +93,7 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				)}
 			</HStack>
 			<Progress
-				value={80}
+				value={progress}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}

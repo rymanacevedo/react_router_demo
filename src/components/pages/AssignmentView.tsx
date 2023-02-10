@@ -79,7 +79,14 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState({});
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<TestProgressBarMenu isOpen={isOpen} setIsOpen={setIsOpen} />
+				<TestProgressBarMenu
+					assignmentType={'learn'}
+					title={'course title'}
+					timeLeft={'50'}
+					progress={5}
+					isOpen={isOpen}
+					setIsOpen={setIsOpen}
+				/>
 				<HStack width="100%">
 					<HStack
 						w="100%"
