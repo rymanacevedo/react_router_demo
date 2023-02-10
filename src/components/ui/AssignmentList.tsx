@@ -134,7 +134,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	};
 
-	const handleAssignmentClick = (assignment: any) => {
+	const handleAssignmentClick = (assignment: any) => () => {
 		if (
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
@@ -160,9 +160,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 					height={'44px'}
 					padding={'4px'}
 					key={curriculum.name}
-					onClick={() => {
-						handleAssignmentClick(assignment);
-					}}>
+					onClick={handleAssignmentClick(assignment)}>
 					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
 						<Text
 							_hover={{
