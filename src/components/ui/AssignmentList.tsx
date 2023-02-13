@@ -134,6 +134,22 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	};
 
+	const handleAssignmentClick = (assignment: any) => () => {
+		if (
+			assignment.assignmentType !== 'TimedAssessment' &&
+			assignment.status === 'NOT_STARTED'
+		) {
+			navigate(`moduleIntro/${assignment.assignmentKey}`);
+		} else if (
+			assignment.assignmentType !== 'TimedAssessment' &&
+			assignment.status === 'IN_PROGRESS'
+		) {
+			navigate(`assignment/${assignment.assignmentKey}`);
+		} else {
+			navigate(`assignment/${assignment.assignmentKey}`);
+		}
+	};
+
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
 			const assignment =
@@ -144,11 +160,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 					height={'44px'}
 					padding={'4px'}
 					key={curriculum.name}
-					onClick={() => {
-						if (assignment.assignmentType !== 'TimedAssessment') {
-							navigate(`moduleIntro/${assignment.assignmentKey}`);
-						}
-					}}>
+					onClick={handleAssignmentClick(assignment)}>
 					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
 						<Text
 							_hover={{
