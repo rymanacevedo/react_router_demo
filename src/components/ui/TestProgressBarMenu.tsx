@@ -12,6 +12,8 @@ type ProgressBarMenu = {
 	assignmentType: string;
 	progress: number;
 	roundNumber: number;
+	roundPhase: string;
+	totalQuestionCount: any;
 };
 
 //refactor to accept assignment type, title, time left, progress props
@@ -23,7 +25,8 @@ const TestProgressBarMenu = ({
 	timeLeft,
 	assignmentType,
 	progress,
-	roundNumber
+	roundNumber,
+	roundPhase,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -55,7 +58,7 @@ const TestProgressBarMenu = ({
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<Text fontSize={'20px'} fontWeight={'600'}>
-						{`Round ${roundNumber}: ${i18n('questions')}`}
+						{`Round ${roundNumber}: ${roundPhase}`}
 					</Text>
 					<HStack>
 						<AmpMicroChip variant="ampDarkSuccess" />

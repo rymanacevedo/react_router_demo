@@ -27,6 +27,7 @@ export interface QuestionType1 {
 	totalQuestionCount: number;
 	masteredQuestionCount: number;
 	roundNumber: number | any;
+	roundPhase: string | any;
 }
 
 const AssignmentView = () => {
@@ -100,6 +101,8 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					roundNumber={currentRoundQuestionData?.roundNumber}
+					roundPhase={currentRoundQuestionData?.roundPhase}
+					totalQuestionCount={currentRoundQuestionData?.totalQuestionCount}
 				/>
 				<pre>{JSON.stringify(currentRoundQuestionData, null, 2)}</pre>
 				<HStack width="100%">
