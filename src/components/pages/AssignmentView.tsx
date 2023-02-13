@@ -128,7 +128,6 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 					roundPhase={currentRoundQuestionData?.roundPhase}
 					totalQuestionCount={currentRoundQuestionData?.totalQuestionCount}
 				/>
-				<pre>{JSON.stringify(currentRoundQuestionData, null, 2)}</pre>
 				<HStack width="100%">
 					<HStack
 						w="100%"
