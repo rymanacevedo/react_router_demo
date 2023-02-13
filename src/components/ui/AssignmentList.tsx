@@ -139,14 +139,20 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
 		) {
-			navigate(`moduleIntro/${assignment.assignmentKey}`);
+			navigate(`moduleIntro/${assignment.assignmentKey}`, {
+				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
+			});
 		} else if (
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'IN_PROGRESS'
 		) {
-			navigate(`assignment/${assignment.assignmentKey}`);
+			navigate(`assignment/${assignment.assignmentKey}`, {
+				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
+			});
 		} else {
-			navigate(`assignment/${assignment.assignmentKey}`);
+			navigate(`assignment/${assignment.assignmentKey}`, {
+				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
+			});
 		}
 	};
 

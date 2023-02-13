@@ -48,10 +48,10 @@ const TestProgressBarMenu = ({
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
 					<Text fontSize={'21px'} fontWeight={'600'}>
 						{/* {i18n('theScienceOfLearning')} */}
-						{assignmentType} : {title}
+						{assignmentType}: {title}
 					</Text>
 					<Text fontSize={'16px'} color="ampNeutral.800">
-						{`${i18n('about')} ${timeLeft} ${i18n('minsLeft')}`}
+						{timeLeft}
 					</Text>
 				</VStack>
 				<VStack

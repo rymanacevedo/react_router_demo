@@ -11,7 +11,7 @@ import TestProgressBarMenu from '../ui/TestProgressBarMenu';
 import ProgressMenu from '../ui/ProgressMenu';
 import Question from '../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import MultipleChoiceAnswers from '../ui/MultipleChoiceAnswers';
 import useCurrentRoundService from '../../services/coursesServices/useGetCurrentRound';
@@ -54,6 +54,7 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound } = useCurrentRoundService();
+	const location = useLocation();
 
 	useEffect(() => {
 		const fetchModuleQuestionsData = async () => {
@@ -84,6 +85,29 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 		  currentRoundQuestionData.masteredQuestionCount
 		: 0;
 
+	const estimatedTimeRemaining = () => {
+		const time = location?.state?.estimatedTimeToComplete;
+		let hour = 0;
+		let min = 0;
+
+		if (time == null || time <= 0) {
+			return '';
+		}
+
+		if (time >= 3600) {
+			// over an hour
+			hour = time / 3600;
+			min = Math.ceil((time % 3600) / 60);
+
+			return `About ${hour} hr ${min} mins remaining.`;
+		} else {
+			// under one hour
+			min = Math.ceil(time / 60);
+
+			return `About ${min} mins remaining.`;
+		}
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -96,7 +120,7 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 				<TestProgressBarMenu
 					assignmentType={questionData.kind}
 					title={questionData.name}
-					timeLeft={'50'}
+					timeLeft={estimatedTimeRemaining()}
 					progress={progressPercent}
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
