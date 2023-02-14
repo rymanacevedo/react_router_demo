@@ -16,19 +16,19 @@ import useModuleContentService from '../../services/coursesServices/useModuleCon
 import MultipleChoiceAnswers from '../ui/MultipleChoiceAnswers';
 import useCurrentRoundService from '../../services/coursesServices/useGetCurrentRound';
 
-export interface AnswerObject {
+export type AnswerObject = {
 	answerId: number | string;
 	confidence: number;
 	selectedOptionId: number;
 	self: any;
-}
+};
 
-export interface QuestionType1 {
+export type QuestionType1 = {
 	totalQuestionCount: number;
 	masteredQuestionCount: number;
 	roundNumber: number | any;
 	roundPhase: string | any;
-}
+};
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
