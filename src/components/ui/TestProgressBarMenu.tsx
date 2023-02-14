@@ -58,7 +58,7 @@ const TestProgressBarMenu = ({
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<Text fontSize={'20px'} fontWeight={'600'}>
-						{`Round ${roundNumber}: ${roundPhase}`}
+						{`Round ${roundNumber}: Learning`}
 					</Text>
 					<HStack>
 						<AmpMicroChip variant="ampDarkSuccess" />
