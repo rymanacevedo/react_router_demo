@@ -63,8 +63,8 @@ const RichContentComponent = ({ content }: { content: any }) => {
 
 	useEffect(() => {
 		replaceH5pElements();
-		replaceMathJaxElements();
-	}, [content, replaceH5pElements, replaceMathJaxElements]);
+		//replaceMathJaxElements();
+	}, [content, replaceH5pElements]); // replaceMathJaxElements]);
 
 	return <Box dangerouslySetInnerHTML={unsanitize(content)}></Box>;
 };

@@ -26,7 +26,7 @@ const ModuleIntroView = () => {
 	}, [assignmentKey]);
 
 	const beginAssignment = () => {
-		navigate(`/app/learning/assignment/:${assignmentKey}`);
+		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 
 	return (

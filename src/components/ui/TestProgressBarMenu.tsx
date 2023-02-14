@@ -7,9 +7,27 @@ import { useMediaQuery } from '@chakra-ui/react';
 type ProgressBarMenu = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
+	title: string;
+	timeLeft: string;
+	assignmentType: string;
+	progress: number;
+	roundNumber: number;
+	roundPhase: string;
+	totalQuestionCount: any;
 };
 
-const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
+//refactor to accept assignment type, title, time left, progress props
+
+const TestProgressBarMenu = ({
+	isOpen,
+	setIsOpen,
+	title,
+	timeLeft,
+	assignmentType,
+	progress,
+	roundNumber,
+	roundPhase,
+}: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 
@@ -29,17 +47,18 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
 					<Text fontSize={'21px'} fontWeight={'600'}>
-						{i18n('theScienceOfLearning')}
+						{/* {i18n('theScienceOfLearning')} */}
+						{assignmentType}: {title}
 					</Text>
 					<Text fontSize={'16px'} color="ampNeutral.800">
-						{`${i18n('about')} 24 ${i18n('minsLeft')}`}
+						{timeLeft}
 					</Text>
 				</VStack>
 				<VStack
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<Text fontSize={'20px'} fontWeight={'600'}>
-						{`Round 1: ${i18n('questions')}`}
+						{`Round ${roundNumber}: ${roundPhase}`}
 					</Text>
 					<HStack>
 						<AmpMicroChip variant="ampDarkSuccess" />
@@ -78,7 +97,7 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				)}
 			</HStack>
 			<Progress
-				value={80}
+				value={progress}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}
