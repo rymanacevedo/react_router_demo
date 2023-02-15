@@ -28,6 +28,12 @@ export type QuestionType1 = {
 	masteredQuestionCount: number;
 	roundNumber: number | any;
 	roundPhase: string | any;
+	unseenCount: number;
+	misinformedCount: number | any;
+	notSureCount: number | any;
+	uninformedCount: number | any;
+	informedCount: number | any;
+	seenCount: number | any;
 };
 
 const AssignmentView = () => {
@@ -108,6 +114,15 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 		}
 	};
 
+	const seenCount = () => {
+		return (
+			currentRoundQuestionData?.notSureCount +
+			currentRoundQuestionData?.uninformedCount +
+			currentRoundQuestionData?.informedCount +
+			currentRoundQuestionData?.misinformedCount
+		);
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -127,6 +142,12 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 					roundNumber={currentRoundQuestionData?.roundNumber}
 					roundPhase={currentRoundQuestionData?.roundPhase}
 					totalQuestionCount={currentRoundQuestionData?.totalQuestionCount}
+					masteredQuestionCount={
+						currentRoundQuestionData?.masteredQuestionCount
+					}
+					unseenCount={currentRoundQuestionData?.unseenCount}
+					misinformedCount={currentRoundQuestionData?.misinformedCount}
+					seenCount={seenCount()}
 				/>
 				<HStack width="100%">
 					<HStack

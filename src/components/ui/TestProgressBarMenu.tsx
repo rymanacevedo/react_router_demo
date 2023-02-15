@@ -14,6 +14,10 @@ type ProgressBarMenu = {
 	roundNumber: number;
 	roundPhase: string;
 	totalQuestionCount: any;
+	masteredQuestionCount: any;
+	unseenCount: any;
+	misinformedCount: number;
+	seenCount: number;
 };
 
 //refactor to accept assignment type, title, time left, progress props
@@ -27,6 +31,11 @@ const TestProgressBarMenu = ({
 	progress,
 	roundNumber,
 	roundPhase,
+	totalQuestionCount,
+	masteredQuestionCount,
+	unseenCount,
+	misinformedCount,
+	seenCount,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -61,13 +70,14 @@ const TestProgressBarMenu = ({
 						{`Round ${roundNumber}: Learning`}
 					</Text>
 					<HStack>
-						<AmpMicroChip variant="ampDarkSuccess" />
-						<AmpMicroChip variant="ampDarkSuccess" />
-						<AmpMicroChip variant="ampDarkSuccess" />
-						<AmpMicroChip variant="ampDarkErrorOutline" />
-						<AmpMicroChip variant="ampDarkError" />
-						<AmpMicroChip variant="ampSecondaryDot" />
-						<AmpMicroChip variant="ampNeutralUnfilled" />
+						{Array(totalQuestionCount).fill(
+							<AmpMicroChip variant="ampDarkSuccess" />,
+						)}
+						<Text>{`your assignment progress: out of ${totalQuestionCount} questions: ${masteredQuestionCount} mastered; ${
+							seenCount - misinformedCount
+						} in progress; ${misinformedCount} incorrect; ${unseenCount} not seen
+						`}</Text>
+					{/* seenQuestionCount = NotSureCount + UninformedCount + InformedCount + MisinformedCount */}
 					</HStack>
 				</VStack>
 
