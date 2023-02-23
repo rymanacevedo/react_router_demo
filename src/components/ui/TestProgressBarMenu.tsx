@@ -85,7 +85,18 @@ type AnswerHistoryType = {
 };
 
 const variantFunc = (answerHistory: any, dotIndex: number) => {
-	const lookup = {
+	type LookupType = {
+		[key: string]: string;
+		OneAnswerPartSureCorrect: string;
+		PartSureCorrect: string;
+		SureCorrect: string;
+		SureIncorrect: string;
+		UnsureCorrect: string;
+		UnsureIncorrect: string;
+		empty: string;
+		PartSurePartiallyCorrect: string;
+	};
+	const lookup: LookupType = {
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
 		PartSureCorrect: 'ampDarkSuccessOutline',
 		SureCorrect: 'ampDarkSuccess',
@@ -100,25 +111,20 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		const wholeAnswerString: any = answerHistory.items.map(
 			(ans: any, i: number) => {
 				if (i === dotIndex) {
-					let classString = `${ans.answerHistory[0].confidence}${ans.answerHistory[0].correctness}`;
-					// @ts-ignore
+					const classString: keyof LookupType = `${ans.answerHistory[0].confidence}${ans.answerHistory[0].correctness}`;
 					return lookup[classString];
 				} else {
 					return lookup.empty;
 				}
 			},
 		);
-		//@ts-ignore
+
 		return wholeAnswerString[dotIndex];
 	}
 };
 
 const AnswerHistoryComponent = ({
 	totalQuestionCount,
-	masteredQuestionCount,
-	seenCount,
-	misinformedCount,
-	unseenCount,
 	answerHistory,
 }: AnswerHistoryType) => {
 	return (
@@ -126,11 +132,6 @@ const AnswerHistoryComponent = ({
 			{Array.from({ length: totalQuestionCount }, (_, i) => (
 				<AmpMicroChip key={i} variant={variantFunc(answerHistory, i)} />
 			))}
-
-			<Text>{`your assignment progress: out of ${totalQuestionCount} questions: ${masteredQuestionCount} mastered; ${
-				seenCount - misinformedCount
-			} in progress; ${misinformedCount} incorrect; ${unseenCount} not seen
-						`}</Text>
 		</HStack>
 	);
 };
