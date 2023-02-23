@@ -16,7 +16,8 @@ type AmpChip = {
 		| 'ampDarkErrorDot'
 		| 'ampSecondary'
 		| 'ampSecondaryDot'
-		| 'ampNeutralUnfilled';
+		| 'ampNeutralUnfilled'
+		| any;
 };
 
 function AmpMicroChip({ variant }: AmpChip): JSX.Element {

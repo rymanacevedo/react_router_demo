@@ -15,6 +15,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import MultipleChoiceAnswers from '../ui/MultipleChoiceAnswers';
 import useCurrentRoundService from '../../services/coursesServices/useGetCurrentRound';
+import useAnswerHistoryService from '../../services/useAnswerHistoryService';
 
 export type AnswerObject = {
 	answerId: number | string;
@@ -28,6 +29,27 @@ export type QuestionType1 = {
 	masteredQuestionCount: number;
 	roundNumber: number | any;
 	roundPhase: string | any;
+	unseenCount: number;
+	misinformedCount: number | any;
+	notSureCount: number | any;
+	uninformedCount: number | any;
+	informedCount: number | any;
+	seenCount: number | any;
+};
+
+type ApiRes = {
+	items: Item[];
+};
+
+type Item = {
+	publishedQuestionUri: string;
+	answerHistory: AnswerHistory[];
+};
+
+type AnswerHistory = {
+	roundNumber: number;
+	confidence: string;
+	correctness: string;
 };
 
 const AssignmentView = () => {
@@ -50,10 +72,12 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 
 	const [selectedAnswers, setSelectedAnswers] = useState<AnswerObject[]>([]);
 	const [clearSelection, setClearSelection] = useState(false);
+	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
 	const { assignmentKey } = useParams();
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound } = useCurrentRoundService();
+	const { getAnswerHistory } = useAnswerHistoryService();
 	const location = useLocation();
 
 	useEffect(() => {
@@ -77,6 +101,17 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 	useEffect(() => {
 		if (questionData?.learningUnits?.length) {
 			setQuestionInFocus(questionData.learningUnits[0].questions[0]);
+		}
+	}, [questionData]);
+
+	useEffect(() => {
+		const getAnsHist = async () => {
+			const resp = await getAnswerHistory(assignmentKey);
+			setAnsHistory(resp);
+		};
+
+		if (questionData) {
+			getAnsHist();
 		}
 	}, [questionData]);
 
@@ -108,6 +143,15 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 		}
 	};
 
+	const seenCount = () => {
+		return (
+			currentRoundQuestionData?.notSureCount +
+			currentRoundQuestionData?.uninformedCount +
+			currentRoundQuestionData?.informedCount +
+			currentRoundQuestionData?.misinformedCount
+		);
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -120,13 +164,20 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 				<TestProgressBarMenu
 					assignmentType={questionData.kind}
 					title={questionData.name}
-					timeLeft={estimatedTimeRemaining()}
+					timeRemaining={estimatedTimeRemaining()}
 					progress={progressPercent}
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					roundNumber={currentRoundQuestionData?.roundNumber}
 					roundPhase={currentRoundQuestionData?.roundPhase}
 					totalQuestionCount={currentRoundQuestionData?.totalQuestionCount}
+					masteredQuestionCount={
+						currentRoundQuestionData?.masteredQuestionCount
+					}
+					unseenCount={currentRoundQuestionData?.unseenCount}
+					misinformedCount={currentRoundQuestionData?.misinformedCount}
+					seenCount={seenCount()}
+					answerHistory={ansHistory}
 				/>
 				<HStack width="100%">
 					<HStack
