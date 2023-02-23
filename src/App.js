@@ -6,7 +6,7 @@ import LoginForm from './components/login/LoginForm';
 import { Route, Routes } from 'react-router-dom';
 import Page from './components/pages/Page';
 import LearningView from './components/pages/LearningView';
-import AssignmentView from './components/pages/AssignmentView';
+import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import MultiFactor from './components/login/MultiFactor';
 import SignUp from './components/login/SignUp';
 import Register from './components/self-registration/Register';

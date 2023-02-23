@@ -1,9 +1,15 @@
 import { Box } from '@chakra-ui/react';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import { MathComponent } from 'mathjax-react';
 
-const RichContentComponent = ({ content }: { content: any }) => {
+const RichContentComponent = ({
+	content,
+	style,
+}: {
+	content: any;
+	style?: any;
+}) => {
 	const unsanitize = (dirty: string) => ({
 		__html: dirty,
 	});
@@ -12,14 +18,10 @@ const RichContentComponent = ({ content }: { content: any }) => {
 		return <MathComponent tex={String.raw`${text}`} />;
 	};
 
-	const replaceNodeWithReactComponent = (
-		element: HTMLElement,
-		reactComponent: any,
-	) => {
-		const parent = element.parentElement;
-		if (parent) {
-			createRoot(parent).render(reactComponent);
-		}
+	const rootRef = useRef(createRoot(document.createElement('div')));
+
+	const replaceNodeWithReactComponent = (reactComponent: any) => {
+		rootRef.current.render(reactComponent);
 	};
 
 	const renderH5P = (element: HTMLElement) => {
@@ -57,7 +59,7 @@ const RichContentComponent = ({ content }: { content: any }) => {
 		const mathJaxElements = document.getElementsByClassName('math-tex');
 		for (const mathJaxElement of Array.of(...mathJaxElements)) {
 			const element = mathJaxElement as HTMLElement;
-			replaceNodeWithReactComponent(element, renderMathJax(element.innerText));
+			replaceNodeWithReactComponent(renderMathJax(element.innerText));
 		}
 	}, []);
 
@@ -66,7 +68,10 @@ const RichContentComponent = ({ content }: { content: any }) => {
 		replaceMathJaxElements();
 	}, [content, replaceH5pElements, replaceMathJaxElements]);
 
-	return <Box dangerouslySetInnerHTML={unsanitize(content)}></Box>;
+	return (
+		<Box
+			style={{ ...style }}
+			dangerouslySetInnerHTML={unsanitize(content)}></Box>
+	);
 };
-
 export default RichContentComponent;

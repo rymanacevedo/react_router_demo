@@ -1,38 +1,12 @@
-import { useState } from 'react';
 import { Box, Heading, Divider } from '@chakra-ui/react';
+import { SelectedAnswers } from '../pages/AssignmentView/AssignmentViewTypes';
 import AnswerInput from './AnswerInput/AnswerInput';
-import { AnswerObject } from '../pages/AssignmentView';
 
-interface Answer {
+export interface Answer {
 	answerId: number | string;
 	confidence: number;
 	selectedOptionId: number;
 	self: any;
-}
-
-interface AnswerData {
-	answerDate: string;
-	answerList: Answer[];
-	avatarMessage: any;
-	completionAlgorithmType: any;
-	completionPercentage: number;
-	confidence: any;
-	correctAnswerIds: any;
-	correctness: any;
-	informedCount: number;
-	masteredQuestionCount: number;
-	misinformedCount: number;
-	moduleComplete: boolean;
-	notSureCount: number;
-	onceCorrectCount: number;
-	questionSeconds: number;
-	questionsMastered: number;
-	reviewSeconds: number;
-	self: any;
-	totalQuestionCount: number;
-	twiceCorrectCount: number;
-	uninformedCount: number;
-	unseenCount: number;
 }
 
 const MultipleChoiceAnswers = ({
@@ -42,44 +16,24 @@ const MultipleChoiceAnswers = ({
 	clearSelection,
 	setClearSelection,
 }: {
-	questionInFocus: {
-		questionRc: any;
-		answers: { answerRc: string; id: number | string }[];
-	};
+	questionInFocus:
+		| {
+				id: string | any;
+				questionRc: any;
+				name?: string | undefined;
+				introductionRc?: any;
+				answerList: {
+					answerRc: string;
+					id: string | number;
+				}[];
+		  }
+		| undefined;
 	selectedAnswers: any;
 	setSelectedAnswers: any;
 	clearSelection: any;
 	setClearSelection: any;
 }) => {
-	// will be needed for next story
-/* eslint-disable */
-	const [answerData, setAnswerData] = useState<AnswerData>({
-		answerDate: '',
-		answerList: [],
-		avatarMessage: null,
-		completionAlgorithmType: null,
-		completionPercentage: 0,
-		confidence: null,
-		correctAnswerIds: null,
-		correctness: null,
-		informedCount: 0,
-		masteredQuestionCount: 0,
-		misinformedCount: 0,
-		moduleComplete: false,
-		notSureCount: 0,
-		onceCorrectCount: 0,
-		questionSeconds: 0,
-		questionsMastered: 0,
-		reviewSeconds: 0,
-		self: null,
-		totalQuestionCount: 0,
-		twiceCorrectCount: 0,
-		uninformedCount: 0,
-		unseenCount: 0,
-	});
-	/* eslint-enable */
-
-	const addAnswer = (answerObject: AnswerObject) => {
+	const addAnswer = (answerObject: SelectedAnswers) => {
 		if (answerObject.answerId) {
 			setSelectedAnswers((prevAnswers: any[]) => {
 				let currentAnswer = prevAnswers.find(
@@ -122,7 +76,7 @@ const MultipleChoiceAnswers = ({
 				justifyContent="space-between"
 				h="100%">
 				<>
-					{questionInFocus?.answers
+					{questionInFocus?.answerList
 						?.slice(0, 10)
 						.map((answer: { answerRc: string; id: string | number }) => {
 							return (
