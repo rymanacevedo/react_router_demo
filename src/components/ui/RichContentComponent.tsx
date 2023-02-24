@@ -65,8 +65,8 @@ const RichContentComponent = ({
 
 	useEffect(() => {
 		replaceH5pElements();
-		replaceMathJaxElements();
-	}, [content, replaceH5pElements, replaceMathJaxElements]);
+		//replaceMathJaxElements();
+	}, [content, replaceH5pElements]); // replaceMathJaxElements]);
 
 	return (
 		<Box

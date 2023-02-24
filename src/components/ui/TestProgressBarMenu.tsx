@@ -7,9 +7,151 @@ import { useMediaQuery } from '@chakra-ui/react';
 type ProgressBarMenu = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
+	title: string;
+	timeRemaining: string;
+	assignmentType: string;
+	progress: number;
+	roundNumber: number;
+	roundPhase: string;
+	totalQuestionCount: any;
+	masteredQuestionCount: any;
+	unseenCount: any;
+	misinformedCount: number;
+	seenCount: number;
+	answerHistory: ApiRes;
 };
 
-const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
+type ApiRes = {
+	items: Item[];
+};
+
+type Item = {
+	publishedQuestionUri: string;
+	answerHistory: AnswerHistory[];
+};
+
+type AnswerHistory = {
+	roundNumber: number;
+	confidence: string;
+	correctness: string;
+};
+
+type ModuleTitleType = {
+	assignmentType: string;
+	title: string;
+};
+
+type ModuleTimeRemainingType = {
+	timeRemaining: string;
+};
+
+type RoundNumberType = {
+	roundNumber: number;
+};
+
+//refactor to accept assignment type, title, time left, progress props
+const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
+	return (
+		<Text fontSize={'21px'} fontWeight={'600'}>
+			{/* {i18n('theScienceOfLearning')} */}
+			{assignmentType}: {title}
+		</Text>
+	);
+};
+
+const ModuleTimeRemaining = ({ timeRemaining }: ModuleTimeRemainingType) => {
+	return (
+		<Text fontSize={'16px'} color="ampNeutral.800">
+			{timeRemaining}
+		</Text>
+	);
+};
+
+const RoundNumberAndPhase = ({ roundNumber }: RoundNumberType) => {
+	return (
+		<Text fontSize={'20px'} fontWeight={'600'}>
+			{`Round ${roundNumber}: Learning`}
+		</Text>
+	);
+};
+
+type AnswerHistoryType = {
+	totalQuestionCount: number;
+	masteredQuestionCount: number;
+	seenCount: number;
+	misinformedCount: number;
+	unseenCount: number;
+	answerHistory: ApiRes;
+};
+
+const variantFunc = (answerHistory: any, dotIndex: number) => {
+	type LookupType = {
+		[key: string]: string;
+		OneAnswerPartSureCorrect: string;
+		PartSureCorrect: string;
+		SureCorrect: string;
+		SureIncorrect: string;
+		UnsureCorrect: string;
+		UnsureIncorrect: string;
+		empty: string;
+		PartSurePartiallyCorrect: string;
+	};
+	const lookup: LookupType = {
+		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
+		PartSureCorrect: 'ampDarkSuccessOutline',
+		SureCorrect: 'ampDarkSuccess',
+		SureIncorrect: 'ampDarkError',
+		UnsureCorrect: 'ampDarkSuccessOutline',
+		UnsureIncorrect: 'ampDarkErrorOutline',
+		empty: 'ampNeutralUnfilled',
+		PartSurePartiallyCorrect: 'ampWarningOutline',
+	};
+
+	if (answerHistory.items) {
+		const wholeAnswerString: any = answerHistory.items.map(
+			(ans: any, i: number) => {
+				if (i === dotIndex) {
+					const classString: keyof LookupType = `${ans.answerHistory[0].confidence}${ans.answerHistory[0].correctness}`;
+					return lookup[classString];
+				} else {
+					return lookup.empty;
+				}
+			},
+		);
+
+		return wholeAnswerString[dotIndex];
+	}
+};
+
+const AnswerHistoryComponent = ({
+	totalQuestionCount,
+	answerHistory,
+}: AnswerHistoryType) => {
+	return (
+		<HStack>
+			{Array.from({ length: totalQuestionCount }, (_, i) => (
+				<AmpMicroChip key={i} variant={variantFunc(answerHistory, i)} />
+			))}
+		</HStack>
+	);
+};
+
+const TestProgressBarMenu = ({
+	isOpen,
+	setIsOpen,
+	title,
+	timeRemaining,
+	assignmentType,
+	progress,
+	roundNumber,
+	roundPhase,
+	totalQuestionCount,
+	masteredQuestionCount,
+	unseenCount,
+	misinformedCount,
+	seenCount,
+	answerHistory,
+}: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 
@@ -28,28 +170,21 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				paddingRight="24px"
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
-					<Text fontSize={'21px'} fontWeight={'600'}>
-						{i18n('theScienceOfLearning')}
-					</Text>
-					<Text fontSize={'16px'} color="ampNeutral.800">
-						{`${i18n('about')} 24 ${i18n('minsLeft')}`}
-					</Text>
+					<ModuleTitle title={title} assignmentType={assignmentType} />
+					<ModuleTimeRemaining timeRemaining={timeRemaining} />
 				</VStack>
 				<VStack
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
-					<Text fontSize={'20px'} fontWeight={'600'}>
-						{`Round 1: ${i18n('questions')}`}
-					</Text>
-					<HStack>
-						<AmpMicroChip variant="ampDarkSuccess" />
-						<AmpMicroChip variant="ampDarkSuccess" />
-						<AmpMicroChip variant="ampDarkSuccess" />
-						<AmpMicroChip variant="ampDarkErrorOutline" />
-						<AmpMicroChip variant="ampDarkError" />
-						<AmpMicroChip variant="ampSecondaryDot" />
-						<AmpMicroChip variant="ampNeutralUnfilled" />
-					</HStack>
+					<RoundNumberAndPhase roundNumber={roundNumber} />
+					<AnswerHistoryComponent
+						totalQuestionCount={totalQuestionCount}
+						masteredQuestionCount={masteredQuestionCount}
+						unseenCount={unseenCount}
+						misinformedCount={misinformedCount}
+						seenCount={seenCount}
+						answerHistory={answerHistory}
+					/>
 				</VStack>
 
 				{isSmallerThan1000 ? (
@@ -78,7 +213,7 @@ const TestProgressBarMenu = ({ isOpen, setIsOpen }: ProgressBarMenu) => {
 				)}
 			</HStack>
 			<Progress
-				value={80}
+				value={progress}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}

@@ -11,10 +11,9 @@ import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
-import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
 	AnswerData,
@@ -24,6 +23,36 @@ import {
 	SelectedAnswers,
 } from './AssignmentViewTypes';
 import { findQuestionInFocus } from './findQuestionInFocus';
+import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
+import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
+
+export type QuestionType1 = {
+	totalQuestionCount: number;
+	masteredQuestionCount: number;
+	roundNumber: number | any;
+	roundPhase: string | any;
+	unseenCount: number;
+	misinformedCount: number | any;
+	notSureCount: number | any;
+	uninformedCount: number | any;
+	informedCount: number | any;
+	seenCount: number | any;
+};
+
+type ApiRes = {
+	items: Item[];
+};
+
+type Item = {
+	publishedQuestionUri: string;
+	answerHistory: AnswerHistory[];
+};
+
+type AnswerHistory = {
+	roundNumber: number;
+	confidence: string;
+	correctness: string;
+};
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
@@ -35,6 +64,10 @@ const AssignmentView = () => {
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
+	/* eslint-disable */
+const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<QuestionType1>();
+	/* eslint-enable */
+	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>({
@@ -76,6 +109,11 @@ const AssignmentView = () => {
 			answerList: [],
 		});
 	const [showoverLay, setShowOverLay] = useState(false);
+	const [questionData, setQuestionData] = useState({
+		learningUnits: [{ questions: [] }],
+		kind: '',
+		name: '',
+	});
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
 		answerList: [],
@@ -106,6 +144,8 @@ const AssignmentView = () => {
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const { getAnswerHistory } = useAnswerHistoryService();
+	const location = useLocation();
 	useEffect(() => {
 		const intervalId = setInterval(() => {
 			setQuestionSeconds((prevSeconds) => prevSeconds + 1);
@@ -117,11 +157,14 @@ const AssignmentView = () => {
 		const fetchModuleQuestionsData = async () => {
 			try {
 				let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-					await getCurrentRound(assignmentKey?.slice(1)),
-					await fetchModuleQuestions(assignmentKey?.slice(1)),
+					await getCurrentRound(assignmentKey),
+					await fetchModuleQuestions(assignmentKey),
 				];
-				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
+
 				if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+					setQuestionData(moduleQuestionsResponse);
+					setCurrentRoundQuestionData(currentRoundQuestionsResponse);
+					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 					setQuestionInFocus(
 						findQuestionInFocus(
 							moduleQuestionsResponse,
@@ -137,6 +180,16 @@ const AssignmentView = () => {
 			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
+	useEffect(() => {
+		const getAnsHist = async () => {
+			const resp = await getAnswerHistory(assignmentKey);
+			setAnsHistory(resp);
+		};
+
+		if (questionData) {
+			getAnsHist();
+		}
+	}, [questionData]);
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
@@ -184,6 +237,43 @@ const AssignmentView = () => {
 		setQuestionSeconds(0);
 	};
 
+	const progressPercent = currentRoundQuestionData
+		? currentRoundQuestionData?.totalQuestionCount /
+		  currentRoundQuestionData?.masteredQuestionCount
+		: 0;
+
+	const estimatedTimeRemaining = () => {
+		const time = location?.state?.estimatedTimeToComplete;
+		let hour = 0;
+		let min = 0;
+
+		if (time == null || time <= 0) {
+			return '';
+		}
+
+		if (time >= 3600) {
+			// over an hour
+			hour = time / 3600;
+			min = Math.ceil((time % 3600) / 60);
+
+			return `About ${hour} hr ${min} mins remaining.`;
+		} else {
+			// under one hour
+			min = Math.ceil(time / 60);
+
+			return `About ${min} mins remaining.`;
+		}
+	};
+
+	const seenCount = () => {
+		return (
+			currentRoundQuestionData?.notSureCount +
+			currentRoundQuestionData?.uninformedCount +
+			currentRoundQuestionData?.informedCount +
+			currentRoundQuestionData?.misinformedCount
+		);
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -193,7 +283,24 @@ const AssignmentView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<TestProgressBarMenu isOpen={isOpen} setIsOpen={setIsOpen} />
+				<TestProgressBarMenu
+					assignmentType={questionData.kind}
+					title={questionData.name}
+					timeRemaining={estimatedTimeRemaining()}
+					progress={progressPercent}
+					isOpen={isOpen}
+					setIsOpen={setIsOpen}
+					roundNumber={currentRoundQuestionData?.roundNumber}
+					roundPhase={currentRoundQuestionData?.roundPhase}
+					totalQuestionCount={currentRoundQuestionData?.totalQuestionCount}
+					masteredQuestionCount={
+						currentRoundQuestionData?.masteredQuestionCount
+					}
+					unseenCount={currentRoundQuestionData?.unseenCount}
+					misinformedCount={currentRoundQuestionData?.misinformedCount}
+					seenCount={seenCount()}
+					answerHistory={ansHistory}
+				/>{' '}
 				<HStack width="100%">
 					<HStack
 						w="100%"
