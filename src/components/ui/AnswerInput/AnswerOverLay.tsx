@@ -161,7 +161,7 @@ const AnswerOverLay = ({
 						</>
 					) : (
 						<>
-							you where <Badge variant={variant}>{text}</Badge> and{' '}
+							You were <Badge variant={variant}>{text}</Badge> and{' '}
 							<Badge variant={variant}>
 								<span style={{ display: 'flex' }}>
 									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>

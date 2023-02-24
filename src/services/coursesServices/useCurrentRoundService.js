@@ -30,10 +30,6 @@ const useCurrentRoundService = () => {
 				},
 				method: 'get',
 			});
-			console.log(
-				'currentRoundQuestionDatacurrentRoundQuestionData',
-				accountDataResponse,
-			);
 
 			return accountDataResponse.data;
 		} catch (err) {

@@ -1,13 +1,13 @@
 import { Answer } from '../../ui/MultipleChoiceAnswers';
 
-export interface SelectedAnswers {
+export type SelectedAnswers = {
 	answerId: number | string;
 	confidence: number;
 	selectedOptionId: number;
 	self: any;
-}
+};
 
-export interface AnswerData {
+export type AnswerData = {
 	answerDate: string;
 	answerList: Answer[];
 	avatarMessage: any;
@@ -30,9 +30,9 @@ export interface AnswerData {
 	twiceCorrectCount: number;
 	uninformedCount: number;
 	unseenCount: number;
-}
+};
 
-export interface QuestionInFocus {
+export type QuestionInFocus = {
 	id: string | number;
 	questionRc: any;
 	name?: string;
@@ -42,14 +42,14 @@ export interface QuestionInFocus {
 		answerRc: string;
 		id: string | number;
 	}[];
-}
+};
 
-export interface CurrentRoundQuestionListData {
+export type CurrentRoundQuestionListData = {
 	id: number | string;
 	questionList: QuestionInFocus[];
-}
+};
 
-export interface CurrentRoundAnswerOverLayData {
+export type CurrentRoundAnswerOverLayData = {
 	self: null;
 	totalQuestionCount: number;
 	masteredQuestionCount: number;
@@ -78,4 +78,4 @@ export interface CurrentRoundAnswerOverLayData {
 		selectedOptionId: number;
 		answerConfidence: string;
 	}[];
-}
+};
