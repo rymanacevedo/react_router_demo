@@ -95,6 +95,8 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		UnsureIncorrect: string;
 		empty: string;
 		PartSurePartiallyCorrect: string;
+		OneAnswerPartSureIncorrect: string;
+		PartSureIncorrect: string;
 	};
 	const lookup: LookupType = {
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
@@ -105,6 +107,8 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		UnsureIncorrect: 'ampDarkErrorOutline',
 		empty: 'ampNeutralUnfilled',
 		PartSurePartiallyCorrect: 'ampWarningOutline',
+		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
+		PartSureIncorrect: 'ampDarkErrorOutline',
 	};
 
 	if (answerHistory.items) {
