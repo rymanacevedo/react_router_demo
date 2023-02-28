@@ -6,7 +6,6 @@ import LoginForm from './components/login/LoginForm';
 import { Route, Routes } from 'react-router-dom';
 import Page from './components/pages/Page';
 import LearningView from './components/pages/LearningView';
-import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import MultiFactor from './components/login/MultiFactor';
 import SignUp from './components/login/SignUp';
 import Register from './components/self-registration/Register';
@@ -15,6 +14,7 @@ import { useAuth } from './hooks/useAuth';
 import ForgotPassword from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
 import ModuleIntroView from './components/pages/ModuleIntroView';
+import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 
 function App() {
 	const { user } = useAuth();
@@ -56,6 +56,16 @@ function App() {
 						}
 					/>
 					<Route path="learning" element={<LearningView />} />
+					<Route
+						path="learning/assignmentReview"
+						element={
+							<Page
+								id={'assignment-review-main'}
+								header={'AssignmentReview'}
+								content={'under construction'}
+							/>
+						}
+					/>
 					<Route
 						path="learning/moduleIntro/:assignmentKey"
 						element={<ModuleIntroView />}

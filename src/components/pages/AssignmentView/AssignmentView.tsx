@@ -6,12 +6,13 @@ import {
 	HStack,
 	Text,
 	useMediaQuery,
+	Fade,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
@@ -25,19 +26,6 @@ import {
 import { findQuestionInFocus } from './findQuestionInFocus';
 import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
-
-export type QuestionType1 = {
-	totalQuestionCount: number;
-	masteredQuestionCount: number;
-	roundNumber: number | any;
-	roundPhase: string | any;
-	unseenCount: number;
-	misinformedCount: number | any;
-	notSureCount: number | any;
-	uninformedCount: number | any;
-	informedCount: number | any;
-	seenCount: number | any;
-};
 
 type ApiRes = {
 	items: Item[];
@@ -64,23 +52,11 @@ const AssignmentView = () => {
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
-	/* eslint-disable */
-const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<QuestionType1>();
-	/* eslint-enable */
+
 	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
-		useState<CurrentRoundQuestionListData>({
-			id: '',
-			questionList: [
-				{
-					publishedQuestionId: '',
-					id: '',
-					questionRc: '',
-					answerList: [{ id: '', answerRc: '' }],
-				},
-			],
-		});
+		useState<CurrentRoundQuestionListData>();
 
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
@@ -145,25 +121,19 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
 	const { getAnswerHistory } = useAnswerHistoryService();
+	const navigate = useNavigate();
 	const location = useLocation();
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setQuestionSeconds((prevSeconds) => prevSeconds + 1);
-		}, 1000);
 
-		return () => clearInterval(intervalId);
-	}, []);
-	useEffect(() => {
-		const fetchModuleQuestionsData = async () => {
-			try {
-				let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-					await getCurrentRound(assignmentKey),
-					await fetchModuleQuestions(assignmentKey),
-				];
+	const fetchModuleQuestionsData = async () => {
+		try {
+			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
+				await getCurrentRound(assignmentKey),
+				await fetchModuleQuestions(assignmentKey),
+			];
 
-				if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+				if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
 					setQuestionData(moduleQuestionsResponse);
-					setCurrentRoundQuestionData(currentRoundQuestionsResponse);
 					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 					setQuestionInFocus(
 						findQuestionInFocus(
@@ -171,40 +141,15 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 							currentRoundQuestionsResponse,
 						),
 					);
+				} else {
+					console.log('IN REVIEW!!!');
+					navigate('/app/learning/assignmentReview');
 				}
-			} catch (error) {
-				console.error(error);
 			}
-		};
-		if (assignmentKey) {
-			fetchModuleQuestionsData();
+		} catch (error) {
+			console.error(error);
 		}
-	}, [assignmentKey]);
-	useEffect(() => {
-		const getAnsHist = async () => {
-			const resp = await getAnswerHistory(assignmentKey);
-			setAnsHistory(resp);
-		};
-
-		if (questionData) {
-			getAnsHist();
-		}
-	}, [questionData]);
-
-	useEffect(() => {
-		const putCurrentRoundRes = async () => {
-			const overLayData = await putCurrentRound(
-				currentRoundQuestionListData.id,
-				questionInFocus.id,
-				answerData,
-			);
-			setCurrentRoundAnswerOverLayData(overLayData);
-			setShowOverLay(true);
-		};
-		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
-			putCurrentRoundRes();
-		}
-	}, [answerData]);
+	};
 
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
@@ -237,9 +182,9 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 		setQuestionSeconds(0);
 	};
 
-	const progressPercent = currentRoundQuestionData
-		? currentRoundQuestionData?.totalQuestionCount /
-		  currentRoundQuestionData?.masteredQuestionCount
+	const progressPercent = currentRoundQuestionListData
+		? currentRoundQuestionListData?.totalQuestionCount /
+		  currentRoundQuestionListData?.masteredQuestionCount
 		: 0;
 
 	const estimatedTimeRemaining = () => {
@@ -267,12 +212,56 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 
 	const seenCount = () => {
 		return (
-			currentRoundQuestionData?.notSureCount +
-			currentRoundQuestionData?.uninformedCount +
-			currentRoundQuestionData?.informedCount +
-			currentRoundQuestionData?.misinformedCount
+			currentRoundQuestionListData?.notSureCount +
+			currentRoundQuestionListData?.uninformedCount +
+			currentRoundQuestionListData?.informedCount +
+			currentRoundQuestionListData?.misinformedCount
 		);
 	};
+
+	const getNextTask = () => {
+		setSelectedAnswers([]);
+		setClearSelection(true);
+		setShowOverLay(false);
+		fetchModuleQuestionsData();
+	};
+	useEffect(() => {
+		const intervalId = setInterval(() => {
+			setQuestionSeconds((prevSeconds) => prevSeconds + 1);
+		}, 1000);
+
+		return () => clearInterval(intervalId);
+	}, []);
+	useEffect(() => {
+		if (assignmentKey) {
+			fetchModuleQuestionsData();
+		}
+	}, [assignmentKey]);
+	useEffect(() => {
+		const getAnsHist = async () => {
+			const resp = await getAnswerHistory(assignmentKey);
+			setAnsHistory(resp);
+		};
+
+		if (questionData) {
+			getAnsHist();
+		}
+	}, [questionData]);
+
+	useEffect(() => {
+		const putCurrentRoundRes = async () => {
+			const overLayData = await putCurrentRound(
+				currentRoundQuestionListData?.id,
+				questionInFocus.id,
+				answerData,
+			);
+			setCurrentRoundAnswerOverLayData(overLayData);
+			setShowOverLay(true);
+		};
+		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
+			putCurrentRoundRes();
+		}
+	}, [answerData]);
 
 	return (
 		<main id="learning-assignment">
@@ -290,14 +279,14 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 					progress={progressPercent}
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
-					roundNumber={currentRoundQuestionData?.roundNumber}
-					roundPhase={currentRoundQuestionData?.roundPhase}
-					totalQuestionCount={currentRoundQuestionData?.totalQuestionCount}
+					roundNumber={currentRoundQuestionListData?.roundNumber}
+					roundPhase={currentRoundQuestionListData?.roundPhase}
+					totalQuestionCount={currentRoundQuestionListData?.totalQuestionCount}
 					masteredQuestionCount={
-						currentRoundQuestionData?.masteredQuestionCount
+						currentRoundQuestionListData?.masteredQuestionCount
 					}
-					unseenCount={currentRoundQuestionData?.unseenCount}
-					misinformedCount={currentRoundQuestionData?.misinformedCount}
+					unseenCount={currentRoundQuestionListData?.unseenCount}
+					misinformedCount={currentRoundQuestionListData?.misinformedCount}
 					seenCount={seenCount()}
 					answerHistory={ansHistory}
 				/>{' '}
@@ -340,22 +329,30 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 							borderRadius={24}
 							p={'72px'}>
 							{!showoverLay ? (
-								<MultipleChoiceAnswers
-									questionInFocus={questionInFocus}
-									selectedAnswers={selectedAnswers}
-									setSelectedAnswers={setSelectedAnswers}
-									clearSelection={clearSelection}
-									setClearSelection={setClearSelection}
-								/>
+								<Fade in={!showoverLay}>
+									{' '}
+									<MultipleChoiceAnswers
+										questionInFocus={questionInFocus}
+										selectedAnswers={selectedAnswers}
+										setSelectedAnswers={setSelectedAnswers}
+										clearSelection={clearSelection}
+										setClearSelection={setClearSelection}
+									/>
+								</Fade>
 							) : (
-								<MultipleChoiceOverLay
-									questionInFocus={questionInFocus}
-									selectedAnswers={selectedAnswers}
-									setSelectedAnswers={setSelectedAnswers}
-									clearSelection={clearSelection}
-									setClearSelection={setClearSelection}
-									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								/>
+								<Fade in={showoverLay}>
+									{' '}
+									<MultipleChoiceOverLay
+										questionInFocus={questionInFocus}
+										selectedAnswers={selectedAnswers}
+										setSelectedAnswers={setSelectedAnswers}
+										clearSelection={clearSelection}
+										setClearSelection={setClearSelection}
+										currentRoundAnswerOverLayData={
+											currentRoundAnswerOverLayData
+										}
+									/>
+								</Fade>
 							)}
 							<HStack
 								justifyContent={'space-between'}
@@ -363,7 +360,7 @@ const [currentRoundQuestionData, setCurrentRoundQuestionData] = useState<Questio
 								marginTop={'12px'}>
 								<Button
 									onClick={() => {
-										submitAnswer();
+										showoverLay ? getNextTask() : submitAnswer();
 									}}
 									variant={'ampSolid'}
 									w="150px">

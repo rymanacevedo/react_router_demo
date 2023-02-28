@@ -11,8 +11,8 @@ type ProgressBarMenu = {
 	timeRemaining: string;
 	assignmentType: string;
 	progress: number;
-	roundNumber: number;
-	roundPhase: string;
+	roundNumber?: number;
+	roundPhase?: string;
 	totalQuestionCount: any;
 	masteredQuestionCount: any;
 	unseenCount: any;
@@ -46,7 +46,7 @@ type ModuleTimeRemainingType = {
 };
 
 type RoundNumberType = {
-	roundNumber: number;
+	roundNumber?: number;
 };
 
 //refactor to accept assignment type, title, time left, progress props
