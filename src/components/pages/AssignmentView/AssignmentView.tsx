@@ -142,7 +142,6 @@ const AssignmentView = () => {
 						),
 					);
 				} else {
-					console.log('IN REVIEW!!!');
 					navigate('/app/learning/assignmentReview');
 				}
 			}
