@@ -1,21 +1,9 @@
-import { memo, useEffect } from 'react';
-import { useNavigate, NavLink, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import {
-	Box,
-	Button,
-	ButtonGroup,
-	Container,
-	HStack,
-	Image,
-	Text,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
-} from '@chakra-ui/react';
+import {memo, useEffect} from 'react';
+import {NavLink, useLocation, useNavigate} from 'react-router-dom';
+import {useAuth} from '../hooks/useAuth';
+import {Box, Button, ButtonGroup, Container, HStack, Image, Menu, MenuButton, MenuItem, MenuList, Text,} from '@chakra-ui/react';
 
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import {ChevronDownIcon} from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
 
 const Header = () => {
@@ -88,7 +76,7 @@ const Header = () => {
 		NDE: ['v8-authoring-link'],
 		'Report Viewer': ['v8-reporting-link'],
 		'Data Analyst': ['v8-reporting-link'],
-		Instructor: ['v8-courses-link', 'v8-learning-link', 'v8-reporting-link'],
+		Instructor: ['v8-courses-link', 'v8-reporting-link'],
 		Learner: ['v8-learning-link'],
 	};
 

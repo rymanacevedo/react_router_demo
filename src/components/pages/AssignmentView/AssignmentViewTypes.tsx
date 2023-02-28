@@ -45,8 +45,18 @@ export type QuestionInFocus = {
 };
 
 export type CurrentRoundQuestionListData = {
+	totalQuestionCount: any;
+	masteredQuestionCount: any;
+	notSureCount: any;
+	uninformedCount: any;
+	informedCount: any;
+	misinformedCount: any;
+	roundNumber: number;
+	roundPhase: string;
+	unseenCount: any;
 	id: number | string;
 	questionList: QuestionInFocus[];
+	seenCount: number | any;
 };
 
 export type CurrentRoundAnswerOverLayData = {
