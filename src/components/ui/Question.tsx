@@ -4,7 +4,9 @@ import RichContentComponent from './RichContentComponent';
 const Question = ({
 	questionInFocus,
 }: {
-	questionInFocus: { questionRc: any; name?: string; introductionRc?: any };
+	questionInFocus:
+		| { questionRc: any; name?: string; introductionRc?: any }
+		| undefined;
 }) => {
 	return (
 		<>

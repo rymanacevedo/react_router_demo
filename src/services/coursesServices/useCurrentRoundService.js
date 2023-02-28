@@ -42,6 +42,32 @@ const useCurrentRoundService = () => {
 			setLoading(false);
 		}
 	};
-	return { error, loading, getCurrentRound };
+
+	const putCurrentRound = async (roundId, roundQuestionId, answerData) => {
+		try {
+			setLoading(true);
+			const accountDataResponse = await axios({
+				url: `/v2/rounds/${roundId}/questions/${roundQuestionId}/response?isWebApp=true&subaccount=${subaccount}`,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+				method: 'put',
+				data: answerData,
+			});
+			return accountDataResponse.data;
+		} catch (err) {
+			console.log(err);
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+	return { error, loading, getCurrentRound, putCurrentRound };
 };
 export default useCurrentRoundService;

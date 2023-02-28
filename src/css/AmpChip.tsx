@@ -13,7 +13,8 @@ interface InterfaceAmpChip {
 		| 'ampNeutralFilled'
 		| 'ampWarningOutline'
 		| 'ampDarkErrorOutline'
-		| 'ampDarkError';
+		| 'ampDarkError'
+		| string;
 	size: 'sm' | 'lg';
 }
 
@@ -23,8 +24,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampDarkSuccessOutline': {
 				return (
 					<CheckIcon
-						height={size === 'lg' ? 40 : 20}
-						width={size === 'lg' ? 25 : 12}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
@@ -32,8 +33,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampDarkSuccess': {
 				return (
 					<CheckIcon
-						height={size === 'lg' ? 40 : 20}
-						width={size === 'lg' ? 25 : 12}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
@@ -41,8 +42,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampNeutralFilled': {
 				return (
 					<QuestionMarkIcon
-						height={size === 'lg' ? 40 : 20}
-						width={size === 'lg' ? 25 : 12}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
@@ -50,8 +51,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampWarningOutline': {
 				return (
 					<MinusIcon
-						height={size === 'lg' ? 40 : 20}
-						width={size === 'lg' ? 25 : 12}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
@@ -59,8 +60,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampDarkErrorOutline': {
 				return (
 					<Cross1Icon
-						height={size === 'lg' ? 40 : 20}
-						width={size === 'lg' ? 25 : 12}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
@@ -68,8 +69,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampDarkError': {
 				return (
 					<Cross1Icon
-						height={size === 'lg' ? 40 : 20}
-						width={size === 'lg' ? 25 : 12}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
@@ -90,6 +91,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 					: '0px'
 			}
 			size={size}
+			height={size === 'lg' ? '45px' : '20px'}
+			width={size === 'lg' ? '45px' : '12px'}
 			borderRadius="30"
 			variant={variant}>
 			{getIcon()}

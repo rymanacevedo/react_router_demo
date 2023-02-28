@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Badge, Checkbox, Slide, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from './CustomIcon';
-import { AnswerObject } from '../../pages/AssignmentView';
+import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentViewTypes';
 
 const AnswerInput = ({
 	questionText,
@@ -12,21 +12,23 @@ const AnswerInput = ({
 	IDK,
 	clearSelection,
 	setClearSelection,
+	isDisabled,
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
 	addAnswer: (answerObject: any) => void;
-	selectedAnswers?: AnswerObject[];
+	selectedAnswers?: SelectedAnswers[];
 	IDK?: boolean;
 	clearSelection?: boolean;
 	setClearSelection?: (arg: boolean) => void;
+	isDisabled?: boolean;
 }) => {
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [variant, setVariant] = useState('');
 	const [answerObject, setAnswerObject] = useState({
-		answerId: '',
+		answerId: 0,
 		confidence: 0,
 		selectedOptionId: 0,
 		self: null,
@@ -39,7 +41,7 @@ const AnswerInput = ({
 	}, [answerObject]);
 
 	function checkSelectedAnswers(
-		selectedAnswersArg: AnswerObject[],
+		selectedAnswersArg: SelectedAnswers[],
 		questionAnswerIdArg: string | number,
 	) {
 		const match = selectedAnswersArg.find(
@@ -89,7 +91,7 @@ const AnswerInput = ({
 					setVariant('ampSecondary');
 					setAnswerObject({
 						...answerObject,
-						answerId: '',
+						answerId: 0,
 						confidence: 0,
 					});
 					break;
@@ -99,7 +101,7 @@ const AnswerInput = ({
 					setStatus('unchecked');
 					setAnswerObject({
 						...answerObject,
-						answerId: '',
+						answerId: 0,
 						confidence: 0,
 					});
 			}
@@ -112,7 +114,7 @@ const AnswerInput = ({
 					setVariant('ampSecondary');
 					setAnswerObject({
 						...answerObject,
-						answerId: target.value,
+						answerId: Number(target.value),
 						confidence: 50,
 					});
 					break;
@@ -122,7 +124,7 @@ const AnswerInput = ({
 					setVariant('ampPrimary');
 					setAnswerObject({
 						...answerObject,
-						answerId: target.value,
+						answerId: Number(target.value),
 						confidence: 100,
 					});
 					break;
@@ -132,7 +134,7 @@ const AnswerInput = ({
 					setStatus('unchecked');
 					setAnswerObject({
 						...answerObject,
-						answerId: target.value,
+						answerId: Number(target.value),
 						confidence: 0,
 					});
 			}
@@ -150,6 +152,7 @@ const AnswerInput = ({
 					<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
 				}
 				isChecked={isChecked}
+				disabled={isDisabled}
 				isIndeterminate={isIndeterminate}
 				onChange={(e) => checkStatus(e)}>
 				<SlideFade in={isEnabled}>
