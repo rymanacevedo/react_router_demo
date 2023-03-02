@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
 	Box,
 	Button,
@@ -115,7 +115,6 @@ const AssignmentView = () => {
 		unseenCount: 0,
 	});
 	const [clearSelection, setClearSelection] = useState(false);
-	const [questionSeconds, setQuestionSeconds] = useState(0);
 	const { assignmentKey } = useParams();
 
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -123,6 +122,8 @@ const AssignmentView = () => {
 	const { getAnswerHistory } = useAnswerHistoryService();
 	const navigate = useNavigate();
 	const location = useLocation();
+	const intervalRef = useRef<ReturnType<typeof setInterval>>();
+	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -174,11 +175,11 @@ const AssignmentView = () => {
 			return {
 				...answerDataArg,
 				answerDate: findDateData(),
-				questionSeconds: questionSeconds,
+				questionSeconds: questionSecondsRef.current,
 				answerList: [...selectedAnswers],
 			};
 		});
-		setQuestionSeconds(0);
+		questionSecondsRef.current = 0;
 	};
 
 	const progressPercent = currentRoundQuestionListData
@@ -225,11 +226,11 @@ const AssignmentView = () => {
 		fetchModuleQuestionsData();
 	};
 	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setQuestionSeconds((prevSeconds) => prevSeconds + 1);
+		intervalRef.current = setInterval(() => {
+			questionSecondsRef.current = questionSecondsRef.current + 1;
 		}, 1000);
 
-		return () => clearInterval(intervalId);
+		return () => clearInterval(intervalRef.current);
 	}, []);
 	useEffect(() => {
 		if (assignmentKey) {

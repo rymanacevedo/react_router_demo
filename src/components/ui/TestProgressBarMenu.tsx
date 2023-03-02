@@ -1,8 +1,15 @@
-import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	HStack,
+	Progress,
+	Text,
+	VStack,
+	useMediaQuery,
+} from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
-import { useMediaQuery } from '@chakra-ui/react';
 
 type ProgressBarMenu = {
 	isOpen: boolean;
@@ -53,7 +60,6 @@ type RoundNumberType = {
 const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
 	return (
 		<Text fontSize={'21px'} fontWeight={'600'}>
-			{/* {i18n('theScienceOfLearning')} */}
 			{assignmentType}: {title}
 		</Text>
 	);
@@ -115,7 +121,9 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		const wholeAnswerString: any = answerHistory.items.map(
 			(ans: any, i: number) => {
 				if (i === dotIndex) {
-					const classString: keyof LookupType = `${ans.answerHistory[0].confidence}${ans.answerHistory[0].correctness}`;
+					const classString: keyof LookupType = `${
+						ans.answerHistory.at(-1).confidence
+					}${ans.answerHistory.at(-1).correctness}`;
 					return lookup[classString];
 				} else {
 					return lookup.empty;
@@ -148,7 +156,6 @@ const TestProgressBarMenu = ({
 	assignmentType,
 	progress,
 	roundNumber,
-	roundPhase,
 	totalQuestionCount,
 	masteredQuestionCount,
 	unseenCount,
