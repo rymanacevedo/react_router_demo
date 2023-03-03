@@ -165,7 +165,7 @@ const TestProgressBarMenu = ({
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-
+	console.log("progress",progress);
 	return (
 		<Box width="100vw" boxSizing="border-box">
 			<HStack
