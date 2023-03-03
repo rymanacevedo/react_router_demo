@@ -27,6 +27,7 @@ type ProgressBarMenu = {
 	seenCount: number;
 	answerHistory: ApiRes;
 	roundLength?: number;
+	currentQuestion: any;
 };
 
 type ApiRes = {
@@ -91,12 +92,14 @@ type AnswerHistoryType = {
 	answerHistory: ApiRes;
 	roundLength: any;
 	roundNumber: any;
+	currentQuestion: any;
 };
 
 const variantFunc = (
 	answerHistory: any,
 	dotIndex: number,
 	roundNumber: number,
+	currentQuestion: any,
 ) => {
 	type LookupType = {
 		[key: string]: string;
@@ -110,6 +113,8 @@ const variantFunc = (
 		PartSurePartiallyCorrect: string;
 		OneAnswerPartSureIncorrect: string;
 		PartSureIncorrect: string;
+		currentQuestion: string;
+		NotSureNoAnswerSelected: string;
 	};
 	const lookup: LookupType = {
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
@@ -122,24 +127,28 @@ const variantFunc = (
 		PartSurePartiallyCorrect: 'ampWarningOutline',
 		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
 		PartSureIncorrect: 'ampDarkErrorOutline',
+		currentQuestion: 'ampSecondaryDot',
+		NotSureNoAnswerSelected: 'ampNeutralFilled',
 	};
-
 	if (answerHistory.items) {
 		const filtered = answerHistory.items.filter((item: any) => {
 			return item.answerHistory.at(-1).roundNumber === roundNumber;
 		});
 
 		const wholeAnswerString: any = filtered.map((ans: any, i: number) => {
+			if (dotIndex === currentQuestion.displayOrder - 1) {
+				return lookup.currentQuestion;
+			}
 			if (i === dotIndex) {
 				const classString: keyof LookupType = `${
 					ans.answerHistory.at(-1).confidence
 				}${ans.answerHistory.at(-1).correctness}`;
+
 				return lookup[classString];
 			} else {
 				return lookup.empty;
 			}
 		});
-
 		return wholeAnswerString[dotIndex];
 	}
 };
@@ -148,13 +157,14 @@ const AnswerHistoryComponent = ({
 	answerHistory,
 	roundLength,
 	roundNumber,
+	currentQuestion,
 }: AnswerHistoryType) => {
 	return (
 		<HStack>
 			{Array.from({ length: roundLength }, (_, i) => (
 				<AmpMicroChip
 					key={i}
-					variant={variantFunc(answerHistory, i, roundNumber)}
+					variant={variantFunc(answerHistory, i, roundNumber, currentQuestion)}
 				/>
 			))}
 		</HStack>
@@ -176,6 +186,7 @@ const TestProgressBarMenu = ({
 	seenCount,
 	answerHistory,
 	roundLength,
+	currentQuestion,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -210,6 +221,7 @@ const TestProgressBarMenu = ({
 						answerHistory={answerHistory}
 						roundLength={roundLength}
 						roundNumber={roundNumber}
+						currentQuestion={currentQuestion}
 					/>
 				</VStack>
 
