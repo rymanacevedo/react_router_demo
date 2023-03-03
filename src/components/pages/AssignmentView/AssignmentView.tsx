@@ -292,6 +292,7 @@ const AssignmentView = () => {
 					misinformedCount={currentRoundQuestionListData?.misinformedCount}
 					seenCount={seenCount()}
 					answerHistory={ansHistory}
+					roundLength={currentRoundQuestionListData?.questionList.length}
 				/>{' '}
 				<HStack width="100%">
 					<HStack
