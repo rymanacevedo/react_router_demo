@@ -183,9 +183,11 @@ const AssignmentView = () => {
 	};
 
 	const progressPercent = currentRoundQuestionListData
-		? (currentRoundQuestionListData?.totalQuestionCount /
-				currentRoundQuestionListData?.masteredQuestionCount) *
-		  100
+		? Math.floor(
+				(currentRoundQuestionListData?.masteredQuestionCount /
+					currentRoundQuestionListData?.totalQuestionCount) *
+					100,
+		  )
 		: 0;
 
 	const estimatedTimeRemaining = () => {
