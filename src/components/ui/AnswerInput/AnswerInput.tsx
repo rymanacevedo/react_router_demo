@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Badge, Checkbox, Slide, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from './CustomIcon';
-import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentViewTypes';
+import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
 
 const AnswerInput = ({
 	questionText,

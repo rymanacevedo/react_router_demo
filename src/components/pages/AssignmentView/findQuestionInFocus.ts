@@ -19,6 +19,7 @@ export const findQuestionInFocus = (
 			learningUnits.forEach(
 				(learningUnit: {
 					questions: {
+						publishedQuestionId: any;
 						id: any;
 						answers: any;
 						name: string;
@@ -30,9 +31,12 @@ export const findQuestionInFocus = (
 					}[];
 				}) => {
 					//matched questions
-					if (
-						learningUnit?.questions[0]?.id === question?.publishedQuestionId
-					) {
+					let matchedQuestion = learningUnit?.questions.filter(
+						(unitQuestion) => {
+							return unitQuestion.id === question?.publishedQuestionId;
+						},
+					);
+					if (matchedQuestion.length) {
 						let updatedAnswerList = question?.answerList;
 						const {
 							name,
@@ -41,7 +45,7 @@ export const findQuestionInFocus = (
 							explanationRc,
 							hasModalIntroduction,
 							introductionRc,
-						} = learningUnit?.questions[0];
+						} = matchedQuestion[0];
 						updatedQuestion = {
 							...question,
 							name: name,
@@ -50,7 +54,6 @@ export const findQuestionInFocus = (
 							explanationRc: explanationRc,
 							hasModalIntroduction: hasModalIntroduction,
 							introductionRc: introductionRc,
-
 							answerList: [
 								...updatedAnswerList.map(
 									(answer: {
@@ -59,7 +62,7 @@ export const findQuestionInFocus = (
 										optionRc: string | any;
 									}) => {
 										let updatedAnswerObj = answer;
-										learningUnit.questions[0].answers.forEach(
+										matchedQuestion[0].answers.forEach(
 											(learningUnitAnswer: {
 												id: any;
 												answerRc: any;
@@ -88,6 +91,7 @@ export const findQuestionInFocus = (
 			return updatedQuestion;
 		},
 	);
+
 	const firstUnansweredQuestion = questionList.find(
 		(question: { answered: boolean }) => {
 			return question.answered === false;

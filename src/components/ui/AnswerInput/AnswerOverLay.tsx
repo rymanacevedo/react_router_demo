@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Slide, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
-import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentViewTypes';
+import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
 import {
 	CheckIcon,
 	Cross1Icon,
@@ -74,6 +74,7 @@ const AnswerOverLay = ({
 			}
 		} else if (choseIDK) {
 			setIsEnabled(true);
+			// eslint-disable-next-line
 			setText('I don\'t know yet');
 			setVariant('ampNeutralFilled');
 			setStatus('checked');

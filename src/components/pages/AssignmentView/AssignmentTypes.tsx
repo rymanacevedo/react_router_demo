@@ -7,6 +7,21 @@ export type SelectedAnswers = {
 	self: any;
 };
 
+export type ApiRes = {
+	items: Item[];
+};
+
+export type Item = {
+	publishedQuestionUri: string;
+	answerHistory: AnswerHistory[];
+};
+
+export type AnswerHistory = {
+	roundNumber: number;
+	confidence: string;
+	correctness: string;
+};
+
 export type AnswerData = {
 	answerDate: string;
 	answerList: Answer[];
