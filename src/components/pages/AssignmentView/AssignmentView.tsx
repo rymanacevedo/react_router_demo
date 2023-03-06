@@ -294,6 +294,7 @@ const AssignmentView = () => {
 					answerHistory={ansHistory}
 					roundLength={currentRoundQuestionListData?.questionList.length}
 					currentQuestion={questionInFocus}
+					questionList={currentRoundQuestionListData?.questionList}
 				/>{' '}
 				<HStack width="100%">
 					<HStack

@@ -28,6 +28,7 @@ type ProgressBarMenu = {
 	answerHistory: ApiRes;
 	roundLength?: number;
 	currentQuestion: any;
+	questionList: any;
 };
 
 type ApiRes = {
@@ -89,17 +90,15 @@ type AnswerHistoryType = {
 	seenCount: number;
 	misinformedCount: number;
 	unseenCount: number;
-	answerHistory: ApiRes;
 	roundLength: any;
-	roundNumber: any;
 	currentQuestion: any;
+	questionList: any;
 };
 
 const variantFunc = (
-	answerHistory: any,
 	dotIndex: number,
-	roundNumber: number,
 	currentQuestion: any,
+	questionList: any,
 ) => {
 	type LookupType = {
 		[key: string]: string;
@@ -130,41 +129,34 @@ const variantFunc = (
 		currentQuestion: 'ampSecondaryDot',
 		NotSureNoAnswerSelected: 'ampNeutralFilled',
 	};
-	if (answerHistory.items) {
-		const filtered = answerHistory.items.filter((item: any) => {
-			return item.answerHistory.at(-1).roundNumber === roundNumber;
-		});
 
-		const wholeAnswerString: any = filtered.map((ans: any, i: number) => {
-			if (dotIndex === currentQuestion.displayOrder - 1) {
-				return lookup.currentQuestion;
-			}
-			if (i === dotIndex) {
-				const classString: keyof LookupType = `${
-					ans.answerHistory.at(-1).confidence
-				}${ans.answerHistory.at(-1).correctness}`;
+	let classNamesArray = questionList?.map((question: any) => {
+		if (dotIndex === currentQuestion.displayOrder - 1) {
+			return lookup.currentQuestion;
+		}
+		if (question.answered) {
+			return lookup[`${question.confidence}${question.correctness}`];
+		} else {
+			return lookup.empty;
+		}
+	});
 
-				return lookup[classString];
-			} else {
-				return lookup.empty;
-			}
-		});
-		return wholeAnswerString[dotIndex];
-	}
+	return classNamesArray[dotIndex] !== undefined
+		? classNamesArray[dotIndex]
+		: lookup.empty;
 };
 
 const AnswerHistoryComponent = ({
-	answerHistory,
 	roundLength,
-	roundNumber,
 	currentQuestion,
+	questionList,
 }: AnswerHistoryType) => {
 	return (
 		<HStack>
 			{Array.from({ length: roundLength }, (_, i) => (
 				<AmpMicroChip
 					key={i}
-					variant={variantFunc(answerHistory, i, roundNumber, currentQuestion)}
+					variant={variantFunc(i, currentQuestion, questionList)}
 				/>
 			))}
 		</HStack>
@@ -184,9 +176,9 @@ const TestProgressBarMenu = ({
 	unseenCount,
 	misinformedCount,
 	seenCount,
-	answerHistory,
 	roundLength,
 	currentQuestion,
+	questionList,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -218,10 +210,9 @@ const TestProgressBarMenu = ({
 						unseenCount={unseenCount}
 						misinformedCount={misinformedCount}
 						seenCount={seenCount}
-						answerHistory={answerHistory}
 						roundLength={roundLength}
-						roundNumber={roundNumber}
 						currentQuestion={currentQuestion}
+						questionList={questionList}
 					/>
 				</VStack>
 
