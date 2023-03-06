@@ -6,8 +6,8 @@ import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentViewTypes'
 import {
 	CheckIcon,
 	Cross1Icon,
-	QuestionMarkCircledIcon,
 	MinusCircledIcon,
+	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
 
 const AnswerOverLay = ({
@@ -74,6 +74,7 @@ const AnswerOverLay = ({
 			}
 		} else if (choseIDK) {
 			setIsEnabled(true);
+			// eslint-disable-next-line
 			setText('I don\'t know yet');
 			setVariant('ampNeutralFilled');
 			setStatus('checked');

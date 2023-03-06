@@ -38,7 +38,6 @@
     "build": "DISABLE_ESLINT_PLUGIN='true' react-scripts build",
     "lint": "eslint --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
     "fix": "eslint --fix --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
-    "prepare": "cd .. && husky install main/.husky",
     "test": "react-scripts test --testURL=http://localhost:3000/main?abbrevName=automation_10",
     "eject": "react-scripts eject",
     "prestart": "rm -rf node_modules/.cache/"

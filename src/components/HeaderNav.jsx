@@ -1,8 +1,8 @@
 import { memo, useEffect } from 'react';
 import {
-	useNavigate,
 	NavLink as ReactRouterNavLink,
 	useLocation,
+	useNavigate,
 } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
@@ -13,18 +13,18 @@ import {
 	HStack,
 	IconButton,
 	Image,
-	Text,
 	Menu,
 	MenuButton,
-	MenuList,
 	MenuItem,
+	MenuList,
+	Text,
 	useMediaQuery,
 } from '@chakra-ui/react';
 
 import {
+	ArrowLeftIcon,
 	ChevronDownIcon,
 	HamburgerMenuIcon,
-	ArrowLeftIcon,
 } from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
 
@@ -99,7 +99,7 @@ const Header = () => {
 		NDE: ['v8-authoring-link'],
 		'Report Viewer': ['v8-reporting-link'],
 		'Data Analyst': ['v8-reporting-link'],
-		Instructor: ['v8-courses-link', 'v8-learning-link', 'v8-reporting-link'],
+		Instructor: ['v8-courses-link', 'v8-reporting-link'],
 		Learner: ['v8-learning-link'],
 	};
 
