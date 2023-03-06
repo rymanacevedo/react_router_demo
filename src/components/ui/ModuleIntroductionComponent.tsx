@@ -57,7 +57,8 @@ const ModuleIntroductionComponent = ({
 				<Text fontSize={14}>
 					{numberOfLearningUnits}{' '}
 					{numberOfLearningUnits > 1 ? i18n('Questions') : i18n('Question')}
-					&nbsp; &nbsp;
+					{/*needed for the space between*/}
+					{'    '}
 					{estimatedTimeRemaining()}
 				</Text>
 			</Stack>

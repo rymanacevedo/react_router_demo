@@ -144,10 +144,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			navigate(`moduleIntro/${assignment.assignmentKey}`, {
 				state: {
 					numberOfLearningUnits: assignment.numLearningUnits,
-					estimatedTimeToComplete:
-						Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
-							? Math.floor(assignment.estimatedTimeToComplete / 60)
-							: 1,
+					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
 			});
 		} else if (
