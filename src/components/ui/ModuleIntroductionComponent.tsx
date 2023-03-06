@@ -54,7 +54,7 @@ const ModuleIntroductionComponent = ({
 			<Heading as="h2">{moduleData?.name}</Heading>
 			<Stack paddingTop="16px" paddingBottom="16px">
 				<RichContentComponent content={moduleData?.introductionRc} />
-				<Text fontSize={14}>
+				<Text fontSize={14} paddingBottom={5} paddingTop={5}>
 					{numberOfLearningUnits}{' '}
 					{numberOfLearningUnits > 1 ? i18n('Questions') : i18n('Question')}
 					{/*needed for the space between*/}
