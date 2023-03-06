@@ -1,6 +1,6 @@
 import { Container } from '@chakra-ui/react';
 import ModuleIntroductionComponent from '../ui/ModuleIntroductionComponent';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import { useEffect, useState } from 'react';
 
@@ -11,6 +11,7 @@ const ModuleIntroView = () => {
 	});
 	const { fetchModuleContent } = useModuleContentService();
 	const navigate = useNavigate();
+	const { state } = useLocation();
 	const { assignmentKey } = useParams();
 
 	useEffect(() => {
@@ -18,6 +19,8 @@ const ModuleIntroView = () => {
 			let response = await fetchModuleContent(assignmentKey);
 			if (response?.introductionRc) {
 				setData(response);
+			} else {
+				navigate(`/app/learning/assignment/:${assignmentKey}`);
 			}
 		};
 		if (assignmentKey) {
@@ -26,7 +29,7 @@ const ModuleIntroView = () => {
 	}, [assignmentKey]);
 
 	const beginAssignment = () => {
-		navigate(`/app/learning/assignment/${assignmentKey}`);
+		navigate(`/app/learning/assignment/:${assignmentKey}`);
 	};
 
 	return (
@@ -40,6 +43,8 @@ const ModuleIntroView = () => {
 				overflowX={'hidden'}>
 				<ModuleIntroductionComponent
 					moduleData={data}
+					numberOfLearningUnits={state.numberOfLearningUnits}
+					estimatedTimeToComplete={state.estimatedTimeToComplete}
 					beginAssignment={beginAssignment}
 				/>
 			</Container>

@@ -140,7 +140,13 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			assignment.status === 'NOT_STARTED'
 		) {
 			navigate(`moduleIntro/${assignment.assignmentKey}`, {
-				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
+				state: {
+					numberOfLearningUnits: 2,
+					estimatedTimeToComplete:
+						Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
+							? Math.floor(assignment.estimatedTimeToComplete / 60)
+							: 1,
+				},
 			});
 		} else if (
 			assignment.assignmentType !== 'TimedAssessment' &&
