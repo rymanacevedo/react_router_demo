@@ -20,7 +20,7 @@ const ModuleIntroView = () => {
 			if (response?.introductionRc) {
 				setData(response);
 			} else {
-				navigate(`/app/learning/assignment/:${assignmentKey}`);
+				navigate(`/app/learning/assignment/${assignmentKey}`);
 			}
 		};
 		if (assignmentKey) {
@@ -29,7 +29,7 @@ const ModuleIntroView = () => {
 	}, [assignmentKey]);
 
 	const beginAssignment = () => {
-		navigate(`/app/learning/assignment/:${assignmentKey}`);
+		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 
 	return (
