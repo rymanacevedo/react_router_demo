@@ -181,7 +181,7 @@ const AssignmentView = () => {
 		setQuestionSeconds(0);
 	};
 
-	const progressPercent = currentRoundQuestionListData
+	const progressPercent: number = currentRoundQuestionListData
 		? currentRoundQuestionListData?.totalQuestionCount /
 		  currentRoundQuestionListData?.masteredQuestionCount
 		: 0;
@@ -215,6 +215,15 @@ const AssignmentView = () => {
 			currentRoundQuestionListData?.uninformedCount +
 			currentRoundQuestionListData?.informedCount +
 			currentRoundQuestionListData?.misinformedCount
+		);
+	};
+
+	const learningCount = () => {
+		return (
+			currentRoundQuestionListData?.notSureCount +
+			currentRoundQuestionListData?.uninformedCount +
+			currentRoundQuestionListData?.informedCount +
+			currentRoundQuestionListData?.onceCorrectCount
 		);
 	};
 
@@ -384,7 +393,20 @@ const AssignmentView = () => {
 							</HStack>
 						</Box>
 					</HStack>
-					<ProgressMenu isOpen={isOpen} />
+					<ProgressMenu
+						isOpen={isOpen}
+						percent={progressPercent}
+						totalQuestionCount={
+							currentRoundQuestionListData?.totalQuestionCount
+						}
+						masteredQuestionCount={
+							currentRoundQuestionListData?.masteredQuestionCount
+						}
+						unseenCount={currentRoundQuestionListData?.unseenCount}
+						misinformedCount={currentRoundQuestionListData?.misinformedCount}
+						seenCount={seenCount()}
+						learningCount={learningCount()}
+					/>
 				</HStack>
 			</Container>
 		</main>

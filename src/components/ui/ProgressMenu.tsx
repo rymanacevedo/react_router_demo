@@ -14,9 +14,25 @@ import { useTranslation } from 'react-i18next';
 
 type ProgressMenuType = {
 	isOpen: boolean;
+	percent: number;
+	totalQuestionCount: number;
+	masteredQuestionCount: number;
+	unseenCount: number;
+	misinformedCount: number;
+	seenCount: number;
+	learningCount: number;
 };
 
-const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
+const ProgressMenu = ({
+	isOpen,
+	masteredQuestionCount,
+	misinformedCount,
+	percent,
+	seenCount,
+	totalQuestionCount,
+	unseenCount,
+	learningCount,
+}: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
 	return (
 		<SlideFade in={isOpen} offsetX="180px" offsetY="0px">
@@ -43,7 +59,7 @@ const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 							marginTop="12px"
 							size="lg"
 							height="24px"
-							value={20}
+							value={percent}
 							borderRadius="24px"
 							variant="ampDarkSuccess"
 							bg="ampSuccess.50"
@@ -54,7 +70,7 @@ const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 									{i18n('mastered')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									5
+									{masteredQuestionCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -62,7 +78,7 @@ const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 									{i18n('incorect')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									4
+									{misinformedCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -78,7 +94,7 @@ const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 									{i18n('unseen')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									18
+									{unseenCount}
 								</Text>
 							</VStack>
 						</HStack>
