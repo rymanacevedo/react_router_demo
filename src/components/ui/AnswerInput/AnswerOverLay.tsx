@@ -3,7 +3,12 @@ import { Badge, Checkbox, Slide, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentViewTypes';
-import { CheckIcon, Cross1Icon, MinusCircledIcon, QuestionMarkCircledIcon, } from '@radix-ui/react-icons';
+import {
+	CheckIcon,
+	Cross1Icon,
+	MinusCircledIcon,
+	QuestionMarkCircledIcon,
+} from '@radix-ui/react-icons';
 
 const AnswerOverLay = ({
 	questionText,
@@ -69,7 +74,7 @@ const AnswerOverLay = ({
 			}
 		} else if (choseIDK) {
 			setIsEnabled(true);
-            // eslint-disable-next-line
+			// eslint-disable-next-line
 			setText('I don\'t know yet');
 			setVariant('ampNeutralFilled');
 			setStatus('checked');

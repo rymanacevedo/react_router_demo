@@ -1,9 +1,31 @@
-import {memo, useEffect} from 'react';
-import {NavLink as ReactRouterNavLink, useLocation, useNavigate,} from 'react-router-dom';
-import {useAuth} from '../hooks/useAuth';
-import {Box, Button, ButtonGroup, Container, HStack, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text, useMediaQuery,} from '@chakra-ui/react';
+import { memo, useEffect } from 'react';
+import {
+	NavLink as ReactRouterNavLink,
+	useLocation,
+	useNavigate,
+} from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import {
+	Box,
+	Button,
+	ButtonGroup,
+	Container,
+	HStack,
+	IconButton,
+	Image,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Text,
+	useMediaQuery,
+} from '@chakra-ui/react';
 
-import {ArrowLeftIcon, ChevronDownIcon, HamburgerMenuIcon,} from '@radix-ui/react-icons';
+import {
+	ArrowLeftIcon,
+	ChevronDownIcon,
+	HamburgerMenuIcon,
+} from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
 
 const Header = () => {

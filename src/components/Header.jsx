@@ -1,7 +1,7 @@
-import React, {memo, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import React, { memo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navigation from './navigation/Navigation';
-import {useAuth} from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 function Header() {
 	const nav = useNavigate();

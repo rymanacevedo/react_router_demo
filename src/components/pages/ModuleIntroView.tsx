@@ -11,7 +11,7 @@ const ModuleIntroView = () => {
 	});
 	const { fetchModuleContent } = useModuleContentService();
 	const navigate = useNavigate();
-    const {state} = useLocation();
+	const { state } = useLocation();
 	const { assignmentKey } = useParams();
 
 	useEffect(() => {
@@ -19,9 +19,9 @@ const ModuleIntroView = () => {
 			let response = await fetchModuleContent(assignmentKey);
 			if (response?.introductionRc) {
 				setData(response);
-            } else {
-                navigate(`/app/learning/assignment/${assignmentKey}`);
-            }
+			} else {
+				navigate(`/app/learning/assignment/${assignmentKey}`);
+			}
 		};
 		if (assignmentKey) {
 			fetchData();
@@ -41,12 +41,12 @@ const ModuleIntroView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-                <ModuleIntroductionComponent
-                        moduleData={data}
-                        numberOfLearningUnits={state.numberOfLearningUnits}
-                        estimatedTimeToComplete={state.estimatedTimeToComplete}
-                        beginAssignment={beginAssignment}
-                />
+				<ModuleIntroductionComponent
+					moduleData={data}
+					numberOfLearningUnits={state.numberOfLearningUnits}
+					estimatedTimeToComplete={state.estimatedTimeToComplete}
+					beginAssignment={beginAssignment}
+				/>
 			</Container>
 		</main>
 	);

@@ -1,5 +1,13 @@
 import { Key, useEffect, useState } from 'react';
-import { Alert, AlertIcon, Divider, HStack, List, ListItem, Text, } from '@chakra-ui/react';
+import {
+	Alert,
+	AlertIcon,
+	Divider,
+	HStack,
+	List,
+	ListItem,
+	Text,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
@@ -9,8 +17,8 @@ type AssignmentType = {
 	assignmentType: string;
 	status: string;
 	estimatedTimeToComplete: number;
-    assignmentKey: string;
-    numLearningUnits: number;
+	assignmentKey: string;
+	numLearningUnits: number;
 };
 
 type AssignmentListDataType = {
@@ -133,12 +141,12 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
 		) {
-            navigate(`moduleIntro/${assignment.assignmentKey}`, {
-                state: {
-                    numberOfLearningUnits: assignment.numLearningUnits,
-                    estimatedTimeToComplete: assignment.estimatedTimeToComplete,
-                },
-            });
+			navigate(`moduleIntro/${assignment.assignmentKey}`, {
+				state: {
+					numberOfLearningUnits: assignment.numLearningUnits,
+					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
+				},
+			});
 		} else if (
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'IN_PROGRESS'
