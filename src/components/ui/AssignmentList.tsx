@@ -165,6 +165,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		(curriculum, index) => {
 			const assignment: AssignmentType =
 				curriculum.assignments[curriculum.assignments.length - 1];
+
 			return (
 				<ListItem
 					height={'44px'}

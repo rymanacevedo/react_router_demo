@@ -1,8 +1,15 @@
-import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	HStack,
+	Progress,
+	Text,
+	VStack,
+	useMediaQuery,
+} from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
-import { useMediaQuery } from '@chakra-ui/react';
 
 type ProgressBarMenu = {
 	isOpen: boolean;
@@ -19,6 +26,9 @@ type ProgressBarMenu = {
 	misinformedCount: number;
 	seenCount: number;
 	answerHistory: ApiRes;
+	roundLength?: number;
+	currentQuestion: any;
+	questionList: any;
 };
 
 type ApiRes = {
@@ -53,7 +63,6 @@ type RoundNumberType = {
 const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
 	return (
 		<Text fontSize={'21px'} fontWeight={'600'}>
-			{/* {i18n('theScienceOfLearning')} */}
 			{assignmentType}: {title}
 		</Text>
 	);
@@ -81,10 +90,16 @@ type AnswerHistoryType = {
 	seenCount: number;
 	misinformedCount: number;
 	unseenCount: number;
-	answerHistory: ApiRes;
+	roundLength: any;
+	currentQuestion: any;
+	questionList: any;
 };
 
-const variantFunc = (answerHistory: any, dotIndex: number) => {
+const variantFunc = (
+	dotIndex: number,
+	currentQuestion: any,
+	questionList: any,
+) => {
 	type LookupType = {
 		[key: string]: string;
 		OneAnswerPartSureCorrect: string;
@@ -97,6 +112,8 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		PartSurePartiallyCorrect: string;
 		OneAnswerPartSureIncorrect: string;
 		PartSureIncorrect: string;
+		currentQuestion: string;
+		NotSureNoAnswerSelected: string;
 	};
 	const lookup: LookupType = {
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
@@ -109,32 +126,38 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		PartSurePartiallyCorrect: 'ampWarningOutline',
 		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
 		PartSureIncorrect: 'ampDarkErrorOutline',
+		currentQuestion: 'ampSecondaryDot',
+		NotSureNoAnswerSelected: 'ampNeutralFilled',
 	};
 
-	if (answerHistory.items) {
-		const wholeAnswerString: any = answerHistory.items.map(
-			(ans: any, i: number) => {
-				if (i === dotIndex) {
-					const classString: keyof LookupType = `${ans.answerHistory[0].confidence}${ans.answerHistory[0].correctness}`;
-					return lookup[classString];
-				} else {
-					return lookup.empty;
-				}
-			},
-		);
+	let classNamesArray = questionList?.map((question: any) => {
+		if (dotIndex === currentQuestion.displayOrder - 1) {
+			return lookup.currentQuestion;
+		}
+		if (question.answered) {
+			return lookup[`${question.confidence}${question.correctness}`];
+		} else {
+			return lookup.empty;
+		}
+	});
 
-		return wholeAnswerString[dotIndex];
-	}
+	return classNamesArray[dotIndex] !== undefined
+		? classNamesArray[dotIndex]
+		: lookup.empty;
 };
 
 const AnswerHistoryComponent = ({
-	totalQuestionCount,
-	answerHistory,
+	roundLength,
+	currentQuestion,
+	questionList,
 }: AnswerHistoryType) => {
 	return (
 		<HStack>
-			{Array.from({ length: totalQuestionCount }, (_, i) => (
-				<AmpMicroChip key={i} variant={variantFunc(answerHistory, i)} />
+			{Array.from({ length: roundLength }, (_, i) => (
+				<AmpMicroChip
+					key={i}
+					variant={variantFunc(i, currentQuestion, questionList)}
+				/>
 			))}
 		</HStack>
 	);
@@ -148,17 +171,17 @@ const TestProgressBarMenu = ({
 	assignmentType,
 	progress,
 	roundNumber,
-	roundPhase,
 	totalQuestionCount,
 	masteredQuestionCount,
 	unseenCount,
 	misinformedCount,
 	seenCount,
-	answerHistory,
+	roundLength,
+	currentQuestion,
+	questionList,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-
 	return (
 		<Box width="100vw" boxSizing="border-box">
 			<HStack
@@ -187,7 +210,9 @@ const TestProgressBarMenu = ({
 						unseenCount={unseenCount}
 						misinformedCount={misinformedCount}
 						seenCount={seenCount}
-						answerHistory={answerHistory}
+						roundLength={roundLength}
+						currentQuestion={currentQuestion}
+						questionList={questionList}
 					/>
 				</VStack>
 
