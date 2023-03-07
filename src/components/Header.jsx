@@ -64,7 +64,7 @@ function Header() {
 		NDE: ['v8-authoring-link'],
 		'Report Viewer': ['v8-reporting-link'],
 		'Data Analyst': ['v8-reporting-link'],
-		Instructor: ['v8-courses-link', 'v8-reporting-link'],
+		Instructor: ['v8-courses-link', 'v8-learning-link', 'v8-reporting-link'],
 		Learner: ['v8-learning-link'],
 	};
 

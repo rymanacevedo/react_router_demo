@@ -1,7 +1,7 @@
 import { Container } from '@chakra-ui/react';
 import ModuleIntroductionComponent from '../ui/ModuleIntroductionComponent';
 import { useParams, useNavigate } from 'react-router-dom';
-import useModuleContentService from '../../services/coursesServices/useModuleContentService';
+import useModuleContentService from '../../services/useModuleContentService';
 import { useEffect, useState } from 'react';
 
 const ModuleIntroView = () => {
@@ -18,6 +18,8 @@ const ModuleIntroView = () => {
 			let response = await fetchModuleContent(assignmentKey);
 			if (response?.introductionRc) {
 				setData(response);
+			} else {
+				navigate(`/app/learning/assignment/:${assignmentKey}`);
 			}
 		};
 		if (assignmentKey) {
@@ -26,7 +28,7 @@ const ModuleIntroView = () => {
 	}, [assignmentKey]);
 
 	const beginAssignment = () => {
-		navigate(`/app/learning/assignment/${assignmentKey}`);
+		navigate(`/app/learning/assignment/:${assignmentKey}`);
 	};
 
 	return (

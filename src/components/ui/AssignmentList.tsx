@@ -17,8 +17,6 @@ type AssignmentType = {
 	assignmentType: string;
 	status: string;
 	estimatedTimeToComplete: number;
-	assignmentKey: string;
-	numLearningUnits: number;
 };
 
 type AssignmentListDataType = {
@@ -136,16 +134,13 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	};
 
-	const handleAssignmentClick = (assignment: AssignmentType) => () => {
+	const handleAssignmentClick = (assignment: any) => () => {
 		if (
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
 		) {
 			navigate(`moduleIntro/${assignment.assignmentKey}`, {
-				state: {
-					numberOfLearningUnits: assignment.numLearningUnits,
-					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
-				},
+				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
 			});
 		} else if (
 			assignment.assignmentType !== 'TimedAssessment' &&
@@ -163,8 +158,9 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
-			const assignment: AssignmentType =
+			const assignment =
 				curriculum.assignments[curriculum.assignments.length - 1];
+
 			return (
 				<ListItem
 					height={'44px'}
