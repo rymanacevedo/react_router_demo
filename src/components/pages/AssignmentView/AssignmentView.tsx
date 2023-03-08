@@ -209,16 +209,6 @@ const AssignmentView = () => {
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
-			console.log(
-				'|||||||||',
-				'RoundID',
-				currentRoundQuestionListData?.id,
-				'questionID',
-				questionInFocus.id,
-				'answerChoicesForQuestionID',
-				answerData.answerList,
-			);
-
 			const overLayData = await putCurrentRound(
 				currentRoundQuestionListData?.id,
 				questionInFocus.id,
@@ -226,19 +216,8 @@ const AssignmentView = () => {
 			);
 
 			if (overLayData) {
-				console.log('-----------', overLayData);
-				// console.log('localstorageDataStructure', {
-				// 	currentRoundId: currentRoundQuestionListData?.id,
-				// 	roundQuestionsHistory: [
-				// 		{
-				// 			answeredQuestionId: questionInFocus.id,
-				// 			answersChosen: [...answerData.answerList],
-				// 			correctAnswerIds: [...overLayData.correctAnswerIds],
-				// 		},
-				// 	],
-				// });
-
-				let star = localQuestionHistory?.roundQuestionsHistory.length
+				let updatedLocalQuestionHistory = localQuestionHistory
+					?.roundQuestionsHistory.length
 					? {
 							currentRoundId: currentRoundQuestionListData?.id,
 							roundQuestionsHistory: [
@@ -261,7 +240,7 @@ const AssignmentView = () => {
 							],
 					  };
 
-				setLocalQuestionHistory(star);
+				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
 				setShowOverLay(true);
 			}

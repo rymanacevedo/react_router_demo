@@ -15,7 +15,6 @@ import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
-	AnswerData,
 	ApiRes,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
@@ -25,6 +24,7 @@ import {
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
+import { useLocalStorage } from '../../../hooks/useLocalStorage';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
@@ -38,6 +38,11 @@ const AssignmentView = () => {
 	});
 
 	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
+	// eslint-disable-next-line
+	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
+		'questionHistory',
+		null,
+	);
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
@@ -67,42 +72,17 @@ const AssignmentView = () => {
 			avatarMessage: null,
 			answerList: [],
 		});
-	const [showoverLay, setShowOverLay] = useState(false);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
 		kind: '',
 		name: '',
 	});
-	// eslint-disable-next-line
-	const [answerData, setAnswerData] = useState<AnswerData>({
-		answerDate: '',
-		answerList: [],
-		avatarMessage: null,
-		completionAlgorithmType: null,
-		completionPercentage: 0,
-		confidence: null,
-		correctAnswerIds: null,
-		correctness: null,
-		informedCount: 0,
-		masteredQuestionCount: 0,
-		misinformedCount: 0,
-		moduleComplete: false,
-		notSureCount: 0,
-		onceCorrectCount: 0,
-		questionSeconds: 0,
-		questionsMastered: 0,
-		reviewSeconds: 0,
-		self: null,
-		totalQuestionCount: 0,
-		twiceCorrectCount: 0,
-		uninformedCount: 0,
-		unseenCount: 0,
-	});
+
 	const [clearSelection, setClearSelection] = useState(false);
 	const { assignmentKey } = useParams();
 
 	const { fetchModuleQuestions } = useModuleContentService();
-	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const { getCurrentRound } = useCurrentRoundService();
 	const { getAnswerHistory } = useAnswerHistoryService();
 
 	const fetchModuleQuestionsData = async () => {
@@ -113,6 +93,24 @@ const AssignmentView = () => {
 			];
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
+					(questionHistory: { answeredQuestionId: any }) => {
+						return (
+							questionHistory.answeredQuestionId ===
+							findQuestionInFocus(
+								moduleQuestionsResponse,
+								currentRoundQuestionsResponse,
+							).id
+						);
+					},
+				);
+				setSelectedAnswers(savedData.answersChosen);
+				setCurrentRoundAnswerOverLayData((roundAnswerOverLayData) => {
+					return {
+						...roundAnswerOverLayData,
+						correctAnswerIds: [...savedData.correctAnswerIds],
+					};
+				});
 				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 				setQuestionInFocus(
@@ -142,21 +140,6 @@ const AssignmentView = () => {
 			getAnsHist();
 		}
 	}, [questionData]);
-
-	useEffect(() => {
-		const putCurrentRoundRes = async () => {
-			const overLayData = await putCurrentRound(
-				currentRoundQuestionListData?.id,
-				questionInFocus.id,
-				answerData,
-			);
-			setCurrentRoundAnswerOverLayData(overLayData);
-			setShowOverLay(true);
-		};
-		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
-			putCurrentRoundRes();
-		}
-	}, [answerData]);
 
 	return (
 		<main id="learning-assignment">
@@ -193,7 +176,11 @@ const AssignmentView = () => {
 							overflow="hidden"
 							borderRadius={24}
 							p={'72px'}>
-							<Question questionInFocus={questionInFocus} />
+							<Question
+								questionInFocus={questionInFocus}
+								review={true}
+								currentRoundQuestionListData={currentRoundQuestionListData}
+							/>
 						</Box>
 						<Box
 							style={{
@@ -225,24 +212,8 @@ const AssignmentView = () => {
 								justifyContent={'space-between'}
 								display={'flex'}
 								marginTop={'12px'}>
-								<Button onClick={() => {}} variant={'ampSolid'} w="150px">
-									<Text>
-										{i18n(showoverLay ? 'continueBtnText' : 'submitBtnText')}
-									</Text>
-								</Button>
-								<Button
-									_hover={{ backgroundColor: 'white' }}
-									height="12px"
-									variant="ghost"
-									onClick={() => {
-										setSelectedAnswers([]);
-										setClearSelection(true);
-									}}>
-									{!showoverLay && (
-										<Text fontSize={'14px'} color={'ampSecondary.500'}>
-											{i18n('clearSelection')}
-										</Text>
-									)}
+								<Button onClick={() => {}} variant={'ampSolid'} w="200px">
+									<Text>{i18n('explainBtnText')}</Text>
 								</Button>
 							</HStack>
 						</Box>
