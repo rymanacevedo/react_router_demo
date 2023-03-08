@@ -57,7 +57,6 @@ export type CurrentRoundQuestionListData = {
 	id: number | string;
 	questionList: QuestionInFocus[];
 	seenCount: number | any;
-	onceCorrectCount: number | any;
 };
 
 export type CurrentRoundAnswerOverLayData = {
