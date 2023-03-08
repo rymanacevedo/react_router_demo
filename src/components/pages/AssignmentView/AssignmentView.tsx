@@ -223,12 +223,7 @@ const AssignmentView = () => {
 	};
 
 	const learningCount = () => {
-		return (
-			currentRoundQuestionListData?.notSureCount +
-			currentRoundQuestionListData?.uninformedCount +
-			currentRoundQuestionListData?.informedCount +
-			currentRoundQuestionListData?.onceCorrectCount
-		);
+		return seenCount() - currentRoundQuestionListData?.misinformedCount;
 	};
 
 	const getNextTask = () => {

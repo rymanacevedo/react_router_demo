@@ -86,7 +86,7 @@ const ProgressMenu = ({
 									{i18n('learning')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									7
+									{learningCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
