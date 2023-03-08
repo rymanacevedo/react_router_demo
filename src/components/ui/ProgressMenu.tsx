@@ -75,7 +75,7 @@ const ProgressMenu = ({
 							</VStack>
 							<VStack paddingLeft="12px">
 								<Text fontSize={'12px'} fontWeight="400">
-									{i18n('incorect')}
+									{i18n('incorrect')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
 									{misinformedCount}
