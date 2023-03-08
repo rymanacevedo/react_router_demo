@@ -132,7 +132,7 @@ const AssignmentView = () => {
 			];
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
-				if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
+				if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 					setQuestionInFocus(
