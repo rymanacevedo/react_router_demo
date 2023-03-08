@@ -74,7 +74,7 @@ const MultipleChoiceAnswers = ({
 				display="flex"
 				flexDirection={'column'}
 				justifyContent="space-between"
-				minHeight={400}
+				minHeight={350}
 				h="100%">
 				<>
 					{questionInFocus?.answerList

@@ -152,23 +152,23 @@ const AnswerOverLay = ({
 				isIndeterminate={isIndeterminate}>
 				<SlideFade in={isEnabled}>
 					{choseIDK ? (
-						<>
+						<div style={{left: '13px', position: 'relative'}}>
 							You answered{' '}
 							<Badge variant={variant}>
 								<span style={{ display: 'flex' }}>
 									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
 								</span>
 							</Badge>
-						</>
+						</div>
 					) : (
-						<>
+						<div style={{left: '15px', position: 'relative'}}>
 							You were <Badge variant={variant}>{text}</Badge> and{' '}
 							<Badge variant={variant}>
 								<span style={{ display: 'flex' }}>
 									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
 								</span>
 							</Badge>
-						</>
+						</div>
 					)}
 				</SlideFade>
 				<Slide
@@ -176,7 +176,10 @@ const AnswerOverLay = ({
 					direction="top"
 					style={{
 						position: 'relative',
-						top: `${!isEnabled ? '10px' : ''}`,
+						top: `${!isEnabled ? '25px' : ''}`,
+						fontSize: 25,
+						display: 'flex',
+						left: '15px'
 					}}>
 					<RichContentComponent
 						style={{
