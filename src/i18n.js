@@ -105,7 +105,7 @@ const resources = {
          //    ProgressMenu.jsx
          //////////////////////////////////
          mastered: 'Mastered',
-         incorect: 'Incorect',
+         incorrect: 'Incorrect',
          learning: 'Learning',
          unseen: 'Unseen',
          sessionTimer: 'Session Timer',

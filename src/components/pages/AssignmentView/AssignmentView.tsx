@@ -222,6 +222,10 @@ const AssignmentView = () => {
 		);
 	};
 
+	const learningCount = () => {
+		return seenCount() - currentRoundQuestionListData?.misinformedCount;
+	};
+
 	const getNextTask = () => {
 		setSelectedAnswers([]);
 		setClearSelection(true);
@@ -391,7 +395,20 @@ const AssignmentView = () => {
 							</HStack>
 						</Box>
 					</HStack>
-					<ProgressMenu isOpen={isOpen} />
+					<ProgressMenu
+						isOpen={isOpen}
+						percent={progressPercent}
+						totalQuestionCount={
+							currentRoundQuestionListData?.totalQuestionCount
+						}
+						masteredQuestionCount={
+							currentRoundQuestionListData?.masteredQuestionCount
+						}
+						unseenCount={currentRoundQuestionListData?.unseenCount}
+						misinformedCount={currentRoundQuestionListData?.misinformedCount}
+						seenCount={seenCount()}
+						learningCount={learningCount()}
+					/>
 				</HStack>
 			</Container>
 		</main>
