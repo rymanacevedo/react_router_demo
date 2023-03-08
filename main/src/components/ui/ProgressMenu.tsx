@@ -14,27 +14,47 @@ import { useTranslation } from 'react-i18next';
 
 type ProgressMenuType = {
 	isOpen: boolean;
-	percent: number;
-	totalQuestionCount: number;
-	masteredQuestionCount: number;
-	unseenCount: number;
-	misinformedCount: number;
-	seenCount: number;
-	learningCount: number;
 };
 
-const ProgressMenu = ({
-	isOpen,
-	masteredQuestionCount,
-	misinformedCount,
-	percent,
-	seenCount,
-	totalQuestionCount,
-	unseenCount,
-	learningCount,
-}: ProgressMenuType) => {
+const ProgressMenu = ({ isOpen }: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
 	return (
+<<<<<<< HEAD
+		<Box
+			style={{
+				backgroundColor: 'white',
+			}}
+			boxShadow="2xl"
+			h="745px"
+			w="345px"
+			borderRadius={24}
+			boxSizing="border-box">
+			<ProgressMessageComponent />
+			<Divider borderWidth="1px" width="297px" marginLeft="24px" />
+			<Box padding="24px">
+				<Text fontSize="21px" fontWeight={'600'}>
+					The road to mastery
+				</Text>
+				<Progress
+					colorScheme="green"
+					marginTop="12px"
+					size="lg"
+					height="24px"
+					value={20}
+					borderRadius="24px"
+					variant='ampDarkSuccess'
+					bg='ampSuccess.50'
+				/>
+				<HStack marginTop='12px'>
+				<VStack><Text fontSize={'12px'} fontWeight='400'>Mastered</Text> <Text fontSize={'16px'} fontWeight="600" w='100%'>5</Text></VStack>
+				<VStack paddingLeft='12px'><Text fontSize={'12px'} fontWeight='400'>Incorect</Text> <Text fontSize={'16px'} fontWeight="600" w='100%'>4</Text></VStack>
+				<VStack paddingLeft='12px'><Text fontSize={'12px'} fontWeight='400'>Learning</Text> <Text fontSize={'16px'} fontWeight="600" w='100%'>7</Text></VStack>
+				<VStack paddingLeft='12px'><Text fontSize={'12px'} fontWeight='400'>Unseen</Text> <Text fontSize={'16px'} fontWeight="600" w='100%'>18</Text></VStack>
+				</HStack>
+				
+			</Box>
+		</Box>
+=======
 		<SlideFade in={isOpen} offsetX="180px" offsetY="0px">
 			<VStack
 				style={{
@@ -59,7 +79,7 @@ const ProgressMenu = ({
 							marginTop="12px"
 							size="lg"
 							height="24px"
-							value={percent}
+							value={20}
 							borderRadius="24px"
 							variant="ampDarkSuccess"
 							bg="ampSuccess.50"
@@ -70,15 +90,15 @@ const ProgressMenu = ({
 									{i18n('mastered')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{masteredQuestionCount}
+									5
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
 								<Text fontSize={'12px'} fontWeight="400">
-									{i18n('incorrect')}
+									{i18n('incorect')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{misinformedCount}
+									4
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -86,7 +106,7 @@ const ProgressMenu = ({
 									{i18n('learning')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{learningCount}
+									7
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -94,7 +114,7 @@ const ProgressMenu = ({
 									{i18n('unseen')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{unseenCount}
+									18
 								</Text>
 							</VStack>
 						</HStack>
@@ -118,6 +138,7 @@ const ProgressMenu = ({
 				</Box>
 			</VStack>
 		</SlideFade>
+>>>>>>> 8a334c31f (Feat: create progressMenu, CountUpTimer, added progressToaster)
 	);
 };
 

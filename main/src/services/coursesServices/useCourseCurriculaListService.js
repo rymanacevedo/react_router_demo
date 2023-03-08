@@ -1,0 +1,47 @@
+import { useState, useContext } from 'react';
+import { useAuth } from '../../hooks/useAuth';
+import axios from 'axios';
+
+import DialogContext from '../../components/DialogProvider';
+
+const useCourseCurriculaListService = () => {
+	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
+	const { setShowAlert } = useContext(DialogContext);
+
+	const { user } = useAuth();
+	let subaccount = '';
+	user.roles.forEach((role) => {
+		if (role.name === 'Learner') {
+			subaccount = role.account;
+		}
+	});
+
+	const getCurriculaCourseList = async (courseKey) => {
+		try {
+			setLoading(true);
+			const accountDataResponse = await axios({
+				url: `/v2/courses/${courseKey}/course-curricula?subaccount=${subaccount}`,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+				method: 'get',
+			});
+
+			return accountDataResponse.data;
+		} catch (err) {
+			console.log(err);
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+	return { error, loading, getCurriculaCourseList };
+};
+export default useCourseCurriculaListService;
