@@ -179,7 +179,6 @@ const AssignmentView = () => {
 							h={isSmallerThan1000 ? '' : '100%'}
 							display={'flex'}
 							flexDirection="column"
-							justifyContent={'space-between'}
 							w="100%"
 							maxWidth={726}
 							overflow="hidden"
@@ -192,6 +191,7 @@ const AssignmentView = () => {
 								clearSelection={clearSelection}
 								setClearSelection={setClearSelection}
 								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+								inReview={true}
 							/>
 
 							<HStack
