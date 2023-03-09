@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
 	Box,
 	Button,
@@ -18,14 +18,12 @@ import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
 	AnswerData,
-	ApiRes,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
 	SelectedAnswers,
 } from './AssignmentTypes';
 import { findQuestionInFocus } from './findQuestionInFocus';
-import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 
@@ -39,8 +37,6 @@ const AssignmentView = () => {
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
-
-	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
 		'questionHistory',
 		null,
@@ -106,14 +102,13 @@ const AssignmentView = () => {
 		unseenCount: 0,
 	});
 	const [clearSelection, setClearSelection] = useState(false);
-	const [questionSeconds, setQuestionSeconds] = useState(0);
-	// eslint-disable-next-line
 	const { assignmentKey } = useParams();
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
-	const { getAnswerHistory } = useAnswerHistoryService();
 	const navigate = useNavigate();
+	const intervalRef = useRef<ReturnType<typeof setInterval>>();
+	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -165,11 +160,11 @@ const AssignmentView = () => {
 			return {
 				...answerDataArg,
 				answerDate: findDateData(),
-				questionSeconds: questionSeconds,
+				questionSeconds: questionSecondsRef.current,
 				answerList: [...selectedAnswers],
 			};
 		});
-		setQuestionSeconds(0);
+		questionSecondsRef.current = 0;
 	};
 
 	const clearSelectionButtonFunc = () => {
@@ -184,27 +179,17 @@ const AssignmentView = () => {
 	};
 
 	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setQuestionSeconds((prevSeconds) => prevSeconds + 1);
+		intervalRef.current = setInterval(() => {
+			questionSecondsRef.current = questionSecondsRef.current + 1;
 		}, 1000);
 
-		return () => clearInterval(intervalId);
+		return () => clearInterval(intervalRef.current);
 	}, []);
 	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
-	useEffect(() => {
-		const getAnsHist = async () => {
-			const resp = await getAnswerHistory(assignmentKey);
-			setAnsHistory(resp);
-		};
-
-		if (questionData) {
-			getAnsHist();
-		}
-	}, [questionData]);
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
@@ -271,7 +256,7 @@ const AssignmentView = () => {
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
-					answerHistory={ansHistory}
+					currentQuestion={questionInFocus}
 				/>{' '}
 				<HStack width="100%">
 					<HStack
@@ -365,7 +350,10 @@ const AssignmentView = () => {
 							</HStack>
 						</Box>
 					</HStack>
-					<ProgressMenu isOpen={isOpen} />
+					<ProgressMenu
+						isOpen={isOpen}
+						currentRoundQuestionListData={currentRoundQuestionListData}
+					/>
 				</HStack>
 			</Container>
 		</main>

@@ -1,31 +1,23 @@
-import { Box, Button, HStack, Progress, Text, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	HStack,
+	Progress,
+	Text,
+	VStack,
+	useMediaQuery,
+} from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
-import { useMediaQuery } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 
 type ProgressBarMenu = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
-	answerHistory: ApiRes;
 	questionData: any;
 	currentRoundQuestionListData: any;
-};
-
-type ApiRes = {
-	items: Item[];
-};
-
-type Item = {
-	publishedQuestionUri: string;
-	answerHistory: AnswerHistory[];
-};
-
-type AnswerHistory = {
-	roundNumber: number;
-	confidence: string;
-	correctness: string;
+	currentQuestion: any;
 };
 
 type ModuleTitleType = {
@@ -41,7 +33,6 @@ type RoundNumberType = {
 const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
 	return (
 		<Text fontSize={'21px'} fontWeight={'600'}>
-			{/* {i18n('theScienceOfLearning')} */}
 			{assignmentType}: {title}
 		</Text>
 	);
@@ -93,10 +84,16 @@ type AnswerHistoryType = {
 	seenCount: number;
 	misinformedCount: number;
 	unseenCount: number;
-	answerHistory: ApiRes;
+	roundLength: any;
+	currentQuestion: any;
+	questionList: any;
 };
 
-const variantFunc = (answerHistory: any, dotIndex: number) => {
+const variantFunc = (
+	dotIndex: number,
+	currentQuestion: any,
+	questionList: any,
+) => {
 	type LookupType = {
 		[key: string]: string;
 		OneAnswerPartSureCorrect: string;
@@ -109,6 +106,8 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		PartSurePartiallyCorrect: string;
 		OneAnswerPartSureIncorrect: string;
 		PartSureIncorrect: string;
+		currentQuestion: string;
+		NotSureNoAnswerSelected: string;
 	};
 	const lookup: LookupType = {
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
@@ -121,32 +120,38 @@ const variantFunc = (answerHistory: any, dotIndex: number) => {
 		PartSurePartiallyCorrect: 'ampWarningOutline',
 		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
 		PartSureIncorrect: 'ampDarkErrorOutline',
+		currentQuestion: 'ampSecondaryDot',
+		NotSureNoAnswerSelected: 'ampNeutralFilled',
 	};
 
-	if (answerHistory.items) {
-		const wholeAnswerString: any = answerHistory.items.map(
-			(ans: any, i: number) => {
-				if (i === dotIndex) {
-					const classString: keyof LookupType = `${ans.answerHistory[0].confidence}${ans.answerHistory[0].correctness}`;
-					return lookup[classString];
-				} else {
-					return lookup.empty;
-				}
-			},
-		);
+	let classNamesArray = questionList?.map((question: any) => {
+		if (dotIndex === currentQuestion.displayOrder - 1) {
+			return lookup.currentQuestion;
+		}
+		if (question.answered) {
+			return lookup[`${question.confidence}${question.correctness}`];
+		} else {
+			return lookup.empty;
+		}
+	});
 
-		return wholeAnswerString[dotIndex];
-	}
+	return classNamesArray[dotIndex] !== undefined
+		? classNamesArray[dotIndex]
+		: lookup.empty;
 };
 
 const AnswerHistoryComponent = ({
-	totalQuestionCount,
-	answerHistory,
+	roundLength,
+	currentQuestion,
+	questionList,
 }: AnswerHistoryType) => {
 	return (
 		<HStack>
-			{Array.from({ length: totalQuestionCount }, (_, i) => (
-				<AmpMicroChip key={i} variant={variantFunc(answerHistory, i)} />
+			{Array.from({ length: roundLength }, (_, i) => (
+				<AmpMicroChip
+					key={i}
+					variant={variantFunc(i, currentQuestion, questionList)}
+				/>
 			))}
 		</HStack>
 	);
@@ -155,8 +160,8 @@ const AnswerHistoryComponent = ({
 const TestProgressBarMenu = ({
 	isOpen,
 	setIsOpen,
-	answerHistory,
 	questionData,
+	currentQuestion,
 	currentRoundQuestionListData,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
@@ -166,10 +171,12 @@ const TestProgressBarMenu = ({
 		currentRoundQuestionListData?.uninformedCount +
 		currentRoundQuestionListData?.informedCount +
 		currentRoundQuestionListData?.misinformedCount;
-
-	const progress = currentRoundQuestionListData
-		? currentRoundQuestionListData?.totalQuestionCount /
-		  currentRoundQuestionListData?.masteredQuestionCount
+	const progressPercent = currentRoundQuestionListData
+		? Math.floor(
+				(currentRoundQuestionListData?.masteredQuestionCount /
+					currentRoundQuestionListData?.totalQuestionCount) *
+					100,
+		  )
 		: 0;
 
 	const assignmentType = questionData?.kind;
@@ -209,7 +216,9 @@ const TestProgressBarMenu = ({
 						unseenCount={currentRoundQuestionListData?.unseenCount}
 						misinformedCount={currentRoundQuestionListData?.misinformedCount}
 						seenCount={seenCount}
-						answerHistory={answerHistory}
+						roundLength={currentRoundQuestionListData?.questionList?.length}
+						currentQuestion={currentQuestion}
+						questionList={currentRoundQuestionListData?.questionList}
 					/>
 				</VStack>
 
@@ -239,7 +248,7 @@ const TestProgressBarMenu = ({
 				)}
 			</HStack>
 			<Progress
-				value={progress}
+				value={progressPercent}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}

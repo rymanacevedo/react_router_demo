@@ -84,6 +84,7 @@ const resources = {
          theScienceOfLearning:'The Science of Learning',
          about: 'About',
          minsLeft:'mins left',
+         question: 'Question',
          questions: 'Questions',
          showProgress:'Show Progress',
          hideProgress: 'Hide Progress',
@@ -93,6 +94,10 @@ const resources = {
          //////////////////////////////////
          mins: 'mins',
          min: "min",
+         minutes: 'minutes',
+         minute: 'minute',
+         hour: 'hour',
+         hours: 'hours',
          minToComplete:'min to complete',
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
@@ -100,7 +105,7 @@ const resources = {
          //    ProgressMenu.jsx
          //////////////////////////////////
          mastered: 'Mastered',
-         incorect: 'Incorect',
+         incorrect: 'Incorrect',
          learning: 'Learning',
          unseen: 'Unseen',
          sessionTimer: 'Session Timer',

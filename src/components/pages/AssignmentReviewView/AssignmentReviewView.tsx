@@ -15,14 +15,12 @@ import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
-	ApiRes,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
 	SelectedAnswers,
 } from '../AssignmentView/AssignmentTypes';
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
-import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 
@@ -37,7 +35,6 @@ const AssignmentView = () => {
 		answerList: [{ answerRc: '', id: '' }],
 	});
 
-	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
 	// eslint-disable-next-line
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
 		'questionHistory',
@@ -83,7 +80,6 @@ const AssignmentView = () => {
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound } = useCurrentRoundService();
-	const { getAnswerHistory } = useAnswerHistoryService();
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -130,16 +126,6 @@ const AssignmentView = () => {
 			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
-	useEffect(() => {
-		const getAnsHist = async () => {
-			const resp = await getAnswerHistory(assignmentKey);
-			setAnsHistory(resp);
-		};
-
-		if (questionData) {
-			getAnsHist();
-		}
-	}, [questionData]);
 
 	return (
 		<main id="learning-assignment">
@@ -155,7 +141,7 @@ const AssignmentView = () => {
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
-					answerHistory={ansHistory}
+					currentQuestion={questionInFocus}
 				/>{' '}
 				<HStack width="100%">
 					<HStack
@@ -218,7 +204,10 @@ const AssignmentView = () => {
 							</HStack>
 						</Box>
 					</HStack>
-					<ProgressMenu isOpen={isOpen} />
+					<ProgressMenu
+						isOpen={isOpen}
+						currentRoundQuestionListData={currentRoundQuestionListData}
+					/>
 				</HStack>
 			</Container>
 		</main>

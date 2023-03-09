@@ -6,8 +6,8 @@ import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
 import {
 	CheckIcon,
 	Cross1Icon,
-	QuestionMarkCircledIcon,
 	MinusCircledIcon,
+	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
 
 const AnswerOverLay = ({
