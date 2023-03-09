@@ -108,7 +108,6 @@ const AssignmentView = () => {
 	const [clearSelection, setClearSelection] = useState(false);
 	const [questionSeconds, setQuestionSeconds] = useState(0);
 	// eslint-disable-next-line
-	const [correctAnswerIds, setCorrectAnswerIds] = useState([]);
 	const { assignmentKey } = useParams();
 
 	const { fetchModuleQuestions } = useModuleContentService();
