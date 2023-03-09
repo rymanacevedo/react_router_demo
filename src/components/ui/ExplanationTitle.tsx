@@ -9,7 +9,7 @@ const ExplanationTitle = ({ answer }: any) => {
 	};
 	const textLookup: { [key: string]: any } = {
 		SureCorrect: 'You knew this one!',
-		SureIncorrect: 'You didn/’t know this one, let/’s dig in.',
+		SureIncorrect: 'You didn’t know this one, let’s dig in.',
 		UnsureCorrect: 'You knew this one! You just weren’t sure.',
 		UnsureIncorrect: 'You didn’t know this one, let’s dig in.',
 		PartSurePartiallyCorrect: 'You got part of this one correct.',
