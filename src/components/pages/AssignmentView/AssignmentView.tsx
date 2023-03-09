@@ -12,7 +12,7 @@ import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
@@ -22,25 +22,10 @@ import {
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
 	SelectedAnswers,
-} from './AssignmentViewTypes';
+} from './AssignmentTypes';
 import { findQuestionInFocus } from './findQuestionInFocus';
-import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
-
-type ApiRes = {
-	items: Item[];
-};
-
-type Item = {
-	publishedQuestionUri: string;
-	answerHistory: AnswerHistory[];
-};
-
-type AnswerHistory = {
-	roundNumber: number;
-	confidence: string;
-	correctness: string;
-};
+import { useLocalStorage } from '../../../hooks/useLocalStorage';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
@@ -52,8 +37,10 @@ const AssignmentView = () => {
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
-
-	const [ansHistory, setAnsHistory] = useState<ApiRes | any>();
+	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
+		'questionHistory',
+		null,
+	);
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
@@ -119,9 +106,7 @@ const AssignmentView = () => {
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
-	const { getAnswerHistory } = useAnswerHistoryService();
 	const navigate = useNavigate();
-	const location = useLocation();
 	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
 
@@ -143,7 +128,7 @@ const AssignmentView = () => {
 						),
 					);
 				} else {
-					navigate('/app/learning/assignmentReview');
+					navigate(`/app/learning/assignmentReview/${assignmentKey}`);
 				}
 			}
 		} catch (error) {
@@ -182,56 +167,17 @@ const AssignmentView = () => {
 		questionSecondsRef.current = 0;
 	};
 
-	const progressPercent = currentRoundQuestionListData
-		? Math.floor(
-				(currentRoundQuestionListData?.masteredQuestionCount /
-					currentRoundQuestionListData?.totalQuestionCount) *
-					100,
-		  )
-		: 0;
-
-	const estimatedTimeRemaining = () => {
-		const time = location?.state?.estimatedTimeToComplete;
-		let hour = 0;
-		let min = 0;
-
-		if (time == null || time <= 0) {
-			return '';
-		}
-
-		if (time >= 3600) {
-			// over an hour
-			hour = time / 3600;
-			min = Math.ceil((time % 3600) / 60);
-
-			return `About ${hour} hr ${min} mins remaining.`;
-		} else {
-			// under one hour
-			min = Math.ceil(time / 60);
-
-			return `About ${min} mins remaining.`;
-		}
-	};
-
-	const seenCount = () => {
-		return (
-			currentRoundQuestionListData?.notSureCount +
-			currentRoundQuestionListData?.uninformedCount +
-			currentRoundQuestionListData?.informedCount +
-			currentRoundQuestionListData?.misinformedCount
-		);
-	};
-
-	const learningCount = () => {
-		return seenCount() - currentRoundQuestionListData?.misinformedCount;
+	const clearSelectionButtonFunc = () => {
+		setSelectedAnswers([]);
+		setClearSelection(true);
 	};
 
 	const getNextTask = () => {
-		setSelectedAnswers([]);
-		setClearSelection(true);
+		clearSelectionButtonFunc();
 		setShowOverLay(false);
 		fetchModuleQuestionsData();
 	};
+
 	useEffect(() => {
 		intervalRef.current = setInterval(() => {
 			questionSecondsRef.current = questionSecondsRef.current + 1;
@@ -244,16 +190,6 @@ const AssignmentView = () => {
 			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
-	useEffect(() => {
-		const getAnsHist = async () => {
-			const resp = await getAnswerHistory(assignmentKey);
-			setAnsHistory(resp);
-		};
-
-		if (questionData) {
-			getAnsHist();
-		}
-	}, [questionData]);
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
@@ -262,13 +198,49 @@ const AssignmentView = () => {
 				questionInFocus.id,
 				answerData,
 			);
-			setCurrentRoundAnswerOverLayData(overLayData);
-			setShowOverLay(true);
+
+			if (overLayData) {
+				let updatedLocalQuestionHistory = localQuestionHistory
+					?.roundQuestionsHistory.length
+					? {
+							currentRoundId: currentRoundQuestionListData?.id,
+							roundQuestionsHistory: [
+								...localQuestionHistory?.roundQuestionsHistory,
+								{
+									answeredQuestionId: questionInFocus.id,
+									answersChosen: [...answerData.answerList],
+									correctAnswerIds: [...overLayData.correctAnswerIds],
+								},
+							],
+					  }
+					: {
+							currentRoundId: currentRoundQuestionListData?.id,
+							roundQuestionsHistory: [
+								{
+									answeredQuestionId: questionInFocus.id,
+									answersChosen: [...answerData.answerList],
+									correctAnswerIds: [...overLayData.correctAnswerIds],
+								},
+							],
+					  };
+
+				setLocalQuestionHistory(updatedLocalQuestionHistory);
+				setCurrentRoundAnswerOverLayData(overLayData);
+				setShowOverLay(true);
+			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
 		}
 	}, [answerData]);
+
+	const continueBtnFunc = () => {
+		if (showoverLay) {
+			getNextTask();
+		} else {
+			submitAnswer();
+		}
+	};
 
 	return (
 		<main id="learning-assignment">
@@ -280,25 +252,11 @@ const AssignmentView = () => {
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
 				<TestProgressBarMenu
-					assignmentType={questionData.kind}
-					title={questionData.name}
-					timeRemaining={estimatedTimeRemaining()}
-					progress={progressPercent}
+					questionData={questionData}
 					isOpen={isOpen}
 					setIsOpen={setIsOpen}
-					roundNumber={currentRoundQuestionListData?.roundNumber}
-					roundPhase={currentRoundQuestionListData?.roundPhase}
-					totalQuestionCount={currentRoundQuestionListData?.totalQuestionCount}
-					masteredQuestionCount={
-						currentRoundQuestionListData?.masteredQuestionCount
-					}
-					unseenCount={currentRoundQuestionListData?.unseenCount}
-					misinformedCount={currentRoundQuestionListData?.misinformedCount}
-					seenCount={seenCount()}
-					answerHistory={ansHistory}
-					roundLength={currentRoundQuestionListData?.questionList.length}
+					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
-					questionList={currentRoundQuestionListData?.questionList}
 				/>{' '}
 				<HStack width="100%">
 					<HStack
@@ -369,9 +327,7 @@ const AssignmentView = () => {
 								display={'flex'}
 								marginTop={'12px'}>
 								<Button
-									onClick={() => {
-										showoverLay ? getNextTask() : submitAnswer();
-									}}
+									onClick={continueBtnFunc}
 									variant={'ampSolid'}
 									w="150px">
 									<Text>
@@ -383,8 +339,7 @@ const AssignmentView = () => {
 									height="12px"
 									variant="ghost"
 									onClick={() => {
-										setSelectedAnswers([]);
-										setClearSelection(true);
+										clearSelectionButtonFunc();
 									}}>
 									{!showoverLay && (
 										<Text fontSize={'14px'} color={'ampSecondary.500'}>
@@ -397,17 +352,7 @@ const AssignmentView = () => {
 					</HStack>
 					<ProgressMenu
 						isOpen={isOpen}
-						percent={progressPercent}
-						totalQuestionCount={
-							currentRoundQuestionListData?.totalQuestionCount
-						}
-						masteredQuestionCount={
-							currentRoundQuestionListData?.masteredQuestionCount
-						}
-						unseenCount={currentRoundQuestionListData?.unseenCount}
-						misinformedCount={currentRoundQuestionListData?.misinformedCount}
-						seenCount={seenCount()}
-						learningCount={learningCount()}
+						currentRoundQuestionListData={currentRoundQuestionListData}
 					/>
 				</HStack>
 			</Container>

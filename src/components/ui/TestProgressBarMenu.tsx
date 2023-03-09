@@ -10,49 +10,19 @@ import {
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import { useLocation } from 'react-router-dom';
 
 type ProgressBarMenu = {
 	isOpen: boolean;
 	setIsOpen: (isOpen: boolean) => void;
-	title: string;
-	timeRemaining: string;
-	assignmentType: string;
-	progress: number;
-	roundNumber?: number;
-	roundPhase?: string;
-	totalQuestionCount: any;
-	masteredQuestionCount: any;
-	unseenCount: any;
-	misinformedCount: number;
-	seenCount: number;
-	answerHistory: ApiRes;
-	roundLength?: number;
+	questionData: any;
+	currentRoundQuestionListData: any;
 	currentQuestion: any;
-	questionList: any;
-};
-
-type ApiRes = {
-	items: Item[];
-};
-
-type Item = {
-	publishedQuestionUri: string;
-	answerHistory: AnswerHistory[];
-};
-
-type AnswerHistory = {
-	roundNumber: number;
-	confidence: string;
-	correctness: string;
 };
 
 type ModuleTitleType = {
 	assignmentType: string;
 	title: string;
-};
-
-type ModuleTimeRemainingType = {
-	timeRemaining: string;
 };
 
 type RoundNumberType = {
@@ -68,10 +38,34 @@ const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
 	);
 };
 
-const ModuleTimeRemaining = ({ timeRemaining }: ModuleTimeRemainingType) => {
+const ModuleTimeRemaining = () => {
+	const location = useLocation();
+
+	const estimatedTimeRemaining = () => {
+		const time = location?.state?.estimatedTimeToComplete;
+		let hour = 0;
+		let min = 0;
+
+		if (time == null || time <= 0) {
+			return '';
+		}
+
+		if (time >= 3600) {
+			// over an hour
+			hour = time / 3600;
+			min = Math.ceil((time % 3600) / 60);
+
+			return `About ${hour} hr ${min} mins remaining.`;
+		} else {
+			// under one hour
+			min = Math.ceil(time / 60);
+
+			return `About ${min} mins remaining.`;
+		}
+	};
 	return (
 		<Text fontSize={'16px'} color="ampNeutral.800">
-			{timeRemaining}
+			{estimatedTimeRemaining()}
 		</Text>
 	);
 };
@@ -166,22 +160,28 @@ const AnswerHistoryComponent = ({
 const TestProgressBarMenu = ({
 	isOpen,
 	setIsOpen,
-	title,
-	timeRemaining,
-	assignmentType,
-	progress,
-	roundNumber,
-	totalQuestionCount,
-	masteredQuestionCount,
-	unseenCount,
-	misinformedCount,
-	seenCount,
-	roundLength,
+	questionData,
 	currentQuestion,
-	questionList,
+	currentRoundQuestionListData,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const seenCount =
+		currentRoundQuestionListData?.notSureCount +
+		currentRoundQuestionListData?.uninformedCount +
+		currentRoundQuestionListData?.informedCount +
+		currentRoundQuestionListData?.misinformedCount;
+	const progressPercent = currentRoundQuestionListData
+		? Math.floor(
+				(currentRoundQuestionListData?.masteredQuestionCount /
+					currentRoundQuestionListData?.totalQuestionCount) *
+					100,
+		  )
+		: 0;
+
+	const assignmentType = questionData?.kind;
+	const title = questionData?.name;
+
 	return (
 		<Box width="100vw" boxSizing="border-box">
 			<HStack
@@ -198,21 +198,27 @@ const TestProgressBarMenu = ({
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
 					<ModuleTitle title={title} assignmentType={assignmentType} />
-					<ModuleTimeRemaining timeRemaining={timeRemaining} />
+					<ModuleTimeRemaining />
 				</VStack>
 				<VStack
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
-					<RoundNumberAndPhase roundNumber={roundNumber} />
+					<RoundNumberAndPhase
+						roundNumber={currentRoundQuestionListData?.roundNumber}
+					/>
 					<AnswerHistoryComponent
-						totalQuestionCount={totalQuestionCount}
-						masteredQuestionCount={masteredQuestionCount}
-						unseenCount={unseenCount}
-						misinformedCount={misinformedCount}
+						totalQuestionCount={
+							currentRoundQuestionListData?.totalQuestionCount
+						}
+						masteredQuestionCount={
+							currentRoundQuestionListData?.masteredQuestionCount
+						}
+						unseenCount={currentRoundQuestionListData?.unseenCount}
+						misinformedCount={currentRoundQuestionListData?.misinformedCount}
 						seenCount={seenCount}
-						roundLength={roundLength}
+						roundLength={currentRoundQuestionListData?.questionList?.length}
 						currentQuestion={currentQuestion}
-						questionList={questionList}
+						questionList={currentRoundQuestionListData?.questionList}
 					/>
 				</VStack>
 
@@ -242,7 +248,7 @@ const TestProgressBarMenu = ({
 				)}
 			</HStack>
 			<Progress
-				value={progress}
+				value={progressPercent}
 				height={'80px'}
 				colorScheme="gray"
 				zIndex={'1'}

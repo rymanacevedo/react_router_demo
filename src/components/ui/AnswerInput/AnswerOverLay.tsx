@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Slide, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
-import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentViewTypes';
+import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
 import {
 	CheckIcon,
 	Cross1Icon,
@@ -17,6 +17,7 @@ const AnswerOverLay = ({
 	IDK,
 	currentRoundAnswerOverLayData,
 	wasCorrectAnswerChosen,
+	inReview,
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
@@ -24,6 +25,7 @@ const AnswerOverLay = ({
 	IDK?: boolean;
 	currentRoundAnswerOverLayData?: any;
 	wasCorrectAnswerChosen?: boolean;
+	inReview?: boolean;
 }) => {
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
@@ -135,7 +137,8 @@ const AnswerOverLay = ({
 	return (
 		<>
 			<Checkbox
-				className={'label-hover-effect'}
+				className={inReview ? '' : 'label-hover-effect'}
+				style={{ cursor: inReview ? 'auto' : '' }}
 				w="100%"
 				variant={'answer'}
 				colorScheme={'transparent'}

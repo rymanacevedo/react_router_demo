@@ -1,5 +1,5 @@
 import { Box, Heading, Divider } from '@chakra-ui/react';
-import { SelectedAnswers } from '../pages/AssignmentView/AssignmentViewTypes';
+import { SelectedAnswers } from '../pages/AssignmentView/AssignmentTypes';
 import AnswerInput from './AnswerInput/AnswerInput';
 
 export interface Answer {

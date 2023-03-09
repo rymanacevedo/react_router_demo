@@ -11,29 +11,36 @@ import ProgressMessageComponent from './ProgressMessageComponent';
 import { LapTimerIcon } from '@radix-ui/react-icons';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
+import { CurrentRoundQuestionListData } from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressMenuType = {
 	isOpen: boolean;
-	percent: number;
-	totalQuestionCount: number;
-	masteredQuestionCount: number;
-	unseenCount: number;
-	misinformedCount: number;
-	seenCount: number;
-	learningCount: number;
+	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
 };
 
 const ProgressMenu = ({
 	isOpen,
-	masteredQuestionCount,
-	misinformedCount,
-	percent,
-	seenCount,
-	totalQuestionCount,
-	unseenCount,
-	learningCount,
+	currentRoundQuestionListData,
 }: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
+	const progressPercent = currentRoundQuestionListData
+		? Math.floor(
+				(currentRoundQuestionListData?.masteredQuestionCount /
+					currentRoundQuestionListData?.totalQuestionCount) *
+					100,
+		  )
+		: 0;
+
+	const learningCount = () => {
+		return (
+			currentRoundQuestionListData?.notSureCount +
+			currentRoundQuestionListData?.uninformedCount +
+			currentRoundQuestionListData?.informedCount +
+			currentRoundQuestionListData?.misinformedCount -
+			currentRoundQuestionListData?.misinformedCount
+		);
+	};
+
 	return (
 		<SlideFade in={isOpen} offsetX="180px" offsetY="0px">
 			<VStack
@@ -59,7 +66,7 @@ const ProgressMenu = ({
 							marginTop="12px"
 							size="lg"
 							height="24px"
-							value={percent}
+							value={progressPercent}
 							borderRadius="24px"
 							variant="ampDarkSuccess"
 							bg="ampSuccess.50"
@@ -70,7 +77,7 @@ const ProgressMenu = ({
 									{i18n('mastered')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{masteredQuestionCount}
+									{currentRoundQuestionListData?.masteredQuestionCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -78,7 +85,7 @@ const ProgressMenu = ({
 									{i18n('incorrect')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{misinformedCount}
+									{currentRoundQuestionListData?.misinformedCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -86,7 +93,7 @@ const ProgressMenu = ({
 									{i18n('learning')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{learningCount}
+									{Number(learningCount())}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -94,7 +101,7 @@ const ProgressMenu = ({
 									{i18n('unseen')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{unseenCount}
+									{currentRoundQuestionListData?.unseenCount}
 								</Text>
 							</VStack>
 						</HStack>
