@@ -13,8 +13,8 @@ import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
 
 type ProgressBarMenu = {
-	isOpen: boolean;
-	setIsOpen: (isOpen: boolean) => void;
+	isMenuOpen: boolean;
+	setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentQuestion: any;
@@ -158,8 +158,8 @@ const AnswerHistoryComponent = ({
 };
 
 const TestProgressBarMenu = ({
-	isOpen,
-	setIsOpen,
+	isMenuOpen,
+	setIsMenuOpen,
 	questionData,
 	currentQuestion,
 	currentRoundQuestionListData,
@@ -237,12 +237,12 @@ const TestProgressBarMenu = ({
 						borderColor={'ampPrimary.300'}
 						bg="ampWhite"
 						width="200px"
-						leftIcon={isOpen ? <ExitIcon /> : <EnterIcon />}
+						leftIcon={isMenuOpen ? <ExitIcon /> : <EnterIcon />}
 						onClick={() => {
-							setIsOpen(!isOpen);
+							setIsMenuOpen(!isMenuOpen);
 						}}>
 						<Text fontSize={'16px'} fontWeight="600">
-							{isOpen ? i18n('hideProgress') : i18n('showProgress')}
+							{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}
 						</Text>
 					</Button>
 				)}

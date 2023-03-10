@@ -152,6 +152,8 @@ const resources = {
          other: 'Other (explain)',
          placeHolderText: 'Placeholder for longer, short answer text input',
          whatYouNeedToKnow: 'What you need to know',
+         wasThisExplanationHelpful: 'Was this explanation helpful?',
+         leaveFeedback: 'Leave feedback',
          courseHome: 'Course Home',
       }
    },
@@ -169,8 +171,6 @@ const resources = {
          pleaseEnterPassword: "Veuillez saisir votre mot de passe",
          accountLockedResetPassword: "Ton compte est bloqué. Veuillez réinitialiser votre mot de passe en cliquant sur \"Mot de passe oublié\".",
          userPassIncorrect: "Votre nom d''utilisateur ou votre mot de passe est incorrect.",
-         wasThisExplanationHelpful: 'Was this explanation helpful?',
-         leaveFeedback: 'Leave feedback',
       }
    },
    de: {

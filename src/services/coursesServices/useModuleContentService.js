@@ -46,7 +46,7 @@ const useModuleContentService = () => {
 		try {
 			setLoading(true);
 			let assignmentsData = await fetchAssignments(assignmentKey);
-			const modalContentResponse = await axios({
+			const moduleContentResponse = await axios({
 				method: 'GET',
 				url: assignmentsData.moduleUri,
 				headers: {
@@ -56,7 +56,7 @@ const useModuleContentService = () => {
 					'Content-type': 'application/json',
 				},
 			});
-			return modalContentResponse.data;
+			return moduleContentResponse.data;
 		} catch (err) {
 			setError(err);
 			if (err.response.status >= 500) {
@@ -71,7 +71,7 @@ const useModuleContentService = () => {
 		try {
 			setLoading(true);
 			let moduleContent = await fetchModuleContent(assignmentKey);
-			const modalContentQuestionResponse = await axios({
+			const moduleContentQuestionResponse = await axios({
 				method: 'GET',
 				url: `${moduleContent.self}?deep=true&subaccount=${subaccount}`,
 				headers: {
@@ -81,7 +81,7 @@ const useModuleContentService = () => {
 					'Content-type': 'application/json',
 				},
 			});
-			return modalContentQuestionResponse.data;
+			return moduleContentQuestionResponse.data;
 		} catch (err) {
 			setError(err);
 			if (err.response.status >= 500) {

@@ -12,7 +12,7 @@ export const findQuestionInFocus = (
 			questionRc: string | any;
 			questionType: string | undefined;
 			explanationRc: string | any;
-			hasModalIntroduction: boolean | undefined;
+			hasModuleIntroduction: boolean | undefined;
 			introductionRc: string | any;
 		}) => {
 			let updatedQuestion = question;
@@ -26,7 +26,7 @@ export const findQuestionInFocus = (
 						questionRc: string;
 						questionType: string;
 						explanationRc: string;
-						hasModalIntroduction: boolean | undefined;
+						hasModuleIntroduction: boolean | undefined;
 						introductionRc: string;
 					}[];
 				}) => {
@@ -43,7 +43,7 @@ export const findQuestionInFocus = (
 							questionRc,
 							questionType,
 							explanationRc,
-							hasModalIntroduction,
+							hasModuleIntroduction,
 							introductionRc,
 						} = matchedQuestion[0];
 						updatedQuestion = {
@@ -52,7 +52,7 @@ export const findQuestionInFocus = (
 							questionRc: questionRc,
 							questionType: questionType,
 							explanationRc: explanationRc,
-							hasModalIntroduction: hasModalIntroduction,
+							hasModuleIntroduction: hasModuleIntroduction,
 							introductionRc: introductionRc,
 							answerList: [
 								...updatedAnswerList.map(

@@ -4,7 +4,15 @@ import {
 	Button,
 	Container,
 	HStack,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Text,
+	useDisclosure,
 	useMediaQuery,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
@@ -23,11 +31,12 @@ import {
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
+import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
 		questionRc: '',
@@ -77,7 +86,7 @@ const AssignmentView = () => {
 
 	const [clearSelection, setClearSelection] = useState(false);
 	const { assignmentKey } = useParams();
-
+	const { isOpen, onOpen, onClose } = useDisclosure()
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound } = useCurrentRoundService();
 
@@ -138,8 +147,8 @@ const AssignmentView = () => {
 				overflowX={'hidden'}>
 				<TestProgressBarMenu
 					questionData={questionData}
-					isOpen={isOpen}
-					setIsOpen={setIsOpen}
+					isMenuOpen={isMenuOpen}
+					setIsMenuOpen={setIsMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
 				/>{' '}
@@ -198,16 +207,30 @@ const AssignmentView = () => {
 								justifyContent={'space-between'}
 								display={'flex'}
 								marginTop={'12px'}>
-								<Button onClick={() => {}} variant={'ampSolid'} w="200px">
+								<Button onClick={onOpen} variant={'ampSolid'} w="200px">
 									<Text>{i18n('explainBtnText')}</Text>
 								</Button>
 							</HStack>
 						</Box>
 					</HStack>
 					<ProgressMenu
-						isOpen={isOpen}
+						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 					/>
+					<Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+            <WhatYouNeedToKnowComponent introductionRc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3}>
+              Save
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 				</HStack>
 			</Container>
 		</main>
