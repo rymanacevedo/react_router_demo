@@ -37,7 +37,7 @@ const CourseMenu = ({
 				variant="ampOutline">
 				<Text>{i18n('changeCourse')}</Text>
 			</MenuButton>
-			<MenuList minWidth="240px">
+			<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
 				<MenuOptionGroup
 					onChange={(value) => {
 						setSelectedCourseKey(value as string);
@@ -49,7 +49,9 @@ const CourseMenu = ({
 					defaultValue={selectedCourseKey}>
 					{courseList?.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
-							{course.name}
+							<Text isTruncated maxW="300px">
+								{course.name}
+							</Text>
 						</MenuItemOption>
 					))}
 				</MenuOptionGroup>
