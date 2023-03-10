@@ -50,8 +50,7 @@ const CourseMenu = ({
 					{courseList?.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
 							<Text isTruncated maxW="240px">
-								{course.name} Some more text with a really long name that I am
-								hoping will wrap please wrap
+								{course.name}
 							</Text>
 						</MenuItemOption>
 					))}
