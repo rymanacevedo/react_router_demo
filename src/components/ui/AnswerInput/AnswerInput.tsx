@@ -163,7 +163,10 @@ const AnswerInput = ({
 					direction="top"
 					style={{
 						position: 'relative',
-						top: `${!isEnabled ? '10px' : ''}`,
+						top: `${!isEnabled ? '25px' : ''}`,
+						fontSize: 25,
+						display: 'flex',
+						left: '15px'
 					}}>
 					<RichContentComponent content={questionText} />
 				</Slide>

@@ -56,6 +56,7 @@ const MultipleChoiceOverLay = ({
 				display="flex"
 				flexDirection={'column'}
 				justifyContent="space-between"
+				minHeight={350}
 				h="100%">
 				<>
 					{questionInFocus?.answerList
