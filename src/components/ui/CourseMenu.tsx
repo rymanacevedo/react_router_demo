@@ -49,7 +49,7 @@ const CourseMenu = ({
 					defaultValue={selectedCourseKey}>
 					{courseList?.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
-							<Text isTruncated maxW="240px">
+							<Text isTruncated maxW="300px">
 								{course.name}
 							</Text>
 						</MenuItemOption>
