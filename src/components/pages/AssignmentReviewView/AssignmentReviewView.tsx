@@ -204,6 +204,7 @@ const AssignmentView = () => {
 								clearSelection={clearSelection}
 								setClearSelection={setClearSelection}
 								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+								inReview={true}
 							/>
 
 							<HStack
