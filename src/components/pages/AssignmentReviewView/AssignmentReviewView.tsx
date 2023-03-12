@@ -32,6 +32,7 @@ import useCurrentRoundService from '../../../services/coursesServices/useCurrent
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
+import ExplanationTitle from '../../ui/ExplanationTitle';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
@@ -159,6 +160,9 @@ const AssignmentView = () => {
 					setIsMenuOpen={setIsMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
+				/>
+				<ExplanationTitle
+					answer={`${questionInFocus.confidence}${questionInFocus.correctness}`}
 				/>
 				<HStack width="100%">
 					<HStack
