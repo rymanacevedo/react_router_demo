@@ -123,7 +123,7 @@ const resources = {
           staySignedInButton: 'Stay Signed In',
           logOutButton: 'Logout Now',
          /////////////////////////////////////////////
-         //   LearningView.tsx
+         //   AssignmentList.tsx
          //////////////////////////////////////////////
          yourAssignments: 'Your Assignments',
          changeCourse: 'Change Course',
@@ -137,6 +137,10 @@ const resources = {
          //   LearningReviewView.tsx
          //////////////////////////////////////////////
          explainBtnText: 'Show The Explanation',
+         gotIt: 'Got It',
+         tryAgain: 'Try Again',
+         revealCorrectAns: 'Reveal Correct Answer',
+         addLearn: 'Additional Learning',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////

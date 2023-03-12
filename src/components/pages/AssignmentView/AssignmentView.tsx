@@ -34,6 +34,8 @@ const AssignmentView = () => {
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
 		questionRc: '',
+		confidence: '',
+		correctness: '',
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
@@ -270,7 +272,6 @@ const AssignmentView = () => {
 								margin: '6px',
 							}}
 							boxShadow="2xl"
-							maxW="xl"
 							w="100%"
 							maxWidth={726}
 							h={isSmallerThan1000 ? '' : '745px'}
@@ -286,7 +287,6 @@ const AssignmentView = () => {
 								minHeight: '745px',
 							}}
 							boxShadow="2xl"
-							maxW="xl"
 							h={isSmallerThan1000 ? '' : '100%'}
 							display={'flex'}
 							flexDirection="column"

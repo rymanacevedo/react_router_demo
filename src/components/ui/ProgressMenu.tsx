@@ -51,6 +51,7 @@ const ProgressMenu = ({
 				h="745px"
 				marginRight="24px"
 				w={isMenuOpen ? '345px' : '0px'}
+				display={isMenuOpen ? 'flex' : 'none'}
 				borderRadius={24}
 				boxSizing="border-box"
 				justifyContent={'space-between'}>

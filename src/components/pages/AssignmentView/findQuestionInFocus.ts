@@ -10,6 +10,7 @@ export const findQuestionInFocus = (
 			answerList: any;
 			name: string | undefined;
 			questionRc: string | any;
+			moreInformationRc: string;
 			questionType: string | undefined;
 			explanationRc: string | any;
 			hasModuleIntroduction: boolean | undefined;
@@ -18,7 +19,9 @@ export const findQuestionInFocus = (
 			let updatedQuestion = question;
 			learningUnits.forEach(
 				(learningUnit: {
+					moreInformationRc: string;
 					questions: {
+						moreInformationRc: string;
 						publishedQuestionId: any;
 						id: any;
 						answers: any;
@@ -48,6 +51,7 @@ export const findQuestionInFocus = (
 						} = matchedQuestion[0];
 						updatedQuestion = {
 							...question,
+							moreInformationRc: learningUnit?.moreInformationRc,
 							name: name,
 							questionRc: questionRc,
 							questionType: questionType,

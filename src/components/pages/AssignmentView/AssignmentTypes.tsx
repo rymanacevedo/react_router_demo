@@ -49,9 +49,13 @@ export type AnswerData = {
 
 export type QuestionInFocus = {
 	id: string | number;
-	questionRc: any;
+	questionRc: string;
 	name?: string;
-	introductionRc?: any;
+	introductionRc?: string;
+	explanationRc?: string;
+	moreInformationRc?: string;
+	confidence: string;
+	correctness: string;
 	publishedQuestionId: number | string;
 	answerList: {
 		answerRc: string;
