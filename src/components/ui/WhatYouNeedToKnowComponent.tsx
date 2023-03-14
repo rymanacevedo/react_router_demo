@@ -131,7 +131,7 @@ const WhatYouNeedToKnowComponent = ({
 							</Text>
 						</Button>
 					</HStack>
-					<ButtonGroup width="100%" justifyContent={'space-between'}>
+					<ButtonGroup width="100%" style={{marginTop: '24px'}} justifyContent={'space-between'}>
 						<Box>
 							<Button variant="ampOutline">
 								<Text>{i18n('yes')}</Text>

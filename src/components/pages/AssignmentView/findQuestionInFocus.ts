@@ -13,7 +13,7 @@ export const findQuestionInFocus = (
 			moreInformationRc: string;
 			questionType: string | undefined;
 			explanationRc: string | any;
-			hasModuleIntroduction: boolean | undefined;
+			hasModuleIntroduction: boolean;
 			introductionRc: string | any;
 		}) => {
 			let updatedQuestion = question;
@@ -29,7 +29,7 @@ export const findQuestionInFocus = (
 						questionRc: string;
 						questionType: string;
 						explanationRc: string;
-						hasModuleIntroduction: boolean | undefined;
+						hasModuleIntroduction: boolean;
 						introductionRc: string;
 					}[];
 				}) => {
