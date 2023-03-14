@@ -164,7 +164,6 @@ const AnswerInput = ({
 					style={{
 						position: 'relative',
 						top: `${!isEnabled ? '25px' : ''}`,
-						fontSize: 25,
 						display: 'flex',
 						left: '15px',
 					}}>
