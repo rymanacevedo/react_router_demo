@@ -24,7 +24,7 @@ const Question = ({
 					{currentRoundQuestionListData?.questionList?.length}{' '}
 				</Heading>
 			) : (
-				<Heading as="h2">{questionInFocus?.name}</Heading>
+				<Heading as="h2">Question</Heading>
 			)}
 			<Stack spacing="20px" marginTop="34px">
 				<RichContentComponent content={questionInFocus?.introductionRc} />
