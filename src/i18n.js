@@ -123,7 +123,7 @@ const resources = {
           staySignedInButton: 'Stay Signed In',
           logOutButton: 'Logout Now',
          /////////////////////////////////////////////
-         //   LearningView.tsx
+         //   AssignmentList.tsx
          //////////////////////////////////////////////
          yourAssignments: 'Your Assignments',
          changeCourse: 'Change Course',
@@ -137,6 +137,10 @@ const resources = {
          //   LearningReviewView.tsx
          //////////////////////////////////////////////
          explainBtnText: 'Show The Explanation',
+         gotIt: 'Got It',
+         tryAgain: 'Try Again',
+         revealCorrectAns: 'Reveal Correct Answer',
+         addLearn: 'Additional Learning',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////
@@ -152,6 +156,8 @@ const resources = {
          other: 'Other (explain)',
          placeHolderText: 'Placeholder for longer, short answer text input',
          whatYouNeedToKnow: 'What you need to know',
+         wasThisExplanationHelpful: 'Was this explanation helpful?',
+         leaveFeedback: 'Leave feedback',
          courseHome: 'Course Home',
       }
    },
@@ -169,8 +175,6 @@ const resources = {
          pleaseEnterPassword: "Veuillez saisir votre mot de passe",
          accountLockedResetPassword: "Ton compte est bloqué. Veuillez réinitialiser votre mot de passe en cliquant sur \"Mot de passe oublié\".",
          userPassIncorrect: "Votre nom d''utilisateur ou votre mot de passe est incorrect.",
-         wasThisExplanationHelpful: 'Was this explanation helpful?',
-         leaveFeedback: 'Leave feedback',
       }
    },
    de: {

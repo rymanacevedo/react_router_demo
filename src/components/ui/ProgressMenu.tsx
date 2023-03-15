@@ -14,12 +14,12 @@ import { useTranslation } from 'react-i18next';
 import { CurrentRoundQuestionListData } from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressMenuType = {
-	isOpen: boolean;
+	isMenuOpen: boolean;
 	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
 };
 
 const ProgressMenu = ({
-	isOpen,
+	isMenuOpen,
 	currentRoundQuestionListData,
 }: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
@@ -42,7 +42,7 @@ const ProgressMenu = ({
 	};
 
 	return (
-		<SlideFade in={isOpen} offsetX="180px" offsetY="0px">
+		<SlideFade in={isMenuOpen} offsetX="180px" offsetY="0px">
 			<VStack
 				style={{
 					backgroundColor: 'white',
@@ -50,7 +50,8 @@ const ProgressMenu = ({
 				boxShadow="2xl"
 				h="745px"
 				marginRight="24px"
-				w={isOpen ? '345px' : '0px'}
+				w={isMenuOpen ? '345px' : '0px'}
+				display={isMenuOpen ? 'flex' : 'none'}
 				borderRadius={24}
 				boxSizing="border-box"
 				justifyContent={'space-between'}>

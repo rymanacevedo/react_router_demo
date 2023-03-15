@@ -10,15 +10,18 @@ export const findQuestionInFocus = (
 			answerList: any;
 			name: string | undefined;
 			questionRc: string | any;
+			moreInformationRc: string;
 			questionType: string | undefined;
 			explanationRc: string | any;
-			hasModalIntroduction: boolean | undefined;
+			hasModuleIntroduction: boolean;
 			introductionRc: string | any;
 		}) => {
 			let updatedQuestion = question;
 			learningUnits.forEach(
 				(learningUnit: {
+					moreInformationRc: string;
 					questions: {
+						moreInformationRc: string;
 						publishedQuestionId: any;
 						id: any;
 						answers: any;
@@ -26,7 +29,7 @@ export const findQuestionInFocus = (
 						questionRc: string;
 						questionType: string;
 						explanationRc: string;
-						hasModalIntroduction: boolean | undefined;
+						hasModuleIntroduction: boolean;
 						introductionRc: string;
 					}[];
 				}) => {
@@ -43,16 +46,17 @@ export const findQuestionInFocus = (
 							questionRc,
 							questionType,
 							explanationRc,
-							hasModalIntroduction,
+							hasModuleIntroduction,
 							introductionRc,
 						} = matchedQuestion[0];
 						updatedQuestion = {
 							...question,
+							moreInformationRc: learningUnit?.moreInformationRc,
 							name: name,
 							questionRc: questionRc,
 							questionType: questionType,
 							explanationRc: explanationRc,
-							hasModalIntroduction: hasModalIntroduction,
+							hasModuleIntroduction: hasModuleIntroduction,
 							introductionRc: introductionRc,
 							answerList: [
 								...updatedAnswerList.map(

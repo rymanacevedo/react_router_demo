@@ -30,10 +30,12 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
 		questionRc: '',
+		confidence: '',
+		correctness: '',
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
@@ -253,8 +255,8 @@ const AssignmentView = () => {
 				overflowX={'hidden'}>
 				<TestProgressBarMenu
 					questionData={questionData}
-					isOpen={isOpen}
-					setIsOpen={setIsOpen}
+					isMenuOpen={isMenuOpen}
+					setIsMenuOpen={setIsMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
 				/>{' '}
@@ -270,7 +272,6 @@ const AssignmentView = () => {
 								margin: '6px',
 							}}
 							boxShadow="2xl"
-							maxW="xl"
 							w="100%"
 							maxWidth={726}
 							h={isSmallerThan1000 ? '' : '745px'}
@@ -286,7 +287,6 @@ const AssignmentView = () => {
 								minHeight: '745px',
 							}}
 							boxShadow="2xl"
-							maxW="xl"
 							h={isSmallerThan1000 ? '' : '100%'}
 							display={'flex'}
 							flexDirection="column"
@@ -351,7 +351,7 @@ const AssignmentView = () => {
 						</Box>
 					</HStack>
 					<ProgressMenu
-						isOpen={isOpen}
+						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 					/>
 				</HStack>

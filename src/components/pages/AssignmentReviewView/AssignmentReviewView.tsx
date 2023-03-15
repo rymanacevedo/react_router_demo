@@ -2,10 +2,17 @@ import { useEffect, useState } from 'react';
 import {
 	Box,
 	Button,
+	Collapse,
 	Container,
 	HStack,
+	Modal,
+	ModalCloseButton,
+	ModalContent,
+	ModalOverlay,
 	Text,
+	useDisclosure,
 	useMediaQuery,
+	VStack,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
@@ -23,15 +30,22 @@ import {
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
+import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
+import ExplanationTitle from '../../ui/ExplanationTitle';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const [isOpen, setIsOpen] = useState(false);
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [showExplanation, setShowExplanation] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
 		questionRc: '',
 		publishedQuestionId: '',
+		confidence: '',
+		correctness: '',
+		explanationRc: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
 
@@ -77,7 +91,7 @@ const AssignmentView = () => {
 
 	const [clearSelection, setClearSelection] = useState(false);
 	const { assignmentKey } = useParams();
-
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound } = useCurrentRoundService();
 
@@ -126,6 +140,10 @@ const AssignmentView = () => {
 			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
+	const closeExplainModal = () => {
+		onClose();
+		setShowExplanation(true);
+	};
 
 	return (
 		<main id="learning-assignment">
@@ -138,11 +156,14 @@ const AssignmentView = () => {
 				overflowX={'hidden'}>
 				<TestProgressBarMenu
 					questionData={questionData}
-					isOpen={isOpen}
-					setIsOpen={setIsOpen}
+					isMenuOpen={isMenuOpen}
+					setIsMenuOpen={setIsMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
-				/>{' '}
+				/>
+				<ExplanationTitle
+					answer={`${questionInFocus.confidence}${questionInFocus.correctness}`}
+				/>
 				<HStack width="100%">
 					<HStack
 						w="100%"
@@ -154,10 +175,8 @@ const AssignmentView = () => {
 								backgroundColor: 'white',
 								margin: '6px',
 							}}
-							boxShadow="2xl"
-							maxW="xl"
+							boxShadow="xl"
 							w="100%"
-							maxWidth={726}
 							h={isSmallerThan1000 ? '' : '745px'}
 							overflow="hidden"
 							borderRadius={24}
@@ -174,13 +193,11 @@ const AssignmentView = () => {
 								margin: '6px',
 								minHeight: '745px',
 							}}
-							boxShadow="2xl"
-							maxW="xl"
+							boxShadow="xl"
 							h={isSmallerThan1000 ? '' : '100%'}
 							display={'flex'}
 							flexDirection="column"
 							w="100%"
-							maxWidth={726}
 							overflow="hidden"
 							borderRadius={24}
 							p={'72px'}>
@@ -198,18 +215,94 @@ const AssignmentView = () => {
 								justifyContent={'space-between'}
 								display={'flex'}
 								marginTop={'12px'}>
-								<Button onClick={() => {}} variant={'ampSolid'} w="200px">
+								<Button
+									display={showExplanation ? 'none' : ''}
+									onClick={onOpen}
+									variant={'ampSolid'}
+									w="220px">
 									<Text>{i18n('explainBtnText')}</Text>
+								</Button>
+								<Button
+									display={
+										showExplanation
+											? questionInFocus.confidence === 'OneAnswerPartSure' &&
+											  questionInFocus.correctness === 'Correct'
+												? 'none'
+												: ''
+											: 'none'
+									}
+									onClick={() => {}}
+									variant={'ampOutline'}
+									w="130px">
+									<Text>{i18n('tryAgain')}</Text>
+								</Button>
+								<Button
+									display={showExplanation ? '' : 'none'}
+									onClick={() => {}}
+									variant={'ampOutline'}
+									w="220px">
+									<Text>{i18n('revealCorrectAns')}</Text>
 								</Button>
 							</HStack>
 						</Box>
 					</HStack>
 					<ProgressMenu
-						isOpen={isOpen}
+						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 					/>
 				</HStack>
+				<Collapse in={showExplanation} animateOpacity>
+					<VStack
+						p="12px"
+						rounded="md"
+						shadow="md"
+						display={'flex'}
+						justifyContent={'center'}
+						w="100%">
+						<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+						<Box
+							style={{
+								backgroundColor: 'white',
+								marginTop: '24px',
+								marginBottom: '24px',
+							}}
+							boxShadow="xl"
+							w="100%"
+							overflow="hidden"
+							borderRadius={24}
+							p={8}>
+							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
+								<Button variant={'ampOutline'}>Previous</Button>
+								<Text>
+									Reviewing 1 of{' '}
+									{currentRoundQuestionListData?.questionList?.length}
+								</Text>
+								<Button
+									rightIcon={<ArrowRightIcon />}
+									variant={'ampSolid'}
+									onClick={closeExplainModal}>
+									Next Question{' '}
+								</Button>
+							</HStack>
+						</Box>
+					</VStack>
+				</Collapse>
 			</Container>
+			<Modal
+				size={'5xl'}
+				closeOnOverlayClick={false}
+				isOpen={isOpen}
+				onClose={closeExplainModal}>
+				<ModalOverlay />
+				<ModalContent w="80vw" borderRadius={24}>
+					<ModalCloseButton />
+					<WhatYouNeedToKnowComponent
+						questionInFocus={questionInFocus}
+						onClick={closeExplainModal}
+						isModal={true}
+					/>
+				</ModalContent>
+			</Modal>
 		</main>
 	);
 };

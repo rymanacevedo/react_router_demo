@@ -14,16 +14,29 @@ import {
 	Radio,
 	Textarea,
 	FormControl,
+	Accordion,
+	AccordionItem,
+	AccordionButton,
+	AccordionPanel,
 } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
-import { Pencil1Icon } from '@radix-ui/react-icons';
+import {
+	Pencil1Icon,
+	ChevronRightIcon,
+	ChevronDownIcon,
+} from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 
 const WhatYouNeedToKnowComponent = ({
-	introductionRc,
+	questionInFocus,
+	onClick,
+	isModal,
 }: {
-	introductionRc: any;
+	questionInFocus: QuestionInFocus;
+	onClick?: () => void;
+	isModal?: boolean;
 }) => {
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
@@ -39,17 +52,65 @@ const WhatYouNeedToKnowComponent = ({
 			style={{
 				backgroundColor: 'white',
 			}}
-			boxShadow="2xl"
+			boxShadow="xl"
 			w="100%"
-			maxWidth="1093px"
 			minH="40vh"
 			overflow="hidden"
 			borderRadius={24}
-			p={8}>
+			padding={'34px 120px'}>
 			<Heading as="h2">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
-				<RichContentComponent content={introductionRc} />
+				<RichContentComponent content={questionInFocus?.explanationRc} />
 			</Stack>
+			{questionInFocus?.moreInformationRc?.length && (
+				<>
+					<Accordion allowMultiple>
+						<AccordionItem style={{ borderStyle: 'none' }}>
+							{({ isExpanded }) => (
+								<>
+									<h2>
+										<AccordionButton>
+											{isExpanded ? (
+												<ChevronDownIcon
+													style={{
+														color: '#255A83',
+														height: '20px',
+														width: '20px',
+													}}
+												/>
+											) : (
+												<ChevronRightIcon
+													style={{
+														color: '#255A83',
+														height: '20px',
+														width: '20px',
+													}}
+												/>
+											)}
+											<Box
+												as="span"
+												flex="1"
+												marginLeft={'24px'}
+												textAlign="left">
+												<Text fontSize={'24px'} textColor={'ampPrimary.600'}>
+													{i18n('addLearn')}
+												</Text>
+											</Box>
+										</AccordionButton>
+									</h2>
+									<AccordionPanel pb={4}>
+										<RichContentComponent
+											content={questionInFocus?.moreInformationRc}
+										/>
+									</AccordionPanel>
+								</>
+							)}
+						</AccordionItem>
+					</Accordion>
+					<Stack paddingTop={'16px'} paddingBottom={'16px'}></Stack>
+				</>
+			)}
+
 			<Divider />
 			<Collapse in={!isOpen} animateOpacity>
 				<VStack marginTop={'16px'}>
@@ -61,20 +122,32 @@ const WhatYouNeedToKnowComponent = ({
 							_hover={{ backgroundColor: 'white' }}
 							height="12px"
 							variant="ghost"
+							w={'130px'}
 							marginTop="-60px"
-							leftIcon={<Pencil1Icon style={{ color: '#257CB5' }} />}
+							rightIcon={<Pencil1Icon style={{ color: '#257CB5' }} />}
 							onClick={onToggle}>
 							<Text fontSize={'14px'} color={'ampSecondary.500'}>
 								{i18n('leaveFeedback')}
 							</Text>
 						</Button>
 					</HStack>
-					<ButtonGroup width="100%">
-						<Button variant="ampOutline">
-							<Text>{i18n('yes')}</Text>
-						</Button>
-						<Button variant="ampOutline">
-							<Text>{i18n('no')}</Text>
+					<ButtonGroup
+						width="100%"
+						style={{ marginTop: '24px' }}
+						justifyContent={'space-between'}>
+						<Box>
+							<Button variant="ampOutline">
+								<Text>{i18n('yes')}</Text>
+							</Button>
+							<Button marginLeft="16px" variant="ampOutline">
+								<Text>{i18n('no')}</Text>
+							</Button>
+						</Box>
+						<Button
+							display={isModal ? 'block' : 'none'}
+							variant="ampSolid"
+							onClick={onClick}>
+							<Text>{i18n('gotIt')}</Text>
 						</Button>
 					</ButtonGroup>
 				</VStack>
