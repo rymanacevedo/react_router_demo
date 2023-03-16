@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Box,
 	Button,
@@ -22,6 +22,7 @@ import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
+	AnswerData,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
@@ -33,6 +34,8 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
+import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
+import { findDateData } from '../../../utils/logic';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
@@ -48,6 +51,7 @@ const AssignmentView = () => {
 		explanationRc: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
+	const [tryAgain, setTryAgain] = useState(false)
 
 	// eslint-disable-next-line
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
@@ -88,12 +92,37 @@ const AssignmentView = () => {
 		kind: '',
 		name: '',
 	});
-
+	const [answerData, setAnswerData] = useState<AnswerData>({
+		answerDate: '',
+		answerList: [],
+		avatarMessage: null,
+		completionAlgorithmType: null,
+		completionPercentage: 0,
+		confidence: null,
+		correctAnswerIds: null,
+		correctness: null,
+		informedCount: 0,
+		masteredQuestionCount: 0,
+		misinformedCount: 0,
+		moduleComplete: false,
+		notSureCount: 0,
+		onceCorrectCount: 0,
+		questionSeconds: 0,
+		questionsMastered: 0,
+		reviewSeconds: 0,
+		self: null,
+		totalQuestionCount: 0,
+		twiceCorrectCount: 0,
+		uninformedCount: 0,
+		unseenCount: 0,
+	});
+	const [answerSubmitted, setAnswerSubmitted] = useState(false)
 	const [clearSelection, setClearSelection] = useState(false);
 	const { assignmentKey } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
-	const { getCurrentRound } = useCurrentRoundService();
+	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -144,6 +173,36 @@ const AssignmentView = () => {
 		onClose();
 		setShowExplanation(true);
 	};
+
+	const submitAnswer = () => {
+		setAnswerData((answerDataArg: any) => {
+			return {
+				...answerDataArg,
+				answerDate: findDateData(),
+				questionSeconds: questionSecondsRef.current,
+				answerList: [...selectedAnswers],
+			};
+		});
+		questionSecondsRef.current = 0;
+	};
+	
+	useEffect(() => {
+		const putCurrentRoundRes = async () => {
+			const overLayData = await putCurrentRound(
+				currentRoundQuestionListData?.id,
+				questionInFocus.id,
+				answerData,
+			)
+			if (overLayData){
+				setTryAgain(false)
+				setCurrentRoundAnswerOverLayData(overLayData);
+				setAnswerSubmitted(true)
+			}			
+		};
+		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
+			putCurrentRoundRes();
+		}
+	}, [answerData]);
 
 	return (
 		<main id="learning-assignment">
@@ -201,7 +260,15 @@ const AssignmentView = () => {
 							overflow="hidden"
 							borderRadius={24}
 							p={'72px'}>
-							<MultipleChoiceOverLay
+							{tryAgain ? (
+								<MultipleChoiceAnswers
+								questionInFocus={questionInFocus}
+								selectedAnswers={selectedAnswers}
+								setSelectedAnswers={setSelectedAnswers}
+								clearSelection={clearSelection}
+								setClearSelection={setClearSelection} />
+							) : (
+								<MultipleChoiceOverLay
 								questionInFocus={questionInFocus}
 								selectedAnswers={selectedAnswers}
 								setSelectedAnswers={setSelectedAnswers}
@@ -210,7 +277,7 @@ const AssignmentView = () => {
 								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 								inReview={true}
 							/>
-
+							)}
 							<HStack
 								justifyContent={'space-between'}
 								display={'flex'}
@@ -222,27 +289,43 @@ const AssignmentView = () => {
 									w="220px">
 									<Text>{i18n('explainBtnText')}</Text>
 								</Button>
-								<Button
-									display={
-										showExplanation
-											? questionInFocus.confidence === 'OneAnswerPartSure' &&
-											  questionInFocus.correctness === 'Correct'
-												? 'none'
-												: ''
-											: 'none'
-									}
-									onClick={() => {}}
-									variant={'ampOutline'}
-									w="130px">
-									<Text>{i18n('tryAgain')}</Text>
+								{tryAgain ? (
+									<Button
+									onClick={submitAnswer}
+									variant={'ampSolid'}
+									w="150px">
+									<Text>
+										{i18n('submitBtnText')}
+									</Text>
 								</Button>
-								<Button
+								) : (
+									!answerSubmitted && (<Button
+										display={
+											showExplanation
+												? questionInFocus.confidence === 'OneAnswerPartSure' &&
+												  questionInFocus.correctness === 'Correct'
+													? 'none'
+													: ''
+												: 'none'
+										}
+										onClick={() => {
+											setTryAgain(true)
+											setSelectedAnswers([])
+										}}
+										variant={'ampOutline'}
+										w="130px">
+										<Text>{i18n('tryAgain')}</Text>
+									</Button>)
+								)}
+								{!tryAgain && (
+									<Button
 									display={showExplanation ? '' : 'none'}
 									onClick={() => {}}
 									variant={'ampOutline'}
 									w="220px">
 									<Text>{i18n('revealCorrectAns')}</Text>
 								</Button>
+								)}
 							</HStack>
 						</Box>
 					</HStack>
