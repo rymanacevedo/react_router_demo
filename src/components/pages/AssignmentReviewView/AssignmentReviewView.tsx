@@ -290,7 +290,6 @@ const AssignmentView = () => {
 			</Container>
 			<Modal
 				size={'5xl'}
-				closeOnOverlayClick={false}
 				isOpen={isOpen}
 				onClose={closeExplainModal}>
 				<ModalOverlay />
