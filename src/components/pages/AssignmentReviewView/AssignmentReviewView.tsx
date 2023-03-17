@@ -51,7 +51,7 @@ const AssignmentView = () => {
 		explanationRc: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
-	const [tryAgain, setTryAgain] = useState(false)
+	const [tryAgain, setTryAgain] = useState(false);
 
 	// eslint-disable-next-line
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
@@ -116,7 +116,7 @@ const AssignmentView = () => {
 		uninformedCount: 0,
 		unseenCount: 0,
 	});
-	const [answerSubmitted, setAnswerSubmitted] = useState(false)
+	const [answerSubmitted, setAnswerSubmitted] = useState(false);
 	const [clearSelection, setClearSelection] = useState(false);
 	const { assignmentKey } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -185,19 +185,18 @@ const AssignmentView = () => {
 		});
 		questionSecondsRef.current = 0;
 	};
-	
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
 			const overLayData = await putCurrentRound(
 				currentRoundQuestionListData?.id,
 				questionInFocus.id,
 				answerData,
-			)
-			if (overLayData){
-				setTryAgain(false)
+			);
+			if (overLayData) {
+				setTryAgain(false);
 				setCurrentRoundAnswerOverLayData(overLayData);
-				setAnswerSubmitted(true)
-			}			
+				setAnswerSubmitted(true);
+			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
@@ -262,21 +261,22 @@ const AssignmentView = () => {
 							p={'72px'}>
 							{tryAgain ? (
 								<MultipleChoiceAnswers
-								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswers}
-								setSelectedAnswers={setSelectedAnswers}
-								clearSelection={clearSelection}
-								setClearSelection={setClearSelection} />
+									questionInFocus={questionInFocus}
+									selectedAnswers={selectedAnswers}
+									setSelectedAnswers={setSelectedAnswers}
+									clearSelection={clearSelection}
+									setClearSelection={setClearSelection}
+								/>
 							) : (
 								<MultipleChoiceOverLay
-								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswers}
-								setSelectedAnswers={setSelectedAnswers}
-								clearSelection={clearSelection}
-								setClearSelection={setClearSelection}
-								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								inReview={true}
-							/>
+									questionInFocus={questionInFocus}
+									selectedAnswers={selectedAnswers}
+									setSelectedAnswers={setSelectedAnswers}
+									clearSelection={clearSelection}
+									setClearSelection={setClearSelection}
+									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									inReview={true}
+								/>
 							)}
 							<HStack
 								justifyContent={'space-between'}
@@ -290,41 +290,39 @@ const AssignmentView = () => {
 									<Text>{i18n('explainBtnText')}</Text>
 								</Button>
 								{tryAgain ? (
-									<Button
-									onClick={submitAnswer}
-									variant={'ampSolid'}
-									w="150px">
-									<Text>
-										{i18n('submitBtnText')}
-									</Text>
-								</Button>
+									<Button onClick={submitAnswer} variant={'ampSolid'} w="150px">
+										<Text>{i18n('submitBtnText')}</Text>
+									</Button>
 								) : (
-									!answerSubmitted && (<Button
-										display={
-											showExplanation
-												? questionInFocus.confidence === 'OneAnswerPartSure' &&
-												  questionInFocus.correctness === 'Correct'
-													? 'none'
-													: ''
-												: 'none'
-										}
-										onClick={() => {
-											setTryAgain(true)
-											setSelectedAnswers([])
-										}}
-										variant={'ampOutline'}
-										w="130px">
-										<Text>{i18n('tryAgain')}</Text>
-									</Button>)
+									!answerSubmitted && (
+										<Button
+											display={
+												showExplanation
+													? questionInFocus.confidence ===
+															'OneAnswerPartSure' &&
+													  questionInFocus.correctness === 'Correct'
+														? 'none'
+														: ''
+													: 'none'
+											}
+											onClick={() => {
+												setTryAgain(true);
+												setSelectedAnswers([]);
+											}}
+											variant={'ampOutline'}
+											w="130px">
+											<Text>{i18n('tryAgain')}</Text>
+										</Button>
+									)
 								)}
 								{!tryAgain && (
 									<Button
-									display={showExplanation ? '' : 'none'}
-									onClick={() => {}}
-									variant={'ampOutline'}
-									w="220px">
-									<Text>{i18n('revealCorrectAns')}</Text>
-								</Button>
+										display={showExplanation ? '' : 'none'}
+										onClick={() => {}}
+										variant={'ampOutline'}
+										w="220px">
+										<Text>{i18n('revealCorrectAns')}</Text>
+									</Button>
 								)}
 							</HStack>
 						</Box>
