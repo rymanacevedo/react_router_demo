@@ -34,6 +34,14 @@ import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
 
+// when page load put the round objects in local storage question list already merged
+// then run find question infocus baised off of the local storage version
+// when the next question button is clicked clear the question infocus
+// update local storage objects that this question was viewed 
+// update findQuestionInfocus to account for review, and if in review use new functionality
+// new logic then sets next question infocus that has not been reviewed 
+// then have next and back slide up the question array untill all have been viewed.
+
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -104,7 +112,7 @@ const AssignmentView = () => {
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
 				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
-					(questionHistory: { answeredQuestionId: any }) => {
+					(questionHistory: { answeredQuestionId: number }) => {
 						return (
 							questionHistory.answeredQuestionId ===
 							findQuestionInFocus(
