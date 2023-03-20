@@ -288,10 +288,7 @@ const AssignmentView = () => {
 					</VStack>
 				</Collapse>
 			</Container>
-			<Modal
-				size={'5xl'}
-				isOpen={isOpen}
-				onClose={closeExplainModal}>
+			<Modal size={'5xl'} isOpen={isOpen} onClose={closeExplainModal}>
 				<ModalOverlay />
 				<ModalContent w="80vw" borderRadius={24}>
 					<ModalCloseButton />
