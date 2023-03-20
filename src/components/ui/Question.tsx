@@ -7,12 +7,14 @@ const Question = ({
 	questionInFocus,
 	review,
 	currentRoundQuestionListData,
+	questionIndex
 }: {
 	review?: boolean;
 	currentRoundQuestionListData?: CurrentRoundQuestionListData;
 	questionInFocus:
 		| { questionRc: any; name?: string; introductionRc?: any }
 		| undefined;
+	questionIndex?: number
 }) => {
 	const { t: i18n } = useTranslation();
 	//TODO: when moving to next question add logic to update what number question you are on.
@@ -20,7 +22,7 @@ const Question = ({
 		<>
 			{review ? (
 				<Heading as="h2">
-					{i18n('ReviewQ')} 1 {i18n('of')}{' '}
+					{i18n('ReviewQ')} {questionIndex} {i18n('of')}{' '}
 					{currentRoundQuestionListData?.questionList?.length}{' '}
 				</Heading>
 			) : (

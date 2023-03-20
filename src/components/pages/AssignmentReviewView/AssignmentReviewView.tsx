@@ -118,6 +118,7 @@ const AssignmentView = () => {
 	});
 	const [answerSubmitted, setAnswerSubmitted] = useState(false);
 	const [clearSelection, setClearSelection] = useState(false);
+	const [questionIndex, setQuestionIndex] = useState(0)
 	const { assignmentKey } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -139,6 +140,7 @@ const AssignmentView = () => {
 							findQuestionInFocus(
 								moduleQuestionsResponse,
 								currentRoundQuestionsResponse,
+								true, questionIndex
 							).id
 						);
 					},
@@ -156,6 +158,8 @@ const AssignmentView = () => {
 					findQuestionInFocus(
 						moduleQuestionsResponse,
 						currentRoundQuestionsResponse,
+						true,
+						questionIndex
 					),
 				);
 			}
@@ -163,6 +167,10 @@ const AssignmentView = () => {
 			console.error(error);
 		}
 	};
+
+	useEffect(() => {
+		fetchModuleQuestionsData()
+	}, [questionIndex])
 
 	useEffect(() => {
 		if (assignmentKey) {
@@ -194,7 +202,7 @@ const AssignmentView = () => {
 			);
 			if (overLayData) {
 				setTryAgain(false);
-				setCurrentRoundAnswerOverLayData(overLayData);
+				setCurrentRoundAnswerOverLayData(currentRoundAnswerOverLayData);
 				setAnswerSubmitted(true);
 			}
 		};
@@ -202,7 +210,17 @@ const AssignmentView = () => {
 			putCurrentRoundRes();
 		}
 	}, [answerData]);
+	const incrementQuestion = () => {
+		let count = questionIndex
+		count += 1;
+		setQuestionIndex(count)
+	}
 
+	const decrementQuestion = () => {
+		let count = questionIndex;
+		count -= 1;
+		setQuestionIndex(count);
+	}
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -243,6 +261,7 @@ const AssignmentView = () => {
 								questionInFocus={questionInFocus}
 								review={true}
 								currentRoundQuestionListData={currentRoundQuestionListData}
+								questionIndex={questionIndex + 1}
 							/>
 						</Box>
 						<Box
@@ -340,7 +359,9 @@ const AssignmentView = () => {
 						display={'flex'}
 						justifyContent={'center'}
 						w="100%">
-						<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+						{(showExplanation && !tryAgain) && (
+							<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+						)}
 						<Box
 							style={{
 								backgroundColor: 'white',
@@ -353,15 +374,21 @@ const AssignmentView = () => {
 							borderRadius={24}
 							p={8}>
 							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-								<Button variant={'ampOutline'}>Previous</Button>
+								<Button variant={'ampOutline'} onClick={decrementQuestion}>Previous</Button>
 								<Text>
-									Reviewing 1 of{' '}
+									Reviewing {questionIndex + 1} of{' '}
 									{currentRoundQuestionListData?.questionList?.length}
 								</Text>
 								<Button
 									rightIcon={<ArrowRightIcon />}
 									variant={'ampSolid'}
-									onClick={closeExplainModal}>
+									onClick={() => {
+										setShowExplanation(false);
+										setAnswerSubmitted(false);
+										setTryAgain(false);
+										incrementQuestion();
+										fetchModuleQuestionsData();
+									}}>
 									Next Question{' '}
 								</Button>
 							</HStack>
