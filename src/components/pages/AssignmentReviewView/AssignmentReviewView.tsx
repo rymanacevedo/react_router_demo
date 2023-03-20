@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Box,
 	Button,
@@ -22,6 +22,7 @@ import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
+	AnswerData,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
@@ -33,6 +34,8 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
+import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
+import { findDateData } from '../../../utils/logic';
 
 const AssignmentView = () => {
 	const { t: i18n } = useTranslation();
@@ -48,6 +51,7 @@ const AssignmentView = () => {
 		explanationRc: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
+	const [tryAgain, setTryAgain] = useState(false);
 
 	// eslint-disable-next-line
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
@@ -88,12 +92,38 @@ const AssignmentView = () => {
 		kind: '',
 		name: '',
 	});
-
+	const [answerData, setAnswerData] = useState<AnswerData>({
+		answerDate: '',
+		answerList: [],
+		avatarMessage: null,
+		completionAlgorithmType: null,
+		completionPercentage: 0,
+		confidence: null,
+		correctAnswerIds: null,
+		correctness: null,
+		informedCount: 0,
+		masteredQuestionCount: 0,
+		misinformedCount: 0,
+		moduleComplete: false,
+		notSureCount: 0,
+		onceCorrectCount: 0,
+		questionSeconds: 0,
+		questionsMastered: 0,
+		reviewSeconds: 0,
+		self: null,
+		totalQuestionCount: 0,
+		twiceCorrectCount: 0,
+		uninformedCount: 0,
+		unseenCount: 0,
+	});
+	const [answerSubmitted, setAnswerSubmitted] = useState(false);
 	const [clearSelection, setClearSelection] = useState(false);
+	const [questionIndex, setQuestionIndex] = useState(0);
 	const { assignmentKey } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
-	const { getCurrentRound } = useCurrentRoundService();
+	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -110,6 +140,8 @@ const AssignmentView = () => {
 							findQuestionInFocus(
 								moduleQuestionsResponse,
 								currentRoundQuestionsResponse,
+								true,
+								questionIndex,
 							).id
 						);
 					},
@@ -127,6 +159,8 @@ const AssignmentView = () => {
 					findQuestionInFocus(
 						moduleQuestionsResponse,
 						currentRoundQuestionsResponse,
+						true,
+						questionIndex,
 					),
 				);
 			}
@@ -134,6 +168,10 @@ const AssignmentView = () => {
 			console.error(error);
 		}
 	};
+
+	useEffect(() => {
+		fetchModuleQuestionsData();
+	}, [questionIndex]);
 
 	useEffect(() => {
 		if (assignmentKey) {
@@ -145,6 +183,45 @@ const AssignmentView = () => {
 		setShowExplanation(true);
 	};
 
+	const submitAnswer = () => {
+		setAnswerData((answerDataArg: any) => {
+			return {
+				...answerDataArg,
+				answerDate: findDateData(),
+				questionSeconds: questionSecondsRef.current,
+				answerList: [...selectedAnswers],
+			};
+		});
+		questionSecondsRef.current = 0;
+	};
+	useEffect(() => {
+		const putCurrentRoundRes = async () => {
+			const overLayData = await putCurrentRound(
+				currentRoundQuestionListData?.id,
+				questionInFocus.id,
+				answerData,
+			);
+			if (overLayData) {
+				setTryAgain(false);
+				setCurrentRoundAnswerOverLayData(currentRoundAnswerOverLayData);
+				setAnswerSubmitted(true);
+			}
+		};
+		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
+			putCurrentRoundRes();
+		}
+	}, [answerData]);
+	const incrementQuestion = () => {
+		let count = questionIndex;
+		count += 1;
+		setQuestionIndex(count);
+	};
+
+	const decrementQuestion = () => {
+		let count = questionIndex;
+		count -= 1;
+		setQuestionIndex(count);
+	};
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -185,6 +262,7 @@ const AssignmentView = () => {
 								questionInFocus={questionInFocus}
 								review={true}
 								currentRoundQuestionListData={currentRoundQuestionListData}
+								questionIndex={questionIndex + 1}
 							/>
 						</Box>
 						<Box
@@ -201,16 +279,25 @@ const AssignmentView = () => {
 							overflow="hidden"
 							borderRadius={24}
 							p={'72px'}>
-							<MultipleChoiceOverLay
-								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswers}
-								setSelectedAnswers={setSelectedAnswers}
-								clearSelection={clearSelection}
-								setClearSelection={setClearSelection}
-								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								inReview={true}
-							/>
-
+							{tryAgain ? (
+								<MultipleChoiceAnswers
+									questionInFocus={questionInFocus}
+									selectedAnswers={selectedAnswers}
+									setSelectedAnswers={setSelectedAnswers}
+									clearSelection={clearSelection}
+									setClearSelection={setClearSelection}
+								/>
+							) : (
+								<MultipleChoiceOverLay
+									questionInFocus={questionInFocus}
+									selectedAnswers={selectedAnswers}
+									setSelectedAnswers={setSelectedAnswers}
+									clearSelection={clearSelection}
+									setClearSelection={setClearSelection}
+									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									inReview={true}
+								/>
+							)}
 							<HStack
 								justifyContent={'space-between'}
 								display={'flex'}
@@ -222,27 +309,41 @@ const AssignmentView = () => {
 									w="220px">
 									<Text>{i18n('explainBtnText')}</Text>
 								</Button>
-								<Button
-									display={
-										showExplanation
-											? questionInFocus.confidence === 'OneAnswerPartSure' &&
-											  questionInFocus.correctness === 'Correct'
-												? 'none'
-												: ''
-											: 'none'
-									}
-									onClick={() => {}}
-									variant={'ampOutline'}
-									w="130px">
-									<Text>{i18n('tryAgain')}</Text>
-								</Button>
-								<Button
-									display={showExplanation ? '' : 'none'}
-									onClick={() => {}}
-									variant={'ampOutline'}
-									w="220px">
-									<Text>{i18n('revealCorrectAns')}</Text>
-								</Button>
+								{tryAgain ? (
+									<Button onClick={submitAnswer} variant={'ampSolid'} w="150px">
+										<Text>{i18n('submitBtnText')}</Text>
+									</Button>
+								) : (
+									!answerSubmitted && (
+										<Button
+											display={
+												showExplanation
+													? questionInFocus.confidence ===
+															'OneAnswerPartSure' &&
+													  questionInFocus.correctness === 'Correct'
+														? 'none'
+														: ''
+													: 'none'
+											}
+											onClick={() => {
+												setTryAgain(true);
+												setSelectedAnswers([]);
+											}}
+											variant={'ampOutline'}
+											w="130px">
+											<Text>{i18n('tryAgain')}</Text>
+										</Button>
+									)
+								)}
+								{!tryAgain && (
+									<Button
+										display={showExplanation ? '' : 'none'}
+										onClick={() => {}}
+										variant={'ampOutline'}
+										w="220px">
+										<Text>{i18n('revealCorrectAns')}</Text>
+									</Button>
+								)}
 							</HStack>
 						</Box>
 					</HStack>
@@ -259,7 +360,9 @@ const AssignmentView = () => {
 						display={'flex'}
 						justifyContent={'center'}
 						w="100%">
-						<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+						{showExplanation && !tryAgain && (
+							<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+						)}
 						<Box
 							style={{
 								backgroundColor: 'white',
@@ -272,15 +375,23 @@ const AssignmentView = () => {
 							borderRadius={24}
 							p={8}>
 							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-								<Button variant={'ampOutline'}>Previous</Button>
+								<Button variant={'ampOutline'} onClick={decrementQuestion}>
+									Previous
+								</Button>
 								<Text>
-									Reviewing 1 of{' '}
+									Reviewing {questionIndex + 1} of{' '}
 									{currentRoundQuestionListData?.questionList?.length}
 								</Text>
 								<Button
 									rightIcon={<ArrowRightIcon />}
 									variant={'ampSolid'}
-									onClick={closeExplainModal}>
+									onClick={() => {
+										setShowExplanation(false);
+										setAnswerSubmitted(false);
+										setTryAgain(false);
+										incrementQuestion();
+										fetchModuleQuestionsData();
+									}}>
 									Next Question{' '}
 								</Button>
 							</HStack>
