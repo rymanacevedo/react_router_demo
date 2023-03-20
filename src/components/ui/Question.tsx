@@ -7,14 +7,14 @@ const Question = ({
 	questionInFocus,
 	review,
 	currentRoundQuestionListData,
-	questionIndex
+	questionIndex,
 }: {
 	review?: boolean;
 	currentRoundQuestionListData?: CurrentRoundQuestionListData;
 	questionInFocus:
 		| { questionRc: any; name?: string; introductionRc?: any }
 		| undefined;
-	questionIndex?: number
+	questionIndex?: number;
 }) => {
 	const { t: i18n } = useTranslation();
 	//TODO: when moving to next question add logic to update what number question you are on.

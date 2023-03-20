@@ -118,7 +118,7 @@ const AssignmentView = () => {
 	});
 	const [answerSubmitted, setAnswerSubmitted] = useState(false);
 	const [clearSelection, setClearSelection] = useState(false);
-	const [questionIndex, setQuestionIndex] = useState(0)
+	const [questionIndex, setQuestionIndex] = useState(0);
 	const { assignmentKey } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -140,7 +140,8 @@ const AssignmentView = () => {
 							findQuestionInFocus(
 								moduleQuestionsResponse,
 								currentRoundQuestionsResponse,
-								true, questionIndex
+								true,
+								questionIndex,
 							).id
 						);
 					},
@@ -159,7 +160,7 @@ const AssignmentView = () => {
 						moduleQuestionsResponse,
 						currentRoundQuestionsResponse,
 						true,
-						questionIndex
+						questionIndex,
 					),
 				);
 			}
@@ -169,8 +170,8 @@ const AssignmentView = () => {
 	};
 
 	useEffect(() => {
-		fetchModuleQuestionsData()
-	}, [questionIndex])
+		fetchModuleQuestionsData();
+	}, [questionIndex]);
 
 	useEffect(() => {
 		if (assignmentKey) {
@@ -211,16 +212,16 @@ const AssignmentView = () => {
 		}
 	}, [answerData]);
 	const incrementQuestion = () => {
-		let count = questionIndex
+		let count = questionIndex;
 		count += 1;
-		setQuestionIndex(count)
-	}
+		setQuestionIndex(count);
+	};
 
 	const decrementQuestion = () => {
 		let count = questionIndex;
 		count -= 1;
 		setQuestionIndex(count);
-	}
+	};
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -359,7 +360,7 @@ const AssignmentView = () => {
 						display={'flex'}
 						justifyContent={'center'}
 						w="100%">
-						{(showExplanation && !tryAgain) && (
+						{showExplanation && !tryAgain && (
 							<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
 						)}
 						<Box
@@ -374,7 +375,9 @@ const AssignmentView = () => {
 							borderRadius={24}
 							p={8}>
 							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-								<Button variant={'ampOutline'} onClick={decrementQuestion}>Previous</Button>
+								<Button variant={'ampOutline'} onClick={decrementQuestion}>
+									Previous
+								</Button>
 								<Text>
 									Reviewing {questionIndex + 1} of{' '}
 									{currentRoundQuestionListData?.questionList?.length}

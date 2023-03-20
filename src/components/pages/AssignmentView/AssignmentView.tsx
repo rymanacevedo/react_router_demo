@@ -127,7 +127,8 @@ const AssignmentView = () => {
 					setQuestionInFocus(
 						findQuestionInFocus(
 							moduleQuestionsResponse,
-							currentRoundQuestionsResponse, false
+							currentRoundQuestionsResponse,
+							false,
 						),
 					);
 				} else {
