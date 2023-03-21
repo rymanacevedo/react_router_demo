@@ -1,6 +1,8 @@
 export const findQuestionInFocus = (
 	questionListDataPeram: { learningUnits: any },
 	currentRoundQuestionListDataPeram: { questionList: any },
+	inReview: boolean,
+	questionIndex?: number,
 ) => {
 	//this function takes the questions and answers lists from each source and combines relevent data then produces the question that should be in focus
 	const learningUnits = questionListDataPeram?.learningUnits;
@@ -96,11 +98,15 @@ export const findQuestionInFocus = (
 		},
 	);
 
-	const firstUnansweredQuestion = questionList.find(
-		(question: { answered: boolean }) => {
-			return question.answered === false;
-		},
-	);
+	if (inReview && questionIndex) {
+		return questionList[questionIndex];
+	} else {
+		const firstUnansweredQuestion = questionList.find(
+			(question: { answered: boolean }) => {
+				return question.answered === false;
+			},
+		);
 
-	return firstUnansweredQuestion || questionList[0];
+		return firstUnansweredQuestion || questionList[0];
+	}
 };

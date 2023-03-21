@@ -166,6 +166,7 @@ const AnswerInput = ({
 						top: `${!isEnabled ? '25px' : ''}`,
 						display: 'flex',
 						left: '15px',
+						fontSize: 25,
 					}}>
 					<RichContentComponent content={questionText} />
 				</Slide>
