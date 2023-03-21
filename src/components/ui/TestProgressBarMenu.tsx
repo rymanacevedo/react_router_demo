@@ -26,7 +26,8 @@ type ModuleTitleType = {
 };
 
 type RoundNumberType = {
-	roundNumber?: number;
+	roundNumber: number;
+	roundPhase: string;
 };
 
 //refactor to accept assignment type, title, time left, progress props
@@ -70,10 +71,23 @@ const ModuleTimeRemaining = () => {
 	);
 };
 
-const RoundNumberAndPhase = ({ roundNumber }: RoundNumberType) => {
+const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
+	let phase;
+
+	switch (roundPhase) {
+		case 'REVIEW':
+			phase = 'Learning';
+			break;
+		case 'QUIZ':
+			phase = 'Questions';
+			break;
+		default:
+			phase = '';
+	}
+
 	return (
 		<Text fontSize={'20px'} fontWeight={'600'}>
-			{`Round ${roundNumber}: Learning`}
+			{`Round ${roundNumber}: ${phase}`}
 		</Text>
 	);
 };
@@ -205,6 +219,7 @@ const TestProgressBarMenu = ({
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<RoundNumberAndPhase
 						roundNumber={currentRoundQuestionListData?.roundNumber}
+						roundPhase={currentRoundQuestionListData?.roundPhase}
 					/>
 					<AnswerHistoryComponent
 						totalQuestionCount={
