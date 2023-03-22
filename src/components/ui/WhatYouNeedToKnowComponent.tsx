@@ -74,16 +74,16 @@ const WhatYouNeedToKnowComponent = ({
 												<ChevronDownIcon
 													style={{
 														color: '#255A83',
-														height: '20px',
-														width: '20px',
+														height: '30px',
+														width: '30px',
 													}}
 												/>
 											) : (
 												<ChevronRightIcon
 													style={{
 														color: '#255A83',
-														height: '20px',
-														width: '20px',
+														height: '30px',
+														width: '30px',
 													}}
 												/>
 											)}
