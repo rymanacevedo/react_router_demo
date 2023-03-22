@@ -52,6 +52,7 @@ const AssignmentView = () => {
 		answerList: [{ answerRc: '', id: '' }],
 	});
 	const [tryAgain, setTryAgain] = useState(false);
+	const [revealAnswer, setRevealAnswer] = useState(false);
 
 	// eslint-disable-next-line
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
@@ -222,6 +223,72 @@ const AssignmentView = () => {
 		count -= 1;
 		setQuestionIndex(count);
 	};
+
+	const reviewButtonsConditionRender = () => {
+		if (revealAnswer || questionInFocus.correctness === 'Correct') {
+			return;
+		}
+
+		if (tryAgain) {
+			if (answerSubmitted === false && showExplanation) {
+				return (
+					<>
+						<Button onClick={submitAnswer} variant={'ampSolid'} w="150px">
+							<Text>{i18n('submitBtnText')}</Text>
+						</Button>
+					</>
+				);
+			}
+		}
+
+		if (tryAgain === false) {
+			if (answerSubmitted) {
+				return (
+					<Button
+						display={showExplanation ? '' : 'none'}
+						onClick={() => {
+							setRevealAnswer(true);
+						}}
+						variant={'ampOutline'}
+						w="220px">
+						<Text>{i18n('revealCorrectAns')}</Text>
+					</Button>
+				);
+			} else {
+				return (
+					<>
+						<Button
+							display={
+								showExplanation
+									? questionInFocus.confidence === 'OneAnswerPartSure' &&
+									  questionInFocus.correctness === 'Correct'
+										? 'none'
+										: ''
+									: 'none'
+							}
+							onClick={() => {
+								setTryAgain(true);
+								setSelectedAnswers([]);
+							}}
+							variant={'ampOutline'}
+							w="130px">
+							<Text>{i18n('tryAgain')}</Text>
+						</Button>
+						<Button
+							display={showExplanation ? '' : 'none'}
+							onClick={() => {
+								setRevealAnswer(true);
+							}}
+							variant={'ampOutline'}
+							w="220px">
+							<Text>{i18n('revealCorrectAns')}</Text>
+						</Button>
+					</>
+				);
+			}
+		}
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -296,6 +363,7 @@ const AssignmentView = () => {
 									setClearSelection={setClearSelection}
 									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 									inReview={true}
+									revealAnswer={revealAnswer}
 								/>
 							)}
 							<HStack
@@ -309,41 +377,7 @@ const AssignmentView = () => {
 									w="220px">
 									<Text>{i18n('explainBtnText')}</Text>
 								</Button>
-								{tryAgain ? (
-									<Button onClick={submitAnswer} variant={'ampSolid'} w="150px">
-										<Text>{i18n('submitBtnText')}</Text>
-									</Button>
-								) : (
-									!answerSubmitted && (
-										<Button
-											display={
-												showExplanation
-													? questionInFocus.confidence ===
-															'OneAnswerPartSure' &&
-													  questionInFocus.correctness === 'Correct'
-														? 'none'
-														: ''
-													: 'none'
-											}
-											onClick={() => {
-												setTryAgain(true);
-												setSelectedAnswers([]);
-											}}
-											variant={'ampOutline'}
-											w="130px">
-											<Text>{i18n('tryAgain')}</Text>
-										</Button>
-									)
-								)}
-								{!tryAgain && (
-									<Button
-										display={showExplanation ? '' : 'none'}
-										onClick={() => {}}
-										variant={'ampOutline'}
-										w="220px">
-										<Text>{i18n('revealCorrectAns')}</Text>
-									</Button>
-								)}
+								{reviewButtonsConditionRender()}
 							</HStack>
 						</Box>
 					</HStack>

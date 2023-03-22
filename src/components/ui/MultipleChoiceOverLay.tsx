@@ -14,6 +14,7 @@ const MultipleChoiceOverLay = ({
 	selectedAnswers,
 	currentRoundAnswerOverLayData,
 	inReview,
+	revealAnswer,
 }: {
 	questionInFocus:
 		| {
@@ -33,6 +34,7 @@ const MultipleChoiceOverLay = ({
 	setClearSelection: any;
 	currentRoundAnswerOverLayData?: any;
 	inReview?: boolean;
+	revealAnswer?: boolean;
 }) => {
 	const [wasCorrectAnswerChosen, setWasCorrectAnswerChosen] = useState(false);
 	useEffect(() => {
@@ -47,7 +49,7 @@ const MultipleChoiceOverLay = ({
 				),
 			);
 		}
-	}, [currentRoundAnswerOverLayData]);
+	}, [currentRoundAnswerOverLayData, revealAnswer]);
 	return (
 		<Box>
 			<Heading as="h2">{'Answer'}</Heading>
@@ -71,6 +73,7 @@ const MultipleChoiceOverLay = ({
 									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 									wasCorrectAnswerChosen={wasCorrectAnswerChosen}
 									inReview={inReview}
+									revealAnswer={revealAnswer}
 								/>
 							);
 						})}
@@ -84,6 +87,7 @@ const MultipleChoiceOverLay = ({
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						wasCorrectAnswerChosen={wasCorrectAnswerChosen}
 						inReview={inReview}
+						revealAnswer={revealAnswer}
 					/>
 				</>
 			</Box>
