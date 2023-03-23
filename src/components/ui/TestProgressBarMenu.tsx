@@ -11,6 +11,7 @@ import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
+import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressBarMenu = {
 	isMenuOpen: boolean;
@@ -18,7 +19,7 @@ type ProgressBarMenu = {
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentQuestion: any;
-	inReview?: boolean | undefined;
+	inReview?: boolean;
 };
 
 type ModuleTitleType = {
@@ -102,14 +103,14 @@ type AnswerHistoryType = {
 	roundLength: any;
 	currentQuestion: any;
 	questionList: any;
-	inReview?: boolean | undefined;
+	inReview?: boolean;
 };
 
 const variantFunc = (
 	dotIndex: number,
 	currentQuestion: any,
-	questionList: any[],
-	wrongAnswers: any[],
+	questionList: QuestionInFocus[],
+	wrongAnswers: QuestionInFocus[],
 	inReview?: boolean,
 ) => {
 	type LookupType = {
