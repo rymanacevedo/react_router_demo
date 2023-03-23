@@ -222,6 +222,14 @@ const AssignmentView = () => {
 		count -= 1;
 		setQuestionIndex(count);
 	};
+	const handleNextQuestionInReview = () => {
+		setShowExplanation(false);
+		setAnswerSubmitted(false);
+		setTryAgain(false);
+		incrementQuestion();
+		fetchModuleQuestionsData();
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -399,11 +407,7 @@ const AssignmentView = () => {
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
 										onClick={() => {
-											setShowExplanation(false);
-											setAnswerSubmitted(false);
-											setTryAgain(false);
-											incrementQuestion();
-											fetchModuleQuestionsData();
+											handleNextQuestionInReview();
 										}}>
 										{i18n('nextQ')}
 									</Button>
