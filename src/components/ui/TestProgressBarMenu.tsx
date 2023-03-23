@@ -11,6 +11,7 @@ import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
+import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressBarMenu = {
 	isMenuOpen: boolean;
@@ -18,6 +19,7 @@ type ProgressBarMenu = {
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentQuestion: any;
+	inReview?: boolean;
 };
 
 type ModuleTitleType = {
@@ -26,7 +28,8 @@ type ModuleTitleType = {
 };
 
 type RoundNumberType = {
-	roundNumber?: number;
+	roundNumber: number;
+	roundPhase: string;
 };
 
 //refactor to accept assignment type, title, time left, progress props
@@ -70,10 +73,23 @@ const ModuleTimeRemaining = () => {
 	);
 };
 
-const RoundNumberAndPhase = ({ roundNumber }: RoundNumberType) => {
+const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
+	let phase;
+
+	switch (roundPhase) {
+		case 'REVIEW':
+			phase = 'Learning';
+			break;
+		case 'QUIZ':
+			phase = 'Questions';
+			break;
+		default:
+			phase = '';
+	}
+
 	return (
 		<Text fontSize={'20px'} fontWeight={'600'}>
-			{`Round ${roundNumber}: Learning`}
+			{`Round ${roundNumber}: ${phase}`}
 		</Text>
 	);
 };
@@ -87,27 +103,18 @@ type AnswerHistoryType = {
 	roundLength: any;
 	currentQuestion: any;
 	questionList: any;
+	inReview?: boolean;
 };
 
 const variantFunc = (
 	dotIndex: number,
 	currentQuestion: any,
-	questionList: any,
+	questionList: QuestionInFocus[],
+	wrongAnswers: QuestionInFocus[],
+	inReview?: boolean,
 ) => {
 	type LookupType = {
 		[key: string]: string;
-		OneAnswerPartSureCorrect: string;
-		PartSureCorrect: string;
-		SureCorrect: string;
-		SureIncorrect: string;
-		UnsureCorrect: string;
-		UnsureIncorrect: string;
-		empty: string;
-		PartSurePartiallyCorrect: string;
-		OneAnswerPartSureIncorrect: string;
-		PartSureIncorrect: string;
-		currentQuestion: string;
-		NotSureNoAnswerSelected: string;
 	};
 	const lookup: LookupType = {
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
@@ -122,12 +129,24 @@ const variantFunc = (
 		PartSureIncorrect: 'ampDarkErrorOutline',
 		currentQuestion: 'ampSecondaryDot',
 		NotSureNoAnswerSelected: 'ampNeutralFilled',
+		CurrentSureIncorrect: 'ampDarkErrorDot',
+		CurrentUnsureIncorrect: 'ampDarkErrorOutlineDot',
+		CurrentOneAnswerPartSureIncorrect: 'ampDarkErrorOutlineDot',
+		CurrentNotSureNoAnswerSelected: 'ampNeutralFilledDot',
+		CurrentPartSurePartiallyCorrect: 'ampWarningOutlineDot',
+		CurrentPartSureCorrect: 'ampDarkSuccessOutlineDot',
+		CurrentOneAnswerPartSureCorrect: 'ampDarkSuccessOutlineDot',
+		CurrentSureCorrect: 'ampDarkSuccessDot',
 	};
-
-	let classNamesArray = questionList?.map((question: any) => {
-		if (dotIndex === currentQuestion.displayOrder - 1) {
-			return lookup.currentQuestion;
+	let arrayToMap = inReview ? wrongAnswers : questionList;
+	let classNamesArray = arrayToMap?.map((question: any) => {
+		if (inReview && dotIndex === currentQuestion.displayOrder - 1) {
+			if (!question.answered) {
+				return lookup.currentQuestion;
+			}
+			return lookup[`Current${question.confidence}${question.correctness}`];
 		}
+
 		if (question.answered) {
 			return lookup[`${question.confidence}${question.correctness}`];
 		} else {
@@ -144,16 +163,36 @@ const AnswerHistoryComponent = ({
 	roundLength,
 	currentQuestion,
 	questionList,
+	inReview,
 }: AnswerHistoryType) => {
+	const wrongAnswers = inReview
+		? questionList?.filter((question: any) => {
+				return (
+					`${question.confidence}${question.correctness}` !== 'SureCorrect'
+				);
+		  })
+		: [];
+
 	return (
-		<HStack>
-			{Array.from({ length: roundLength }, (_, i) => (
-				<AmpMicroChip
-					key={i}
-					variant={variantFunc(i, currentQuestion, questionList)}
-				/>
-			))}
-		</HStack>
+		<>
+			<HStack>
+				{Array.from(
+					{ length: inReview ? wrongAnswers?.length : roundLength },
+					(_, i) => (
+						<AmpMicroChip
+							key={i}
+							variant={variantFunc(
+								i,
+								currentQuestion,
+								questionList,
+								wrongAnswers,
+								inReview,
+							)}
+						/>
+					),
+				)}
+			</HStack>
+		</>
 	);
 };
 
@@ -163,6 +202,7 @@ const TestProgressBarMenu = ({
 	questionData,
 	currentQuestion,
 	currentRoundQuestionListData,
+	inReview,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -205,6 +245,7 @@ const TestProgressBarMenu = ({
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
 					<RoundNumberAndPhase
 						roundNumber={currentRoundQuestionListData?.roundNumber}
+						roundPhase={currentRoundQuestionListData?.roundPhase}
 					/>
 					<AnswerHistoryComponent
 						totalQuestionCount={
@@ -219,6 +260,7 @@ const TestProgressBarMenu = ({
 						roundLength={currentRoundQuestionListData?.questionList?.length}
 						currentQuestion={currentQuestion}
 						questionList={currentRoundQuestionListData?.questionList}
+						inReview={inReview}
 					/>
 				</VStack>
 
