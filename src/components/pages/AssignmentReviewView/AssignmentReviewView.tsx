@@ -32,7 +32,7 @@ import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
-import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
@@ -40,9 +40,9 @@ import { findDateData } from '../../../utils/logic';
 // when page load put the round objects in local storage question list already merged
 // then run find question infocus baised off of the local storage version
 // when the next question button is clicked clear the question infocus
-// update local storage objects that this question was viewed 
+// update local storage objects that this question was viewed
 // update findQuestionInfocus to account for review, and if in review use new functionality
-// new logic then sets next question infocus that has not been reviewed 
+// new logic then sets next question infocus that has not been reviewed
 // then have next and back slide up the question array untill all have been viewed.
 
 const AssignmentView = () => {
@@ -383,25 +383,39 @@ const AssignmentView = () => {
 							borderRadius={24}
 							p={8}>
 							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-								<Button variant={'ampOutline'} onClick={decrementQuestion}>
-									Previous
+								<Button
+									leftIcon={<ArrowLeftIcon />}
+									variant={'ampOutline'}
+									onClick={decrementQuestion}
+									disabled={questionIndex === 0}>
+									{i18n('prevQ')}
 								</Button>
 								<Text>
-									Reviewing {questionIndex + 1} of{' '}
+									{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
 									{currentRoundQuestionListData?.questionList?.length}
 								</Text>
-								<Button
-									rightIcon={<ArrowRightIcon />}
-									variant={'ampSolid'}
-									onClick={() => {
-										setShowExplanation(false);
-										setAnswerSubmitted(false);
-										setTryAgain(false);
-										incrementQuestion();
-										fetchModuleQuestionsData();
-									}}>
-									Next Question{' '}
-								</Button>
+								{Number(currentRoundQuestionListData?.questionList?.length) ===
+								questionIndex + 1 ? (
+									<Button
+										rightIcon={<ArrowRightIcon />}
+										variant={'ampSolid'}
+										onClick={() => {}}>
+										{i18n('keepGoing')}
+									</Button>
+								) : (
+									<Button
+										rightIcon={<ArrowRightIcon />}
+										variant={'ampSolid'}
+										onClick={() => {
+											setShowExplanation(false);
+											setAnswerSubmitted(false);
+											setTryAgain(false);
+											incrementQuestion();
+											fetchModuleQuestionsData();
+										}}>
+										{i18n('nextQ')}
+									</Button>
+								)}
 							</HStack>
 						</Box>
 					</VStack>
