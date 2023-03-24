@@ -154,15 +154,6 @@ const AssignmentView = () => {
 				});
 				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
-				console.log('localQuestionHistory', localQuestionHistory);
-				console.log(
-					'question',
-					findQuestionInFocus(
-						moduleQuestionsResponse,
-						currentRoundQuestionsResponse,
-						true,
-					)[questionIndex],
-				);
 				setQuestionInFocus(
 					findQuestionInFocus(
 						moduleQuestionsResponse,

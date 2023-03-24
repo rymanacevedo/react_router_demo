@@ -96,34 +96,13 @@ export const findQuestionInFocus = (
 			return updatedQuestion;
 		},
 	);
-	console.log('^^^^^^^^', inReview);
 	if (inReview) {
-		console.log(
-			'{{{{{{{{{{{{{{{',
-			questionList.filter(
-				(item: { confidence: string; correctness: string }) => {
-					return !(
-						item.confidence === 'Sure' && item.correctness === 'Correct'
-					);
-				},
-			),
-		);
 		return questionList.filter(
 			(item: { confidence: string; correctness: string }) => {
 				return !(item.confidence === 'Sure' && item.correctness === 'Correct');
 			},
 		);
 	} else {
-		console.log(
-			'}}}}}}}}}}',
-			questionList.filter(
-				(item: { confidence: string; correctness: string }) => {
-					return !(
-						item.confidence === 'Sure' && item.correctness === 'Correct'
-					);
-				},
-			),
-		);
 		const firstUnansweredQuestion = questionList.find(
 			(question: { answered: boolean }) => {
 				return question.answered === false;
