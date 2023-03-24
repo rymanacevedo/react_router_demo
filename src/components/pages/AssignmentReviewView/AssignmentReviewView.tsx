@@ -141,8 +141,7 @@ const AssignmentView = () => {
 								moduleQuestionsResponse,
 								currentRoundQuestionsResponse,
 								true,
-								questionIndex,
-							).id
+							)[questionIndex].id
 						);
 					},
 				);
@@ -155,19 +154,33 @@ const AssignmentView = () => {
 				});
 				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
+				console.log('localQuestionHistory', localQuestionHistory);
+				console.log(
+					'question',
+					findQuestionInFocus(
+						moduleQuestionsResponse,
+						currentRoundQuestionsResponse,
+						true,
+					)[questionIndex],
+				);
 				setQuestionInFocus(
 					findQuestionInFocus(
 						moduleQuestionsResponse,
 						currentRoundQuestionsResponse,
 						true,
-						questionIndex,
-					),
+					)[questionIndex],
 				);
 			}
 		} catch (error) {
 			console.error(error);
 		}
 	};
+
+	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
+		(item: { confidence: string; correctness: string }) => {
+			return !(item.confidence === 'Sure' && item.correctness === 'Correct');
+		},
+	).length;
 
 	useEffect(() => {
 		fetchModuleQuestionsData();
@@ -269,7 +282,7 @@ const AssignmentView = () => {
 							<Question
 								questionInFocus={questionInFocus}
 								review={true}
-								currentRoundQuestionListData={currentRoundQuestionListData}
+								numberOfQInReview={numberOfQInReview}
 								questionIndex={questionIndex + 1}
 							/>
 						</Box>
@@ -392,10 +405,9 @@ const AssignmentView = () => {
 								</Button>
 								<Text>
 									{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
-									{currentRoundQuestionListData?.questionList?.length}
+									{numberOfQInReview}
 								</Text>
-								{Number(currentRoundQuestionListData?.questionList?.length) ===
-								questionIndex + 1 ? (
+								{Number(numberOfQInReview) === questionIndex + 1 ? (
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
