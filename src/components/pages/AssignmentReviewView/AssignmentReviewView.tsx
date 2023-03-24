@@ -53,12 +53,6 @@ const AssignmentView = () => {
 	});
 	const [tryAgain, setTryAgain] = useState(false);
 
-	// eslint-disable-next-line
-	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
-		'questionHistory',
-		null,
-	);
-
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
@@ -120,6 +114,11 @@ const AssignmentView = () => {
 	const [clearSelection, setClearSelection] = useState(false);
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const { assignmentKey } = useParams();
+	// eslint-disable-next-line
+	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
+		`questionHistory${assignmentKey}`,
+		null,
+	);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
