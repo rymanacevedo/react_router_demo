@@ -141,6 +141,9 @@ const resources = {
          tryAgain: 'Try Again',
          revealCorrectAns: 'Reveal Correct Answer',
          addLearn: 'Additional Learning',
+         prevQ: 'Previous Question',
+         reviewing:'Reviewing',
+         keepGoing:'Keep Going',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////

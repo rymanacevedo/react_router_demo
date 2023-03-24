@@ -32,7 +32,7 @@ import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
-import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
@@ -134,15 +134,14 @@ const AssignmentView = () => {
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
 				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
-					(questionHistory: { answeredQuestionId: any }) => {
+					(questionHistory: { answeredQuestionId: number }) => {
 						return (
 							questionHistory.answeredQuestionId ===
 							findQuestionInFocus(
 								moduleQuestionsResponse,
 								currentRoundQuestionsResponse,
 								true,
-								questionIndex,
-							).id
+							)[questionIndex].id
 						);
 					},
 				);
@@ -160,14 +159,19 @@ const AssignmentView = () => {
 						moduleQuestionsResponse,
 						currentRoundQuestionsResponse,
 						true,
-						questionIndex,
-					),
+					)[questionIndex],
 				);
 			}
 		} catch (error) {
 			console.error(error);
 		}
 	};
+
+	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
+		(item: { confidence: string; correctness: string }) => {
+			return !(item.confidence === 'Sure' && item.correctness === 'Correct');
+		},
+	).length;
 
 	useEffect(() => {
 		fetchModuleQuestionsData();
@@ -222,6 +226,14 @@ const AssignmentView = () => {
 		count -= 1;
 		setQuestionIndex(count);
 	};
+	const handleNextQuestionInReview = () => {
+		setShowExplanation(false);
+		setAnswerSubmitted(false);
+		setTryAgain(false);
+		incrementQuestion();
+		fetchModuleQuestionsData();
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Container
@@ -262,7 +274,7 @@ const AssignmentView = () => {
 							<Question
 								questionInFocus={questionInFocus}
 								review={true}
-								currentRoundQuestionListData={currentRoundQuestionListData}
+								numberOfQInReview={numberOfQInReview}
 								questionIndex={questionIndex + 1}
 							/>
 						</Box>
@@ -376,25 +388,34 @@ const AssignmentView = () => {
 							borderRadius={24}
 							p={8}>
 							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-								<Button variant={'ampOutline'} onClick={decrementQuestion}>
-									Previous
+								<Button
+									leftIcon={<ArrowLeftIcon />}
+									variant={'ampOutline'}
+									onClick={decrementQuestion}
+									disabled={questionIndex === 0}>
+									{i18n('prevQ')}
 								</Button>
 								<Text>
-									Reviewing {questionIndex + 1} of{' '}
-									{currentRoundQuestionListData?.questionList?.length}
+									{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
+									{numberOfQInReview}
 								</Text>
-								<Button
-									rightIcon={<ArrowRightIcon />}
-									variant={'ampSolid'}
-									onClick={() => {
-										setShowExplanation(false);
-										setAnswerSubmitted(false);
-										setTryAgain(false);
-										incrementQuestion();
-										fetchModuleQuestionsData();
-									}}>
-									Next Question{' '}
-								</Button>
+								{Number(numberOfQInReview) === questionIndex + 1 ? (
+									<Button
+										rightIcon={<ArrowRightIcon />}
+										variant={'ampSolid'}
+										onClick={() => {}}>
+										{i18n('keepGoing')}
+									</Button>
+								) : (
+									<Button
+										rightIcon={<ArrowRightIcon />}
+										variant={'ampSolid'}
+										onClick={() => {
+											handleNextQuestionInReview();
+										}}>
+										{i18n('nextQ')}
+									</Button>
+								)}
 							</HStack>
 						</Box>
 					</VStack>
