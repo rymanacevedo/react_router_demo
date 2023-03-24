@@ -304,6 +304,7 @@ const AssignmentView = () => {
 					setIsMenuOpen={setIsMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
+					inReview={true}
 				/>
 				<ExplanationTitle
 					answer={`${questionInFocus.confidence}${questionInFocus.correctness}`}

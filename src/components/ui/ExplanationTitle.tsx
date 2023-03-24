@@ -14,6 +14,8 @@ const ExplanationTitle = ({ answer }: any) => {
 		UnsureIncorrect: 'You didn’t know this one, let’s dig in.',
 		PartSurePartiallyCorrect: 'You got part of this one correct.',
 		NotSureNoAnswerSelected: 'You didn’t know this one, let’s take a look.',
+		OneAnswerPartSureIncorrect: 'You didn’t know this one, let’s dig in.',
+		OneAnswerPartSureCorrect: 'You knew this one! You just weren’t sure.',
 	};
 
 	const iconLookup: { [key: string]: any } = {
@@ -23,6 +25,8 @@ const ExplanationTitle = ({ answer }: any) => {
 		UnsureIncorrect: 'ampDarkErrorOutline',
 		PartSurePartiallyCorrect: 'ampWarningOutline',
 		NotSureNoAnswerSelected: 'ampNeutralFilled',
+		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
+		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
 	};
 
 	const variant: string = iconLookup[answer as keyof ExplanationAnswerType];
