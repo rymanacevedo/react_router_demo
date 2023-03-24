@@ -11,13 +11,17 @@ import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import {
+	QuestionInFocus,
+	CurrentRoundAnswerOverLayData,
+} from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressBarMenu = {
 	isMenuOpen: boolean;
 	setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	currentQuestion: any;
 	inReview?: boolean;
 };
@@ -104,6 +108,7 @@ type AnswerHistoryType = {
 	currentQuestion: any;
 	questionList: any;
 	inReview?: boolean;
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 };
 
 const variantFunc = (
@@ -112,6 +117,7 @@ const variantFunc = (
 	questionList: QuestionInFocus[],
 	wrongAnswers: QuestionInFocus[],
 	inReview?: boolean,
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData,
 ) => {
 	type LookupType = {
 		[key: string]: string;
@@ -140,11 +146,13 @@ const variantFunc = (
 	};
 	let arrayToMap = inReview ? wrongAnswers : questionList;
 	let classNamesArray = arrayToMap?.map((question: any) => {
-		if (inReview && dotIndex === currentQuestion.displayOrder - 1) {
+		if (!inReview && dotIndex === currentQuestion.displayOrder - 1) {
 			if (!question.answered) {
-				return lookup.currentQuestion;
+				return lookup[
+					`Current${currentRoundAnswerOverLayData?.confidence}${currentRoundAnswerOverLayData?.correctness}`
+				];
 			}
-			return lookup[`Current${question.confidence}${question.correctness}`];
+			return lookup.currentQuestion;
 		}
 
 		if (question.answered) {
@@ -164,6 +172,7 @@ const AnswerHistoryComponent = ({
 	currentQuestion,
 	questionList,
 	inReview,
+	currentRoundAnswerOverLayData,
 }: AnswerHistoryType) => {
 	const wrongAnswers = inReview
 		? questionList?.filter((question: any) => {
@@ -187,6 +196,7 @@ const AnswerHistoryComponent = ({
 								questionList,
 								wrongAnswers,
 								inReview,
+								currentRoundAnswerOverLayData,
 							)}
 						/>
 					),
@@ -203,6 +213,7 @@ const TestProgressBarMenu = ({
 	currentQuestion,
 	currentRoundQuestionListData,
 	inReview,
+	currentRoundAnswerOverLayData,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -261,6 +272,7 @@ const TestProgressBarMenu = ({
 						currentQuestion={currentQuestion}
 						questionList={currentRoundQuestionListData?.questionList}
 						inReview={inReview}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 				</VStack>
 

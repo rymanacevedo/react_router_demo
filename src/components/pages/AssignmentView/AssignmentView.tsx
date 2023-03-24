@@ -242,6 +242,7 @@ const AssignmentView = () => {
 					setIsMenuOpen={setIsMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
+					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 				/>{' '}
 				<HStack width="100%">
 					<HStack
