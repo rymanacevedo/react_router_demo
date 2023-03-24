@@ -1,16 +1,15 @@
 import { Heading, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import RichContentComponent from './RichContentComponent';
-import { CurrentRoundQuestionListData } from '../pages/AssignmentView/AssignmentTypes';
 
 const Question = ({
 	questionInFocus,
 	review,
-	currentRoundQuestionListData,
+	numberOfQInReview,
 	questionIndex,
 }: {
 	review?: boolean;
-	currentRoundQuestionListData?: CurrentRoundQuestionListData;
+	numberOfQInReview?: number;
 	questionInFocus:
 		| { questionRc: any; name?: string; introductionRc?: any }
 		| undefined;
@@ -22,8 +21,7 @@ const Question = ({
 		<>
 			{review ? (
 				<Heading as="h2">
-					{i18n('ReviewQ')} {questionIndex} {i18n('of')}{' '}
-					{currentRoundQuestionListData?.questionList?.length}{' '}
+					{i18n('ReviewQ')} {questionIndex} {i18n('of')} {numberOfQInReview}{' '}
 				</Heading>
 			) : (
 				<Heading as="h2">Question</Heading>

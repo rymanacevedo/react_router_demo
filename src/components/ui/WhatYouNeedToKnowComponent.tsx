@@ -69,7 +69,7 @@ const WhatYouNeedToKnowComponent = ({
 							{({ isExpanded }) => (
 								<>
 									<h2>
-										<AccordionButton>
+										<AccordionButton padding={'0'}>
 											{isExpanded ? (
 												<ChevronDownIcon
 													style={{
@@ -98,7 +98,7 @@ const WhatYouNeedToKnowComponent = ({
 											</Box>
 										</AccordionButton>
 									</h2>
-									<AccordionPanel pb={4}>
+									<AccordionPanel padding={'0px'}>
 										<RichContentComponent
 											content={questionInFocus?.moreInformationRc}
 										/>
