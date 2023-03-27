@@ -18,7 +18,7 @@ import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
@@ -54,12 +54,6 @@ const AssignmentView = () => {
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
 
-	// eslint-disable-next-line
-	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
-		'questionHistory',
-		null,
-	);
-
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
@@ -93,6 +87,7 @@ const AssignmentView = () => {
 		kind: '',
 		name: '',
 	});
+
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
 		answerList: [],
@@ -108,9 +103,9 @@ const AssignmentView = () => {
 		moduleComplete: false,
 		notSureCount: 0,
 		onceCorrectCount: 0,
-		questionSeconds: 0,
+		questionSeconds: 20,
 		questionsMastered: 0,
-		reviewSeconds: 0,
+		reviewSeconds: 20,
 		self: null,
 		totalQuestionCount: 0,
 		twiceCorrectCount: 0,
@@ -121,9 +116,15 @@ const AssignmentView = () => {
 	const [clearSelection, setClearSelection] = useState(false);
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const { assignmentKey } = useParams();
+	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
+		`questionHistory${assignmentKey}`,
+		null,
+	);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const [questionSecondsHistory, setQuestionSecondsHistory] = useState(0);
+	const navigate = useNavigate();
 	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
@@ -146,11 +147,12 @@ const AssignmentView = () => {
 						);
 					},
 				);
-				setSelectedAnswers(savedData.answersChosen);
+				setQuestionSecondsHistory(savedData?.questionSeconds);
+				setSelectedAnswers(savedData?.answersChosen);
 				setCurrentRoundAnswerOverLayData((roundAnswerOverLayData) => {
 					return {
 						...roundAnswerOverLayData,
-						correctAnswerIds: [...savedData.correctAnswerIds],
+						correctAnswerIds: savedData?.correctAnswerIds,
 					};
 				});
 				setQuestionData(moduleQuestionsResponse);
@@ -227,15 +229,40 @@ const AssignmentView = () => {
 		count -= 1;
 		setQuestionIndex(count);
 	};
-	const handleNextQuestionInReview = () => {
+	const putReviewInfo = async () => {
+		await putCurrentRound(
+			currentRoundQuestionListData?.id,
+			questionInFocus.id,
+			{
+				...answerData,
+				answerDate: null,
+				answerList: null,
+				reviewSeconds: 20,
+			},
+		);
+	};
+	const handleNextQuestionInReview = async () => {
 		setRevealAnswer(false);
 		setShowExplanation(false);
 		setAnswerSubmitted(false);
 		setTryAgain(false);
 		incrementQuestion();
 		fetchModuleQuestionsData();
+		putReviewInfo();
 	};
-
+	const handelKeepGoing = async () => {
+		setLocalQuestionHistory(null);
+		navigate(`/app/learning/assignment/${assignmentKey}`);
+		setAnswerData((answerDataArg: any) => {
+			return {
+				...answerDataArg,
+				questionSeconds: questionSecondsHistory,
+				//TODO: add tracked review seconds
+				reviewSeconds: 20,
+			};
+		});
+		putReviewInfo();
+	};
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus.correctness === 'Correct') {
 			return;
@@ -437,16 +464,14 @@ const AssignmentView = () => {
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={() => {}}>
+										onClick={handelKeepGoing}>
 										{i18n('keepGoing')}
 									</Button>
 								) : (
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={() => {
-											handleNextQuestionInReview();
-										}}>
+										onClick={handleNextQuestionInReview}>
 										{i18n('nextQ')}
 									</Button>
 								)}
