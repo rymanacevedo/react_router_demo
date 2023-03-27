@@ -296,7 +296,7 @@ const AssignmentView = () => {
 							isOpen={isInstructionalOverlayOpen}
 							onClose={onClose}
 							defaultIsOpen={isInstructionalOverlayOpen}
-							placement={isSmallerThan1000 ? 'top' : 'left'}
+							placement={isSmallerThan1000 ? 'auto' : 'left'}
 							initialFocusRef={initRef}
 							arrowSize={20}>
 							<PopoverAnchor>
@@ -376,9 +376,9 @@ const AssignmentView = () => {
 							<Box style={{ zIndex: 1401 }}>
 								<PopoverContent
 									p={isSmallerThan1000 ? 12 : 10}
-									h={isSmallerThan1000 ? 485 : 435}
+									h={isSmallerThan1000 ? 'auto' : 485}
 									w={560}>
-									<PopoverArrow />
+									<PopoverArrow style={{ borderRadius: '2px' }} />
 									<Heading as="h2" size="lg" mb={3}>
 										Ways to answer
 									</Heading>
@@ -387,28 +387,32 @@ const AssignmentView = () => {
 											<Box>
 												<Heading
 													style={{ fontWeight: 'normal' }}
+													mt={4}
+													mb={4}
 													as="h3"
 													size="md">
 													Click <strong>once</strong> if you are{' '}
 													<strong>unsure</strong>
 												</Heading>
 												<img
-													style={{ marginTop: '12px', marginBottom: '24px' }}
-													src={`${process.env.PUBLIC_URL}/images/sure.gif`}
+													style={{ marginTop: '24px', marginBottom: '24px' }}
+													src={`${process.env.PUBLIC_URL}/images/unsure.gif`}
 													alt="unsure gif"
 												/>
 											</Box>
 											<Box>
 												<Heading
 													style={{ fontWeight: 'normal' }}
+													mt={4}
+													mb={4}
 													as="h3"
 													size="md">
 													Click <strong>twice</strong> if you are{' '}
 													<strong>sure</strong>
 												</Heading>
 												<img
-													style={{ marginTop: '12px', marginBottom: '24px' }}
-													src={`${process.env.PUBLIC_URL}/images/unsure.gif`}
+													style={{ marginTop: '24px', marginBottom: '24px' }}
+													src={`${process.env.PUBLIC_URL}/images/sure.gif`}
 													alt="sure gif"
 												/>
 											</Box>
@@ -418,7 +422,7 @@ const AssignmentView = () => {
 											question again later after learning more. You can submit
 											up to two choices if you are unsure.
 										</Text>
-										<Text>
+										<Text mt={5}>
 											You can click three times to unselect your answer.
 										</Text>
 										<Button mt={4} onClick={onClose} ref={initRef}>
