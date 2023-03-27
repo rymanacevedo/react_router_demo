@@ -364,6 +364,7 @@ const AssignmentView = () => {
 					<ProgressMenu
 						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 				</HStack>
 				<Collapse in={showExplanation} animateOpacity>

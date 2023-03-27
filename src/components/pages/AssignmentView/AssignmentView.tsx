@@ -361,6 +361,7 @@ const AssignmentView = () => {
 					<ProgressMenu
 						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 				</HStack>
 			</Container>

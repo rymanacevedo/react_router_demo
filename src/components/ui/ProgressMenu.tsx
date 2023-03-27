@@ -11,34 +11,45 @@ import ProgressMessageComponent from './ProgressMessageComponent';
 import { LapTimerIcon } from '@radix-ui/react-icons';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
-import { CurrentRoundQuestionListData } from '../pages/AssignmentView/AssignmentTypes';
+import {
+	CurrentRoundQuestionListData,
+	CurrentRoundAnswerOverLayData,
+} from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressMenuType = {
 	isMenuOpen: boolean;
 	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
+	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData | undefined;
 };
 
 const ProgressMenu = ({
 	isMenuOpen,
 	currentRoundQuestionListData,
+	currentRoundAnswerOverLayData,
 }: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
-	const progressPercent = currentRoundQuestionListData
+	const dataSource = currentRoundAnswerOverLayData
+		? currentRoundAnswerOverLayData
+		: currentRoundQuestionListData;
+
+	const progressPercent = dataSource
 		? Math.floor(
-				(currentRoundQuestionListData?.masteredQuestionCount /
-					currentRoundQuestionListData?.totalQuestionCount) *
+				(dataSource?.masteredQuestionCount / dataSource?.totalQuestionCount) *
 					100,
 		  )
 		: 0;
 
-	const learningCount = () => {
+	const seenCount = () => {
 		return (
-			currentRoundQuestionListData?.notSureCount +
-			currentRoundQuestionListData?.uninformedCount +
-			currentRoundQuestionListData?.informedCount +
-			currentRoundQuestionListData?.misinformedCount -
-			currentRoundQuestionListData?.misinformedCount
+			dataSource?.notSureCount +
+			dataSource?.uninformedCount +
+			dataSource?.informedCount +
+			dataSource?.misinformedCount
 		);
+	};
+
+	const learningCount = () => {
+		return seenCount() - dataSource?.misinformedCount;
 	};
 
 	return (
@@ -78,7 +89,7 @@ const ProgressMenu = ({
 									{i18n('mastered')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{currentRoundQuestionListData?.masteredQuestionCount}
+									{dataSource?.masteredQuestionCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -86,7 +97,7 @@ const ProgressMenu = ({
 									{i18n('incorrect')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{currentRoundQuestionListData?.misinformedCount}
+									{dataSource?.misinformedCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
@@ -102,7 +113,7 @@ const ProgressMenu = ({
 									{i18n('unseen')}
 								</Text>{' '}
 								<Text fontSize={'16px'} fontWeight="600" w="100%">
-									{currentRoundQuestionListData?.unseenCount}
+									{dataSource?.unseenCount}
 								</Text>
 							</VStack>
 						</HStack>

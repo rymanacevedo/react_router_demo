@@ -232,15 +232,19 @@ const TestProgressBarMenu = ({
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const dataSource = currentRoundAnswerOverLayData
+		? currentRoundAnswerOverLayData
+		: currentRoundQuestionListData;
+
 	const seenCount =
-		currentRoundQuestionListData?.notSureCount +
-		currentRoundQuestionListData?.uninformedCount +
-		currentRoundQuestionListData?.informedCount +
-		currentRoundQuestionListData?.misinformedCount;
-	const progressPercent = currentRoundQuestionListData
+		dataSource?.notSureCount +
+		dataSource?.uninformedCount +
+		dataSource?.informedCount +
+		dataSource?.misinformedCount;
+
+	const progressPercent = dataSource
 		? Math.floor(
-				(currentRoundQuestionListData?.masteredQuestionCount /
-					currentRoundQuestionListData?.totalQuestionCount) *
+				(dataSource?.masteredQuestionCount / dataSource?.totalQuestionCount) *
 					100,
 		  )
 		: 0;
