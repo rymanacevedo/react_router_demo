@@ -1,30 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import {
 	Box,
-	Button,
 	Container,
-	Fade,
-	Heading,
 	HStack,
 	Modal,
 	ModalOverlay,
-	Popover,
-	PopoverAnchor,
-	PopoverArrow,
-	PopoverBody,
-	PopoverContent,
-	Stack,
-	Text,
 	useMediaQuery,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
-import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
 	AnswerData,
 	CurrentRoundAnswerOverLayData,
@@ -37,9 +24,9 @@ import useCurrentRoundService from '../../../services/coursesServices/useCurrent
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { findDateData } from '../../../utils/logic';
 import { Cookies } from 'react-cookie-consent';
+import AnswerArea from '../../ui/AnswerInput/AnswerArea';
 
 const AssignmentView = () => {
-	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
@@ -88,7 +75,7 @@ const AssignmentView = () => {
 			avatarMessage: null,
 			answerList: [],
 		});
-	const [showoverLay, setShowOverLay] = useState(false);
+	const [showOverlay, setShowOverlay] = useState(false);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
 		kind: '',
@@ -173,7 +160,7 @@ const AssignmentView = () => {
 
 	const getNextTask = () => {
 		clearSelectionButtonFunc();
-		setShowOverLay(false);
+		setShowOverlay(false);
 		fetchModuleQuestionsData();
 	};
 
@@ -225,7 +212,7 @@ const AssignmentView = () => {
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
-				setShowOverLay(true);
+				setShowOverlay(true);
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
@@ -234,7 +221,7 @@ const AssignmentView = () => {
 	}, [answerData]);
 
 	const continueBtnFunc = () => {
-		if (showoverLay) {
+		if (showOverlay) {
 			getNextTask();
 		} else {
 			submitAnswer();
@@ -287,151 +274,21 @@ const AssignmentView = () => {
 							p={'72px'}>
 							<Question questionInFocus={questionInFocus} />
 						</Box>
-						<Popover
-							closeOnBlur={false}
-							closeOnEsc={false}
-							isLazy={true}
-							offset={[-150, 0]}
-							arrowPadding={220}
+						<AnswerArea
 							isOpen={isInstructionalOverlayOpen}
 							onClose={onClose}
-							defaultIsOpen={isInstructionalOverlayOpen}
-							placement={isSmallerThan1000 ? 'auto' : 'left'}
+							smallerThan1000={isSmallerThan1000}
 							initialFocusRef={initRef}
-							arrowSize={20}>
-							<PopoverAnchor>
-								<Box
-									style={{
-										backgroundColor: 'white',
-										margin: '6px',
-										minHeight: '745px',
-									}}
-									boxShadow="2xl"
-									h={isSmallerThan1000 ? '' : '100%'}
-									display={'flex'}
-									flexDirection="column"
-									justifyContent={'space-between'}
-									w="100%"
-									maxWidth={726}
-									overflow="hidden"
-									borderRadius={24}
-									p={'72px'}>
-									{!showoverLay ? (
-										<Fade in={!showoverLay}>
-											{' '}
-											<MultipleChoiceAnswers
-												questionInFocus={questionInFocus}
-												selectedAnswers={selectedAnswers}
-												setSelectedAnswers={setSelectedAnswers}
-												clearSelection={clearSelection}
-												setClearSelection={setClearSelection}
-											/>
-										</Fade>
-									) : (
-										<Fade in={showoverLay}>
-											{' '}
-											<MultipleChoiceOverLay
-												questionInFocus={questionInFocus}
-												selectedAnswers={selectedAnswers}
-												setSelectedAnswers={setSelectedAnswers}
-												clearSelection={clearSelection}
-												setClearSelection={setClearSelection}
-												currentRoundAnswerOverLayData={
-													currentRoundAnswerOverLayData
-												}
-											/>
-										</Fade>
-									)}
-									<HStack
-										justifyContent={'space-between'}
-										display={'flex'}
-										marginTop={'12px'}>
-										<Button
-											onClick={continueBtnFunc}
-											variant={'ampSolid'}
-											w="150px">
-											<Text>
-												{i18n(
-													showoverLay ? 'continueBtnText' : 'submitBtnText',
-												)}
-											</Text>
-										</Button>
-										<Button
-											_hover={{ backgroundColor: 'white' }}
-											height="12px"
-											variant="ghost"
-											onClick={() => {
-												clearSelectionButtonFunc();
-											}}>
-											{!showoverLay && (
-												<Text fontSize={'14px'} color={'ampSecondary.500'}>
-													{i18n('clearSelection')}
-												</Text>
-											)}
-										</Button>
-									</HStack>
-								</Box>
-							</PopoverAnchor>
-							{/* TODO: a hack, is to wrap a box around instead of added zindex to the theme file https://chakra-ui.com/docs/styled-system/theme#z-index-values*/}
-							<Box style={{ zIndex: 1401 }}>
-								<PopoverContent
-									p={isSmallerThan1000 ? 12 : 10}
-									h={isSmallerThan1000 ? 'auto' : 485}
-									w={560}>
-									<PopoverArrow style={{ borderRadius: '2px' }} />
-									<Heading as="h2" size="lg" mb={3}>
-										Ways to answer
-									</Heading>
-									<PopoverBody style={{ padding: 0 }}>
-										<Stack direction={['column', 'row']}>
-											<Box>
-												<Heading
-													style={{ fontWeight: 'normal' }}
-													mt={4}
-													mb={4}
-													as="h3"
-													size="md">
-													Click <strong>once</strong> if you are{' '}
-													<strong>unsure</strong>
-												</Heading>
-												<img
-													style={{ marginTop: '24px', marginBottom: '24px' }}
-													src={`${process.env.PUBLIC_URL}/images/unsure.gif`}
-													alt="unsure gif"
-												/>
-											</Box>
-											<Box>
-												<Heading
-													style={{ fontWeight: 'normal' }}
-													mt={4}
-													mb={4}
-													as="h3"
-													size="md">
-													Click <strong>twice</strong> if you are{' '}
-													<strong>sure</strong>
-												</Heading>
-												<img
-													style={{ marginTop: '24px', marginBottom: '24px' }}
-													src={`${process.env.PUBLIC_URL}/images/sure.gif`}
-													alt="sure gif"
-												/>
-											</Box>
-										</Stack>
-										<Text>
-											Choosing unsure will give you the opportunity to try this
-											question again later after learning more. You can submit
-											up to two choices if you are unsure.
-										</Text>
-										<Text mt={5}>
-											You can click three times to unselect your answer.
-										</Text>
-										<Button mt={4} onClick={onClose} ref={initRef}>
-											Continue
-										</Button>
-									</PopoverBody>
-								</PopoverContent>
-							</Box>
-						</Popover>
+							showOverlay={showOverlay}
+							questionInFocus={questionInFocus}
+							selectedAnswers={selectedAnswers}
+							selectedAnswersState={setSelectedAnswers}
+							clearSelection={clearSelection}
+							clearSelectionState={setClearSelection}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+							onClick={continueBtnFunc}
+							clearSelectionFunction={clearSelectionButtonFunc}
+						/>
 					</HStack>
 					<ProgressMenu
 						isMenuOpen={isMenuOpen}
