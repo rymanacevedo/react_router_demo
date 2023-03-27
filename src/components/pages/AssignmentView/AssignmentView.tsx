@@ -13,7 +13,6 @@ import {
 	PopoverArrow,
 	PopoverBody,
 	PopoverContent,
-	PopoverTrigger,
 	Stack,
 	Text,
 	useMediaQuery,
@@ -357,9 +356,6 @@ const AssignmentView = () => {
 												)}
 											</Text>
 										</Button>
-										<PopoverTrigger>
-											<Button>Click</Button>
-										</PopoverTrigger>
 										<Button
 											_hover={{ backgroundColor: 'white' }}
 											height="12px"
