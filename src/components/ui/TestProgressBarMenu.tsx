@@ -11,15 +11,20 @@ import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import {
+	QuestionInFocus,
+	CurrentRoundAnswerOverLayData,
+} from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressBarMenu = {
 	isMenuOpen: boolean;
 	setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	currentQuestion: any;
 	inReview?: boolean;
+	questionIndex?: number;
 };
 
 type ModuleTitleType = {
@@ -104,6 +109,8 @@ type AnswerHistoryType = {
 	currentQuestion: any;
 	questionList: any;
 	inReview?: boolean;
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
+	questionIndex?: number;
 };
 
 const variantFunc = (
@@ -112,6 +119,8 @@ const variantFunc = (
 	questionList: QuestionInFocus[],
 	wrongAnswers: QuestionInFocus[],
 	inReview?: boolean,
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData,
+	questionIndex?: number,
 ) => {
 	type LookupType = {
 		[key: string]: string;
@@ -140,11 +149,22 @@ const variantFunc = (
 	};
 	let arrayToMap = inReview ? wrongAnswers : questionList;
 	let classNamesArray = arrayToMap?.map((question: any) => {
-		if (inReview && dotIndex === currentQuestion.displayOrder - 1) {
-			if (!question.answered) {
-				return lookup.currentQuestion;
+		if (!inReview && dotIndex === currentQuestion.displayOrder - 1) {
+			if (question.confidence === null && question.correctness === null) {
+				if (
+					currentRoundAnswerOverLayData?.confidence &&
+					currentRoundAnswerOverLayData?.correctness
+				) {
+					return lookup[
+						`Current${currentRoundAnswerOverLayData?.confidence}${currentRoundAnswerOverLayData?.correctness}`
+					];
+				}
 			}
-			return lookup[`Current${question.confidence}${question.correctness}`];
+
+			return lookup.currentQuestion;
+		}
+		if (inReview && dotIndex === questionIndex) {
+			return lookup[`Current${question?.confidence}${question?.correctness}`];
 		}
 
 		if (question.answered) {
@@ -164,6 +184,8 @@ const AnswerHistoryComponent = ({
 	currentQuestion,
 	questionList,
 	inReview,
+	currentRoundAnswerOverLayData,
+	questionIndex,
 }: AnswerHistoryType) => {
 	const wrongAnswers = inReview
 		? questionList?.filter((question: any) => {
@@ -187,6 +209,8 @@ const AnswerHistoryComponent = ({
 								questionList,
 								wrongAnswers,
 								inReview,
+								currentRoundAnswerOverLayData,
+								questionIndex,
 							)}
 						/>
 					),
@@ -203,18 +227,24 @@ const TestProgressBarMenu = ({
 	currentQuestion,
 	currentRoundQuestionListData,
 	inReview,
+	currentRoundAnswerOverLayData,
+	questionIndex,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const dataSource = currentRoundAnswerOverLayData
+		? currentRoundAnswerOverLayData
+		: currentRoundQuestionListData;
+
 	const seenCount =
-		currentRoundQuestionListData?.notSureCount +
-		currentRoundQuestionListData?.uninformedCount +
-		currentRoundQuestionListData?.informedCount +
-		currentRoundQuestionListData?.misinformedCount;
-	const progressPercent = currentRoundQuestionListData
+		dataSource?.notSureCount +
+		dataSource?.uninformedCount +
+		dataSource?.informedCount +
+		dataSource?.misinformedCount;
+
+	const progressPercent = dataSource
 		? Math.floor(
-				(currentRoundQuestionListData?.masteredQuestionCount /
-					currentRoundQuestionListData?.totalQuestionCount) *
+				(dataSource?.masteredQuestionCount / dataSource?.totalQuestionCount) *
 					100,
 		  )
 		: 0;
@@ -261,6 +291,8 @@ const TestProgressBarMenu = ({
 						currentQuestion={currentQuestion}
 						questionList={currentRoundQuestionListData?.questionList}
 						inReview={inReview}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						questionIndex={questionIndex}
 					/>
 				</VStack>
 

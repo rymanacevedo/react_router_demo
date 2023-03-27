@@ -344,6 +344,7 @@ const AssignmentView = () => {
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
 					inReview={true}
+					questionIndex={questionIndex}
 				/>
 				<ExplanationTitle
 					answer={`${questionInFocus.confidence}${questionInFocus.correctness}`}
@@ -424,6 +425,7 @@ const AssignmentView = () => {
 					<ProgressMenu
 						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 				</HStack>
 				<Collapse in={showExplanation} animateOpacity>
