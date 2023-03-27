@@ -116,7 +116,6 @@ const AssignmentView = () => {
 	const [clearSelection, setClearSelection] = useState(false);
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const { assignmentKey } = useParams();
-	// eslint-disable-next-line
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
 		`questionHistory${assignmentKey}`,
 		null,
@@ -230,15 +229,6 @@ const AssignmentView = () => {
 		count -= 1;
 		setQuestionIndex(count);
 	};
-	const handleNextQuestionInReview = () => {
-		setRevealAnswer(false);
-		setShowExplanation(false);
-		setAnswerSubmitted(false);
-		setTryAgain(false);
-		incrementQuestion();
-		fetchModuleQuestionsData();
-	};
-
 	const putReviewInfo = async () => {
 		await putCurrentRound(
 			currentRoundQuestionListData?.id,
@@ -250,6 +240,28 @@ const AssignmentView = () => {
 				reviewSeconds: 20,
 			},
 		);
+	};
+	const handleNextQuestionInReview = async () => {
+		setRevealAnswer(false);
+		setShowExplanation(false);
+		setAnswerSubmitted(false);
+		setTryAgain(false);
+		incrementQuestion();
+		fetchModuleQuestionsData();
+		putReviewInfo();
+	};
+	const handelKeepGoing = async () => {
+		setLocalQuestionHistory(null);
+		navigate(`/app/learning/assignment/${assignmentKey}`);
+		setAnswerData((answerDataArg: any) => {
+			return {
+				...answerDataArg,
+				questionSeconds: questionSecondsHistory,
+				//TODO: add tracked review seconds
+				reviewSeconds: 20,
+			};
+		});
+		putReviewInfo();
 	};
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus.correctness === 'Correct') {
@@ -452,29 +464,14 @@ const AssignmentView = () => {
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={async () => {
-											setLocalQuestionHistory(null);
-											navigate(`/app/learning/assignment/${assignmentKey}`);
-											setAnswerData((answerDataArg: any) => {
-												return {
-													...answerDataArg,
-													questionSeconds: questionSecondsHistory,
-													//TODO: add tracked review seconds
-													reviewSeconds: 20,
-												};
-											});
-											putReviewInfo();
-										}}>
+										onClick={handelKeepGoing}>
 										{i18n('keepGoing')}
 									</Button>
 								) : (
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={async () => {
-											handleNextQuestionInReview();
-											putReviewInfo();
-										}}>
+										onClick={handleNextQuestionInReview}>
 										{i18n('nextQ')}
 									</Button>
 								)}
