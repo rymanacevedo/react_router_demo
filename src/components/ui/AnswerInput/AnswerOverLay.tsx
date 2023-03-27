@@ -18,6 +18,7 @@ const AnswerOverLay = ({
 	currentRoundAnswerOverLayData,
 	wasCorrectAnswerChosen,
 	inReview,
+	revealAnswer,
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
@@ -26,6 +27,7 @@ const AnswerOverLay = ({
 	currentRoundAnswerOverLayData?: any;
 	wasCorrectAnswerChosen?: boolean;
 	inReview?: boolean;
+	revealAnswer?: boolean;
 }) => {
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
@@ -104,6 +106,21 @@ const AnswerOverLay = ({
 			}
 		}
 	}, [currentRoundAnswerOverLayData, wasCorrectAnswerChosen]);
+	const revealCorrectAnswer = () => {
+		const correctAnswer = currentRoundAnswerOverLayData?.correctAnswerIds[0];
+		if (correctAnswer === questionAnswerId) {
+			setStatus('checked');
+			setText('');
+			setVariant('ampDarkSuccess');
+			setIsEnabled(true);
+		}
+	};
+
+	useEffect(() => {
+		if (revealAnswer) {
+			revealCorrectAnswer();
+		}
+	}, [revealAnswer]);
 
 	const badgeIcon = () => {
 		switch (variant) {
@@ -133,6 +150,8 @@ const AnswerOverLay = ({
 			}
 		}
 	};
+
+	const revealAnswerDisplayCondition = revealAnswer && text === '';
 
 	return (
 		<>
@@ -165,8 +184,14 @@ const AnswerOverLay = ({
 						</div>
 					) : (
 						<div style={{ left: '15px', position: 'relative' }}>
-							You were <Badge variant={variant}>{text}</Badge> and{' '}
-							<Badge variant={variant}>
+							<span hidden={revealAnswerDisplayCondition}>
+								You were{' '}
+								<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
+									{text}
+								</Badge>{' '}
+								and{' '}
+							</span>
+							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
 								<span style={{ display: 'flex' }}>
 									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
 								</span>
