@@ -20,12 +20,13 @@ import {
 import MultipleChoiceAnswers from '../MultipleChoiceAnswers';
 import MultipleChoiceOverLay from '../MultipleChoiceOverLay';
 import { useTranslation } from 'react-i18next';
+import { MutableRefObject } from 'react';
 
 export default function AnswerArea(props: {
 	isOpen: boolean;
 	onClose: () => void;
 	smallerThan1000: boolean;
-	initialFocusRef: React.MutableRefObject<null>;
+	initialFocusRef: MutableRefObject<null>;
 	showOverlay: boolean;
 	questionInFocus: QuestionInFocus;
 	selectedAnswers: SelectedAnswers[];
@@ -171,7 +172,7 @@ export default function AnswerArea(props: {
 							again later after learning more. You can submit up to two choices
 							if you are unsure.
 						</Text>
-						<Text mt={5}>
+						<Text mt={'5px'}>
 							You can click three times to unselect your answer.
 						</Text>
 						<Button mt={4} onClick={props.onClose} ref={props.initialFocusRef}>

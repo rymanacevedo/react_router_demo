@@ -229,10 +229,10 @@ const AssignmentView = () => {
 	};
 
 	const onClose = () => {
+		setIsInstructionalOverlayOpen(false);
 		Cookies.set('instructional_overlay', window.btoa('instructional_overlay'), {
 			path: '/',
 		});
-		setIsInstructionalOverlayOpen(false);
 	};
 
 	return (
