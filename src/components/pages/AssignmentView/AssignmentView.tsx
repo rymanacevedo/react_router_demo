@@ -40,6 +40,10 @@ const AssignmentView = () => {
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
+	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
+		'questionHistory',
+		null,
+	);
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
@@ -102,10 +106,7 @@ const AssignmentView = () => {
 	});
 	const [clearSelection, setClearSelection] = useState(false);
 	const { assignmentKey } = useParams();
-	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
-		`questionHistory${assignmentKey}`,
-		null,
-	);
+
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
 	const navigate = useNavigate();
@@ -194,6 +195,7 @@ const AssignmentView = () => {
 									answeredQuestionId: questionInFocus.id,
 									answersChosen: [...answerData.answerList],
 									correctAnswerIds: [...overLayData.correctAnswerIds],
+									questionSeconds: answerData.questionSeconds,
 								},
 							],
 					  }
@@ -204,6 +206,7 @@ const AssignmentView = () => {
 									answeredQuestionId: questionInFocus.id,
 									answersChosen: [...answerData.answerList],
 									correctAnswerIds: [...overLayData.correctAnswerIds],
+									questionSeconds: answerData.questionSeconds,
 								},
 							],
 					  };

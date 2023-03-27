@@ -18,7 +18,7 @@ import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
@@ -86,6 +86,7 @@ const AssignmentView = () => {
 		kind: '',
 		name: '',
 	});
+
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
 		answerList: [],
@@ -101,9 +102,9 @@ const AssignmentView = () => {
 		moduleComplete: false,
 		notSureCount: 0,
 		onceCorrectCount: 0,
-		questionSeconds: 0,
+		questionSeconds: 20,
 		questionsMastered: 0,
-		reviewSeconds: 0,
+		reviewSeconds: 20,
 		self: null,
 		totalQuestionCount: 0,
 		twiceCorrectCount: 0,
@@ -122,6 +123,8 @@ const AssignmentView = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const [questionSecondsHistory, setQuestionSecondsHistory] = useState(0);
+	const navigate = useNavigate();
 	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
@@ -144,6 +147,7 @@ const AssignmentView = () => {
 						);
 					},
 				);
+				setQuestionSecondsHistory(savedData.questionSeconds);
 				setSelectedAnswers(savedData.answersChosen);
 				setCurrentRoundAnswerOverLayData((roundAnswerOverLayData) => {
 					return {
@@ -231,6 +235,19 @@ const AssignmentView = () => {
 		setTryAgain(false);
 		incrementQuestion();
 		fetchModuleQuestionsData();
+	};
+
+	const putReviewInfo = async () => {
+		await putCurrentRound(
+			currentRoundQuestionListData?.id,
+			questionInFocus.id,
+			{
+				...answerData,
+				answerDate: null,
+				answerList: null,
+				reviewSeconds: 20,
+			},
+		);
 	};
 
 	return (
@@ -401,15 +418,28 @@ const AssignmentView = () => {
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={() => {}}>
+										onClick={async () => {
+											setLocalQuestionHistory(null);
+											navigate(`/app/learning/assignment/${assignmentKey}`);
+											setAnswerData((answerDataArg: any) => {
+												return {
+													...answerDataArg,
+													questionSeconds: questionSecondsHistory,
+													//TODO: add tracked review seconds
+													reviewSeconds: 20,
+												};
+											});
+											putReviewInfo();
+										}}>
 										{i18n('keepGoing')}
 									</Button>
 								) : (
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={() => {
+										onClick={async () => {
 											handleNextQuestionInReview();
+											putReviewInfo();
 										}}>
 										{i18n('nextQ')}
 									</Button>
