@@ -1,21 +1,17 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Box,
-	Button,
 	Container,
 	HStack,
-	Text,
+	Modal,
+	ModalOverlay,
 	useMediaQuery,
-	Fade,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
-import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
-import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
 	AnswerData,
 	CurrentRoundAnswerOverLayData,
@@ -27,11 +23,16 @@ import { findQuestionInFocus } from './findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { findDateData } from '../../../utils/logic';
+import { Cookies } from 'react-cookie-consent';
+import AnswerArea from '../../ui/AnswerInput/AnswerArea';
 
 const AssignmentView = () => {
-	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
+		!Cookies.get('instructional_overlay'),
+	);
+	const initRef = useRef(null);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
 		questionRc: '',
@@ -70,7 +71,7 @@ const AssignmentView = () => {
 			avatarMessage: null,
 			answerList: [],
 		});
-	const [showoverLay, setShowOverLay] = useState(false);
+	const [showOverlay, setShowOverlay] = useState(false);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
 		kind: '',
@@ -159,7 +160,7 @@ const AssignmentView = () => {
 
 	const getNextTask = () => {
 		clearSelectionButtonFunc();
-		setShowOverLay(false);
+		setShowOverlay(false);
 		fetchModuleQuestionsData();
 	};
 
@@ -213,7 +214,7 @@ const AssignmentView = () => {
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
-				setShowOverLay(true);
+				setShowOverlay(true);
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
@@ -222,15 +223,25 @@ const AssignmentView = () => {
 	}, [answerData]);
 
 	const continueBtnFunc = () => {
-		if (showoverLay) {
+		if (showOverlay) {
 			getNextTask();
 		} else {
 			submitAnswer();
 		}
 	};
 
+	const onClose = () => {
+		setIsInstructionalOverlayOpen(false);
+		Cookies.set('instructional_overlay', window.btoa('instructional_overlay'), {
+			path: '/',
+		});
+	};
+
 	return (
 		<main id="learning-assignment">
+			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
+				<ModalOverlay />
+			</Modal>
 			<Container
 				id={'learning-assignment'}
 				margin="0"
@@ -265,75 +276,21 @@ const AssignmentView = () => {
 							p={'72px'}>
 							<Question questionInFocus={questionInFocus} />
 						</Box>
-						<Box
-							style={{
-								backgroundColor: 'white',
-								margin: '6px',
-								minHeight: '745px',
-							}}
-							boxShadow="2xl"
-							h={isSmallerThan1000 ? '' : '100%'}
-							display={'flex'}
-							flexDirection="column"
-							justifyContent={'space-between'}
-							w="100%"
-							maxWidth={726}
-							overflow="hidden"
-							borderRadius={24}
-							p={'72px'}>
-							{!showoverLay ? (
-								<Fade in={!showoverLay}>
-									{' '}
-									<MultipleChoiceAnswers
-										questionInFocus={questionInFocus}
-										selectedAnswers={selectedAnswers}
-										setSelectedAnswers={setSelectedAnswers}
-										clearSelection={clearSelection}
-										setClearSelection={setClearSelection}
-									/>
-								</Fade>
-							) : (
-								<Fade in={showoverLay}>
-									{' '}
-									<MultipleChoiceOverLay
-										questionInFocus={questionInFocus}
-										selectedAnswers={selectedAnswers}
-										setSelectedAnswers={setSelectedAnswers}
-										clearSelection={clearSelection}
-										setClearSelection={setClearSelection}
-										currentRoundAnswerOverLayData={
-											currentRoundAnswerOverLayData
-										}
-									/>
-								</Fade>
-							)}
-							<HStack
-								justifyContent={'space-between'}
-								display={'flex'}
-								marginTop={'12px'}>
-								<Button
-									onClick={continueBtnFunc}
-									variant={'ampSolid'}
-									w="150px">
-									<Text>
-										{i18n(showoverLay ? 'continueBtnText' : 'submitBtnText')}
-									</Text>
-								</Button>
-								<Button
-									_hover={{ backgroundColor: 'white' }}
-									height="12px"
-									variant="ghost"
-									onClick={() => {
-										clearSelectionButtonFunc();
-									}}>
-									{!showoverLay && (
-										<Text fontSize={'14px'} color={'ampSecondary.500'}>
-											{i18n('clearSelection')}
-										</Text>
-									)}
-								</Button>
-							</HStack>
-						</Box>
+						<AnswerArea
+							isOpen={isInstructionalOverlayOpen}
+							onClose={onClose}
+							smallerThan1000={isSmallerThan1000}
+							initialFocusRef={initRef}
+							showOverlay={showOverlay}
+							questionInFocus={questionInFocus}
+							selectedAnswers={selectedAnswers}
+							selectedAnswersState={setSelectedAnswers}
+							clearSelection={clearSelection}
+							clearSelectionState={setClearSelection}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+							onClick={continueBtnFunc}
+							clearSelectionFunction={clearSelectionButtonFunc}
+						/>
 					</HStack>
 					<ProgressMenu
 						isMenuOpen={isMenuOpen}
