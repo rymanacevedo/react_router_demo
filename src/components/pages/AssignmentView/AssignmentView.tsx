@@ -161,6 +161,30 @@ const AssignmentView = () => {
 		clearSelectionButtonFunc();
 		setShowOverLay(false);
 		fetchModuleQuestionsData();
+		setCurrentRoundAnswerOverLayData({
+			self: null,
+			totalQuestionCount: 0,
+			masteredQuestionCount: 0,
+			unseenCount: 0,
+			misinformedCount: 0,
+			uninformedCount: 0,
+			notSureCount: 0,
+			informedCount: 0,
+			onceCorrectCount: 0,
+			twiceCorrectCount: 0,
+			completionPercentage: 0,
+			completionAlgorithmType: '',
+			questionsMastered: 0,
+			questionSeconds: 0,
+			reviewSeconds: 0,
+			answerDate: '',
+			correctness: '',
+			confidence: '',
+			correctAnswerIds: [],
+			moduleComplete: false,
+			avatarMessage: null,
+			answerList: [],
+		});
 	};
 
 	useEffect(() => {

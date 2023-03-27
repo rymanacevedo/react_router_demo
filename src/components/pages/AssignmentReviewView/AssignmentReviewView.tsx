@@ -250,6 +250,7 @@ const AssignmentView = () => {
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentQuestion={questionInFocus}
 					inReview={true}
+					questionIndex={questionIndex}
 				/>
 				<ExplanationTitle
 					answer={`${questionInFocus.confidence}${questionInFocus.correctness}`}
