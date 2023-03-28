@@ -157,6 +157,7 @@ const AssignmentView = () => {
 	const clearSelectionButtonFunc = () => {
 		setSelectedAnswers([]);
 		setClearSelection(true);
+		setIDKResponse(false);
 	};
 
 	const getNextTask = () => {

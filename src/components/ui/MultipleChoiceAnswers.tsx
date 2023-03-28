@@ -92,6 +92,7 @@ const MultipleChoiceAnswers = ({
 									addAnswer={addAnswer}
 									selectedAnswers={selectedAnswers}
 									IDK={false}
+									setIDKResponse={setIDKResponse}
 								/>
 							);
 						})}
@@ -108,6 +109,7 @@ const MultipleChoiceAnswers = ({
 						IDK={true}
 						clearSelection={clearSelection}
 						setClearSelection={setClearSelection}
+						setIDKResponse={setIDKResponse}
 					/>
 				</>
 			</Box>
