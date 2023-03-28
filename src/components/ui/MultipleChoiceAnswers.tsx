@@ -103,7 +103,6 @@ const MultipleChoiceAnswers = ({
 						questionAnswerId={''}
 						addAnswer={() => {
 							setSelectedAnswers([]);
-							setIDKResponse(true);
 						}}
 						selectedAnswers={selectedAnswers}
 						IDK={true}
