@@ -107,6 +107,7 @@ const AssignmentView = () => {
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	const [IDKResponse, setIDKResponse] = useState(false);
 
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
@@ -315,6 +316,8 @@ const AssignmentView = () => {
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 							onClick={continueBtnFunc}
 							clearSelectionFunction={clearSelectionButtonFunc}
+							IDKResponse={IDKResponse}
+							setIDKResponse={setIDKResponse}
 						/>
 					</HStack>
 					<ProgressMenu

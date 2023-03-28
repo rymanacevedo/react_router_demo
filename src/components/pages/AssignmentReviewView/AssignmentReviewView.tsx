@@ -120,6 +120,7 @@ const AssignmentView = () => {
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	const [IDKResponse, setIDKResponse] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
@@ -394,6 +395,9 @@ const AssignmentView = () => {
 									setSelectedAnswers={setSelectedAnswers}
 									clearSelection={clearSelection}
 									setClearSelection={setClearSelection}
+									setIDKResponse={setIDKResponse}
+									IDKResponse={IDKResponse}
+
 								/>
 							) : (
 								<MultipleChoiceOverLay

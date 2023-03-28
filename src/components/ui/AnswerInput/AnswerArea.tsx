@@ -42,6 +42,8 @@ export default function AnswerArea(props: {
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
 	onClick: () => void;
 	clearSelectionFunction: () => void;
+	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
+	IDKResponse: boolean;
 }) {
 	const { t: i18n } = useTranslation();
 
@@ -84,6 +86,8 @@ export default function AnswerArea(props: {
 								setSelectedAnswers={props.selectedAnswersState}
 								clearSelection={props.clearSelection}
 								setClearSelection={props.clearSelectionState}
+								setIDKResponse={props.setIDKResponse}
+								IDKResponse={props.IDKResponse}
 							/>
 						</Fade>
 					) : (
@@ -109,7 +113,10 @@ export default function AnswerArea(props: {
 							onClick={props.onClick}
 							variant={'ampSolid'}
 							w="150px"
-							isDisabled={!props.selectedAnswers.length}>
+							isDisabled={
+								!props.selectedAnswers.length ||
+								(props.IDKResponse && !props.selectedAnswers.length)
+							}>
 							<Text>
 								{i18n(props.showOverlay ? 'continueBtnText' : 'submitBtnText')}
 							</Text>
