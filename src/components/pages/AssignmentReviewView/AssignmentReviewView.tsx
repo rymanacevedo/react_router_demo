@@ -455,7 +455,7 @@ const AssignmentView = () => {
 									leftIcon={<ArrowLeftIcon />}
 									variant={'ampOutline'}
 									onClick={decrementQuestion}
-									disabled={questionIndex === 0}>
+									isDisabled={questionIndex === 0}>
 									{i18n('prevQ')}
 								</Button>
 								<Text>
