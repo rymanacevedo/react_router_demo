@@ -28,9 +28,9 @@ const ProgressMenu = ({
 	currentRoundAnswerOverLayData,
 }: ProgressMenuType) => {
 	const { t: i18n } = useTranslation();
-	const dataSource = currentRoundAnswerOverLayData
-		? currentRoundAnswerOverLayData
-		: currentRoundQuestionListData;
+	const dataSource = !currentRoundAnswerOverLayData?.answerDate
+		? currentRoundQuestionListData
+		: currentRoundAnswerOverLayData;
 
 	const progressPercent = dataSource
 		? Math.floor(

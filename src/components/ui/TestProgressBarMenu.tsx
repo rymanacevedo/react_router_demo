@@ -232,9 +232,9 @@ const TestProgressBarMenu = ({
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const dataSource = currentRoundAnswerOverLayData
-		? currentRoundAnswerOverLayData
-		: currentRoundQuestionListData;
+	const dataSource = !currentRoundAnswerOverLayData?.answerDate
+		? currentRoundQuestionListData
+		: currentRoundAnswerOverLayData;
 
 	const seenCount =
 		dataSource?.notSureCount +
