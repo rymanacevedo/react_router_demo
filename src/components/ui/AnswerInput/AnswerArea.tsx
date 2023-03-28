@@ -105,7 +105,11 @@ export default function AnswerArea(props: {
 						justifyContent={'space-between'}
 						display={'flex'}
 						marginTop={'12px'}>
-						<Button onClick={props.onClick} variant={'ampSolid'} w="150px">
+						<Button
+							onClick={props.onClick}
+							variant={'ampSolid'}
+							w="150px"
+							isDisabled={!props.selectedAnswers.length}>
 							<Text>
 								{i18n(props.showOverlay ? 'continueBtnText' : 'submitBtnText')}
 							</Text>
