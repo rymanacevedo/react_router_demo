@@ -113,10 +113,7 @@ export default function AnswerArea(props: {
 							onClick={props.onClick}
 							variant={'ampSolid'}
 							w="150px"
-							isDisabled={
-								!props.selectedAnswers.length ||
-								(props.IDKResponse && !props.selectedAnswers.length)
-							}>
+							isDisabled={!props.IDKResponse && !props.selectedAnswers.length}>
 							<Text>
 								{i18n(props.showOverlay ? 'continueBtnText' : 'submitBtnText')}
 							</Text>
