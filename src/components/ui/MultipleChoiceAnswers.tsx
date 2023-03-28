@@ -15,6 +15,7 @@ const MultipleChoiceAnswers = ({
 	setSelectedAnswers,
 	clearSelection,
 	setClearSelection,
+	setIDKResponse,
 }: {
 	questionInFocus:
 		| {
@@ -32,6 +33,8 @@ const MultipleChoiceAnswers = ({
 	setSelectedAnswers: any;
 	clearSelection: any;
 	setClearSelection: any;
+	setIDKResponse: any;
+	IDKResponse: any;
 }) => {
 	const addAnswer = (answerObject: SelectedAnswers) => {
 		if (answerObject.answerId) {
@@ -63,6 +66,7 @@ const MultipleChoiceAnswers = ({
 					return [...updatedAnswers, answerObject];
 				}
 			});
+			setIDKResponse(false);
 		}
 	};
 
@@ -88,6 +92,7 @@ const MultipleChoiceAnswers = ({
 									addAnswer={addAnswer}
 									selectedAnswers={selectedAnswers}
 									IDK={false}
+									setIDKResponse={setIDKResponse}
 								/>
 							);
 						})}
@@ -103,6 +108,7 @@ const MultipleChoiceAnswers = ({
 						IDK={true}
 						clearSelection={clearSelection}
 						setClearSelection={setClearSelection}
+						setIDKResponse={setIDKResponse}
 					/>
 				</>
 			</Box>

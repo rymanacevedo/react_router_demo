@@ -13,6 +13,7 @@ const AnswerInput = ({
 	clearSelection,
 	setClearSelection,
 	isDisabled,
+	setIDKResponse,
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
@@ -22,6 +23,7 @@ const AnswerInput = ({
 	clearSelection?: boolean;
 	setClearSelection?: (arg: boolean) => void;
 	isDisabled?: boolean;
+	setIDKResponse: (arg: boolean) => void;
 }) => {
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
@@ -53,10 +55,12 @@ const AnswerInput = ({
 				setIsEnabled(false);
 				setText('');
 				setStatus('unchecked');
+				setIDKResponse(false);
 			} else if (clearSelection) {
 				setIsEnabled(false);
 				setText('');
 				setStatus('unchecked');
+				setIDKResponse(false);
 				if (setClearSelection) {
 					setClearSelection(false);
 				}
@@ -94,6 +98,7 @@ const AnswerInput = ({
 						answerId: 0,
 						confidence: 0,
 					});
+					setIDKResponse(true);
 					break;
 				case 'checked':
 					setIsEnabled(false);
@@ -104,6 +109,7 @@ const AnswerInput = ({
 						answerId: 0,
 						confidence: 0,
 					});
+					setIDKResponse(false);
 			}
 		} else {
 			switch (status) {
