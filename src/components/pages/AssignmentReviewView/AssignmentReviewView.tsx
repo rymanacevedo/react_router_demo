@@ -37,7 +37,7 @@ import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
 
-const AssignmentView = () => {
+const AssignmentReviewView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,9 +103,9 @@ const AssignmentView = () => {
 		moduleComplete: false,
 		notSureCount: 0,
 		onceCorrectCount: 0,
-		questionSeconds: 20,
+		questionSeconds: 0,
 		questionsMastered: 0,
-		reviewSeconds: 20,
+		reviewSeconds: 0,
 		self: null,
 		totalQuestionCount: 0,
 		twiceCorrectCount: 0,
@@ -126,6 +126,7 @@ const AssignmentView = () => {
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
 	const [questionSecondsHistory, setQuestionSecondsHistory] = useState(0);
 	const navigate = useNavigate();
+	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
 
 	const fetchModuleQuestionsData = async () => {
@@ -190,13 +191,27 @@ const AssignmentView = () => {
 		onClose();
 		setShowExplanation(true);
 	};
+	const stopTimer = () => {
+		clearInterval(intervalRef.current);
+		questionSecondsRef.current = 0;
+	};
+	const startTimer = () => {
+		intervalRef.current = setInterval(() => {
+			questionSecondsRef.current = questionSecondsRef.current + 1;
+		}, 1000);
+
+		return () => clearInterval(intervalRef.current);
+	};
+	useEffect(() => {
+		startTimer();
+	}, []);
 
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
 				answerDate: findDateData(),
-				questionSeconds: questionSecondsRef.current,
+				questionSeconds: questionSecondsHistory,
 				answerList: [...selectedAnswers],
 			};
 		});
@@ -238,7 +253,8 @@ const AssignmentView = () => {
 				...answerData,
 				answerDate: null,
 				answerList: null,
-				reviewSeconds: 20,
+				questionSeconds: questionSecondsHistory,
+				reviewSeconds: questionSecondsRef.current,
 			},
 		);
 	};
@@ -250,6 +266,8 @@ const AssignmentView = () => {
 		incrementQuestion();
 		fetchModuleQuestionsData();
 		putReviewInfo();
+		await stopTimer();
+		startTimer();
 	};
 	const handelKeepGoing = async () => {
 		setLocalQuestionHistory(null);
@@ -258,8 +276,7 @@ const AssignmentView = () => {
 			return {
 				...answerDataArg,
 				questionSeconds: questionSecondsHistory,
-				//TODO: add tracked review seconds
-				reviewSeconds: 20,
+				reviewSeconds: questionSecondsRef.current,
 			};
 		});
 		putReviewInfo();
@@ -397,7 +414,6 @@ const AssignmentView = () => {
 									setClearSelection={setClearSelection}
 									setIDKResponse={setIDKResponse}
 									IDKResponse={IDKResponse}
-
 								/>
 							) : (
 								<MultipleChoiceOverLay
@@ -501,4 +517,4 @@ const AssignmentView = () => {
 	);
 };
 
-export default AssignmentView;
+export default AssignmentReviewView;

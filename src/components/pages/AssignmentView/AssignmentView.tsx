@@ -141,7 +141,17 @@ const AssignmentView = () => {
 			console.error(error);
 		}
 	};
+	const stopTimer = () => {
+		clearInterval(intervalRef.current);
+		questionSecondsRef.current = 0;
+	};
+	const startTimer = () => {
+		intervalRef.current = setInterval(() => {
+			questionSecondsRef.current = questionSecondsRef.current + 1;
+		}, 1000);
 
+		return () => clearInterval(intervalRef.current);
+	};
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
@@ -151,7 +161,7 @@ const AssignmentView = () => {
 				answerList: [...selectedAnswers],
 			};
 		});
-		questionSecondsRef.current = 0;
+		stopTimer();
 	};
 
 	const clearSelectionButtonFunc = () => {
@@ -188,14 +198,11 @@ const AssignmentView = () => {
 			avatarMessage: null,
 			answerList: [],
 		});
+		startTimer();
 	};
 
 	useEffect(() => {
-		intervalRef.current = setInterval(() => {
-			questionSecondsRef.current = questionSecondsRef.current + 1;
-		}, 1000);
-
-		return () => clearInterval(intervalRef.current);
+		startTimer();
 	}, []);
 	useEffect(() => {
 		if (assignmentKey) {
