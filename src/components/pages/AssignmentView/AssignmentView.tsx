@@ -26,6 +26,31 @@ import { findDateData } from '../../../utils/logic';
 import { Cookies } from 'react-cookie-consent';
 import AnswerArea from '../../ui/AnswerInput/AnswerArea';
 
+const initState = {
+	self: null,
+	totalQuestionCount: 0,
+	masteredQuestionCount: 0,
+	unseenCount: 0,
+	misinformedCount: 0,
+	uninformedCount: 0,
+	notSureCount: 0,
+	informedCount: 0,
+	onceCorrectCount: 0,
+	twiceCorrectCount: 0,
+	completionPercentage: 0,
+	completionAlgorithmType: '',
+	questionsMastered: 0,
+	questionSeconds: 0,
+	reviewSeconds: 0,
+	answerDate: '',
+	correctness: '',
+	confidence: '',
+	correctAnswerIds: [],
+	moduleComplete: false,
+	avatarMessage: null,
+	answerList: [],
+};
+
 const AssignmentView = () => {
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,30 +72,7 @@ const AssignmentView = () => {
 
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
-		useState<CurrentRoundAnswerOverLayData>({
-			self: null,
-			totalQuestionCount: 0,
-			masteredQuestionCount: 0,
-			unseenCount: 0,
-			misinformedCount: 0,
-			uninformedCount: 0,
-			notSureCount: 0,
-			informedCount: 0,
-			onceCorrectCount: 0,
-			twiceCorrectCount: 0,
-			completionPercentage: 0,
-			completionAlgorithmType: '',
-			questionsMastered: 0,
-			questionSeconds: 0,
-			reviewSeconds: 0,
-			answerDate: '',
-			correctness: '',
-			confidence: '',
-			correctAnswerIds: [],
-			moduleComplete: false,
-			avatarMessage: null,
-			answerList: [],
-		});
+		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
@@ -174,30 +176,7 @@ const AssignmentView = () => {
 		clearSelectionButtonFunc();
 		setShowOverlay(false);
 		fetchModuleQuestionsData();
-		setCurrentRoundAnswerOverLayData({
-			self: null,
-			totalQuestionCount: 0,
-			masteredQuestionCount: 0,
-			unseenCount: 0,
-			misinformedCount: 0,
-			uninformedCount: 0,
-			notSureCount: 0,
-			informedCount: 0,
-			onceCorrectCount: 0,
-			twiceCorrectCount: 0,
-			completionPercentage: 0,
-			completionAlgorithmType: '',
-			questionsMastered: 0,
-			questionSeconds: 0,
-			reviewSeconds: 0,
-			answerDate: '',
-			correctness: '',
-			confidence: '',
-			correctAnswerIds: [],
-			moduleComplete: false,
-			avatarMessage: null,
-			answerList: [],
-		});
+		setCurrentRoundAnswerOverLayData(initState);
 		startTimer();
 	};
 
