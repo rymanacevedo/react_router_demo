@@ -15,6 +15,7 @@ import ForgotUsername from './components/login/ForgotUsername';
 import ModuleIntroView from './components/pages/ModuleIntroView';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
+import TourView from './components/pages/TourView';
 
 function App() {
 	const { user } = useAuth();
@@ -67,6 +68,12 @@ function App() {
 						path="learning/assignment/:assignmentKey"
 						element={<AssignmentView />}
 					/>
+
+					<Route
+						path="learning/assignment/:assignmentKey/tour"
+						element={<TourView />}
+					/>
+
 					<Route
 						path="switch-account"
 						element={
