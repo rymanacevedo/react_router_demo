@@ -2,7 +2,9 @@ import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 
 const ProgressMessageComponent = () => {
 	return (
-		<Box bg="ampSuccess.50" borderRadius={'12px'} padding="20px" margin="24px">
+		<Box bg="ampSuccess.50" borderRadius={'12px'} padding="10px 20px 30px 20px" margin="24px">
+			<div className="close"><span style={{fontSize: '20px'}}>&times;</span></div>
+			
 			<HStack>
 				<AvatarGroup spacing="4px">
 					<Avatar bg="teal.500" />

@@ -6,7 +6,7 @@ type FireProgressToastType = {
 	setIsOpen: (isOpen: boolean) => void;
 };
 
-const FireProgressToast = ({ setIsOpen }: FireProgressToastType) => {
+const FireProgressToast = () => {
 	const toast = useToast();
 	const { t: i18n } = useTranslation();
 
@@ -14,11 +14,14 @@ const FireProgressToast = ({ setIsOpen }: FireProgressToastType) => {
 	if (!toast.isActive(id)) {
 		toast({
 			position: 'top-right',
-			duration: 10000,
+			duration: 1000000,
 			isClosable: true,
 			id,
 			render: () => (
 				<Box
+				border="1px solid #E2E8F0"
+				boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+					style={{border: '1px'}}
 					marginTop={'160px'}
 					borderRadius={'24px'}
 					width={'475px'}
@@ -36,7 +39,7 @@ const FireProgressToast = ({ setIsOpen }: FireProgressToastType) => {
 						height="40px"
 						margin="24px"
 						onClick={() => {
-							setIsOpen(true);
+							// setIsOpen(true);
 							toast.close(id);
 						}}>
 						<Text fontSize={'16px'} fontWeight="600">

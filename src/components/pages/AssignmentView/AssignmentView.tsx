@@ -7,6 +7,7 @@ import {
 	Modal,
 	ModalOverlay,
 	useMediaQuery,
+	useToast,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
@@ -269,13 +270,34 @@ const AssignmentView = () => {
 		});
 	};
 
+	function ToastExample() {
+		const toast = useToast()
+	  
+		return (
+		  <Button
+			onClick={() =>
+			  toast({
+				position: 'top-right',
+				title: "Account created.",
+				description: "We've created your account for you.",
+				status: "success",
+				duration: 9000,
+				isClosable: true,
+			  })
+			}
+		  >
+			Show Toast
+		  </Button>
+		)
+	  }
+
 	useEffect(() => {
 		if (questionSecondsRef.current <= 5){
 			handleMessage('FIVE_FAST_ANSWERS');
 			setIsOpen(true)
 		}
 	}, [answerData])
-
+	console.log(isOpen)
 	return (
 		<main id="learning-assignment">
 			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
@@ -289,11 +311,17 @@ const AssignmentView = () => {
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
 				<Button onClick={() => {
-					setAnswered(!answered)}}>
+					if (isOpen){
+						setIsOpen(false)
+					} else {
+						setIsOpen(true)
+					}
+					}}>
 				RandomButton
 				</Button>
 				{/* @ts-ignore */}
-				{/* {!isOpen && (<FireProgressToast setIsOpen={setIsOpen} />)} */}
+				{isOpen && (<FireProgressToast />)}
+				<ToastExample />
 				<TestProgressBarMenu
 					questionData={questionData}
 					isMenuOpen={isMenuOpen}
