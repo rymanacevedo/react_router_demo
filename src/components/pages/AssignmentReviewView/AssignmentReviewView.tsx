@@ -266,7 +266,7 @@ const AssignmentReviewView = () => {
 		incrementQuestion();
 		fetchModuleQuestionsData();
 		putReviewInfo();
-		await stopTimer();
+		stopTimer();
 		startTimer();
 	};
 	const handelKeepGoing = async () => {
