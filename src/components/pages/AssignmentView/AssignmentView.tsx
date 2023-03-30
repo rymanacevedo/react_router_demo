@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import {
 	Box,
+	Button,
 	Container,
 	HStack,
 	Modal,
@@ -25,8 +26,13 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { findDateData } from '../../../utils/logic';
 import { Cookies } from 'react-cookie-consent';
 import AnswerArea from '../../ui/AnswerInput/AnswerArea';
+import QuizContext from './QuizContext';
+import FireProgressToast from '../../ui/ProgressToast';
 
 const AssignmentView = () => {
+	const {message, handleMessage} = useContext(QuizContext);
+	const [answered, setAnswered] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
@@ -263,6 +269,13 @@ const AssignmentView = () => {
 		});
 	};
 
+	useEffect(() => {
+		if (questionSecondsRef.current <= 5){
+			handleMessage('FIVE_FAST_ANSWERS');
+			setIsOpen(true)
+		}
+	}, [answerData])
+
 	return (
 		<main id="learning-assignment">
 			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
@@ -275,6 +288,12 @@ const AssignmentView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
+				<Button onClick={() => {
+					setAnswered(!answered)}}>
+				RandomButton
+				</Button>
+				{/* @ts-ignore */}
+				{/* {!isOpen && (<FireProgressToast setIsOpen={setIsOpen} />)} */}
 				<TestProgressBarMenu
 					questionData={questionData}
 					isMenuOpen={isMenuOpen}

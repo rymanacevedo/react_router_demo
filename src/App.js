@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './css/App.css';
 import LoginWrapper from './components/login/LoginWrapper';
 import LoginForm from './components/login/LoginForm';
@@ -15,9 +15,48 @@ import ForgotUsername from './components/login/ForgotUsername';
 import ModuleIntroView from './components/pages/ModuleIntroView';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
+import QuizContext from './components/pages/AssignmentView/QuizContext';
 
 function App() {
 	const { user } = useAuth();
+	const [message, setMessage] = useState({
+		FIVE_FAST_ANSWERS: 0,
+		FIVE_CONSEC_SI: 0,
+		SIX_DK_IN_ROUND: 0,
+		FIVE_CONSEC_SC: 0
+	})
+
+	const handleMessage = (messageType) => {
+		switch (messageType) {
+			case 'FIVE_FAST_ANSWERS':
+					setMessage({
+					  ...message,
+					  FIVE_FAST_ANSWERS: message.FIVE_FAST_ANSWERS + 1
+					})
+					console.log(message)
+					if (message.FIVE_FAST_ANSWERS === 5){
+						console.log('Show toast now')
+						setMessage({
+							...message,
+							FIVE_FAST_ANSWERS: 0
+						})
+					}
+				break;
+			case 'FIVE_CONSEC_SI':
+				// handle FIVE_CONSEC_SI case
+				break;
+			case 'SIX_DK_IN_ROUND':
+				// handle SIX_DK_IN_ROUND case
+				break;
+			case 'FIVE_CONSEC_SC':
+				// handle FIVE_CONSEC_SC case
+				break;
+			default:
+				// handle default case
+		}
+	};
+
+
 	return (
 		<>
 			<Routes>
@@ -65,7 +104,11 @@ function App() {
 					/>
 					<Route
 						path="learning/assignment/:assignmentKey"
-						element={<AssignmentView />}
+						element={
+							<QuizContext.Provider value={{ message, handleMessage }}>
+								<AssignmentView />
+							</QuizContext.Provider>
+						}
 					/>
 					<Route
 						path="switch-account"
