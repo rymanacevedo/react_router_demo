@@ -120,6 +120,12 @@ const AssignmentReviewView = () => {
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	// eslint-disable-next-line
+	const [localQuestionReviewHistory, setLocalQuestionReviewHistory] =
+		useLocalStorage(
+			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+			null,
+		);
 	const [IDKResponse, setIDKResponse] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -128,6 +134,7 @@ const AssignmentReviewView = () => {
 	const navigate = useNavigate();
 	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
+	const proceedDownDesiredPathRef = useRef(true);
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -171,6 +178,31 @@ const AssignmentReviewView = () => {
 			console.error(error);
 		}
 	};
+	function handleBeforeUnload() {
+		if (questionInFocus?.id) {
+			setLocalQuestionReviewHistory({
+				localStorageQuestionReviewSeconds: Number(questionSecondsRef.current),
+			});
+		}
+	}
+	useEffect(() => {
+		// Clean up function to add the stored value when the component unmounts if user is not done with review
+		return () => {
+			if (proceedDownDesiredPathRef.current) {
+				handleBeforeUnload();
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		// Register a listener for the beforeunload event
+		window.addEventListener('beforeunload', handleBeforeUnload);
+
+		return () => {
+			// Remove the listener
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	}, [setLocalQuestionReviewHistory]);
 
 	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
 		(item: { confidence: string; correctness: string }) => {
@@ -246,6 +278,17 @@ const AssignmentReviewView = () => {
 		setQuestionIndex(count);
 	};
 	const putReviewInfo = async () => {
+		let storedtime = 0;
+		if (questionInFocus.id) {
+			const myObjectString = localStorage.getItem(
+				`questionReviewHistory${assignmentKey}${questionInFocus.id}`,
+			);
+			const myObject = JSON.parse(String(myObjectString));
+			if (myObject?.localStorageQuestionReviewSeconds) {
+				storedtime = myObject.localStorageQuestionReviewSeconds;
+			}
+		}
+
 		await putCurrentRound(
 			currentRoundQuestionListData?.id,
 			questionInFocus.id,
@@ -254,8 +297,11 @@ const AssignmentReviewView = () => {
 				answerDate: null,
 				answerList: null,
 				questionSeconds: questionSecondsHistory,
-				reviewSeconds: questionSecondsRef.current,
+				reviewSeconds: Number(questionSecondsRef.current) + Number(storedtime),
 			},
+		);
+		localStorage.removeItem(
+			`questionReviewHistory${assignmentKey}${questionInFocus.id}`,
 		);
 	};
 	const handleNextQuestionInReview = async () => {
@@ -271,7 +317,7 @@ const AssignmentReviewView = () => {
 	};
 	const handelKeepGoing = async () => {
 		setLocalQuestionHistory(null);
-		navigate(`/app/learning/assignment/${assignmentKey}`);
+		proceedDownDesiredPathRef.current = false;
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -280,6 +326,7 @@ const AssignmentReviewView = () => {
 			};
 		});
 		putReviewInfo();
+		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus.correctness === 'Correct') {
