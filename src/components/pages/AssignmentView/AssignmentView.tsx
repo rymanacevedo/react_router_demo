@@ -56,7 +56,7 @@ const initState = {
 const AssignmentView = () => {
 	const { message, handleMessage } = useContext(QuizContext);
 	const [textPrompt, setTextPrompt] = useState<string>('');
-	const [isToastOpen, setIsToastOpen] = useState(false);
+	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(

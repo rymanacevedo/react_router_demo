@@ -9,7 +9,7 @@ type ProgressMessageComponentPropsType = {
 
 const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	const { closeToast, textPrompt } = props;
-	const [toastText, setToastText] = useState('');
+	const [toastText, setToastText] = useState<string>('');
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
