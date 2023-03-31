@@ -38,7 +38,10 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 			borderRadius={'12px'}
 			padding="10px 20px 30px 20px"
 			margin="24px">
-			<div className="close" onClick={closeToast}>
+			<div
+				className="close"
+				style={{ textAlignLast: 'right', cursor: 'pointer' }}
+				onClick={closeToast}>
 				<span style={{ fontSize: '20px' }}>&times;</span>
 			</div>
 			<HStack>
