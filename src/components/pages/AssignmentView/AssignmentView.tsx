@@ -57,6 +57,7 @@ const AssignmentView = () => {
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
 		!Cookies.get('instructional_overlay'),
 	);
+	const [hasNotSeenTour] = useState(!Cookies.get('seen_tour'));
 	const initRef = useRef(null);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
@@ -249,6 +250,12 @@ const AssignmentView = () => {
 			path: '/',
 		});
 	};
+
+	useEffect(() => {
+		if (hasNotSeenTour) {
+			navigate('tour');
+		}
+	}, []);
 
 	return (
 		<main id="learning-assignment">

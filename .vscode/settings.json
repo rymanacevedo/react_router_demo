@@ -1,4 +1,5 @@
 {
     "editor.formatOnSave": false,
-    "eslint.codeActionsOnSave.rules": null
+    "eslint.codeActionsOnSave.rules": null,
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
