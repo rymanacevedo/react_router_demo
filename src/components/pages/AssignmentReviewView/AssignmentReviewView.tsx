@@ -397,7 +397,6 @@ const AssignmentView = () => {
 									setClearSelection={setClearSelection}
 									setIDKResponse={setIDKResponse}
 									IDKResponse={IDKResponse}
-
 								/>
 							) : (
 								<MultipleChoiceOverLay

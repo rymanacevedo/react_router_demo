@@ -32,7 +32,7 @@ const AssignmentView = () => {
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
 		!Cookies.get('instructional_overlay'),
 	);
-	const [seenTour, setSeenTour] = useState(!Cookies.get('intro_tour'));
+	const [hasNotSeenTour] = useState(!Cookies.get('seen_tour'));
 	const initRef = useRef(null);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
@@ -269,7 +269,12 @@ const AssignmentView = () => {
 			navigate('tour');
 		}
 	}, []);
-	
+
+	useEffect(() => {
+		if (hasNotSeenTour) {
+			navigate('tour');
+		}
+	}, []);
 
 	return (
 		<main id="learning-assignment">
@@ -291,7 +296,6 @@ const AssignmentView = () => {
 					currentQuestion={questionInFocus}
 					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 				/>{' '}
-				{/* <Button>Tour</Button> */}
 				<HStack width="100%">
 					<HStack
 						w="100%"
