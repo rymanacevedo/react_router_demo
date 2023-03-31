@@ -16,6 +16,7 @@ import ModuleIntroView from './components/pages/ModuleIntroView';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
 import QuizContext from './components/pages/AssignmentView/QuizContext';
+import TourView from './components/pages/TourView';
 
 function App() {
 	const { user } = useAuth();
@@ -115,6 +116,12 @@ function App() {
 							</QuizContext.Provider>
 						}
 					/>
+
+					<Route
+						path="learning/assignment/:assignmentKey/tour"
+						element={<TourView />}
+					/>
+
 					<Route
 						path="switch-account"
 						element={
