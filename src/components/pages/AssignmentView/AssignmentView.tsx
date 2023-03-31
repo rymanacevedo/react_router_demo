@@ -28,6 +28,31 @@ import AnswerArea from '../../ui/AnswerInput/AnswerArea';
 import QuizContext from './QuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 
+const initState = {
+	self: null,
+	totalQuestionCount: 0,
+	masteredQuestionCount: 0,
+	unseenCount: 0,
+	misinformedCount: 0,
+	uninformedCount: 0,
+	notSureCount: 0,
+	informedCount: 0,
+	onceCorrectCount: 0,
+	twiceCorrectCount: 0,
+	completionPercentage: 0,
+	completionAlgorithmType: '',
+	questionsMastered: 0,
+	questionSeconds: 0,
+	reviewSeconds: 0,
+	answerDate: '',
+	correctness: '',
+	confidence: '',
+	correctAnswerIds: [],
+	moduleComplete: false,
+	avatarMessage: null,
+	answerList: [],
+};
+
 const AssignmentView = () => {
 	const { message, handleMessage } = useContext(QuizContext);
 	const [textPrompt, setTextPrompt] = useState<string>('');
@@ -43,6 +68,7 @@ const AssignmentView = () => {
 		questionRc: '',
 		confidence: '',
 		correctness: '',
+		reviewSeconds: 0,
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});
@@ -52,30 +78,7 @@ const AssignmentView = () => {
 
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
-		useState<CurrentRoundAnswerOverLayData>({
-			self: null,
-			totalQuestionCount: 0,
-			masteredQuestionCount: 0,
-			unseenCount: 0,
-			misinformedCount: 0,
-			uninformedCount: 0,
-			notSureCount: 0,
-			informedCount: 0,
-			onceCorrectCount: 0,
-			twiceCorrectCount: 0,
-			completionPercentage: 0,
-			completionAlgorithmType: '',
-			questionsMastered: 0,
-			questionSeconds: 0,
-			reviewSeconds: 0,
-			answerDate: '',
-			correctness: '',
-			confidence: '',
-			correctAnswerIds: [],
-			moduleComplete: false,
-			avatarMessage: null,
-			answerList: [],
-		});
+		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [showOverlay, setShowOverlay] = useState(false);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
@@ -146,7 +149,17 @@ const AssignmentView = () => {
 			console.error(error);
 		}
 	};
+	const stopTimer = () => {
+		clearInterval(intervalRef.current);
+		questionSecondsRef.current = 0;
+	};
+	const startTimer = () => {
+		intervalRef.current = setInterval(() => {
+			questionSecondsRef.current = questionSecondsRef.current + 1;
+		}, 1000);
 
+		return () => clearInterval(intervalRef.current);
+	};
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
@@ -166,6 +179,7 @@ const AssignmentView = () => {
 		}
 
 		questionSecondsRef.current = 0;
+		stopTimer();
 	};
 
 	const clearSelectionButtonFunc = () => {
@@ -179,38 +193,12 @@ const AssignmentView = () => {
 		clearSelectionButtonFunc();
 		setShowOverlay(false);
 		fetchModuleQuestionsData();
-		setCurrentRoundAnswerOverLayData({
-			self: null,
-			totalQuestionCount: 0,
-			masteredQuestionCount: 0,
-			unseenCount: 0,
-			misinformedCount: 0,
-			uninformedCount: 0,
-			notSureCount: 0,
-			informedCount: 0,
-			onceCorrectCount: 0,
-			twiceCorrectCount: 0,
-			completionPercentage: 0,
-			completionAlgorithmType: '',
-			questionsMastered: 0,
-			questionSeconds: 0,
-			reviewSeconds: 0,
-			answerDate: '',
-			correctness: '',
-			confidence: '',
-			correctAnswerIds: [],
-			moduleComplete: false,
-			avatarMessage: null,
-			answerList: [],
-		});
+		setCurrentRoundAnswerOverLayData(initState);
+		startTimer();
 	};
 
 	useEffect(() => {
-		intervalRef.current = setInterval(() => {
-			questionSecondsRef.current = questionSecondsRef.current + 1;
-		}, 1000);
-
-		return () => clearInterval(intervalRef.current);
+		startTimer();
 	}, []);
 	useEffect(() => {
 		if (assignmentKey) {

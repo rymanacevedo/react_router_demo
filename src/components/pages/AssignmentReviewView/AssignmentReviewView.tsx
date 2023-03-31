@@ -37,7 +37,7 @@ import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
 
-const AssignmentView = () => {
+const AssignmentReviewView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +46,7 @@ const AssignmentView = () => {
 		id: '',
 		questionRc: '',
 		publishedQuestionId: '',
+		reviewSeconds: 0,
 		confidence: '',
 		correctness: '',
 		explanationRc: '',
@@ -103,9 +104,9 @@ const AssignmentView = () => {
 		moduleComplete: false,
 		notSureCount: 0,
 		onceCorrectCount: 0,
-		questionSeconds: 20,
+		questionSeconds: 0,
 		questionsMastered: 0,
-		reviewSeconds: 20,
+		reviewSeconds: 0,
 		self: null,
 		totalQuestionCount: 0,
 		twiceCorrectCount: 0,
@@ -120,15 +121,23 @@ const AssignmentView = () => {
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	// eslint-disable-next-line
+	const [localQuestionReviewHistory, setLocalQuestionReviewHistory] =
+		useLocalStorage(
+			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+			null,
+		);
 	const [IDKResponse, setIDKResponse] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
 	const [questionSecondsHistory, setQuestionSecondsHistory] = useState(0);
 	const navigate = useNavigate();
+	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
+	const proceedDownDesiredPathRef = useRef(true);
 
-	const fetchModuleQuestionsData = async () => {
+	const fetchModuleQuestionsData = async (firstRender?: boolean) => {
 		try {
 			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
 				await getCurrentRound(assignmentKey),
@@ -136,6 +145,17 @@ const AssignmentView = () => {
 			];
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+				if (firstRender) {
+					setQuestionIndex(
+						Number(
+							currentRoundQuestionsResponse?.questionList.findIndex(
+								(question: { reviewSeconds: number }) =>
+									Number(question.reviewSeconds) === 0,
+							),
+						),
+					);
+				}
+
 				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
 					(questionHistory: { answeredQuestionId: number }) => {
 						return (
@@ -170,6 +190,31 @@ const AssignmentView = () => {
 			console.error(error);
 		}
 	};
+	function handleBeforeUnload() {
+		if (questionInFocus?.id) {
+			setLocalQuestionReviewHistory({
+				localStorageQuestionReviewSeconds: Number(questionSecondsRef.current),
+			});
+		}
+	}
+	useEffect(() => {
+		// Clean up function to add the stored value when the component unmounts if user is not done with review
+		return () => {
+			if (proceedDownDesiredPathRef.current) {
+				handleBeforeUnload();
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		// Register a listener for the beforeunload event
+		window.addEventListener('beforeunload', handleBeforeUnload);
+
+		return () => {
+			// Remove the listener
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+		};
+	}, [setLocalQuestionReviewHistory]);
 
 	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
 		(item: { confidence: string; correctness: string }) => {
@@ -183,20 +228,34 @@ const AssignmentView = () => {
 
 	useEffect(() => {
 		if (assignmentKey) {
-			fetchModuleQuestionsData();
+			fetchModuleQuestionsData(true);
 		}
 	}, [assignmentKey]);
 	const closeExplainModal = () => {
 		onClose();
 		setShowExplanation(true);
 	};
+	const stopTimer = () => {
+		clearInterval(intervalRef.current);
+		questionSecondsRef.current = 0;
+	};
+	const startTimer = () => {
+		intervalRef.current = setInterval(() => {
+			questionSecondsRef.current = questionSecondsRef.current + 1;
+		}, 1000);
+
+		return () => clearInterval(intervalRef.current);
+	};
+	useEffect(() => {
+		startTimer();
+	}, []);
 
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
 				answerDate: findDateData(),
-				questionSeconds: questionSecondsRef.current,
+				questionSeconds: questionSecondsHistory,
 				answerList: [...selectedAnswers],
 			};
 		});
@@ -231,6 +290,17 @@ const AssignmentView = () => {
 		setQuestionIndex(count);
 	};
 	const putReviewInfo = async () => {
+		let storedtime = 0;
+		if (questionInFocus.id) {
+			const myObjectString = localStorage.getItem(
+				`questionReviewHistory${assignmentKey}${questionInFocus.id}`,
+			);
+			const myObject = JSON.parse(String(myObjectString));
+			if (myObject?.localStorageQuestionReviewSeconds) {
+				storedtime = myObject.localStorageQuestionReviewSeconds;
+			}
+		}
+
 		await putCurrentRound(
 			currentRoundQuestionListData?.id,
 			questionInFocus.id,
@@ -238,8 +308,12 @@ const AssignmentView = () => {
 				...answerData,
 				answerDate: null,
 				answerList: null,
-				reviewSeconds: 20,
+				questionSeconds: questionSecondsHistory,
+				reviewSeconds: Number(questionSecondsRef.current) + Number(storedtime),
 			},
+		);
+		localStorage.removeItem(
+			`questionReviewHistory${assignmentKey}${questionInFocus.id}`,
 		);
 	};
 	const handleNextQuestionInReview = async () => {
@@ -250,19 +324,21 @@ const AssignmentView = () => {
 		incrementQuestion();
 		fetchModuleQuestionsData();
 		putReviewInfo();
+		stopTimer();
+		startTimer();
 	};
 	const handelKeepGoing = async () => {
 		setLocalQuestionHistory(null);
-		navigate(`/app/learning/assignment/${assignmentKey}`);
+		proceedDownDesiredPathRef.current = false;
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
 				questionSeconds: questionSecondsHistory,
-				//TODO: add tracked review seconds
-				reviewSeconds: 20,
+				reviewSeconds: questionSecondsRef.current,
 			};
 		});
 		putReviewInfo();
+		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus.correctness === 'Correct') {
@@ -397,7 +473,6 @@ const AssignmentView = () => {
 									setClearSelection={setClearSelection}
 									setIDKResponse={setIDKResponse}
 									IDKResponse={IDKResponse}
-
 								/>
 							) : (
 								<MultipleChoiceOverLay
@@ -501,4 +576,4 @@ const AssignmentView = () => {
 	);
 };
 
-export default AssignmentView;
+export default AssignmentReviewView;

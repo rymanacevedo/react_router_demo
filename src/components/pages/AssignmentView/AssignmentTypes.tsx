@@ -51,6 +51,7 @@ export type QuestionInFocus = {
 	id: string | number;
 	questionRc: string;
 	name?: string;
+	reviewSeconds: number;
 	introductionRc?: string;
 	explanationRc?: string;
 	moreInformationRc?: string;
