@@ -1,10 +1,15 @@
+import React, {useRef} from 'react'
 import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 
-const ProgressMessageComponent = () => {
+type ProgressMessageComponentPropsType = {
+	closeToast?: () => void;
+}
+
+const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
+	const {closeToast} = props;
 	return (
 		<Box bg="ampSuccess.50" borderRadius={'12px'} padding="10px 20px 30px 20px" margin="24px">
-			<div className="close"><span style={{fontSize: '20px'}}>&times;</span></div>
-			
+			<div className="close" onClick={closeToast}><span style={{fontSize: '20px'}}>&times;</span></div>
 			<HStack>
 				<AvatarGroup spacing="4px">
 					<Avatar bg="teal.500" />

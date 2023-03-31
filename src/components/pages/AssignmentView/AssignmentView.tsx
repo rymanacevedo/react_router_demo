@@ -32,8 +32,9 @@ import FireProgressToast from '../../ui/ProgressToast';
 
 const AssignmentView = () => {
 	const {message, handleMessage} = useContext(QuizContext);
-	const [answered, setAnswered] = useState(false);
-	const [isOpen, setIsOpen] = useState(false);
+	// TODO: add questions answered consecutively.
+	const [questionsAnsweredConsecutively, setQuestionsAnsweredConsecutively] = useState(0);
+	const [isToastOpen, setIsToastOpen] = useState(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
@@ -150,6 +151,7 @@ const AssignmentView = () => {
 	};
 
 	const submitAnswer = () => {
+		setQuestionsAnsweredConsecutively(prevState => prevState + 1);
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -294,10 +296,11 @@ const AssignmentView = () => {
 	useEffect(() => {
 		if (questionSecondsRef.current <= 5){
 			handleMessage('FIVE_FAST_ANSWERS');
-			setIsOpen(true)
+			// setIsToastOpen(true)
 		}
-	}, [answerData])
-	console.log(isOpen)
+	}, [])
+
+	console.log('questionsAnsweredConsecutively: ', questionsAnsweredConsecutively)
 	return (
 		<main id="learning-assignment">
 			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
@@ -311,17 +314,12 @@ const AssignmentView = () => {
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
 				<Button onClick={() => {
-					if (isOpen){
-						setIsOpen(false)
-					} else {
-						setIsOpen(true)
-					}
-					}}>
+					setIsToastOpen(true)
+				}}>
 				RandomButton
 				</Button>
 				{/* @ts-ignore */}
-				{isOpen && (<FireProgressToast />)}
-				<ToastExample />
+				<FireProgressToast isToastOpen={isToastOpen} />
 				<TestProgressBarMenu
 					questionData={questionData}
 					isMenuOpen={isMenuOpen}

@@ -316,4 +316,5 @@ a.white-text {
 
 .close {
     text-align-last: right;
+    cursor: pointer;
   }
