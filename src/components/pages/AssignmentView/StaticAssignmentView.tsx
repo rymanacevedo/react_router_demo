@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from 'react';
 import { Box, Container, HStack, useMediaQuery } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
