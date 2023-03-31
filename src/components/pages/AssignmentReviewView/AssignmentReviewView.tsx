@@ -129,8 +129,7 @@ const AssignmentReviewView = () => {
 	const navigate = useNavigate();
 	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
-
-	const fetchModuleQuestionsData = async (firstRender: boolean | undefined) => {
+	const fetchModuleQuestionsData = async (firstRender?: boolean) => {
 		try {
 			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
 				await getCurrentRound(assignmentKey),
@@ -191,7 +190,7 @@ const AssignmentReviewView = () => {
 	).length;
 
 	useEffect(() => {
-		fetchModuleQuestionsData(false);
+		fetchModuleQuestionsData();
 	}, [questionIndex]);
 
 	useEffect(() => {
@@ -276,7 +275,7 @@ const AssignmentReviewView = () => {
 		setAnswerSubmitted(false);
 		setTryAgain(false);
 		incrementQuestion();
-		fetchModuleQuestionsData(false);
+		fetchModuleQuestionsData();
 		putReviewInfo();
 		stopTimer();
 		startTimer();
