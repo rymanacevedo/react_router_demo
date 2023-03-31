@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './css/App.css';
 import LoginWrapper from './components/login/LoginWrapper';
 import LoginForm from './components/login/LoginForm';
@@ -23,24 +23,29 @@ function App() {
 		FIVE_FAST_ANSWERS: 0,
 		FIVE_CONSEC_SI: 0,
 		SIX_DK_IN_ROUND: 0,
-		FIVE_CONSEC_SC: 0
-	})
+		FIVE_CONSEC_SC: 0,
+	});
 
-	const handleMessage = (messageType) => {
+	const handleMessage = (messageType, reset) => {
 		switch (messageType) {
 			case 'FIVE_FAST_ANSWERS':
+				if (reset) {
 					setMessage({
-					  ...message,
-					  FIVE_FAST_ANSWERS: message.FIVE_FAST_ANSWERS + 1
-					})
-					console.log(message)
-					if (message.FIVE_FAST_ANSWERS === 5){
-						console.log('Show toast now')
+						...message,
+						FIVE_FAST_ANSWERS: 0,
+					});
+				} else {
+					setMessage({
+						...message,
+						FIVE_FAST_ANSWERS: message.FIVE_FAST_ANSWERS + 1,
+					});
+					if (message.FIVE_FAST_ANSWERS === 5) {
 						setMessage({
 							...message,
-							FIVE_FAST_ANSWERS: 0
-						})
+							FIVE_FAST_ANSWERS: 0,
+						});
 					}
+				}
 				break;
 			case 'FIVE_CONSEC_SI':
 				// handle FIVE_CONSEC_SI case
@@ -52,10 +57,9 @@ function App() {
 				// handle FIVE_CONSEC_SC case
 				break;
 			default:
-				// handle default case
+			// handle default case
 		}
 	};
-
 
 	return (
 		<>

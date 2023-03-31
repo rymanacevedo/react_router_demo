@@ -102,6 +102,10 @@ const resources = {
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
          //////////////////////////////////
+         //    AssignmentView.jsx
+         //////////////////////////////////
+         fiveFastAnswers: 'You\'ll actually go faster if you slow down and read.',
+         //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
          mastered: 'Mastered',

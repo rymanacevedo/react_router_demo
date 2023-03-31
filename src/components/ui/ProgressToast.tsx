@@ -1,26 +1,29 @@
+import React, { useEffect } from 'react';
 import { Box, useToast, Button, Text } from '@chakra-ui/react';
 import ProgressMessageComponent from './ProgressMessageComponent';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useRef } from 'react';
 
 type FireProgressToastType = {
 	setIsOpen?: (isOpen: boolean) => void;
 	isToastOpen?: boolean;
+	textPrompt: string;
 };
 
 const FireProgressToast = (props: FireProgressToastType) => {
-	const {isToastOpen} = props;
+	const { isToastOpen, textPrompt } = props;
 	const toast = useToast();
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
-		if (isToastOpen){
+		if (isToastOpen) {
+			const id = 'progress-toast';
+
 			const closeToast = () => {
 				if (toast) {
-					toast.close(id)
+					toast.close(id);
 				}
-			}
-			const id = 'progress-toast';
+			};
+
 			if (!toast.isActive(id)) {
 				toast({
 					position: 'top-right',
@@ -29,9 +32,9 @@ const FireProgressToast = (props: FireProgressToastType) => {
 					id,
 					render: () => (
 						<Box
-						border="1px solid #E2E8F0"
-						boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-							style={{border: '1px'}}
+							border="1px solid #E2E8F0"
+							boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+							style={{ border: '1px' }}
 							marginTop={'160px'}
 							borderRadius={'24px'}
 							width={'475px'}
@@ -39,7 +42,10 @@ const FireProgressToast = (props: FireProgressToastType) => {
 							marginLeft="200px"
 							bg="ampWhite">
 							<Box w="373px">
-								<ProgressMessageComponent closeToast={closeToast} />
+								<ProgressMessageComponent
+									closeToast={closeToast}
+									textPrompt={textPrompt}
+								/>
 							</Box>
 							<Button
 								variant={'outline'}
@@ -49,7 +55,6 @@ const FireProgressToast = (props: FireProgressToastType) => {
 								height="40px"
 								margin="24px"
 								onClick={() => {
-									// setIsOpen(true);
 									toast.close(id);
 								}}>
 								<Text fontSize={'16px'} fontWeight="600">
@@ -60,8 +65,11 @@ const FireProgressToast = (props: FireProgressToastType) => {
 					),
 				});
 			}
-	
-		}}, [isToastOpen]);	
+		}
+	}, [isToastOpen]);
+
+	// To appease the TypeScript gods
+	return <></>;
 };
 
 export default FireProgressToast;

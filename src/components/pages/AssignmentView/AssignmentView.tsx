@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 import {
 	Box,
-	Button,
 	Container,
 	HStack,
 	Modal,
 	ModalOverlay,
 	useMediaQuery,
-	useToast,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
@@ -31,9 +29,8 @@ import QuizContext from './QuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 
 const AssignmentView = () => {
-	const {message, handleMessage} = useContext(QuizContext);
-	// TODO: add questions answered consecutively.
-	const [questionsAnsweredConsecutively, setQuestionsAnsweredConsecutively] = useState(0);
+	const { message, handleMessage } = useContext(QuizContext);
+	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [isToastOpen, setIsToastOpen] = useState(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -151,7 +148,6 @@ const AssignmentView = () => {
 	};
 
 	const submitAnswer = () => {
-		setQuestionsAnsweredConsecutively(prevState => prevState + 1);
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -160,6 +156,15 @@ const AssignmentView = () => {
 				answerList: [...selectedAnswers],
 			};
 		});
+
+		if (questionSecondsRef.current <= 5) {
+			if (message.FIVE_FAST_ANSWERS < 5) {
+				handleMessage('FIVE_FAST_ANSWERS', false);
+			}
+		} else {
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		}
+
 		questionSecondsRef.current = 0;
 	};
 
@@ -170,6 +175,7 @@ const AssignmentView = () => {
 	};
 
 	const getNextTask = () => {
+		setIsToastOpen(false);
 		clearSelectionButtonFunc();
 		setShowOverlay(false);
 		fetchModuleQuestionsData();
@@ -272,35 +278,34 @@ const AssignmentView = () => {
 		});
 	};
 
-	function ToastExample() {
-		const toast = useToast()
-	  
-		return (
-		  <Button
-			onClick={() =>
-			  toast({
-				position: 'top-right',
-				title: "Account created.",
-				description: "We've created your account for you.",
-				status: "success",
-				duration: 9000,
-				isClosable: true,
-			  })
+	useEffect(() => {
+		const courseHomeElement = Array.from(
+			document.getElementsByTagName('p'),
+		).find((p) => p.innerText === 'Course Home');
+
+		const handleClick = () => {
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		};
+
+		if (courseHomeElement) {
+			courseHomeElement.addEventListener('click', handleClick);
+		}
+
+		return () => {
+			if (courseHomeElement) {
+				courseHomeElement.removeEventListener('click', handleClick);
 			}
-		  >
-			Show Toast
-		  </Button>
-		)
-	  }
+		};
+	}, []);
 
 	useEffect(() => {
-		if (questionSecondsRef.current <= 5){
-			handleMessage('FIVE_FAST_ANSWERS');
-			// setIsToastOpen(true)
+		if (message.FIVE_FAST_ANSWERS === 5) {
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_FAST_ANSWERS');
+			handleMessage('FIVE_FAST_ANSWERS', true);
 		}
-	}, [])
+	}, [message.FIVE_FAST_ANSWERS]);
 
-	console.log('questionsAnsweredConsecutively: ', questionsAnsweredConsecutively)
 	return (
 		<main id="learning-assignment">
 			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
@@ -313,13 +318,7 @@ const AssignmentView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<Button onClick={() => {
-					setIsToastOpen(true)
-				}}>
-				RandomButton
-				</Button>
-				{/* @ts-ignore */}
-				<FireProgressToast isToastOpen={isToastOpen} />
+				<FireProgressToast isToastOpen={isToastOpen} textPrompt={textPrompt} />
 				<TestProgressBarMenu
 					questionData={questionData}
 					isMenuOpen={isMenuOpen}
