@@ -63,6 +63,7 @@ const AssignmentView = () => {
 		questionRc: '',
 		confidence: '',
 		correctness: '',
+		reviewSeconds: 0,
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
 	});

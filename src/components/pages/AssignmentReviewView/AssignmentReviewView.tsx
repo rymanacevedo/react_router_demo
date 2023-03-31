@@ -46,6 +46,7 @@ const AssignmentReviewView = () => {
 		id: '',
 		questionRc: '',
 		publishedQuestionId: '',
+		reviewSeconds: 0,
 		confidence: '',
 		correctness: '',
 		explanationRc: '',
@@ -129,7 +130,7 @@ const AssignmentReviewView = () => {
 	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
 
-	const fetchModuleQuestionsData = async () => {
+	const fetchModuleQuestionsData = async (firstRender: boolean | undefined) => {
 		try {
 			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
 				await getCurrentRound(assignmentKey),
@@ -137,6 +138,17 @@ const AssignmentReviewView = () => {
 			];
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+				if (firstRender) {
+					setQuestionIndex(
+						Number(
+							currentRoundQuestionsResponse?.questionList.findIndex(
+								(question: { reviewSeconds: number }) =>
+									Number(question.reviewSeconds) === 0,
+							),
+						),
+					);
+				}
+
 				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
 					(questionHistory: { answeredQuestionId: number }) => {
 						return (
@@ -179,12 +191,12 @@ const AssignmentReviewView = () => {
 	).length;
 
 	useEffect(() => {
-		fetchModuleQuestionsData();
+		fetchModuleQuestionsData(false);
 	}, [questionIndex]);
 
 	useEffect(() => {
 		if (assignmentKey) {
-			fetchModuleQuestionsData();
+			fetchModuleQuestionsData(true);
 		}
 	}, [assignmentKey]);
 	const closeExplainModal = () => {
@@ -264,7 +276,7 @@ const AssignmentReviewView = () => {
 		setAnswerSubmitted(false);
 		setTryAgain(false);
 		incrementQuestion();
-		fetchModuleQuestionsData();
+		fetchModuleQuestionsData(false);
 		putReviewInfo();
 		stopTimer();
 		startTimer();
