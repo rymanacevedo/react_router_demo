@@ -43,7 +43,9 @@ function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
 							/>
 						</Center>
 
-						<ModalHeader pl="0">How to use Amplifire</ModalHeader>
+						<ModalHeader pl="0" fontSize={24}>
+							How to use Amplifire
+						</ModalHeader>
 						<Text>
 							Our goal is to provide you with a focused, efficient path to
 							mastering and retaining the information you need to be successful.
