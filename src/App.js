@@ -27,23 +27,24 @@ function App() {
 	});
 
 	const handleMessage = (messageType, reset) => {
+		const resetFiveFastAnswers = () => {
+			setMessage({
+				...message,
+				FIVE_FAST_ANSWERS: 0,
+			});
+		};
+
 		switch (messageType) {
 			case 'FIVE_FAST_ANSWERS':
 				if (reset) {
-					setMessage({
-						...message,
-						FIVE_FAST_ANSWERS: 0,
-					});
+					resetFiveFastAnswers();
 				} else {
 					setMessage({
 						...message,
 						FIVE_FAST_ANSWERS: message.FIVE_FAST_ANSWERS + 1,
 					});
 					if (message.FIVE_FAST_ANSWERS === 5) {
-						setMessage({
-							...message,
-							FIVE_FAST_ANSWERS: 0,
-						});
+						resetFiveFastAnswers();
 					}
 				}
 				break;
