@@ -13,6 +13,7 @@ import {
 	Image,
 	Text,
 	HStack,
+	Center,
 } from '@chakra-ui/react';
 import Step1ModalGraphic from '../../introImage.svg';
 import { Cookies } from 'react-cookie-consent';
@@ -23,23 +24,27 @@ type Step1ModalProps = {
 };
 
 function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
-	const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
+	const { isOpen } = useDisclosure({ defaultIsOpen: true });
 	const nav = useNavigate();
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+			<Modal isOpen={isOpen} onClose={() => nav(-1)} size={'xl'}>
 				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader>How to use Amplifire</ModalHeader>
-					<ModalCloseButton
-						onClick={() => {
-							nav(-1);
-						}}
-					/>
-					<ModalBody p="8">
-						<Image src={Step1ModalGraphic} alt="How to use Amplifire" />
-						<Text mt="5">
+				<ModalContent p="24px" w="720px">
+					<ModalCloseButton />
+					<ModalBody p="24px">
+						<Center>
+							<Image
+								align="center"
+								pl="5"
+								src={Step1ModalGraphic}
+								alt="How to use Amplifire"
+							/>
+						</Center>
+
+						<ModalHeader pl="0">How to use Amplifire</ModalHeader>
+						<Text>
 							Our goal is to provide you with a focused, efficient path to
 							mastering and retaining the information you need to be successful.
 							The adaptive system you are using was developed based on
@@ -53,12 +58,16 @@ function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
 							Step {tourStep} of 6
 						</Text>
 						<HStack>
-							<Text color="rgba(0, 0, 0, 0.5)" mr={3}>
+							<Text
+								as="u"
+								color="rgba(0, 0, 0, 0.5)"
+								mr={3}
+								cursor="pointer"
+								onClick={() => {
+									nav(-1);
+								}}>
 								Skip the tour
 							</Text>
-							{/* <Button colorScheme='blue' mr={3} onClick={onClose}>
-				Close
-			  </Button> */}
 
 							<Button
 								onClick={() => {
