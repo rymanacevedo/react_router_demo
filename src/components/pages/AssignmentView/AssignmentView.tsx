@@ -265,12 +265,6 @@ const AssignmentView = () => {
 	};
 
 	useEffect(() => {
-		if (!Cookies.get('seenTour')) {
-			navigate('tour');
-		}
-	}, []);
-
-	useEffect(() => {
 		if (hasNotSeenTour) {
 			navigate('tour');
 		}
