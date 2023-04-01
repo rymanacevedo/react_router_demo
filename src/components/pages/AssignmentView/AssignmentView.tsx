@@ -253,11 +253,10 @@ const AssignmentView = () => {
 	}, [answerData]);
 
 	const continueBtnFunc = () => {
+		setIsToastOpen(false);
 		if (showOverlay) {
-			setIsToastOpen(false);
 			getNextTask();
 		} else {
-			setIsToastOpen(false);
 			submitAnswer();
 		}
 	};

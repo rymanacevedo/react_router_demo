@@ -15,7 +15,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	const [icon, setIcon] = useState<ReactElement<any, any> | undefined>(
 		<Cross1Icon />,
 	);
-	const [iconColor, setIconColor] = useState('teal.500');
+	const [iconColor, setIconColor] = useState<string>('teal.500');
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
