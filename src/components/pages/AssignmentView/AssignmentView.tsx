@@ -254,8 +254,10 @@ const AssignmentView = () => {
 
 	const continueBtnFunc = () => {
 		if (showOverlay) {
+			setIsToastOpen(false);
 			getNextTask();
 		} else {
+			setIsToastOpen(false);
 			submitAnswer();
 		}
 	};
@@ -301,6 +303,11 @@ const AssignmentView = () => {
 		}
 	}, []);
 
+	const expandProgressMenu = () => {
+		setIsToastOpen(false);
+		setIsMenuOpen(true);
+	};
+
 	return (
 		<main id="learning-assignment">
 			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
@@ -313,7 +320,11 @@ const AssignmentView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<FireProgressToast isToastOpen={isToastOpen} textPrompt={textPrompt} />
+				<FireProgressToast
+					isToastOpen={isToastOpen}
+					textPrompt={textPrompt}
+					expandProgressMenu={expandProgressMenu}
+				/>
 				<TestProgressBarMenu
 					questionData={questionData}
 					isMenuOpen={isMenuOpen}
@@ -361,6 +372,7 @@ const AssignmentView = () => {
 						/>
 					</HStack>
 					<ProgressMenu
+						textPrompt={textPrompt}
 						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}

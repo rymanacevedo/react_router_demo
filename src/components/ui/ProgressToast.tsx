@@ -7,17 +7,19 @@ type FireProgressToastType = {
 	setIsOpen?: (isOpen: boolean) => void;
 	isToastOpen?: boolean;
 	textPrompt: string;
+	expandProgressMenu: () => void;
 };
 
 const FireProgressToast = (props: FireProgressToastType) => {
-	const { isToastOpen, textPrompt } = props;
+	const { isToastOpen, textPrompt, expandProgressMenu } = props;
 	const toast = useToast();
 	const { t: i18n } = useTranslation();
-
 	useEffect(() => {
+		const id = 'progress-toast';
+		if (isToastOpen === false) {
+			toast.close(id);
+		}
 		if (isToastOpen) {
-			const id = 'progress-toast';
-
 			const closeToast = () => {
 				if (toast) {
 					toast.close(id);
@@ -56,6 +58,7 @@ const FireProgressToast = (props: FireProgressToastType) => {
 								margin="24px"
 								onClick={() => {
 									toast.close(id);
+									expandProgressMenu();
 								}}>
 								<Text fontSize={'16px'} fontWeight="600">
 									{i18n('viewMoreProgress')}

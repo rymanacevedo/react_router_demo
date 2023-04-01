@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { Cross1Icon } from '@radix-ui/react-icons';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
@@ -10,12 +11,20 @@ type ProgressMessageComponentPropsType = {
 const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	const { closeToast, textPrompt } = props;
 	const [toastText, setToastText] = useState<string>('');
+	const [bgColor, setBgColor] = useState<string>('ampSuccess.50');
+	const [icon, setIcon] = useState<ReactElement<any, any> | undefined>(
+		<Cross1Icon />,
+	);
+	const [iconColor, setIconColor] = useState('teal.500');
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
 		switch (textPrompt) {
 			case 'FIVE_FAST_ANSWERS':
 				setToastText(i18n('fiveFastAnswers'));
+				setBgColor('red.100');
+				setIconColor('red.500');
+				setIcon(<Cross1Icon />);
 				break;
 			case 'FIVE_CONSEC_SI':
 				// handle FIVE_CONSEC_SI case
@@ -30,11 +39,13 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setToastText(
 					'You’re doing a great job at knowing what you are sure and unsure about.',
 				);
+				setIcon(undefined);
+				setIconColor('teal.500');
 		}
 	}, [textPrompt]);
 	return (
 		<Box
-			bg="ampSuccess.50"
+			bg={bgColor}
 			borderRadius={'12px'}
 			padding="10px 20px 30px 20px"
 			margin="24px">
@@ -46,7 +57,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 			</div>
 			<HStack>
 				<AvatarGroup spacing="4px">
-					<Avatar bg="teal.500" />
+					<Avatar bg={iconColor} icon={icon}></Avatar>
 				</AvatarGroup>
 				<Text fontSize={'16px'}>{toastText}</Text>
 			</HStack>
