@@ -2,14 +2,16 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Cross1Icon } from '@radix-ui/react-icons';
+import RedIcon from './RedIcon';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
 	textPrompt?: string;
+	isMenuOpen: boolean;
 };
 
 const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
-	const { closeToast, textPrompt } = props;
+	const { closeToast, textPrompt, isMenuOpen } = props;
 	const [toastText, setToastText] = useState<string>('');
 	const [bgColor, setBgColor] = useState<string>('ampSuccess.50');
 	const [icon, setIcon] = useState<ReactElement<any, any> | undefined>(
@@ -24,7 +26,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setToastText(i18n('fiveFastAnswers'));
 				setBgColor('red.100');
 				setIconColor('red.500');
-				setIcon(<Cross1Icon />);
+				setIcon(<RedIcon />);
 				break;
 			case 'FIVE_CONSEC_SI':
 				// handle FIVE_CONSEC_SI case
@@ -47,14 +49,16 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 		<Box
 			bg={bgColor}
 			borderRadius={'12px'}
-			padding="10px 20px 30px 20px"
+			padding={isMenuOpen ? '30px 20px 30px 20px' : '10px 20px 30px 20px'}
 			margin="24px">
-			<div
-				className="close"
-				style={{ textAlignLast: 'right', cursor: 'pointer' }}
-				onClick={closeToast}>
-				<span style={{ fontSize: '20px' }}>&times;</span>
-			</div>
+			{!isMenuOpen && (
+				<div
+					className="close"
+					style={{ textAlignLast: 'right', cursor: 'pointer' }}
+					onClick={closeToast}>
+					<span style={{ fontSize: '20px' }}>&times;</span>
+				</div>
+			)}
 			<HStack>
 				<AvatarGroup spacing="4px">
 					<Avatar bg={iconColor} icon={icon}></Avatar>

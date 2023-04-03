@@ -70,7 +70,10 @@ const ProgressMenu = (props: ProgressMenuType) => {
 				boxSizing="border-box"
 				justifyContent={'space-between'}>
 				<Box>
-					<ProgressMessageComponent textPrompt={textPrompt} />
+					<ProgressMessageComponent
+						textPrompt={textPrompt}
+						isMenuOpen={isMenuOpen}
+					/>
 					<Divider borderWidth="1px" width="297px" marginLeft="24px" />
 					<Box padding="24px">
 						<Text fontSize="21px" fontWeight={'600'}>
