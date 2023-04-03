@@ -55,6 +55,7 @@ const initState = {
 
 const AssignmentView = () => {
 	const { message, handleMessage } = useContext(QuizContext);
+	const [isCorrectAndSure, setIsCorrectAndSure] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -162,17 +163,23 @@ const AssignmentView = () => {
 		return () => clearInterval(intervalRef.current);
 	};
 	const submitAnswer = () => {
-		setAnswerData((answerDataArg: any) => {
-			return {
-				...answerDataArg,
-				answerDate: findDateData(),
-				questionSeconds: questionSecondsRef.current,
-				answerList: [...selectedAnswers],
-			};
-		});
-
-		if (questionSecondsRef.current <= 5) {
+		
+		console.log(currentRoundAnswerOverLayData);
+		if (
+			currentRoundAnswerOverLayData.confidence === 'Sure' &&
+			currentRoundAnswerOverLayData.correctness === 'Correct' &&
+			message.FIVE_CONSEC_SC < 5
+		  ) {
+			setIsCorrectAndSure(true);
+			handleMessage('FIVE_CONSEC_SC', false);
+		  } else {
+			setIsCorrectAndSure(false);
+			handleMessage('FIVE_CONSEC_SC', true);
+		  }
+		if (questionSecondsRef.current <= 5 && isCorrectAndSure === false) {
+			console.log('isCorrectAndSure: ', isCorrectAndSure);
 			if (message.FIVE_FAST_ANSWERS < 5) {
+				console.log("REACHED")
 				handleMessage('FIVE_FAST_ANSWERS', false);
 			}
 		} else {
@@ -181,6 +188,15 @@ const AssignmentView = () => {
 
 		questionSecondsRef.current = 0;
 		stopTimer();
+
+		setAnswerData((answerDataArg: any) => {
+			return {
+				...answerDataArg,
+				answerDate: findDateData(),
+				questionSeconds: questionSecondsRef.current,
+				answerList: [...selectedAnswers],
+			};
+		});
 	};
 
 	const clearSelectionButtonFunc = () => {
@@ -216,6 +232,18 @@ const AssignmentView = () => {
 			);
 
 			if (overLayData) {
+				if (
+					overLayData.confidence === 'Sure' &&
+					overLayData.correctness === 'Correct' &&
+					message.FIVE_CONSEC_SC < 5
+				) {
+					setIsCorrectAndSure(true);
+					handleMessage('FIVE_CONSEC_SC', false);
+				} else {
+					setIsCorrectAndSure(false);
+					handleMessage('FIVE_CONSEC_SC', true);
+				}
+
 				let updatedLocalQuestionHistory = localQuestionHistory
 					?.roundQuestionsHistory.length
 					? {
@@ -289,12 +317,26 @@ const AssignmentView = () => {
 	}, []);
 
 	useEffect(() => {
-		if (message.FIVE_FAST_ANSWERS === 5) {
+		console.log(message);
+		if (message.FIVE_FAST_ANSWERS === 5 && message.FIVE_CONSEC_SC !== 5) {
+			console.log('five fast');
 			setIsToastOpen(true);
 			setTextPrompt('FIVE_FAST_ANSWERS');
 			handleMessage('FIVE_FAST_ANSWERS', true);
 		}
 	}, [message.FIVE_FAST_ANSWERS]);
+
+	useEffect(() => {
+		console.log(message)
+		console.log('five consec: ', message.FIVE_CONSEC_SC);
+		if (message.FIVE_CONSEC_SC === 5) {
+			console.log('message.FIVE_FAST: ', message.FIVE_FAST_ANSWERS);
+			console.log('message.FIVE_FAST: ', message.FIVE_CONSEC_SC);
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_CONSEC_SC');
+			handleMessage('FIVE_CONSEC_SC', true);
+		}
+	}, [message.FIVE_CONSEC_SC]);
 
 	useEffect(() => {
 		if (hasNotSeenTour) {

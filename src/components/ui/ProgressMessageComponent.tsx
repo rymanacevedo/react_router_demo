@@ -35,7 +35,10 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				// handle SIX_DK_IN_ROUND case
 				break;
 			case 'FIVE_CONSEC_SC':
-				// handle FIVE_CONSEC_SC case
+				setToastText(i18n('fiveSureCorrectAnswers'));
+				setBgColor('darkgreen');
+				setIconColor('red.500');
+				setIcon(<RedIcon />);
 				break;
 			default:
 				setToastText(
@@ -61,7 +64,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 			)}
 			<HStack>
 				<AvatarGroup spacing="4px">
-					<Avatar bg={iconColor} icon={icon}></Avatar>
+					<Avatar bg={''} icon={icon}></Avatar>
 				</AvatarGroup>
 				<Text fontSize={'16px'}>{toastText}</Text>
 			</HStack>
