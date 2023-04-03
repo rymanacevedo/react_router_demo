@@ -53,6 +53,7 @@ const FireProgressToast = (props: FireProgressToastType) => {
 								<ProgressMessageComponent
 									closeToast={closeToast}
 									textPrompt={textPrompt}
+									isMenuOpen={false}
 								/>
 							</Box>
 							<Button
