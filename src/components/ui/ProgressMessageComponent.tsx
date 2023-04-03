@@ -3,6 +3,7 @@ import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import RedIcon from './RedIcon';
+import GreenIcon from './GreenIcon';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
@@ -25,7 +26,6 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 			case 'FIVE_FAST_ANSWERS':
 				setToastText(i18n('fiveFastAnswers'));
 				setBgColor('red.100');
-				setIconColor('red.500');
 				setIcon(<RedIcon />);
 				break;
 			case 'FIVE_CONSEC_SI':
@@ -36,9 +36,8 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				break;
 			case 'FIVE_CONSEC_SC':
 				setToastText(i18n('fiveSureCorrectAnswers'));
-				setBgColor('darkgreen');
-				setIconColor('red.500');
-				setIcon(<RedIcon />);
+				setBgColor('ampSuccess.50');
+				setIcon(<GreenIcon />);
 				break;
 			default:
 				setToastText(
@@ -46,6 +45,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				);
 				setIcon(undefined);
 				setIconColor('teal.500');
+				setBgColor('ampSuccess.50');
 		}
 	}, [textPrompt]);
 	return (
@@ -64,7 +64,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 			)}
 			<HStack>
 				<AvatarGroup spacing="4px">
-					<Avatar bg={''} icon={icon}></Avatar>
+					<Avatar bg={iconColor} icon={icon}></Avatar>
 				</AvatarGroup>
 				<Text fontSize={'16px'}>{toastText}</Text>
 			</HStack>

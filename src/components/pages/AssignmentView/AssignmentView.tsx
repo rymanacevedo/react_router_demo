@@ -163,23 +163,19 @@ const AssignmentView = () => {
 		return () => clearInterval(intervalRef.current);
 	};
 	const submitAnswer = () => {
-		
-		console.log(currentRoundAnswerOverLayData);
 		if (
 			currentRoundAnswerOverLayData.confidence === 'Sure' &&
 			currentRoundAnswerOverLayData.correctness === 'Correct' &&
 			message.FIVE_CONSEC_SC < 5
-		  ) {
+		) {
 			setIsCorrectAndSure(true);
 			handleMessage('FIVE_CONSEC_SC', false);
-		  } else {
+		} else {
 			setIsCorrectAndSure(false);
 			handleMessage('FIVE_CONSEC_SC', true);
-		  }
+		}
 		if (questionSecondsRef.current <= 5 && isCorrectAndSure === false) {
-			console.log('isCorrectAndSure: ', isCorrectAndSure);
 			if (message.FIVE_FAST_ANSWERS < 5) {
-				console.log("REACHED")
 				handleMessage('FIVE_FAST_ANSWERS', false);
 			}
 		} else {
@@ -317,9 +313,7 @@ const AssignmentView = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log(message);
 		if (message.FIVE_FAST_ANSWERS === 5 && message.FIVE_CONSEC_SC !== 5) {
-			console.log('five fast');
 			setIsToastOpen(true);
 			setTextPrompt('FIVE_FAST_ANSWERS');
 			handleMessage('FIVE_FAST_ANSWERS', true);
@@ -327,11 +321,7 @@ const AssignmentView = () => {
 	}, [message.FIVE_FAST_ANSWERS]);
 
 	useEffect(() => {
-		console.log(message)
-		console.log('five consec: ', message.FIVE_CONSEC_SC);
 		if (message.FIVE_CONSEC_SC === 5) {
-			console.log('message.FIVE_FAST: ', message.FIVE_FAST_ANSWERS);
-			console.log('message.FIVE_FAST: ', message.FIVE_CONSEC_SC);
 			setIsToastOpen(true);
 			setTextPrompt('FIVE_CONSEC_SC');
 			handleMessage('FIVE_CONSEC_SC', true);
