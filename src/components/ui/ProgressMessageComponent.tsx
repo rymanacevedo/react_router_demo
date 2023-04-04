@@ -26,6 +26,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 			case 'FIVE_FAST_ANSWERS':
 				setToastText(i18n('fiveFastAnswers'));
 				setBgColor('red.100');
+				setIconColor('red.500');
 				setIcon(<RedIcon />);
 				break;
 			case 'FIVE_CONSEC_SI':
