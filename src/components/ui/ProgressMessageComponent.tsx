@@ -3,6 +3,7 @@ import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import RedIcon from './RedIcon';
+import GreenIcon from './GreenIcon';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
@@ -35,7 +36,9 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				// handle SIX_DK_IN_ROUND case
 				break;
 			case 'FIVE_CONSEC_SC':
-				// handle FIVE_CONSEC_SC case
+				setToastText(i18n('fiveSureCorrectAnswers'));
+				setBgColor('ampSuccess.50');
+				setIcon(<GreenIcon />);
 				break;
 			default:
 				setToastText(
@@ -43,6 +46,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				);
 				setIcon(undefined);
 				setIconColor('teal.500');
+				setBgColor('ampSuccess.50');
 		}
 	}, [textPrompt]);
 	return (

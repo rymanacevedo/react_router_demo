@@ -105,6 +105,7 @@ const resources = {
          //    AssignmentView.jsx
          //////////////////////////////////
          fiveFastAnswers: 'You\'ll actually go faster if you slow down and read.',
+         fiveSureCorrectAnswers: 'Five in a row!  Keep it going.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
