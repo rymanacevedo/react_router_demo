@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import {
 	Box,
 	Container,
@@ -25,6 +25,8 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { findDateData } from '../../../utils/logic';
 import { Cookies } from 'react-cookie-consent';
 import AnswerArea from '../../ui/AnswerInput/AnswerArea';
+import QuizContext from './QuizContext';
+import FireProgressToast from '../../ui/ProgressToast';
 
 const initState = {
 	self: null,
@@ -52,6 +54,9 @@ const initState = {
 };
 
 const AssignmentView = () => {
+	const { message, handleMessage } = useContext(QuizContext);
+	const [textPrompt, setTextPrompt] = useState<string>('');
+	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
@@ -165,6 +170,16 @@ const AssignmentView = () => {
 				answerList: [...selectedAnswers],
 			};
 		});
+
+		if (questionSecondsRef.current <= 5) {
+			if (message.FIVE_FAST_ANSWERS < 5) {
+				handleMessage('FIVE_FAST_ANSWERS', false);
+			}
+		} else {
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		}
+
+		questionSecondsRef.current = 0;
 		stopTimer();
 	};
 
@@ -175,6 +190,7 @@ const AssignmentView = () => {
 	};
 
 	const getNextTask = () => {
+		setIsToastOpen(false);
 		clearSelectionButtonFunc();
 		setShowOverlay(false);
 		fetchModuleQuestionsData();
@@ -237,6 +253,7 @@ const AssignmentView = () => {
 	}, [answerData]);
 
 	const continueBtnFunc = () => {
+		setIsToastOpen(false);
 		if (showOverlay) {
 			getNextTask();
 		} else {
@@ -252,10 +269,43 @@ const AssignmentView = () => {
 	};
 
 	useEffect(() => {
+		const courseHomeElement = Array.from(
+			document.getElementsByTagName('p'),
+		).find((p) => p.innerText === 'Course Home');
+
+		const handleClick = () => {
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		};
+
+		if (courseHomeElement) {
+			courseHomeElement.addEventListener('click', handleClick);
+		}
+
+		return () => {
+			if (courseHomeElement) {
+				courseHomeElement.removeEventListener('click', handleClick);
+			}
+		};
+	}, []);
+
+	useEffect(() => {
+		if (message.FIVE_FAST_ANSWERS === 5) {
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_FAST_ANSWERS');
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		}
+	}, [message.FIVE_FAST_ANSWERS]);
+
+	useEffect(() => {
 		if (hasNotSeenTour) {
 			navigate('tour');
 		}
 	}, []);
+
+	const expandProgressMenu = () => {
+		setIsToastOpen(false);
+		setIsMenuOpen(true);
+	};
 
 	return (
 		<main id="learning-assignment">
@@ -269,6 +319,11 @@ const AssignmentView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
+				<FireProgressToast
+					isToastOpen={isToastOpen}
+					textPrompt={textPrompt}
+					expandProgressMenu={expandProgressMenu}
+				/>
 				<TestProgressBarMenu
 					questionData={questionData}
 					isMenuOpen={isMenuOpen}
@@ -316,6 +371,7 @@ const AssignmentView = () => {
 						/>
 					</HStack>
 					<ProgressMenu
+						textPrompt={textPrompt}
 						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}

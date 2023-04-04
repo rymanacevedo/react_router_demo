@@ -169,7 +169,9 @@ const Header = () => {
 									<ReactRouterNavLink to="/app/learning">
 										<HStack>
 											<ArrowLeftIcon />
-											<Text fontWeight="bold">Course Home</Text>
+											<Text id="course-home" fontWeight="bold">
+												Course Home
+											</Text>
 										</HStack>
 									</ReactRouterNavLink>
 								</MenuItem>
