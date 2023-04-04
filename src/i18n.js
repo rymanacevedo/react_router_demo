@@ -148,6 +148,7 @@ const resources = {
          prevQ: 'Previous Question',
          reviewing:'Reviewing',
          keepGoing:'Keep Going',
+			reviewCorrectAns: 'Review correct answers',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////
