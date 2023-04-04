@@ -174,10 +174,27 @@ const AssignmentReviewView = () => {
 				if (firstRender) {
 					setQuestionIndex(
 						Number(
-							currentRoundQuestionsResponse?.questionList.findIndex(
-								(question: { reviewSeconds: number }) =>
-									Number(question.reviewSeconds) === 0,
-							),
+							currentRoundQuestionsResponse?.questionList
+								.filter((item: { confidence: string; correctness: string }) => {
+									return !(
+										item.confidence === 'Sure' && item.correctness === 'Correct'
+									);
+								})
+								.findIndex(
+									(question: {
+										confidence: string;
+										correctness: string;
+										reviewSeconds: number;
+									}) => {
+										return (
+											Number(question.reviewSeconds) === 0 &&
+											!(
+												question.confidence === 'Sure' &&
+												question.correctness === 'Correct'
+											)
+										);
+									},
+								),
 						),
 					);
 				}
