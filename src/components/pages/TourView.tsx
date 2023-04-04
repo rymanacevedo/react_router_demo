@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import Step1ModalGraphic from '../../introImage.svg';
 import { Cookies } from 'react-cookie-consent';
+import StaticAssignmentView from './AssignmentView/StaticAssignmentView';
 
 type Step1ModalProps = {
 	tourStep: number;
@@ -74,7 +75,6 @@ function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
 							<Button
 								onClick={() => {
 									setTourStep(tourStep + 1);
-									nav(-1);
 								}}>
 								Next
 							</Button>
@@ -96,7 +96,8 @@ const TourView = () => {
 
 	return (
 		<>
-			<Step1Modal tourStep={tourStep} setTourStep={setTourStep} />;
+			<Step1Modal tourStep={tourStep} setTourStep={setTourStep} />
+			<StaticAssignmentView />
 		</>
 	);
 };
