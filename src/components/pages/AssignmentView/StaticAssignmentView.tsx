@@ -79,7 +79,7 @@ const StaticAssignmentView = () => {
 								uid: '7c73a85a-7599-4ed5-a630-9079bb95402c',
 								versionId: 1,
 								answerRc:
-									"<p>Seasons are caused by variations in the sun's temperature.</p>\n",
+									'<p>Seasons are caused by variations in the sun\'s temperature.</p>\n',
 								optionRc: null,
 							},
 						],
@@ -437,7 +437,7 @@ const StaticAssignmentView = () => {
 				publishedQuestionUri:
 					'http://localapi.amplifire.me:8080/v2/curricula/questions/0749f150-39b5-4ef3-80e0-f011da0b6cbc/version/2',
 				answerRc:
-					"<p>Seasons are caused by variations in the sun's temperature.</p>\n",
+					'<p>Seasons are caused by variations in the sun\'s temperature.</p>\n',
 				optionRc: null,
 			},
 			{
@@ -458,7 +458,8 @@ const StaticAssignmentView = () => {
 				selectedOptionUri: null,
 				publishedQuestionUri:
 					'http://localapi.amplifire.me:8080/v2/curricula/questions/0749f150-39b5-4ef3-80e0-f011da0b6cbc/version/2',
-				answerRc: '<p>Seasons are caused by the earth moving closer or farther from the sun as it orbits it.</p>\n',
+				answerRc:
+					'<p>Seasons are caused by the earth moving closer or farther from the sun as it orbits it.</p>\n',
 				optionRc: null,
 			},
 		],
