@@ -299,6 +299,7 @@ const AssignmentView = () => {
 
 		const handleClick = () => {
 			handleMessage('FIVE_FAST_ANSWERS', true);
+			handleMessage('FIVE_CONSEC_SC', true);
 		};
 
 		if (courseHomeElement) {
