@@ -140,9 +140,9 @@ const AssignmentReviewView = () => {
 
 	const putReviewInfo = async () => {
 		let storedtime = 0;
-		if (questionInFocus.id) {
+		if (questionInFocus?.id) {
 			const myObjectString = localStorage.getItem(
-				`questionReviewHistory${assignmentKey}${questionInFocus.id}`,
+				`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
 			);
 			const myObject = JSON.parse(String(myObjectString));
 			if (myObject?.localStorageQuestionReviewSeconds) {
@@ -152,7 +152,7 @@ const AssignmentReviewView = () => {
 
 		await putCurrentRound(
 			currentRoundQuestionListData?.id,
-			questionInFocus.id,
+			questionInFocus?.id,
 			{
 				...answerData,
 				answerDate: null,
@@ -184,6 +184,17 @@ const AssignmentReviewView = () => {
 
 				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
 					(questionHistory: { answeredQuestionId: number }) => {
+						console.log(
+							'***************',
+							findQuestionInFocus(
+								moduleQuestionsResponse,
+								currentRoundQuestionsResponse,
+								true,
+								viewCorrect,
+							),
+							moduleQuestionsResponse,
+							currentRoundQuestionsResponse,
+						);
 						return (
 							questionHistory.answeredQuestionId ===
 							findQuestionInFocus(
@@ -269,7 +280,6 @@ const AssignmentReviewView = () => {
 					reviewSeconds: questionSecondsRef.current,
 				};
 			});
-			putReviewInfo();
 		}
 	}, [viewCorrect]);
 
@@ -312,7 +322,7 @@ const AssignmentReviewView = () => {
 		const putCurrentRoundRes = async () => {
 			const overLayData = await putCurrentRound(
 				currentRoundQuestionListData?.id,
-				questionInFocus.id,
+				questionInFocus?.id,
 				answerData,
 			);
 			if (overLayData) {
@@ -360,12 +370,12 @@ const AssignmentReviewView = () => {
 		putReviewInfo();
 		setLocalQuestionHistory(null);
 		localStorage.removeItem(
-			`questionReviewHistory${assignmentKey}${questionInFocus.id}`,
+			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
 		);
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 	const reviewButtonsConditionRender = () => {
-		if (revealAnswer || questionInFocus.correctness === 'Correct') {
+		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
 		}
 
@@ -380,8 +390,9 @@ const AssignmentReviewView = () => {
 				);
 			}
 		}
-
-		if (tryAgain === false) {
+		if (viewCorrect) {
+			return;
+		} else if (tryAgain === false) {
 			if (answerSubmitted) {
 				return (
 					<Button
@@ -400,8 +411,8 @@ const AssignmentReviewView = () => {
 						<Button
 							display={
 								showExplanation
-									? questionInFocus.confidence === 'OneAnswerPartSure' &&
-									  questionInFocus.correctness === 'Correct'
+									? questionInFocus?.confidence === 'OneAnswerPartSure' &&
+									  questionInFocus?.correctness === 'Correct'
 										? 'none'
 										: ''
 									: 'none'
@@ -448,7 +459,7 @@ const AssignmentReviewView = () => {
 					questionIndex={questionIndex}
 				/>
 				<ExplanationTitle
-					answer={`${questionInFocus.confidence}${questionInFocus.correctness}`}
+					answer={`${questionInFocus?.confidence}${questionInFocus?.correctness}`}
 				/>
 				<HStack width="100%">
 					<HStack
@@ -569,7 +580,8 @@ const AssignmentReviewView = () => {
 									{Boolean(Number(numberOfQInReview) === questionIndex + 1) &&
 										numberOfQInReview &&
 										numberOfQInReview <
-											currentRoundQuestionListData?.questionList?.length && (
+											currentRoundQuestionListData?.questionList?.length &&
+										!viewCorrect && (
 											<Button
 												onClick={() => {
 													setViewCorrect((view) => {
