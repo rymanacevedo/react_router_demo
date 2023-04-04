@@ -201,17 +201,6 @@ const AssignmentReviewView = () => {
 
 				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
 					(questionHistory: { answeredQuestionId: number }) => {
-						console.log(
-							'***************',
-							findQuestionInFocus(
-								moduleQuestionsResponse,
-								currentRoundQuestionsResponse,
-								true,
-								viewCorrect,
-							),
-							moduleQuestionsResponse,
-							currentRoundQuestionsResponse,
-						);
 						return (
 							questionHistory.answeredQuestionId ===
 							findQuestionInFocus(
