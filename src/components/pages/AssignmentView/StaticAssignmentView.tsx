@@ -1,6 +1,25 @@
 //@ts-nocheck
-import { useState } from 'react';
-import { Box, Container, HStack, useMediaQuery } from '@chakra-ui/react';
+import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+	Box,
+	Container,
+	HStack,
+	useMediaQuery,
+	Popover,
+	PopoverTrigger,
+	PopoverContent,
+	PopoverHeader,
+	PopoverBody,
+	PopoverFooter,
+	PopoverArrow,
+	PopoverCloseButton,
+	PopoverAnchor,
+	Button,
+	Text,
+	ModalOverlay,
+	Modal,
+} from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
@@ -13,7 +32,18 @@ import {
 	SelectedAnswers,
 } from './AssignmentTypes';
 
-const StaticAssignmentView = () => {
+const OverlayOne = ({ tourStep }) => (
+	<Modal isOpen={tourStep >= 2}>
+		<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
+	</Modal>
+);
+
+const StaticAssignmentView = ({
+	tourStep,
+	setTourStep,
+	ansIndex,
+	setAnsIndex,
+}) => {
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
@@ -79,7 +109,7 @@ const StaticAssignmentView = () => {
 								uid: '7c73a85a-7599-4ed5-a630-9079bb95402c',
 								versionId: 1,
 								answerRc:
-									'<p>Seasons are caused by variations in the sun\'s temperature.</p>\n',
+									"<p>Seasons are caused by variations in the sun's temperature.</p>\n",
 								optionRc: null,
 							},
 						],
@@ -135,7 +165,7 @@ const StaticAssignmentView = () => {
 								uid: 'aa521747-d97c-4563-bd0c-1036b4613e44',
 								versionId: 1,
 								answerRc:
-									'<p>Seasons are caused by variations in the sun\'s temperature.</p>\n',
+									"<p>Seasons are caused by variations in the sun's temperature.</p>\n",
 								optionRc: null,
 							},
 						],
@@ -437,7 +467,7 @@ const StaticAssignmentView = () => {
 				publishedQuestionUri:
 					'http://localapi.amplifire.me:8080/v2/curricula/questions/0749f150-39b5-4ef3-80e0-f011da0b6cbc/version/2',
 				answerRc:
-					'<p>Seasons are caused by variations in the sun\'s temperature.</p>\n',
+					"<p>Seasons are caused by variations in the sun's temperature.</p>\n",
 				optionRc: null,
 			},
 			{
@@ -1008,60 +1038,123 @@ const StaticAssignmentView = () => {
 			answerList: [],
 		});
 
+	const answerRef = useRef();
+	const nav = useNavigate();
 	return (
-		<main id="learning-assignment">
-			<Container
-				id={'learning-assignment'}
-				margin="0"
-				padding="0"
-				maxWidth={'100vw'}
-				overflowY={'hidden'}
-				overflowX={'hidden'}>
-				<TestProgressBarMenu
-					id={'bar'}
-					questionData={questionData}
-					isMenuOpen={isMenuOpen}
-					setIsMenuOpen={setIsMenuOpen}
-					currentRoundQuestionListData={currentRoundQuestionListData}
-					currentQuestion={fakequestionInFocus}
-					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-				/>{' '}
-				<HStack width="100%">
-					<HStack
-						w="100%"
-						p="12px"
-						justifyContent={'center'}
-						flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
-						<Box
-							style={{
-								backgroundColor: 'white',
-								margin: '6px',
-							}}
-							boxShadow="2xl"
+		<>
+			<main id="learning-assignment" pointerEvents="none">
+				<Container
+					id={'learning-assignment'}
+					margin="0"
+					padding="0"
+					maxWidth={'100vw'}
+					overflowY={'hidden'}
+					overflowX={'hidden'}>
+					<TestProgressBarMenu
+						id={'bar'}
+						questionData={questionData}
+						isMenuOpen={isMenuOpen}
+						setIsMenuOpen={setIsMenuOpen}
+						currentRoundQuestionListData={currentRoundQuestionListData}
+						currentQuestion={fakequestionInFocus}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+					/>{' '}
+					<HStack width="100%">
+						<HStack
 							w="100%"
-							maxWidth={726}
-							h={isSmallerThan1000 ? '' : '745px'}
-							overflow="hidden"
-							borderRadius={24}
-							p={'72px'}>
-							<Question questionInFocus={fakequestionInFocus} />
-						</Box>
-						<AnswerArea
-							smallerThan1000={isSmallerThan1000}
-							questionInFocus={fakequestionInFocus}
+							p="12px"
+							justifyContent={'center'}
+							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+							<Box
+								style={{
+									backgroundColor: 'white',
+									margin: '6px',
+								}}
+								boxShadow="2xl"
+								w="100%"
+								maxWidth={726}
+								h={isSmallerThan1000 ? '' : '745px'}
+								overflow="hidden"
+								borderRadius={24}
+								p={'72px'}>
+								<Question questionInFocus={fakequestionInFocus} />
+							</Box>
+							<Popover
+								isOpen={tourStep === 2}
+								placement="left"
+								initialFocusRef={answerRef.current}
+								gutter="40">
+								<PopoverTrigger>
+									<PopoverAnchor>
+										<Box style={{ zIndex: ansIndex }}>
+											<AnswerArea
+												id="answerArea"
+												smallerThan1000={isSmallerThan1000}
+												questionInFocus={fakequestionInFocus}
+												currentRoundAnswerOverLayData={
+													currentRoundAnswerOverLayData
+												}
+												selectedAnswers={selectedAnswers}
+												selectedAnswersState={setSelectedAnswers}
+												ref={answerRef.current}
+												tabIndex="0"
+											/>
+										</Box>
+									</PopoverAnchor>
+								</PopoverTrigger>
+								<Box style={{ position: 'relative', zIndex: ansIndex }}>
+									<PopoverContent w="560px" h="287px">
+										<PopoverArrow height="500px" width={500} />
+										<PopoverCloseButton />
+										<PopoverHeader border="0" fontSize={24} as="h2">
+											We first ask questions 🤔
+										</PopoverHeader>
+										<PopoverBody>
+											<Text>
+												By first answering questions, we prime your brain to
+												acquire new knowledge, creating a mental framework for
+												the material to be learned.
+											</Text>
+										</PopoverBody>
+										<PopoverFooter border="0" justifyContent="flex-start">
+											<HStack>
+												<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
+													Step {tourStep} of 6{' '}
+												</Text>
+												<Text
+													as="u"
+													color="rgba(0, 0, 0, 0.5)"
+													mr={3}
+													cursor="pointer"
+													onClick={() => {
+														nav(-1);
+													}}>
+													Skip the tour
+												</Text>
+
+												<Button
+													onClick={() => {
+														setTourStep(tourStep + 1);
+														setAnsIndex(0);
+													}}>
+													Next
+												</Button>
+											</HStack>
+										</PopoverFooter>
+									</PopoverContent>
+								</Box>
+							</Popover>
+						</HStack>
+						<ProgressMenu
+							isMenuOpen={isMenuOpen}
+							currentRoundQuestionListData={currentRoundQuestionListData}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-							selectedAnswers={selectedAnswers}
-							selectedAnswersState={setSelectedAnswers}
 						/>
 					</HStack>
-					<ProgressMenu
-						isMenuOpen={isMenuOpen}
-						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-					/>
-				</HStack>
-			</Container>
-		</main>
+				</Container>
+			</main>
+			<OverlayOne tourStep={tourStep} />
+		</>
 	);
 };
 
