@@ -141,6 +141,7 @@ const AssignmentView = () => {
 							moduleQuestionsResponse,
 							currentRoundQuestionsResponse,
 							false,
+							false,
 						),
 					);
 				} else {
