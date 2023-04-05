@@ -150,6 +150,7 @@ const AssignmentReviewView = () => {
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	const [storedTime, setStoredtime] = useState(0);
 	// eslint-disable-next-line
 	const [localQuestionReviewHistory, setLocalQuestionReviewHistory] =
 		useLocalStorage(
@@ -171,16 +172,6 @@ const AssignmentReviewView = () => {
 		questionId?: any;
 		payload?: any;
 	}) => {
-		let storedtime = 0;
-		if (questionInFocus?.id) {
-			const myObjectString = localStorage.getItem(
-				`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
-			);
-			const myObject = JSON.parse(String(myObjectString));
-			if (myObject?.localStorageQuestionReviewSeconds) {
-				storedtime = myObject.localStorageQuestionReviewSeconds;
-			}
-		}
 		if (lastRevQDataArg?.roundId) {
 			await putCurrentRound(
 				lastRevQDataArg?.roundId,
@@ -197,7 +188,7 @@ const AssignmentReviewView = () => {
 					answerList: null,
 					questionSeconds: questionSecondsHistory,
 					reviewSeconds:
-						Number(questionSecondsRef.current) + Number(storedtime),
+						Number(questionSecondsRef.current) + Number(storedTime),
 				},
 			);
 		}
@@ -270,6 +261,15 @@ const AssignmentReviewView = () => {
 						viewCorrect,
 					)[questionIndex],
 				);
+				if (questionInFocus?.id) {
+					const myObjectString = localStorage.getItem(
+						`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+					);
+					const myObject = JSON.parse(String(myObjectString));
+					if (myObject?.localStorageQuestionReviewSeconds) {
+						setStoredtime(myObject.localStorageQuestionReviewSecond);
+					}
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -636,17 +636,6 @@ const AssignmentReviewView = () => {
 										!viewCorrect && (
 											<Button
 												onClick={() => {
-													let storedtime = 0;
-													if (questionInFocus?.id) {
-														const myObjectString = localStorage.getItem(
-															`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
-														);
-														const myObject = JSON.parse(String(myObjectString));
-														if (myObject?.localStorageQuestionReviewSeconds) {
-															storedtime =
-																myObject.localStorageQuestionReviewSeconds;
-														}
-													}
 													setLastRevQData({
 														roundId: Number(currentRoundQuestionListData?.id),
 														questionId: Number(questionInFocus?.id),
@@ -658,7 +647,7 @@ const AssignmentReviewView = () => {
 															questionSeconds: questionSecondsHistory,
 															reviewSeconds:
 																Number(questionSecondsRef.current) +
-																Number(storedtime),
+																Number(storedTime),
 														},
 													});
 													setViewCorrect((view) => {
