@@ -9,7 +9,6 @@ import {
 	Popover,
 	PopoverTrigger,
 	PopoverContent,
-	PopoverHeader,
 	PopoverBody,
 	PopoverFooter,
 	PopoverArrow,
@@ -19,6 +18,7 @@ import {
 	Text,
 	ModalOverlay,
 	Modal,
+	Heading,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
@@ -109,7 +109,8 @@ const StaticAssignmentView = ({
 								uid: '7c73a85a-7599-4ed5-a630-9079bb95402c',
 								versionId: 1,
 								answerRc:
-									"<p>Seasons are caused by variations in the sun's temperature.</p>\n",
+									// eslint-disable-next-line prettier/prettier
+									'<p>Seasons are caused by variations in the sun\'s temperature.</p>\n',
 								optionRc: null,
 							},
 						],
@@ -1086,7 +1087,7 @@ const StaticAssignmentView = ({
 								gutter="40">
 								<PopoverTrigger>
 									<PopoverAnchor>
-										<Box style={{ zIndex: ansIndex }}>
+										<Box style={{ zIndex: ansIndex, pointerEvents: 'none' }}>
 											<AnswerArea
 												id="answerArea"
 												smallerThan1000={isSmallerThan1000}
@@ -1103,28 +1104,32 @@ const StaticAssignmentView = ({
 									</PopoverAnchor>
 								</PopoverTrigger>
 								<Box style={{ position: 'relative', zIndex: ansIndex }}>
-									<PopoverContent w="560px" h="287px">
-										<PopoverArrow height="500px" width={500} />
-										<PopoverCloseButton />
-										<PopoverHeader border="0" fontSize={24} as="h2">
-											We first ask questions 🤔
-										</PopoverHeader>
-										<PopoverBody>
+									<PopoverContent p="24px" w="560px" h="287px">
+										<PopoverArrow />
+										<PopoverCloseButton
+											p="24px"
+											onClick={() => {
+												nav(-1);
+											}}
+										/>
+										<PopoverBody p="24px" pl="0">
+											<Heading fontSize={24} as="h2" mb={3}>
+												We first ask questions 🤔
+											</Heading>
 											<Text>
 												By first answering questions, we prime your brain to
 												acquire new knowledge, creating a mental framework for
 												the material to be learned.
 											</Text>
 										</PopoverBody>
-										<PopoverFooter border="0" justifyContent="flex-start">
-											<HStack>
+										<PopoverFooter border="0" p="0" justifyContent="flex-start">
+											<HStack spacing={5}>
 												<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
-													Step {tourStep} of 6{' '}
+													Step {tourStep} of 6
 												</Text>
 												<Text
 													as="u"
 													color="rgba(0, 0, 0, 0.5)"
-													mr={3}
 													cursor="pointer"
 													onClick={() => {
 														nav(-1);

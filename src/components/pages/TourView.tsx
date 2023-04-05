@@ -76,7 +76,7 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 							<Button
 								onClick={() => {
 									setTourStep(tourStep + 1);
-									setAnsIndex(40000);
+									setAnsIndex(1500);
 									onClose();
 								}}>
 								Next
