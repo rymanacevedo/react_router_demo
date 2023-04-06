@@ -15,6 +15,8 @@ import {
 	HStack,
 	Center,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+
 import Step1ModalGraphic from '../../introImage.svg';
 import { Cookies } from 'react-cookie-consent';
 import StaticAssignmentView from './AssignmentView/StaticAssignmentView';
@@ -28,6 +30,7 @@ type Step1ModalProps = {
 function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 	const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 	const nav = useNavigate();
+	const { t: i18n } = useTranslation();
 
 	return (
 		<>
@@ -46,20 +49,14 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 						</Center>
 
 						<ModalHeader pl="0" fontSize={24}>
-							How to use Amplifire
+							{i18n('step1ModalTitle')}
 						</ModalHeader>
-						<Text>
-							Our goal is to provide you with a focused, efficient path to
-							mastering and retaining the information you need to be successful.
-							The adaptive system you are using was developed based on
-							scientific studies of how people can learn most efficiently. Click
-							through the tour to get to know how Amplifire works.
-						</Text>
+						<Text>{i18n('step1ModalContent')}</Text>
 					</ModalBody>
 
 					<ModalFooter justifyContent="flex-start">
 						<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
-							Step {tourStep} of 6
+							{i18n('step')} {tourStep} {i18n('of6')}
 						</Text>
 						<HStack>
 							<Text
@@ -70,7 +67,7 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 								onClick={() => {
 									nav(-1);
 								}}>
-								Skip the tour
+								{i18n('skipTour')}
 							</Text>
 
 							<Button
@@ -79,7 +76,7 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 									setAnsIndex(1500);
 									onClose();
 								}}>
-								Next
+								{i18n('nextBtn')}
 							</Button>
 						</HStack>
 					</ModalFooter>
