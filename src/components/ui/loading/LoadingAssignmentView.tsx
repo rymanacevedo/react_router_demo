@@ -26,69 +26,62 @@ export default function LoadingAssignmentView() {
 				<Skeleton height="20px" width={'235px'} />
 				<Skeleton height="20px" width={'110px'} />
 			</Stack>
-			<HStack width="100%">
-				<HStack
+			<HStack
+				w="100%"
+				p="12px"
+				justifyContent={'center'}
+				flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+				<Box
+					backgroundColor="white"
+					margin="6px"
+					h={isSmallerThan1000 ? '745px' : '100%'}
+					boxShadow="2xl"
 					w="100%"
-					p="12px"
-					justifyContent={'center'}
-					flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
-					<Box
-						style={{
-							backgroundColor: 'white',
-							margin: '6px',
-						}}
-						boxShadow="2xl"
-						w="100%"
-						maxWidth={726}
-						h={isSmallerThan1000 ? '' : '745px'}
-						overflow="hidden"
-						borderRadius={24}
-						p={'72px'}>
-						<Skeleton height="20px" width={'235px'} />
-						<SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="5" />
-					</Box>
-					<Box
-						style={{
-							backgroundColor: 'white',
-							margin: '6px',
-							minHeight: '745px',
-						}}
-						boxShadow="2xl"
-						h={isSmallerThan1000 ? '' : '100%'}
-						display={'flex'}
-						flexDirection="column"
-						w="100%"
-						maxWidth={726}
-						overflow="hidden"
-						borderRadius={24}
-						p={'72px'}>
-						<Skeleton height="20px" width={'235px'} />
-						<HStack marginTop={5}>
-							<SkeletonCircle marginRight={4} size="10" />
-							<Box style={{ flex: 1 }}>
-								<Skeleton height="20px" width={'250px'} />
-							</Box>
-						</HStack>
-						<HStack marginTop={5}>
-							<SkeletonCircle marginRight={4} size="10" />
-							<Box style={{ flex: 1 }}>
-								<Skeleton height="20px" width={'250px'} />
-							</Box>
-						</HStack>
-						<HStack marginTop={5}>
-							<SkeletonCircle marginRight={4} size="10" />
-							<Box style={{ flex: 1 }}>
-								<Skeleton height="20px" width={'250px'} />
-							</Box>
-						</HStack>
-						<HStack marginTop={5}>
-							<SkeletonCircle marginRight={4} size="10" />
-							<Box style={{ flex: 1 }}>
-								<Skeleton height="20px" width={'250px'} />
-							</Box>
-						</HStack>
-					</Box>
-				</HStack>
+					maxWidth={726}
+					overflow="hidden"
+					borderRadius={24}
+					p={'72px'}>
+					<Skeleton height="20px" width={'235px'} />
+					<SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="5" />
+				</Box>
+				<Box
+					backgroundColor="white"
+					margin="6px"
+					h={isSmallerThan1000 ? '745px' : '100%'}
+					boxShadow="2xl"
+					display={'flex'}
+					flexDirection="column"
+					w="100%"
+					maxWidth={726}
+					overflow="hidden"
+					borderRadius={24}
+					p={'72px'}>
+					<Skeleton height="20px" width={'235px'} />
+					<HStack marginTop={5}>
+						<SkeletonCircle marginRight={4} size="10" />
+						<Box style={{ flex: 1 }}>
+							<Skeleton height="20px" width={'250px'} />
+						</Box>
+					</HStack>
+					<HStack marginTop={5}>
+						<SkeletonCircle marginRight={4} size="10" />
+						<Box style={{ flex: 1 }}>
+							<Skeleton height="20px" width={'250px'} />
+						</Box>
+					</HStack>
+					<HStack marginTop={5}>
+						<SkeletonCircle marginRight={4} size="10" />
+						<Box style={{ flex: 1 }}>
+							<Skeleton height="20px" width={'250px'} />
+						</Box>
+					</HStack>
+					<HStack marginTop={5}>
+						<SkeletonCircle marginRight={4} size="10" />
+						<Box style={{ flex: 1 }}>
+							<Skeleton height="20px" width={'250px'} />
+						</Box>
+					</HStack>
+				</Box>
 			</HStack>
 		</Container>
 	);
