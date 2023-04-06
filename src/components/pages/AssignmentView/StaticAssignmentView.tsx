@@ -23,6 +23,7 @@ import {
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
+import { useTranslation } from 'react-i18next';
 
 import AnswerArea from '../../ui/AnswerInput/AnswerArea';
 import {
@@ -39,7 +40,7 @@ import {
 	currentRoundAnswerOverlayDataMock,
 } from './mockAssignmentData';
 
-const OverlayOne = ({ tourStep }) => (
+const OverlayOne = ({ tourStep }: number) => (
 	<Modal isOpen={tourStep >= 2}>
 		<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
 	</Modal>
@@ -50,7 +51,10 @@ const StaticAssignmentView = ({
 	setTourStep,
 	ansIndex,
 	setAnsIndex,
+	barIndex,
+	setBarIndex,
 }) => {
+	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
@@ -68,7 +72,27 @@ const StaticAssignmentView = ({
 		useState<CurrentRoundAnswerOverLayData>(currentRoundAnswerOverlayDataMock);
 
 	const answerRef = useRef();
+	const barRef = useRef();
 	const nav = useNavigate();
+
+	const barPopoverContent = {
+		3: {
+			placement: 'bottom-start',
+			title: 'step3PopoverTitle',
+			content: 'step3PopoverContent',
+		},
+		4: {
+			placement: 'bottom',
+			title: 'step4PopoverTitle',
+			content: 'step4PopoverContent',
+		},
+		5: {
+			placement: 'bottom-end',
+			title: 'step5PopoverTitle',
+			content: 'step5PopoverContent',
+		},
+	};
+
 	return (
 		<>
 			<main id="learning-assignment" pointerEvents="none">
@@ -79,15 +103,77 @@ const StaticAssignmentView = ({
 					maxWidth={'100vw'}
 					overflowY={'hidden'}
 					overflowX={'hidden'}>
-					<TestProgressBarMenu
-						id={'bar'}
-						questionData={questionData}
-						isMenuOpen={isMenuOpen}
-						setIsMenuOpen={setIsMenuOpen}
-						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentQuestion={questionInFocusMock}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-					/>{' '}
+					<Popover
+						isOpen={tourStep >= 3 && tourStep < 6}
+						placement={barPopoverContent[tourStep]?.placement || 'bottom'}
+						initialFocusRef={barRef.current}
+						arrowSize={20}>
+						<PopoverTrigger>
+							<PopoverAnchor>
+								<Box
+									style={{
+										zIndex: barIndex,
+										pointerEvents: 'none',
+										position: 'fixed',
+									}}>
+									<TestProgressBarMenu
+										id={'bar'}
+										questionData={questionData}
+										isMenuOpen={isMenuOpen}
+										setIsMenuOpen={setIsMenuOpen}
+										currentRoundQuestionListData={currentRoundQuestionListData}
+										currentQuestion={questionInFocusMock}
+										currentRoundAnswerOverLayData={
+											currentRoundAnswerOverLayData
+										}
+										ref={barRef.current}
+										tabIndex="0"
+									/>
+								</Box>
+							</PopoverAnchor>
+						</PopoverTrigger>
+						<Box style={{ position: 'relative', zIndex: barIndex }}>
+							<PopoverContent p="24px" w="560px" h="287px">
+								<PopoverArrow mr="304px" />
+								<PopoverCloseButton
+									p="24px"
+									onClick={() => {
+										nav(-1);
+									}}
+								/>
+								<PopoverBody p="24px" pl="0">
+									<Heading fontSize={24} as="h2" mb={3}>
+										{i18n(barPopoverContent[tourStep]?.title)}
+									</Heading>
+									<Text>{i18n(barPopoverContent[tourStep]?.content)}</Text>
+								</PopoverBody>
+								<PopoverFooter border="0" p="0" justifyContent="flex-start">
+									<HStack spacing={5}>
+										<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
+											{i18n('skip')} {tourStep} {i18n('of6')}
+										</Text>
+										<Text
+											as="u"
+											color="rgba(0, 0, 0, 0.5)"
+											cursor="pointer"
+											onClick={() => {
+												nav(-1);
+											}}>
+											{i18n('skipTour')}
+										</Text>
+
+										<Button
+											onClick={() => {
+												setTourStep(tourStep + 1);
+												// setBarIndex(0);
+											}}>
+											{i18n('nextBtn')}
+										</Button>
+									</HStack>
+								</PopoverFooter>
+							</PopoverContent>
+						</Box>
+					</Popover>
 					<HStack width="100%">
 						<HStack
 							w="100%"
@@ -112,7 +198,8 @@ const StaticAssignmentView = ({
 								isOpen={tourStep === 2}
 								placement="left"
 								initialFocusRef={answerRef.current}
-								gutter="40">
+								gutter="40"
+								arrowSize={20}>
 								<PopoverTrigger>
 									<PopoverAnchor>
 										<Box style={{ zIndex: ansIndex, pointerEvents: 'none' }}>
@@ -142,18 +229,14 @@ const StaticAssignmentView = ({
 										/>
 										<PopoverBody p="24px" pl="0">
 											<Heading fontSize={24} as="h2" mb={3}>
-												We first ask questions 🤔
+												{i18n('step2PopoverTitle')}
 											</Heading>
-											<Text>
-												By first answering questions, we prime your brain to
-												acquire new knowledge, creating a mental framework for
-												the material to be learned.
-											</Text>
+											<Text>{i18n('step2PopoverContent')}</Text>
 										</PopoverBody>
 										<PopoverFooter border="0" p="0" justifyContent="flex-start">
 											<HStack spacing={5}>
 												<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
-													Step {tourStep} of 6
+													{i18n('skip')} {tourStep} {i18n('of6')}
 												</Text>
 												<Text
 													as="u"
@@ -162,15 +245,16 @@ const StaticAssignmentView = ({
 													onClick={() => {
 														nav(-1);
 													}}>
-													Skip the tour
+													{i18n('skipTour')}
 												</Text>
 
 												<Button
 													onClick={() => {
 														setTourStep(tourStep + 1);
 														setAnsIndex(0);
+														setBarIndex(1500);
 													}}>
-													Next
+													{i18n('nextBtn')}
 												</Button>
 											</HStack>
 										</PopoverFooter>
