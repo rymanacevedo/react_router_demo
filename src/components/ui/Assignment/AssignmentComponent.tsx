@@ -19,10 +19,15 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { useNavigate } from 'react-router-dom';
 import LoadingAssignmentView from '../loading/LoadingAssignmentView';
+import { useQuizContext } from '../../../hooks/useQuizContext';
+import FireProgressToast from '../ProgressToast';
 
 type Props = {
 	isMenuOpen: boolean;
 	setIsMenuOpen: (isMenuOpen: boolean) => void;
+	isToastOpen: boolean;
+	setIsToastOpen: (isToastOpen: boolean) => void;
+	expandProgressMenu: () => void;
 	isInstructionalOverlayOpen: boolean;
 	onClose: () => void;
 	initRef: any;
@@ -57,13 +62,19 @@ const initState = {
 export default function AssignmentComponent({
 	isMenuOpen,
 	setIsMenuOpen,
+	isToastOpen,
+	setIsToastOpen,
+	expandProgressMenu,
 	isInstructionalOverlayOpen,
 	onClose,
 	initRef,
 	assignmentKey,
 }: Props) {
 	const navigate = useNavigate();
+	const { message, handleMessage } = useQuizContext();
+	const [isCorrectAndSure, setIsCorrectAndSure] = useState<boolean>(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
 		answerList: [],
@@ -145,6 +156,7 @@ export default function AssignmentComponent({
 							moduleQuestionsResponse,
 							currentRoundQuestionsResponse,
 							false,
+							false,
 						),
 					);
 				} else {
@@ -168,6 +180,7 @@ export default function AssignmentComponent({
 	};
 
 	const getNextTask = () => {
+		setIsToastOpen(false);
 		clearSelectionButtonFunc();
 		setShowOverlay(false);
 		fetchModuleQuestionsData().then(() => {
@@ -177,6 +190,28 @@ export default function AssignmentComponent({
 	};
 
 	const submitAnswer = () => {
+		if (
+			currentRoundAnswerOverLayData.confidence === 'Sure' &&
+			currentRoundAnswerOverLayData.correctness === 'Correct' &&
+			message.FIVE_CONSEC_SC < 5
+		) {
+			setIsCorrectAndSure(true);
+			handleMessage('FIVE_CONSEC_SC', false);
+		} else {
+			setIsCorrectAndSure(false);
+			handleMessage('FIVE_CONSEC_SC', true);
+		}
+		if (questionSecondsRef.current <= 5 && isCorrectAndSure === false) {
+			if (message.FIVE_FAST_ANSWERS < 5) {
+				handleMessage('FIVE_FAST_ANSWERS', false);
+			}
+		} else {
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		}
+
+		questionSecondsRef.current = 0;
+		stopTimer();
+
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -185,7 +220,6 @@ export default function AssignmentComponent({
 				answerList: [...selectedAnswers],
 			};
 		});
-		stopTimer();
 	};
 
 	const continueBtnFunc = () => {
@@ -205,6 +239,18 @@ export default function AssignmentComponent({
 			);
 
 			if (overLayData) {
+				if (
+					overLayData.confidence === 'Sure' &&
+					overLayData.correctness === 'Correct' &&
+					message.FIVE_CONSEC_SC < 5
+				) {
+					setIsCorrectAndSure(true);
+					handleMessage('FIVE_CONSEC_SC', false);
+				} else {
+					setIsCorrectAndSure(false);
+					handleMessage('FIVE_CONSEC_SC', true);
+				}
+
 				let updatedLocalQuestionHistory = localQuestionHistory
 					?.roundQuestionsHistory.length
 					? {
@@ -242,6 +288,22 @@ export default function AssignmentComponent({
 	}, [answerData]);
 
 	useEffect(() => {
+		if (message.FIVE_FAST_ANSWERS === 5 && message.FIVE_CONSEC_SC !== 5) {
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_FAST_ANSWERS');
+			handleMessage('FIVE_FAST_ANSWERS', true);
+		}
+	}, [message.FIVE_FAST_ANSWERS]);
+
+	useEffect(() => {
+		if (message.FIVE_CONSEC_SC === 5) {
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_CONSEC_SC');
+			handleMessage('FIVE_CONSEC_SC', true);
+		}
+	}, [message.FIVE_CONSEC_SC]);
+
+	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
 		}
@@ -255,6 +317,11 @@ export default function AssignmentComponent({
 			maxWidth={'100vw'}
 			overflowY={'hidden'}
 			overflowX={'hidden'}>
+			<FireProgressToast
+				textPrompt={textPrompt}
+				expandProgressMenu={expandProgressMenu}
+				isToastOpen={isToastOpen}
+			/>
 			<TestProgressBarMenu
 				questionData={questionData}
 				isMenuOpen={isMenuOpen}
