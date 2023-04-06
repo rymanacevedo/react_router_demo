@@ -20,13 +20,16 @@ type ProgressMenuType = {
 	isMenuOpen: boolean;
 	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData | undefined;
+	textPrompt?: string;
 };
 
-const ProgressMenu = ({
-	isMenuOpen,
-	currentRoundQuestionListData,
-	currentRoundAnswerOverLayData,
-}: ProgressMenuType) => {
+const ProgressMenu = (props: ProgressMenuType) => {
+	const {
+		isMenuOpen,
+		currentRoundQuestionListData,
+		currentRoundAnswerOverLayData,
+		textPrompt,
+	} = props;
 	const { t: i18n } = useTranslation();
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
 		? currentRoundQuestionListData
@@ -67,7 +70,10 @@ const ProgressMenu = ({
 				boxSizing="border-box"
 				justifyContent={'space-between'}>
 				<Box>
-					<ProgressMessageComponent />
+					<ProgressMessageComponent
+						textPrompt={textPrompt}
+						isMenuOpen={isMenuOpen}
+					/>
 					<Divider borderWidth="1px" width="297px" marginLeft="24px" />
 					<Box padding="24px">
 						<Text fontSize="21px" fontWeight={'600'}>

@@ -68,7 +68,10 @@
       ],
       "quotes": [
         "error",
-        "single"
+        "single",
+        {
+          "avoidEscape": true
+        }
       ],
       "prettier/prettier": [
         "error",
@@ -83,6 +86,14 @@
         }
       ],
       "no-unused-vars": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { 
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_"
+        }
+      ],
       "no-console": "warn",
       "react/jsx-filename-extension": [
         1,

@@ -2,6 +2,7 @@ export const findQuestionInFocus = (
 	questionListDataPeram: { learningUnits: any },
 	currentRoundQuestionListDataPeram: { questionList: any },
 	inReview: boolean,
+	viewCorrect: boolean,
 ) => {
 	//this function takes the questions and answers lists from each source and combines relevent data then produces the question that should be in focus
 	const learningUnits = questionListDataPeram?.learningUnits;
@@ -99,7 +100,13 @@ export const findQuestionInFocus = (
 	if (inReview) {
 		return questionList.filter(
 			(item: { confidence: string; correctness: string }) => {
-				return !(item.confidence === 'Sure' && item.correctness === 'Correct');
+				if (viewCorrect) {
+					return item.confidence === 'Sure' && item.correctness === 'Correct';
+				} else {
+					return !(
+						item.confidence === 'Sure' && item.correctness === 'Correct'
+					);
+				}
 			},
 		);
 	} else {
