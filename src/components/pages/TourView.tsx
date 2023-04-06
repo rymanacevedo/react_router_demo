@@ -92,6 +92,7 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 const TourView = () => {
 	const [tourStep, setTourStep] = useState(1);
 	const [ansIndex, setAnsIndex] = useState(0);
+	const [barIndex, setBarIndex] = useState(0);
 	useEffect(() => {
 		Cookies.set('seen_tour', window.btoa('seen_tour'), {
 			path: '/',
@@ -110,6 +111,8 @@ const TourView = () => {
 				setTourStep={setTourStep}
 				ansIndex={ansIndex}
 				setAnsIndex={setAnsIndex}
+				barIndex={barIndex}
+				setBarIndex={setBarIndex}
 			/>
 		</>
 	);

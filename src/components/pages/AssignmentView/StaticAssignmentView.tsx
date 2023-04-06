@@ -50,6 +50,8 @@ const StaticAssignmentView = ({
 	setTourStep,
 	ansIndex,
 	setAnsIndex,
+	barIndex,
+	setBarIndex,
 }) => {
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -68,6 +70,7 @@ const StaticAssignmentView = ({
 		useState<CurrentRoundAnswerOverLayData>(currentRoundAnswerOverlayDataMock);
 
 	const answerRef = useRef();
+	const barRef = useRef();
 	const nav = useNavigate();
 	return (
 		<>
@@ -79,15 +82,76 @@ const StaticAssignmentView = ({
 					maxWidth={'100vw'}
 					overflowY={'hidden'}
 					overflowX={'hidden'}>
-					<TestProgressBarMenu
-						id={'bar'}
-						questionData={questionData}
-						isMenuOpen={isMenuOpen}
-						setIsMenuOpen={setIsMenuOpen}
-						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentQuestion={questionInFocusMock}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-					/>{' '}
+					<Popover
+						isOpen={tourStep === 3}
+						placement="bottom-start"
+						initialFocusRef={barRef.current}
+						gutter="40">
+						<PopoverTrigger>
+							<PopoverAnchor>
+								<Box style={{ zIndex: barIndex, pointerEvents: 'none' }}>
+									<TestProgressBarMenu
+										id={'bar'}
+										questionData={questionData}
+										isMenuOpen={isMenuOpen}
+										setIsMenuOpen={setIsMenuOpen}
+										currentRoundQuestionListData={currentRoundQuestionListData}
+										currentQuestion={questionInFocusMock}
+										currentRoundAnswerOverLayData={
+											currentRoundAnswerOverLayData
+										}
+										ref={barRef.current}
+										tabIndex="0"
+									/>
+								</Box>
+							</PopoverAnchor>
+						</PopoverTrigger>
+						<Box style={{ position: 'relative', zIndex: barIndex }}>
+							<PopoverContent p="24px" w="560px" h="287px">
+								<PopoverArrow />
+								<PopoverCloseButton
+									p="24px"
+									onClick={() => {
+										nav(-1);
+									}}
+								/>
+								<PopoverBody p="24px" pl="0">
+									<Heading fontSize={24} as="h2" mb={3}>
+										Your estimated time left ⏰
+									</Heading>
+									<Text>
+										This is approximately how much time we think it will take
+										you to complete this module. It will fluctuate throughout
+										based on how you answer.
+									</Text>
+								</PopoverBody>
+								<PopoverFooter border="0" p="0" justifyContent="flex-start">
+									<HStack spacing={5}>
+										<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
+											Step {tourStep} of 6
+										</Text>
+										<Text
+											as="u"
+											color="rgba(0, 0, 0, 0.5)"
+											cursor="pointer"
+											onClick={() => {
+												nav(-1);
+											}}>
+											Skip the tour
+										</Text>
+
+										<Button
+											onClick={() => {
+												setTourStep(tourStep + 1);
+												setBarIndex(0);
+											}}>
+											Next
+										</Button>
+									</HStack>
+								</PopoverFooter>
+							</PopoverContent>
+						</Box>
+					</Popover>
 					<HStack width="100%">
 						<HStack
 							w="100%"
@@ -169,6 +233,7 @@ const StaticAssignmentView = ({
 													onClick={() => {
 														setTourStep(tourStep + 1);
 														setAnsIndex(0);
+														setBarIndex(1500);
 													}}>
 													Next
 												</Button>
