@@ -17,20 +17,22 @@ import {
 } from '@chakra-ui/react';
 import Step1ModalGraphic from '../../introImage.svg';
 import { Cookies } from 'react-cookie-consent';
+import StaticAssignmentView from './AssignmentView/StaticAssignmentView';
 
 type Step1ModalProps = {
 	tourStep: number;
 	setTourStep: (value: ((prevState: number) => number) | number) => void;
+	setAnsIndex: (value: ((prevState: number) => number) | number) => void;
 };
 
-function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
-	const { isOpen } = useDisclosure({ defaultIsOpen: true });
+function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
+	const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 	const nav = useNavigate();
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={() => nav(-1)} size={'xl'}>
-				<ModalOverlay />
+			<Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+				<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
 				<ModalContent p="24px" w="720px">
 					<ModalCloseButton />
 					<ModalBody p="24px">
@@ -74,7 +76,8 @@ function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
 							<Button
 								onClick={() => {
 									setTourStep(tourStep + 1);
-									nav(-1);
+									setAnsIndex(1500);
+									onClose();
 								}}>
 								Next
 							</Button>
@@ -88,6 +91,7 @@ function Step1Modal({ tourStep, setTourStep }: Step1ModalProps) {
 
 const TourView = () => {
 	const [tourStep, setTourStep] = useState(1);
+	const [ansIndex, setAnsIndex] = useState(0);
 	useEffect(() => {
 		Cookies.set('seen_tour', window.btoa('seen_tour'), {
 			path: '/',
@@ -96,7 +100,17 @@ const TourView = () => {
 
 	return (
 		<>
-			<Step1Modal tourStep={tourStep} setTourStep={setTourStep} />;
+			<Step1Modal
+				tourStep={tourStep}
+				setTourStep={setTourStep}
+				setAnsIndex={setAnsIndex}
+			/>
+			<StaticAssignmentView
+				tourStep={tourStep}
+				setTourStep={setTourStep}
+				ansIndex={ansIndex}
+				setAnsIndex={setAnsIndex}
+			/>
 		</>
 	);
 };
