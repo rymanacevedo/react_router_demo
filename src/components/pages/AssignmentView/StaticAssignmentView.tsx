@@ -89,7 +89,12 @@ const StaticAssignmentView = ({
 						gutter="40">
 						<PopoverTrigger>
 							<PopoverAnchor>
-								<Box style={{ zIndex: barIndex, pointerEvents: 'none' }}>
+								<Box
+									style={{
+										zIndex: barIndex,
+										pointerEvents: 'none',
+										position: 'fixed',
+									}}>
 									<TestProgressBarMenu
 										id={'bar'}
 										questionData={questionData}
