@@ -6,12 +6,11 @@ import {
 	SkeletonCircle,
 	SkeletonText,
 	Stack,
+	useMediaQuery,
 } from '@chakra-ui/react';
 
-type Props = {
-	isSmallerThan1000: boolean;
-};
-export default function LoadingAssignmentView({ isSmallerThan1000 }: Props) {
+export default function LoadingAssignmentView() {
+	const isSmallerThan1000 = useMediaQuery('(max-width:1000px)');
 	return (
 		<Container
 			id={'loading'}
@@ -46,7 +45,7 @@ export default function LoadingAssignmentView({ isSmallerThan1000 }: Props) {
 						borderRadius={24}
 						p={'72px'}>
 						<Skeleton height="20px" width={'235px'} />
-						<SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="2" />
+						<SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="5" />
 					</Box>
 					<Box
 						style={{
@@ -65,25 +64,25 @@ export default function LoadingAssignmentView({ isSmallerThan1000 }: Props) {
 						p={'72px'}>
 						<Skeleton height="20px" width={'235px'} />
 						<HStack marginTop={5}>
-							<SkeletonCircle size="10" />
+							<SkeletonCircle marginRight={4} size="10" />
 							<Box style={{ flex: 1 }}>
 								<Skeleton height="20px" width={'250px'} />
 							</Box>
 						</HStack>
 						<HStack marginTop={5}>
-							<SkeletonCircle size="10" />
+							<SkeletonCircle marginRight={4} size="10" />
 							<Box style={{ flex: 1 }}>
 								<Skeleton height="20px" width={'250px'} />
 							</Box>
 						</HStack>
 						<HStack marginTop={5}>
-							<SkeletonCircle size="10" />
+							<SkeletonCircle marginRight={4} size="10" />
 							<Box style={{ flex: 1 }}>
 								<Skeleton height="20px" width={'250px'} />
 							</Box>
 						</HStack>
 						<HStack marginTop={5}>
-							<SkeletonCircle size="10" />
+							<SkeletonCircle marginRight={4} size="10" />
 							<Box style={{ flex: 1 }}>
 								<Skeleton height="20px" width={'250px'} />
 							</Box>
