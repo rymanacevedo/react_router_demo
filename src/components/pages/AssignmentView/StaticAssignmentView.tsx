@@ -81,16 +81,19 @@ const StaticAssignmentView = ({
 			placement: 'bottom-start',
 			title: 'step3PopoverTitle',
 			content: 'step3PopoverContent',
+			arrowOffset: '25px',
 		},
 		4: {
 			placement: 'bottom',
 			title: 'step4PopoverTitle',
 			content: 'step4PopoverContent',
+			arrowOffset: '230px',
 		},
 		5: {
 			placement: 'bottom-end',
 			title: 'step5PopoverTitle',
 			content: 'step5PopoverContent',
+			arrowOffset: '450px',
 		},
 	};
 
@@ -116,7 +119,8 @@ const StaticAssignmentView = ({
 						isOpen={tourStep >= 3 && tourStep < 6}
 						placement={barPopoverContent[tourStep]?.placement || 'bottom'}
 						initialFocusRef={barRef.current}
-						arrowSize={20}>
+						arrowSize={20}
+						gutter={20}>
 						<PopoverTrigger>
 							<PopoverAnchor>
 								<Box
@@ -143,7 +147,12 @@ const StaticAssignmentView = ({
 						</PopoverTrigger>
 						<Box style={{ position: 'relative', zIndex: barIndex }}>
 							<PopoverContent p="24px" w="560px" h="287px">
-								<PopoverArrow mr="304px" />
+								<Box
+									position="fixed"
+									top="2px"
+									left={barPopoverContent[tourStep]?.arrowOffset}>
+									<PopoverArrow position="fixed" top="0" left="0" />
+								</Box>
 								<PopoverCloseButton
 									p="24px"
 									onClick={() => {
