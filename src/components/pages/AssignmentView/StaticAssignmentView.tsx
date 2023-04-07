@@ -286,7 +286,12 @@ const StaticAssignmentView = ({
 							arrowSize={20}>
 							<PopoverTrigger>
 								<PopoverAnchor>
-									<Box style={{ zIndex: menuIndex, pointerEvents: 'none', marginTop: 'unset' }}>
+									<Box
+										style={{
+											zIndex: menuIndex,
+											pointerEvents: 'none',
+											marginTop: 'unset',
+										}}>
 										<ProgressMenu
 											isMenuOpen={isMenuOpen}
 											currentRoundQuestionListData={
