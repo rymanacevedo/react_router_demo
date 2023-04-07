@@ -181,7 +181,10 @@ const resources = {
          step4PopoverContent: 'Amplifire comes at you in rounds. A micro testing burst followed by a learning burst. These icons indicate how you are doing in your current round. You can also use the blue bar to see your overall progress in this module',
          step5PopoverTitle:'Your detailed progress 📊',
          step5PopoverContent: 'You can see your detailed progress that includes feedback, your road to mastery, and how long you\'ve spent in this session of learning.',
+         step6PopoverTitle:'Feedback 👋',
+         step6PopoverContent: 'Amplifire will help remind, encourage, and celebrate success with you as you learn',
          skipTour: 'Skip the tour',
+         finishTourBtn: 'Finish tour',
          step: 'Step',
          of6: 'of 6',
          nextBtn: 'Next'         
