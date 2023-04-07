@@ -64,7 +64,6 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				}
 				break;
 			case 'FIVE_CONSEC_SI':
-				console.log('this was hit');
 				if (reset) {
 					resetFiveConsecutiveSureIncorrect();
 				} else {
