@@ -5,8 +5,6 @@ import { Cookies } from 'react-cookie-consent';
 import AssignmentComponent from '../../ui/Assignment/AssignmentComponent';
 
 const AssignmentView = () => {
-	const [isToastOpen, setIsToastOpen] = useState(false);
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isInstructionalOverlayOpen, setIsInstructionalOverlayOpen] = useState(
 		!Cookies.get('instructional_overlay'),
 	);
@@ -28,11 +26,6 @@ const AssignmentView = () => {
 		}
 	}, []);
 
-	const expandProgressMenu = () => {
-		setIsToastOpen(false);
-		setIsMenuOpen(true);
-	};
-
 	return (
 		<main id="learning-assignment">
 			<Modal isOpen={isInstructionalOverlayOpen} onClose={onClose}>
@@ -40,11 +33,6 @@ const AssignmentView = () => {
 			</Modal>
 			<AssignmentComponent
 				assignmentKey={assignmentKey}
-				isMenuOpen={isMenuOpen}
-				setIsMenuOpen={setIsMenuOpen}
-				expandProgressMenu={expandProgressMenu}
-				isToastOpen={isToastOpen}
-				setIsToastOpen={setIsToastOpen}
 				isInstructionalOverlayOpen={isInstructionalOverlayOpen}
 				onClose={onClose}
 				initRef={initRef}

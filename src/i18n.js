@@ -106,6 +106,7 @@ const resources = {
          //////////////////////////////////
          fiveFastAnswers: 'You\'ll actually go faster if you slow down and read.',
          fiveSureCorrectAnswers: 'Five in a row!  Keep it going.',
+         fiveSureIncorrectAnswers: 'You\'ve been sure but incorrect five times in a row. That\'s OK, you\'re here to learn. Answer accordingly if you\'re not sure about an answer.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////

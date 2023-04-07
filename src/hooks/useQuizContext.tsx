@@ -43,6 +43,12 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			});
 		};
 
+		const resetFiveConsecutiveSureIncorrect = () => {
+			setMessage({
+				...message,
+				FIVE_CONSEC_SI: 0,
+			});
+		};
 		switch (messageType) {
 			case 'FIVE_FAST_ANSWERS':
 				if (reset) {
@@ -58,7 +64,18 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				}
 				break;
 			case 'FIVE_CONSEC_SI':
-				// handle FIVE_CONSEC_SI case
+				console.log('this was hit');
+				if (reset) {
+					resetFiveConsecutiveSureIncorrect();
+				} else {
+					setMessage({
+						...message,
+						FIVE_CONSEC_SI: message.FIVE_CONSEC_SI + 1,
+					});
+					if (message.FIVE_CONSEC_SI === 5) {
+						resetFiveConsecutiveSureIncorrect();
+					}
+				}
 				break;
 			case 'SIX_DK_IN_ROUND':
 				// handle SIX_DK_IN_ROUND case
