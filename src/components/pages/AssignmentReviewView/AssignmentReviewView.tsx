@@ -404,6 +404,23 @@ const AssignmentReviewView = () => {
 		stopTimer();
 		startTimer();
 	};
+	const handleReviewCorrect = () => {
+		setLastRevQData({
+			roundId: Number(currentRoundQuestionListData?.id),
+			questionId: Number(questionInFocus?.id),
+			payload: {
+				...answerData,
+				answerDate: null,
+				// @ts-ignore
+				answerList: null,
+				questionSeconds: questionSecondsHistory,
+				reviewSeconds: Number(questionSecondsRef.current) + Number(storedTime),
+			},
+		});
+		setViewCorrect((view) => {
+			return !view;
+		});
+	};
 	const handelKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
 		proceedDownDesiredPathRef.current = false;
 		setAnswerData((answerDataArg: any) => {
@@ -425,6 +442,15 @@ const AssignmentReviewView = () => {
 		);
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
+
+	const handelProgress = async () => {
+		if (viewCorrect) {
+			handelKeepGoing(lastRevQData);
+		} else {
+			handelKeepGoing();
+		}
+	};
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
@@ -493,7 +519,6 @@ const AssignmentReviewView = () => {
 
 	return (
 		<main id="learning-assignment">
-			{/* eslint-disable-next-line */}
 			<Container
 				id={'learning-assignment'}
 				margin="0"
@@ -635,25 +660,7 @@ const AssignmentReviewView = () => {
 											currentRoundQuestionListData?.questionList?.length &&
 										!viewCorrect && (
 											<Button
-												onClick={() => {
-													setLastRevQData({
-														roundId: Number(currentRoundQuestionListData?.id),
-														questionId: Number(questionInFocus?.id),
-														payload: {
-															...answerData,
-															answerDate: null,
-															// @ts-ignore
-															answerList: null,
-															questionSeconds: questionSecondsHistory,
-															reviewSeconds:
-																Number(questionSecondsRef.current) +
-																Number(storedTime),
-														},
-													});
-													setViewCorrect((view) => {
-														return !view;
-													});
-												}}
+												onClick={handleReviewCorrect}
 												variant={'ghost'}
 												color={'ampPrimary'}>
 												<Text color="ampSecondary.500">
@@ -666,13 +673,7 @@ const AssignmentReviewView = () => {
 									<Button
 										rightIcon={<ArrowRightIcon />}
 										variant={'ampSolid'}
-										onClick={() => {
-											if (viewCorrect) {
-												handelKeepGoing(lastRevQData);
-											} else {
-												handelKeepGoing();
-											}
-										}}>
+										onClick={handelProgress}>
 										{i18n('keepGoing')}
 									</Button>
 								) : (
