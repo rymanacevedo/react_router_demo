@@ -119,10 +119,39 @@ const AssignmentReviewView = () => {
 	const [viewCorrect, setViewCorrect] = useState(false);
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const { assignmentKey } = useParams();
+	const [lastRevQData, setLastRevQData] = useState({
+		roundId: 0,
+		questionId: 0,
+		payload: {
+			answerDate: null,
+			answerList: [],
+			avatarMessage: null,
+			completionAlgorithmType: null,
+			completionPercentage: 0,
+			confidence: null,
+			correctAnswerIds: null,
+			correctness: null,
+			informedCount: 0,
+			masteredQuestionCount: 0,
+			misinformedCount: 0,
+			moduleComplete: false,
+			notSureCount: 0,
+			onceCorrectCount: 0,
+			questionSeconds: 0,
+			questionsMastered: 0,
+			reviewSeconds: 0,
+			self: null,
+			totalQuestionCount: 0,
+			twiceCorrectCount: 0,
+			uninformedCount: 0,
+			unseenCount: 0,
+		},
+	});
 	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	const [storedTime, setStoredtime] = useState(0);
 	// eslint-disable-next-line
 	const [localQuestionReviewHistory, setLocalQuestionReviewHistory] =
 		useLocalStorage(
@@ -139,29 +168,31 @@ const AssignmentReviewView = () => {
 	const questionSecondsRef = useRef(0);
 	const proceedDownDesiredPathRef = useRef(true);
 
-	const putReviewInfo = async () => {
-		let storedtime = 0;
-		if (questionInFocus?.id) {
-			const myObjectString = localStorage.getItem(
-				`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+	const putReviewInfo = async (lastRevQDataArg?: {
+		roundId?: any;
+		questionId?: any;
+		payload?: any;
+	}) => {
+		if (lastRevQDataArg?.roundId) {
+			await putCurrentRound(
+				lastRevQDataArg?.roundId,
+				lastRevQDataArg?.questionId,
+				lastRevQDataArg?.payload,
 			);
-			const myObject = JSON.parse(String(myObjectString));
-			if (myObject?.localStorageQuestionReviewSeconds) {
-				storedtime = myObject.localStorageQuestionReviewSeconds;
-			}
+		} else {
+			await putCurrentRound(
+				currentRoundQuestionListData?.id,
+				questionInFocus?.id,
+				{
+					...answerData,
+					answerDate: null,
+					answerList: null,
+					questionSeconds: questionSecondsHistory,
+					reviewSeconds:
+						Number(questionSecondsRef.current) + Number(storedTime),
+				},
+			);
 		}
-
-		await putCurrentRound(
-			currentRoundQuestionListData?.id,
-			questionInFocus?.id,
-			{
-				...answerData,
-				answerDate: null,
-				answerList: null,
-				questionSeconds: questionSecondsHistory,
-				reviewSeconds: Number(questionSecondsRef.current) + Number(storedtime),
-			},
-		);
 	};
 
 	const fetchModuleQuestionsData = async (firstRender?: boolean) => {
@@ -231,6 +262,15 @@ const AssignmentReviewView = () => {
 						viewCorrect,
 					)[questionIndex],
 				);
+				if (questionInFocus?.id) {
+					const myObjectString = localStorage.getItem(
+						`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+					);
+					const myObject = JSON.parse(String(myObjectString));
+					if (myObject?.localStorageQuestionReviewSeconds) {
+						setStoredtime(myObject.localStorageQuestionReviewSecond);
+					}
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -365,7 +405,24 @@ const AssignmentReviewView = () => {
 		stopTimer();
 		startTimer();
 	};
-	const handelKeepGoing = async () => {
+	const handleReviewCorrect = () => {
+		setLastRevQData({
+			roundId: Number(currentRoundQuestionListData?.id),
+			questionId: Number(questionInFocus?.id),
+			payload: {
+				...answerData,
+				answerDate: null,
+				// @ts-ignore
+				answerList: null,
+				questionSeconds: questionSecondsHistory,
+				reviewSeconds: Number(questionSecondsRef.current) + Number(storedTime),
+			},
+		});
+		setViewCorrect((view) => {
+			return !view;
+		});
+	};
+	const handelKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
 		proceedDownDesiredPathRef.current = false;
 		setAnswerData((answerDataArg: any) => {
 			return {
@@ -374,13 +431,27 @@ const AssignmentReviewView = () => {
 				reviewSeconds: questionSecondsRef.current,
 			};
 		});
-		putReviewInfo();
+		if (lastRevQDataArg?.roundId) {
+			await putReviewInfo(lastRevQDataArg);
+		} else {
+			await putReviewInfo();
+		}
+
 		setLocalQuestionHistory(null);
 		localStorage.removeItem(
 			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
 		);
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
+
+	const handelProgress = async () => {
+		if (viewCorrect) {
+			handelKeepGoing(lastRevQData);
+		} else {
+			handelKeepGoing();
+		}
+	};
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
@@ -593,11 +664,7 @@ const AssignmentReviewView = () => {
 												currentRoundQuestionListData?.questionList?.length &&
 											!viewCorrect && (
 												<Button
-													onClick={() => {
-														setViewCorrect((view) => {
-															return !view;
-														});
-													}}
+													onClick={handleReviewCorrect}
 													variant={'ghost'}
 													color={'ampPrimary'}>
 													<Text color="ampSecondary.500">
@@ -610,7 +677,7 @@ const AssignmentReviewView = () => {
 										<Button
 											rightIcon={<ArrowRightIcon />}
 											variant={'ampSolid'}
-											onClick={handelKeepGoing}>
+											onClick={handelProgress}>
 											{i18n('keepGoing')}
 										</Button>
 									) : (
