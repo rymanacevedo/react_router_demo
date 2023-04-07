@@ -38,6 +38,19 @@ const AnswerInput = ({
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 
+	const removeTranslateHack = () => {
+		if (IDK) {
+			return '50%';
+		}
+		if (isChecked) {
+			return '0%';
+		}
+		if (isIndeterminate) {
+			return '0%';
+		}
+		return '50%';
+	};
+
 	useEffect(() => {
 		addAnswer(answerObject);
 	}, [answerObject]);
@@ -147,37 +160,32 @@ const AnswerInput = ({
 		}
 	};
 	return (
-		<>
-			<Checkbox
-				className={'label-hover-effect'}
-				variant={'answer'}
-				colorScheme={'transparent'}
-				value={questionAnswerId}
-				size={'4rem'}
-				icon={
-					<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
-				}
-				isChecked={isChecked}
-				disabled={isDisabled}
-				isIndeterminate={isIndeterminate}
-				onChange={(e) => checkStatus(e)}>
-				<SlideFade in={isEnabled}>
-					<Badge variant={variant}>{text}</Badge>
-				</SlideFade>
-				<Slide
-					in={isEnabled}
-					direction="top"
-					style={{
-						position: 'relative',
-						top: `${!isEnabled ? '25px' : ''}`,
-						display: 'flex',
-						left: '15px',
-						fontSize: 25,
-					}}>
-					<RichContentComponent content={questionText} />
-				</Slide>
-			</Checkbox>
-		</>
+		<Checkbox
+			className={'label-hover-effect'}
+			variant={'answer'}
+			colorScheme={'transparent'}
+			value={questionAnswerId}
+			size={'4rem'}
+			icon={
+				<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
+			}
+			isChecked={isChecked}
+			disabled={isDisabled}
+			isIndeterminate={isIndeterminate}
+			onChange={(e) => checkStatus(e)}>
+			<SlideFade in={isEnabled}>
+				<Badge variant={variant}>{text}</Badge>
+			</SlideFade>
+			<Slide
+				in={isEnabled}
+				direction="top"
+				style={{
+					position: 'relative',
+					translateY: removeTranslateHack(),
+				}}>
+				<RichContentComponent content={questionText} />
+			</Slide>
+		</Checkbox>
 	);
 };
 

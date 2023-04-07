@@ -67,9 +67,7 @@ const RichContentComponent = ({
 	}, [content, replaceH5pElements]); // replaceMathJaxElements]);
 
 	return (
-		<Box
-			style={{ ...style }}
-			dangerouslySetInnerHTML={unsanitize(content)}></Box>
+		<Box style={{ ...style }} dangerouslySetInnerHTML={unsanitize(content)} />
 	);
 };
 export default RichContentComponent;
