@@ -1,6 +1,4 @@
-import React from 'react';
-
-const CompleteIcon: React.FC = () => {
+const CompleteIcon = () => {
 	return (
 		<svg
 			width="72"
