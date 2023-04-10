@@ -139,6 +139,7 @@ const resources = {
          //////////////////////////////////////////////
          clearSelection: 'Clear selection',
          nextQ: 'Next Question',
+         completeMod: "Congratulations, you've completed this module!",
          /////////////////////////////////////////////
          //   LearningReviewView.tsx
          //////////////////////////////////////////////

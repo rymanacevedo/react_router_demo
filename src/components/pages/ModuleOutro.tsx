@@ -4,6 +4,7 @@ import {
 	Box,
 	Button,
 	HStack,
+	Heading,
 	Stack,
 	Text,
 } from '@chakra-ui/react';
@@ -23,7 +24,6 @@ type ModuleOutroType = {
 	action?: () => void;
 };
 const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
-	console.log('moduleData', moduleData);
 	const { t: i18n } = useTranslation();
 	return (
 		<Box
@@ -46,7 +46,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 					<AvatarGroup spacing="4px">
 						<Avatar bg={'ampSuccess.500'} icon={<CompleteIcon />}></Avatar>
 					</AvatarGroup>
-					<Text>Congradulations, you've completed this module! </Text>
+					<Heading>{i18n('completeMod')}</Heading>
 				</HStack>
 				{moduleData?.outroRc && (
 					<RichContentComponent content={moduleData?.outroRc} />
