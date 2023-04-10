@@ -18,7 +18,6 @@ import {
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressMenuType = {
-	// isMenuOpen: boolean;
 	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData | undefined;
 	textPrompt?: string;
@@ -26,12 +25,11 @@ type ProgressMenuType = {
 
 const ProgressMenu = (props: ProgressMenuType) => {
 	const {
-		// isMenuOpen,
 		currentRoundQuestionListData,
 		currentRoundAnswerOverLayData,
 		textPrompt,
 	} = props;
-	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
+	const { isMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
 		? currentRoundQuestionListData

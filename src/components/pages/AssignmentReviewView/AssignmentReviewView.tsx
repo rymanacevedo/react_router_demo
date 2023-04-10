@@ -530,7 +530,6 @@ const AssignmentReviewView = () => {
 					overflowX={'hidden'}>
 					<TestProgressBarMenu
 						questionData={questionData}
-						isMenuOpen={isMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}
 						inReview={true}

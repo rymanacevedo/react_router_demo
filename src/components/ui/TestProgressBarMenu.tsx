@@ -18,8 +18,6 @@ import {
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressBarMenu = {
-	isMenuOpen: boolean;
-	// setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
@@ -222,8 +220,6 @@ const AnswerHistoryComponent = ({
 };
 
 const TestProgressBarMenu = ({
-	// isMenuOpen,
-	// setIsMenuOpen,
 	questionData,
 	currentQuestion,
 	currentRoundQuestionListData,
@@ -253,7 +249,6 @@ const TestProgressBarMenu = ({
 
 	const assignmentType = questionData?.kind;
 	const title = questionData?.name;
-	console.log(isMenuOpen);
 
 	return (
 		<Box width="100vw" boxSizing="border-box">
@@ -316,7 +311,6 @@ const TestProgressBarMenu = ({
 						width="200px"
 						leftIcon={isMenuOpen ? <ExitIcon /> : <EnterIcon />}
 						onClick={() => {
-							// setIsMenuOpen(!isMenuOpen);
 							handleMenuOpen();
 						}}>
 						<Text fontSize={'16px'} fontWeight="600">
