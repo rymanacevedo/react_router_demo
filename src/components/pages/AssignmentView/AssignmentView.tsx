@@ -27,6 +27,7 @@ import { Cookies } from 'react-cookie-consent';
 import AnswerArea from '../../ui/AnswerInput/AnswerArea';
 import QuizContext from './QuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
+import ModuleOutro from '../ModuleOutro';
 
 const initState = {
 	self: null,
@@ -85,6 +86,10 @@ const AssignmentView = () => {
 		learningUnits: [{ questions: [] }],
 		kind: '',
 		name: '',
+		outroLink: '',
+		outroButtonText: '',
+		introductionRc: '',
+		outroRc: '',
 	});
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
@@ -123,6 +128,7 @@ const AssignmentView = () => {
 	const navigate = useNavigate();
 	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
+	const [outro, setOutro] = useState(false);
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -132,7 +138,13 @@ const AssignmentView = () => {
 			];
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
-				if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
+				console.log('############', currentRoundQuestionsResponse);
+				if (
+					currentRoundQuestionsResponse?.totalQuestionCount ===
+					currentRoundQuestionsResponse?.masteredQuestionCount
+				) {
+					setOutro(true);
+				} else if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 					setQuestionInFocus(
@@ -256,7 +268,14 @@ const AssignmentView = () => {
 	const continueBtnFunc = () => {
 		setIsToastOpen(false);
 		if (showOverlay) {
-			getNextTask();
+			if (
+				currentRoundQuestionListData?.totalQuestionCount ===
+				currentRoundQuestionListData?.masteredQuestionCount
+			) {
+				setOutro(true);
+			} else {
+				getNextTask();
+			}
 		} else {
 			submitAnswer();
 		}
@@ -320,64 +339,74 @@ const AssignmentView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<FireProgressToast
-					isToastOpen={isToastOpen}
-					textPrompt={textPrompt}
-					expandProgressMenu={expandProgressMenu}
-				/>
-				<TestProgressBarMenu
-					questionData={questionData}
-					isMenuOpen={isMenuOpen}
-					setIsMenuOpen={setIsMenuOpen}
-					currentRoundQuestionListData={currentRoundQuestionListData}
-					currentQuestion={questionInFocus}
-					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-				/>{' '}
-				<HStack width="100%">
-					<HStack
-						w="100%"
-						p="12px"
-						justifyContent={'center'}
-						flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
-						<Box
-							style={{
-								backgroundColor: 'white',
-								margin: '6px',
-							}}
-							boxShadow="2xl"
-							w="100%"
-							maxWidth={726}
-							h={isSmallerThan1000 ? '' : '745px'}
-							overflow="hidden"
-							borderRadius={24}
-							p={'72px'}>
-							<Question questionInFocus={questionInFocus} />
-						</Box>
-						<AnswerArea
-							isOpen={isInstructionalOverlayOpen}
-							onClose={onClose}
-							smallerThan1000={isSmallerThan1000}
-							initialFocusRef={initRef}
-							showOverlay={showOverlay}
-							questionInFocus={questionInFocus}
-							selectedAnswers={selectedAnswers}
-							selectedAnswersState={setSelectedAnswers}
-							clearSelection={clearSelection}
-							clearSelectionState={setClearSelection}
-							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-							onClick={continueBtnFunc}
-							clearSelectionFunction={clearSelectionButtonFunc}
-							IDKResponse={IDKResponse}
-							setIDKResponse={setIDKResponse}
+				{!outro ? (
+					<>
+						<FireProgressToast
+							isToastOpen={isToastOpen}
+							textPrompt={textPrompt}
+							expandProgressMenu={expandProgressMenu}
 						/>
-					</HStack>
-					<ProgressMenu
-						textPrompt={textPrompt}
-						isMenuOpen={isMenuOpen}
-						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						<TestProgressBarMenu
+							questionData={questionData}
+							isMenuOpen={isMenuOpen}
+							setIsMenuOpen={setIsMenuOpen}
+							currentRoundQuestionListData={currentRoundQuestionListData}
+							currentQuestion={questionInFocus}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						/>
+						<HStack width="100%">
+							<HStack
+								w="100%"
+								p="12px"
+								justifyContent={'center'}
+								flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+								<Box
+									style={{
+										backgroundColor: 'white',
+										margin: '6px',
+									}}
+									boxShadow="2xl"
+									w="100%"
+									maxWidth={726}
+									h={isSmallerThan1000 ? '' : '745px'}
+									overflow="hidden"
+									borderRadius={24}
+									p={'72px'}>
+									<Question questionInFocus={questionInFocus} />
+								</Box>
+								<AnswerArea
+									isOpen={isInstructionalOverlayOpen}
+									onClose={onClose}
+									smallerThan1000={isSmallerThan1000}
+									initialFocusRef={initRef}
+									showOverlay={showOverlay}
+									questionInFocus={questionInFocus}
+									selectedAnswers={selectedAnswers}
+									selectedAnswersState={setSelectedAnswers}
+									clearSelection={clearSelection}
+									clearSelectionState={setClearSelection}
+									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									onClick={continueBtnFunc}
+									clearSelectionFunction={clearSelectionButtonFunc}
+									IDKResponse={IDKResponse}
+									setIDKResponse={setIDKResponse}
+								/>
+							</HStack>
+							<ProgressMenu
+								textPrompt={textPrompt}
+								isMenuOpen={isMenuOpen}
+								currentRoundQuestionListData={currentRoundQuestionListData}
+								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+							/>
+						</HStack>
+					</>
+				) : (
+					// @ts-ignore
+					<ModuleOutro
+						moduleData={questionData}
+						action={() => navigate('/app/learning')}
 					/>
-				</HStack>
+				)}
 			</Container>
 		</main>
 	);

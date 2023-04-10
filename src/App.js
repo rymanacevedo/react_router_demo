@@ -116,6 +116,10 @@ function App() {
 							</QuizContext.Provider>
 						}
 					/>
+					<Route
+						path="learning/assignment/:assignmentKey/outro"
+						element={<ModuleIntroView outro />}
+					/>
 
 					<Route
 						path="learning/assignment/:assignmentKey/tour"
