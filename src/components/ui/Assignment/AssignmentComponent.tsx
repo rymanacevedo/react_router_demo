@@ -64,7 +64,7 @@ export default function AssignmentComponent({
 	const { message, handleMessage } = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
-	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+	const [isMenuOpen, Open] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
@@ -180,10 +180,11 @@ export default function AssignmentComponent({
 		});
 	};
 
-	const submitAnswer = () => {
-		questionSecondsRef.current = 0;
-		stopTimer();
+	useEffect(() => {
+		startTimer();
+	}, []);
 
+	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -264,6 +265,8 @@ export default function AssignmentComponent({
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
 				setShowOverlay(true);
+				questionSecondsRef.current = 0;
+				stopTimer();
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
@@ -303,7 +306,7 @@ export default function AssignmentComponent({
 
 	const expandProgressMenu = () => {
 		setIsToastOpen(false);
-		setIsMenuOpen(true);
+		// setIsMenuOpen(true);
 	};
 
 	return currentRoundQuestionListData ? (
@@ -322,7 +325,7 @@ export default function AssignmentComponent({
 			<TestProgressBarMenu
 				questionData={questionData}
 				isMenuOpen={isMenuOpen}
-				setIsMenuOpen={setIsMenuOpen}
+				// setIsMenuOpen={setIsMenuOpen}
 				currentRoundQuestionListData={currentRoundQuestionListData}
 				currentQuestion={questionInFocus}
 				currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
@@ -367,7 +370,7 @@ export default function AssignmentComponent({
 				</HStack>
 				<ProgressMenu
 					textPrompt={textPrompt}
-					isMenuOpen={isMenuOpen}
+					// isMenuOpen={isMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 				/>

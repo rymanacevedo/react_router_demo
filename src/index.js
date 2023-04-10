@@ -11,6 +11,7 @@ import DialogProvider from './components/DialogProvider';
 import { AuthProvider } from './hooks/useAuth';
 import { BrowserRouter } from 'react-router-dom';
 import { QuizProvider } from './hooks/useQuizContext';
+import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 
 // Init KF.state
 setupKFState();
@@ -21,9 +22,11 @@ root.render(
 		<BrowserRouter basename="/main">
 			<AuthProvider>
 				<DialogProvider>
-					<QuizProvider>
-						<App />
-					</QuizProvider>
+					<ProgressMenuContextProvider>
+						<QuizProvider>
+							<App />
+						</QuizProvider>
+					</ProgressMenuContextProvider>
 				</DialogProvider>
 			</AuthProvider>
 		</BrowserRouter>

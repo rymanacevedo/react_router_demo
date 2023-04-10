@@ -15,10 +15,11 @@ import {
 	QuestionInFocus,
 	CurrentRoundAnswerOverLayData,
 } from '../pages/AssignmentView/AssignmentTypes';
+import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressBarMenu = {
 	isMenuOpen: boolean;
-	setIsMenuOpen: (isMenuOpen: boolean) => void;
+	// setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
@@ -221,8 +222,8 @@ const AnswerHistoryComponent = ({
 };
 
 const TestProgressBarMenu = ({
-	isMenuOpen,
-	setIsMenuOpen,
+	// isMenuOpen,
+	// setIsMenuOpen,
 	questionData,
 	currentQuestion,
 	currentRoundQuestionListData,
@@ -230,6 +231,7 @@ const TestProgressBarMenu = ({
 	currentRoundAnswerOverLayData,
 	questionIndex,
 }: ProgressBarMenu) => {
+	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
@@ -251,6 +253,7 @@ const TestProgressBarMenu = ({
 
 	const assignmentType = questionData?.kind;
 	const title = questionData?.name;
+	console.log(isMenuOpen);
 
 	return (
 		<Box width="100vw" boxSizing="border-box">
@@ -313,7 +316,8 @@ const TestProgressBarMenu = ({
 						width="200px"
 						leftIcon={isMenuOpen ? <ExitIcon /> : <EnterIcon />}
 						onClick={() => {
-							setIsMenuOpen(!isMenuOpen);
+							// setIsMenuOpen(!isMenuOpen);
+							handleMenuOpen();
 						}}>
 						<Text fontSize={'16px'} fontWeight="600">
 							{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}

@@ -531,7 +531,6 @@ const AssignmentReviewView = () => {
 					<TestProgressBarMenu
 						questionData={questionData}
 						isMenuOpen={isMenuOpen}
-						setIsMenuOpen={setIsMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}
 						inReview={true}
@@ -618,7 +617,6 @@ const AssignmentReviewView = () => {
 							</Box>
 						</HStack>
 						<ProgressMenu
-							isMenuOpen={isMenuOpen}
 							currentRoundQuestionListData={currentRoundQuestionListData}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>

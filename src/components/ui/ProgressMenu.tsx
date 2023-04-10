@@ -15,9 +15,10 @@ import {
 	CurrentRoundQuestionListData,
 	CurrentRoundAnswerOverLayData,
 } from '../pages/AssignmentView/AssignmentTypes';
+import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressMenuType = {
-	isMenuOpen: boolean;
+	// isMenuOpen: boolean;
 	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData | undefined;
 	textPrompt?: string;
@@ -25,11 +26,12 @@ type ProgressMenuType = {
 
 const ProgressMenu = (props: ProgressMenuType) => {
 	const {
-		isMenuOpen,
+		// isMenuOpen,
 		currentRoundQuestionListData,
 		currentRoundAnswerOverLayData,
 		textPrompt,
 	} = props;
+	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
 		? currentRoundQuestionListData
