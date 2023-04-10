@@ -139,7 +139,7 @@ export default function AnswerArea(props: {
 					h={props.smallerThan1000 ? 'auto' : 485}
 					w={560}>
 					<PopoverArrow />
-					<Heading as="h2" size="lg" mb={3}>
+					<Heading as="h3" mb={3}>
 						Ways to answer
 					</Heading>
 					<PopoverBody style={{ padding: 0 }}>

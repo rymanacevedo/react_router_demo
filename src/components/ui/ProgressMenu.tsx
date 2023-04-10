@@ -1,6 +1,7 @@
 import {
 	Box,
 	Divider,
+	Heading,
 	HStack,
 	Progress,
 	SlideFade,
@@ -12,8 +13,8 @@ import { LapTimerIcon } from '@radix-ui/react-icons';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
 import {
-	CurrentRoundQuestionListData,
 	CurrentRoundAnswerOverLayData,
+	CurrentRoundQuestionListData,
 } from '../pages/AssignmentView/AssignmentTypes';
 
 type ProgressMenuType = {
@@ -76,9 +77,9 @@ const ProgressMenu = (props: ProgressMenuType) => {
 					/>
 					<Divider borderWidth="1px" width="297px" marginLeft="24px" />
 					<Box padding="24px">
-						<Text fontSize="21px" fontWeight={'600'}>
+						<Heading as="h3" size="lg">
 							The road to mastery
-						</Text>
+						</Heading>
 						<Progress
 							colorScheme="green"
 							marginTop="12px"

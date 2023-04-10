@@ -1,4 +1,4 @@
-import { Container, HStack, Text } from '@chakra-ui/react';
+import { Container, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import AssignmentList from '../ui/AssignmentList';
 import useCourseListService from '../../services/coursesServices/useCourseListService';
@@ -50,22 +50,18 @@ const LearningView = () => {
 			boxShadow={
 				'0px 100px 80px rgba(0, 0, 0, 0.04), 0px 6.6501px 5.32008px rgba(0, 0, 0, 0.0161557), 0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0112458)'
 			}>
-			<Text
-				fontWeight={'600'}
-				fontSize={'38px'}
-				marginBottom="24px"
-				margin="12px">
+			<Heading as="h1" marginBottom="24px" margin="12px">
 				{courseTitle}
-			</Text>
+			</Heading>
 			<HStack
 				justifyContent={'space-between'}
 				margin="12px"
 				marginBottom="24px"
 				width="100%"
 				maxWidth={'800px'}>
-				<Text fontWeight={'600'} fontSize={'28px'}>
+				<Heading as="h2" size="lg">
 					{i18n('yourAssignments')}
-				</Text>
+				</Heading>
 				{courseList.length > 0 && (
 					<CourseMenu
 						courseList={courseList}

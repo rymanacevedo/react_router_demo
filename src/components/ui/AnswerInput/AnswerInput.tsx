@@ -38,7 +38,7 @@ const AnswerInput = ({
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 
-	const removeTranslateHack = () => {
+	const calculateTranslateY = () => {
 		if (IDK) {
 			return '50%';
 		}
@@ -181,7 +181,7 @@ const AnswerInput = ({
 				direction="top"
 				style={{
 					position: 'relative',
-					translateY: removeTranslateHack(),
+					translateY: calculateTranslateY(),
 				}}>
 				<RichContentComponent content={questionText} />
 			</Slide>

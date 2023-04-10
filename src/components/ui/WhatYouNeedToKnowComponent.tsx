@@ -1,29 +1,29 @@
 import {
-	Box,
-	Heading,
-	VStack,
-	Text,
-	Button,
-	Stack,
-	Divider,
-	ButtonGroup,
-	HStack,
-	useDisclosure,
-	Collapse,
-	RadioGroup,
-	Radio,
-	Textarea,
-	FormControl,
 	Accordion,
-	AccordionItem,
 	AccordionButton,
+	AccordionItem,
 	AccordionPanel,
+	Box,
+	Button,
+	ButtonGroup,
+	Collapse,
+	Divider,
+	FormControl,
+	Heading,
+	HStack,
+	Radio,
+	RadioGroup,
+	Stack,
+	Text,
+	Textarea,
+	useDisclosure,
+	VStack,
 } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
 import {
-	Pencil1Icon,
-	ChevronRightIcon,
 	ChevronDownIcon,
+	ChevronRightIcon,
+	Pencil1Icon,
 } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
@@ -58,7 +58,7 @@ const WhatYouNeedToKnowComponent = ({
 			overflow="hidden"
 			borderRadius={24}
 			padding={'34px 120px'}>
-			<Heading as="h2">{i18n('whatYouNeedToKnow')}</Heading>
+			<Heading as="h3">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
 				<RichContentComponent content={questionInFocus?.explanationRc} />
 			</Stack>
@@ -68,7 +68,7 @@ const WhatYouNeedToKnowComponent = ({
 						<AccordionItem style={{ borderStyle: 'none' }}>
 							{({ isExpanded }) => (
 								<>
-									<h2>
+									<Heading as="h2">
 										<AccordionButton padding={'0'}>
 											{isExpanded ? (
 												<ChevronDownIcon
@@ -97,7 +97,7 @@ const WhatYouNeedToKnowComponent = ({
 												</Text>
 											</Box>
 										</AccordionButton>
-									</h2>
+									</Heading>
 									<AccordionPanel padding={'0px'}>
 										<RichContentComponent
 											content={questionInFocus?.moreInformationRc}
