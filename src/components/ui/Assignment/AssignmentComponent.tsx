@@ -211,6 +211,8 @@ export default function AssignmentComponent({
 			);
 
 			if (overLayData) {
+				console.log('overLayData.confidence: ', overLayData.confidence);
+				console.log('overLayData.correctness: ', overLayData.correctness);
 				if (
 					overLayData.confidence === 'Sure' &&
 					overLayData.correctness === 'Correct' &&
@@ -229,6 +231,12 @@ export default function AssignmentComponent({
 					message.FIVE_CONSEC_SI < 5
 				) {
 					handleMessage('FIVE_CONSEC_SI', false);
+				} else if (
+					overLayData.confidence === 'NotSure' &&
+					overLayData.correctness === 'NoAnswerSelected' &&
+					message.SIX_DK_IN_ROUND < 6
+				) {
+					handleMessage('SIX_DK_IN_ROUND', false);
 				} else {
 					handleMessage('FIVE_CONSEC_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', true);
@@ -305,6 +313,14 @@ export default function AssignmentComponent({
 		setIsToastOpen(false);
 		setIsMenuOpen(true);
 	};
+
+	useEffect(() => {
+		if (message.SIX_DK_IN_ROUND === 6) {
+			setIsToastOpen(true);
+			setTextPrompt('SIX_DK_IN_ROUND');
+			handleMessage('SIX_DK_IN_ROUND', true);
+		}
+	}, [message.SIX_DK_IN_ROUND]);
 
 	return currentRoundQuestionListData ? (
 		<Container

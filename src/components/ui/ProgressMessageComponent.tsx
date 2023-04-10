@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import RedIcon from './RedIcon';
 import GreenIcon from './GreenIcon';
+import BlueIcon from './BlueIcon';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
@@ -27,6 +28,12 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 		setIcon(<RedIcon />);
 	};
 
+	const setEncouragementFeedback = () => {
+		setBgColor('blue.100');
+		setIcon(<GreenIcon />);
+		// setIcon(<BlueIcon />);
+	};
+
 	useEffect(() => {
 		switch (textPrompt) {
 			case 'FIVE_FAST_ANSWERS':
@@ -38,7 +45,8 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setNegativeFeedback();
 				break;
 			case 'SIX_DK_IN_ROUND':
-				// handle SIX_DK_IN_ROUND case
+				setToastText(i18n('sixDontKnowInRound'));
+				setEncouragementFeedback();
 				break;
 			case 'FIVE_CONSEC_SC':
 				setToastText(i18n('fiveSureCorrectAnswers'));
