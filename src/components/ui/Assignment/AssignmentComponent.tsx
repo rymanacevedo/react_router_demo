@@ -211,27 +211,28 @@ export default function AssignmentComponent({
 			);
 
 			if (overLayData) {
-				switch (true) {
-					case overLayData.confidence === 'Sure' &&
-						overLayData.correctness === 'Correct' &&
-						message.FIVE_CONSEC_SC < 5:
-						handleMessage('FIVE_CONSEC_SC', false);
-						break;
-					case questionSecondsRef.current <= 5 &&
-						overLayData.correctness !== 'Correct' &&
-						message.FIVE_FAST_ANSWERS < 5:
-						handleMessage('FIVE_FAST_ANSWERS', false);
-						break;
-					case overLayData.confidence === 'Sure' &&
-						overLayData.correctness === 'Incorrect' &&
-						message.FIVE_CONSEC_SI < 5:
-						handleMessage('FIVE_CONSEC_SI', false);
-						break;
-					default:
-						handleMessage('FIVE_CONSEC_SC', true);
-						handleMessage('FIVE_FAST_ANSWERS', true);
-						handleMessage('FIVE_CONSEC_SI', true);
-						break;
+				if (
+					overLayData.confidence === 'Sure' &&
+					overLayData.correctness === 'Correct' &&
+					message.FIVE_CONSEC_SC < 5
+				) {
+					handleMessage('FIVE_CONSEC_SC', false);
+				} else if (
+					questionSecondsRef.current <= 5 &&
+					overLayData.correctness !== 'Correct' &&
+					message.FIVE_FAST_ANSWERS < 5
+				) {
+					handleMessage('FIVE_FAST_ANSWERS', false);
+				} else if (
+					overLayData.confidence === 'Sure' &&
+					overLayData.correctness === 'Incorrect' &&
+					message.FIVE_CONSEC_SI < 5
+				) {
+					handleMessage('FIVE_CONSEC_SI', false);
+				} else {
+					handleMessage('FIVE_CONSEC_SC', true);
+					handleMessage('FIVE_FAST_ANSWERS', true);
+					handleMessage('FIVE_CONSEC_SI', true);
 				}
 
 				let updatedLocalQuestionHistory = localQuestionHistory

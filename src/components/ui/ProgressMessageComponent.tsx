@@ -21,7 +21,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	const [iconColor, setIconColor] = useState<string>('teal.500');
 	const { t: i18n } = useTranslation();
 
-	const negativeFeedback = () => {
+	const setNegativeFeedback = () => {
 		setBgColor('red.100');
 		setIconColor('red.500');
 		setIcon(<RedIcon />);
@@ -31,11 +31,11 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 		switch (textPrompt) {
 			case 'FIVE_FAST_ANSWERS':
 				setToastText(i18n('fiveFastAnswers'));
-				negativeFeedback();
+				setNegativeFeedback();
 				break;
 			case 'FIVE_CONSEC_SI':
 				setToastText(i18n('fiveSureIncorrectAnswers'));
-				negativeFeedback();
+				setNegativeFeedback();
 				break;
 			case 'SIX_DK_IN_ROUND':
 				// handle SIX_DK_IN_ROUND case
