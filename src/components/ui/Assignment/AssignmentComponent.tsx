@@ -211,8 +211,6 @@ export default function AssignmentComponent({
 			);
 
 			if (overLayData) {
-				console.log('overLayData.confidence: ', overLayData.confidence);
-				console.log('overLayData.correctness: ', overLayData.correctness);
 				if (
 					overLayData.confidence === 'Sure' &&
 					overLayData.correctness === 'Correct' &&

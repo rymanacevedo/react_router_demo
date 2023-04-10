@@ -30,8 +30,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 
 	const setEncouragementFeedback = () => {
 		setBgColor('blue.100');
-		setIcon(<GreenIcon />);
-		// setIcon(<BlueIcon />);
+		setIcon(<BlueIcon />);
 	};
 
 	useEffect(() => {
