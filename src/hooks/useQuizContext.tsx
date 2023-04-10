@@ -43,37 +43,44 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			});
 		};
 
+		const resetFiveConsecutiveSureIncorrect = () => {
+			setMessage({
+				...message,
+				FIVE_CONSEC_SI: 0,
+			});
+		};
 		switch (messageType) {
 			case 'FIVE_FAST_ANSWERS':
-				if (reset) {
+				if (reset || message.FIVE_FAST_ANSWERS === 5) {
 					resetFiveFastAnswers();
 				} else {
 					setMessage({
 						...message,
 						FIVE_FAST_ANSWERS: message.FIVE_FAST_ANSWERS + 1,
 					});
-					if (message.FIVE_FAST_ANSWERS === 5) {
-						resetFiveFastAnswers();
-					}
 				}
 				break;
 			case 'FIVE_CONSEC_SI':
-				// handle FIVE_CONSEC_SI case
+				if (reset || message.FIVE_CONSEC_SI === 5) {
+					resetFiveConsecutiveSureIncorrect();
+				} else {
+					setMessage({
+						...message,
+						FIVE_CONSEC_SI: message.FIVE_CONSEC_SI + 1,
+					});
+				}
 				break;
 			case 'SIX_DK_IN_ROUND':
 				// handle SIX_DK_IN_ROUND case
 				break;
 			case 'FIVE_CONSEC_SC':
-				if (reset) {
+				if (reset || message.FIVE_CONSEC_SC === 5) {
 					resetFiveConsecutiveSureCorrect();
 				} else {
 					setMessage({
 						...message,
 						FIVE_CONSEC_SC: message.FIVE_CONSEC_SC + 1,
 					});
-					if (message.FIVE_CONSEC_SC === 5) {
-						resetFiveConsecutiveSureCorrect();
-					}
 				}
 				break;
 			default:

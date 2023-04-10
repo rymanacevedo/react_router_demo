@@ -23,11 +23,6 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 
 type Props = {
-	isMenuOpen: boolean;
-	setIsMenuOpen: (isMenuOpen: boolean) => void;
-	isToastOpen: boolean;
-	setIsToastOpen: (isToastOpen: boolean) => void;
-	expandProgressMenu: () => void;
 	isInstructionalOverlayOpen: boolean;
 	onClose: () => void;
 	initRef: any;
@@ -60,11 +55,6 @@ const initState = {
 };
 
 export default function AssignmentComponent({
-	isMenuOpen,
-	setIsMenuOpen,
-	isToastOpen,
-	setIsToastOpen,
-	expandProgressMenu,
 	isInstructionalOverlayOpen,
 	onClose,
 	initRef,
@@ -72,8 +62,9 @@ export default function AssignmentComponent({
 }: Props) {
 	const navigate = useNavigate();
 	const { message, handleMessage } = useQuizContext();
-	const [isCorrectAndSure, setIsCorrectAndSure] = useState<boolean>(false);
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
@@ -190,25 +181,6 @@ export default function AssignmentComponent({
 	};
 
 	const submitAnswer = () => {
-		if (
-			currentRoundAnswerOverLayData.confidence === 'Sure' &&
-			currentRoundAnswerOverLayData.correctness === 'Correct' &&
-			message.FIVE_CONSEC_SC < 5
-		) {
-			setIsCorrectAndSure(true);
-			handleMessage('FIVE_CONSEC_SC', false);
-		} else {
-			setIsCorrectAndSure(false);
-			handleMessage('FIVE_CONSEC_SC', true);
-		}
-		if (questionSecondsRef.current <= 5 && isCorrectAndSure === false) {
-			if (message.FIVE_FAST_ANSWERS < 5) {
-				handleMessage('FIVE_FAST_ANSWERS', false);
-			}
-		} else {
-			handleMessage('FIVE_FAST_ANSWERS', true);
-		}
-
 		questionSecondsRef.current = 0;
 		stopTimer();
 
@@ -244,11 +216,23 @@ export default function AssignmentComponent({
 					overLayData.correctness === 'Correct' &&
 					message.FIVE_CONSEC_SC < 5
 				) {
-					setIsCorrectAndSure(true);
 					handleMessage('FIVE_CONSEC_SC', false);
+				} else if (
+					questionSecondsRef.current <= 5 &&
+					overLayData.correctness !== 'Correct' &&
+					message.FIVE_FAST_ANSWERS < 5
+				) {
+					handleMessage('FIVE_FAST_ANSWERS', false);
+				} else if (
+					overLayData.confidence === 'Sure' &&
+					overLayData.correctness === 'Incorrect' &&
+					message.FIVE_CONSEC_SI < 5
+				) {
+					handleMessage('FIVE_CONSEC_SI', false);
 				} else {
-					setIsCorrectAndSure(false);
 					handleMessage('FIVE_CONSEC_SC', true);
+					handleMessage('FIVE_FAST_ANSWERS', true);
+					handleMessage('FIVE_CONSEC_SI', true);
 				}
 
 				let updatedLocalQuestionHistory = localQuestionHistory
@@ -304,10 +288,23 @@ export default function AssignmentComponent({
 	}, [message.FIVE_CONSEC_SC]);
 
 	useEffect(() => {
+		if (message.FIVE_CONSEC_SI === 5) {
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_CONSEC_SI');
+			handleMessage('FIVE_CONSEC_SI', true);
+		}
+	}, [message.FIVE_CONSEC_SI]);
+
+	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
+
+	const expandProgressMenu = () => {
+		setIsToastOpen(false);
+		setIsMenuOpen(true);
+	};
 
 	return currentRoundQuestionListData ? (
 		<Container
@@ -369,6 +366,7 @@ export default function AssignmentComponent({
 					/>
 				</HStack>
 				<ProgressMenu
+					textPrompt={textPrompt}
 					isMenuOpen={isMenuOpen}
 					currentRoundQuestionListData={currentRoundQuestionListData}
 					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
