@@ -41,6 +41,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 				<HStack
 					bg={'ampSuccess.50'}
 					borderRadius={'12px'}
+					marginBottom={'20px'}
 					p={'30px 20px 30px 20px'}>
 					<AvatarGroup spacing="4px">
 						<Avatar bg={'ampSuccess.500'} icon={<CompleteIcon />}></Avatar>
@@ -54,6 +55,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 			{moduleData?.outroLink?.length && moduleData?.outroButtonText?.length && (
 				<Button
 					width="200px"
+					marginTop={'10px'}
 					onClick={
 						// open url in new tab
 						() => window.open(moduleData?.outroLink, '_blank')
