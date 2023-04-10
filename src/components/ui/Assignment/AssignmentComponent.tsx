@@ -180,10 +180,11 @@ export default function AssignmentComponent({
 		});
 	};
 
-	const submitAnswer = () => {
-		questionSecondsRef.current = 0;
-		stopTimer();
+	useEffect(() => {
+		startTimer();
+	}, []);
 
+	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -264,6 +265,8 @@ export default function AssignmentComponent({
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
 				setShowOverlay(true);
+				questionSecondsRef.current = 0;
+				stopTimer();
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
