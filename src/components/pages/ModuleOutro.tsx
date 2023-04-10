@@ -1,7 +1,16 @@
-import { Box, Button, Stack, Text } from '@chakra-ui/react';
+import {
+	Avatar,
+	AvatarGroup,
+	Box,
+	Button,
+	HStack,
+	Stack,
+	Text,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import RichContentComponent from '../ui/RichContentComponent';
+import CompleteIcon from '../ui/Icons/CompleteIcon';
 
 type ModuleOutroType = {
 	moduleData: {
@@ -29,12 +38,15 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 			display={'flex'}
 			flexDirection={'column'}>
 			<Stack paddingTop="16px" paddingBottom="16px">
-				<Box
+				<HStack
 					bg={'ampSuccess.50'}
 					borderRadius={'12px'}
 					p={'30px 20px 30px 20px'}>
+					<AvatarGroup spacing="4px">
+						<Avatar bg={'ampSuccess.500'} icon={<CompleteIcon />}></Avatar>
+					</AvatarGroup>
 					<Text>Congradulations, you've completed this module! </Text>
-				</Box>
+				</HStack>
 				{moduleData?.outroRc && (
 					<RichContentComponent content={moduleData?.outroRc} />
 				)}
