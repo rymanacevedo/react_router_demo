@@ -21,16 +21,13 @@ import {
 	useMediaQuery,
 } from '@chakra-ui/react';
 
-import {
-	ArrowLeftIcon,
-	ChevronDownIcon,
-	HamburgerMenuIcon,
-} from '@radix-ui/react-icons';
+import { ChevronDownIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
 
 const Header = () => {
 	const location = useLocation();
 	const nav = useNavigate();
+
 	const { user, logout } = useAuth();
 	const inAssignment = location.pathname.indexOf('assignment');
 	const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
@@ -166,14 +163,7 @@ const Header = () => {
 						<MenuList zIndex={'10'} right={'0'}>
 							{inAssignment > -1 && !isLargerThan992 ? (
 								<MenuItem width={'100%'}>
-									<ReactRouterNavLink to="/app/learning">
-										<HStack>
-											<ArrowLeftIcon />
-											<Text id="course-home" fontWeight="bold">
-												Course Home
-											</Text>
-										</HStack>
-									</ReactRouterNavLink>
+									<CourseHome />
 								</MenuItem>
 							) : null}
 							<MenuItem

@@ -36,6 +36,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
+import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 
 const AssignmentReviewView = () => {
 	const { t: i18n } = useTranslation();
@@ -150,6 +151,7 @@ const AssignmentReviewView = () => {
 		`questionHistory${assignmentKey}`,
 		null,
 	);
+	const [storedTime, setStoredtime] = useState(0);
 	// eslint-disable-next-line
 	const [localQuestionReviewHistory, setLocalQuestionReviewHistory] =
 		useLocalStorage(
@@ -171,16 +173,6 @@ const AssignmentReviewView = () => {
 		questionId?: any;
 		payload?: any;
 	}) => {
-		let storedtime = 0;
-		if (questionInFocus?.id) {
-			const myObjectString = localStorage.getItem(
-				`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
-			);
-			const myObject = JSON.parse(String(myObjectString));
-			if (myObject?.localStorageQuestionReviewSeconds) {
-				storedtime = myObject.localStorageQuestionReviewSeconds;
-			}
-		}
 		if (lastRevQDataArg?.roundId) {
 			await putCurrentRound(
 				lastRevQDataArg?.roundId,
@@ -197,7 +189,7 @@ const AssignmentReviewView = () => {
 					answerList: null,
 					questionSeconds: questionSecondsHistory,
 					reviewSeconds:
-						Number(questionSecondsRef.current) + Number(storedtime),
+						Number(questionSecondsRef.current) + Number(storedTime),
 				},
 			);
 		}
@@ -270,6 +262,15 @@ const AssignmentReviewView = () => {
 						viewCorrect,
 					)[questionIndex],
 				);
+				if (questionInFocus?.id) {
+					const myObjectString = localStorage.getItem(
+						`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+					);
+					const myObject = JSON.parse(String(myObjectString));
+					if (myObject?.localStorageQuestionReviewSeconds) {
+						setStoredtime(myObject.localStorageQuestionReviewSecond);
+					}
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -404,6 +405,23 @@ const AssignmentReviewView = () => {
 		stopTimer();
 		startTimer();
 	};
+	const handleReviewCorrect = () => {
+		setLastRevQData({
+			roundId: Number(currentRoundQuestionListData?.id),
+			questionId: Number(questionInFocus?.id),
+			payload: {
+				...answerData,
+				answerDate: null,
+				// @ts-ignore
+				answerList: null,
+				questionSeconds: questionSecondsHistory,
+				reviewSeconds: Number(questionSecondsRef.current) + Number(storedTime),
+			},
+		});
+		setViewCorrect((view) => {
+			return !view;
+		});
+	};
 	const handelKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
 		proceedDownDesiredPathRef.current = false;
 		setAnswerData((answerDataArg: any) => {
@@ -425,6 +443,15 @@ const AssignmentReviewView = () => {
 		);
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
+
+	const handelProgress = async () => {
+		if (viewCorrect) {
+			handelKeepGoing(lastRevQData);
+		} else {
+			handelKeepGoing();
+		}
+	};
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
@@ -493,212 +520,182 @@ const AssignmentReviewView = () => {
 
 	return (
 		<main id="learning-assignment">
-			{/* eslint-disable-next-line */}
-			<Container
-				id={'learning-assignment'}
-				margin="0"
-				padding="0"
-				maxWidth={'100vw'}
-				overflowY={'hidden'}
-				overflowX={'hidden'}>
-				<TestProgressBarMenu
-					questionData={questionData}
-					isMenuOpen={isMenuOpen}
-					setIsMenuOpen={setIsMenuOpen}
-					currentRoundQuestionListData={currentRoundQuestionListData}
-					currentQuestion={questionInFocus}
-					inReview={true}
-					questionIndex={questionIndex}
-				/>
-				<ExplanationTitle
-					answer={`${questionInFocus?.confidence}${questionInFocus?.correctness}`}
-				/>
-				<HStack width="100%">
-					<HStack
-						w="100%"
-						p="12px"
-						justifyContent={'center'}
-						flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
-						<Box
-							style={{
-								backgroundColor: 'white',
-								margin: '6px',
-							}}
-							boxShadow="xl"
-							w="100%"
-							h={isSmallerThan1000 ? '' : '745px'}
-							overflow="hidden"
-							borderRadius={24}
-							p={'72px'}>
-							<Question
-								questionInFocus={questionInFocus}
-								review={true}
-								numberOfQInReview={numberOfQInReview}
-								questionIndex={questionIndex + 1}
-							/>
-						</Box>
-						<Box
-							style={{
-								backgroundColor: 'white',
-								margin: '6px',
-								minHeight: '745px',
-							}}
-							boxShadow="xl"
-							h={isSmallerThan1000 ? '' : '100%'}
-							display={'flex'}
-							flexDirection="column"
-							w="100%"
-							overflow="hidden"
-							borderRadius={24}
-							p={'72px'}>
-							{tryAgain ? (
-								<MultipleChoiceAnswers
-									questionInFocus={questionInFocus}
-									selectedAnswers={selectedAnswers}
-									setSelectedAnswers={setSelectedAnswers}
-									clearSelection={clearSelection}
-									setClearSelection={setClearSelection}
-									setIDKResponse={setIDKResponse}
-									IDKResponse={IDKResponse}
-								/>
-							) : (
-								<MultipleChoiceOverLay
-									questionInFocus={questionInFocus}
-									selectedAnswers={selectedAnswers}
-									setSelectedAnswers={setSelectedAnswers}
-									clearSelection={clearSelection}
-									setClearSelection={setClearSelection}
-									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-									inReview={true}
-									revealAnswer={revealAnswer}
-								/>
-							)}
-							<HStack
-								justifyContent={'space-between'}
-								display={'flex'}
-								marginTop={'12px'}>
-								<Button
-									display={showExplanation ? 'none' : ''}
-									onClick={onOpen}
-									variant={'ampSolid'}
-									w="220px">
-									<Text>{i18n('explainBtnText')}</Text>
-								</Button>
-								{reviewButtonsConditionRender()}
-							</HStack>
-						</Box>
-					</HStack>
-					<ProgressMenu
+			{currentRoundQuestionListData ? (
+				<Container
+					id={'learning-assignment'}
+					margin="0"
+					padding="0"
+					maxWidth={'100vw'}
+					overflowY={'hidden'}
+					overflowX={'hidden'}>
+					<TestProgressBarMenu
+						questionData={questionData}
 						isMenuOpen={isMenuOpen}
+						setIsMenuOpen={setIsMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						currentQuestion={questionInFocus}
+						inReview={true}
+						questionIndex={questionIndex}
 					/>
-				</HStack>
-				<Collapse in={showExplanation} animateOpacity>
-					<VStack
-						p="12px"
-						rounded="md"
-						shadow="md"
-						display={'flex'}
-						justifyContent={'center'}
-						w="100%">
-						{showExplanation && !tryAgain && (
-							<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
-						)}
-						<Box
-							style={{
-								backgroundColor: 'white',
-								marginTop: '24px',
-								marginBottom: '24px',
-							}}
-							boxShadow="xl"
+					<ExplanationTitle
+						answer={`${questionInFocus?.confidence}${questionInFocus?.correctness}`}
+					/>
+					<HStack width="100%">
+						<HStack
 							w="100%"
-							overflow="hidden"
-							borderRadius={24}
-							p={8}>
-							<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-								<Button
-									leftIcon={<ArrowLeftIcon />}
-									variant={'ampOutline'}
-									onClick={decrementQuestion}
-									isDisabled={questionIndex === 0}>
-									{i18n('prevQ')}
-								</Button>
-								<VStack>
-									<Text marginBottom={'-10px'}>
-										{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
-										{numberOfQInReview}
-									</Text>
-									{Boolean(Number(numberOfQInReview) === questionIndex + 1) &&
-										numberOfQInReview &&
-										numberOfQInReview <
-											currentRoundQuestionListData?.questionList?.length &&
-										!viewCorrect && (
-											<Button
-												onClick={() => {
-													let storedtime = 0;
-													if (questionInFocus?.id) {
-														const myObjectString = localStorage.getItem(
-															`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
-														);
-														const myObject = JSON.parse(String(myObjectString));
-														if (myObject?.localStorageQuestionReviewSeconds) {
-															storedtime =
-																myObject.localStorageQuestionReviewSeconds;
-														}
-													}
-													setLastRevQData({
-														roundId: Number(currentRoundQuestionListData?.id),
-														questionId: Number(questionInFocus?.id),
-														payload: {
-															...answerData,
-															answerDate: null,
-															// @ts-ignore
-															answerList: null,
-															questionSeconds: questionSecondsHistory,
-															reviewSeconds:
-																Number(questionSecondsRef.current) +
-																Number(storedtime),
-														},
-													});
-													setViewCorrect((view) => {
-														return !view;
-													});
-												}}
-												variant={'ghost'}
-												color={'ampPrimary'}>
-												<Text color="ampSecondary.500">
-													{i18n('reviewCorrectAns')}
-												</Text>
-											</Button>
-										)}
-								</VStack>
-								{Number(numberOfQInReview) === questionIndex + 1 ? (
-									<Button
-										rightIcon={<ArrowRightIcon />}
-										variant={'ampSolid'}
-										onClick={() => {
-											if (viewCorrect) {
-												handelKeepGoing(lastRevQData);
-											} else {
-												handelKeepGoing();
-											}
-										}}>
-										{i18n('keepGoing')}
-									</Button>
+							p="12px"
+							justifyContent={'center'}
+							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+							<Box
+								style={{
+									backgroundColor: 'white',
+									margin: '6px',
+								}}
+								boxShadow="xl"
+								w="100%"
+								h={isSmallerThan1000 ? '' : '745px'}
+								overflow="hidden"
+								borderRadius={24}
+								p={'72px'}>
+								<Question
+									questionInFocus={questionInFocus}
+									review={true}
+									numberOfQInReview={numberOfQInReview}
+									questionIndex={questionIndex + 1}
+								/>
+							</Box>
+							<Box
+								style={{
+									backgroundColor: 'white',
+									margin: '6px',
+									minHeight: '745px',
+								}}
+								boxShadow="xl"
+								h={isSmallerThan1000 ? '' : '100%'}
+								display={'flex'}
+								flexDirection="column"
+								w="100%"
+								overflow="hidden"
+								borderRadius={24}
+								p={'72px'}>
+								{tryAgain ? (
+									<MultipleChoiceAnswers
+										questionInFocus={questionInFocus}
+										selectedAnswers={selectedAnswers}
+										setSelectedAnswers={setSelectedAnswers}
+										clearSelection={clearSelection}
+										setClearSelection={setClearSelection}
+										setIDKResponse={setIDKResponse}
+										IDKResponse={IDKResponse}
+									/>
 								) : (
-									<Button
-										rightIcon={<ArrowRightIcon />}
-										variant={'ampSolid'}
-										onClick={handleNextQuestionInReview}>
-										{i18n('nextQ')}
-									</Button>
+									<MultipleChoiceOverLay
+										questionInFocus={questionInFocus}
+										selectedAnswers={selectedAnswers}
+										setSelectedAnswers={setSelectedAnswers}
+										clearSelection={clearSelection}
+										setClearSelection={setClearSelection}
+										currentRoundAnswerOverLayData={
+											currentRoundAnswerOverLayData
+										}
+										inReview={true}
+										revealAnswer={revealAnswer}
+									/>
 								)}
-							</HStack>
-						</Box>
-					</VStack>
-				</Collapse>
-			</Container>
+								<HStack
+									justifyContent={'space-between'}
+									display={'flex'}
+									marginTop={'12px'}>
+									<Button
+										display={showExplanation ? 'none' : ''}
+										onClick={onOpen}
+										variant={'ampSolid'}
+										w="220px">
+										<Text>{i18n('explainBtnText')}</Text>
+									</Button>
+									{reviewButtonsConditionRender()}
+								</HStack>
+							</Box>
+						</HStack>
+						<ProgressMenu
+							isMenuOpen={isMenuOpen}
+							currentRoundQuestionListData={currentRoundQuestionListData}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						/>
+					</HStack>
+					<Collapse in={showExplanation} animateOpacity>
+						<VStack
+							p="12px"
+							rounded="md"
+							shadow="md"
+							display={'flex'}
+							justifyContent={'center'}
+							w="100%">
+							{showExplanation && !tryAgain && (
+								<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+							)}
+							<Box
+								style={{
+									backgroundColor: 'white',
+									marginTop: '24px',
+									marginBottom: '24px',
+								}}
+								boxShadow="xl"
+								w="100%"
+								overflow="hidden"
+								borderRadius={24}
+								p={8}>
+								<HStack padding={'0px 150px'} justifyContent={'space-between'}>
+									<Button
+										leftIcon={<ArrowLeftIcon />}
+										variant={'ampOutline'}
+										onClick={decrementQuestion}
+										isDisabled={questionIndex === 0}>
+										{i18n('prevQ')}
+									</Button>
+									<VStack>
+										<Text marginBottom={'-10px'}>
+											{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
+											{numberOfQInReview}
+										</Text>
+										{Boolean(Number(numberOfQInReview) === questionIndex + 1) &&
+											numberOfQInReview &&
+											numberOfQInReview <
+												currentRoundQuestionListData?.questionList?.length &&
+											!viewCorrect && (
+												<Button
+													onClick={handleReviewCorrect}
+													variant={'ghost'}
+													color={'ampPrimary'}>
+													<Text color="ampSecondary.500">
+														{i18n('reviewCorrectAns')}
+													</Text>
+												</Button>
+											)}
+									</VStack>
+									{Number(numberOfQInReview) === questionIndex + 1 ? (
+										<Button
+											rightIcon={<ArrowRightIcon />}
+											variant={'ampSolid'}
+											onClick={handelProgress}>
+											{i18n('keepGoing')}
+										</Button>
+									) : (
+										<Button
+											rightIcon={<ArrowRightIcon />}
+											variant={'ampSolid'}
+											onClick={handleNextQuestionInReview}>
+											{i18n('nextQ')}
+										</Button>
+									)}
+								</HStack>
+							</Box>
+						</VStack>
+					</Collapse>
+				</Container>
+			) : (
+				<LoadingAssignmentView />
+			)}
 			<Modal size={'5xl'} isOpen={isOpen} onClose={closeExplainModal}>
 				<ModalOverlay />
 				<ModalContent w="80vw" borderRadius={24}>

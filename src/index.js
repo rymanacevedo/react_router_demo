@@ -10,6 +10,7 @@ import reportWebVitals from './reportWebVitals';
 import DialogProvider from './components/DialogProvider';
 import { AuthProvider } from './hooks/useAuth';
 import { BrowserRouter } from 'react-router-dom';
+import { QuizProvider } from './hooks/useQuizContext';
 
 // Init KF.state
 setupKFState();
@@ -20,7 +21,9 @@ root.render(
 		<BrowserRouter basename="/main">
 			<AuthProvider>
 				<DialogProvider>
-					<App />
+					<QuizProvider>
+						<App />
+					</QuizProvider>
 				</DialogProvider>
 			</AuthProvider>
 		</BrowserRouter>

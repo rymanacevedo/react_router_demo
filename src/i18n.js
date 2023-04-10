@@ -105,6 +105,8 @@ const resources = {
          //    AssignmentView.jsx
          //////////////////////////////////
          fiveFastAnswers: 'You\'ll actually go faster if you slow down and read.',
+         fiveSureCorrectAnswers: 'Five in a row!  Keep it going.',
+         fiveSureIncorrectAnswers: 'You\'ve been sure but incorrect five times in a row. That\'s OK, you\'re here to learn. Answer accordingly if you\'re not sure about an answer.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
@@ -167,6 +169,27 @@ const resources = {
          wasThisExplanationHelpful: 'Was this explanation helpful?',
          leaveFeedback: 'Leave feedback',
          courseHome: 'Course Home',
+          //////////////////////////////////////////////
+         //   StaticAssignmentView.tsx
+         //////////////////////////////////////////////
+         step1ModalTitle:'How to use Amplifire',
+         step1ModalContent: 'Our goal is to provide you with a focused, efficient path to mastering and retaining the information you need to be successful. The adaptive system you are using was developed based on scientific studies of how people can learn most efficiently. Click through the tour to get to know how Amplifire works.',
+         step2PopoverTitle:'We first ask questions 🤔',
+         step2PopoverContent:'By first answering questions, we prime your brain to acquire new knowledge, creating a mental framework for the material to be learned.',
+         step3PopoverTitle:'Your estimated time left ⏰',
+         step3PopoverContent: 'This is approximately how much time we think it will take you to complete this module. It will fluctuate throughout based on how you answer.',
+         step4PopoverTitle:'Your Progress 📊',
+         step4PopoverContent: 'Amplifire comes at you in rounds. A micro testing burst followed by a learning burst. These icons indicate how you are doing in your current round. You can also use the blue bar to see your overall progress in this module',
+         step5PopoverTitle:'Your detailed progress 📊',
+         step5PopoverContent: 'You can see your detailed progress that includes feedback, your road to mastery, and how long you\'ve spent in this session of learning.',
+         step6PopoverTitle:'Feedback 👋',
+         step6PopoverContent: 'Amplifire will help remind, encourage, and celebrate success with you as you learn',
+         skipTour: 'Skip the tour',
+         finishTourBtn: 'Finish tour',
+         step: 'Step',
+         of6: 'of 6',
+         nextBtn: 'Next'         
+
       }
    },
    fr: {
