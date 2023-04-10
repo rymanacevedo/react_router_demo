@@ -2,8 +2,8 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import RedIcon from './RedIcon';
-import GreenIcon from './GreenIcon';
+import RedIcon from './Icons/RedIcon';
+import GreenIcon from './Icons/GreenIcon';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
