@@ -146,7 +146,7 @@ const StaticAssignmentView = ({
 							</PopoverAnchor>
 						</PopoverTrigger>
 						<Box style={{ position: 'relative', zIndex: barIndex }}>
-							<PopoverContent p="24px" w="560px" h="287px">
+							<PopoverContent p="24px" w="560px" h="auto">
 								<Box
 									position="fixed"
 									top="2px"
@@ -245,7 +245,7 @@ const StaticAssignmentView = ({
 										position: 'relative',
 										zIndex: tourStep === 2 ? ansIndex : 'unset',
 									}}>
-									<PopoverContent p="24px" w="560px" h="287px">
+									<PopoverContent p="24px" w="560px" h="auto">
 										<PopoverArrow />
 										<PopoverCloseButton
 											p="24px"
@@ -290,7 +290,7 @@ const StaticAssignmentView = ({
 						</HStack>
 						<Popover
 							isOpen={tourStep === 6}
-							placement="auto"
+							placement="left-start"
 							gutter="40"
 							arrowSize={20}>
 							<PopoverTrigger>
@@ -314,8 +314,10 @@ const StaticAssignmentView = ({
 								</PopoverAnchor>
 							</PopoverTrigger>
 							<Box style={{ position: 'relative', zIndex: menuIndex }}>
-								<PopoverContent p="24px" w="560px" h="287px">
-									<PopoverArrow />
+								<PopoverContent p="24px" w="560px" h="auto">
+									<Box position="fixed" top="40px" left="555px">
+										<PopoverArrow position="fixed" top="0" left="0" />
+									</Box>
 									<PopoverCloseButton
 										p="24px"
 										onClick={() => {
