@@ -369,13 +369,13 @@ export default function AssignmentComponent({
 							w="100%"
 							p="12px"
 							alignItems="stretch"
-					justifyContent={'center'}
-					flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
-					<Box
-						backgroundColor="white"
-						boxShadow="md"
-						borderRadius={24}
-						flex={1}
+							justifyContent={'center'}
+							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+							<Box
+								backgroundColor="white"
+								boxShadow="md"
+								borderRadius={24}
+								flex={1}
 								p={'72px'}>
 								<Question questionInFocus={questionInFocus} />
 							</Box>
