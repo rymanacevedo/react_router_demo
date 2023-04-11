@@ -4,6 +4,7 @@ import {
 	Button,
 	Collapse,
 	Container,
+	Divider,
 	Fade,
 	HStack,
 	Modal,
@@ -598,6 +599,7 @@ const AssignmentReviewView = () => {
 										/>
 									</Fade>
 								)}
+								<Divider marginTop="43px" />
 								<HStack
 									justifyContent={'space-between'}
 									display={'flex'}

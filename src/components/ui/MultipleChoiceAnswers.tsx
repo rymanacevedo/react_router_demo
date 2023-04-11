@@ -1,4 +1,4 @@
-import { Box, Divider, Heading } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import { SelectedAnswers } from '../pages/AssignmentView/AssignmentTypes';
 import AnswerInput from './AnswerInput/AnswerInput';
 
@@ -112,7 +112,6 @@ const MultipleChoiceAnswers = ({
 					/>
 				</>
 			</Box>
-			<Divider marginTop="43px" />
 		</Box>
 	);
 };

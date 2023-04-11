@@ -150,8 +150,8 @@ const AnswerInput = ({
 		<Checkbox
 			style={{
 				display: 'flex',
-				marginBottom: '2rem',
-				padding: '0.5rem',
+				marginBottom: '0.5rem',
+				cursor: 'pointer',
 			}}
 			className={'label-hover-effect'}
 			variant={'answer'}

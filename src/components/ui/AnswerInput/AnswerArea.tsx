@@ -6,6 +6,7 @@ import {
 import {
 	Box,
 	Button,
+	Divider,
 	Fade,
 	Heading,
 	HStack,
@@ -100,6 +101,7 @@ export default function AnswerArea(props: {
 							/>
 						</Fade>
 					)}
+					<Divider marginTop="43px" />
 					<HStack
 						justifyContent={'space-between'}
 						display={'flex'}

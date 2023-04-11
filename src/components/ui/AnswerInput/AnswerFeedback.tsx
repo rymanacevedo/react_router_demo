@@ -10,7 +10,7 @@ import {
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
 
-const AnswerOverLay = ({
+const AnswerFeedback = ({
 	questionText,
 	questionAnswerId,
 	selectedAnswers,
@@ -116,13 +116,6 @@ const AnswerOverLay = ({
 		}
 	};
 
-	const calculateTop = () => {
-		if (IDK) {
-			return 0;
-		}
-		return 5;
-	};
-
 	useEffect(() => {
 		if (revealAnswer) {
 			revealCorrectAnswer();
@@ -158,8 +151,7 @@ const AnswerOverLay = ({
 		<Checkbox
 			style={{
 				display: 'flex',
-				marginBottom: '2rem',
-				padding: '0.5rem',
+				marginBottom: '0.5rem',
 			}}
 			className={inReview ? '' : 'label-hover-effect'}
 			variant={'answer'}
@@ -192,7 +184,7 @@ const AnswerOverLay = ({
 							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
 								{text}
 							</Badge>{' '}
-							and{' '}
+							and&nbsp;
 						</span>
 						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
 							<span style={{ display: 'flex', alignItems: 'center' }}>
@@ -208,7 +200,7 @@ const AnswerOverLay = ({
 						? '#6D758D'
 						: 'inherit',
 					position: 'relative',
-					top: calculateTop(),
+					top: 5,
 					bottom: 0,
 					left: 0,
 					right: 0,
@@ -223,4 +215,4 @@ const AnswerOverLay = ({
 	);
 };
 
-export default AnswerOverLay;
+export default AnswerFeedback;
