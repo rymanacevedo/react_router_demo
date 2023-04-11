@@ -1,19 +1,20 @@
 import {
 	Box,
 	Button,
+	Heading,
 	HStack,
 	Progress,
 	Text,
-	VStack,
 	useMediaQuery,
+	VStack,
 } from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
-import { EnterIcon, ExitIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon, EnterIcon, ExitIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
 import {
-	QuestionInFocus,
 	CurrentRoundAnswerOverLayData,
+	QuestionInFocus,
 } from '../pages/AssignmentView/AssignmentTypes';
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
@@ -40,9 +41,9 @@ type RoundNumberType = {
 //refactor to accept assignment type, title, time left, progress props
 const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
 	return (
-		<Text fontSize={'21px'} fontWeight={'600'}>
+		<Heading as="h1" fontSize={'21px'}>
 			{assignmentType}: {title}
-		</Text>
+		</Heading>
 	);
 };
 

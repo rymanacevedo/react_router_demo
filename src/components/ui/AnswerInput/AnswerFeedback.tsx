@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Badge, Checkbox, Slide, SlideFade, Text } from '@chakra-ui/react';
+import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
@@ -10,7 +10,7 @@ import {
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
 
-const AnswerOverLay = ({
+const AnswerFeedback = ({
 	questionText,
 	questionAnswerId,
 	selectedAnswers,
@@ -126,27 +126,21 @@ const AnswerOverLay = ({
 		switch (variant) {
 			case 'ampDarkSuccessOutline': {
 				return <CheckIcon />;
-				break;
 			}
 			case 'ampNeutralFilled': {
 				return <QuestionMarkCircledIcon />;
-				break;
 			}
 			case 'ampDarkSuccess': {
 				return <CheckIcon />;
-				break;
 			}
 			case 'ampWarningOutline': {
 				return <MinusCircledIcon />;
-				break;
 			}
 			case 'ampDarkErrorOutline': {
 				return <Cross1Icon />;
-				break;
 			}
 			case 'ampDarkError': {
 				return <Cross1Icon />;
-				break;
 			}
 		}
 	};
@@ -154,73 +148,71 @@ const AnswerOverLay = ({
 	const revealAnswerDisplayCondition = revealAnswer && text === '';
 
 	return (
-		<>
-			<Checkbox
-				className={inReview ? '' : 'label-hover-effect'}
-				style={{ cursor: inReview ? 'auto' : '' }}
-				w="100%"
-				variant={'answer'}
-				colorScheme={'transparent'}
-				value={questionAnswerId}
-				size={'4rem'}
-				icon={
-					<CustomOverLayIcon
-						variant={variant}
-						isIndeterminate={isIndeterminate}
-						isChecked={isChecked}
-					/>
-				}
-				isChecked={isChecked}
-				isIndeterminate={isIndeterminate}>
-				<SlideFade in={isEnabled}>
-					{choseIDK ? (
-						<div style={{ left: '13px', position: 'relative' }}>
-							You answered{' '}
-							<Badge variant={variant}>
-								<span style={{ display: 'flex' }}>
-									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
-								</span>
-							</Badge>
-						</div>
-					) : (
-						<div style={{ left: '15px', position: 'relative' }}>
-							<span hidden={revealAnswerDisplayCondition}>
-								You were{' '}
-								<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-									{text}
-								</Badge>{' '}
-								and{' '}
+		<Checkbox
+			style={{
+				display: 'flex',
+				marginBottom: '0.5rem',
+			}}
+			className={inReview ? '' : 'label-hover-effect'}
+			variant={'answer'}
+			colorScheme={'transparent'}
+			value={questionAnswerId}
+			size={'4rem'}
+			icon={
+				<CustomOverLayIcon
+					variant={variant}
+					isIndeterminate={isIndeterminate}
+					isChecked={isChecked}
+				/>
+			}
+			isChecked={isChecked}
+			isIndeterminate={isIndeterminate}>
+			<SlideFade in={isEnabled}>
+				{choseIDK ? (
+					<Flex>
+						<Text>You answered &nbsp;</Text>
+						<Badge variant={variant}>
+							<span style={{ display: 'flex', alignItems: 'center' }}>
+								{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
 							</span>
+						</Badge>
+					</Flex>
+				) : (
+					<Flex>
+						<span hidden={revealAnswerDisplayCondition}>
+							You were{' '}
 							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-								<span style={{ display: 'flex' }}>
-									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
-								</span>
-							</Badge>
-						</div>
-					)}
-				</SlideFade>
-				<Slide
-					in={isEnabled}
-					direction="top"
-					style={{
-						position: 'relative',
-						top: `${!isEnabled ? '25px' : ''}`,
-						fontSize: 25,
-						display: 'flex',
-						left: '15px',
-					}}>
-					<RichContentComponent
-						style={{
-							color: currentRoundAnswerOverLayData?.correctAnswerIds
-								? '#6D758D'
-								: 'inherit',
-						}}
-						content={questionText}
-					/>
-				</Slide>
-			</Checkbox>
-		</>
+								{text}
+							</Badge>{' '}
+							and&nbsp;
+						</span>
+						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
+							<span style={{ display: 'flex', alignItems: 'center' }}>
+								{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
+							</span>
+						</Badge>
+					</Flex>
+				)}
+			</SlideFade>
+			<RichContentComponent
+				style={{
+					color: currentRoundAnswerOverLayData?.correctAnswerIds
+						? '#6D758D'
+						: 'inherit',
+					position: 'relative',
+					top: 5,
+					bottom: 0,
+					left: 0,
+					right: 0,
+					transform: `${
+						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+					}`,
+					transition: 'transform 0.3s ease-in-out',
+				}}
+				content={questionText}
+			/>
+		</Checkbox>
 	);
 };
 
-export default AnswerOverLay;
+export default AnswerFeedback;

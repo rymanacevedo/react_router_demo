@@ -20,11 +20,11 @@ const Question = ({
 	return (
 		<>
 			{review ? (
-				<Heading as="h2">
+				<Heading as="h3">
 					{i18n('ReviewQ')} {questionIndex} {i18n('of')} {numberOfQInReview}{' '}
 				</Heading>
 			) : (
-				<Heading as="h2">Question</Heading>
+				<Heading as="h3">Question</Heading>
 			)}
 			<Stack spacing="20px" marginTop="34px">
 				<RichContentComponent content={questionInFocus?.introductionRc} />

@@ -5,6 +5,7 @@ import { Tag } from './Tags';
 import { Checkbox } from './Checkbox';
 import { Link } from './Link';
 import { Divider } from './Divider';
+import Heading from './Heading';
 
 export const ampTheme = extendTheme({
 	styles: {
@@ -15,11 +16,15 @@ export const ampTheme = extendTheme({
 			'h1, h2, h3, h4, h5, h6': {
 				fontWeight: '600',
 			},
+			a: {
+				color: '#015B87',
+				textDecoration: 'underline',
+			},
 			h1: {
 				fontSize: '3.188rem',
 			},
 			h2: {
-				fontSize: '2.375rem',
+				fontSize: '2rem',
 			},
 			h3: {
 				fontSize: '1.750rem',
@@ -31,6 +36,30 @@ export const ampTheme = extendTheme({
 				fontSize: '1rem',
 			},
 		},
+	},
+	fontSizes: {
+		// large screens
+		xs: '.75rem',
+		sm: '.75rem',
+		md: '1rem',
+		lg: '1.312rem',
+		xl: '1.75rem',
+		'2xl': '2.375rem',
+		'3xl': '3.188rem',
+		// small screens
+		's-xs': '0.688rem',
+		's-sm': '0.875rem',
+		's-md': '1.125rem',
+		's-lg': '1.37rem',
+		's-xl': '1.688rem',
+		's-2xl': '2.125rem',
+		// We don't need these sizes for now, scale is 1.333
+		// "4xl": "2.25rem",
+		// "5xl": "3rem",
+		// "6xl": "3.75rem",
+		// "7xl": "4.5rem",
+		// "8xl": "6rem",
+		// "9xl": "8rem",
 	},
 	colors: {
 		ampWhite: '#FFFFFF',
@@ -151,7 +180,7 @@ export const ampTheme = extendTheme({
 			letterSpacing: '-2%',
 		},
 		h2: {
-			fontSize: ['36px', '48px'],
+			fontSize: ['1.688rem', '2.375rem'],
 			fontWeight: 'semibold',
 			lineHeight: '110%',
 			letterSpacing: '-1%',
@@ -164,6 +193,7 @@ export const ampTheme = extendTheme({
 		Checkbox,
 		Link,
 		Divider,
+		Heading,
 		Progress: {
 			baseStyle: {
 				filledTrack: {

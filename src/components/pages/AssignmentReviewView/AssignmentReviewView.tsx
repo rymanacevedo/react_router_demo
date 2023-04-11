@@ -4,6 +4,8 @@ import {
 	Button,
 	Collapse,
 	Container,
+	Divider,
+	Fade,
 	HStack,
 	Modal,
 	ModalCloseButton,
@@ -421,7 +423,7 @@ const AssignmentReviewView = () => {
 			return !view;
 		});
 	};
-	const handelKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
+	const handleKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
 		proceedDownDesiredPathRef.current = false;
 		setAnswerData((answerDataArg: any) => {
 			return {
@@ -443,11 +445,11 @@ const AssignmentReviewView = () => {
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 
-	const handelProgress = async () => {
+	const handleProgress = async () => {
 		if (viewCorrect) {
-			handelKeepGoing(lastRevQData);
+			await handleKeepGoing(lastRevQData);
 		} else {
-			handelKeepGoing();
+			await handleKeepGoing();
 		}
 	};
 
@@ -457,7 +459,7 @@ const AssignmentReviewView = () => {
 		}
 
 		if (tryAgain) {
-			if (answerSubmitted === false && showExplanation) {
+			if (!answerSubmitted && showExplanation) {
 				return (
 					<>
 						<Button onClick={submitAnswer} variant={'ampSolid'} w="150px">
@@ -469,7 +471,7 @@ const AssignmentReviewView = () => {
 		}
 		if (viewCorrect) {
 			return;
-		} else if (tryAgain === false) {
+		} else if (!tryAgain) {
 			if (answerSubmitted) {
 				return (
 					<Button
@@ -542,18 +544,14 @@ const AssignmentReviewView = () => {
 						<HStack
 							w="100%"
 							p="12px"
+							alignItems="stretch"
 							justifyContent={'center'}
 							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
 							<Box
-								style={{
-									backgroundColor: 'white',
-									margin: '6px',
-								}}
-								boxShadow="xl"
-								w="100%"
-								h={isSmallerThan1000 ? '' : '745px'}
-								overflow="hidden"
+								backgroundColor="white"
+								boxShadow="md"
 								borderRadius={24}
+								flex={1}
 								p={'72px'}>
 								<Question
 									questionInFocus={questionInFocus}
@@ -563,43 +561,43 @@ const AssignmentReviewView = () => {
 								/>
 							</Box>
 							<Box
-								style={{
-									backgroundColor: 'white',
-									margin: '6px',
-									minHeight: '745px',
-								}}
-								boxShadow="xl"
-								h={isSmallerThan1000 ? '' : '100%'}
-								display={'flex'}
+								style={{ marginTop: isSmallerThan1000 ? '10px' : '0px' }}
+								flex={1}
+								backgroundColor="white"
+								boxShadow="md"
+								display="flex"
 								flexDirection="column"
-								w="100%"
-								overflow="hidden"
 								borderRadius={24}
 								p={'72px'}>
 								{tryAgain ? (
-									<MultipleChoiceAnswers
-										questionInFocus={questionInFocus}
-										selectedAnswers={selectedAnswers}
-										setSelectedAnswers={setSelectedAnswers}
-										clearSelection={clearSelection}
-										setClearSelection={setClearSelection}
-										setIDKResponse={setIDKResponse}
-										IDKResponse={IDKResponse}
-									/>
+									<Fade in={true}>
+										<MultipleChoiceAnswers
+											questionInFocus={questionInFocus}
+											selectedAnswers={selectedAnswers}
+											setSelectedAnswers={setSelectedAnswers}
+											clearSelection={clearSelection}
+											setClearSelection={setClearSelection}
+											setIDKResponse={setIDKResponse}
+											IDKResponse={IDKResponse}
+										/>
+									</Fade>
 								) : (
-									<MultipleChoiceOverLay
-										questionInFocus={questionInFocus}
-										selectedAnswers={selectedAnswers}
-										setSelectedAnswers={setSelectedAnswers}
-										clearSelection={clearSelection}
-										setClearSelection={setClearSelection}
-										currentRoundAnswerOverLayData={
-											currentRoundAnswerOverLayData
-										}
-										inReview={true}
-										revealAnswer={revealAnswer}
-									/>
+									<Fade in={true}>
+										<MultipleChoiceOverLay
+											questionInFocus={questionInFocus}
+											selectedAnswers={selectedAnswers}
+											setSelectedAnswers={setSelectedAnswers}
+											clearSelection={clearSelection}
+											setClearSelection={setClearSelection}
+											currentRoundAnswerOverLayData={
+												currentRoundAnswerOverLayData
+											}
+											inReview={true}
+											revealAnswer={revealAnswer}
+										/>
+									</Fade>
 								)}
+								<Divider marginTop="43px" />
 								<HStack
 									justifyContent={'space-between'}
 									display={'flex'}
@@ -674,7 +672,7 @@ const AssignmentReviewView = () => {
 										<Button
 											rightIcon={<ArrowRightIcon />}
 											variant={'ampSolid'}
-											onClick={handelProgress}>
+											onClick={handleProgress}>
 											{i18n('keepGoing')}
 										</Button>
 									) : (

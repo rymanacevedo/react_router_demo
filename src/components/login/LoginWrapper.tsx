@@ -39,7 +39,7 @@ export default function LoginWrapper() {
 
 	return (
 		<>
-			<Container maxW="container.xl" centerContent p={0}>
+			<Container maxW="container.xl" centerContent>
 				<Flex minH="665px" py={40}>
 					<Box
 						minH="665px"
@@ -48,7 +48,6 @@ export default function LoginWrapper() {
 						bg="ampPrimary.700">
 						<HeadLogo />
 					</Box>
-
 					<VStack
 						minH="665px"
 						p="72px"
@@ -58,9 +57,7 @@ export default function LoginWrapper() {
 						bg="white"
 						borderLeftRadius={{ base: 'xl', lg: 'none' }}
 						borderRightRadius="xl">
-						<VStack spacing={16} alignItems="center">
-							<AmpLogo />
-						</VStack>
+						<AmpLogo />
 						<Outlet
 							context={{
 								accountKey: accountKey,

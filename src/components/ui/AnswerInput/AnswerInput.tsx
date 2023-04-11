@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Badge, Checkbox, Slide, SlideFade } from '@chakra-ui/react';
+import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from './CustomIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
@@ -147,37 +147,42 @@ const AnswerInput = ({
 		}
 	};
 	return (
-		<>
-			<Checkbox
-				className={'label-hover-effect'}
-				variant={'answer'}
-				colorScheme={'transparent'}
-				value={questionAnswerId}
-				size={'4rem'}
-				icon={
-					<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
-				}
-				isChecked={isChecked}
-				disabled={isDisabled}
-				isIndeterminate={isIndeterminate}
-				onChange={(e) => checkStatus(e)}>
-				<SlideFade in={isEnabled}>
-					<Badge variant={variant}>{text}</Badge>
-				</SlideFade>
-				<Slide
-					in={isEnabled}
-					direction="top"
-					style={{
-						position: 'relative',
-						top: `${!isEnabled ? '25px' : ''}`,
-						display: 'flex',
-						left: '15px',
-						fontSize: 25,
-					}}>
-					<RichContentComponent content={questionText} />
-				</Slide>
-			</Checkbox>
-		</>
+		<Checkbox
+			style={{
+				display: 'flex',
+				marginBottom: '0.5rem',
+				cursor: 'pointer',
+			}}
+			className={'label-hover-effect'}
+			variant={'answer'}
+			colorScheme={'transparent'}
+			value={questionAnswerId}
+			size={'4rem'}
+			icon={
+				<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
+			}
+			isChecked={isChecked}
+			disabled={isDisabled}
+			isIndeterminate={isIndeterminate}
+			onChange={(e) => checkStatus(e)}>
+			<SlideFade in={isEnabled}>
+				<Badge variant={variant}>{text}</Badge>
+			</SlideFade>
+			<RichContentComponent
+				style={{
+					position: 'relative',
+					top: 5,
+					bottom: 0,
+					left: 0,
+					right: 0,
+					transform: `${
+						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+					}`,
+					transition: 'transform 0.3s ease-in-out',
+				}}
+				content={questionText}
+			/>
+		</Checkbox>
 	);
 };
 

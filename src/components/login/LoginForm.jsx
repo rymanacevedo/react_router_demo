@@ -173,7 +173,9 @@ function LoginForm() {
 				w={{ base: '100%', md: '358px' }}
 				as="form"
 				onSubmit={submitHandler}>
-				<Heading fontSize="28px">{i18n('welcomeMsg')}</Heading>
+				<Heading as="h1" size="lg">
+					{i18n('welcomeMsg')}
+				</Heading>
 				<FormControl
 					isRequired
 					isDisabled={disabled || context.fetchInitialAccountDataError}

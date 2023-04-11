@@ -1,5 +1,5 @@
-import { Box, Heading, Divider } from '@chakra-ui/react';
-import AnswerOverLay from './AnswerInput/AnswerOverLay';
+import { Box, Heading } from '@chakra-ui/react';
+import AnswerFeedback from './AnswerInput/AnswerFeedback';
 import { useEffect, useState } from 'react';
 
 export interface Answer {
@@ -52,7 +52,7 @@ const MultipleChoiceOverLay = ({
 	}, [currentRoundAnswerOverLayData, revealAnswer]);
 	return (
 		<Box>
-			<Heading as="h2">{'Answer'}</Heading>
+			<Heading as="h3">Answer</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"
@@ -65,7 +65,7 @@ const MultipleChoiceOverLay = ({
 						?.slice(0, 10)
 						.map((answer: { answerRc: string; id: string | number }) => {
 							return (
-								<AnswerOverLay
+								<AnswerFeedback
 									key={answer.id}
 									questionText={answer.answerRc}
 									questionAnswerId={answer.id}
@@ -77,7 +77,7 @@ const MultipleChoiceOverLay = ({
 								/>
 							);
 						})}
-					<AnswerOverLay
+					<AnswerFeedback
 						/* eslint-disable */
 						questionText={"I don't know yet"}
 						/* eslint-enable */
@@ -91,7 +91,6 @@ const MultipleChoiceOverLay = ({
 					/>
 				</>
 			</Box>
-			<Divider marginTop="43px" />
 		</Box>
 	);
 };
