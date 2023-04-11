@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Badge, Checkbox, Slide, SlideFade, Text } from '@chakra-ui/react';
+import {
+	Badge,
+	Checkbox,
+	Flex,
+	Slide,
+	SlideFade,
+	Text,
+} from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
@@ -116,6 +123,19 @@ const AnswerOverLay = ({
 		}
 	};
 
+	const calculateTranslateY = () => {
+		if (IDK) {
+			return '0%';
+		}
+		if (isChecked) {
+			return '0%';
+		}
+		if (isIndeterminate) {
+			return '0%';
+		}
+		return '50%';
+	};
+
 	useEffect(() => {
 		if (revealAnswer) {
 			revealCorrectAnswer();
@@ -126,27 +146,21 @@ const AnswerOverLay = ({
 		switch (variant) {
 			case 'ampDarkSuccessOutline': {
 				return <CheckIcon />;
-				break;
 			}
 			case 'ampNeutralFilled': {
 				return <QuestionMarkCircledIcon />;
-				break;
 			}
 			case 'ampDarkSuccess': {
 				return <CheckIcon />;
-				break;
 			}
 			case 'ampWarningOutline': {
 				return <MinusCircledIcon />;
-				break;
 			}
 			case 'ampDarkErrorOutline': {
 				return <Cross1Icon />;
-				break;
 			}
 			case 'ampDarkError': {
 				return <Cross1Icon />;
-				break;
 			}
 		}
 	};
@@ -174,16 +188,16 @@ const AnswerOverLay = ({
 				isIndeterminate={isIndeterminate}>
 				<SlideFade in={isEnabled}>
 					{choseIDK ? (
-						<div style={{ left: '13px', position: 'relative' }}>
-							You answered{' '}
+						<Flex>
+							<Text>You answered &nbsp;</Text>
 							<Badge variant={variant}>
-								<span style={{ display: 'flex' }}>
+								<span style={{ display: 'flex', alignItems: 'center' }}>
 									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
 								</span>
 							</Badge>
-						</div>
+						</Flex>
 					) : (
-						<div style={{ left: '15px', position: 'relative' }}>
+						<Flex>
 							<span hidden={revealAnswerDisplayCondition}>
 								You were{' '}
 								<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
@@ -192,11 +206,11 @@ const AnswerOverLay = ({
 								and{' '}
 							</span>
 							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-								<span style={{ display: 'flex' }}>
+								<span style={{ display: 'flex', alignItems: 'center' }}>
 									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
 								</span>
 							</Badge>
-						</div>
+						</Flex>
 					)}
 				</SlideFade>
 				<Slide
@@ -204,10 +218,7 @@ const AnswerOverLay = ({
 					direction="top"
 					style={{
 						position: 'relative',
-						top: `${!isEnabled ? '25px' : ''}`,
-						fontSize: 25,
-						display: 'flex',
-						left: '15px',
+						translateY: calculateTranslateY(),
 					}}>
 					<RichContentComponent
 						style={{

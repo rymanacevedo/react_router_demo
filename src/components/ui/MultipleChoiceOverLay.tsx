@@ -1,4 +1,4 @@
-import { Box, Heading, Divider } from '@chakra-ui/react';
+import { Box, Divider, Heading } from '@chakra-ui/react';
 import AnswerOverLay from './AnswerInput/AnswerOverLay';
 import { useEffect, useState } from 'react';
 
@@ -52,7 +52,7 @@ const MultipleChoiceOverLay = ({
 	}, [currentRoundAnswerOverLayData, revealAnswer]);
 	return (
 		<Box>
-			<Heading as="h2">{'Answer'}</Heading>
+			<Heading as="h3">Answer</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"

@@ -62,19 +62,14 @@ export default function AnswerArea(props: {
 			arrowSize={20}>
 			<PopoverAnchor>
 				<Box
-					style={{
-						backgroundColor: 'white',
-						margin: '6px',
-						minHeight: '745px',
-					}}
-					boxShadow="2xl"
-					h={props.smallerThan1000 ? '' : '100%'}
-					display={'flex'}
+					style={{ marginTop: props.smallerThan1000 ? '10px' : '0px' }}
+					alignItems="stretch"
+					flex={1}
+					backgroundColor="white"
+					boxShadow="md"
+					display="flex"
 					flexDirection="column"
-					justifyContent={'space-between'}
-					w="100%"
-					maxWidth={726}
-					overflow="hidden"
+					justifyContent="space-between"
 					borderRadius={24}
 					p={'72px'}>
 					{!props.showOverlay ? (
