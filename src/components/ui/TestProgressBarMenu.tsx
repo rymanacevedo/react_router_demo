@@ -15,10 +15,9 @@ import {
 	QuestionInFocus,
 	CurrentRoundAnswerOverLayData,
 } from '../pages/AssignmentView/AssignmentTypes';
+import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressBarMenu = {
-	isMenuOpen: boolean;
-	setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
@@ -230,8 +229,6 @@ const AnswerHistoryComponent = ({
 };
 
 const TestProgressBarMenu = ({
-	isMenuOpen,
-	setIsMenuOpen,
 	questionData,
 	currentQuestion,
 	currentRoundQuestionListData,
@@ -240,6 +237,7 @@ const TestProgressBarMenu = ({
 	questionIndex,
 	viewCorrect,
 }: ProgressBarMenu) => {
+	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
@@ -324,7 +322,7 @@ const TestProgressBarMenu = ({
 						width="200px"
 						leftIcon={isMenuOpen ? <ExitIcon /> : <EnterIcon />}
 						onClick={() => {
-							setIsMenuOpen(!isMenuOpen);
+							handleMenuOpen();
 						}}>
 						<Text fontSize={'16px'} fontWeight="600">
 							{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}

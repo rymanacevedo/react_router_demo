@@ -65,7 +65,6 @@ export default function AssignmentComponent({
 	const { message, handleMessage } = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
-	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
@@ -334,7 +333,6 @@ export default function AssignmentComponent({
 
 	const expandProgressMenu = () => {
 		setIsToastOpen(false);
-		setIsMenuOpen(true);
 	};
 
 	useEffect(() => {
@@ -362,8 +360,6 @@ export default function AssignmentComponent({
 					/>
 					<TestProgressBarMenu
 						questionData={questionData}
-						isMenuOpen={isMenuOpen}
-						setIsMenuOpen={setIsMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
@@ -408,7 +404,6 @@ export default function AssignmentComponent({
 						</HStack>
 						<ProgressMenu
 							textPrompt={textPrompt}
-							isMenuOpen={isMenuOpen}
 							currentRoundQuestionListData={currentRoundQuestionListData}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>

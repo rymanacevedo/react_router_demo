@@ -41,7 +41,6 @@ import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 const AssignmentReviewView = () => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [showExplanation, setShowExplanation] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
@@ -530,8 +529,6 @@ const AssignmentReviewView = () => {
 					overflowX={'hidden'}>
 					<TestProgressBarMenu
 						questionData={questionData}
-						isMenuOpen={isMenuOpen}
-						setIsMenuOpen={setIsMenuOpen}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}
 						inReview={true}
@@ -619,7 +616,6 @@ const AssignmentReviewView = () => {
 							</Box>
 						</HStack>
 						<ProgressMenu
-							isMenuOpen={isMenuOpen}
 							currentRoundQuestionListData={currentRoundQuestionListData}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>
