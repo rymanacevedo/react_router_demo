@@ -25,6 +25,7 @@ type ProgressBarMenu = {
 	currentQuestion: any;
 	inReview?: boolean;
 	questionIndex?: number;
+	viewCorrect?: boolean;
 };
 
 type ModuleTitleType = {
@@ -111,6 +112,7 @@ type AnswerHistoryType = {
 	inReview?: boolean;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	questionIndex?: number;
+	viewCorrect?: boolean;
 };
 
 const variantFunc = (
@@ -186,12 +188,19 @@ const AnswerHistoryComponent = ({
 	inReview,
 	currentRoundAnswerOverLayData,
 	questionIndex,
+	viewCorrect,
 }: AnswerHistoryType) => {
 	const wrongAnswers = inReview
 		? questionList?.filter((question: any) => {
-				return (
-					`${question.confidence}${question.correctness}` !== 'SureCorrect'
-				);
+				if (viewCorrect) {
+					return (
+						`${question.confidence}${question.correctness}` === 'SureCorrect'
+					);
+				} else {
+					return (
+						`${question.confidence}${question.correctness}` !== 'SureCorrect'
+					);
+				}
 		  })
 		: [];
 
@@ -229,6 +238,7 @@ const TestProgressBarMenu = ({
 	inReview,
 	currentRoundAnswerOverLayData,
 	questionIndex,
+	viewCorrect,
 }: ProgressBarMenu) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -293,6 +303,7 @@ const TestProgressBarMenu = ({
 						inReview={inReview}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						questionIndex={questionIndex}
+						viewCorrect={viewCorrect}
 					/>
 				</VStack>
 

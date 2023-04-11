@@ -536,6 +536,7 @@ const AssignmentReviewView = () => {
 						currentQuestion={questionInFocus}
 						inReview={true}
 						questionIndex={questionIndex}
+						viewCorrect={viewCorrect}
 					/>
 					<ExplanationTitle
 						answer={`${questionInFocus?.confidence}${questionInFocus?.correctness}`}
