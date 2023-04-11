@@ -106,6 +106,8 @@ const resources = {
          //////////////////////////////////
          fiveFastAnswers: 'You\'ll actually go faster if you slow down and read.',
          fiveSureCorrectAnswers: 'Five in a row!  Keep it going.',
+         fiveSureIncorrectAnswers: 'You\'ve been sure but incorrect five times in a row. That\'s OK, you\'re here to learn. Answer accordingly if you\'re not sure about an answer.',
+         sixDontKnowInRound: 'It\'s ok that you don\'t know this yet.  Make sure to read the question, answers, and explanation to learn what you don\'t know.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
@@ -138,6 +140,7 @@ const resources = {
          //////////////////////////////////////////////
          clearSelection: 'Clear selection',
          nextQ: 'Next Question',
+         completeMod: "Congratulations, you've completed this module!",
          /////////////////////////////////////////////
          //   LearningReviewView.tsx
          //////////////////////////////////////////////
@@ -181,7 +184,10 @@ const resources = {
          step4PopoverContent: 'Amplifire comes at you in rounds. A micro testing burst followed by a learning burst. These icons indicate how you are doing in your current round. You can also use the blue bar to see your overall progress in this module',
          step5PopoverTitle:'Your detailed progress 📊',
          step5PopoverContent: 'You can see your detailed progress that includes feedback, your road to mastery, and how long you\'ve spent in this session of learning.',
+         step6PopoverTitle:'Feedback 👋',
+         step6PopoverContent: 'Amplifire will help remind, encourage, and celebrate success with you as you learn',
          skipTour: 'Skip the tour',
+         finishTourBtn: 'Finish tour',
          step: 'Step',
          of6: 'of 6',
          nextBtn: 'Next'         

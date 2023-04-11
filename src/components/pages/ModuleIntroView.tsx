@@ -1,5 +1,5 @@
 import { Container } from '@chakra-ui/react';
-import ModuleIntroductionComponent from '../ui/ModuleIntroductionComponent';
+import ModuleIntroOutroComponent from '../ui/ModuleIntroComponent';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import { useEffect, useState } from 'react';
@@ -8,6 +8,7 @@ const ModuleIntroView = () => {
 	const [data, setData] = useState({
 		name: '',
 		introductionRc: '',
+		outroRc: '',
 	});
 	const { fetchModuleContent } = useModuleContentService();
 	const navigate = useNavigate();
@@ -41,11 +42,11 @@ const ModuleIntroView = () => {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<ModuleIntroductionComponent
+				<ModuleIntroOutroComponent
 					moduleData={data}
 					numberOfLearningUnits={state.numberOfLearningUnits}
 					estimatedTimeToComplete={state.estimatedTimeToComplete}
-					beginAssignment={beginAssignment}
+					action={beginAssignment}
 				/>
 			</Container>
 		</main>

@@ -397,7 +397,7 @@ const questionInFocusDataMock = {
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/0749f150-39b5-4ef3-80e0-f011da0b6cbc/version/2',
 			answerRc:
-				'<p><strong>Seasons are caused by the tilt of the earth on its axis.</strong></p>\n',
+				'<p>Seasons are caused by the tilt of the earth on its axis.</p>\n',
 			optionRc: null,
 		},
 		{

@@ -2,21 +2,22 @@ import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
 import { useTranslation } from 'react-i18next';
 
-type ModuleIntroductionComponentType = {
+type ModuleIntroComponentType = {
 	moduleData: {
 		name: string;
-		introductionRc: any;
+		introductionRc: string;
+		outroRc: string;
 	};
-	numberOfLearningUnits: number;
-	estimatedTimeToComplete: number;
-	beginAssignment: () => void;
+	numberOfLearningUnits?: number;
+	estimatedTimeToComplete?: number;
+	action?: () => void;
 };
-const ModuleIntroductionComponent = ({
+const ModuleIntroComponent = ({
 	moduleData,
 	numberOfLearningUnits,
 	estimatedTimeToComplete,
-	beginAssignment,
-}: ModuleIntroductionComponentType) => {
+	action,
+}: ModuleIntroComponentType) => {
 	const { t: i18n } = useTranslation();
 	const estimatedTimeRemaining = () => {
 		const time = estimatedTimeToComplete;
@@ -50,23 +51,29 @@ const ModuleIntroductionComponent = ({
 			overflow="hidden"
 			margin={'12px auto'}
 			borderRadius={24}
-			padding={16}>
+			padding={16}
+			display={'flex'}
+			flexDirection={'column'}>
 			<Heading as="h2">{moduleData?.name}</Heading>
 			<Stack paddingTop="16px" paddingBottom="16px">
 				<RichContentComponent content={moduleData?.introductionRc} />
+
 				<Text fontSize={14} paddingBottom={5} paddingTop={5}>
 					{numberOfLearningUnits}{' '}
-					{numberOfLearningUnits > 1 ? i18n('Questions') : i18n('Question')}
+					{numberOfLearningUnits && numberOfLearningUnits > 1
+						? i18n('Questions')
+						: i18n('Question')}
 					{/*needed for the space between*/}
 					{'    '}
 					{estimatedTimeRemaining()}
 				</Text>
 			</Stack>
-			<Button onClick={() => beginAssignment()}>
+
+			<Button onClick={() => action && action()}>
 				<Text>Let's Begin</Text>
 			</Button>
 		</Box>
 	);
 };
 
-export default ModuleIntroductionComponent;
+export default ModuleIntroComponent;

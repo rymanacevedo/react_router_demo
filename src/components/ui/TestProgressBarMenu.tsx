@@ -16,16 +16,16 @@ import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
 } from '../pages/AssignmentView/AssignmentTypes';
+import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressBarMenu = {
-	isMenuOpen: boolean;
-	setIsMenuOpen: (isMenuOpen: boolean) => void;
 	questionData: any;
 	currentRoundQuestionListData: any;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	currentQuestion: any;
 	inReview?: boolean;
 	questionIndex?: number;
+	viewCorrect?: boolean;
 };
 
 type ModuleTitleType = {
@@ -112,6 +112,7 @@ type AnswerHistoryType = {
 	inReview?: boolean;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	questionIndex?: number;
+	viewCorrect?: boolean;
 };
 
 const variantFunc = (
@@ -187,12 +188,19 @@ const AnswerHistoryComponent = ({
 	inReview,
 	currentRoundAnswerOverLayData,
 	questionIndex,
+	viewCorrect,
 }: AnswerHistoryType) => {
 	const wrongAnswers = inReview
 		? questionList?.filter((question: any) => {
-				return (
-					`${question.confidence}${question.correctness}` !== 'SureCorrect'
-				);
+				if (viewCorrect) {
+					return (
+						`${question.confidence}${question.correctness}` === 'SureCorrect'
+					);
+				} else {
+					return (
+						`${question.confidence}${question.correctness}` !== 'SureCorrect'
+					);
+				}
 		  })
 		: [];
 
@@ -222,15 +230,15 @@ const AnswerHistoryComponent = ({
 };
 
 const TestProgressBarMenu = ({
-	isMenuOpen,
-	setIsMenuOpen,
 	questionData,
 	currentQuestion,
 	currentRoundQuestionListData,
 	inReview,
 	currentRoundAnswerOverLayData,
 	questionIndex,
+	viewCorrect,
 }: ProgressBarMenu) => {
+	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
@@ -294,6 +302,7 @@ const TestProgressBarMenu = ({
 						inReview={inReview}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						questionIndex={questionIndex}
+						viewCorrect={viewCorrect}
 					/>
 				</VStack>
 
@@ -314,7 +323,7 @@ const TestProgressBarMenu = ({
 						width="200px"
 						leftIcon={isMenuOpen ? <ExitIcon /> : <EnterIcon />}
 						onClick={() => {
-							setIsMenuOpen(!isMenuOpen);
+							handleMenuOpen();
 						}}>
 						<Text fontSize={'16px'} fontWeight="600">
 							{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}

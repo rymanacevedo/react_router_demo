@@ -2,8 +2,9 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { Avatar, AvatarGroup, Box, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import RedIcon from './RedIcon';
-import GreenIcon from './GreenIcon';
+import BlueIcon from './Icons/BlueIcon';
+import RedIcon from './Icons/RedIcon';
+import GreenIcon from './Icons/GreenIcon';
 
 type ProgressMessageComponentPropsType = {
 	closeToast?: () => void;
@@ -21,19 +22,30 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	const [iconColor, setIconColor] = useState<string>('teal.500');
 	const { t: i18n } = useTranslation();
 
+	const setNegativeFeedback = () => {
+		setBgColor('red.100');
+		setIconColor('red.500');
+		setIcon(<RedIcon />);
+	};
+
+	const setEncouragementFeedback = () => {
+		setBgColor('blue.100');
+		setIcon(<BlueIcon />);
+	};
+
 	useEffect(() => {
 		switch (textPrompt) {
 			case 'FIVE_FAST_ANSWERS':
 				setToastText(i18n('fiveFastAnswers'));
-				setBgColor('red.100');
-				setIconColor('red.500');
-				setIcon(<RedIcon />);
+				setNegativeFeedback();
 				break;
 			case 'FIVE_CONSEC_SI':
-				// handle FIVE_CONSEC_SI case
+				setToastText(i18n('fiveSureIncorrectAnswers'));
+				setNegativeFeedback();
 				break;
 			case 'SIX_DK_IN_ROUND':
-				// handle SIX_DK_IN_ROUND case
+				setToastText(i18n('sixDontKnowInRound'));
+				setEncouragementFeedback();
 				break;
 			case 'FIVE_CONSEC_SC':
 				setToastText(i18n('fiveSureCorrectAnswers'));
