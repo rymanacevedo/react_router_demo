@@ -49,6 +49,14 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				FIVE_CONSEC_SI: 0,
 			});
 		};
+
+		const resetSixDontKnowInRound = () => {
+			setMessage({
+				...message,
+				SIX_DK_IN_ROUND: 0,
+			});
+		};
+
 		switch (messageType) {
 			case 'FIVE_FAST_ANSWERS':
 				if (reset || message.FIVE_FAST_ANSWERS === 5) {
@@ -71,7 +79,14 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				}
 				break;
 			case 'SIX_DK_IN_ROUND':
-				// handle SIX_DK_IN_ROUND case
+				if (reset || message.SIX_DK_IN_ROUND === 6) {
+					resetSixDontKnowInRound();
+				} else {
+					setMessage({
+						...message,
+						SIX_DK_IN_ROUND: message.SIX_DK_IN_ROUND + 1,
+					});
+				}
 				break;
 			case 'FIVE_CONSEC_SC':
 				if (reset || message.FIVE_CONSEC_SC === 5) {

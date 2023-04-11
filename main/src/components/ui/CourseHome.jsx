@@ -12,6 +12,7 @@ const CourseHome = () => {
         handleMessage('FIVE_FAST_ANSWERS', true);
         handleMessage('FIVE_CONSEC_SC', true);
 		handleMessage('FIVE_CONSEC_SI', true);
+		handleMessage('SIX_DK_IN_ROUND', true);
     }
 
 	return (
