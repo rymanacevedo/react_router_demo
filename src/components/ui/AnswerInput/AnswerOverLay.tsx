@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	Badge,
-	Checkbox,
-	Flex,
-	Slide,
-	SlideFade,
-	Text,
-} from '@chakra-ui/react';
+import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
@@ -123,17 +116,11 @@ const AnswerOverLay = ({
 		}
 	};
 
-	const calculateTranslateY = () => {
+	const calculateTop = () => {
 		if (IDK) {
-			return '0%';
+			return 0;
 		}
-		if (isChecked) {
-			return '0%';
-		}
-		if (isIndeterminate) {
-			return '0%';
-		}
-		return '50%';
+		return 5;
 	};
 
 	useEffect(() => {
@@ -168,69 +155,71 @@ const AnswerOverLay = ({
 	const revealAnswerDisplayCondition = revealAnswer && text === '';
 
 	return (
-		<>
-			<Checkbox
-				className={inReview ? '' : 'label-hover-effect'}
-				style={{ cursor: inReview ? 'auto' : '' }}
-				w="100%"
-				variant={'answer'}
-				colorScheme={'transparent'}
-				value={questionAnswerId}
-				size={'4rem'}
-				icon={
-					<CustomOverLayIcon
-						variant={variant}
-						isIndeterminate={isIndeterminate}
-						isChecked={isChecked}
-					/>
-				}
-				isChecked={isChecked}
-				isIndeterminate={isIndeterminate}>
-				<SlideFade in={isEnabled}>
-					{choseIDK ? (
-						<Flex>
-							<Text>You answered &nbsp;</Text>
-							<Badge variant={variant}>
-								<span style={{ display: 'flex', alignItems: 'center' }}>
-									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
-								</span>
-							</Badge>
-						</Flex>
-					) : (
-						<Flex>
-							<span hidden={revealAnswerDisplayCondition}>
-								You were{' '}
-								<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-									{text}
-								</Badge>{' '}
-								and{' '}
+		<Checkbox
+			style={{
+				display: 'flex',
+				marginBottom: '2rem',
+				padding: '0.5rem',
+			}}
+			className={inReview ? '' : 'label-hover-effect'}
+			variant={'answer'}
+			colorScheme={'transparent'}
+			value={questionAnswerId}
+			size={'4rem'}
+			icon={
+				<CustomOverLayIcon
+					variant={variant}
+					isIndeterminate={isIndeterminate}
+					isChecked={isChecked}
+				/>
+			}
+			isChecked={isChecked}
+			isIndeterminate={isIndeterminate}>
+			<SlideFade in={isEnabled}>
+				{choseIDK ? (
+					<Flex>
+						<Text>You answered &nbsp;</Text>
+						<Badge variant={variant}>
+							<span style={{ display: 'flex', alignItems: 'center' }}>
+								{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
 							</span>
+						</Badge>
+					</Flex>
+				) : (
+					<Flex>
+						<span hidden={revealAnswerDisplayCondition}>
+							You were{' '}
 							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-								<span style={{ display: 'flex', alignItems: 'center' }}>
-									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
-								</span>
-							</Badge>
-						</Flex>
-					)}
-				</SlideFade>
-				<Slide
-					in={isEnabled}
-					direction="top"
-					style={{
-						position: 'relative',
-						translateY: calculateTranslateY(),
-					}}>
-					<RichContentComponent
-						style={{
-							color: currentRoundAnswerOverLayData?.correctAnswerIds
-								? '#6D758D'
-								: 'inherit',
-						}}
-						content={questionText}
-					/>
-				</Slide>
-			</Checkbox>
-		</>
+								{text}
+							</Badge>{' '}
+							and{' '}
+						</span>
+						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
+							<span style={{ display: 'flex', alignItems: 'center' }}>
+								{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
+							</span>
+						</Badge>
+					</Flex>
+				)}
+			</SlideFade>
+			<RichContentComponent
+				style={{
+					color: currentRoundAnswerOverLayData?.correctAnswerIds
+						? '#6D758D'
+						: 'inherit',
+					position: 'relative',
+					top: calculateTop(),
+					bottom: 0,
+					left: 0,
+					right: 0,
+					transform: `${
+						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+					}`,
+					transition: 'transform 0.3s ease-in-out',
+				}}
+				content={questionText}
+			/>
+		</Checkbox>
 	);
 };
 
