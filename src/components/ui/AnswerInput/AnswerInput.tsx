@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Badge, Checkbox, Slide, SlideFade } from '@chakra-ui/react';
+import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from './CustomIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
@@ -37,19 +37,6 @@ const AnswerInput = ({
 	});
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
-
-	const calculateTranslateY = () => {
-		if (IDK) {
-			return '50%';
-		}
-		if (isChecked) {
-			return '0%';
-		}
-		if (isIndeterminate) {
-			return '0%';
-		}
-		return '50%';
-	};
 
 	useEffect(() => {
 		addAnswer(answerObject);
@@ -161,6 +148,11 @@ const AnswerInput = ({
 	};
 	return (
 		<Checkbox
+			style={{
+				display: 'flex',
+				marginBottom: '2rem',
+				padding: '0.5rem',
+			}}
 			className={'label-hover-effect'}
 			variant={'answer'}
 			colorScheme={'transparent'}
@@ -176,15 +168,20 @@ const AnswerInput = ({
 			<SlideFade in={isEnabled}>
 				<Badge variant={variant}>{text}</Badge>
 			</SlideFade>
-			<Slide
-				in={isEnabled}
-				direction="top"
+			<RichContentComponent
 				style={{
 					position: 'relative',
-					translateY: calculateTranslateY(),
-				}}>
-				<RichContentComponent content={questionText} />
-			</Slide>
+					top: 5,
+					bottom: 0,
+					left: 0,
+					right: 0,
+					transform: `${
+						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+					}`,
+					transition: 'transform 0.3s ease-in-out',
+				}}
+				content={questionText}
+			/>
 		</Checkbox>
 	);
 };

@@ -72,7 +72,7 @@ const MultipleChoiceAnswers = ({
 
 	return (
 		<Box>
-			<Heading as="h2">Answer</Heading>
+			<Heading as="h3">Answer</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"
