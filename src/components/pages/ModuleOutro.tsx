@@ -46,7 +46,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 					<AvatarGroup spacing="4px">
 						<Avatar bg={'ampSuccess.500'} icon={<CompleteIcon />}></Avatar>
 					</AvatarGroup>
-					<Heading>{i18n('completeMod')}</Heading>
+					<Heading fontSize={'16px'}>{i18n('completeMod')}</Heading>
 				</HStack>
 				{moduleData?.outroRc && (
 					<RichContentComponent content={moduleData?.outroRc} />
