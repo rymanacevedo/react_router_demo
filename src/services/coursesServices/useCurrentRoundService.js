@@ -20,7 +20,7 @@ const useCurrentRoundService = () => {
 	const getCurrentRound = async (assignmentKey) => {
 		try {
 			setLoading(true);
-			const accountDataResponse = await axios({
+			const Response = await axios({
 				url: `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
@@ -31,7 +31,32 @@ const useCurrentRoundService = () => {
 				method: 'get',
 			});
 
-			return accountDataResponse.data;
+			return Response.data;
+		} catch (err) {
+			console.log(err);
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+	const getCurrentRoundSkipReview = async (assignmentKey) => {
+		try {
+			setLoading(true);
+			const Response = await axios({
+				url: `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&skipreview=true&subaccount=${subaccount}`,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+				method: 'get',
+			});
+
+			return Response.data;
 		} catch (err) {
 			console.log(err);
 			setError(err);
@@ -46,7 +71,7 @@ const useCurrentRoundService = () => {
 	const putCurrentRound = async (roundId, roundQuestionId, answerData) => {
 		try {
 			setLoading(true);
-			const accountDataResponse = await axios({
+			const Response = await axios({
 				url: `/v2/rounds/${roundId}/questions/${roundQuestionId}/response?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
@@ -57,7 +82,7 @@ const useCurrentRoundService = () => {
 				method: 'put',
 				data: answerData,
 			});
-			return accountDataResponse.data;
+			return Response.data;
 		} catch (err) {
 			console.log(err);
 			setError(err);
@@ -68,6 +93,12 @@ const useCurrentRoundService = () => {
 			setLoading(false);
 		}
 	};
-	return { error, loading, getCurrentRound, putCurrentRound };
+	return {
+		error,
+		loading,
+		getCurrentRound,
+		putCurrentRound,
+		getCurrentRoundSkipReview,
+	};
 };
 export default useCurrentRoundService;
