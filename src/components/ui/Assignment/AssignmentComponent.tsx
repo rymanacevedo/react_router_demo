@@ -1,4 +1,4 @@
-import { Box, Container, HStack, useMediaQuery } from '@chakra-ui/react';
+import { Box, Container, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 
@@ -365,12 +365,12 @@ export default function AssignmentComponent({
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 					<HStack width="100%">
-						<HStack
+						<Stack
 							w="100%"
 							p="12px"
 							alignItems="stretch"
 							justifyContent={'center'}
-							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
 							<Box
 								backgroundColor="white"
 								boxShadow="md"
@@ -396,7 +396,7 @@ export default function AssignmentComponent({
 								IDKResponse={IDKResponse}
 								setIDKResponse={setIDKResponse}
 							/>
-						</HStack>
+						</Stack>
 						<ProgressMenu
 							textPrompt={textPrompt}
 							currentRoundQuestionListData={currentRoundQuestionListData}
