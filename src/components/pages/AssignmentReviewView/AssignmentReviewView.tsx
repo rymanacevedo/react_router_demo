@@ -320,7 +320,7 @@ const AssignmentReviewView = () => {
 
 	useEffect(() => {
 		fetchModuleQuestionsData();
-	}, [questionIndex]);
+	}, [questionIndex, viewCorrect]);
 
 	useEffect(() => {
 		setQuestionIndex(0);
@@ -371,6 +371,7 @@ const AssignmentReviewView = () => {
 		});
 		questionSecondsRef.current = 0;
 	};
+
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
 			const overLayData = await putCurrentRound(

@@ -93,7 +93,8 @@ export default function AssignmentComponent({
 		unseenCount: 0,
 	});
 	const [clearSelection, setClearSelection] = useState(false);
-	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const { getCurrentRound, putCurrentRound, getCurrentRoundSkipReview } =
+		useCurrentRoundService();
 	const { fetchModuleQuestions } = useModuleContentService();
 
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
@@ -144,6 +145,7 @@ export default function AssignmentComponent({
 				await getCurrentRound(assignmentKey),
 				await fetchModuleQuestions(assignmentKey),
 			];
+			let revSkipRes = {} as CurrentRoundQuestionListData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
 				handleMessage('SIX_DK_IN_ROUND', true);
@@ -156,6 +158,24 @@ export default function AssignmentComponent({
 					currentRoundQuestionsResponse?.masteredQuestionCount
 				) {
 					setOutro(true);
+				} else if (
+					currentRoundQuestionsResponse.questionList.every(
+						(question: { correctness: string }) =>
+							question.correctness === 'Correct',
+					)
+				) {
+					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
+					setQuestionData(moduleQuestionsResponse);
+					setCurrentRoundQuestionListData(revSkipRes);
+					setQuestionInFocus(
+						findQuestionInFocus(
+							moduleQuestionsResponse,
+							revSkipRes,
+							false,
+							false,
+						),
+					);
+					setLocalQuestionHistory(null);
 				} else if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
