@@ -145,6 +145,10 @@ export default function AssignmentComponent({
 			];
 			let revSkipRes = {} as CurrentRoundQuestionListData;
 
+			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
+				handleMessage('SIX_DK_IN_ROUND', true);
+			}
+
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
@@ -258,6 +262,7 @@ export default function AssignmentComponent({
 				} else if (
 					questionSecondsRef.current <= 5 &&
 					overLayData.correctness !== 'Correct' &&
+					overLayData.correctness !== 'NoAnswerSelected' &&
 					message.FIVE_FAST_ANSWERS < 5
 				) {
 					handleMessage('FIVE_FAST_ANSWERS', false);
@@ -277,6 +282,7 @@ export default function AssignmentComponent({
 					handleMessage('FIVE_CONSEC_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', true);
 					handleMessage('FIVE_CONSEC_SI', true);
+					handleMessage('SIX_DK_IN_ROUND', true);
 				}
 
 				let updatedLocalQuestionHistory = localQuestionHistory
