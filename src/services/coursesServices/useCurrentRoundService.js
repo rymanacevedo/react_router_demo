@@ -20,7 +20,7 @@ const useCurrentRoundService = () => {
 	const getCurrentRound = async (assignmentKey) => {
 		try {
 			setLoading(true);
-			const Response = await axios({
+			const response = await axios({
 				url: `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
@@ -31,7 +31,7 @@ const useCurrentRoundService = () => {
 				method: 'get',
 			});
 
-			return Response.data;
+			return response.data;
 		} catch (err) {
 			console.log(err);
 			setError(err);
@@ -45,7 +45,7 @@ const useCurrentRoundService = () => {
 	const getCurrentRoundSkipReview = async (assignmentKey) => {
 		try {
 			setLoading(true);
-			const Response = await axios({
+			const response = await axios({
 				url: `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&skipreview=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
@@ -56,7 +56,7 @@ const useCurrentRoundService = () => {
 				method: 'get',
 			});
 
-			return Response.data;
+			return response.data;
 		} catch (err) {
 			console.log(err);
 			setError(err);
@@ -71,7 +71,7 @@ const useCurrentRoundService = () => {
 	const putCurrentRound = async (roundId, roundQuestionId, answerData) => {
 		try {
 			setLoading(true);
-			const Response = await axios({
+			const response = await axios({
 				url: `/v2/rounds/${roundId}/questions/${roundQuestionId}/response?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
@@ -82,7 +82,7 @@ const useCurrentRoundService = () => {
 				method: 'put',
 				data: answerData,
 			});
-			return Response.data;
+			return response.data;
 		} catch (err) {
 			console.log(err);
 			setError(err);
