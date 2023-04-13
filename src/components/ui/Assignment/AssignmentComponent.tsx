@@ -139,7 +139,6 @@ export default function AssignmentComponent({
 	};
 
 	const fetchModuleQuestionsData = async () => {
-		console.log(message);
 		try {
 			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
 				await getCurrentRound(assignmentKey),
@@ -273,12 +272,12 @@ export default function AssignmentComponent({
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('SIX_DK_IN_ROUND', false);
 				} else {
-					setIsSureAndCorrectAllRound(false);
 					handleMessage('FIVE_CONSEC_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', true);
 					handleMessage('FIVE_CONSEC_SI', true);
 					handleMessage('SIX_DK_IN_ROUND', true);
 					handleMessage('FULL_ROUND_OF_SC', true);
+					setIsSureAndCorrectAllRound(false);
 				}
 
 				let updatedLocalQuestionHistory = localQuestionHistory

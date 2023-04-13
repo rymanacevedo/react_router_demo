@@ -112,7 +112,6 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				if (reset) {
 					resetFullRoundOfSureCorrect();
 				} else {
-					console.log("INCREMENT BY 1")
 					setMessage({
 						...message,
 						FULL_ROUND_OF_SC: message.FULL_ROUND_OF_SC + 1,
