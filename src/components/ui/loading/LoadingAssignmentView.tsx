@@ -26,11 +26,12 @@ export default function LoadingAssignmentView() {
 				<Skeleton height="20px" width={'235px'} />
 				<Skeleton height="20px" width={'110px'} />
 			</Stack>
-			<HStack
+			<Stack
 				w="100%"
 				p="12px"
+				direction={['column', 'column', 'row', 'row', 'row', 'row']}
 				justifyContent={'center'}
-				flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+				alignItems={'center'}>
 				<Box
 					backgroundColor="white"
 					margin="6px"
@@ -82,7 +83,7 @@ export default function LoadingAssignmentView() {
 						</Box>
 					</HStack>
 				</Box>
-			</HStack>
+			</Stack>
 		</Container>
 	);
 }
