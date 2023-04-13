@@ -65,7 +65,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				...message,
 				FULL_ROUND_OF_SC: 0,
 			});
-		}
+		};
 
 		switch (messageType) {
 			case 'FIVE_FAST_ANSWERS':
