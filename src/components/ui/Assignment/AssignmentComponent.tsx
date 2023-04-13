@@ -145,6 +145,7 @@ export default function AssignmentComponent({
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
 				handleMessage('SIX_DK_IN_ROUND', true);
+				handleMessage('FIVE_FAST_ANSWERS', true);
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {

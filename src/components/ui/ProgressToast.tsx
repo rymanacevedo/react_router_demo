@@ -42,12 +42,14 @@ const FireProgressToast = (props: FireProgressToastType) => {
 						<Box
 							border="1px solid #E2E8F0"
 							boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
-							style={{ border: '1px' }}
-							marginTop={'160px'}
-							borderRadius={'24px'}
-							width={'475px'}
-							paddingTop="1px"
-							marginLeft="200px"
+							style={{
+								border: '1px',
+								marginTop: '160px',
+								borderRadius: '24px',
+								width: '475px',
+								paddingTop: '1px',
+								transform: 'translateX(120px)',
+							}}
 							bg="ampWhite">
 							<Box w="373px">
 								<ProgressMessageComponent
