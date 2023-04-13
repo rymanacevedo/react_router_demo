@@ -6,6 +6,7 @@ type QuizContextType = {
 		FIVE_CONSEC_SI: number;
 		SIX_DK_IN_ROUND: number;
 		FIVE_CONSEC_SC: number;
+		FIVE_FAST_REVIEWS: number;
 	};
 	handleMessage: (messageType: string, reset: boolean) => void;
 };
@@ -16,6 +17,7 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_CONSEC_SI: 0,
 		SIX_DK_IN_ROUND: 0,
 		FIVE_CONSEC_SC: 0,
+		FIVE_FAST_REVIEWS: 0,
 	},
 	handleMessage: () => {},
 });
@@ -26,6 +28,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_CONSEC_SI: 0,
 		SIX_DK_IN_ROUND: 0,
 		FIVE_CONSEC_SC: 0,
+		FIVE_FAST_REVIEWS: 0,
 	});
 
 	const handleMessage = (messageType: string, reset: boolean) => {
@@ -54,6 +57,13 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			setMessage({
 				...message,
 				SIX_DK_IN_ROUND: 0,
+			});
+		};
+
+		const resetFiveFastReviews = () => {
+			setMessage({
+				...message,
+				FIVE_FAST_REVIEWS: 0,
 			});
 		};
 
@@ -95,6 +105,16 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					setMessage({
 						...message,
 						FIVE_CONSEC_SC: message.FIVE_CONSEC_SC + 1,
+					});
+				}
+				break;
+			case 'FIVE_FAST_REVIEWS':
+				if (reset || message.FIVE_FAST_REVIEWS === 5) {
+					resetFiveFastReviews();
+				} else {
+					setMessage({
+						...message,
+						FIVE_FAST_REVIEWS: message.FIVE_FAST_REVIEWS + 1,
 					});
 				}
 				break;
