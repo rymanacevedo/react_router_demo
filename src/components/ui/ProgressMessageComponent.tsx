@@ -52,6 +52,11 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setBgColor('ampSuccess.50');
 				setIcon(<GreenIcon />);
 				break;
+			case 'FULL_ROUND_OF_SC':
+				setToastText(i18n('fullRoundSureCorrect'));
+				setBgColor('ampSuccess.50');
+				setIcon(<GreenIcon />);
+				break;
 			default:
 				setToastText(
 					'You’re doing a great job at knowing what you are sure and unsure about.',

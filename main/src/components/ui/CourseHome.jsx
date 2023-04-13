@@ -13,6 +13,7 @@ const CourseHome = () => {
         handleMessage('FIVE_CONSEC_SC', true);
 		handleMessage('FIVE_CONSEC_SI', true);
 		handleMessage('SIX_DK_IN_ROUND', true);
+		handleMessage('FULL_ROUND_OF_SC', true);
     }
 
 	return (
