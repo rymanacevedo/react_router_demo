@@ -22,6 +22,7 @@ import LoadingAssignmentView from '../loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
+import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 
 type Props = {
 	isInstructionalOverlayOpen: boolean;
@@ -61,6 +62,7 @@ export default function AssignmentComponent({
 	initRef,
 	assignmentKey,
 }: Props) {
+	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
 	const { message, handleMessage } = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -338,6 +340,7 @@ export default function AssignmentComponent({
 	}, [assignmentKey]);
 
 	const expandProgressMenu = () => {
+		handleMenuOpen();
 		setIsToastOpen(false);
 	};
 
