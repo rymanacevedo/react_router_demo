@@ -9,6 +9,8 @@ type QuizContextType = {
 		FIVE_FAST_REVIEWS: number;
 	};
 	handleMessage: (messageType: string, reset: boolean) => void;
+	selectedCourseKey: string;
+	setSelectedCourseKey: (selectedCourseKey: string) => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
@@ -20,6 +22,8 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_FAST_REVIEWS: 0,
 	},
 	handleMessage: () => {},
+	selectedCourseKey: '',
+	setSelectedCourseKey: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -30,6 +34,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_CONSEC_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
 	});
+
+	const [selectedCourseKey, setSelectedCourseKey] = useState('');
 
 	const handleMessage = (messageType: string, reset: boolean) => {
 		const resetFiveFastAnswers = () => {
@@ -125,8 +131,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	};
 
 	const value = useMemo(
-		() => ({ message, handleMessage }),
-		[message, handleMessage],
+		() => ({ message, handleMessage, selectedCourseKey, setSelectedCourseKey }),
+		[message, handleMessage, selectedCourseKey, setSelectedCourseKey],
 	);
 
 	return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
