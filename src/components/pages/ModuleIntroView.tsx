@@ -34,7 +34,7 @@ const ModuleIntroView = () => {
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 
-	return data.introductionRc.length ? (
+	return data.introductionRc ? (
 		<main id="main-learning">
 			<Container
 				id={'module-into'}
