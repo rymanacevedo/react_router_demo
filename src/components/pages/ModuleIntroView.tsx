@@ -3,6 +3,7 @@ import ModuleIntroOutroComponent from '../ui/ModuleIntroComponent';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import { useEffect, useState } from 'react';
+import LoadingAssignmentView from '../ui/loading/LoadingAssignmentView';
 
 const ModuleIntroView = () => {
 	const [data, setData] = useState({
@@ -33,7 +34,7 @@ const ModuleIntroView = () => {
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
 
-	return (
+	return data.introductionRc.length ? (
 		<main id="main-learning">
 			<Container
 				id={'module-into'}
@@ -50,6 +51,8 @@ const ModuleIntroView = () => {
 				/>
 			</Container>
 		</main>
+	) : (
+		<LoadingAssignmentView />
 	);
 };
 
