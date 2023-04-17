@@ -42,6 +42,7 @@ const WhatYouNeedToKnowComponent = ({
 	const { t: i18n } = useTranslation();
 	const [radioValue, setRadioValue] = useState('');
 	const [textAreaValue, setTextAreaValue] = useState('');
+	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 	const submitHandler = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -52,7 +53,7 @@ const WhatYouNeedToKnowComponent = ({
 			style={{
 				backgroundColor: 'white',
 			}}
-			boxShadow="xl"
+			boxShadow={isSafari ? 'none' : 'xl'}
 			w="100%"
 			minH="40vh"
 			overflow="hidden"
@@ -112,7 +113,7 @@ const WhatYouNeedToKnowComponent = ({
 			)}
 
 			<Divider />
-			<Collapse in={!isOpen} animateOpacity>
+			<Collapse in={true} animateOpacity>
 				<VStack marginTop={'16px'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
 						<Text float="left" fontSize="14px">
