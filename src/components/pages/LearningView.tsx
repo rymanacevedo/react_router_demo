@@ -4,6 +4,7 @@ import AssignmentList from '../ui/AssignmentList';
 import useCourseListService from '../../services/coursesServices/useCourseListService';
 import { useEffect, useState } from 'react';
 import CourseMenu from '../ui/CourseMenu';
+import { useQuizContext } from '../../hooks/useQuizContext';
 
 export type CourseListType = [
 	{
@@ -21,19 +22,36 @@ const LearningView = () => {
 			name: '',
 		},
 	]);
-	const [selectedCourseKey, setSelectedCourseKey] = useState<string>('');
+	const { selectedCourseKey, setSelectedCourseKey } = useQuizContext();
 	const [courseTitle, setCourseTitle] = useState<string>('');
 
-	const fetchCourseListData = async () => {
-		let courseListResponse = await fetchCourseList();
-		setCourseList(courseListResponse?.items);
-		setSelectedCourseKey(courseListResponse?.items[0]?.key);
-		setCourseTitle(courseListResponse?.items[0]?.name);
-	};
-
 	useEffect(() => {
+		const fetchCourseListData = async () => {
+			let courseListResponse = await fetchCourseList();
+
+			setCourseList(courseListResponse?.items);
+
+			if (!selectedCourseKey) {
+				setCourseTitle(courseListResponse?.items[0]?.name);
+				setSelectedCourseKey(courseListResponse?.items[0]?.key);
+			}
+		};
+
 		fetchCourseListData();
 	}, []);
+
+	useEffect(() => {
+		if (courseList) {
+			const currCourse = courseList?.find((course) => {
+				return course.key === selectedCourseKey;
+			});
+
+			if (currCourse) {
+				setCourseTitle(currCourse.name);
+				setSelectedCourseKey(currCourse.key);
+			}
+		}
+	}, [courseList]);
 
 	return (
 		<Container
