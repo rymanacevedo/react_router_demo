@@ -66,6 +66,8 @@ export default function AssignmentComponent({
 	const navigate = useNavigate();
 	const { message, handleMessage } = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
+		useState<boolean>(true);
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
@@ -149,6 +151,8 @@ export default function AssignmentComponent({
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
 				handleMessage('SIX_DK_IN_ROUND', true);
+				handleMessage('FULL_ROUND_OF_SC', true);
+				setIsSureAndCorrectAllRound(false);
 				handleMessage('FIVE_FAST_ANSWERS', true);
 			}
 
@@ -258,34 +262,45 @@ export default function AssignmentComponent({
 			if (overLayData) {
 				if (
 					overLayData.confidence === 'Sure' &&
-					overLayData.correctness === 'Correct' &&
-					message.FIVE_CONSEC_SC < 5
+					overLayData.correctness === 'Correct'
 				) {
-					handleMessage('FIVE_CONSEC_SC', false);
+					if (message.FIVE_CONSEC_SC < 5 && isSureAndCorrectAllRound) {
+						handleMessage('BOTH_SC', false);
+					} else {
+						handleMessage('FIVE_CONSEC_SC', false);
+					}
 				} else if (
 					questionSecondsRef.current <= 5 &&
 					overLayData.correctness !== 'Correct' &&
 					overLayData.correctness !== 'NoAnswerSelected' &&
 					message.FIVE_FAST_ANSWERS < 5
 				) {
+					setIsSureAndCorrectAllRound(false);
+					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', false);
 				} else if (
 					overLayData.confidence === 'Sure' &&
 					overLayData.correctness === 'Incorrect' &&
 					message.FIVE_CONSEC_SI < 5
 				) {
+					setIsSureAndCorrectAllRound(false);
+					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('FIVE_CONSEC_SI', false);
 				} else if (
 					overLayData.confidence === 'NotSure' &&
 					overLayData.correctness === 'NoAnswerSelected' &&
 					message.SIX_DK_IN_ROUND < 6
 				) {
+					setIsSureAndCorrectAllRound(false);
+					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('SIX_DK_IN_ROUND', false);
 				} else {
 					handleMessage('FIVE_CONSEC_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', true);
 					handleMessage('FIVE_CONSEC_SI', true);
 					handleMessage('SIX_DK_IN_ROUND', true);
+					handleMessage('FULL_ROUND_OF_SC', true);
+					setIsSureAndCorrectAllRound(false);
 				}
 
 				let updatedLocalQuestionHistory = localQuestionHistory
@@ -372,6 +387,26 @@ export default function AssignmentComponent({
 			handleMessage('SIX_DK_IN_ROUND', true);
 		}
 	}, [message.SIX_DK_IN_ROUND]);
+
+	useEffect(() => {
+		if (
+			currentRoundQuestionListData?.questionList.length &&
+			currentRoundQuestionListData?.questionList.length >= 5
+		) {
+			if (
+				message.FULL_ROUND_OF_SC ===
+					currentRoundQuestionListData?.questionList.length &&
+				isSureAndCorrectAllRound
+			) {
+				setIsToastOpen(true);
+				setTextPrompt('FULL_ROUND_OF_SC');
+				handleMessage('FULL_ROUND_OF_SC', true);
+			}
+		}
+	}, [
+		message.FULL_ROUND_OF_SC,
+		currentRoundQuestionListData?.questionList.length,
+	]);
 
 	return currentRoundQuestionListData ? (
 		<>

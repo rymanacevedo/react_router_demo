@@ -108,6 +108,7 @@ const resources = {
          fiveSureCorrectAnswers: 'Five in a row!  Keep it going.',
          fiveSureIncorrectAnswers: 'You\'ve been sure but incorrect five times in a row. That\'s OK, you\'re here to learn. Answer accordingly if you\'re not sure about an answer.',
          sixDontKnowInRound: 'It\'s ok that you don\'t know this yet.  Make sure to read the question, answers, and explanation to learn what you don\'t know.',
+         fullRoundSureCorrect: 'Perfect round! Great work!',
          fiveFastReviews: 'Slow down and absorb the material.  It will take you less time to actually learn.',
          //////////////////////////////////
          //    ProgressMenu.jsx

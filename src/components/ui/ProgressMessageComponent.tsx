@@ -52,6 +52,11 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setBgColor('ampSuccess.50');
 				setIcon(<GreenIcon />);
 				break;
+			case 'FULL_ROUND_OF_SC':
+				setToastText(i18n('fullRoundSureCorrect'));
+				setBgColor('ampSuccess.50');
+				setIcon(<GreenIcon />);
+				break;
 			case 'FIVE_FAST_REVIEWS':
 				setToastText(i18n('fiveFastReviews'));
 				setNegativeFeedback();
