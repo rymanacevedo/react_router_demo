@@ -402,7 +402,7 @@ const AssignmentReviewView = () => {
 	};
 
 	const handleNextQuestionInReview = async () => {
-		if (questionSecondsRef.current <= 7 && message.FIVE_FAST_REVIEWS < 7) {
+		if (questionSecondsRef.current <= 7 && message.FIVE_FAST_REVIEWS < 5) {
 			handleMessage('FIVE_FAST_REVIEWS', false);
 		} else {
 			handleMessage('FIVE_FAST_REVIEWS', true);
