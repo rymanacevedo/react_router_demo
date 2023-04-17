@@ -39,10 +39,15 @@ import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
 import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
+import { useQuizContext } from '../../../hooks/useQuizContext';
+import FireProgressToast from '../../ui/ProgressToast';
 
 const AssignmentReviewView = () => {
+	const { message, handleMessage } = useQuizContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
+	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
+	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [showExplanation, setShowExplanation] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
@@ -315,7 +320,7 @@ const AssignmentReviewView = () => {
 
 	useEffect(() => {
 		fetchModuleQuestionsData();
-	}, [questionIndex]);
+	}, [questionIndex, viewCorrect]);
 
 	useEffect(() => {
 		setQuestionIndex(0);
@@ -366,6 +371,7 @@ const AssignmentReviewView = () => {
 		});
 		questionSecondsRef.current = 0;
 	};
+
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
 			const overLayData = await putCurrentRound(
@@ -396,6 +402,16 @@ const AssignmentReviewView = () => {
 	};
 
 	const handleNextQuestionInReview = async () => {
+		if (questionSecondsRef.current <= 7 && message.FIVE_FAST_REVIEWS < 7) {
+			handleMessage('FIVE_FAST_REVIEWS', false);
+		} else {
+			handleMessage('FIVE_FAST_REVIEWS', true);
+		}
+
+		if (isToastOpen) {
+			setIsToastOpen(false);
+		}
+
 		setRevealAnswer(false);
 		setShowExplanation(viewCorrect ? true : false);
 		setAnswerSubmitted(false);
@@ -452,6 +468,18 @@ const AssignmentReviewView = () => {
 			await handleKeepGoing();
 		}
 	};
+
+	const expandProgressMenu = () => {
+		setIsToastOpen(false);
+	};
+
+	useEffect(() => {
+		if (message.FIVE_FAST_REVIEWS === 5) {
+			setIsToastOpen(true);
+			setTextPrompt('FIVE_FAST_REVIEWS');
+			handleMessage('FIVE_FAST_REVIEWS', true);
+		}
+	}, [message.FIVE_FAST_REVIEWS]);
 
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
@@ -529,6 +557,11 @@ const AssignmentReviewView = () => {
 					maxWidth={'100vw'}
 					overflowY={'hidden'}
 					overflowX={'hidden'}>
+					<FireProgressToast
+						textPrompt={textPrompt}
+						expandProgressMenu={expandProgressMenu}
+						isToastOpen={isToastOpen}
+					/>
 					<TestProgressBarMenu
 						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}

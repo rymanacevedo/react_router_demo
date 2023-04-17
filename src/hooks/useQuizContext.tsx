@@ -7,8 +7,11 @@ type QuizContextType = {
 		SIX_DK_IN_ROUND: number;
 		FIVE_CONSEC_SC: number;
 		FULL_ROUND_OF_SC: number;
+		FIVE_FAST_REVIEWS: number;
 	};
 	handleMessage: (messageType: string, reset: boolean) => void;
+	selectedCourseKey: string;
+	setSelectedCourseKey: (selectedCourseKey: string) => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
@@ -18,8 +21,11 @@ const QuizContext = createContext<QuizContextType>({
 		SIX_DK_IN_ROUND: 0,
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
+		FIVE_FAST_REVIEWS: 0,
 	},
 	handleMessage: () => {},
+	selectedCourseKey: '',
+	setSelectedCourseKey: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -29,7 +35,10 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		SIX_DK_IN_ROUND: 0,
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
+		FIVE_FAST_REVIEWS: 0,
 	});
+
+	const [selectedCourseKey, setSelectedCourseKey] = useState('');
 
 	const handleMessage = (messageType: string, reset: boolean) => {
 		const resetFiveFastAnswers = () => {
@@ -64,6 +73,13 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			setMessage({
 				...message,
 				FULL_ROUND_OF_SC: 0,
+			});
+		};
+
+		const resetFiveFastReviews = () => {
+			setMessage({
+				...message,
+				FIVE_FAST_REVIEWS: 0,
 			});
 		};
 
@@ -125,6 +141,16 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					FIVE_CONSEC_SC: message.FIVE_CONSEC_SC + 1,
 				});
 				break;
+			case 'FIVE_FAST_REVIEWS':
+				if (reset || message.FIVE_FAST_REVIEWS === 5) {
+					resetFiveFastReviews();
+				} else {
+					setMessage({
+						...message,
+						FIVE_FAST_REVIEWS: message.FIVE_FAST_REVIEWS + 1,
+					});
+				}
+				break;
 			default:
 				// handle default case
 				break;
@@ -132,8 +158,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	};
 
 	const value = useMemo(
-		() => ({ message, handleMessage }),
-		[message, handleMessage],
+		() => ({ message, handleMessage, selectedCourseKey, setSelectedCourseKey }),
+		[message, handleMessage, selectedCourseKey, setSelectedCourseKey],
 	);
 
 	return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

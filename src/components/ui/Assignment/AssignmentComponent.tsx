@@ -1,4 +1,4 @@
-import { Box, Container, HStack, useMediaQuery } from '@chakra-ui/react';
+import { Box, Container, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 
@@ -22,6 +22,7 @@ import LoadingAssignmentView from '../loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
+import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 
 type Props = {
 	isInstructionalOverlayOpen: boolean;
@@ -61,6 +62,7 @@ export default function AssignmentComponent({
 	initRef,
 	assignmentKey,
 }: Props) {
+	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
 	const { message, handleMessage } = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -93,7 +95,8 @@ export default function AssignmentComponent({
 		unseenCount: 0,
 	});
 	const [clearSelection, setClearSelection] = useState(false);
-	const { getCurrentRound, putCurrentRound } = useCurrentRoundService();
+	const { getCurrentRound, putCurrentRound, getCurrentRoundSkipReview } =
+		useCurrentRoundService();
 	const { fetchModuleQuestions } = useModuleContentService();
 
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
@@ -144,11 +147,13 @@ export default function AssignmentComponent({
 				await getCurrentRound(assignmentKey),
 				await fetchModuleQuestions(assignmentKey),
 			];
+			let revSkipRes = {} as CurrentRoundQuestionListData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
 				handleMessage('SIX_DK_IN_ROUND', true);
 				handleMessage('FULL_ROUND_OF_SC', true);
 				setIsSureAndCorrectAllRound(false);
+				handleMessage('FIVE_FAST_ANSWERS', true);
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
@@ -157,6 +162,24 @@ export default function AssignmentComponent({
 					currentRoundQuestionsResponse?.masteredQuestionCount
 				) {
 					setOutro(true);
+				} else if (
+					currentRoundQuestionsResponse.questionList.every(
+						(question: { correctness: string }) =>
+							question.correctness === 'Correct',
+					)
+				) {
+					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
+					setQuestionData(moduleQuestionsResponse);
+					setCurrentRoundQuestionListData(revSkipRes);
+					setQuestionInFocus(
+						findQuestionInFocus(
+							moduleQuestionsResponse,
+							revSkipRes,
+							false,
+							false,
+						),
+					);
+					setLocalQuestionHistory(null);
 				} else if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
@@ -353,6 +376,7 @@ export default function AssignmentComponent({
 	}, [assignmentKey]);
 
 	const expandProgressMenu = () => {
+		handleMenuOpen();
 		setIsToastOpen(false);
 	};
 
@@ -406,12 +430,12 @@ export default function AssignmentComponent({
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 					<HStack width="100%">
-						<HStack
+						<Stack
 							w="100%"
 							p="12px"
 							alignItems="stretch"
 							justifyContent={'center'}
-							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
 							<Box
 								backgroundColor="white"
 								boxShadow="md"
@@ -437,7 +461,7 @@ export default function AssignmentComponent({
 								IDKResponse={IDKResponse}
 								setIDKResponse={setIDKResponse}
 							/>
-						</HStack>
+						</Stack>
 						<ProgressMenu
 							textPrompt={textPrompt}
 							currentRoundQuestionListData={currentRoundQuestionListData}

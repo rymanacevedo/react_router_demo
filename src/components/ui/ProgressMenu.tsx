@@ -57,13 +57,17 @@ const ProgressMenu = (props: ProgressMenuType) => {
 	};
 
 	return (
-		<SlideFade in={isMenuOpen} offsetX="180px" offsetY="0px">
+		<SlideFade
+			in={isMenuOpen}
+			offsetX="180px"
+			offsetY="0px"
+			style={{ alignSelf: 'flex-start', paddingTop: '10px' }}>
 			<VStack
 				style={{
 					backgroundColor: 'white',
 				}}
 				boxShadow="2xl"
-				h="745px"
+				h="600px"
 				marginRight="24px"
 				w={isMenuOpen ? '345px' : '0px'}
 				display={isMenuOpen ? 'flex' : 'none'}
