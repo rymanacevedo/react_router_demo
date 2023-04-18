@@ -110,6 +110,7 @@ const resources = {
          sixDontKnowInRound: 'It\'s ok that you don\'t know this yet.  Make sure to read the question, answers, and explanation to learn what you don\'t know.',
          fullRoundSureCorrect: 'Perfect round! Great work!',
          fiveFastReviews: 'Slow down and absorb the material.  It will take you less time to actually learn.',
+         tenLongReviews: 'You’re putting the time into reading the explanations. Good work. Its worth it.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
