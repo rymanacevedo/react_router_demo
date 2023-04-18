@@ -1,5 +1,15 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 
+type SeenQuestionType = {
+	[key: number]: {
+		seenCount: number;
+		correctess: string;
+		confidence: string;
+		npaCount: number;
+		siCount: number;
+	};
+};
+
 type QuizContextType = {
 	message: {
 		FIVE_FAST_ANSWERS: number;
@@ -12,6 +22,8 @@ type QuizContextType = {
 	handleMessage: (messageType: string, reset: boolean) => void;
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
+	seenQuestions: SeenQuestionType[];
+	setSeenQuestions: (seenQuestions: SeenQuestionType[]) => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
@@ -26,6 +38,8 @@ const QuizContext = createContext<QuizContextType>({
 	handleMessage: () => {},
 	selectedCourseKey: '',
 	setSelectedCourseKey: () => {},
+	seenQuestions: [],
+	setSeenQuestions: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -39,6 +53,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
+	const [seenQuestions, setSeenQuestions] = useState<SeenQuestionType[]>([]);
 
 	const handleMessage = (messageType: string, reset: boolean) => {
 		const resetFiveFastAnswers = () => {
@@ -158,8 +173,22 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	};
 
 	const value = useMemo(
-		() => ({ message, handleMessage, selectedCourseKey, setSelectedCourseKey }),
-		[message, handleMessage, selectedCourseKey, setSelectedCourseKey],
+		() => ({
+			message,
+			handleMessage,
+			selectedCourseKey,
+			setSelectedCourseKey,
+			seenQuestions,
+			setSeenQuestions,
+		}),
+		[
+			message,
+			handleMessage,
+			selectedCourseKey,
+			setSelectedCourseKey,
+			seenQuestions,
+			setSeenQuestions,
+		],
 	);
 
 	return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
