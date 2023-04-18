@@ -661,6 +661,7 @@ const AssignmentReviewView = () => {
 							</Box>
 						</HStack>
 						<ProgressMenu
+							textPrompt={textPrompt}
 							currentRoundQuestionListData={currentRoundQuestionListData}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>
