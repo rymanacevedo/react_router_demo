@@ -407,6 +407,9 @@ const AssignmentReviewView = () => {
 		} else {
 			handleMessage('FIVE_FAST_REVIEWS', true);
 		}
+		if (questionSecondsRef.current >= 12) {
+			handleMessage('TEN_LONG_REVIEWS', false);
+		}
 
 		if (isToastOpen) {
 			setIsToastOpen(false);
@@ -480,6 +483,14 @@ const AssignmentReviewView = () => {
 			handleMessage('FIVE_FAST_REVIEWS', true);
 		}
 	}, [message.FIVE_FAST_REVIEWS]);
+
+	useEffect(() => {
+		if (message.TEN_LONG_REVIEWS === 10) {
+			setIsToastOpen(true);
+			setTextPrompt('TEN_LONG_REVIEWS');
+			handleMessage('FIVE_FAST_REVIEWS', true);
+		}
+	}, [message.TEN_LONG_REVIEWS]);
 
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
