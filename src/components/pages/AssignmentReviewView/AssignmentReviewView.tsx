@@ -41,8 +41,10 @@ import { findDateData } from '../../../utils/logic';
 import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
+import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 
 const AssignmentReviewView = () => {
+	const { handleMenuOpen } = useProgressMenuContext();
 	const { message, handleMessage } = useQuizContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -471,6 +473,7 @@ const AssignmentReviewView = () => {
 
 	const expandProgressMenu = () => {
 		setIsToastOpen(false);
+		handleMenuOpen();
 	};
 
 	useEffect(() => {
