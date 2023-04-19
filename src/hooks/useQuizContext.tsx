@@ -97,7 +97,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				}));
 			};
 
-			const restTwoFastReviewsInLu = () => {
+			const resetTwoFastReviewsInLu = () => {
 				const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.filter(
 					(question) => question.questionId !== questionId,
 				);
@@ -178,9 +178,9 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					break;
 				case 'TWO_FAST_REVIEWS_IN_LU':
 					if (reset && questionId) {
-						restTwoFastReviewsInLu();
+						resetTwoFastReviewsInLu();
 					} else if (questionId) {
-						const newTFRINLU = [
+						const newVal = [
 							...message.TWO_FAST_REVIEWS_IN_LU.filter(
 								(item) => item.questionId !== questionId,
 							),
@@ -188,7 +188,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 						];
 						setMessage((prevMessage) => ({
 							...prevMessage,
-							TWO_FAST_REVIEWS_IN_LU: newTFRINLU,
+							TWO_FAST_REVIEWS_IN_LU: newVal,
 						}));
 					}
 					break;
