@@ -61,6 +61,10 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setToastText(i18n('fiveFastReviews'));
 				setNegativeFeedback();
 				break;
+			case 'TWO_FAST_REVIEWS_IN_LU':
+				setToastText(i18n('twoFastReviewsInLu'));
+				setNegativeFeedback();
+				break;
 			default:
 				setToastText(
 					'You’re doing a great job at knowing what you are sure and unsure about.',

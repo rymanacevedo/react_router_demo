@@ -402,6 +402,28 @@ const AssignmentReviewView = () => {
 	};
 
 	const handleNextQuestionInReview = async () => {
+		if (questionSecondsRef.current <= 7) {
+			if (
+				message.TWO_FAST_REVIEWS_IN_LU.find(
+					(item) => item.questionId === questionInFocus.publishedQuestionId,
+				)
+			) {
+				setIsToastOpen(true);
+				setTextPrompt('TWO_FAST_REVIEWS_IN_LU');
+				handleMessage(
+					'TWO_FAST_REVIEWS_IN_LU',
+					true,
+					Number(questionInFocus?.publishedQuestionId),
+				);
+			} else {
+				handleMessage(
+					'TWO_FAST_REVIEWS_IN_LU',
+					false,
+					Number(questionInFocus?.publishedQuestionId),
+				);
+			}
+		}
+
 		if (questionSecondsRef.current <= 7 && message.FIVE_FAST_REVIEWS < 5) {
 			handleMessage('FIVE_FAST_REVIEWS', false);
 		} else {

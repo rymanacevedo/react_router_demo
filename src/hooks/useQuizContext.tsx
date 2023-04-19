@@ -1,4 +1,10 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+	createContext,
+	useContext,
+	useMemo,
+	useState,
+	useCallback,
+} from 'react';
 
 type QuizContextType = {
 	message: {
@@ -8,8 +14,13 @@ type QuizContextType = {
 		FIVE_CONSEC_SC: number;
 		FULL_ROUND_OF_SC: number;
 		FIVE_FAST_REVIEWS: number;
+		TWO_FAST_REVIEWS_IN_LU: { questionId: number }[];
 	};
-	handleMessage: (messageType: string, reset: boolean) => void;
+	handleMessage: (
+		messageType: string,
+		reset: boolean,
+		questionId?: number,
+	) => void;
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
 };
@@ -22,6 +33,7 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
+		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
 	},
 	handleMessage: () => {},
 	selectedCourseKey: '',
@@ -36,126 +48,158 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
+		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
 
-	const handleMessage = (messageType: string, reset: boolean) => {
-		const resetFiveFastAnswers = () => {
-			setMessage({
-				...message,
-				FIVE_FAST_ANSWERS: 0,
-			});
-		};
+	const handleMessage = useCallback(
+		(messageType: string, reset: boolean, questionId?: number) => {
+			const resetFiveFastAnswers = () => {
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					FIVE_FAST_ANSWERS: 0,
+				}));
+			};
 
-		const resetFiveConsecutiveSureCorrect = () => {
-			setMessage({
-				...message,
-				FIVE_CONSEC_SC: 0,
-			});
-		};
+			const resetFiveConsecutiveSureCorrect = () => {
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					FIVE_CONSEC_SC: 0,
+				}));
+			};
 
-		const resetFiveConsecutiveSureIncorrect = () => {
-			setMessage({
-				...message,
-				FIVE_CONSEC_SI: 0,
-			});
-		};
+			const resetFiveConsecutiveSureIncorrect = () => {
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					FIVE_CONSEC_SI: 0,
+				}));
+			};
 
-		const resetSixDontKnowInRound = () => {
-			setMessage({
-				...message,
-				SIX_DK_IN_ROUND: 0,
-			});
-		};
+			const resetSixDontKnowInRound = () => {
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					SIX_DK_IN_ROUND: 0,
+				}));
+			};
 
-		const resetFullRoundOfSureCorrect = () => {
-			setMessage({
-				...message,
-				FULL_ROUND_OF_SC: 0,
-			});
-		};
+			const resetFullRoundOfSureCorrect = () => {
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					FULL_ROUND_OF_SC: 0,
+				}));
+			};
 
-		const resetFiveFastReviews = () => {
-			setMessage({
-				...message,
-				FIVE_FAST_REVIEWS: 0,
-			});
-		};
+			const resetFiveFastReviews = () => {
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					FIVE_FAST_REVIEWS: 0,
+				}));
+			};
 
-		switch (messageType) {
-			case 'FIVE_FAST_ANSWERS':
-				if (reset || message.FIVE_FAST_ANSWERS === 5) {
-					resetFiveFastAnswers();
-				} else {
-					setMessage({
-						...message,
-						FIVE_FAST_ANSWERS: message.FIVE_FAST_ANSWERS + 1,
-					});
-				}
-				break;
-			case 'FIVE_CONSEC_SI':
-				if (reset || message.FIVE_CONSEC_SI === 5) {
-					resetFiveConsecutiveSureIncorrect();
-				} else {
-					setMessage({
-						...message,
-						FIVE_CONSEC_SI: message.FIVE_CONSEC_SI + 1,
-					});
-				}
-				break;
-			case 'SIX_DK_IN_ROUND':
-				if (reset || message.SIX_DK_IN_ROUND === 6) {
-					resetSixDontKnowInRound();
-				} else {
-					setMessage({
-						...message,
-						SIX_DK_IN_ROUND: message.SIX_DK_IN_ROUND + 1,
-					});
-				}
-				break;
-			case 'FIVE_CONSEC_SC':
-				if (reset || message.FIVE_CONSEC_SC === 5) {
-					resetFiveConsecutiveSureCorrect();
-				} else {
-					setMessage({
-						...message,
-						FIVE_CONSEC_SC: message.FIVE_CONSEC_SC + 1,
-					});
-				}
-				break;
-			case 'FULL_ROUND_OF_SC':
-				if (reset) {
-					resetFullRoundOfSureCorrect();
-				} else {
-					setMessage({
-						...message,
-						FULL_ROUND_OF_SC: message.FULL_ROUND_OF_SC + 1,
-					});
-				}
-				break;
-			case 'BOTH_SC':
-				setMessage({
-					...message,
-					FULL_ROUND_OF_SC: message.FULL_ROUND_OF_SC + 1,
-					FIVE_CONSEC_SC: message.FIVE_CONSEC_SC + 1,
-				});
-				break;
-			case 'FIVE_FAST_REVIEWS':
-				if (reset || message.FIVE_FAST_REVIEWS === 5) {
-					resetFiveFastReviews();
-				} else {
-					setMessage({
-						...message,
-						FIVE_FAST_REVIEWS: message.FIVE_FAST_REVIEWS + 1,
-					});
-				}
-				break;
-			default:
-				// handle default case
-				break;
-		}
-	};
+			const restTwoFastReviewsInLu = () => {
+				const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.filter(
+					(question) => question.questionId !== questionId,
+				);
+
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+				}));
+			};
+
+			switch (messageType) {
+				case 'FIVE_FAST_ANSWERS':
+					if (reset || message.FIVE_FAST_ANSWERS === 5) {
+						resetFiveFastAnswers();
+					} else {
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							FIVE_FAST_ANSWERS: prevMessage.FIVE_FAST_ANSWERS + 1,
+						}));
+					}
+					break;
+				case 'FIVE_CONSEC_SI':
+					if (reset || message.FIVE_CONSEC_SI === 5) {
+						resetFiveConsecutiveSureIncorrect();
+					} else {
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							FIVE_CONSEC_SI: prevMessage.FIVE_CONSEC_SI + 1,
+						}));
+					}
+					break;
+				case 'SIX_DK_IN_ROUND':
+					if (reset || message.SIX_DK_IN_ROUND === 6) {
+						resetSixDontKnowInRound();
+					} else {
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							SIX_DK_IN_ROUND: prevMessage.SIX_DK_IN_ROUND + 1,
+						}));
+					}
+					break;
+				case 'FIVE_CONSEC_SC':
+					if (reset || message.FIVE_CONSEC_SC === 5) {
+						resetFiveConsecutiveSureCorrect();
+					} else {
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							FIVE_CONSEC_SC: prevMessage.FIVE_CONSEC_SC + 1,
+						}));
+					}
+					break;
+				case 'FULL_ROUND_OF_SC':
+					if (reset) {
+						resetFullRoundOfSureCorrect();
+					} else {
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							FULL_ROUND_OF_SC: prevMessage.FULL_ROUND_OF_SC + 1,
+						}));
+					}
+					break;
+				case 'BOTH_SC':
+					setMessage((prevMessage) => ({
+						...prevMessage,
+						FULL_ROUND_OF_SC: prevMessage.FULL_ROUND_OF_SC + 1,
+						FIVE_CONSEC_SC: prevMessage.FIVE_CONSEC_SC + 1,
+					}));
+					break;
+				case 'FIVE_FAST_REVIEWS':
+					if (reset || message.FIVE_FAST_REVIEWS === 5) {
+						resetFiveFastReviews();
+					} else {
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							FIVE_FAST_REVIEWS: prevMessage.FIVE_FAST_REVIEWS + 1,
+						}));
+					}
+					break;
+				case 'TWO_FAST_REVIEWS_IN_LU':
+					if (reset && questionId) {
+						restTwoFastReviewsInLu();
+					} else if (questionId) {
+						const newTFRINLU = [
+							...message.TWO_FAST_REVIEWS_IN_LU.filter(
+								(item) => item.questionId !== questionId,
+							),
+							{ questionId: Number(questionId) },
+						];
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							TWO_FAST_REVIEWS_IN_LU: newTFRINLU,
+						}));
+					}
+					break;
+
+				default:
+					// handle default case
+					break;
+			}
+		},
+		[message],
+	);
 
 	const value = useMemo(
 		() => ({ message, handleMessage, selectedCourseKey, setSelectedCourseKey }),
