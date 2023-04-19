@@ -15,6 +15,7 @@ type QuizContextType = {
 		FULL_ROUND_OF_SC: number;
 		FIVE_FAST_REVIEWS: number;
 		TWO_FAST_REVIEWS_IN_LU: { questionId: number }[];
+		TEN_LONG_REVIEWS: number;
 	};
 	handleMessage: (
 		messageType: string,
@@ -34,6 +35,7 @@ const QuizContext = createContext<QuizContextType>({
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
+		TEN_LONG_REVIEWS: 0,
 	},
 	handleMessage: () => {},
 	selectedCourseKey: '',
@@ -49,6 +51,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
+		TEN_LONG_REVIEWS: 0,
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
@@ -95,6 +98,13 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					...prevMessage,
 					FIVE_FAST_REVIEWS: 0,
 				}));
+			};
+
+			const resetTenLongReviews = () => {
+				setMessage({
+					...message,
+					TEN_LONG_REVIEWS: 0,
+				});
 			};
 
 			const resetTwoFastReviewsInLu = () => {
@@ -192,7 +202,16 @@ export const QuizProvider = ({ children }: { children: any }) => {
 						}));
 					}
 					break;
-
+				case 'TEN_LONG_REVIEWS':
+					if (reset || message.TEN_LONG_REVIEWS === 10) {
+						resetTenLongReviews();
+					} else {
+						setMessage({
+							...message,
+							TEN_LONG_REVIEWS: message.TEN_LONG_REVIEWS + 1,
+						});
+					}
+					break;
 				default:
 					// handle default case
 					break;

@@ -111,6 +111,7 @@ const resources = {
          fullRoundSureCorrect: 'Perfect round! Great work!',
          twoFastReviewsInLu: `You didn't read about this concept last time. Take your time to read the explanation and you'll finish faster.`,
          fiveFastReviews: 'Slow down and absorb the material.  It will take you less time to actually learn.',
+         tenLongReviews: 'You’re putting the time into reading the explanations. Good work. Its worth it.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
