@@ -113,7 +113,7 @@ const WhatYouNeedToKnowComponent = ({
 			)}
 
 			<Divider />
-			<Collapse in={true} animateOpacity>
+			<Collapse in={!isOpen} animateOpacity>
 				<VStack marginTop={'16px'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
 						<Text float="left" fontSize="14px">
