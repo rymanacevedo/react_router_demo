@@ -1,9 +1,9 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 
-type SeenQuestionType = {
+export type SeenQuestionType = {
 	[key: number]: {
 		seenCount: number;
-		correctess: string;
+		correctness: string;
 		confidence: string;
 		npaCount: number;
 		siCount: number;
@@ -24,7 +24,7 @@ type QuizContextType = {
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
 	seenQuestions: SeenQuestionType[];
-	setSeenQuestions: (seenQuestions: SeenQuestionType[]) => void;
+	setSeenQuestions: React.Dispatch<React.SetStateAction<SeenQuestionType[]>>;
 };
 
 const QuizContext = createContext<QuizContextType>({

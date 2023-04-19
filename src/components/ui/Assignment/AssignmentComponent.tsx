@@ -19,7 +19,10 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { useNavigate } from 'react-router-dom';
 import LoadingAssignmentView from '../loading/LoadingAssignmentView';
-import { useQuizContext } from '../../../hooks/useQuizContext';
+import {
+	useQuizContext,
+	SeenQuestionType,
+} from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
@@ -226,21 +229,22 @@ export default function AssignmentComponent({
 	}, []);
 
 	useEffect(() => {
-		//@ts-ignore
-		setSeenQuestions((prevState) => {
-			return [
-				...prevState,
-				{
-					[questionInFocus.id]: {
-						seenCount: 1,
-						correctness: '',
-						confidence: '',
-						npaCount: 0,
-						siCount: 0,
+		setSeenQuestions(
+			(seenQuestions: SeenQuestionType[]): SeenQuestionType[] => {
+				return [
+					...seenQuestions,
+					{
+						[questionInFocus.id]: {
+							seenCount: 1,
+							correctness: '',
+							confidence: '',
+							npaCount: 0,
+							siCount: 0,
+						},
 					},
-				},
-			];
-		});
+				];
+			},
+		);
 	}, [questionInFocus]);
 
 	const submitAnswer = () => {
