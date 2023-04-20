@@ -18,6 +18,7 @@ type QuizContextType = {
 		FULL_ROUND_OF_SC: number;
 		FIVE_FAST_REVIEWS: number;
 		TEN_LONG_REVIEWS: number;
+		TWO_IDENTICAL_SI: number;
 	};
 	handleMessage: (messageType: string, reset: boolean) => void;
 	selectedCourseKey: string;
@@ -35,6 +36,7 @@ const QuizContext = createContext<QuizContextType>({
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
 		TEN_LONG_REVIEWS: 0,
+		TWO_IDENTICAL_SI: 0,
 	},
 	handleMessage: () => {},
 	selectedCourseKey: '',
@@ -52,6 +54,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
 		TEN_LONG_REVIEWS: 0,
+		TWO_IDENTICAL_SI: 0,
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
@@ -103,6 +106,12 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			setMessage({
 				...message,
 				TEN_LONG_REVIEWS: 0,
+			});
+		};
+		const resetTwoIdenticalSureIncorrect = () => {
+			setMessage({
+				...message,
+				TWO_IDENTICAL_SI: 0,
 			});
 		};
 
@@ -181,6 +190,16 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					setMessage({
 						...message,
 						TEN_LONG_REVIEWS: message.TEN_LONG_REVIEWS + 1,
+					});
+				}
+				break;
+			case 'TWO_IDENTICAL_SI':
+				if (reset || message.TWO_IDENTICAL_SI === 2) {
+					resetTwoIdenticalSureIncorrect();
+				} else {
+					setMessage({
+						...message,
+						TWO_IDENTICAL_SI: message.TWO_IDENTICAL_SI + 1,
 					});
 				}
 				break;

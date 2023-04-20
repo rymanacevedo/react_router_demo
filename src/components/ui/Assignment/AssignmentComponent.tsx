@@ -256,12 +256,12 @@ export default function AssignmentComponent({
 	};
 
 	const addQuestion = (
-		newObject: SeenQuestionType,
+		newQuestion: SeenQuestionType,
 		overLayData: CurrentRoundAnswerOverLayData,
 	) => {
-		const index = seenQuestions.findIndex((obj) => obj.id === newObject.id);
+		const index = seenQuestions.findIndex((obj) => obj.id === newQuestion.id);
 		if (index === -1) {
-			setSeenQuestions([...seenQuestions, newObject]);
+			setSeenQuestions([...seenQuestions, newQuestion]);
 		} else {
 			setSeenQuestions((prevState) => {
 				const updatedArray = [...prevState];
@@ -394,6 +394,16 @@ export default function AssignmentComponent({
 			putCurrentRoundRes();
 		}
 	}, [answerData]);
+
+	useEffect(() => {
+		const currentQuestion = seenQuestions.find((question) => {
+			return question.id === questionInFocus.publishedQuestionId;
+		});
+
+		if (currentQuestion?.siCount === 2) {
+			handleMessage('TWO_IDENTICAL_SI', false);
+		}
+	}, [seenQuestions]);
 
 	const handleReturnHome = () => {
 		navigate('/app/learning');
