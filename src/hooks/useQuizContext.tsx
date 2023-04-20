@@ -206,10 +206,10 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					if (reset || message.TEN_LONG_REVIEWS === 10) {
 						resetTenLongReviews();
 					} else {
-						setMessage({
-							...message,
-							TEN_LONG_REVIEWS: message.TEN_LONG_REVIEWS + 1,
-						});
+						setMessage((prevMessage) => ({
+							...prevMessage,
+							TEN_LONG_REVIEWS: prevMessage.TEN_LONG_REVIEWS + 1,
+						}));
 					}
 					break;
 				default:

@@ -513,7 +513,7 @@ const AssignmentReviewView = () => {
 		if (message.TEN_LONG_REVIEWS === 10) {
 			setIsToastOpen(true);
 			setTextPrompt('TEN_LONG_REVIEWS');
-			handleMessage('FIVE_FAST_REVIEWS', true);
+			handleMessage('TEN_LONG_REVIEWS', true);
 		}
 	}, [message.TEN_LONG_REVIEWS]);
 
