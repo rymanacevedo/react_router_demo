@@ -1,13 +1,12 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 
 export type SeenQuestionType = {
-	[key: number]: {
-		seenCount: number;
-		correctness: string;
-		confidence: string;
-		npaCount: number;
-		siCount: number;
-	};
+	id: string | number;
+	seenCount: number;
+	correctness: string;
+	confidence: string;
+	npaCount: number;
+	siCount: number;
 };
 
 type QuizContextType = {

@@ -67,7 +67,8 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage, setSeenQuestions } = useQuizContext();
+	const { message, handleMessage, seenQuestions, setSeenQuestions } =
+		useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
@@ -228,25 +229,6 @@ export default function AssignmentComponent({
 		startTimer();
 	}, []);
 
-	useEffect(() => {
-		setSeenQuestions(
-			(seenQuestions: SeenQuestionType[]): SeenQuestionType[] => {
-				return [
-					...seenQuestions,
-					{
-						[questionInFocus.id]: {
-							seenCount: 1,
-							correctness: '',
-							confidence: '',
-							npaCount: 0,
-							siCount: 0,
-						},
-					},
-				];
-			},
-		);
-	}, [questionInFocus]);
-
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: any) => {
 			return {
@@ -270,6 +252,37 @@ export default function AssignmentComponent({
 			}
 		} else {
 			submitAnswer();
+		}
+	};
+
+	const addQuestion = (
+		newObject: SeenQuestionType,
+		overLayData: CurrentRoundAnswerOverLayData,
+	) => {
+		const index = seenQuestions.findIndex((obj) => obj.id === newObject.id);
+		if (index === -1) {
+			setSeenQuestions([...seenQuestions, newObject]);
+		} else {
+			setSeenQuestions((prevState) => {
+				const updatedArray = [...prevState];
+				updatedArray[index] = {
+					...updatedArray[index],
+					seenCount: updatedArray[index].seenCount + 1,
+					correctness: overLayData.correctness,
+					confidence: overLayData.confidence,
+					npaCount:
+						`${overLayData.confidence}${overLayData.correctness}` !==
+						'SureCorrect'
+							? updatedArray[index].npaCount + 1
+							: updatedArray[index].npaCount,
+					siCount:
+						`${overLayData.confidence}${overLayData.correctness}` ===
+						'SureIncorrect'
+							? updatedArray[index].siCount + 1
+							: updatedArray[index].siCount,
+				};
+				return updatedArray;
+			});
 		}
 	};
 
@@ -356,6 +369,25 @@ export default function AssignmentComponent({
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
+				addQuestion(
+					{
+						id: questionInFocus.publishedQuestionId,
+						seenCount: 1,
+						correctness: overLayData.correctness,
+						confidence: overLayData.confidence,
+						npaCount:
+							`${overLayData.confidence}${overLayData.correctness}` !==
+							'SureCorrect'
+								? 1
+								: 0,
+						siCount:
+							`${overLayData.confidence}${overLayData.correctness}` ===
+							'SureIncorrect'
+								? 1
+								: 0,
+					},
+					overLayData,
+				);
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
