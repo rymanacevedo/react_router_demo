@@ -148,7 +148,6 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	};
 
 	const handleAssignmentClick = (assignment: AssignmentType) => () => {
-		console.log('assignment', assignment);
 		if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {
 				setRefreshIsOpen('');
