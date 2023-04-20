@@ -2,16 +2,25 @@ import { Key, useEffect, useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
+	Button,
+	ButtonGroup,
 	Divider,
 	HStack,
 	List,
 	ListItem,
+	Popover,
+	PopoverAnchor,
+	PopoverArrow,
+	PopoverContent,
+	PopoverTrigger,
 	Text,
+	VStack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
 import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
+import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 
 type AssignmentType = {
 	assignmentType: string;
@@ -40,6 +49,8 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	const { t: i18n } = useTranslation();
 	const { getCurriculaCourseList } = useCourseCurriculaListService();
 	const { getAssignments } = useAssignmentByUserAssociations();
+	const [refreshIsOpen, setRefreshIsOpen] = useState('');
+	const { startRefresher } = useModuleContentService();
 	const [assignmentListData, setAssignmentsListData] =
 		useState<AssignmentListDataType>({
 			displayCurriculum: {
@@ -137,7 +148,14 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	};
 
 	const handleAssignmentClick = (assignment: AssignmentType) => () => {
-		if (
+		console.log('assignment', assignment);
+		if (assignment.status === 'COMPLETED') {
+			if (refreshIsOpen) {
+				setRefreshIsOpen('');
+			} else {
+				setRefreshIsOpen(assignment.assignmentKey);
+			}
+		} else if (
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
 		) {
@@ -160,6 +178,10 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			});
 		}
 	};
+	const handleRefresherClick = (assignment: AssignmentType) => async () => {
+		const refresher = await startRefresher(assignment.assignmentKey);
+		navigate(`moduleIntro/${refresher.assignmentKey}`);
+	};
 
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
@@ -167,34 +189,59 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 				curriculum.assignments[curriculum.assignments.length - 1];
 
 			return (
-				<ListItem
-					height={'44px'}
-					padding={'4px'}
-					key={curriculum.name}
-					onClick={handleAssignmentClick(assignment)}>
-					<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
-						<Text
-							_hover={{
-								textDecoration: 'underline',
-								color: 'ampPrimary.300 ',
-								cursor: 'pointer',
-							}}
-							fontSize={'21px'}
-							fontWeight={'bold'}>
-							{curriculum.name}
-						</Text>
-						{getAssignmentText(assignment)}
-					</HStack>
-					{index !==
-						assignmentListData?.displayCurriculum.children.length - 1 && (
-						<Divider
-							borderWidth="1px"
-							borderStyle="solid"
-							borderRadius="10"
-							borderColor="#AFB3B4"
-						/>
-					)}
-				</ListItem>
+				<Popover
+					key={index}
+					returnFocusOnClose={false}
+					isOpen={refreshIsOpen === assignment?.assignmentKey}
+					placement="bottom"
+					closeOnBlur={false}>
+					<PopoverTrigger>
+						<PopoverAnchor>
+							<ListItem
+								height={'44px'}
+								padding={'4px'}
+								w="100%"
+								key={curriculum.name}
+								onClick={handleAssignmentClick(assignment)}>
+								<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+									<Text
+										_hover={{
+											textDecoration: 'underline',
+											color: 'ampPrimary.300 ',
+											cursor: 'pointer',
+										}}
+										fontSize={'21px'}
+										fontWeight={'bold'}>
+										{curriculum.name}
+									</Text>
+									{getAssignmentText(assignment)}
+								</HStack>
+								{index !==
+									assignmentListData?.displayCurriculum.children.length - 1 && (
+									<Divider
+										borderWidth="1px"
+										borderStyle="solid"
+										borderRadius="10"
+										borderColor="#AFB3B4"
+									/>
+								)}
+							</ListItem>
+						</PopoverAnchor>
+					</PopoverTrigger>
+					<PopoverContent>
+						<PopoverArrow />
+						<ButtonGroup size="lg" w="100%">
+							<VStack>
+								<Button
+									w="320px"
+									variant="ampOutline"
+									onClick={handleRefresherClick(curriculum.assignments[0])}>
+									{i18n('refresher')}
+								</Button>
+							</VStack>
+						</ButtonGroup>
+					</PopoverContent>
+				</Popover>
 			);
 		},
 	);

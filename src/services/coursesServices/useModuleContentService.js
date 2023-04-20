@@ -42,6 +42,31 @@ const useModuleContentService = () => {
 		}
 	};
 
+	const startRefresher = async (assignmentKey) => {
+		try {
+			setLoading(true);
+			const startRefreshResponse = await axios({
+				method: 'POST',
+				url: `/v2/assignments/${assignmentKey}/refreshers?subaccount=${subaccount}`,
+				headers: {
+					Authorization: `Basic ${window.base64.encode(
+						`${user.sessionKey}:someotherstring`,
+					)}`,
+					'Content-type': 'application/json',
+				},
+			});
+
+			return startRefreshResponse.data;
+		} catch (err) {
+			setError(err);
+			if (err.response.status >= 500) {
+				setShowAlert(true);
+			}
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const fetchModuleContent = async (assignmentKey) => {
 		try {
 			setLoading(true);
@@ -98,6 +123,7 @@ const useModuleContentService = () => {
 		fetchModuleContent,
 		fetchAssignments,
 		fetchModuleQuestions,
+		startRefresher,
 	};
 };
 export default useModuleContentService;

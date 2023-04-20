@@ -19,6 +19,7 @@ const ModuleIntroView = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			let response = await fetchModuleContent(assignmentKey);
+			console.log('response', response);
 			if (response?.introductionRc) {
 				setData(response);
 			} else {
@@ -45,8 +46,8 @@ const ModuleIntroView = () => {
 				overflowX={'hidden'}>
 				<ModuleIntroOutroComponent
 					moduleData={data}
-					numberOfLearningUnits={state.numberOfLearningUnits}
-					estimatedTimeToComplete={state.estimatedTimeToComplete}
+					numberOfLearningUnits={state?.numberOfLearningUnits}
+					estimatedTimeToComplete={state?.estimatedTimeToComplete}
 					action={beginAssignment}
 				/>
 			</Container>
