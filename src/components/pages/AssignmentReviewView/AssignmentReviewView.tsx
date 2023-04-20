@@ -517,6 +517,22 @@ const AssignmentReviewView = () => {
 		}
 	}, [message.TEN_LONG_REVIEWS]);
 
+	useEffect(() => {
+		if (
+			message.TWO_FAST_REVIEWS_IN_LU.filter(
+				(item) => item.questionId === questionInFocus?.publishedQuestionId,
+			)
+		) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_FAST_REVIEWS_IN_LU');
+			handleMessage(
+				'TWO_FAST_REVIEWS_IN_LU',
+				true,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
+	}, [message.TWO_FAST_REVIEWS_IN_LU]);
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
