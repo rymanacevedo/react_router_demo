@@ -81,7 +81,11 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	}, [selectedCourseKey]);
 
 	const getAssignmentText = (assignment: AssignmentType) => {
-		if (assignment?.assignmentType !== 'TimedAssessment') {
+		if (assignment?.assignmentType === 'Assessment' && assignment?.status === 'COMPLETED') {
+			return <Text fontSize={'12px'}>{i18n('completedAssessment')}</Text>;
+		} else if( assignment?.assignmentType === 'Assessment' ) {
+			return <Text fontSize={'12px'}>{i18n('assessment')}</Text>;
+		} else if (assignment?.assignmentType !== 'TimedAssessment') {
 			switch (assignment?.status) {
 				case 'NOT_STARTED': {
 					return (
@@ -231,12 +235,14 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 						<PopoverArrow />
 						<ButtonGroup size="lg" w="100%">
 							<VStack>
+								{curriculum?.assignments[0]?.assignmentType !== 'Assessment' && (
 								<Button
 									w="320px"
 									variant="ghost"
 									onClick={handleRefresherClick(curriculum.assignments[0])}>
 									{i18n('refresher')}
 								</Button>
+								)}
 							</VStack>
 						</ButtonGroup>
 					</PopoverContent>

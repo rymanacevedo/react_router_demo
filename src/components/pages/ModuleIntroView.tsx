@@ -19,7 +19,6 @@ const ModuleIntroView = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			let response = await fetchModuleContent(assignmentKey);
-			console.log('response', response);
 			if (response?.introductionRc) {
 				setData(response);
 			} else {
