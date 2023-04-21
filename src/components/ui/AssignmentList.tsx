@@ -233,7 +233,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 							<VStack>
 								<Button
 									w="320px"
-									variant="ampOutline"
+									variant="ghost"
 									onClick={handleRefresherClick(curriculum.assignments[0])}>
 									{i18n('refresher')}
 								</Button>
