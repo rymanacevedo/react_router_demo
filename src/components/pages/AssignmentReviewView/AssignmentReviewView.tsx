@@ -475,6 +475,13 @@ const AssignmentReviewView = () => {
 	};
 
 	const handleProgress = async () => {
+		if (questionSecondsRef.current <= 7) {
+			handleMessage(
+				'TWO_FAST_REVIEWS_IN_LU',
+				false,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
 		if (viewCorrect) {
 			await handleKeepGoing(lastRevQData);
 		} else {
@@ -507,7 +514,7 @@ const AssignmentReviewView = () => {
 		if (
 			message.TWO_FAST_REVIEWS_IN_LU.filter(
 				(item) => item.questionId === questionInFocus?.publishedQuestionId,
-			)
+			).length
 		) {
 			setIsToastOpen(true);
 			setTextPrompt('TWO_FAST_REVIEWS_IN_LU');
@@ -517,7 +524,7 @@ const AssignmentReviewView = () => {
 				Number(questionInFocus?.publishedQuestionId),
 			);
 		}
-	}, [message.TWO_FAST_REVIEWS_IN_LU]);
+	}, [questionInFocus]);
 
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
