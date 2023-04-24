@@ -150,6 +150,7 @@ export default function AssignmentComponent({
 			let revSkipRes = {} as CurrentRoundQuestionListData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
+				handleMessage('FIVE_CONSEC_SC', true);
 				handleMessage('SIX_DK_IN_ROUND', true);
 				handleMessage('FULL_ROUND_OF_SC', true);
 				setIsSureAndCorrectAllRound(false);
@@ -278,6 +279,7 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', false);
+					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
 					overLayData.confidence === 'Sure' &&
 					overLayData.correctness === 'Incorrect' &&
@@ -286,6 +288,7 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('FIVE_CONSEC_SI', false);
+					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
 					overLayData.confidence === 'NotSure' &&
 					overLayData.correctness === 'NoAnswerSelected' &&
@@ -294,6 +297,7 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('SIX_DK_IN_ROUND', false);
+					handleMessage('FIVE_CONSEC_SC', true);
 				} else {
 					handleMessage('FIVE_CONSEC_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', true);

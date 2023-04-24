@@ -33,6 +33,11 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 		setIcon(<BlueIcon />);
 	};
 
+	const setPossitiveFeedback = () => {
+		setBgColor('ampSuccess.50');
+		setIcon(<GreenIcon />);
+	};
+
 	useEffect(() => {
 		switch (textPrompt) {
 			case 'FIVE_FAST_ANSWERS':
@@ -49,22 +54,23 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				break;
 			case 'FIVE_CONSEC_SC':
 				setToastText(i18n('fiveSureCorrectAnswers'));
-				setBgColor('ampSuccess.50');
-				setIcon(<GreenIcon />);
+				setPossitiveFeedback();
 				break;
 			case 'FULL_ROUND_OF_SC':
 				setToastText(i18n('fullRoundSureCorrect'));
-				setBgColor('ampSuccess.50');
-				setIcon(<GreenIcon />);
+				setPossitiveFeedback();
 				break;
 			case 'FIVE_FAST_REVIEWS':
 				setToastText(i18n('fiveFastReviews'));
 				setNegativeFeedback();
 				break;
+			case 'TWO_FAST_REVIEWS_IN_LU':
+				setToastText(i18n('twoFastReviewsInLu'));
+				setNegativeFeedback();
+				break;
 			case 'TEN_LONG_REVIEWS':
 				setToastText(i18n('tenLongReviews'));
-				setBgColor('ampSuccess.50');
-				setIcon(<GreenIcon />);
+				setPossitiveFeedback();
 				break;
 			default:
 				setToastText(
