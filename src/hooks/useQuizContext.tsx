@@ -14,7 +14,10 @@ type QuizContextType = {
 		FIVE_CONSEC_SC: number;
 		FULL_ROUND_OF_SC: number;
 		FIVE_FAST_REVIEWS: number;
-		TWO_FAST_REVIEWS_IN_LU: { questionId: number }[];
+		TWO_FAST_REVIEWS_IN_LU: {
+			questionId: number;
+			fastReviewsOnQuestion: number;
+		}[];
 		TEN_LONG_REVIEWS: number;
 	};
 	handleMessage: (
@@ -34,7 +37,7 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
-		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
+		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
 	},
 	handleMessage: () => {},
@@ -50,7 +53,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
-		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
+		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
 	});
 
@@ -190,16 +193,34 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					if (reset && questionId) {
 						resetTwoFastReviewsInLu();
 					} else if (questionId) {
-						const newVal = [
-							...message.TWO_FAST_REVIEWS_IN_LU.filter(
-								(item) => item.questionId !== questionId,
-							),
-							{ questionId: Number(questionId) },
-						];
-						setMessage((prevMessage) => ({
-							...prevMessage,
-							TWO_FAST_REVIEWS_IN_LU: newVal,
-						}));
+						const isQuestionInArray = message.TWO_FAST_REVIEWS_IN_LU.some(
+							(question) => question.questionId === questionId,
+						);
+
+						if (isQuestionInArray) {
+							const updatedTwoFastReviewsInLu =
+								message.TWO_FAST_REVIEWS_IN_LU.map((question) => {
+									if (question.questionId === questionId) {
+										return {
+											...question,
+											fastReviewsOnQuestion: question.fastReviewsOnQuestion + 1,
+										};
+									}
+									return question;
+								});
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+							}));
+						} else {
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_FAST_REVIEWS_IN_LU: [
+									...prevMessage.TWO_FAST_REVIEWS_IN_LU,
+									{ questionId: Number(questionId), fastReviewsOnQuestion: 0 },
+								],
+							}));
+						}
 					}
 					break;
 				case 'TEN_LONG_REVIEWS':

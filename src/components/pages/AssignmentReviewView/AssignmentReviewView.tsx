@@ -454,6 +454,13 @@ const AssignmentReviewView = () => {
 	};
 	const handleKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
 		proceedDownDesiredPathRef.current = false;
+		if (questionSecondsRef.current <= 7) {
+			handleMessage(
+				'TWO_FAST_REVIEWS_IN_LU',
+				false,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
 		setAnswerData((answerDataArg: any) => {
 			return {
 				...answerDataArg,
@@ -511,18 +518,20 @@ const AssignmentReviewView = () => {
 	}, [message.TEN_LONG_REVIEWS]);
 
 	useEffect(() => {
-		if (
-			message.TWO_FAST_REVIEWS_IN_LU.filter(
-				(item) => item.questionId === questionInFocus?.publishedQuestionId,
-			).length
-		) {
-			setIsToastOpen(true);
-			setTextPrompt('TWO_FAST_REVIEWS_IN_LU');
-			handleMessage(
-				'TWO_FAST_REVIEWS_IN_LU',
-				true,
-				Number(questionInFocus?.publishedQuestionId),
-			);
+		if (questionInFocus.publishedQuestionId) {
+			if (
+				message.TWO_FAST_REVIEWS_IN_LU.filter((item) => {
+					return item.questionId === questionInFocus?.publishedQuestionId;
+				})[0]?.fastReviewsOnQuestion === 2
+			) {
+				setIsToastOpen(true);
+				setTextPrompt('TWO_FAST_REVIEWS_IN_LU');
+				handleMessage(
+					'TWO_FAST_REVIEWS_IN_LU',
+					true,
+					Number(questionInFocus?.publishedQuestionId),
+				);
+			}
 		}
 	}, [questionInFocus]);
 
