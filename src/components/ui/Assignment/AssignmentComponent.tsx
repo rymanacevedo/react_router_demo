@@ -307,31 +307,21 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				let updatedLocalQuestionHistory = localQuestionHistory
-					?.roundQuestionsHistory.length
-					? {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								...localQuestionHistory?.roundQuestionsHistory,
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  }
-					: {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  };
+				let roundQuestionsHistory =
+					localQuestionHistory?.roundQuestionsHistory || [];
+
+				let updatedLocalQuestionHistory = {
+					currentRoundId: currentRoundQuestionListData?.id,
+					roundQuestionsHistory: [
+						...roundQuestionsHistory,
+						{
+							answeredQuestionId: questionInFocus.id,
+							answersChosen: [...answerData.answerList],
+							correctAnswerIds: [...overLayData.correctAnswerIds],
+							questionSeconds: answerData.questionSeconds,
+						},
+					],
+				};
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
