@@ -19,10 +19,7 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { useNavigate } from 'react-router-dom';
 import LoadingAssignmentView from '../loading/LoadingAssignmentView';
-import {
-	useQuizContext,
-	SeenQuestionType,
-} from '../../../hooks/useQuizContext';
+import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
@@ -67,8 +64,7 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage, seenQuestions, setSeenQuestions } =
-		useQuizContext();
+	const { message, handleMessage } = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
@@ -255,37 +251,6 @@ export default function AssignmentComponent({
 		}
 	};
 
-	const addQuestion = (
-		newQuestion: SeenQuestionType,
-		overLayData: CurrentRoundAnswerOverLayData,
-	) => {
-		const index = seenQuestions.findIndex((obj) => obj.id === newQuestion.id);
-		if (index === -1) {
-			setSeenQuestions([...seenQuestions, newQuestion]);
-		} else {
-			setSeenQuestions((prevState) => {
-				const updatedArray = [...prevState];
-				updatedArray[index] = {
-					...updatedArray[index],
-					seenCount: updatedArray[index].seenCount + 1,
-					correctness: overLayData.correctness,
-					confidence: overLayData.confidence,
-					npaCount:
-						`${overLayData.confidence}${overLayData.correctness}` !==
-						'SureCorrect'
-							? updatedArray[index].npaCount + 1
-							: updatedArray[index].npaCount,
-					siCount:
-						`${overLayData.confidence}${overLayData.correctness}` ===
-						'SureIncorrect'
-							? updatedArray[index].siCount + 1
-							: updatedArray[index].siCount,
-				};
-				return updatedArray;
-			});
-		}
-	};
-
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
 			const overLayData = await putCurrentRound(
@@ -369,41 +334,22 @@ export default function AssignmentComponent({
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
-				addQuestion(
-					{
-						id: questionInFocus.publishedQuestionId,
-						seenCount: 1,
-						correctness: overLayData.correctness,
-						confidence: overLayData.confidence,
-						npaCount:
-							`${overLayData.confidence}${overLayData.correctness}` !==
-							'SureCorrect'
-								? 1
-								: 0,
-						siCount:
-							`${overLayData.confidence}${overLayData.correctness}` ===
-							'SureIncorrect'
-								? 1
-								: 0,
-					},
-					overLayData,
-				);
+				if (
+					`${overLayData.confidence}${overLayData.correctness}` ===
+					'SureIncorrect'
+				) {
+					handleMessage(
+						'TWO_IDENTICAL_SI',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
+				}
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
 		}
 	}, [answerData]);
-
-	useEffect(() => {
-		const currentQuestion = seenQuestions.find((question) => {
-			return question.id === questionInFocus.publishedQuestionId;
-		});
-
-		if (currentQuestion?.siCount === 2) {
-			handleMessage('TWO_IDENTICAL_SI', false);
-		}
-	}, [seenQuestions]);
 
 	const handleReturnHome = () => {
 		navigate('/app/learning');
@@ -471,6 +417,22 @@ export default function AssignmentComponent({
 		message.FULL_ROUND_OF_SC,
 		currentRoundQuestionListData?.questionList.length,
 	]);
+
+	useEffect(() => {
+		const index = message.TWO_IDENTICAL_SI.findIndex(
+			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
+		);
+
+		if (index !== -1 && message.TWO_IDENTICAL_SI[index].siCount >= 2) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_IDENTICAL_SI');
+			handleMessage(
+				'TWO_IDENTICAL_SI',
+				true,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
+	}, [message.TWO_IDENTICAL_SI]);
 
 	return currentRoundQuestionListData ? (
 		<>
