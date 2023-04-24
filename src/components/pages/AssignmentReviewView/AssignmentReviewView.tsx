@@ -390,6 +390,11 @@ const AssignmentReviewView = () => {
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
 		}
+
+		if (message.FIVE_CONSEC_SC > 0) {
+			handleMessage('FIVE_CONSEC_SC', true);
+			handleMessage('FULL_ROUND_OF_SC', true);
+		}
 	}, [answerData]);
 	const incrementQuestion = () => {
 		let count = questionIndex;

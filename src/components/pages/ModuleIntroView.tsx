@@ -45,8 +45,8 @@ const ModuleIntroView = () => {
 				overflowX={'hidden'}>
 				<ModuleIntroOutroComponent
 					moduleData={data}
-					numberOfLearningUnits={state.numberOfLearningUnits}
-					estimatedTimeToComplete={state.estimatedTimeToComplete}
+					numberOfLearningUnits={state?.numberOfLearningUnits}
+					estimatedTimeToComplete={state?.estimatedTimeToComplete}
 					action={beginAssignment}
 				/>
 			</Container>
