@@ -16,6 +16,7 @@ type QuizContextType = {
 		FIVE_FAST_REVIEWS: number;
 		TWO_FAST_REVIEWS_IN_LU: { questionId: number }[];
 		TEN_LONG_REVIEWS: number;
+		TWO_IDENTICAL_SI: { questionId: number; siCount: number }[];
 	};
 	handleMessage: (
 		messageType: string,
@@ -36,6 +37,7 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
 		TEN_LONG_REVIEWS: 0,
+		TWO_IDENTICAL_SI: [],
 	},
 	handleMessage: () => {},
 	selectedCourseKey: '',
@@ -52,6 +54,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
 		TEN_LONG_REVIEWS: 0,
+		TWO_IDENTICAL_SI: [],
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
@@ -115,6 +118,18 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				setMessage((prevMessage) => ({
 					...prevMessage,
 					TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+				}));
+			};
+
+			const resetTwoIdenticalSureIncorrects = () => {
+				const updatedTwoIdenticalSureIncorrects =
+					message.TWO_IDENTICAL_SI.filter(
+						(question) => question.questionId !== questionId,
+					);
+
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					TWO_IDENTICAL_SI: updatedTwoIdenticalSureIncorrects,
 				}));
 			};
 
@@ -212,6 +227,37 @@ export const QuizProvider = ({ children }: { children: any }) => {
 						}));
 					}
 					break;
+				case 'TWO_IDENTICAL_SI':
+					if (reset && questionId) {
+						resetTwoIdenticalSureIncorrects();
+					} else if (questionId) {
+						const index = message.TWO_IDENTICAL_SI.findIndex(
+							(obj) => obj.questionId === questionId,
+						);
+
+						const newSiEntry = [
+							...message.TWO_IDENTICAL_SI,
+							{ questionId: Number(questionId), siCount: 1 },
+						];
+
+						if (index === -1) {
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_IDENTICAL_SI: newSiEntry,
+							}));
+						} else {
+							const updatedSiArray = [...message.TWO_IDENTICAL_SI];
+							updatedSiArray[index] = {
+								...updatedSiArray[index],
+								siCount: updatedSiArray[index].siCount + 1,
+							};
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_IDENTICAL_SI: updatedSiArray,
+							}));
+						}
+					}
+					break;
 				default:
 					// handle default case
 					break;
@@ -221,7 +267,12 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	);
 
 	const value = useMemo(
-		() => ({ message, handleMessage, selectedCourseKey, setSelectedCourseKey }),
+		() => ({
+			message,
+			handleMessage,
+			selectedCourseKey,
+			setSelectedCourseKey,
+		}),
 		[message, handleMessage, selectedCourseKey, setSelectedCourseKey],
 	);
 

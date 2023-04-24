@@ -68,6 +68,10 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setToastText(i18n('twoFastReviewsInLu'));
 				setNegativeFeedback();
 				break;
+			case 'TWO_IDENTICAL_SI':
+				setToastText(i18n('twoIdenticalSureIncorrects'));
+				setNegativeFeedback();
+				break;
 			case 'TEN_LONG_REVIEWS':
 				setToastText(i18n('tenLongReviews'));
 				setPossitiveFeedback();
