@@ -61,13 +61,35 @@ const RichContentComponent = ({
 	// 	}
 	// }, []);
 
+	const fixContentSrcUrls = (contentArg: string) => {
+		if (!contentArg?.includes('amp_resource?path=')) {
+			return contentArg;
+		}
+
+		const baseUrl = window.location.origin + '/amp/';
+
+		const updateUrl = (match: string) => {
+			return baseUrl + match;
+		};
+
+		const updatedContent = contentArg.replace(
+			/(amp_resource\?path=)/g,
+			updateUrl,
+		);
+
+		return updatedContent;
+	};
+
 	useEffect(() => {
 		replaceH5pElements();
 		//replaceMathJaxElements();
 	}, [content, replaceH5pElements]); // replaceMathJaxElements]);
 
 	return (
-		<Box style={{ ...style }} dangerouslySetInnerHTML={unsanitize(content)} />
+		<Box
+			style={{ ...style }}
+			dangerouslySetInnerHTML={unsanitize(fixContentSrcUrls(content))}
+		/>
 	);
 };
 export default RichContentComponent;
