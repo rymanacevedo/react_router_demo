@@ -43,6 +43,31 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 
+const initState = {
+	self: null,
+	totalQuestionCount: 0,
+	masteredQuestionCount: 0,
+	unseenCount: 0,
+	misinformedCount: 0,
+	uninformedCount: 0,
+	notSureCount: 0,
+	informedCount: 0,
+	onceCorrectCount: 0,
+	twiceCorrectCount: 0,
+	completionPercentage: 0,
+	completionAlgorithmType: '',
+	questionsMastered: 0,
+	questionSeconds: 0,
+	reviewSeconds: 0,
+	answerDate: '',
+	correctness: '',
+	confidence: '',
+	correctAnswerIds: [],
+	moduleComplete: false,
+	avatarMessage: null,
+	answerList: [],
+};
+
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { message, handleMessage } = useQuizContext();
@@ -68,30 +93,7 @@ const AssignmentReviewView = () => {
 		useState<CurrentRoundQuestionListData>();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
-		useState<CurrentRoundAnswerOverLayData>({
-			self: null,
-			totalQuestionCount: 0,
-			masteredQuestionCount: 0,
-			unseenCount: 0,
-			misinformedCount: 0,
-			uninformedCount: 0,
-			notSureCount: 0,
-			informedCount: 0,
-			onceCorrectCount: 0,
-			twiceCorrectCount: 0,
-			completionPercentage: 0,
-			completionAlgorithmType: '',
-			questionsMastered: 0,
-			questionSeconds: 0,
-			reviewSeconds: 0,
-			answerDate: '',
-			correctness: '',
-			confidence: '',
-			correctAnswerIds: [],
-			moduleComplete: false,
-			avatarMessage: null,
-			answerList: [],
-		});
+		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [questionData, setQuestionData] = useState({
 		learningUnits: [{ questions: [] }],
 		kind: '',
@@ -160,12 +162,10 @@ const AssignmentReviewView = () => {
 		null,
 	);
 	const [storedTime, setStoredtime] = useState(0);
-	// eslint-disable-next-line
-	const [localQuestionReviewHistory, setLocalQuestionReviewHistory] =
-		useLocalStorage(
-			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
-			null,
-		);
+	const [, setLocalQuestionReviewHistory] = useLocalStorage(
+		`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
+		null,
+	);
 	const [IDKResponse, setIDKResponse] = useState(false);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -239,24 +239,46 @@ const AssignmentReviewView = () => {
 					);
 				}
 
-				const savedData = localQuestionHistory?.roundQuestionsHistory?.find(
-					(questionHistory: { answeredQuestionId: number }) => {
-						return (
-							questionHistory.answeredQuestionId ===
-							findQuestionInFocus(
-								moduleQuestionsResponse,
-								currentRoundQuestionsResponse,
-								true,
-								viewCorrect,
-							)[questionIndex].id
-						);
-					},
+				const questionId: string = findQuestionInFocus(
+					moduleQuestionsResponse,
+					currentRoundQuestionsResponse,
+					true,
+					viewCorrect,
+				)[questionIndex].id;
+				const roundQuestionsHistory: any[] =
+					localQuestionHistory?.roundQuestionsHistory || [];
+				const savedData = roundQuestionsHistory.find(
+					({ answeredQuestionId }: { answeredQuestionId: string }) =>
+						answeredQuestionId === questionId,
 				);
+
+				if (!savedData) {
+					// const payload = {
+					// 	...answerData,
+					// 	answerDate: null,
+					// 	answerList: null,
+					// 	questionSeconds: questionSecondsHistory,
+					// 	reviewSeconds:
+					// 		Number(questionSecondsRef.current) + Number(storedTime),
+					// };
+					//
+					// const data = await putCurrentRound(
+					// 	currentRoundQuestionsResponse?.id,
+					// 	questionInFocus.id,
+					// 	payload,
+					// );
+					//
+					// console.log(data);
+					console.error(
+						'No saved data found, reveal correct answer will not function.',
+					);
+				}
+
 				setQuestionSecondsHistory(savedData?.questionSeconds);
 				setSelectedAnswers(savedData?.answersChosen);
-				setCurrentRoundAnswerOverLayData((roundAnswerOverLayData) => {
+				setCurrentRoundAnswerOverLayData((prevState) => {
 					return {
-						...roundAnswerOverLayData,
+						...prevState,
 						correctAnswerIds: savedData?.correctAnswerIds,
 					};
 				});
@@ -321,7 +343,7 @@ const AssignmentReviewView = () => {
 	).length;
 
 	useEffect(() => {
-		fetchModuleQuestionsData();
+		fetchModuleQuestionsData().catch((error) => new Error(error));
 	}, [questionIndex, viewCorrect]);
 
 	useEffect(() => {
@@ -340,7 +362,7 @@ const AssignmentReviewView = () => {
 
 	useEffect(() => {
 		if (assignmentKey) {
-			fetchModuleQuestionsData(true);
+			fetchModuleQuestionsData(true).catch((error) => new Error(error));
 		}
 	}, [assignmentKey]);
 	const closeExplainModal = () => {
@@ -388,7 +410,7 @@ const AssignmentReviewView = () => {
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
-			putCurrentRoundRes();
+			putCurrentRoundRes().catch((error) => new Error(error));
 		}
 
 		if (message.FIVE_CONSEC_SC > 0) {
@@ -431,12 +453,12 @@ const AssignmentReviewView = () => {
 		}
 
 		setRevealAnswer(false);
-		setShowExplanation(viewCorrect ? true : false);
+		setShowExplanation(viewCorrect);
 		setAnswerSubmitted(false);
 		setTryAgain(false);
 		incrementQuestion();
-		fetchModuleQuestionsData();
-		putReviewInfo();
+		await fetchModuleQuestionsData();
+		await putReviewInfo();
 		stopTimer();
 		startTimer();
 	};

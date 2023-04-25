@@ -307,10 +307,10 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				let roundQuestionsHistory =
+				const roundQuestionsHistory: any[] =
 					localQuestionHistory?.roundQuestionsHistory || [];
 
-				let updatedLocalQuestionHistory = {
+				const updatedLocalQuestionHistory = {
 					currentRoundId: currentRoundQuestionListData?.id,
 					roundQuestionsHistory: [
 						...roundQuestionsHistory,
@@ -331,7 +331,7 @@ export default function AssignmentComponent({
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
-			putCurrentRoundRes();
+			putCurrentRoundRes().catch((error) => new Error(error));
 		}
 	}, [answerData]);
 
@@ -365,7 +365,7 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		if (assignmentKey) {
-			fetchModuleQuestionsData();
+			fetchModuleQuestionsData().catch((error) => new Error(error));
 		}
 	}, [assignmentKey]);
 
