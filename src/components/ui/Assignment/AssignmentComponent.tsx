@@ -4,6 +4,8 @@ import ProgressMenu from '../ProgressMenu';
 
 import {
 	AnswerData,
+	Confidence,
+	Correctness,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
@@ -48,8 +50,8 @@ const initState = {
 	questionSeconds: 0,
 	reviewSeconds: 0,
 	answerDate: '',
-	correctness: '',
-	confidence: '',
+	correctness: null,
+	confidence: null,
 	correctAnswerIds: [],
 	moduleComplete: false,
 	avatarMessage: null,
@@ -102,8 +104,8 @@ export default function AssignmentComponent({
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		id: '',
 		questionRc: '',
-		confidence: '',
-		correctness: '',
+		confidence: null,
+		correctness: null,
 		reviewSeconds: 0,
 		publishedQuestionId: '',
 		answerList: [{ answerRc: '', id: '' }],
@@ -254,16 +256,15 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
-			const overLayData = await putCurrentRound(
+			const feedbackData: CurrentRoundAnswerOverLayData = await putCurrentRound(
 				currentRoundQuestionListData?.id,
 				questionInFocus.id,
 				answerData,
 			);
-
-			if (overLayData) {
+			if (feedbackData !== null) {
 				if (
-					overLayData.confidence === 'Sure' &&
-					overLayData.correctness === 'Correct'
+					feedbackData.confidence === Confidence.Sure &&
+					feedbackData.correctness === Correctness.Correct
 				) {
 					if (message.FIVE_CONSEC_SC < 5 && isSureAndCorrectAllRound) {
 						handleMessage('BOTH_SC', false);
@@ -272,8 +273,8 @@ export default function AssignmentComponent({
 					}
 				} else if (
 					questionSecondsRef.current <= 5 &&
-					overLayData.correctness !== 'Correct' &&
-					overLayData.correctness !== 'NoAnswerSelected' &&
+					feedbackData.correctness !== Correctness.Correct &&
+					feedbackData.correctness !== Correctness.NoAnswerSelected &&
 					message.FIVE_FAST_ANSWERS < 5
 				) {
 					setIsSureAndCorrectAllRound(false);
@@ -281,8 +282,8 @@ export default function AssignmentComponent({
 					handleMessage('FIVE_FAST_ANSWERS', false);
 					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
-					overLayData.confidence === 'Sure' &&
-					overLayData.correctness === 'Incorrect' &&
+					feedbackData.confidence === Confidence.Sure &&
+					feedbackData.correctness === Correctness.Incorrect &&
 					message.FIVE_CONSEC_SI < 5
 				) {
 					setIsSureAndCorrectAllRound(false);
@@ -290,8 +291,8 @@ export default function AssignmentComponent({
 					handleMessage('FIVE_CONSEC_SI', false);
 					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
-					overLayData.confidence === 'NotSure' &&
-					overLayData.correctness === 'NoAnswerSelected' &&
+					feedbackData.confidence === Confidence.NotSure &&
+					feedbackData.correctness === Correctness.NoAnswerSelected &&
 					message.SIX_DK_IN_ROUND < 6
 				) {
 					setIsSureAndCorrectAllRound(false);
@@ -316,7 +317,7 @@ export default function AssignmentComponent({
 								{
 									answeredQuestionId: questionInFocus.id,
 									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
+									correctAnswerIds: [...feedbackData.correctAnswerIds],
 									questionSeconds: answerData.questionSeconds,
 								},
 							],
@@ -327,19 +328,31 @@ export default function AssignmentComponent({
 								{
 									answeredQuestionId: questionInFocus.id,
 									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
+									correctAnswerIds: [...feedbackData.correctAnswerIds],
 									questionSeconds: answerData.questionSeconds,
 								},
 							],
 					  };
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
-				setCurrentRoundAnswerOverLayData(overLayData);
+				setCurrentRoundAnswerOverLayData(feedbackData);
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
+
+				if (
+					feedbackData.correctness === Correctness.Correct &&
+					feedbackData.confidence === Confidence.Sure
+				) {
+					handleMessage(
+						'TWO_NPA_IN_ROUND',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
+				}
 			}
 		};
+
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
 		}

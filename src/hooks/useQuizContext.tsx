@@ -16,6 +16,12 @@ type QuizContextType = {
 		FIVE_FAST_REVIEWS: number;
 		TWO_FAST_REVIEWS_IN_LU: { questionId: number }[];
 		TEN_LONG_REVIEWS: number;
+		TWO_NPA_IN_ROUND: {
+			questionId: number;
+			npaCount: number;
+			seenCount: number;
+			roundNumber: number;
+		}[];
 	};
 	handleMessage: (
 		messageType: string,
@@ -36,6 +42,7 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
 		TEN_LONG_REVIEWS: 0,
+		TWO_NPA_IN_ROUND: [],
 	},
 	handleMessage: () => {},
 	selectedCourseKey: '',
@@ -52,6 +59,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
 		TEN_LONG_REVIEWS: 0,
+		TWO_NPA_IN_ROUND: [],
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
@@ -115,6 +123,16 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				setMessage((prevMessage) => ({
 					...prevMessage,
 					TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+				}));
+			};
+
+			const resetTwoNpaInRound = () => {
+				const updatedTwoNPAInRound = message.TWO_NPA_IN_ROUND.filter(
+					(question) => question.questionId !== questionId,
+				);
+				setMessage((prevMessage) => ({
+					...prevMessage,
+					TWO_NPA_IN_ROUND: updatedTwoNPAInRound,
 				}));
 			};
 
@@ -210,6 +228,39 @@ export const QuizProvider = ({ children }: { children: any }) => {
 							...prevMessage,
 							TEN_LONG_REVIEWS: prevMessage.TEN_LONG_REVIEWS + 1,
 						}));
+					}
+					break;
+
+				case 'TWO_NPA_IN_ROUND':
+					if (reset && questionId) {
+						resetTwoNpaInRound();
+					} else if (questionId) {
+						const index = message.TWO_NPA_IN_ROUND.findIndex(
+							(obj) => obj.questionId === questionId,
+						);
+
+						const newTwoNpaEntry = [
+							...message.TWO_NPA_IN_ROUND,
+							{ questionId: Number(questionId), seenCount: 1, npaCount: 0 },
+						];
+
+						if (index === -1) {
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_NPA_IN_LU: newTwoNpaEntry,
+							}));
+						} else {
+							const updatedTwoNpaArray = [...message.TWO_NPA_IN_ROUND];
+							updatedTwoNpaArray[index] = {
+								...updatedTwoNpaArray[index],
+								seenCount: updatedTwoNpaArray[index].seenCount + 1,
+								npaCount: updatedTwoNpaArray[index].npaCount + 1,
+							};
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_NPA_IN_ROUND: updatedTwoNpaArray,
+							}));
+						}
 					}
 					break;
 				default:

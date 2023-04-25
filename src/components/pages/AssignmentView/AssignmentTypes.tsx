@@ -18,8 +18,8 @@ export type Item = {
 
 export type AnswerHistory = {
 	roundNumber: number;
-	confidence: string;
-	correctness: string;
+	confidence: Confidence | null;
+	correctness: Correctness | null;
 };
 
 export type AnswerData = {
@@ -28,9 +28,9 @@ export type AnswerData = {
 	avatarMessage: any;
 	completionAlgorithmType: any;
 	completionPercentage: number;
-	confidence: any;
+	confidence: Confidence | null;
 	correctAnswerIds: any;
-	correctness: any;
+	correctness: Correctness | null;
 	informedCount: number;
 	masteredQuestionCount: number;
 	misinformedCount: number;
@@ -55,8 +55,8 @@ export type QuestionInFocus = {
 	introductionRc?: string;
 	explanationRc?: string;
 	moreInformationRc?: string;
-	confidence: string;
-	correctness: string;
+	confidence: Confidence | null;
+	correctness: Correctness | null;
 	publishedQuestionId: number | string;
 	answerList: {
 		answerRc: string;
@@ -96,8 +96,8 @@ export type CurrentRoundAnswerOverLayData = {
 	questionSeconds: number;
 	reviewSeconds: number;
 	answerDate: string;
-	correctness: string;
-	confidence: string;
+	correctness: Correctness | null;
+	confidence: Confidence | null;
 	correctAnswerIds: number[];
 	moduleComplete: boolean;
 	avatarMessage: null;
@@ -109,3 +109,15 @@ export type CurrentRoundAnswerOverLayData = {
 		answerConfidence: string;
 	}[];
 };
+
+// alternative to enums
+export enum Confidence {
+	NotSure = 'NotSure',
+	Sure = 'Sure',
+}
+
+export enum Correctness {
+	Correct = 'Correct',
+	Incorrect = 'Incorrect',
+	NoAnswerSelected = 'NoAnswerSelected',
+}
