@@ -307,10 +307,10 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				let roundQuestionsHistory =
+				const roundQuestionsHistory: any[] =
 					localQuestionHistory?.roundQuestionsHistory || [];
 
-				let updatedLocalQuestionHistory = {
+				const updatedLocalQuestionHistory = {
 					currentRoundId: currentRoundQuestionListData?.id,
 					roundQuestionsHistory: [
 						...roundQuestionsHistory,
