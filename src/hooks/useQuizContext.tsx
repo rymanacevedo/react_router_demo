@@ -27,6 +27,7 @@ type QuizContextType = {
 	) => void;
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
+	incrimentTwoFastReviewsInLu: () => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
@@ -43,6 +44,7 @@ const QuizContext = createContext<QuizContextType>({
 	handleMessage: () => {},
 	selectedCourseKey: '',
 	setSelectedCourseKey: () => {},
+	incrimentTwoFastReviewsInLu: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -58,6 +60,24 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
+
+	const incrimentTwoFastReviewsInLu = () => {
+	//take the TWO_FAST_REVIEWS_IN_LU array and for each questionId, incriment the fastReviewsOnQuestion by 1
+	//then update the state with the new array
+		const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.map(
+			(question) => {
+					return {
+						...question,
+						fastReviewsOnQuestion: question.fastReviewsOnQuestion + 1,
+					};
+			}
+		);
+
+		setMessage((prevMessage) => ({
+			...prevMessage,
+			TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+		}));
+	};
 
 	const handleMessage = useCallback(
 		(messageType: string, reset: boolean, questionId?: number) => {
@@ -112,8 +132,11 @@ export const QuizProvider = ({ children }: { children: any }) => {
 
 			const resetTwoFastReviewsInLu = () => {
 				const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.filter(
-					(question) => question.questionId !== questionId,
+					(question) => {
+						console.log('@@@@@@@@@@@@', question, questionId)
+						return question.questionId !== questionId}
 				);
+				console.log('delete',message.TWO_FAST_REVIEWS_IN_LU, updatedTwoFastReviewsInLu )
 
 				setMessage((prevMessage) => ({
 					...prevMessage,
@@ -190,16 +213,18 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					}
 					break;
 				case 'TWO_FAST_REVIEWS_IN_LU':
-					if (reset && questionId) {
+					if (reset) {
 						resetTwoFastReviewsInLu();
 					} else if (questionId) {
 						const isQuestionInArray = message.TWO_FAST_REVIEWS_IN_LU.some(
 							(question) => question.questionId === questionId,
 						);
+						console.log("*****",isQuestionInArray);
 
 						if (isQuestionInArray) {
-							const updatedTwoFastReviewsInLu =
-								message.TWO_FAST_REVIEWS_IN_LU.map((question) => {
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_FAST_REVIEWS_IN_LU: prevMessage.TWO_FAST_REVIEWS_IN_LU.map((question) => {
 									if (question.questionId === questionId) {
 										return {
 											...question,
@@ -207,10 +232,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 										};
 									}
 									return question;
-								});
-							setMessage((prevMessage) => ({
-								...prevMessage,
-								TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+								})
 							}));
 						} else {
 							setMessage((prevMessage) => ({
@@ -242,8 +264,14 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	);
 
 	const value = useMemo(
-		() => ({ message, handleMessage, selectedCourseKey, setSelectedCourseKey }),
-		[message, handleMessage, selectedCourseKey, setSelectedCourseKey],
+		() => ({
+			message,
+			handleMessage,
+			selectedCourseKey,
+			setSelectedCourseKey,
+			incrimentTwoFastReviewsInLu,
+		}),
+		[message, handleMessage, selectedCourseKey, setSelectedCourseKey, incrimentTwoFastReviewsInLu],
 	);
 
 	return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
