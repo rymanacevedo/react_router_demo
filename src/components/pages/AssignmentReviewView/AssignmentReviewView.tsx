@@ -273,12 +273,15 @@ const AssignmentReviewView = () => {
 
 				if (
 					message.TWO_FAST_REVIEWS_IN_LU.filter((item) => {
-						return item.questionId === findQuestionInFocus(
-							moduleQuestionsResponse,
-							currentRoundQuestionsResponse,
-							true,
-							viewCorrect,
-						)[questionIndex]?.publishedQuestionId;
+						return (
+							item.questionId ===
+							findQuestionInFocus(
+								moduleQuestionsResponse,
+								currentRoundQuestionsResponse,
+								true,
+								viewCorrect,
+							)[questionIndex]?.publishedQuestionId
+						);
 					})[0]?.fastReviewsOnQuestion >= 1
 				) {
 					setIsToastOpen(true);
@@ -289,7 +292,7 @@ const AssignmentReviewView = () => {
 						Number(questionInFocus?.publishedQuestionId),
 					);
 				}
-				
+
 				if (questionInFocus?.id) {
 					const myObjectString = localStorage.getItem(
 						`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
@@ -341,9 +344,8 @@ const AssignmentReviewView = () => {
 	).length;
 
 	useEffect(() => {
-		fetchModuleQuestionsData()
+		fetchModuleQuestionsData();
 	}, [questionIndex, viewCorrect]);
-	
 
 	useEffect(() => {
 		setQuestionIndex(0);
@@ -397,7 +399,6 @@ const AssignmentReviewView = () => {
 				Number(questionInFocus?.publishedQuestionId),
 			);
 		}
-
 	}, [questionInFocus]);
 
 	const submitAnswer = () => {
@@ -497,7 +498,7 @@ const AssignmentReviewView = () => {
 	};
 	const handleKeepGoing = async (lastRevQDataArg?: { roundId: number }) => {
 		proceedDownDesiredPathRef.current = false;
-		if (questionSecondsRef.current <= 7) {			
+		if (questionSecondsRef.current <= 7) {
 			handleMessage(
 				'TWO_FAST_REVIEWS_IN_LU',
 				false,
@@ -552,7 +553,6 @@ const AssignmentReviewView = () => {
 			handleMessage('TEN_LONG_REVIEWS', true);
 		}
 	}, [message.TEN_LONG_REVIEWS]);
-
 
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {

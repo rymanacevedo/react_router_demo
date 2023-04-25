@@ -64,7 +64,8 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage, incrimentTwoFastReviewsInLu } = useQuizContext();
+	const { message, handleMessage, incrimentTwoFastReviewsInLu } =
+		useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
