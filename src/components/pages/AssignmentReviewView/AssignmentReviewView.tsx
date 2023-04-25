@@ -327,7 +327,7 @@ const AssignmentReviewView = () => {
 	).length;
 
 	useEffect(() => {
-		fetchModuleQuestionsData().catch((error) => new Error(error));
+		fetchModuleQuestionsData();
 	}, [questionIndex, viewCorrect]);
 
 	useEffect(() => {
@@ -346,7 +346,7 @@ const AssignmentReviewView = () => {
 
 	useEffect(() => {
 		if (assignmentKey) {
-			fetchModuleQuestionsData(true).catch((error) => new Error(error));
+			fetchModuleQuestionsData(true);
 		}
 	}, [assignmentKey]);
 	const closeExplainModal = () => {
@@ -394,7 +394,7 @@ const AssignmentReviewView = () => {
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
-			putCurrentRoundRes().catch((error) => new Error(error));
+			putCurrentRoundRes();
 		}
 
 		if (message.FIVE_CONSEC_SC > 0) {

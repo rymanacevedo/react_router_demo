@@ -331,7 +331,7 @@ export default function AssignmentComponent({
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
-			putCurrentRoundRes().catch((error) => new Error(error));
+			putCurrentRoundRes();
 		}
 	}, [answerData]);
 
@@ -365,7 +365,7 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		if (assignmentKey) {
-			fetchModuleQuestionsData().catch((error) => new Error(error));
+			fetchModuleQuestionsData();
 		}
 	}, [assignmentKey]);
 
