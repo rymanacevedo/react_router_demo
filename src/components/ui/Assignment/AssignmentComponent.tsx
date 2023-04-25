@@ -309,37 +309,37 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				let updatedLocalQuestionHistory = localQuestionHistory
-					?.roundQuestionsHistory.length
-					? {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								...localQuestionHistory?.roundQuestionsHistory,
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  }
-					: {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  };
+				let roundQuestionsHistory =
+					localQuestionHistory?.roundQuestionsHistory || [];
+
+				let updatedLocalQuestionHistory = {
+					currentRoundId: currentRoundQuestionListData?.id,
+					roundQuestionsHistory: [
+						...roundQuestionsHistory,
+						{
+							answeredQuestionId: questionInFocus.id,
+							answersChosen: [...answerData.answerList],
+							correctAnswerIds: [...overLayData.correctAnswerIds],
+							questionSeconds: answerData.questionSeconds,
+						},
+					],
+				};
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
+				if (
+					`${overLayData.confidence}${overLayData.correctness}` ===
+					'SureIncorrect'
+				) {
+					handleMessage(
+						'TWO_IDENTICAL_SI',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
+				}
 			}
 		};
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
@@ -413,6 +413,22 @@ export default function AssignmentComponent({
 		message.FULL_ROUND_OF_SC,
 		currentRoundQuestionListData?.questionList.length,
 	]);
+
+	useEffect(() => {
+		const index = message.TWO_IDENTICAL_SI.findIndex(
+			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
+		);
+
+		if (index !== -1 && message.TWO_IDENTICAL_SI[index].siCount >= 2) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_IDENTICAL_SI');
+			handleMessage(
+				'TWO_IDENTICAL_SI',
+				true,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
+	}, [message.TWO_IDENTICAL_SI]);
 
 	return currentRoundQuestionListData ? (
 		<>

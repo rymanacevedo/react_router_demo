@@ -112,6 +112,7 @@ const resources = {
          twoFastReviewsInLu: `You didn't read about this concept last time. Take your time to read the explanation and you'll finish faster.`,
          fiveFastReviews: 'Slow down and absorb the material.  It will take you less time to actually learn.',
          tenLongReviews: 'You’re putting the time into reading the explanations. Good work. Its worth it.',
+         twoIdenticalSureIncorrects: 'That\'s the same thing you said last time, but it still isn\'t right. Make sure to read the explanation in a couple minutes!',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
