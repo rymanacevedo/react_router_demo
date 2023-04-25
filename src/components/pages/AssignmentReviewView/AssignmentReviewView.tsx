@@ -253,22 +253,6 @@ const AssignmentReviewView = () => {
 				);
 
 				if (!savedData) {
-					// const payload = {
-					// 	...answerData,
-					// 	answerDate: null,
-					// 	answerList: null,
-					// 	questionSeconds: questionSecondsHistory,
-					// 	reviewSeconds:
-					// 		Number(questionSecondsRef.current) + Number(storedTime),
-					// };
-					//
-					// const data = await putCurrentRound(
-					// 	currentRoundQuestionsResponse?.id,
-					// 	questionInFocus.id,
-					// 	payload,
-					// );
-					//
-					// console.log(data);
 					console.error(
 						'No saved data found, reveal correct answer will not function.',
 					);
