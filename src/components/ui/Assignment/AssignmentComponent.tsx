@@ -341,8 +341,10 @@ export default function AssignmentComponent({
 					);
 				}
 				if (
-					`${overLayData.confidence}${overLayData.correctness}` !==
-					'SureCorrect'
+					!(
+						overLayData.correctness === 'Correct' &&
+						overLayData.confidence === 'Sure'
+					)
 				) {
 					handleMessage(
 						'TWO_NPA_ON_LU',
@@ -445,7 +447,7 @@ export default function AssignmentComponent({
 			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
 		);
 
-		if (index !== -1 && message.TWO_NPA_ON_LU[index].seenCount >= 3) {
+		if (message.TWO_NPA_ON_LU[index].npaCount >= 3) {
 			setIsToastOpen(true);
 			setTextPrompt('TWO_NPA_ON_LU');
 			handleMessage(
