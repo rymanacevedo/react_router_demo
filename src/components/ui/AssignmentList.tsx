@@ -2,6 +2,7 @@ import { Key, useEffect, useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
+	Box,
 	Button,
 	ButtonGroup,
 	Divider,
@@ -234,8 +235,11 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 							</ListItem>
 						</PopoverAnchor>
 					</PopoverTrigger>
-					<PopoverContent>
-						<PopoverArrow />
+					<PopoverContent marginRight={'200px'}>
+						<Box position="fixed" top="0px" left="20px">
+							{' '}
+							<PopoverArrow position="fixed" top="0" left="0" />
+						</Box>{' '}
 						<ButtonGroup size="lg" w="100%">
 							<VStack>
 								{curriculum?.assignments[0]?.assignmentType !==

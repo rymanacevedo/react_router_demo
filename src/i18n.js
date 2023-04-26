@@ -113,6 +113,7 @@ const resources = {
          fiveFastReviews: 'Slow down and absorb the material.  It will take you less time to actually learn.',
          tenLongReviews: 'You’re putting the time into reading the explanations. Good work. Its worth it.',
          twoNpaInRound: 'Not getting it? Don\'t be discouraged, what you need to know is in the explanation.',
+         twoIdenticalSureIncorrects: 'That\'s the same thing you said last time, but it still isn\'t right. Make sure to read the explanation in a couple minutes!',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////

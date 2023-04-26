@@ -66,7 +66,8 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage } = useQuizContext();
+	const { message, handleMessage, incrimentTwoFastReviewsInLu } =
+		useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
@@ -226,6 +227,7 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		startTimer();
+		incrimentTwoFastReviewsInLu();
 	}, []);
 
 	const submitAnswer = () => {
@@ -308,31 +310,21 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				let updatedLocalQuestionHistory = localQuestionHistory
-					?.roundQuestionsHistory.length
-					? {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								...localQuestionHistory?.roundQuestionsHistory,
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...feedbackData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  }
-					: {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...feedbackData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  };
+				const roundQuestionsHistory: any[] =
+					localQuestionHistory?.roundQuestionsHistory || [];
+
+				const updatedLocalQuestionHistory = {
+					currentRoundId: currentRoundQuestionListData?.id,
+					roundQuestionsHistory: [
+						...roundQuestionsHistory,
+						{
+							answeredQuestionId: questionInFocus.id,
+							answersChosen: [...answerData.answerList],
+							correctAnswerIds: [...feedbackData.correctAnswerIds],
+							questionSeconds: answerData.questionSeconds,
+						},
+					],
+				};
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(feedbackData);
@@ -346,6 +338,16 @@ export default function AssignmentComponent({
 				) {
 					handleMessage(
 						'TWO_NPA_IN_ROUND',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
+				}
+				if (
+					`${overLayData.confidence}${overLayData.correctness}` ===
+					'SureIncorrect'
+				) {
+					handleMessage(
+						'TWO_IDENTICAL_SI',
 						false,
 						Number(questionInFocus.publishedQuestionId),
 					);
@@ -424,6 +426,22 @@ export default function AssignmentComponent({
 		message.FULL_ROUND_OF_SC,
 		currentRoundQuestionListData?.questionList.length,
 	]);
+
+	useEffect(() => {
+		const index = message.TWO_IDENTICAL_SI.findIndex(
+			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
+		);
+
+		if (index !== -1 && message.TWO_IDENTICAL_SI[index].siCount >= 2) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_IDENTICAL_SI');
+			handleMessage(
+				'TWO_IDENTICAL_SI',
+				true,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
+	}, [message.TWO_IDENTICAL_SI]);
 
 	return currentRoundQuestionListData ? (
 		<>
