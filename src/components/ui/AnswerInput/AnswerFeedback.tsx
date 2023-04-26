@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomOverLayIcon from './CustomOverLayIcon';
-import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
+import {
+	CurrentRoundAnswerOverLayData,
+	SelectedAnswers,
+} from '../../pages/AssignmentView/AssignmentTypes';
 import {
 	CheckIcon,
 	Cross1Icon,
@@ -24,7 +27,7 @@ const AnswerFeedback = ({
 	questionAnswerId: number | string;
 	selectedAnswers?: any[];
 	IDK?: boolean;
-	currentRoundAnswerOverLayData?: any;
+	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	wasCorrectAnswerChosen?: boolean;
 	inReview?: boolean;
 	revealAnswer?: boolean;
@@ -107,7 +110,12 @@ const AnswerFeedback = ({
 		}
 	}, [currentRoundAnswerOverLayData, wasCorrectAnswerChosen]);
 	const revealCorrectAnswer = () => {
-		const correctAnswer = currentRoundAnswerOverLayData?.correctAnswerIds[0];
+		const correctAnswer = currentRoundAnswerOverLayData?.correctAnswerIds?.[0];
+
+		if (!correctAnswer) {
+			console.error('Correct answer not found, possible local storage issue.');
+		}
+
 		if (correctAnswer === questionAnswerId) {
 			setStatus('checked');
 			setText('');
