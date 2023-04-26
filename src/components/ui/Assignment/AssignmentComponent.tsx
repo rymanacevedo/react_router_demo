@@ -106,7 +106,7 @@ export default function AssignmentComponent({
 		correctness: '',
 		reviewSeconds: 0,
 		publishedQuestionId: '',
-		answerList: [{ answerRc: '', id: '' }],
+		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
@@ -343,14 +343,16 @@ export default function AssignmentComponent({
 					const publishedAnswer = questionInFocus.answerList.find((answer) => {
 						return answer.id === overLayData.answerList[0].answerId;
 					});
-
-					handleMessage(
-						'TWO_IDENTICAL_SI',
-						false,
-						Number(questionInFocus.publishedQuestionId),
-						//@ts-ignore
-						Number(publishedAnswer.publishedAnswerId),
-					);
+					if (publishedAnswer) {
+						handleMessage(
+							'TWO_IDENTICAL_SI',
+							false,
+							Number(questionInFocus.publishedQuestionId),
+							Number(publishedAnswer.publishedAnswerId),
+						);
+					} else {
+						console.error('publishedAnswer not found');
+					}
 				}
 			}
 		};
