@@ -84,7 +84,7 @@ const AssignmentReviewView = () => {
 		confidence: '',
 		correctness: '',
 		explanationRc: '',
-		answerList: [{ answerRc: '', id: '' }],
+		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
