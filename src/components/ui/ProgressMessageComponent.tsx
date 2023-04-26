@@ -76,10 +76,6 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setToastText(i18n('tenLongReviews'));
 				setPossitiveFeedback();
 				break;
-			case 'TWO_NPA_ON_LU':
-				setToastText(i18n('twoNpaOnLu'));
-				setNegativeFeedback();
-				break;
 			default:
 				setToastText(
 					'You’re doing a great job at knowing what you are sure and unsure about.',

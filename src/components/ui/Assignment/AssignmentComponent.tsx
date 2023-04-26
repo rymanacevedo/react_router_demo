@@ -334,24 +334,22 @@ export default function AssignmentComponent({
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
+
 				if (
+					questionInFocus &&
 					`${overLayData.confidence}${overLayData.correctness}` ===
-					'SureIncorrect'
+						'SureIncorrect'
 				) {
+					const publishedAnswer = questionInFocus.answerList.find((answer) => {
+						return answer.id === overLayData.answerList[0].answerId;
+					});
+
 					handleMessage(
 						'TWO_IDENTICAL_SI',
 						false,
 						Number(questionInFocus.publishedQuestionId),
-					);
-				}
-				if (
-					`${overLayData.confidence}${overLayData.correctness}` !==
-					'SureCorrect'
-				) {
-					handleMessage(
-						'TWO_NPA_ON_LU',
-						false,
-						Number(questionInFocus.publishedQuestionId),
+						//@ts-ignore
+						Number(publishedAnswer.publishedAnswerId),
 					);
 				}
 			}
@@ -443,22 +441,6 @@ export default function AssignmentComponent({
 			);
 		}
 	}, [message.TWO_IDENTICAL_SI]);
-
-	useEffect(() => {
-		const index = message.TWO_NPA_ON_LU.findIndex(
-			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
-		);
-
-		if (index !== -1 && message.TWO_NPA_ON_LU[index].seenCount >= 3) {
-			setIsToastOpen(true);
-			setTextPrompt('TWO_NPA_ON_LU');
-			handleMessage(
-				'TWO_NPA_ON_LU',
-				true,
-				Number(questionInFocus?.publishedQuestionId),
-			);
-		}
-	}, [message.TWO_NPA_ON_LU]);
 
 	return currentRoundQuestionListData ? (
 		<>
