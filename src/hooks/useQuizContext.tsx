@@ -31,6 +31,7 @@ type QuizContextType = {
 		messageType: string,
 		reset: boolean,
 		questionId?: number,
+		roundNumber?: number,
 	) => void;
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
@@ -91,7 +92,12 @@ export const QuizProvider = ({ children }: { children: any }) => {
 	};
 
 	const handleMessage = useCallback(
-		(messageType: string, reset: boolean, questionId?: number) => {
+		(
+			messageType: string,
+			reset: boolean,
+			questionId?: number,
+			roundNumber?: number,
+		) => {
 			const resetFiveFastAnswers = () => {
 				setMessage((prevMessage) => ({
 					...prevMessage,
@@ -257,8 +263,6 @@ export const QuizProvider = ({ children }: { children: any }) => {
 						const isQuestionInArray = message.TWO_FAST_REVIEWS_IN_LU.some(
 							(question) => question.questionId === questionId,
 						);
-						console.log('*****', isQuestionInArray);
-
 						if (isQuestionInArray) {
 							setMessage((prevMessage) => ({
 								...prevMessage,
@@ -331,27 +335,36 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				case 'TWO_NPA_IN_ROUND':
 					if (reset && questionId) {
 						resetTwoNpaInRound();
-					} else if (questionId) {
+					} else if (questionId && roundNumber) {
 						const index = message.TWO_NPA_IN_ROUND.findIndex(
 							(obj) => obj.questionId === questionId,
 						);
 
 						const newTwoNpaEntry = [
 							...message.TWO_NPA_IN_ROUND,
-							{ questionId: Number(questionId), seenCount: 1, npaCount: 0 },
+							{
+								questionId: Number(questionId),
+								seenCount: 1,
+								npaCount: 0,
+								roundNumber,
+							},
 						];
 
 						if (index === -1) {
 							setMessage((prevMessage) => ({
 								...prevMessage,
-								TWO_NPA_IN_LU: newTwoNpaEntry,
+								TWO_NPA_IN_ROUND: newTwoNpaEntry,
 							}));
 						} else {
 							const updatedTwoNpaArray = [...message.TWO_NPA_IN_ROUND];
+							const npaCountIncrement =
+								updatedTwoNpaArray[index].roundNumber === roundNumber ? 1 : 0;
 							updatedTwoNpaArray[index] = {
 								...updatedTwoNpaArray[index],
 								seenCount: updatedTwoNpaArray[index].seenCount + 1,
-								npaCount: updatedTwoNpaArray[index].npaCount + 1,
+								npaCount:
+									updatedTwoNpaArray[index].npaCount + npaCountIncrement,
+								roundNumber,
 							};
 							setMessage((prevMessage) => ({
 								...prevMessage,

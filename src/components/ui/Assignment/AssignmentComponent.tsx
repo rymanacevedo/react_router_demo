@@ -168,8 +168,8 @@ export default function AssignmentComponent({
 					setOutro(true);
 				} else if (
 					currentRoundQuestionsResponse.questionList.every(
-						(question: { correctness: string }) =>
-							question.correctness === 'Correct',
+						(question: QuestionInFocus) =>
+							question.correctness === Correctness.Correct,
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
@@ -340,11 +340,12 @@ export default function AssignmentComponent({
 						'TWO_NPA_IN_ROUND',
 						false,
 						Number(questionInFocus.publishedQuestionId),
+						currentRoundQuestionListData?.roundNumber,
 					);
 				}
 				if (
-					`${overLayData.confidence}${overLayData.correctness}` ===
-					'SureIncorrect'
+					feedbackData.correctness === Correctness.Incorrect &&
+					feedbackData.confidence === Confidence.Sure
 				) {
 					handleMessage(
 						'TWO_IDENTICAL_SI',
@@ -442,6 +443,15 @@ export default function AssignmentComponent({
 			);
 		}
 	}, [message.TWO_IDENTICAL_SI]);
+
+	useEffect(() => {
+		console.log('2 npa activated, for:', Number(questionInFocus.id));
+		if (message.TWO_NPA_IN_ROUND[Number(questionInFocus.id)].npaCount === 2) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_NPA_IN_ROUND');
+			handleMessage('TWO_NPA_IN_ROUND', true);
+		}
+	}, [message.TWO_NPA_IN_ROUND]);
 
 	return currentRoundQuestionListData ? (
 		<>

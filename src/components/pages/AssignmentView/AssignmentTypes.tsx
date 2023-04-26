@@ -110,14 +110,15 @@ export type CurrentRoundAnswerOverLayData = {
 	}[];
 };
 
-// alternative to enums
 export enum Confidence {
 	NotSure = 'NotSure',
+	OneAnswerPartSure = 'OneAnswerPartSure',
 	Sure = 'Sure',
 }
 
 export enum Correctness {
-	Correct = 'Correct',
 	Incorrect = 'Incorrect',
 	NoAnswerSelected = 'NoAnswerSelected',
+	Correct = 'Correct',
+	Cor = 'Correct',
 }
