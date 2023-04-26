@@ -14,7 +14,10 @@ type QuizContextType = {
 		FIVE_CONSEC_SC: number;
 		FULL_ROUND_OF_SC: number;
 		FIVE_FAST_REVIEWS: number;
-		TWO_FAST_REVIEWS_IN_LU: { questionId: number }[];
+		TWO_FAST_REVIEWS_IN_LU: {
+			questionId: number;
+			fastReviewsOnQuestion: number;
+		}[];
 		TEN_LONG_REVIEWS: number;
 		TWO_IDENTICAL_SI: {
 			questionId: number;
@@ -30,6 +33,7 @@ type QuizContextType = {
 	) => void;
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
+	incrimentTwoFastReviewsInLu: () => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
@@ -40,13 +44,14 @@ const QuizContext = createContext<QuizContextType>({
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
-		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
+		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
 		TWO_IDENTICAL_SI: [],
 	},
 	handleMessage: () => {},
 	selectedCourseKey: '',
 	setSelectedCourseKey: () => {},
+	incrimentTwoFastReviewsInLu: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -57,12 +62,30 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_CONSEC_SC: 0,
 		FULL_ROUND_OF_SC: 0,
 		FIVE_FAST_REVIEWS: 0,
-		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0 }],
+		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
 		TWO_IDENTICAL_SI: [],
 	});
 
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
+
+	const incrimentTwoFastReviewsInLu = () => {
+		//take the TWO_FAST_REVIEWS_IN_LU array and for each questionId, incriment the fastReviewsOnQuestion by 1
+		//then update the state with the new array
+		const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.map(
+			(question) => {
+				return {
+					...question,
+					fastReviewsOnQuestion: question.fastReviewsOnQuestion + 1,
+				};
+			},
+		);
+
+		setMessage((prevMessage) => ({
+			...prevMessage,
+			TWO_FAST_REVIEWS_IN_LU: updatedTwoFastReviewsInLu,
+		}));
+	};
 
 	const handleMessage = useCallback(
 		(
@@ -122,7 +145,15 @@ export const QuizProvider = ({ children }: { children: any }) => {
 
 			const resetTwoFastReviewsInLu = () => {
 				const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.filter(
-					(question) => question.questionId !== questionId,
+					(question) => {
+						console.log('@@@@@@@@@@@@', question, questionId);
+						return question.questionId !== questionId;
+					},
+				);
+				console.log(
+					'delete',
+					message.TWO_FAST_REVIEWS_IN_LU,
+					updatedTwoFastReviewsInLu,
 				);
 
 				setMessage((prevMessage) => ({
@@ -212,19 +243,39 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					}
 					break;
 				case 'TWO_FAST_REVIEWS_IN_LU':
-					if (reset && questionId) {
+					if (reset) {
 						resetTwoFastReviewsInLu();
 					} else if (questionId) {
-						const newVal = [
-							...message.TWO_FAST_REVIEWS_IN_LU.filter(
-								(item) => item.questionId !== questionId,
-							),
-							{ questionId: Number(questionId) },
-						];
-						setMessage((prevMessage) => ({
-							...prevMessage,
-							TWO_FAST_REVIEWS_IN_LU: newVal,
-						}));
+						const isQuestionInArray = message.TWO_FAST_REVIEWS_IN_LU.some(
+							(question) => question.questionId === questionId,
+						);
+						console.log('*****', isQuestionInArray);
+
+						if (isQuestionInArray) {
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_FAST_REVIEWS_IN_LU: prevMessage.TWO_FAST_REVIEWS_IN_LU.map(
+									(question) => {
+										if (question.questionId === questionId) {
+											return {
+												...question,
+												fastReviewsOnQuestion:
+													question.fastReviewsOnQuestion + 1,
+											};
+										}
+										return question;
+									},
+								),
+							}));
+						} else {
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_FAST_REVIEWS_IN_LU: [
+									...prevMessage.TWO_FAST_REVIEWS_IN_LU,
+									{ questionId: Number(questionId), fastReviewsOnQuestion: 0 },
+								],
+							}));
+						}
 					}
 					break;
 				case 'TEN_LONG_REVIEWS':
@@ -290,8 +341,15 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			handleMessage,
 			selectedCourseKey,
 			setSelectedCourseKey,
+			incrimentTwoFastReviewsInLu,
 		}),
-		[message, handleMessage, selectedCourseKey, setSelectedCourseKey],
+		[
+			message,
+			handleMessage,
+			selectedCourseKey,
+			setSelectedCourseKey,
+			incrimentTwoFastReviewsInLu,
+		],
 	);
 
 	return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

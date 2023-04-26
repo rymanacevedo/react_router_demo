@@ -64,7 +64,8 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage } = useQuizContext();
+	const { message, handleMessage, incrimentTwoFastReviewsInLu } =
+		useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
@@ -150,6 +151,7 @@ export default function AssignmentComponent({
 			let revSkipRes = {} as CurrentRoundQuestionListData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
+				handleMessage('FIVE_CONSEC_SC', true);
 				handleMessage('SIX_DK_IN_ROUND', true);
 				handleMessage('FULL_ROUND_OF_SC', true);
 				setIsSureAndCorrectAllRound(false);
@@ -223,6 +225,7 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		startTimer();
+		incrimentTwoFastReviewsInLu();
 	}, []);
 
 	const submitAnswer = () => {
@@ -278,6 +281,7 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', false);
+					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
 					overLayData.confidence === 'Sure' &&
 					overLayData.correctness === 'Incorrect' &&
@@ -286,6 +290,7 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('FIVE_CONSEC_SI', false);
+					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
 					overLayData.confidence === 'NotSure' &&
 					overLayData.correctness === 'NoAnswerSelected' &&
@@ -294,6 +299,7 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 					handleMessage('FULL_ROUND_OF_SC', true);
 					handleMessage('SIX_DK_IN_ROUND', false);
+					handleMessage('FIVE_CONSEC_SC', true);
 				} else {
 					handleMessage('FIVE_CONSEC_SC', true);
 					handleMessage('FIVE_FAST_ANSWERS', true);
@@ -303,31 +309,21 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				let updatedLocalQuestionHistory = localQuestionHistory
-					?.roundQuestionsHistory.length
-					? {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								...localQuestionHistory?.roundQuestionsHistory,
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  }
-					: {
-							currentRoundId: currentRoundQuestionListData?.id,
-							roundQuestionsHistory: [
-								{
-									answeredQuestionId: questionInFocus.id,
-									answersChosen: [...answerData.answerList],
-									correctAnswerIds: [...overLayData.correctAnswerIds],
-									questionSeconds: answerData.questionSeconds,
-								},
-							],
-					  };
+				const roundQuestionsHistory: any[] =
+					localQuestionHistory?.roundQuestionsHistory || [];
+
+				const updatedLocalQuestionHistory = {
+					currentRoundId: currentRoundQuestionListData?.id,
+					roundQuestionsHistory: [
+						...roundQuestionsHistory,
+						{
+							answeredQuestionId: questionInFocus.id,
+							answersChosen: [...answerData.answerList],
+							correctAnswerIds: [...overLayData.correctAnswerIds],
+							questionSeconds: answerData.questionSeconds,
+						},
+					],
+				};
 
 				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(overLayData);
@@ -353,6 +349,18 @@ export default function AssignmentComponent({
 					} else {
 						console.error('publishedAnswer not found');
 					}
+				}
+				if (
+					!(
+						overLayData.correctness === 'Correct' &&
+						overLayData.confidence === 'Sure'
+					)
+				) {
+					handleMessage(
+						'TWO_NPA_ON_LU',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
 				}
 			}
 		};

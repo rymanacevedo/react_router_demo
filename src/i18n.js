@@ -139,7 +139,10 @@ const resources = {
          //////////////////////////////////////////////
          yourAssignments: 'Your Assignments',
          changeCourse: 'Change Course',
+         refresher: 'Refresher',
          noCoursesAssigned: "You are not currently assigned to a course. Please check with your administrator.",
+         assessment: 'Assessment',
+         completedAssessment: 'Completed Assessment',
          /////////////////////////////////////////////
          //   LearningView.tsx
          //////////////////////////////////////////////
