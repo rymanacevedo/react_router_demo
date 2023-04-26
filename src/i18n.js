@@ -114,6 +114,7 @@ const resources = {
          tenLongReviews: 'You’re putting the time into reading the explanations. Good work. Its worth it.',
          twoNpaInRound: 'Not getting it? Don\'t be discouraged, what you need to know is in the explanation.',
          twoIdenticalSureIncorrects: 'That\'s the same thing you said last time, but it still isn\'t right. Make sure to read the explanation in a couple minutes!',
+         twoNpaOnLu: 'You\'ve been struggling with that concept, make sure to pay attention next time.',
          //////////////////////////////////
          //    ProgressMenu.jsx
          //////////////////////////////////
