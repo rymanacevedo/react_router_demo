@@ -452,6 +452,22 @@ export default function AssignmentComponent({
 		}
 	}, [message.TWO_IDENTICAL_SI]);
 
+	useEffect(() => {
+		const index = message.TWO_NPA_ON_LU.findIndex(
+			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
+		);
+
+		if (message.TWO_NPA_ON_LU[index].npaCount >= 2) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_NPA_ON_LU');
+			handleMessage(
+				'TWO_NPA_ON_LU',
+				true,
+				Number(questionInFocus?.publishedQuestionId),
+			);
+		}
+	}, [message.TWO_NPA_ON_LU]);
+
 	return currentRoundQuestionListData ? (
 		<>
 			{!outro ? (
