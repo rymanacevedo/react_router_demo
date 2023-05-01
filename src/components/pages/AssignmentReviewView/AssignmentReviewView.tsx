@@ -325,12 +325,6 @@ const AssignmentReviewView = () => {
 	}
 
 	useEffect(() => {
-		if (questionInFocus?.id) {
-			console.log('questionInFocus?.id', questionInFocus);
-		}
-	}, [questionInFocus?.id]);
-
-	useEffect(() => {
 		// Clean up function to add the stored value when the component unmounts if user is not done with review
 		return () => {
 			if (proceedDownDesiredPathRef.current) {

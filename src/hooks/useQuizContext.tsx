@@ -146,14 +146,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			const resetTwoFastReviewsInLu = () => {
 				const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.filter(
 					(question) => {
-						console.log('@@@@@@@@@@@@', question, questionId);
 						return question.questionId !== questionId;
 					},
-				);
-				console.log(
-					'delete',
-					message.TWO_FAST_REVIEWS_IN_LU,
-					updatedTwoFastReviewsInLu,
 				);
 
 				setMessage((prevMessage) => ({
@@ -249,7 +243,6 @@ export const QuizProvider = ({ children }: { children: any }) => {
 						const isQuestionInArray = message.TWO_FAST_REVIEWS_IN_LU.some(
 							(question) => question.questionId === questionId,
 						);
-						console.log('*****', isQuestionInArray);
 
 						if (isQuestionInArray) {
 							setMessage((prevMessage) => ({
