@@ -191,8 +191,6 @@ const Header = () => {
 		nav(link);
 	}, [user]);
 
-	console.log('inReview: ', inReview);
-
 	return (
 		<Box
 			as="header"
