@@ -16,6 +16,7 @@ import ModuleIntroView from './components/pages/ModuleIntroView';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
 import TourView from './components/pages/TourView';
+import Review from './components/pages/Review';
 
 function App() {
 	const { user } = useAuth();
@@ -65,6 +66,7 @@ function App() {
 						path="learning/moduleIntro/:assignmentKey"
 						element={<ModuleIntroView />}
 					/>
+					<Route path="learning/review/:assignmentKey" element={<Review />} />
 					<Route
 						path="learning/assignment/:assignmentKey"
 						element={<AssignmentView />}
@@ -105,16 +107,6 @@ function App() {
 							<Page
 								id={'reporting'}
 								header={'Reporting'}
-								content={'under construction'}
-							/>
-						}
-					/>
-					<Route
-						path="courses"
-						element={
-							<Page
-								id={'courses'}
-								header={'Courses'}
 								content={'under construction'}
 							/>
 						}

@@ -190,6 +190,12 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		navigate(`moduleIntro/${refresher.assignmentKey}`);
 	};
 
+	const handleReviewClick = (assignment: AssignmentType) => {
+		return () => {
+			navigate(`review/${assignment.assignmentKey}`);
+		};
+	};
+
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
 			const assignment: AssignmentType =
@@ -244,12 +250,20 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 							<VStack>
 								{curriculum?.assignments[0]?.assignmentType !==
 									'Assessment' && (
-									<Button
-										w="320px"
-										variant="ghost"
-										onClick={handleRefresherClick(curriculum.assignments[0])}>
-										{i18n('refresher')}
-									</Button>
+									<>
+										<Button
+											w="320px"
+											variant="ghost"
+											onClick={handleRefresherClick(curriculum.assignments[0])}>
+											{i18n('refresher')}
+										</Button>
+										<Button
+											w="320px"
+											variant="ghost"
+											onClick={handleReviewClick(curriculum.assignments[0])}>
+											{i18n('review')}
+										</Button>
+									</>
 								)}
 							</VStack>
 						</ButtonGroup>

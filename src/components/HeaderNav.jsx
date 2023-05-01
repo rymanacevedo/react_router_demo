@@ -30,6 +30,7 @@ const Header = () => {
 
 	const { user, logout } = useAuth();
 	const inAssignment = location.pathname.indexOf('assignment');
+	const inReview = location.pathname.indexOf('review');
 	const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,6 +191,8 @@ const Header = () => {
 		nav(link);
 	}, [user]);
 
+	console.log('inReview: ', inReview);
+
 	return (
 		<Box
 			as="header"
@@ -205,7 +208,9 @@ const Header = () => {
 							width="275"
 							height="90"
 						/>
-						{inAssignment > -1 && isLargerThan992 ? <CourseHome /> : null}
+						{(inAssignment > -1 || inReview > -1) && isLargerThan992 ? (
+							<CourseHome />
+						) : null}
 						<Navigation />
 					</HStack>
 				</Container>
