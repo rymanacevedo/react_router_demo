@@ -8,15 +8,15 @@ export const findQuestionInFocus = (
 	const learningUnits = questionListDataPeram?.learningUnits;
 	const questionList = currentRoundQuestionListDataPeram?.questionList.map(
 		(question: {
-			publishedQuestionId: any;
+			publishedQuestionId: number;
 			answerList: any;
-			name: string | undefined;
-			questionRc: string | any;
+			name: string;
+			questionRc: string;
 			moreInformationRc: string;
-			questionType: string | undefined;
-			explanationRc: string | any;
+			questionType: string;
+			explanationRc: string;
 			hasModuleIntroduction: boolean;
-			introductionRc: string | any;
+			introductionRc: string;
 		}) => {
 			let updatedQuestion = question;
 			learningUnits.forEach(
@@ -24,8 +24,8 @@ export const findQuestionInFocus = (
 					moreInformationRc: string;
 					questions: {
 						moreInformationRc: string;
-						publishedQuestionId: any;
-						id: any;
+						publishedQuestionId: number;
+						id: number;
 						answers: any;
 						name: string;
 						questionRc: string;
@@ -63,16 +63,18 @@ export const findQuestionInFocus = (
 							answerList: [
 								...updatedAnswerList.map(
 									(answer: {
-										publishedAnswerId: any;
-										answerRc: string | any;
-										optionRc: string | any;
+										publishedAnswerId: number;
+										answerRc: string;
+										optionRc: string;
+										isCorrect: boolean;
 									}) => {
 										let updatedAnswerObj = answer;
 										matchedQuestion[0].answers.forEach(
 											(learningUnitAnswer: {
-												id: any;
-												answerRc: any;
-												optionRc: any;
+												id: number;
+												answerRc: string;
+												optionRc: string;
+												isCorrect: boolean;
 											}) => {
 												//matched answers
 												if (
@@ -82,6 +84,7 @@ export const findQuestionInFocus = (
 														...answer,
 														answerRc: learningUnitAnswer.answerRc,
 														optionRc: learningUnitAnswer.optionRc,
+														isCorrect: learningUnitAnswer.isCorrect,
 													};
 												}
 											},

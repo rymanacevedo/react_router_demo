@@ -12,16 +12,26 @@ import {
 	HStack,
 } from '@chakra-ui/react';
 
-const SessionDialogComponent = (props: any) => {
+type SessionDialogComponentType = {
+	isOpen: boolean;
+	handleStaySignedIn: () => void;
+	onClose: () => void;
+};
+
+const SessionDialogComponent = ({
+	isOpen,
+	handleStaySignedIn,
+	onClose,
+}: SessionDialogComponentType) => {
 	const { t: i18n } = useTranslation();
 	const cancelRef = useRef<HTMLButtonElement>(null);
 
 	return (
 		<>
 			<AlertDialog
-				onClose={props.onClose}
+				onClose={onClose}
 				leastDestructiveRef={cancelRef}
-				isOpen={props.isOpen}
+				isOpen={isOpen}
 				isCentered
 				closeOnEsc={false}
 				closeOnOverlayClick={false}>
@@ -35,13 +45,10 @@ const SessionDialogComponent = (props: any) => {
 
 						<AlertDialogFooter justifyContent="flex-start">
 							<HStack>
-								<Button onClick={props.handleStaySignedIn}>
+								<Button onClick={handleStaySignedIn}>
 									{i18n('staySignedInButton')}
 								</Button>
-								<Button
-									variant="ampOutline"
-									onClick={props.onClose}
-									ref={cancelRef}>
+								<Button variant="ampOutline" onClick={onClose} ref={cancelRef}>
 									{i18n('logOutButton')}
 								</Button>
 							</HStack>
