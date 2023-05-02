@@ -6,7 +6,7 @@ export interface Answer {
 	answerId: number | string;
 	confidence: number;
 	selectedOptionId: number;
-	self: any;
+	self: string;
 }
 
 const MultipleChoiceAnswers = ({
@@ -20,9 +20,9 @@ const MultipleChoiceAnswers = ({
 	questionInFocus:
 		| {
 				id: string | any;
-				questionRc: any;
+				questionRc: string;
 				name?: string | undefined;
-				introductionRc?: any;
+				introductionRc?: string;
 				answerList: {
 					answerRc: string;
 					id: string | number;
@@ -33,8 +33,8 @@ const MultipleChoiceAnswers = ({
 	setSelectedAnswers: any;
 	clearSelection: any;
 	setClearSelection: any;
-	setIDKResponse: any;
-	IDKResponse: any;
+	setIDKResponse: (Arg0: boolean) => void;
+	IDKResponse: boolean;
 }) => {
 	const addAnswer = (answerObject: SelectedAnswers) => {
 		if (answerObject.answerId) {

@@ -6,7 +6,7 @@ export interface Answer {
 	answerId: number | string;
 	confidence: number;
 	selectedOptionId: number;
-	self: any;
+	self: string;
 }
 
 const MultipleChoiceOverLay = ({
@@ -19,9 +19,9 @@ const MultipleChoiceOverLay = ({
 	questionInFocus:
 		| {
 				id: string | any;
-				questionRc: any;
+				questionRc: string;
 				name?: string | undefined;
-				introductionRc?: any;
+				introductionRc?: string;
 				answerList: {
 					answerRc: string;
 					id: string | number;
