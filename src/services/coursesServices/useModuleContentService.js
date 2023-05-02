@@ -98,7 +98,7 @@ const useModuleContentService = () => {
 			let moduleContent = await fetchModuleContent(assignmentKey);
 			const moduleContentQuestionResponse = await axios({
 				method: 'GET',
-				url: `${moduleContent.self}?deep=true&subaccount=${subaccount}`,
+				url: `${moduleContent.self}?deep=true&subaccount=${subaccount}&answerKey=true`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,

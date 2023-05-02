@@ -109,7 +109,7 @@ export default function AssignmentComponent({
 		correctness: null,
 		reviewSeconds: 0,
 		publishedQuestionId: '',
-		answerList: [{ answerRc: '', id: '' }],
+		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
@@ -346,12 +346,23 @@ export default function AssignmentComponent({
 				if (
 					feedbackData.correctness === Correctness.Incorrect &&
 					feedbackData.confidence === Confidence.Sure
+					questionInFocus &&
+					`${overLayData.confidence}${overLayData.correctness}` ===
+						'SureIncorrect'
 				) {
-					handleMessage(
-						'TWO_IDENTICAL_SI',
-						false,
-						Number(questionInFocus.publishedQuestionId),
-					);
+					const publishedAnswer = questionInFocus.answerList.find((answer) => {
+						return answer.id === overLayData.answerList[0].answerId;
+					});
+					if (publishedAnswer) {
+						handleMessage(
+							'TWO_IDENTICAL_SI',
+							false,
+							Number(questionInFocus.publishedQuestionId),
+							Number(publishedAnswer.publishedAnswerId),
+						);
+					} else {
+						console.error('publishedAnswer not found');
+					}
 				}
 				if (
 					!(

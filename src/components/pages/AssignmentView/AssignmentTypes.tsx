@@ -61,6 +61,7 @@ export type QuestionInFocus = {
 	answerList: {
 		answerRc: string;
 		id: string | number;
+		publishedAnswerId: number | string;
 	}[];
 };
 

@@ -19,7 +19,11 @@ type QuizContextType = {
 			fastReviewsOnQuestion: number;
 		}[];
 		TEN_LONG_REVIEWS: number;
-		TWO_IDENTICAL_SI: { questionId: number; siCount: number }[];
+		TWO_IDENTICAL_SI: {
+			questionId: number;
+			siCount: number;
+			answerIdArray: number[];
+		}[];
 		TWO_NPA_IN_ROUND: {
 			questionId: number;
 			npaCount: number;
@@ -37,6 +41,7 @@ type QuizContextType = {
 		reset: boolean,
 		questionId?: number,
 		roundNumber?: number,
+		answerId?: number,
 	) => void;
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
@@ -104,6 +109,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			reset: boolean,
 			questionId?: number,
 			roundNumber?: number,
+            answerId?: number,
 		) => {
 			const resetFiveFastAnswers = () => {
 				setMessage((prevMessage) => ({
@@ -157,14 +163,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			const resetTwoFastReviewsInLu = () => {
 				const updatedTwoFastReviewsInLu = message.TWO_FAST_REVIEWS_IN_LU.filter(
 					(question) => {
-						console.log('@@@@@@@@@@@@', question, questionId);
 						return question.questionId !== questionId;
 					},
-				);
-				console.log(
-					'delete',
-					message.TWO_FAST_REVIEWS_IN_LU,
-					updatedTwoFastReviewsInLu,
 				);
 
 				setMessage((prevMessage) => ({
@@ -281,6 +281,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 						const isQuestionInArray = message.TWO_FAST_REVIEWS_IN_LU.some(
 							(question) => question.questionId === questionId,
 						);
+
 						if (isQuestionInArray) {
 							setMessage((prevMessage) => ({
 								...prevMessage,
@@ -321,14 +322,18 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				case 'TWO_IDENTICAL_SI':
 					if (reset && questionId) {
 						resetTwoIdenticalSureIncorrects();
-					} else if (questionId) {
+					} else if (questionId && answerId) {
 						const index = message.TWO_IDENTICAL_SI.findIndex(
 							(obj) => obj.questionId === questionId,
 						);
 
 						const newSiEntry = [
 							...message.TWO_IDENTICAL_SI,
-							{ questionId: Number(questionId), siCount: 1 },
+							{
+								questionId: Number(questionId),
+								siCount: 1,
+								answerIdArray: [answerId],
+							},
 						];
 
 						if (index === -1) {
@@ -341,6 +346,10 @@ export const QuizProvider = ({ children }: { children: any }) => {
 							updatedSiArray[index] = {
 								...updatedSiArray[index],
 								siCount: updatedSiArray[index].siCount + 1,
+								answerIdArray: [
+									...updatedSiArray[index].answerIdArray,
+									answerId,
+								],
 							};
 							setMessage((prevMessage) => ({
 								...prevMessage,

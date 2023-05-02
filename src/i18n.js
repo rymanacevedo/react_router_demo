@@ -142,6 +142,7 @@ const resources = {
          yourAssignments: 'Your Assignments',
          changeCourse: 'Change Course',
          refresher: 'Refresher',
+         review: 'Review',
          noCoursesAssigned: "You are not currently assigned to a course. Please check with your administrator.",
          assessment: 'Assessment',
          completedAssessment: 'Completed Assessment',
@@ -200,8 +201,11 @@ const resources = {
          finishTourBtn: 'Finish tour',
          step: 'Step',
          of6: 'of 6',
-         nextBtn: 'Next'         
-
+         nextBtn: 'Next',
+         //////////////////////////////////////////////
+         //   Review.tsx
+         //////////////////////////////////////////////         
+         questions: 'Questions',
       }
    },
    fr: {

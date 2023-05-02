@@ -87,7 +87,7 @@ const AssignmentReviewView = () => {
 		confidence: Confidence.Sure,
 		correctness: Correctness.Correct,
 		explanationRc: '',
-		answerList: [{ answerRc: '', id: '' }],
+		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
@@ -180,8 +180,8 @@ const AssignmentReviewView = () => {
 	const proceedDownDesiredPathRef = useRef(true);
 
 	const putReviewInfo = async (lastRevQDataArg?: {
-		roundId?: any;
-		questionId?: any;
+		roundId?: number;
+		questionId?: number;
 		payload?: any;
 	}) => {
 		if (lastRevQDataArg?.roundId) {
@@ -254,12 +254,15 @@ const AssignmentReviewView = () => {
 						'No saved data found, reveal correct answer will not function.',
 					);
 				}
-
+				//TODO: pull seconds from questionInFocus
 				setQuestionSecondsHistory(savedData?.questionSeconds);
+				//TODO: build answersChosen from questuionInFocus
 				setSelectedAnswers(savedData?.answersChosen);
 				setCurrentRoundAnswerOverLayData((prevState) => {
 					return {
 						...prevState,
+						// TODO: update this with the correct data from the learning unit call
+						// TODO: make a find function that will find the correct answer ids
 						correctAnswerIds: savedData?.correctAnswerIds,
 					};
 				});
@@ -317,6 +320,7 @@ const AssignmentReviewView = () => {
 			});
 		}
 	}
+
 	useEffect(() => {
 		// Clean up function to add the stored value when the component unmounts if user is not done with review
 		return () => {
