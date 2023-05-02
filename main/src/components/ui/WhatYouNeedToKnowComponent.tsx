@@ -23,7 +23,7 @@ import { useState } from 'react';
 const WhatYouNeedToKnowComponent = ({
 	introductionRc,
 }: {
-	introductionRc: any;
+	introductionRc: string;
 }) => {
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
