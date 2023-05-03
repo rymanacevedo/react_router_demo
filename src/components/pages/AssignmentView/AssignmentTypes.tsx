@@ -49,24 +49,24 @@ export type AnswerData = {
 
 export type QuestionInFocus = {
 	answerList: {
-	  answerRc: string;
-	  displayOrder: number;
-	  id: number;
-	  isCorrect: boolean;
-	  optionRc: string | null;
-	  publishedAnswerId: number;
-	  publishedAnswerUri: string;
-	  publishedOptionId: number | null;
-	  publishedOptionUri: string | null;
-	  publishedQuestionUri: string;
-	  questionId: number;
-	  questionVersionId: number;
-	  selected: boolean;
-	  selectedOptionId: number | null;
-	  selectedOptionUri: string | null;
-	  self: string;
-	  uid: string;
-	  versionId: number;
+		answerRc: string;
+		displayOrder: number;
+		id: number;
+		isCorrect: boolean;
+		optionRc: string | null;
+		publishedAnswerId: number;
+		publishedAnswerUri: string;
+		publishedOptionId: number | null;
+		publishedOptionUri: string | null;
+		publishedQuestionUri: string;
+		questionId: number;
+		questionVersionId: number;
+		selected: boolean;
+		selectedOptionId: number | null;
+		selectedOptionUri: string | null;
+		self: string;
+		uid: string;
+		versionId: number;
 	}[];
 	answered: boolean;
 	confidence: string;
@@ -92,8 +92,7 @@ export type QuestionInFocus = {
 	questionVersionId: number;
 	quizSeconds: number;
 	reviewSeconds: number;
-  };
-  
+};
 
 export type CurrentRoundQuestionListData = {
 	totalQuestionCount: any;

@@ -130,7 +130,7 @@ export default function AssignmentComponent({
 		questionVersionId: 0,
 		quizSeconds: 0,
 		reviewSeconds: 0,
-	  });
+	});
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();

@@ -1,5 +1,8 @@
 import { Box, Heading } from '@chakra-ui/react';
-import { QuestionInFocus, SelectedAnswers } from '../pages/AssignmentView/AssignmentTypes';
+import {
+	QuestionInFocus,
+	SelectedAnswers,
+} from '../pages/AssignmentView/AssignmentTypes';
 import AnswerInput from './AnswerInput/AnswerInput';
 
 export interface Answer {

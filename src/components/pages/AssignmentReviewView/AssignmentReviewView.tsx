@@ -108,7 +108,7 @@ const AssignmentReviewView = () => {
 		questionVersionId: 0,
 		quizSeconds: 0,
 		reviewSeconds: 0,
-	  });
+	});
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
 
