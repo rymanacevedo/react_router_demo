@@ -182,10 +182,8 @@ export default function AssignmentComponent({
 			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
 			let moduleQuestionsResponse = {} as ModuleData;
 			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
-				console.log('1111111111111', moduleLearningUnitsData.data);
 				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
 			} else {
-				console.log('2222222222222');
 				let res = await fetchModuleQuestions(assignmentKey);
 				moduleQuestionsResponse = res;
 				updateModuleLearningUnitsData(res, assignmentKey);
@@ -202,11 +200,6 @@ export default function AssignmentComponent({
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
-				console.log(
-					'currentRoundQuestionsResponse',
-					currentRoundQuestionsResponse,
-				);
-				console.log('moduleQuestionsResponse', moduleQuestionsResponse);
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
 					currentRoundQuestionsResponse?.masteredQuestionCount
