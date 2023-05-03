@@ -5,72 +5,7 @@ import {
 	useState,
 	useCallback,
 } from 'react';
-
-type Answer = {
-	answerRc: string;
-	id: number;
-	isCorrect: boolean;
-	optionRc: null;
-	self: string;
-	uid: string;
-	versionId: number;
-};
-
-type Question = {
-	answers: Answer[];
-	explanationRc: null;
-	hasModalIntroduction: boolean;
-	id: number;
-	introductionRc: null;
-	learningUnitId: number;
-	learningUnitUid: string;
-	learningUnitUri: string;
-	learningUnitVersionId: number;
-	name: string;
-	questionRc: string;
-	questionType: string;
-	self: string;
-	uid: string;
-	versionId: number;
-};
-
-type LearningUnit = {
-	id: number;
-	introductionRc: null;
-	moreInformationRc: null;
-	name: string;
-	questions: Question[];
-	self: string;
-	uid: string;
-	versionId: number;
-};
-
-export type ModuleData = {
-	accountUri: string;
-	children: null;
-	customizations: any[];
-	descriptionRc: null;
-	id: number;
-	introductionRc: null;
-	isAllowTimeIncrease: boolean;
-	isCustomMessagesEnabled: boolean;
-	isRecommendedModulesEnabled: boolean;
-	key: string;
-	kind: string;
-	learningUnits: LearningUnit[];
-	locale: string;
-	name: string;
-	outroButtonText: null;
-	outroLink: null;
-	outroRc: null;
-	ownerAccountUid: string;
-	publishedVersionId: null;
-	self: string;
-	timeAllotted: null;
-	timedAssessment: boolean;
-	uid: string;
-	versionId: number;
-};
+import { ModuleData } from '../components/pages/AssignmentView/AssignmentTypes';
 
 export type QuizContextType = {
 	moduleLearningUnitsData: {

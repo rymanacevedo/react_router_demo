@@ -27,6 +27,7 @@ import {
 	AnswerData,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
+	ModuleData,
 	QuestionInFocus,
 	SelectedAnswers,
 } from '../AssignmentView/AssignmentTypes';
@@ -39,7 +40,7 @@ import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
 import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
-import { ModuleData, useQuizContext } from '../../../hooks/useQuizContext';
+import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';

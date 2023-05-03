@@ -6,6 +6,7 @@ import {
 	AnswerData,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
+	ModuleData,
 	QuestionInFocus,
 	SelectedAnswers,
 } from '../../pages/AssignmentView/AssignmentTypes';
@@ -18,7 +19,7 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { useNavigate } from 'react-router-dom';
 import LoadingAssignmentView from '../loading/LoadingAssignmentView';
-import { ModuleData, useQuizContext } from '../../../hooks/useQuizContext';
+import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
