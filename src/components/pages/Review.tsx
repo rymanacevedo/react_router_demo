@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import LoadingReview from '../ui/loading/LoadingReview';
+import ReviewQuestion from '../ui/Review/ReviewQuestion';
 
 const Review = () => {
 	const [data, setData] = useState({
@@ -68,6 +69,7 @@ const Review = () => {
 						<Text marginTop={34} fontSize={28} color={'#7E8A9B'}>
 							{data.learningUnits.length} {i18n('questions')}
 						</Text>
+						<ReviewQuestion text="What kind of immediate feedback is most beneficial?" />
 					</Box>
 				) : (
 					<LoadingReview />
