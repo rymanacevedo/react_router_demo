@@ -1,14 +1,15 @@
+type QInFocusDataType = {
+	correctAnswerIds: string;
+	answerList: {
+		selected: boolean;
+		id: number;
+		selectedOptionId: number | null;
+		self: string;
+	}[];
+};
+
 export const findRoundAnswersData = (
-	QInFocusData: {
-		correctAnswerIds: string;
-		confidence: string;
-		answerList: {
-			selected: boolean;
-			id: number;
-			selectedOptionId: number | null;
-			self: string;
-		}[];
-	},
+	QInFocusData: QInFocusDataType,
 	correctAnsIds?: boolean,
 ) => {
 	const correctAnswerIds: number[] = [];
