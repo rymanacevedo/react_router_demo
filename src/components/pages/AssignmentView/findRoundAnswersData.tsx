@@ -1,6 +1,7 @@
 export const findRoundAnswersData = (
 	QInFocusData: {
 		correctAnswerIds: string;
+		confidence: string;
 		answerList: {
 			selected: boolean;
 			id: number;
@@ -11,6 +12,7 @@ export const findRoundAnswersData = (
 	correctAnsIds?: boolean,
 ) => {
 	const correctAnswerIds: number[] = [];
+	console.log('QInFocusData', QInFocusData);
 	const answersChosen = QInFocusData.answerList
 		.map(
 			(answer: {
@@ -39,7 +41,8 @@ export const findRoundAnswersData = (
 		.filter((item: any) => item !== null);
 	if (!correctAnsIds) {
 		return answersChosen.map((item: any) => {
-			if (answersChosen.length === 1) {
+			console.log('item', item);
+			if (answersChosen.length === 1 && QInFocusData.confidence === 'Sure') {
 				return { ...item, confidence: 100 };
 			} else {
 				return { ...item, confidence: 50 };

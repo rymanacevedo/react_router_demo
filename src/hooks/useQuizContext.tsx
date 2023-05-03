@@ -6,7 +6,78 @@ import {
 	useCallback,
 } from 'react';
 
-type QuizContextType = {
+type Answer = {
+	answerRc: string;
+	id: number;
+	isCorrect: boolean;
+	optionRc: null;
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
+type Question = {
+	answers: Answer[];
+	explanationRc: null;
+	hasModalIntroduction: boolean;
+	id: number;
+	introductionRc: null;
+	learningUnitId: number;
+	learningUnitUid: string;
+	learningUnitUri: string;
+	learningUnitVersionId: number;
+	name: string;
+	questionRc: string;
+	questionType: string;
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
+type LearningUnit = {
+	id: number;
+	introductionRc: null;
+	moreInformationRc: null;
+	name: string;
+	questions: Question[];
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
+export type ModuleData = {
+	accountUri: string;
+	children: null;
+	customizations: any[];
+	descriptionRc: null;
+	id: number;
+	introductionRc: null;
+	isAllowTimeIncrease: boolean;
+	isCustomMessagesEnabled: boolean;
+	isRecommendedModulesEnabled: boolean;
+	key: string;
+	kind: string;
+	learningUnits: LearningUnit[];
+	locale: string;
+	name: string;
+	outroButtonText: null;
+	outroLink: null;
+	outroRc: null;
+	ownerAccountUid: string;
+	publishedVersionId: null;
+	self: string;
+	timeAllotted: null;
+	timedAssessment: boolean;
+	uid: string;
+	versionId: number;
+};
+
+export type QuizContextType = {
+	moduleLearningUnitsData: {
+		assignmentKey: string;
+		data: ModuleData;
+	};
+
 	message: {
 		FIVE_FAST_ANSWERS: number;
 		FIVE_CONSEC_SI: number;
@@ -34,9 +105,42 @@ type QuizContextType = {
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
 	incrimentTwoFastReviewsInLu: () => void;
+	updateModuleLearningUnitsData: (
+		moduleLearningUnitsData: ModuleData,
+		assignmentKey: string,
+	) => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
+	moduleLearningUnitsData: {
+		assignmentKey: '',
+		data: {
+			accountUri: '',
+			children: null,
+			customizations: [],
+			descriptionRc: null,
+			id: 0,
+			introductionRc: null,
+			isAllowTimeIncrease: false,
+			isCustomMessagesEnabled: false,
+			isRecommendedModulesEnabled: false,
+			key: '',
+			kind: '',
+			learningUnits: [],
+			locale: '',
+			name: '',
+			outroButtonText: null,
+			outroLink: null,
+			outroRc: null,
+			ownerAccountUid: '',
+			publishedVersionId: null,
+			self: '',
+			timeAllotted: null,
+			timedAssessment: false,
+			uid: '',
+			versionId: 0,
+		},
+	},
 	message: {
 		FIVE_FAST_ANSWERS: 0,
 		FIVE_CONSEC_SI: 0,
@@ -52,6 +156,7 @@ const QuizContext = createContext<QuizContextType>({
 	selectedCourseKey: '',
 	setSelectedCourseKey: () => {},
 	incrimentTwoFastReviewsInLu: () => {},
+	updateModuleLearningUnitsData: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -67,7 +172,47 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		TWO_IDENTICAL_SI: [],
 	});
 
+	const [moduleLearningUnitsData, setModuleLearningUnitsData] = useState({
+		assignmentKey: '',
+		data: {
+			accountUri: '',
+			children: null,
+			customizations: [],
+			descriptionRc: null,
+			id: 0,
+			introductionRc: null,
+			isAllowTimeIncrease: false,
+			isCustomMessagesEnabled: false,
+			isRecommendedModulesEnabled: false,
+			key: '',
+			kind: '',
+			learningUnits: [],
+			locale: '',
+			name: '',
+			outroButtonText: null,
+			outroLink: null,
+			outroRc: null,
+			ownerAccountUid: '',
+			publishedVersionId: null,
+			self: '',
+			timeAllotted: null,
+			timedAssessment: false,
+			uid: '',
+			versionId: 0,
+		},
+	} as QuizContextType['moduleLearningUnitsData']);
+
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
+	// function that takes in the moduleLearningUnitsData and updates the state with the new data
+	const updateModuleLearningUnitsData = useCallback(
+		(moduleLearningUnitsDataArg: ModuleData, assignmentKey: string) => {
+			setModuleLearningUnitsData({
+				assignmentKey: assignmentKey,
+				data: moduleLearningUnitsDataArg,
+			});
+		},
+		[],
+	);
 
 	const incrimentTwoFastReviewsInLu = () => {
 		//take the TWO_FAST_REVIEWS_IN_LU array and for each questionId, incriment the fastReviewsOnQuestion by 1
@@ -335,6 +480,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			selectedCourseKey,
 			setSelectedCourseKey,
 			incrimentTwoFastReviewsInLu,
+			moduleLearningUnitsData,
+			updateModuleLearningUnitsData,
 		}),
 		[
 			message,
@@ -342,6 +489,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			selectedCourseKey,
 			setSelectedCourseKey,
 			incrimentTwoFastReviewsInLu,
+			moduleLearningUnitsData,
+			updateModuleLearningUnitsData,
 		],
 	);
 

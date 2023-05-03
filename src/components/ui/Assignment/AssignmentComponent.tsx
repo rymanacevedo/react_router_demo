@@ -18,7 +18,7 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { useNavigate } from 'react-router-dom';
 import LoadingAssignmentView from '../loading/LoadingAssignmentView';
-import { useQuizContext } from '../../../hooks/useQuizContext';
+import { ModuleData, useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
@@ -27,7 +27,7 @@ type Props = {
 	isInstructionalOverlayOpen: boolean;
 	onClose: () => void;
 	initRef: any;
-	assignmentKey: string | undefined;
+	assignmentKey: string;
 };
 
 const initState = {
@@ -63,8 +63,13 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage, incrimentTwoFastReviewsInLu } =
-		useQuizContext();
+	const {
+		message,
+		handleMessage,
+		incrimentTwoFastReviewsInLu,
+		moduleLearningUnitsData,
+		updateModuleLearningUnitsData,
+	} = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
@@ -116,14 +121,31 @@ export default function AssignmentComponent({
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [showOverlay, setShowOverlay] = useState(false);
-	const [questionData, setQuestionData] = useState({
-		learningUnits: [{ questions: [] }],
+	const [questionData, setQuestionData] = useState<ModuleData>({
+		accountUri: '',
+		children: null,
+		customizations: [],
+		descriptionRc: null,
+		id: 0,
+		introductionRc: null,
+		isAllowTimeIncrease: false,
+		isCustomMessagesEnabled: false,
+		isRecommendedModulesEnabled: false,
+		key: '',
 		kind: '',
+		learningUnits: [],
+		locale: '',
 		name: '',
-		outroLink: '',
-		outroButtonText: '',
-		introductionRc: '',
-		outroRc: '',
+		outroButtonText: null,
+		outroLink: null,
+		outroRc: null,
+		ownerAccountUid: '',
+		publishedVersionId: null,
+		self: '',
+		timeAllotted: null,
+		timedAssessment: false,
+		uid: '',
+		versionId: 0,
 	});
 
 	const [IDKResponse, setIDKResponse] = useState(false);
@@ -139,10 +161,18 @@ export default function AssignmentComponent({
 
 	const fetchModuleQuestionsData = async () => {
 		try {
-			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-				await getCurrentRound(assignmentKey),
-				await fetchModuleQuestions(assignmentKey),
-			];
+			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
+			let moduleQuestionsResponse = {} as ModuleData;
+			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
+				console.log('1111111111111', moduleLearningUnitsData.data);
+				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
+			} else {
+				console.log('2222222222222');
+				let res = await fetchModuleQuestions(assignmentKey);
+				moduleQuestionsResponse = res;
+				updateModuleLearningUnitsData(res, assignmentKey);
+			}
+
 			let revSkipRes = {} as CurrentRoundQuestionListData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
@@ -154,6 +184,11 @@ export default function AssignmentComponent({
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+				console.log(
+					'currentRoundQuestionsResponse',
+					currentRoundQuestionsResponse,
+				);
+				console.log('moduleQuestionsResponse', moduleQuestionsResponse);
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
 					currentRoundQuestionsResponse?.masteredQuestionCount
@@ -161,8 +196,9 @@ export default function AssignmentComponent({
 					setOutro(true);
 				} else if (
 					currentRoundQuestionsResponse.questionList.every(
-						(question: { correctness: string }) =>
-							question.correctness === 'Correct',
+						(question: { correctness: string; confidence: string }) =>
+							question.correctness === 'Correct' &&
+							question.confidence === 'Sure',
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
