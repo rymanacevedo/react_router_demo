@@ -236,24 +236,24 @@ const AssignmentReviewView = () => {
 					);
 				}
 
-				const QInFocus = findQuestionInFocus(
+				const foundQuestionInFocus = findQuestionInFocus(
 					moduleQuestionsResponse,
 					currentRoundQuestionsResponse,
 					true,
 					viewCorrect,
 				)[questionIndex];
-				setQuestionSecondsHistory(QInFocus?.quizSeconds);
+				setQuestionSecondsHistory(foundQuestionInFocus?.quizSeconds);
 
-				setSelectedAnswers(findRoundAnswersData(QInFocus));
+				setSelectedAnswers(findRoundAnswersData(foundQuestionInFocus));
 				setCurrentRoundAnswerOverLayData((prevState) => {
 					return {
 						...prevState,
-						correctAnswerIds: findRoundAnswersData(QInFocus, true),
+						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus, true),
 					};
 				});
 				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
-				setQuestionInFocus(QInFocus);
+				setQuestionInFocus(foundQuestionInFocus);
 
 				if (
 					message.TWO_FAST_REVIEWS_IN_LU.filter((item) => {
