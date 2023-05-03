@@ -1,5 +1,5 @@
 import { Box, Heading } from '@chakra-ui/react';
-import { SelectedAnswers } from '../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus, SelectedAnswers } from '../pages/AssignmentView/AssignmentTypes';
 import AnswerInput from './AnswerInput/AnswerInput';
 
 export interface Answer {
@@ -17,18 +17,7 @@ const MultipleChoiceAnswers = ({
 	setClearSelection,
 	setIDKResponse,
 }: {
-	questionInFocus:
-		| {
-				id: string | any;
-				questionRc: string;
-				name?: string | undefined;
-				introductionRc?: string;
-				answerList: {
-					answerRc: string;
-					id: string | number;
-				}[];
-		  }
-		| undefined;
+	questionInFocus: QuestionInFocus;
 	selectedAnswers: any;
 	setSelectedAnswers: any;
 	clearSelection: any;

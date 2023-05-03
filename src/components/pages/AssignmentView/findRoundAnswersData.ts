@@ -1,5 +1,6 @@
 type QInFocusDataType = {
 	correctAnswerIds: string;
+	confidence: string;
 	answerList: {
 		selected: boolean;
 		id: number;

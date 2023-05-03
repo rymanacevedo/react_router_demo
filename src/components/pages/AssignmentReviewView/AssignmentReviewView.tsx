@@ -39,7 +39,7 @@ import ExplanationTitle from '../../ui/ExplanationTitle';
 import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
 import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
-import { useQuizContext } from '../../../hooks/useQuizContext';
+import { ModuleData, useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
@@ -71,22 +71,44 @@ const initState = {
 
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
-	const { message, handleMessage } = useQuizContext();
+	const {
+		message,
+		handleMessage,
+		moduleLearningUnitsData,
+		updateModuleLearningUnitsData,
+	} = useQuizContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [showExplanation, setShowExplanation] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
-		id: '',
-		questionRc: '',
-		publishedQuestionId: '',
-		reviewSeconds: 0,
+		answerList: [],
+		answered: false,
 		confidence: '',
 		correctness: '',
-		explanationRc: '',
-		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
-	});
+		difficultyScore: 0,
+		displayOrder: 0,
+		explanationRc: null,
+		flagged: false,
+		hasModuleIntroduction: undefined,
+		hideQuestionIntroImages: false,
+		id: 0,
+		interactiveState: null,
+		introductionRc: null,
+		moreInformationRc: null,
+		name: '',
+		pointsWorth: 0,
+		publishedLearningUnitUri: '',
+		publishedQuestionAuthoringKey: '',
+		publishedQuestionId: 0,
+		publishedQuestionUri: '',
+		questionRc: '',
+		questionType: '',
+		questionVersionId: 0,
+		quizSeconds: 0,
+		reviewSeconds: 0,
+	  });
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
 
@@ -95,10 +117,31 @@ const AssignmentReviewView = () => {
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
-	const [questionData, setQuestionData] = useState({
-		learningUnits: [{ questions: [] }],
+	const [questionData, setQuestionData] = useState<ModuleData>({
+		accountUri: '',
+		children: null,
+		customizations: [],
+		descriptionRc: null,
+		id: 0,
+		introductionRc: null,
+		isAllowTimeIncrease: false,
+		isCustomMessagesEnabled: false,
+		isRecommendedModulesEnabled: false,
+		key: '',
 		kind: '',
+		learningUnits: [],
+		locale: '',
 		name: '',
+		outroButtonText: null,
+		outroLink: null,
+		outroRc: null,
+		ownerAccountUid: '',
+		publishedVersionId: null,
+		self: '',
+		timeAllotted: null,
+		timedAssessment: false,
+		uid: '',
+		versionId: 0,
 	});
 
 	const [answerData, setAnswerData] = useState<AnswerData>({
@@ -202,10 +245,17 @@ const AssignmentReviewView = () => {
 
 	const fetchModuleQuestionsData = async (firstRender?: boolean) => {
 		try {
-			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-				await getCurrentRound(assignmentKey),
-				await fetchModuleQuestions(assignmentKey),
-			];
+			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
+			let moduleQuestionsResponse = {} as ModuleData;
+			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
+				console.log('1111111111111', moduleLearningUnitsData.data);
+				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
+			} else {
+				console.log('2222222222222');
+				let res = await fetchModuleQuestions(assignmentKey);
+				moduleQuestionsResponse = res;
+				updateModuleLearningUnitsData(res, assignmentKey as string);
+			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
 				if (firstRender) {
@@ -251,7 +301,7 @@ const AssignmentReviewView = () => {
 						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus, true),
 					};
 				});
-				setQuestionData(moduleQuestionsResponse);
+				setQuestionData(moduleQuestionsResponse as ModuleData);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 				setQuestionInFocus(foundQuestionInFocus);
 

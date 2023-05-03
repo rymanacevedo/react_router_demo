@@ -48,22 +48,52 @@ export type AnswerData = {
 };
 
 export type QuestionInFocus = {
-	id: string | number;
-	questionRc: string;
-	name?: string;
-	reviewSeconds: number;
-	introductionRc?: string;
-	explanationRc?: string;
-	moreInformationRc?: string;
+	answerList: {
+	  answerRc: string;
+	  displayOrder: number;
+	  id: number;
+	  isCorrect: boolean;
+	  optionRc: string | null;
+	  publishedAnswerId: number;
+	  publishedAnswerUri: string;
+	  publishedOptionId: number | null;
+	  publishedOptionUri: string | null;
+	  publishedQuestionUri: string;
+	  questionId: number;
+	  questionVersionId: number;
+	  selected: boolean;
+	  selectedOptionId: number | null;
+	  selectedOptionUri: string | null;
+	  self: string;
+	  uid: string;
+	  versionId: number;
+	}[];
+	answered: boolean;
 	confidence: string;
 	correctness: string;
-	publishedQuestionId: number | string;
-	answerList: {
-		answerRc: string;
-		id: string | number;
-		publishedAnswerId: number | string;
-	}[];
-};
+	difficultyScore: number;
+	displayOrder: number;
+	explanationRc: string | null;
+	flagged: boolean;
+	hasModuleIntroduction: boolean | undefined;
+	hideQuestionIntroImages: boolean;
+	id: number;
+	interactiveState: any | null;
+	introductionRc: string | null;
+	moreInformationRc: string | null;
+	name: string;
+	pointsWorth: number;
+	publishedLearningUnitUri: string;
+	publishedQuestionAuthoringKey: string;
+	publishedQuestionId: number;
+	publishedQuestionUri: string;
+	questionRc: string;
+	questionType: string;
+	questionVersionId: number;
+	quizSeconds: number;
+	reviewSeconds: number;
+  };
+  
 
 export type CurrentRoundQuestionListData = {
 	totalQuestionCount: any;

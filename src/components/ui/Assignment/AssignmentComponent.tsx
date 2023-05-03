@@ -105,14 +105,32 @@ export default function AssignmentComponent({
 	const { fetchModuleQuestions } = useModuleContentService();
 
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
-		id: '',
-		questionRc: '',
+		answerList: [],
+		answered: false,
 		confidence: '',
 		correctness: '',
+		difficultyScore: 0,
+		displayOrder: 0,
+		explanationRc: null,
+		flagged: false,
+		hasModuleIntroduction: undefined,
+		hideQuestionIntroImages: false,
+		id: 0,
+		interactiveState: null,
+		introductionRc: null,
+		moreInformationRc: null,
+		name: '',
+		pointsWorth: 0,
+		publishedLearningUnitUri: '',
+		publishedQuestionAuthoringKey: '',
+		publishedQuestionId: 0,
+		publishedQuestionUri: '',
+		questionRc: '',
+		questionType: '',
+		questionVersionId: 0,
+		quizSeconds: 0,
 		reviewSeconds: 0,
-		publishedQuestionId: '',
-		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
-	});
+	  });
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();

@@ -77,7 +77,7 @@ export default function AnswerArea(props: {
 						<Fade in={!props.showOverlay}>
 							{' '}
 							<MultipleChoiceAnswers
-								questionInFocus={props.questionInFocus}
+								questionInFocus={props.questionInFocus as QuestionInFocus}
 								selectedAnswers={props.selectedAnswers}
 								setSelectedAnswers={props.selectedAnswersState}
 								clearSelection={props.clearSelection}
