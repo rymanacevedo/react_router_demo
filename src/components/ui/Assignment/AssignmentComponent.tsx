@@ -333,8 +333,10 @@ export default function AssignmentComponent({
 				stopTimer();
 
 				if (
-					feedbackData.correctness === Correctness.Correct &&
-					feedbackData.confidence === Confidence.Sure
+					!(
+						feedbackData.correctness === Correctness.Correct &&
+						feedbackData.confidence === Confidence.Sure
+					)
 				) {
 					handleMessage(
 						'TWO_NPA_IN_ROUND',
