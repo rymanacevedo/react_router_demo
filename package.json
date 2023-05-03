@@ -41,10 +41,9 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
     "fix": "eslint --fix --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
     "prepare": "cd .. && husky install main/.husky",
-    "test": "react-scripts test --testURL=http://localhost:3000/main?abbrevName=automation_10",
+    "test": "vitest",
     "prestart": "rm -rf node_modules/.cache/"
   },
-  
   "browserslist": {
     "production": [
       ">0.2%",
@@ -65,7 +64,9 @@
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
+    "jsdom": "^22.0.0",
     "vite": "^4.3.3",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite-plugin-eslint": "^1.8.1",
+    "vitest": "^0.31.0"
   }
 }

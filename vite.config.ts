@@ -31,7 +31,17 @@ export default defineConfig(() => {
         ],
       },
     },
-    plugins: [react(), viteTsconfigPaths(), svgrPlugin(), eslint()],
+    plugins: [
+      react(), 
+      viteTsconfigPaths(), 
+      svgrPlugin(), 
+      eslint()
+    ],
+    test: {
+      environment: 'jsdom',
+      globals: true,
+      setupFiles: './src/setupTests.ts'
+    },
     server: {
       port: 3000,
       open: true,

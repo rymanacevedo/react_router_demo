@@ -21,7 +21,9 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src","config"
+    "vite.config.ts",
+    ".eslintrc",
+    "src"
   ],
   "references": [{ "path": "./tsconfig.node.json" }],
   "types": ["vite-plugin-svgr/client", "vite/client"],
