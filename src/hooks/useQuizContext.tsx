@@ -24,12 +24,7 @@ type QuizContextType = {
 			siCount: number;
 			answerIdArray: number[];
 		}[];
-		TWO_NPA_IN_ROUND: {
-			questionId: number;
-			npaCount: number;
-			seenCount: number;
-			roundNumber: number;
-		}[];
+		TWO_NPA_IN_ROUND: number;
 		TWO_NPA_ON_LU: {
 			questionId: number;
 			npaCount: number;
@@ -59,7 +54,7 @@ const QuizContext = createContext<QuizContextType>({
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
 		TWO_IDENTICAL_SI: [],
-		TWO_NPA_IN_ROUND: [],
+		TWO_NPA_IN_ROUND: 0,
 		TWO_NPA_ON_LU: [],
 	},
 	handleMessage: () => {},
@@ -78,7 +73,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
-		TWO_NPA_IN_ROUND: [],
+		TWO_NPA_IN_ROUND: 0,
 		TWO_IDENTICAL_SI: [],
 		TWO_NPA_ON_LU: [],
 	});
@@ -108,8 +103,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			messageType: string,
 			reset: boolean,
 			questionId?: number,
-			roundNumber?: number,
-            answerId?: number,
+			answerId?: number,
 		) => {
 			const resetFiveFastAnswers = () => {
 				setMessage((prevMessage) => ({
@@ -197,13 +191,10 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			};
 
 			const resetTwoNpaInRound = () => {
-				const updatedTwoNPAInRound = message.TWO_NPA_IN_ROUND.filter(
-					(question) => question.questionId !== questionId,
-				);
-				setMessage((prevMessage) => ({
-					...prevMessage,
-					TWO_NPA_IN_ROUND: updatedTwoNPAInRound,
-				}));
+				setMessage({
+					...message,
+					TWO_NPA_IN_ROUND: 0,
+				});
 			};
 
 			switch (messageType) {
@@ -387,6 +378,11 @@ export const QuizProvider = ({ children }: { children: any }) => {
 								...prevMessage,
 								TWO_NPA_ON_LU: updatedTwoNpaArray,
 							}));
+
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_NPA_IN_ROUND: prevMessage.TWO_NPA_IN_ROUND + 1,
+							}));
 						}
 					}
 					break;
@@ -394,43 +390,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				case 'TWO_NPA_IN_ROUND':
 					if (reset && questionId) {
 						resetTwoNpaInRound();
-					} else if (questionId && roundNumber) {
-						const index = message.TWO_NPA_IN_ROUND.findIndex(
-							(obj) => obj.questionId === questionId,
-						);
-
-						const newTwoNpaEntry = [
-							...message.TWO_NPA_IN_ROUND,
-							{
-								questionId: Number(questionId),
-								seenCount: 1,
-								npaCount: 0,
-								roundNumber,
-							},
-						];
-
-						if (index === -1) {
-							setMessage((prevMessage) => ({
-								...prevMessage,
-								TWO_NPA_IN_ROUND: newTwoNpaEntry,
-							}));
-						} else {
-							const updatedTwoNpaArray = [...message.TWO_NPA_IN_ROUND];
-							const npaCountIncrement =
-								updatedTwoNpaArray[index].roundNumber === roundNumber ? 1 : 0;
-							updatedTwoNpaArray[index] = {
-								...updatedTwoNpaArray[index],
-								seenCount: updatedTwoNpaArray[index].seenCount + 1,
-								npaCount:
-									updatedTwoNpaArray[index].npaCount + npaCountIncrement,
-								roundNumber,
-							};
-							setMessage((prevMessage) => ({
-								...prevMessage,
-								TWO_NPA_IN_ROUND: updatedTwoNpaArray,
-							}));
-						}
 					}
+					// TODO: we shouldn't have to do this because we have to make a case each time we want to reset the data instead of just reseting it directly.
 					break;
 				default:
 					// handle default case

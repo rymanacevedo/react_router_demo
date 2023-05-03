@@ -342,16 +342,20 @@ export default function AssignmentComponent({
 						Number(questionInFocus.publishedQuestionId),
 						currentRoundQuestionListData?.roundNumber,
 					);
+
+					handleMessage(
+						'TWO_NPA_ON_LU',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
 				}
 				if (
 					feedbackData.correctness === Correctness.Incorrect &&
-					feedbackData.confidence === Confidence.Sure
-					questionInFocus &&
-					`${overLayData.confidence}${overLayData.correctness}` ===
-						'SureIncorrect'
+					feedbackData.confidence === Confidence.Sure &&
+					questionInFocus
 				) {
 					const publishedAnswer = questionInFocus.answerList.find((answer) => {
-						return answer.id === overLayData.answerList[0].answerId;
+						return answer.id === feedbackData.answerList[0].answerId;
 					});
 					if (publishedAnswer) {
 						handleMessage(
@@ -363,18 +367,6 @@ export default function AssignmentComponent({
 					} else {
 						console.error('publishedAnswer not found');
 					}
-				}
-				if (
-					!(
-						overLayData.correctness === 'Correct' &&
-						overLayData.confidence === 'Sure'
-					)
-				) {
-					handleMessage(
-						'TWO_NPA_ON_LU',
-						false,
-						Number(questionInFocus.publishedQuestionId),
-					);
 				}
 			}
 		};
@@ -468,13 +460,17 @@ export default function AssignmentComponent({
 	}, [message.TWO_IDENTICAL_SI]);
 
 	useEffect(() => {
-		console.log('2 npa activated, for:', Number(questionInFocus.id));
-		if (message.TWO_NPA_IN_ROUND[Number(questionInFocus.id)].npaCount === 2) {
+		if (message.TWO_NPA_IN_ROUND === 2) {
 			setIsToastOpen(true);
 			setTextPrompt('TWO_NPA_IN_ROUND');
 			handleMessage('TWO_NPA_IN_ROUND', true);
 		}
 	}, [message.TWO_NPA_IN_ROUND]);
+
+	useEffect(() => {
+		// event listener for when the round changes
+		handleMessage('TWO_NPA_IN_ROUND', true);
+	}, [currentRoundQuestionListData?.roundNumber]);
 
 	useEffect(() => {
 		const index = message.TWO_NPA_ON_LU.findIndex(
@@ -554,7 +550,6 @@ export default function AssignmentComponent({
 					</HStack>
 				</Container>
 			) : (
-				// @ts-ignore
 				<ModuleOutro moduleData={questionData} action={handleReturnHome} />
 			)}
 		</>

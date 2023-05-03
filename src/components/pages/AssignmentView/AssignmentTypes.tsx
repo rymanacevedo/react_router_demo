@@ -121,5 +121,4 @@ export enum Correctness {
 	Incorrect = 'Incorrect',
 	NoAnswerSelected = 'NoAnswerSelected',
 	Correct = 'Correct',
-	Cor = 'Correct',
 }
