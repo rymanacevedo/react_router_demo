@@ -2,7 +2,7 @@ import {
 	Box,
 	Container,
 	Stack,
-	useMediaQuery,
+	// useMediaQuery,
 	Heading,
 	Text,
 } from '@chakra-ui/react';
@@ -23,7 +23,7 @@ const Review = () => {
 	const [reviewQuestions, setReviewQuestions] = useState<any[]>([]);
 	const { t: i18n } = useTranslation();
 	const { assignmentKey } = useParams();
-	const isSmallerThan1000 = useMediaQuery('(max-width:1000px)');
+	// const isSmallerThan1000 = useMediaQuery('(max-width:1000px)');
 	const { fetchModuleQuestions } = useModuleContentService();
 
 	const logQuestions = (obj: any) => {
@@ -47,6 +47,7 @@ const Review = () => {
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
+				console.log(response);
 				logQuestions(response);
 				setData(response);
 			}
