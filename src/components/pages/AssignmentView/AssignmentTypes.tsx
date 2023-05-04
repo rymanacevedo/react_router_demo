@@ -48,21 +48,50 @@ export type AnswerData = {
 };
 
 export type QuestionInFocus = {
-	id: string | number;
-	questionRc: string;
-	name?: string;
-	reviewSeconds: number;
-	introductionRc?: string;
-	explanationRc?: string;
-	moreInformationRc?: string;
-	confidence: string;
-	correctness: string;
-	publishedQuestionId: number | string;
 	answerList: {
 		answerRc: string;
-		id: string | number;
-		publishedAnswerId: number | string;
+		displayOrder: number;
+		id: number;
+		isCorrect: boolean;
+		optionRc: string | null;
+		publishedAnswerId: number;
+		publishedAnswerUri: string;
+		publishedOptionId: number | null;
+		publishedOptionUri: string | null;
+		publishedQuestionUri: string;
+		questionId: number;
+		questionVersionId: number;
+		selected: boolean;
+		selectedOptionId: number | null;
+		selectedOptionUri: string | null;
+		self: string;
+		uid: string;
+		versionId: number;
 	}[];
+	answered: boolean;
+	confidence: string;
+	correctness: string;
+	difficultyScore: number;
+	displayOrder: number;
+	explanationRc: string | null;
+	flagged: boolean;
+	hasModuleIntroduction: boolean | undefined;
+	hideQuestionIntroImages: boolean;
+	id: number;
+	interactiveState: any | null;
+	introductionRc: string | null;
+	moreInformationRc: string | null;
+	name: string;
+	pointsWorth: number;
+	publishedLearningUnitUri: string;
+	publishedQuestionAuthoringKey: string;
+	publishedQuestionId: number;
+	publishedQuestionUri: string;
+	questionRc: string;
+	questionType: string;
+	questionVersionId: number;
+	quizSeconds: number;
+	reviewSeconds: number;
 };
 
 export type CurrentRoundQuestionListData = {
@@ -109,4 +138,70 @@ export type CurrentRoundAnswerOverLayData = {
 		selectedOptionId: number;
 		answerConfidence: string;
 	}[];
+};
+
+type LearningUnitQuestionAnswer = {
+	answerRc: string;
+	id: number;
+	isCorrect: boolean;
+	optionRc: null;
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
+type LearningUnitQuestion = {
+	answers: LearningUnitQuestionAnswer[];
+	explanationRc: null;
+	hasModalIntroduction: boolean;
+	id: number;
+	introductionRc: null;
+	learningUnitId: number;
+	learningUnitUid: string;
+	learningUnitUri: string;
+	learningUnitVersionId: number;
+	name: string;
+	questionRc: string;
+	questionType: string;
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
+type ModuleDataLearningUnit = {
+	id: number;
+	introductionRc: null;
+	moreInformationRc: null;
+	name: string;
+	questions: LearningUnitQuestion[];
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
+export type ModuleData = {
+	accountUri: string;
+	children: null;
+	customizations: any[];
+	descriptionRc: null;
+	id: number;
+	introductionRc: null;
+	isAllowTimeIncrease: boolean;
+	isCustomMessagesEnabled: boolean;
+	isRecommendedModulesEnabled: boolean;
+	key: string;
+	kind: string;
+	learningUnits: ModuleDataLearningUnit[];
+	locale: string;
+	name: string;
+	outroButtonText: null;
+	outroLink: null;
+	outroRc: null;
+	ownerAccountUid: string;
+	publishedVersionId: null;
+	self: string;
+	timeAllotted: null;
+	timedAssessment: boolean;
+	uid: string;
+	versionId: number;
 };
