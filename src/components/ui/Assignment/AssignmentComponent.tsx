@@ -14,7 +14,6 @@ import {
 import AnswerArea from '../AnswerInput/AnswerArea';
 import { useEffect, useRef, useState } from 'react';
 import { findDateData } from '../../../utils/logic';
-import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
@@ -129,10 +128,6 @@ export default function AssignmentComponent({
 		outroRc: '',
 	});
 
-	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
-		`questionHistory${assignmentKey}`,
-		null,
-	);
 	const [IDKResponse, setIDKResponse] = useState(false);
 	const intervalRef = useRef<ReturnType<typeof setInterval>>();
 	const questionSecondsRef = useRef(0);
@@ -183,7 +178,6 @@ export default function AssignmentComponent({
 							false,
 						),
 					);
-					setLocalQuestionHistory(null);
 				} else if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
@@ -310,23 +304,6 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				const roundQuestionsHistory: any[] =
-					localQuestionHistory?.roundQuestionsHistory || [];
-
-				const updatedLocalQuestionHistory = {
-					currentRoundId: currentRoundQuestionListData?.id,
-					roundQuestionsHistory: [
-						...roundQuestionsHistory,
-						{
-							answeredQuestionId: questionInFocus.id,
-							answersChosen: [...answerData.answerList],
-							correctAnswerIds: [...feedbackData.correctAnswerIds],
-							questionSeconds: answerData.questionSeconds,
-						},
-					],
-				};
-
-				setLocalQuestionHistory(updatedLocalQuestionHistory);
 				setCurrentRoundAnswerOverLayData(feedbackData);
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;

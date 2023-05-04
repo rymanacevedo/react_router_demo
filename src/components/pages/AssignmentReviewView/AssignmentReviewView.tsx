@@ -45,6 +45,7 @@ import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
 
 const initState = {
 	self: null,
@@ -160,10 +161,6 @@ const AssignmentReviewView = () => {
 			unseenCount: 0,
 		},
 	});
-	const [localQuestionHistory, setLocalQuestionHistory] = useLocalStorage(
-		`questionHistory${assignmentKey}`,
-		null,
-	);
 	const [storedTime, setStoredtime] = useState(0);
 	const [, setLocalQuestionReviewHistory] = useLocalStorage(
 		`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
@@ -236,46 +233,24 @@ const AssignmentReviewView = () => {
 					);
 				}
 
-				const questionId: string = findQuestionInFocus(
+				const foundQuestionInFocus = findQuestionInFocus(
 					moduleQuestionsResponse,
 					currentRoundQuestionsResponse,
 					true,
 					viewCorrect,
-				)[questionIndex].id;
-				const roundQuestionsHistory: any[] =
-					localQuestionHistory?.roundQuestionsHistory || [];
-				const savedData = roundQuestionsHistory.find(
-					({ answeredQuestionId }: { answeredQuestionId: string }) =>
-						answeredQuestionId === questionId,
-				);
+				)[questionIndex];
+				setQuestionSecondsHistory(foundQuestionInFocus?.quizSeconds);
 
-				if (!savedData) {
-					console.error(
-						'No saved data found, reveal correct answer will not function.',
-					);
-				}
-				//TODO: pull seconds from questionInFocus
-				setQuestionSecondsHistory(savedData?.questionSeconds);
-				//TODO: build answersChosen from questuionInFocus
-				setSelectedAnswers(savedData?.answersChosen);
+				setSelectedAnswers(findRoundAnswersData(foundQuestionInFocus));
 				setCurrentRoundAnswerOverLayData((prevState) => {
 					return {
 						...prevState,
-						// TODO: update this with the correct data from the learning unit call
-						// TODO: make a find function that will find the correct answer ids
-						correctAnswerIds: savedData?.correctAnswerIds,
+						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus, true),
 					};
 				});
 				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
-				setQuestionInFocus(
-					findQuestionInFocus(
-						moduleQuestionsResponse,
-						currentRoundQuestionsResponse,
-						true,
-						viewCorrect,
-					)[questionIndex],
-				);
+				setQuestionInFocus(foundQuestionInFocus);
 
 				if (
 					message.TWO_FAST_REVIEWS_IN_LU.filter((item) => {
@@ -531,7 +506,6 @@ const AssignmentReviewView = () => {
 			await putReviewInfo();
 		}
 
-		setLocalQuestionHistory(null);
 		localStorage.removeItem(
 			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
 		);
