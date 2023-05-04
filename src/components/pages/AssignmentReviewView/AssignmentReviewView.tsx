@@ -85,8 +85,8 @@ const AssignmentReviewView = () => {
 		questionRc: '',
 		publishedQuestionId: '',
 		reviewSeconds: 0,
-		confidence: Confidence.Sure,
-		correctness: Correctness.Correct,
+		confidence: null,
+		correctness: null,
 		explanationRc: '',
 		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
