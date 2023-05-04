@@ -8,6 +8,7 @@ import fs from 'fs/promises';
 
 export default defineConfig(() => {
   return {
+    base: '/main/',
     build: {
       outDir: "build",
     },
