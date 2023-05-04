@@ -44,18 +44,6 @@
     "test": "vitest",
     "prestart": "rm -rf node_modules/.cache/"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
     "eslint": "^8.25.0",
