@@ -20,15 +20,34 @@ const Review = () => {
 		outroRc: '',
 		learningUnits: [],
 	});
+	const [reviewQuestions, setReviewQuestions] = useState<any[]>([]);
 	const { t: i18n } = useTranslation();
 	const { assignmentKey } = useParams();
 	const isSmallerThan1000 = useMediaQuery('(max-width:1000px)');
 	const { fetchModuleQuestions } = useModuleContentService();
 
+	const logQuestions = (obj: any) => {
+		const questions: any[] = [];
+		for (let prop in obj) {
+			if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+				logQuestions(obj[prop]);
+			}
+			if (Array.isArray(obj[prop]) && prop === 'learningUnits') {
+				obj[prop].forEach((unit: { questions: any[] }) => {
+					unit.questions.map((question) => {
+						questions.push(question);
+					});
+				});
+			}
+		}
+		setReviewQuestions(questions);
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
+				logQuestions(response);
 				setData(response);
 			}
 		};
@@ -43,7 +62,7 @@ const Review = () => {
 			margin="0"
 			padding="0"
 			maxWidth={'100vw'}
-			overflowY={'hidden'}
+			overflowY={'auto'}
 			overflowX={'hidden'}>
 			<Stack
 				w="100%"
@@ -55,7 +74,6 @@ const Review = () => {
 					<Box
 						backgroundColor="white"
 						margin="6px"
-						h={isSmallerThan1000 ? '745px' : '100%'}
 						boxShadow="2xl"
 						w="100%"
 						overflow="hidden"
@@ -69,7 +87,9 @@ const Review = () => {
 						<Text marginTop={34} fontSize={28} color={'#7E8A9B'}>
 							{data.learningUnits.length} {i18n('questions')}
 						</Text>
-						<ReviewQuestion text="What kind of immediate feedback is most beneficial?" />
+						{reviewQuestions.map((question) => (
+							<ReviewQuestion text={question.questionRc} key={question.uid} />
+						))}
 					</Box>
 				) : (
 					<LoadingReview />

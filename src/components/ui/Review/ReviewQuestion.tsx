@@ -1,36 +1,53 @@
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { Circle } from "@chakra-ui/react";
+import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 const styles = {
-	container: {
-		border: '1px solid #CCCCCC',
-		borderRadius: '10px',
-		padding: '10px',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		width: '895px',
-		height: '76px',
-	},
-	text: {
-		fontWeight: 'bold',
-		marginLeft: '24px',
-	},
+  container: {
+    border: "1px solid #CCCCCC",
+    borderRadius: "10px",
+    padding: "10px",
+    display: "flex",
+    alignItems: "center",
+    width: "895px",
+    height: "76px",
+    marginBottom: '27px'
+  },
+  text: {
+    fontWeight: "bold",
+    marginRight: "24px",
+  },
+  chevron: {
+    marginRight: '20px'
+  },
+  circle: {
+    marginInlineEnd: '4px'
+  },
 };
 
 interface ReviewQuestionProps {
-	text: string;
+  text: string;
 }
+// TODO: find out how to tell if questions are answered.
+const Circles = () => {
+  return (
+    <div style={{ display: "flex", marginLeft: 'auto', marginRight: '27.5px' }}>
+      <Circle size={"24px"} bg="ampSuccess.500" style={styles.circle}></Circle>
+      <Circle size={"24px"} bg="ampSuccess.500" style={styles.circle}></Circle>
+      <Circle size={"24px"} bg="ampSuccess.500" style={styles.circle}></Circle>
+      <Circle size={"24px"} bg="ampSuccess.500" style={styles.circle}></Circle>
+      <Circle size={"24px"} bg="ampSuccess.500"></Circle>
+    </div>
+  );
+};
 
 const ReviewQuestion = ({ text }: ReviewQuestionProps) => {
-	return (
-		<div style={styles.container}>
-			<div style={styles.text}>{text}</div>
-			<ChevronDownIcon />
-			<ChevronDownIcon />
-			<ChevronDownIcon />
-			<ChevronDownIcon />
-		</div>
-	);
+  return (
+    <div style={styles.container}>
+      <div style={styles.text}>{text}</div>
+      <Circles />
+      <ChevronDownIcon style={styles.chevron} height={20} width={20} />
+    </div>
+  );
 };
 
 export default ReviewQuestion;
