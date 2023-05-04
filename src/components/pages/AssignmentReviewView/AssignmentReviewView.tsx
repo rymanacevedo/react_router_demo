@@ -217,15 +217,16 @@ const AssignmentReviewView = () => {
 							currentRoundQuestionsResponse?.questionList
 								.filter((q: QuestionInFocus) => {
 									return !(
-										q.confidence === 'Sure' && q.correctness === 'Correct'
+										q.confidence === Confidence.Sure &&
+										q.correctness === Correctness.Correct
 									);
 								})
 								.findIndex((question: QuestionInFocus) => {
 									return (
 										Number(question.reviewSeconds) === 0 &&
 										!(
-											question.confidence === 'Sure' &&
-											question.correctness === 'Correct'
+											question.confidence === Confidence.Sure &&
+											question.correctness === Correctness.Correct
 										)
 									);
 								}),
