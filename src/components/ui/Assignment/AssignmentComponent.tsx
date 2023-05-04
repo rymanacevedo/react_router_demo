@@ -263,7 +263,7 @@ export default function AssignmentComponent({
 				questionInFocus.id,
 				answerData,
 			);
-			if (feedbackData !== null) {
+			if (feedbackData) {
 				if (
 					feedbackData.confidence === Confidence.Sure &&
 					feedbackData.correctness === Correctness.Correct

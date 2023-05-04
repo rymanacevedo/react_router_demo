@@ -80,7 +80,12 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				setToastText(i18n('twoNpaOnLu'));
 				setNegativeFeedback();
 				break;
+			case 'TWO_NPA_IN_ROUND':
+				setToastText(i18n('twoNpaInRound'));
+				setEncouragementFeedback();
+				break;
 			default:
+				// TODO: we should throw an error here
 				setToastText(
 					'You’re doing a great job at knowing what you are sure and unsure about.',
 				);
