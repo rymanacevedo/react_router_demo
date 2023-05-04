@@ -32,7 +32,7 @@ const AssignmentView = () => {
 				<ModalOverlay />
 			</Modal>
 			<AssignmentComponent
-				assignmentKey={assignmentKey}
+				assignmentKey={assignmentKey as string}
 				isInstructionalOverlayOpen={isInstructionalOverlayOpen}
 				onClose={onClose}
 				initRef={initRef}

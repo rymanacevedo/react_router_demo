@@ -8,6 +8,7 @@ import {
 	Correctness,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
+	ModuleData,
 	QuestionInFocus,
 	SelectedAnswers,
 } from '../../pages/AssignmentView/AssignmentTypes';
@@ -29,7 +30,7 @@ type Props = {
 	isInstructionalOverlayOpen: boolean;
 	onClose: () => void;
 	initRef: any;
-	assignmentKey: string | undefined;
+	assignmentKey: string;
 };
 
 const initState = {
@@ -65,8 +66,13 @@ export default function AssignmentComponent({
 }: Props) {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const { message, handleMessage, incrimentTwoFastReviewsInLu } =
-		useQuizContext();
+	const {
+		message,
+		handleMessage,
+		incrimentTwoFastReviewsInLu,
+		moduleLearningUnitsData,
+		updateModuleLearningUnitsData,
+	} = useQuizContext();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isSureAndCorrectAllRound, setIsSureAndCorrectAllRound] =
 		useState<boolean>(true);
@@ -102,13 +108,31 @@ export default function AssignmentComponent({
 	const { fetchModuleQuestions } = useModuleContentService();
 
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
-		id: '',
-		questionRc: '',
+		answerList: [],
+		answered: false,
 		confidence: null,
 		correctness: null,
+		difficultyScore: 0,
+		displayOrder: 0,
+		explanationRc: null,
+		flagged: false,
+		hasModuleIntroduction: undefined,
+		hideQuestionIntroImages: false,
+		id: 0,
+		interactiveState: null,
+		introductionRc: null,
+		moreInformationRc: null,
+		name: '',
+		pointsWorth: 0,
+		publishedLearningUnitUri: '',
+		publishedQuestionAuthoringKey: '',
+		publishedQuestionId: 0,
+		publishedQuestionUri: '',
+		questionRc: '',
+		questionType: '',
+		questionVersionId: 0,
+		quizSeconds: 0,
 		reviewSeconds: 0,
-		publishedQuestionId: '',
-		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
@@ -118,14 +142,31 @@ export default function AssignmentComponent({
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [showOverlay, setShowOverlay] = useState(false);
-	const [questionData, setQuestionData] = useState({
-		learningUnits: [{ questions: [] }],
+	const [questionData, setQuestionData] = useState<ModuleData>({
+		accountUri: '',
+		children: null,
+		customizations: [],
+		descriptionRc: null,
+		id: 0,
+		introductionRc: null,
+		isAllowTimeIncrease: false,
+		isCustomMessagesEnabled: false,
+		isRecommendedModulesEnabled: false,
+		key: '',
 		kind: '',
+		learningUnits: [],
+		locale: '',
 		name: '',
-		outroLink: '',
-		outroButtonText: '',
-		introductionRc: '',
-		outroRc: '',
+		outroButtonText: null,
+		outroLink: null,
+		outroRc: null,
+		ownerAccountUid: '',
+		publishedVersionId: null,
+		self: '',
+		timeAllotted: null,
+		timedAssessment: false,
+		uid: '',
+		versionId: 0,
 	});
 
 	const [IDKResponse, setIDKResponse] = useState(false);
@@ -141,10 +182,16 @@ export default function AssignmentComponent({
 
 	const fetchModuleQuestionsData = async () => {
 		try {
-			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-				await getCurrentRound(assignmentKey),
-				await fetchModuleQuestions(assignmentKey),
-			];
+			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
+			let moduleQuestionsResponse = {} as ModuleData;
+			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
+				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
+			} else {
+				let res = await fetchModuleQuestions(assignmentKey);
+				moduleQuestionsResponse = res;
+				updateModuleLearningUnitsData(res, assignmentKey);
+			}
+
 			let revSkipRes = {} as CurrentRoundQuestionListData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {

@@ -5,8 +5,14 @@ import {
 	useState,
 	useCallback,
 } from 'react';
+import { ModuleData } from '../components/pages/AssignmentView/AssignmentTypes';
 
-type QuizContextType = {
+export type QuizContextType = {
+	moduleLearningUnitsData: {
+		assignmentKey: string;
+		data: ModuleData;
+	};
+
 	message: {
 		FIVE_FAST_ANSWERS: number;
 		FIVE_CONSEC_SI: number;
@@ -41,9 +47,42 @@ type QuizContextType = {
 	selectedCourseKey: string;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
 	incrimentTwoFastReviewsInLu: () => void;
+	updateModuleLearningUnitsData: (
+		moduleLearningUnitsData: ModuleData,
+		assignmentKey: string,
+	) => void;
 };
 
 const QuizContext = createContext<QuizContextType>({
+	moduleLearningUnitsData: {
+		assignmentKey: '',
+		data: {
+			accountUri: '',
+			children: null,
+			customizations: [],
+			descriptionRc: null,
+			id: 0,
+			introductionRc: null,
+			isAllowTimeIncrease: false,
+			isCustomMessagesEnabled: false,
+			isRecommendedModulesEnabled: false,
+			key: '',
+			kind: '',
+			learningUnits: [],
+			locale: '',
+			name: '',
+			outroButtonText: null,
+			outroLink: null,
+			outroRc: null,
+			ownerAccountUid: '',
+			publishedVersionId: null,
+			self: '',
+			timeAllotted: null,
+			timedAssessment: false,
+			uid: '',
+			versionId: 0,
+		},
+	},
 	message: {
 		FIVE_FAST_ANSWERS: 0,
 		FIVE_CONSEC_SI: 0,
@@ -61,6 +100,7 @@ const QuizContext = createContext<QuizContextType>({
 	selectedCourseKey: '',
 	setSelectedCourseKey: () => {},
 	incrimentTwoFastReviewsInLu: () => {},
+	updateModuleLearningUnitsData: () => {},
 });
 
 export const QuizProvider = ({ children }: { children: any }) => {
@@ -78,7 +118,47 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		TWO_NPA_ON_LU: [],
 	});
 
+	const [moduleLearningUnitsData, setModuleLearningUnitsData] = useState({
+		assignmentKey: '',
+		data: {
+			accountUri: '',
+			children: null,
+			customizations: [],
+			descriptionRc: null,
+			id: 0,
+			introductionRc: null,
+			isAllowTimeIncrease: false,
+			isCustomMessagesEnabled: false,
+			isRecommendedModulesEnabled: false,
+			key: '',
+			kind: '',
+			learningUnits: [],
+			locale: '',
+			name: '',
+			outroButtonText: null,
+			outroLink: null,
+			outroRc: null,
+			ownerAccountUid: '',
+			publishedVersionId: null,
+			self: '',
+			timeAllotted: null,
+			timedAssessment: false,
+			uid: '',
+			versionId: 0,
+		},
+	} as QuizContextType['moduleLearningUnitsData']);
+
 	const [selectedCourseKey, setSelectedCourseKey] = useState('');
+	// function that takes in the moduleLearningUnitsData and updates the state with the new data
+	const updateModuleLearningUnitsData = useCallback(
+		(moduleLearningUnitsDataArg: ModuleData, assignmentKey: string) => {
+			setModuleLearningUnitsData({
+				assignmentKey: assignmentKey,
+				data: moduleLearningUnitsDataArg,
+			});
+		},
+		[],
+	);
 
 	const incrimentTwoFastReviewsInLu = () => {
 		//take the TWO_FAST_REVIEWS_IN_LU array and for each questionId, incriment the fastReviewsOnQuestion by 1
@@ -408,6 +488,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			selectedCourseKey,
 			setSelectedCourseKey,
 			incrimentTwoFastReviewsInLu,
+			moduleLearningUnitsData,
+			updateModuleLearningUnitsData,
 		}),
 		[
 			message,
@@ -415,6 +497,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 			selectedCourseKey,
 			setSelectedCourseKey,
 			incrimentTwoFastReviewsInLu,
+			moduleLearningUnitsData,
+			updateModuleLearningUnitsData,
 		],
 	);
 

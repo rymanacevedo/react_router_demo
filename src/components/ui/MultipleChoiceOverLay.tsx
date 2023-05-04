@@ -1,6 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
 import AnswerFeedback from './AnswerInput/AnswerFeedback';
 import { useEffect, useState } from 'react';
+import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 
 export interface Answer {
 	answerId: number | string;
@@ -16,18 +17,7 @@ const MultipleChoiceOverLay = ({
 	inReview,
 	revealAnswer,
 }: {
-	questionInFocus:
-		| {
-				id: string | any;
-				questionRc: string;
-				name?: string | undefined;
-				introductionRc?: string;
-				answerList: {
-					answerRc: string;
-					id: string | number;
-				}[];
-		  }
-		| undefined;
+	questionInFocus: QuestionInFocus;
 	selectedAnswers: any[];
 	setSelectedAnswers: any;
 	clearSelection: any;

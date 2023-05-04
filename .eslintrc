@@ -1,0 +1,29 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"extends": ["react-app", "react-app/jest", "airbnb-typescript", "prettier"],
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"ignorePatterns": ["src/i18n.js"],
+	"plugins": ["import", "prettier"],
+	"rules": {
+		"semi": ["error", "always"],
+		"quotes": [
+			"error",
+			"single",
+			{
+				"avoidEscape": true
+			}
+		],
+		"no-unused-vars": "error",
+		"no-console": "warn",
+		"react/jsx-filename-extension": [
+			1,
+			{
+				"extensions": [".js", ".jsx", ".tsx"]
+			}
+		],
+		"import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+		"prettier/prettier": ["error"]
+	}
+}

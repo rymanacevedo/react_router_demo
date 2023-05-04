@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -21,6 +21,10 @@
     "jsx": "react-jsx"
   },
   "include": [
+    "vite.config.ts",
+    ".eslintrc",
     "src"
-  ]
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "types": ["vite-plugin-svgr/client", "vite/client"],
 }
