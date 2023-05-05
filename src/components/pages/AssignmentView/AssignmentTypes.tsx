@@ -18,8 +18,8 @@ export type Item = {
 
 export type AnswerHistory = {
 	roundNumber: number;
-	confidence: string;
-	correctness: string;
+	confidence: Confidence | null;
+	correctness: Correctness | null;
 };
 
 export type AnswerData = {
@@ -28,9 +28,9 @@ export type AnswerData = {
 	avatarMessage: any;
 	completionAlgorithmType: any;
 	completionPercentage: number;
-	confidence: any;
+	confidence: Confidence | null;
 	correctAnswerIds: any;
-	correctness: any;
+	correctness: Correctness | null;
 	informedCount: number;
 	masteredQuestionCount: number;
 	misinformedCount: number;
@@ -48,6 +48,14 @@ export type AnswerData = {
 };
 
 export type QuestionInFocus = {
+	id: string | number;
+	questionRc: string;
+	name?: string;
+	reviewSeconds: number;
+	introductionRc?: string;
+	explanationRc?: string;
+	moreInformationRc?: string;
+	publishedQuestionId: number | string;
 	answerList: {
 		answerRc: string;
 		displayOrder: number;
@@ -69,29 +77,21 @@ export type QuestionInFocus = {
 		versionId: number;
 	}[];
 	answered: boolean;
-	confidence: string;
-	correctness: string;
+    confidence: Confidence | null;
+    correctness: Correctness | null;
 	difficultyScore: number;
 	displayOrder: number;
-	explanationRc: string | null;
 	flagged: boolean;
 	hasModuleIntroduction: boolean | undefined;
 	hideQuestionIntroImages: boolean;
-	id: number;
 	interactiveState: any | null;
-	introductionRc: string | null;
-	moreInformationRc: string | null;
-	name: string;
 	pointsWorth: number;
 	publishedLearningUnitUri: string;
 	publishedQuestionAuthoringKey: string;
-	publishedQuestionId: number;
 	publishedQuestionUri: string;
-	questionRc: string;
 	questionType: string;
 	questionVersionId: number;
 	quizSeconds: number;
-	reviewSeconds: number;
 };
 
 export type CurrentRoundQuestionListData = {
@@ -126,8 +126,8 @@ export type CurrentRoundAnswerOverLayData = {
 	questionSeconds: number;
 	reviewSeconds: number;
 	answerDate: string;
-	correctness: string;
-	confidence: string;
+	correctness: Correctness | null;
+	confidence: Confidence | null;
 	correctAnswerIds: number[];
 	moduleComplete: boolean;
 	avatarMessage: null;
@@ -205,3 +205,15 @@ export type ModuleData = {
 	uid: string;
 	versionId: number;
 };
+
+export enum Confidence {
+	NotSure = 'NotSure',
+	OneAnswerPartSure = 'OneAnswerPartSure',
+	Sure = 'Sure',
+}
+
+export enum Correctness {
+	Incorrect = 'Incorrect',
+	NoAnswerSelected = 'NoAnswerSelected',
+	Correct = 'Correct',
+}

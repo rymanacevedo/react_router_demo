@@ -30,6 +30,7 @@ export type QuizContextType = {
 			siCount: number;
 			answerIdArray: number[];
 		}[];
+		TWO_NPA_IN_ROUND: number;
 		TWO_NPA_ON_LU: {
 			questionId: number;
 			npaCount: number;
@@ -40,6 +41,7 @@ export type QuizContextType = {
 		messageType: string,
 		reset: boolean,
 		questionId?: number,
+		roundNumber?: number,
 		answerId?: number,
 	) => void;
 	selectedCourseKey: string;
@@ -91,6 +93,7 @@ const QuizContext = createContext<QuizContextType>({
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
 		TWO_IDENTICAL_SI: [],
+		TWO_NPA_IN_ROUND: 0,
 		TWO_NPA_ON_LU: [],
 	},
 	handleMessage: () => {},
@@ -110,6 +113,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 		FIVE_FAST_REVIEWS: 0,
 		TWO_FAST_REVIEWS_IN_LU: [{ questionId: 0, fastReviewsOnQuestion: 0 }],
 		TEN_LONG_REVIEWS: 0,
+		TWO_NPA_IN_ROUND: 0,
 		TWO_IDENTICAL_SI: [],
 		TWO_NPA_ON_LU: [],
 	});
@@ -264,6 +268,13 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					...prevMessage,
 					TWO_NPA_ON_LU: updatedTwoNPAOnLu,
 				}));
+			};
+
+			const resetTwoNpaInRound = () => {
+				setMessage({
+					...message,
+					TWO_NPA_IN_ROUND: 0,
+				});
 			};
 
 			switch (messageType) {
@@ -447,8 +458,20 @@ export const QuizProvider = ({ children }: { children: any }) => {
 								...prevMessage,
 								TWO_NPA_ON_LU: updatedTwoNpaArray,
 							}));
+
+							setMessage((prevMessage) => ({
+								...prevMessage,
+								TWO_NPA_IN_ROUND: prevMessage.TWO_NPA_IN_ROUND + 1,
+							}));
 						}
 					}
+					break;
+
+				case 'TWO_NPA_IN_ROUND':
+					if (reset && questionId) {
+						resetTwoNpaInRound();
+					}
+					// TODO: we shouldn't have to do this because we have to make a case each time we want to reset the data instead of just reseting it directly.
 					break;
 				default:
 					// handle default case

@@ -11,6 +11,7 @@ import {
 	ModalCloseButton,
 	ModalContent,
 	ModalOverlay,
+	ResponsiveValue,
 	Text,
 	useDisclosure,
 	useMediaQuery,
@@ -25,6 +26,8 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
 	AnswerData,
+	Confidence,
+	Correctness,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	ModuleData,
@@ -62,8 +65,8 @@ const initState = {
 	questionSeconds: 0,
 	reviewSeconds: 0,
 	answerDate: '',
-	correctness: '',
-	confidence: '',
+	correctness: null,
+	confidence: null,
 	correctAnswerIds: [],
 	moduleComplete: false,
 	avatarMessage: null,
@@ -109,6 +112,10 @@ const AssignmentReviewView = () => {
 		questionVersionId: 0,
 		quizSeconds: 0,
 		reviewSeconds: 0,
+		confidence: null,
+		correctness: null,
+		explanationRc: '',
+		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
@@ -261,26 +268,21 @@ const AssignmentReviewView = () => {
 					setQuestionIndex(
 						Number(
 							currentRoundQuestionsResponse?.questionList
-								.filter((item: { confidence: string; correctness: string }) => {
+								.filter((q: QuestionInFocus) => {
 									return !(
-										item.confidence === 'Sure' && item.correctness === 'Correct'
+										q.confidence === Confidence.Sure &&
+										q.correctness === Correctness.Correct
 									);
 								})
-								.findIndex(
-									(question: {
-										confidence: string;
-										correctness: string;
-										reviewSeconds: number;
-									}) => {
-										return (
-											Number(question.reviewSeconds) === 0 &&
-											!(
-												question.confidence === 'Sure' &&
-												question.correctness === 'Correct'
-											)
-										);
-									},
-								),
+								.findIndex((question: QuestionInFocus) => {
+									return (
+										Number(question.reviewSeconds) === 0 &&
+										!(
+											question.confidence === Confidence.Sure &&
+											question.correctness === Correctness.Correct
+										)
+									);
+								}),
 						),
 					);
 				}
@@ -368,14 +370,20 @@ const AssignmentReviewView = () => {
 	}, [setLocalQuestionReviewHistory]);
 
 	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
-		(item: { confidence: string; correctness: string }) => {
+		(q: QuestionInFocus) => {
 			if (viewCorrect) {
-				return item.confidence === 'Sure' && item.correctness === 'Correct';
+				return (
+					q.confidence === Confidence.Sure &&
+					q.correctness === Correctness.Correct
+				);
 			} else {
-				return !(item.confidence === 'Sure' && item.correctness === 'Correct');
+				return !(
+					q.confidence === Confidence.Sure &&
+					q.correctness === Correctness.Correct
+				);
 			}
 		},
-	).length;
+	)?.length;
 
 	useEffect(() => {
 		fetchModuleQuestionsData();
@@ -587,6 +595,21 @@ const AssignmentReviewView = () => {
 		}
 	}, [message.TEN_LONG_REVIEWS]);
 
+	const showTryAgainButton = (): ResponsiveValue<string> | undefined => {
+		if (showExplanation && questionInFocus) {
+			if (
+				questionInFocus.confidence === Confidence.OneAnswerPartSure &&
+				questionInFocus.correctness === Correctness.Correct
+			) {
+				return 'none';
+			} else {
+				return '';
+			}
+		}
+		// Return undefined when conditions are not met
+		return undefined;
+	};
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
@@ -622,14 +645,7 @@ const AssignmentReviewView = () => {
 				return (
 					<>
 						<Button
-							display={
-								showExplanation
-									? questionInFocus?.confidence === 'OneAnswerPartSure' &&
-									  questionInFocus?.correctness === 'Correct'
-										? 'none'
-										: ''
-									: 'none'
-							}
+							display={showTryAgainButton()}
 							onClick={() => {
 								setTryAgain(true);
 								setSelectedAnswers([]);

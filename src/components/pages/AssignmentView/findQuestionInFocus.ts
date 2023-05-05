@@ -1,3 +1,5 @@
+import { Confidence, Correctness, QuestionInFocus } from './AssignmentTypes';
+
 export const findQuestionInFocus = (
 	questionListDataPeram: { learningUnits: any },
 	currentRoundQuestionListDataPeram: { questionList: any },
@@ -101,21 +103,23 @@ export const findQuestionInFocus = (
 		},
 	);
 	if (inReview) {
-		return questionList.filter(
-			(item: { confidence: string; correctness: string }) => {
-				if (viewCorrect) {
-					return item.confidence === 'Sure' && item.correctness === 'Correct';
-				} else {
-					return !(
-						item.confidence === 'Sure' && item.correctness === 'Correct'
-					);
-				}
-			},
-		);
+		return questionList.filter((q: QuestionInFocus) => {
+			if (viewCorrect) {
+				return (
+					q.confidence === Confidence.Sure &&
+					q.correctness === Correctness.Correct
+				);
+			} else {
+				return !(
+					q.confidence === Confidence.Sure &&
+					q.correctness === Correctness.Correct
+				);
+			}
+		});
 	} else {
 		const firstUnansweredQuestion = questionList.find(
 			(question: { answered: boolean }) => {
-				return question.answered === false;
+				return !question.answered;
 			},
 		);
 

@@ -4,6 +4,8 @@ import ProgressMenu from '../ProgressMenu';
 
 import {
 	AnswerData,
+	Confidence,
+	Correctness,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	ModuleData,
@@ -48,8 +50,8 @@ const initState = {
 	questionSeconds: 0,
 	reviewSeconds: 0,
 	answerDate: '',
-	correctness: '',
-	confidence: '',
+	correctness: null,
+	confidence: null,
 	correctAnswerIds: [],
 	moduleComplete: false,
 	avatarMessage: null,
@@ -108,8 +110,8 @@ export default function AssignmentComponent({
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		answerList: [],
 		answered: false,
-		confidence: '',
-		correctness: '',
+		confidence: null,
+		correctness: null,
 		difficultyScore: 0,
 		displayOrder: 0,
 		explanationRc: null,
@@ -208,9 +210,8 @@ export default function AssignmentComponent({
 					setOutro(true);
 				} else if (
 					currentRoundQuestionsResponse.questionList.every(
-						(question: { correctness: string; confidence: string }) =>
-							question.correctness === 'Correct' &&
-							question.confidence === 'Sure',
+						(question: QuestionInFocus) =>
+							question.correctness === Correctness.Correct,
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
@@ -298,16 +299,15 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
-			const overLayData = await putCurrentRound(
+			const feedbackData: CurrentRoundAnswerOverLayData = await putCurrentRound(
 				currentRoundQuestionListData?.id,
 				questionInFocus.id,
 				answerData,
 			);
-
-			if (overLayData) {
+			if (feedbackData) {
 				if (
-					overLayData.confidence === 'Sure' &&
-					overLayData.correctness === 'Correct'
+					feedbackData.confidence === Confidence.Sure &&
+					feedbackData.correctness === Correctness.Correct
 				) {
 					if (message.FIVE_CONSEC_SC < 5 && isSureAndCorrectAllRound) {
 						handleMessage('BOTH_SC', false);
@@ -316,8 +316,8 @@ export default function AssignmentComponent({
 					}
 				} else if (
 					questionSecondsRef.current <= 5 &&
-					overLayData.correctness !== 'Correct' &&
-					overLayData.correctness !== 'NoAnswerSelected' &&
+					feedbackData.correctness !== Correctness.Correct &&
+					feedbackData.correctness !== Correctness.NoAnswerSelected &&
 					message.FIVE_FAST_ANSWERS < 5
 				) {
 					setIsSureAndCorrectAllRound(false);
@@ -325,8 +325,8 @@ export default function AssignmentComponent({
 					handleMessage('FIVE_FAST_ANSWERS', false);
 					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
-					overLayData.confidence === 'Sure' &&
-					overLayData.correctness === 'Incorrect' &&
+					feedbackData.confidence === Confidence.Sure &&
+					feedbackData.correctness === Correctness.Incorrect &&
 					message.FIVE_CONSEC_SI < 5
 				) {
 					setIsSureAndCorrectAllRound(false);
@@ -334,8 +334,8 @@ export default function AssignmentComponent({
 					handleMessage('FIVE_CONSEC_SI', false);
 					handleMessage('FIVE_CONSEC_SC', true);
 				} else if (
-					overLayData.confidence === 'NotSure' &&
-					overLayData.correctness === 'NoAnswerSelected' &&
+					feedbackData.confidence === Confidence.NotSure &&
+					feedbackData.correctness === Correctness.NoAnswerSelected &&
 					message.SIX_DK_IN_ROUND < 6
 				) {
 					setIsSureAndCorrectAllRound(false);
@@ -351,18 +351,37 @@ export default function AssignmentComponent({
 					setIsSureAndCorrectAllRound(false);
 				}
 
-				setCurrentRoundAnswerOverLayData(overLayData);
+				setCurrentRoundAnswerOverLayData(feedbackData);
 				setShowOverlay(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
 
 				if (
-					questionInFocus &&
-					`${overLayData.confidence}${overLayData.correctness}` ===
-						'SureIncorrect'
+					!(
+						feedbackData.correctness === Correctness.Correct &&
+						feedbackData.confidence === Confidence.Sure
+					)
+				) {
+					handleMessage(
+						'TWO_NPA_IN_ROUND',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+						currentRoundQuestionListData?.roundNumber,
+					);
+
+					handleMessage(
+						'TWO_NPA_ON_LU',
+						false,
+						Number(questionInFocus.publishedQuestionId),
+					);
+				}
+				if (
+					feedbackData.correctness === Correctness.Incorrect &&
+					feedbackData.confidence === Confidence.Sure &&
+					questionInFocus
 				) {
 					const publishedAnswer = questionInFocus.answerList.find((answer) => {
-						return answer.id === overLayData.answerList[0].answerId;
+						return answer.id === feedbackData.answerList[0].answerId;
 					});
 					if (publishedAnswer) {
 						handleMessage(
@@ -375,20 +394,9 @@ export default function AssignmentComponent({
 						console.error('publishedAnswer not found');
 					}
 				}
-				if (
-					!(
-						overLayData.correctness === 'Correct' &&
-						overLayData.confidence === 'Sure'
-					)
-				) {
-					handleMessage(
-						'TWO_NPA_ON_LU',
-						false,
-						Number(questionInFocus.publishedQuestionId),
-					);
-				}
 			}
 		};
+
 		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
 		}
@@ -478,6 +486,19 @@ export default function AssignmentComponent({
 	}, [message.TWO_IDENTICAL_SI]);
 
 	useEffect(() => {
+		if (message.TWO_NPA_IN_ROUND === 2) {
+			setIsToastOpen(true);
+			setTextPrompt('TWO_NPA_IN_ROUND');
+			handleMessage('TWO_NPA_IN_ROUND', true);
+		}
+	}, [message.TWO_NPA_IN_ROUND]);
+
+	useEffect(() => {
+		// event listener for when the round changes
+		handleMessage('TWO_NPA_IN_ROUND', true);
+	}, [currentRoundQuestionListData?.roundNumber]);
+
+	useEffect(() => {
 		const index = message.TWO_NPA_ON_LU.findIndex(
 			(obj) => obj.questionId === questionInFocus.publishedQuestionId,
 		);
@@ -555,7 +576,6 @@ export default function AssignmentComponent({
 					</HStack>
 				</Container>
 			) : (
-				// @ts-ignore
 				<ModuleOutro moduleData={questionData} action={handleReturnHome} />
 			)}
 		</>
