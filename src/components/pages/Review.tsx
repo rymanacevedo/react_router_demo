@@ -18,7 +18,9 @@ const Review = () => {
 		outroRc: '',
 		learningUnits: [],
 	});
-	const [reviewQuestions, setReviewQuestions] = useState<any[]>([]);
+	const [reviewQuestions, setReviewQuestions] = useState<
+		LearningUnitQuestion[]
+	>([]);
 	const { t: i18n } = useTranslation();
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
