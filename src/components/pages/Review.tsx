@@ -12,11 +12,31 @@ import {
 } from './AssignmentView/AssignmentTypes';
 
 const Review = () => {
-	const [questionData, setQuestionData] = useState({
-		name: '',
-		introductionRc: '',
-		outroRc: '',
+	const [questionData, setQuestionData] = useState<ModuleData>({
+		accountUri: '',
+		children: null,
+		customizations: [],
+		descriptionRc: null,
+		id: 0,
+		introductionRc: null,
+		isAllowTimeIncrease: false,
+		isCustomMessagesEnabled: false,
+		isRecommendedModulesEnabled: false,
+		key: '',
+		kind: '',
 		learningUnits: [],
+		locale: '',
+		name: '',
+		outroButtonText: null,
+		outroLink: null,
+		outroRc: null,
+		ownerAccountUid: '',
+		publishedVersionId: null,
+		self: '',
+		timeAllotted: null,
+		timedAssessment: false,
+		uid: '',
+		versionId: 0,
 	});
 	const [reviewQuestions, setReviewQuestions] = useState<
 		LearningUnitQuestion[]

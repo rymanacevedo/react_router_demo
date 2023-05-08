@@ -186,7 +186,7 @@ export type ModuleData = {
 	customizations: any[];
 	descriptionRc: null;
 	id: number;
-	introductionRc: null;
+	introductionRc: string | null;
 	isAllowTimeIncrease: boolean;
 	isCustomMessagesEnabled: boolean;
 	isRecommendedModulesEnabled: boolean;
@@ -197,7 +197,7 @@ export type ModuleData = {
 	name: string;
 	outroButtonText: null;
 	outroLink: null;
-	outroRc: null;
+	outroRc: string | null;
 	ownerAccountUid: string;
 	publishedVersionId: null;
 	self: string;
