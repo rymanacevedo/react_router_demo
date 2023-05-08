@@ -1,0 +1,6 @@
+vite.config.ts
+node_modules/
+build/
+main/
+.eslintrc
+env.d.ts

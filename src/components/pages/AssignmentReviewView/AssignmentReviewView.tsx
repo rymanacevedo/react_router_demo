@@ -11,6 +11,7 @@ import {
 	ModalCloseButton,
 	ModalContent,
 	ModalOverlay,
+	ResponsiveValue,
 	Text,
 	useDisclosure,
 	useMediaQuery,
@@ -25,8 +26,11 @@ import useModuleContentService from '../../../services/coursesServices/useModule
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceOverLay';
 import {
 	AnswerData,
+	Confidence,
+	Correctness,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
+	ModuleData,
 	QuestionInFocus,
 	SelectedAnswers,
 } from '../AssignmentView/AssignmentTypes';
@@ -61,8 +65,8 @@ const initState = {
 	questionSeconds: 0,
 	reviewSeconds: 0,
 	answerDate: '',
-	correctness: '',
-	confidence: '',
+	correctness: null,
+	confidence: null,
 	correctAnswerIds: [],
 	moduleComplete: false,
 	avatarMessage: null,
@@ -71,19 +75,45 @@ const initState = {
 
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
-	const { message, handleMessage } = useQuizContext();
+	const {
+		message,
+		handleMessage,
+		moduleLearningUnitsData,
+		updateModuleLearningUnitsData,
+	} = useQuizContext();
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [showExplanation, setShowExplanation] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
-		id: '',
-		questionRc: '',
-		publishedQuestionId: '',
-		reviewSeconds: 0,
+		answerList: [],
+		answered: false,
 		confidence: '',
 		correctness: '',
+		difficultyScore: 0,
+		displayOrder: 0,
+		explanationRc: null,
+		flagged: false,
+		hasModuleIntroduction: undefined,
+		hideQuestionIntroImages: false,
+		id: 0,
+		interactiveState: null,
+		introductionRc: null,
+		moreInformationRc: null,
+		name: '',
+		pointsWorth: 0,
+		publishedLearningUnitUri: '',
+		publishedQuestionAuthoringKey: '',
+		publishedQuestionId: 0,
+		publishedQuestionUri: '',
+		questionRc: '',
+		questionType: '',
+		questionVersionId: 0,
+		quizSeconds: 0,
+		reviewSeconds: 0,
+		confidence: null,
+		correctness: null,
 		explanationRc: '',
 		answerList: [{ answerRc: '', id: '', publishedAnswerId: '' }],
 	});
@@ -95,10 +125,31 @@ const AssignmentReviewView = () => {
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
-	const [questionData, setQuestionData] = useState({
-		learningUnits: [{ questions: [] }],
+	const [questionData, setQuestionData] = useState<ModuleData>({
+		accountUri: '',
+		children: null,
+		customizations: [],
+		descriptionRc: null,
+		id: 0,
+		introductionRc: null,
+		isAllowTimeIncrease: false,
+		isCustomMessagesEnabled: false,
+		isRecommendedModulesEnabled: false,
+		key: '',
 		kind: '',
+		learningUnits: [],
+		locale: '',
 		name: '',
+		outroButtonText: null,
+		outroLink: null,
+		outroRc: null,
+		ownerAccountUid: '',
+		publishedVersionId: null,
+		self: '',
+		timeAllotted: null,
+		timedAssessment: false,
+		uid: '',
+		versionId: 0,
 	});
 
 	const [answerData, setAnswerData] = useState<AnswerData>({
@@ -202,36 +253,36 @@ const AssignmentReviewView = () => {
 
 	const fetchModuleQuestionsData = async (firstRender?: boolean) => {
 		try {
-			let [currentRoundQuestionsResponse, moduleQuestionsResponse] = [
-				await getCurrentRound(assignmentKey),
-				await fetchModuleQuestions(assignmentKey),
-			];
+			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
+			let moduleQuestionsResponse = {} as ModuleData;
+			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
+				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
+			} else {
+				let res = await fetchModuleQuestions(assignmentKey);
+				moduleQuestionsResponse = res;
+				updateModuleLearningUnitsData(res, assignmentKey as string);
+			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
 				if (firstRender) {
 					setQuestionIndex(
 						Number(
 							currentRoundQuestionsResponse?.questionList
-								.filter((item: { confidence: string; correctness: string }) => {
+								.filter((q: QuestionInFocus) => {
 									return !(
-										item.confidence === 'Sure' && item.correctness === 'Correct'
+										q.confidence === Confidence.Sure &&
+										q.correctness === Correctness.Correct
 									);
 								})
-								.findIndex(
-									(question: {
-										confidence: string;
-										correctness: string;
-										reviewSeconds: number;
-									}) => {
-										return (
-											Number(question.reviewSeconds) === 0 &&
-											!(
-												question.confidence === 'Sure' &&
-												question.correctness === 'Correct'
-											)
-										);
-									},
-								),
+								.findIndex((question: QuestionInFocus) => {
+									return (
+										Number(question.reviewSeconds) === 0 &&
+										!(
+											question.confidence === Confidence.Sure &&
+											question.correctness === Correctness.Correct
+										)
+									);
+								}),
 						),
 					);
 				}
@@ -251,7 +302,7 @@ const AssignmentReviewView = () => {
 						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus, true),
 					};
 				});
-				setQuestionData(moduleQuestionsResponse);
+				setQuestionData(moduleQuestionsResponse as ModuleData);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 				setQuestionInFocus(foundQuestionInFocus);
 
@@ -319,14 +370,20 @@ const AssignmentReviewView = () => {
 	}, [setLocalQuestionReviewHistory]);
 
 	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
-		(item: { confidence: string; correctness: string }) => {
+		(q: QuestionInFocus) => {
 			if (viewCorrect) {
-				return item.confidence === 'Sure' && item.correctness === 'Correct';
+				return (
+					q.confidence === Confidence.Sure &&
+					q.correctness === Correctness.Correct
+				);
 			} else {
-				return !(item.confidence === 'Sure' && item.correctness === 'Correct');
+				return !(
+					q.confidence === Confidence.Sure &&
+					q.correctness === Correctness.Correct
+				);
 			}
 		},
-	).length;
+	)?.length;
 
 	useEffect(() => {
 		fetchModuleQuestionsData();
@@ -538,6 +595,21 @@ const AssignmentReviewView = () => {
 		}
 	}, [message.TEN_LONG_REVIEWS]);
 
+	const showTryAgainButton = (): ResponsiveValue<string> | undefined => {
+		if (showExplanation && questionInFocus) {
+			if (
+				questionInFocus.confidence === Confidence.OneAnswerPartSure &&
+				questionInFocus.correctness === Correctness.Correct
+			) {
+				return 'none';
+			} else {
+				return '';
+			}
+		}
+		// Return undefined when conditions are not met
+		return undefined;
+	};
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
@@ -573,14 +645,7 @@ const AssignmentReviewView = () => {
 				return (
 					<>
 						<Button
-							display={
-								showExplanation
-									? questionInFocus?.confidence === 'OneAnswerPartSure' &&
-									  questionInFocus?.correctness === 'Correct'
-										? 'none'
-										: ''
-									: 'none'
-							}
+							display={showTryAgainButton()}
 							onClick={() => {
 								setTryAgain(true);
 								setSelectedAnswers([]);

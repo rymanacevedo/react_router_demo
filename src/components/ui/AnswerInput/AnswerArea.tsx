@@ -77,7 +77,7 @@ export default function AnswerArea(props: {
 						<Fade in={!props.showOverlay}>
 							{' '}
 							<MultipleChoiceAnswers
-								questionInFocus={props.questionInFocus}
+								questionInFocus={props.questionInFocus as QuestionInFocus}
 								selectedAnswers={props.selectedAnswers}
 								setSelectedAnswers={props.selectedAnswersState}
 								clearSelection={props.clearSelection}
@@ -152,7 +152,7 @@ export default function AnswerArea(props: {
 								</Heading>
 								<img
 									style={{ marginTop: '24px', marginBottom: '24px' }}
-									src={`${process.env.PUBLIC_URL}/images/unsure.gif`}
+									src={`${import.meta.env.VITE_PUBLIC_URL}/images/unsure.gif`}
 									alt="unsure gif"
 								/>
 							</Box>
@@ -167,7 +167,7 @@ export default function AnswerArea(props: {
 								</Heading>
 								<img
 									style={{ marginTop: '24px', marginBottom: '24px' }}
-									src={`${process.env.PUBLIC_URL}/images/sure.gif`}
+									src={`${import.meta.env.VITE_PUBLIC_URL}/images/sure.gif`}
 									alt="sure gif"
 								/>
 							</Box>
