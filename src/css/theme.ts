@@ -61,6 +61,10 @@ export const ampTheme = extendTheme({
 		// "8xl": "6rem",
 		// "9xl": "8rem",
 	},
+	fonts: {
+		heading: 'Proxima Nova, sans-serif',
+		body: 'Proxima Nova, sans-serif',
+	},
 	colors: {
 		ampWhite: '#FFFFFF',
 		ampPrimaryText: '#20252B',

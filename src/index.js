@@ -11,6 +11,7 @@ import { AuthProvider } from './hooks/useAuth';
 import { BrowserRouter } from 'react-router-dom';
 import { QuizProvider } from './hooks/useQuizContext';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
+import Fonts from './components/ui/Fonts';
 
 // Init KF.state
 setupKFState();
@@ -18,6 +19,7 @@ setupKFState();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<ChakraProvider theme={ampTheme}>
+		<Fonts />
 		<BrowserRouter basename="/main">
 			<AuthProvider>
 				<DialogProvider>

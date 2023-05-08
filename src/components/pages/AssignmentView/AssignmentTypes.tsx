@@ -77,8 +77,8 @@ export type QuestionInFocus = {
 		versionId: number;
 	}[];
 	answered: boolean;
-    confidence: Confidence | null;
-    correctness: Correctness | null;
+	confidence: Confidence | null;
+	correctness: Correctness | null;
 	difficultyScore: number;
 	displayOrder: number;
 	flagged: boolean;
