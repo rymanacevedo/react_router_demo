@@ -1,6 +1,6 @@
 import { Circle } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { example } from '../../pages/DeleteLater';
+import RichContentComponent from '../RichContentComponent';
 
 const styles = {
 	container: {
@@ -24,11 +24,10 @@ const styles = {
 		marginInlineEnd: '4px',
 	},
 };
-
 interface ReviewQuestionProps {
 	text: string;
 }
-// TODO: find out how to tell if questions are answered.
+
 const Circles = () => {
 	return (
 		<div style={{ display: 'flex', marginLeft: 'auto', marginRight: '27.5px' }}>
@@ -44,7 +43,9 @@ const Circles = () => {
 const ReviewQuestion = ({ text }: ReviewQuestionProps) => {
 	return (
 		<div style={styles.container}>
-			<div style={styles.text}>{text}</div>
+			<div style={styles.text}>
+				<RichContentComponent content={text} />
+			</div>
 			<Circles />
 			<ChevronDownIcon style={styles.chevron} height={20} width={20} />
 		</div>

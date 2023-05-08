@@ -1,11 +1,4 @@
-import {
-	Box,
-	Container,
-	Stack,
-	// useMediaQuery,
-	Heading,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Container, Stack, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -23,7 +16,6 @@ const Review = () => {
 	const [reviewQuestions, setReviewQuestions] = useState<any[]>([]);
 	const { t: i18n } = useTranslation();
 	const { assignmentKey } = useParams();
-	// const isSmallerThan1000 = useMediaQuery('(max-width:1000px)');
 	const { fetchModuleQuestions } = useModuleContentService();
 
 	const logQuestions = (obj: any) => {
@@ -82,10 +74,12 @@ const Review = () => {
 						p={'72px'}
 						display="flex"
 						flexDirection="column">
-						<Heading as="h1" margin="12px">
-							{data.name}
-						</Heading>
-						<Text marginTop={34} fontSize={28} color={'#7E8A9B'}>
+						<Heading as="h1">{data.name}</Heading>
+						<Text
+							marginTop={34}
+							marginBottom={10}
+							fontSize={28}
+							color={'#7E8A9B'}>
 							{data.learningUnits.length} {i18n('questions')}
 						</Text>
 						{reviewQuestions.map((question) => (
