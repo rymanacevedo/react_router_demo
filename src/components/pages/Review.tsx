@@ -7,7 +7,7 @@ import LoadingReview from '../ui/loading/LoadingReview';
 import ReviewQuestion from '../ui/Review/ReviewQuestion';
 
 const Review = () => {
-	const [data, setData] = useState({
+	const [questionData, setQuestionData] = useState({
 		name: '',
 		introductionRc: '',
 		outroRc: '',
@@ -18,11 +18,11 @@ const Review = () => {
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
 
-	const logQuestions = (obj: any) => {
+	const populateQuestions = (obj: any) => {
 		const questions: any[] = [];
 		for (let prop in obj) {
 			if (typeof obj[prop] === 'object' && obj[prop] !== null) {
-				logQuestions(obj[prop]);
+				populateQuestions(obj[prop]);
 			}
 			if (Array.isArray(obj[prop]) && prop === 'learningUnits') {
 				obj[prop].forEach((unit: { questions: any[] }) => {
@@ -39,8 +39,8 @@ const Review = () => {
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
-				logQuestions(response);
-				setData(response);
+				populateQuestions(response);
+				setQuestionData(response);
 			}
 		};
 		if (assignmentKey) {
@@ -62,7 +62,7 @@ const Review = () => {
 				direction={['column', 'column', 'row', 'row', 'row', 'row']}
 				justifyContent={'center'}
 				alignItems={'center'}>
-				{data.learningUnits.length ? (
+				{questionData.learningUnits.length ? (
 					<Box
 						backgroundColor="white"
 						margin="6px"
@@ -73,13 +73,13 @@ const Review = () => {
 						p={'72px'}
 						display="flex"
 						flexDirection="column">
-						<Heading as="h1">{data.name}</Heading>
+						<Heading as="h1">{questionData.name}</Heading>
 						<Text
 							marginTop={34}
 							marginBottom={10}
 							fontSize={28}
 							color={'#7E8A9B'}>
-							{data.learningUnits.length} {i18n('questions')}
+							{questionData.learningUnits.length} {i18n('questions')}
 						</Text>
 						{reviewQuestions.map((question) => (
 							<ReviewQuestion text={question.questionRc} key={question.uid} />
