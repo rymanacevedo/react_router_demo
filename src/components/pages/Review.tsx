@@ -39,7 +39,6 @@ const Review = () => {
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
-				console.log(response);
 				logQuestions(response);
 				setData(response);
 			}
