@@ -5,6 +5,11 @@ import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import LoadingReview from '../ui/loading/LoadingReview';
 import ReviewQuestion from '../ui/Review/ReviewQuestion';
+import {
+	LearningUnitQuestion,
+	ModuleData,
+	ModuleDataLearningUnit,
+} from './AssignmentView/AssignmentTypes';
 
 const Review = () => {
 	const [questionData, setQuestionData] = useState({
@@ -18,15 +23,15 @@ const Review = () => {
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
 
-	const populateQuestions = (obj: any) => {
-		const questions: any[] = [];
+	const populateQuestions = (obj: ModuleData) => {
+		const questions: LearningUnitQuestion[] = [];
 		for (let prop in obj) {
 			if (typeof obj[prop] === 'object' && obj[prop] !== null) {
 				populateQuestions(obj[prop]);
 			}
 			if (Array.isArray(obj[prop]) && prop === 'learningUnits') {
-				obj[prop].forEach((unit: { questions: any[] }) => {
-					unit.questions.map((question) => {
+				obj[prop].forEach((unit: ModuleDataLearningUnit) => {
+					unit.questions.forEach((question) => {
 						questions.push(question);
 					});
 				});

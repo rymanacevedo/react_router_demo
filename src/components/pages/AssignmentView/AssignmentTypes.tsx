@@ -77,8 +77,8 @@ export type QuestionInFocus = {
 		versionId: number;
 	}[];
 	answered: boolean;
-    confidence: Confidence | null;
-    correctness: Correctness | null;
+	confidence: Confidence | null;
+	correctness: Correctness | null;
 	difficultyScore: number;
 	displayOrder: number;
 	flagged: boolean;
@@ -150,7 +150,7 @@ type LearningUnitQuestionAnswer = {
 	versionId: number;
 };
 
-type LearningUnitQuestion = {
+export type LearningUnitQuestion = {
 	answers: LearningUnitQuestionAnswer[];
 	explanationRc: null;
 	hasModalIntroduction: boolean;
@@ -168,7 +168,7 @@ type LearningUnitQuestion = {
 	versionId: number;
 };
 
-type ModuleDataLearningUnit = {
+export type ModuleDataLearningUnit = {
 	id: number;
 	introductionRc: null;
 	moreInformationRc: null;
@@ -180,6 +180,7 @@ type ModuleDataLearningUnit = {
 };
 
 export type ModuleData = {
+	[key: string]: any;
 	accountUri: string;
 	children: null;
 	customizations: any[];

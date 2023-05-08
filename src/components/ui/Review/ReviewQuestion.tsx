@@ -1,4 +1,4 @@
-import { Circle } from '@chakra-ui/react';
+import { Circle, Box } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import RichContentComponent from '../RichContentComponent';
 
@@ -24,31 +24,32 @@ const styles = {
 		marginInlineEnd: '4px',
 	},
 };
+
 interface ReviewQuestionProps {
 	text: string;
 }
 
 const Circles = () => {
 	return (
-		<div style={{ display: 'flex', marginLeft: 'auto', marginRight: '27.5px' }}>
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle}></Circle>
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle}></Circle>
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle}></Circle>
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle}></Circle>
-			<Circle size={'24px'} bg="ampSuccess.500"></Circle>
-		</div>
+		<Box display="flex" marginLeft="auto" marginRight="27.5px">
+			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
+			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
+			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
+			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
+			<Circle size={'24px'} bg="ampSuccess.500" />
+		</Box>
 	);
 };
 
 const ReviewQuestion = ({ text }: ReviewQuestionProps) => {
 	return (
-		<div style={styles.container}>
-			<div style={styles.text}>
+		<Box style={styles.container}>
+			<Box style={styles.text}>
 				<RichContentComponent content={text} />
-			</div>
+			</Box>
 			<Circles />
 			<ChevronDownIcon style={styles.chevron} height={20} width={20} />
-		</div>
+		</Box>
 	);
 };
 
