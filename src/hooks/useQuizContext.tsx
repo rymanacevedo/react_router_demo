@@ -468,7 +468,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					break;
 
 				case 'TWO_NPA_IN_ROUND':
-					if (reset && questionId) {
+					if (reset) {
 						resetTwoNpaInRound();
 					}
 					// TODO: we shouldn't have to do this because we have to make a case each time we want to reset the data instead of just reseting it directly.
