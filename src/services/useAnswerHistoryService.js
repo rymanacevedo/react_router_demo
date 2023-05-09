@@ -30,6 +30,7 @@ const useAnswerHistoryService = () => {
 				},
 				method: 'get',
 			});
+
 			return answerHistoryResponse.data;
 		} catch (err) {
 			console.log(err);
