@@ -33,6 +33,9 @@ const ModuleIntroView = () => {
 	const beginAssignment = () => {
 		navigate(`/app/learning/assignment/${assignmentKey}`);
 	};
+	const backToReview = () => {
+		navigate(`/app/learning/review/${assignmentKey}`);
+	};
 
 	return data.introductionRc ? (
 		<main id="main-learning">
@@ -47,7 +50,8 @@ const ModuleIntroView = () => {
 					moduleData={data}
 					numberOfLearningUnits={state?.numberOfLearningUnits}
 					estimatedTimeToComplete={state?.estimatedTimeToComplete}
-					action={beginAssignment}
+					action={!state.review ? beginAssignment : backToReview}
+					review={state.review}
 				/>
 			</Container>
 		</main>

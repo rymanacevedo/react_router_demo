@@ -11,12 +11,14 @@ type ModuleIntroComponentType = {
 	numberOfLearningUnits?: number;
 	estimatedTimeToComplete?: number;
 	action?: () => void;
+	review?: boolean;
 };
 const ModuleIntroComponent = ({
 	moduleData,
 	numberOfLearningUnits,
 	estimatedTimeToComplete,
 	action,
+	review,
 }: ModuleIntroComponentType) => {
 	const { t: i18n } = useTranslation();
 	const estimatedTimeRemaining = () => {
@@ -70,7 +72,7 @@ const ModuleIntroComponent = ({
 			</Stack>
 
 			<Button onClick={() => action && action()}>
-				<Text>Let's Begin</Text>
+				<Text>{!review ? i18n('letsBegin') : i18n('returnToReview')}</Text>
 			</Button>
 		</Box>
 	);
