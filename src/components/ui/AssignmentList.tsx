@@ -198,9 +198,11 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 
 	const handleSmartRefresherClick =
 		(assignment: AssignmentType) => async () => {
-			// const smartRefresher = await getAnswerHistory(assignment.assignmentKey);
-			const refresher = await startRefresher(assignment.assignmentKey);
-			navigate(`review/smartrefresh/${refresher.assignmentKey}`);
+			const smartRefresher = await startRefresher(
+				assignment.assignmentKey,
+				true,
+			);
+			navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
 		};
 
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
