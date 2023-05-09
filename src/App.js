@@ -67,7 +67,6 @@ function App() {
 						element={<ModuleIntroView />}
 					/>
 					<Route path="learning/review/:assignmentKey" element={<Review />} />
-
 					<Route
 						path="learning/assignment/:assignmentKey"
 						element={<AssignmentView />}
