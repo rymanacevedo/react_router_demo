@@ -62,7 +62,7 @@ export type QuestionInFocus = {
 		id: number;
 		isCorrect: boolean;
 		optionRc: string | null;
-		publishedAnswerId: number;
+		publishedAnswerId: number | string;
 		publishedAnswerUri: string;
 		publishedOptionId: number | null;
 		publishedOptionUri: string | null;
@@ -195,8 +195,8 @@ export type ModuleData = {
 	learningUnits: ModuleDataLearningUnit[];
 	locale: string;
 	name: string;
-	outroButtonText: null;
-	outroLink: null;
+	outroButtonText: string | null;
+	outroLink: string | null;
 	outroRc: string | null;
 	ownerAccountUid: string;
 	publishedVersionId: null;
