@@ -85,6 +85,16 @@ const Review = () => {
 		}
 	}, [assignmentKey]);
 
+	const handleViewModuleIntro = () => {
+		navigate(`/app/learning/moduleIntro/${assignmentKey}`, {
+			state: {
+				review: true,
+				numberOfLearningUnits: questionData.learningUnits.length,
+				estimatedTimeToComplete: questionData.timeAllotted,
+			},
+		});
+	};
+
 	return (
 		<Container
 			id={'review'}
@@ -142,16 +152,7 @@ const Review = () => {
 									<Button
 										variant={'ampOutline'}
 										marginTop={'12px'}
-										onClick={() =>
-											navigate(`/app/learning/moduleIntro/${assignmentKey}`, {
-												state: {
-													review: true,
-													numberOfLearningUnits:
-														questionData.learningUnits.length,
-													estimatedTimeToComplete: questionData.timeAllotted,
-												},
-											})
-										}>
+										onClick={() => handleViewModuleIntro}>
 										{i18n('viewModuleIntro')}
 									</Button>
 								)}
