@@ -15,16 +15,22 @@ import CompleteIcon from '../ui/Icons/CompleteIcon';
 
 type ModuleOutroType = {
 	moduleData: {
-		outroLink: string;
-		outroButtonText: string;
-		name: string;
-		introductionRc: string;
-		outroRc: string;
+		outroLink: string | null;
+		outroButtonText: string | null;
+		name: string | null;
+		introductionRc: string | null;
+		outroRc: string | null;
 	};
 	action?: () => void;
 };
 const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 	const { t: i18n } = useTranslation();
+	const handleClick = () => {
+		if (moduleData.outroLink) {
+			window.open(moduleData.outroLink, '_blank');
+		}
+	};
+
 	return (
 		<Box
 			style={{
@@ -56,10 +62,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 				<Button
 					width="200px"
 					marginTop={'10px'}
-					onClick={
-						// open url in new tab
-						() => window.open(moduleData?.outroLink, '_blank')
-					}
+					onClick={handleClick}
 					variant={'ampOutline'}>
 					<Text>{moduleData?.outroButtonText}</Text>
 				</Button>
