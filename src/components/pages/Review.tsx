@@ -152,7 +152,7 @@ const Review = () => {
 									<Button
 										variant={'ampOutline'}
 										marginTop={'12px'}
-										onClick={() => handleViewModuleIntro}>
+										onClick={() => handleViewModuleIntro()}>
 										{i18n('viewModuleIntro')}
 									</Button>
 								)}
