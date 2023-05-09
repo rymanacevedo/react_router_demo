@@ -150,7 +150,7 @@ type LearningUnitQuestionAnswer = {
 	versionId: number;
 };
 
-type LearningUnitQuestion = {
+export type LearningUnitQuestion = {
 	answers: LearningUnitQuestionAnswer[];
 	explanationRc: null;
 	hasModalIntroduction: boolean;
@@ -168,7 +168,7 @@ type LearningUnitQuestion = {
 	versionId: number;
 };
 
-type ModuleDataLearningUnit = {
+export type ModuleDataLearningUnit = {
 	id: number;
 	introductionRc: null;
 	moreInformationRc: null;
@@ -180,12 +180,13 @@ type ModuleDataLearningUnit = {
 };
 
 export type ModuleData = {
+	[key: string]: any;
 	accountUri: string;
 	children: null;
 	customizations: any[];
 	descriptionRc: null;
 	id: number;
-	introductionRc: null;
+	introductionRc: string | null;
 	isAllowTimeIncrease: boolean;
 	isCustomMessagesEnabled: boolean;
 	isRecommendedModulesEnabled: boolean;
@@ -196,7 +197,7 @@ export type ModuleData = {
 	name: string;
 	outroButtonText: null;
 	outroLink: null;
-	outroRc: null;
+	outroRc: string | null;
 	ownerAccountUid: string;
 	publishedVersionId: null;
 	self: string;

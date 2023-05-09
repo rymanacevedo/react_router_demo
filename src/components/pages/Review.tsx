@@ -1,34 +1,73 @@
-import {
-	Box,
-	Container,
-	Stack,
-	useMediaQuery,
-	Heading,
-	Text,
-} from '@chakra-ui/react';
+import { Box, Container, Stack, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import LoadingReview from '../ui/loading/LoadingReview';
+import ReviewQuestion from '../ui/Review/ReviewQuestion';
+import {
+	LearningUnitQuestion,
+	ModuleData,
+	ModuleDataLearningUnit,
+} from './AssignmentView/AssignmentTypes';
 
 const Review = () => {
-	const [data, setData] = useState({
-		name: '',
-		introductionRc: '',
-		outroRc: '',
+	const [questionData, setQuestionData] = useState<ModuleData>({
+		accountUri: '',
+		children: null,
+		customizations: [],
+		descriptionRc: null,
+		id: 0,
+		introductionRc: null,
+		isAllowTimeIncrease: false,
+		isCustomMessagesEnabled: false,
+		isRecommendedModulesEnabled: false,
+		key: '',
+		kind: '',
 		learningUnits: [],
+		locale: '',
+		name: '',
+		outroButtonText: null,
+		outroLink: null,
+		outroRc: null,
+		ownerAccountUid: '',
+		publishedVersionId: null,
+		self: '',
+		timeAllotted: null,
+		timedAssessment: false,
+		uid: '',
+		versionId: 0,
 	});
+	const [reviewQuestions, setReviewQuestions] = useState<
+		LearningUnitQuestion[]
+	>([]);
 	const { t: i18n } = useTranslation();
 	const { assignmentKey } = useParams();
-	const isSmallerThan1000 = useMediaQuery('(max-width:1000px)');
 	const { fetchModuleQuestions } = useModuleContentService();
+
+	const populateQuestions = (obj: ModuleData) => {
+		const questions: LearningUnitQuestion[] = [];
+		for (let prop in obj) {
+			if (typeof obj[prop] === 'object' && obj[prop] !== null) {
+				populateQuestions(obj[prop]);
+			}
+			if (Array.isArray(obj[prop]) && prop === 'learningUnits') {
+				obj[prop].forEach((unit: ModuleDataLearningUnit) => {
+					unit.questions.forEach((question) => {
+						questions.push(question);
+					});
+				});
+			}
+		}
+		setReviewQuestions(questions);
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
-				setData(response);
+				populateQuestions(response);
+				setQuestionData(response);
 			}
 		};
 		if (assignmentKey) {
@@ -42,7 +81,7 @@ const Review = () => {
 			margin="0"
 			padding="0"
 			maxWidth={'100vw'}
-			overflowY={'hidden'}
+			overflowY={'auto'}
 			overflowX={'hidden'}>
 			<Stack
 				w="100%"
@@ -50,11 +89,10 @@ const Review = () => {
 				direction={['column', 'column', 'row', 'row', 'row', 'row']}
 				justifyContent={'center'}
 				alignItems={'center'}>
-				{data.learningUnits.length ? (
+				{questionData.learningUnits.length ? (
 					<Box
 						backgroundColor="white"
 						margin="6px"
-						h={isSmallerThan1000 ? '745px' : '100%'}
 						boxShadow="2xl"
 						w="100%"
 						overflow="hidden"
@@ -62,12 +100,17 @@ const Review = () => {
 						p={'72px'}
 						display="flex"
 						flexDirection="column">
-						<Heading as="h1" margin="12px">
-							{data.name}
-						</Heading>
-						<Text marginTop={34} fontSize={28} color={'#7E8A9B'}>
-							{data.learningUnits.length} {i18n('questions')}
+						<Heading as="h1">{questionData.name}</Heading>
+						<Text
+							marginTop={34}
+							marginBottom={10}
+							fontSize={28}
+							color={'#7E8A9B'}>
+							{questionData.learningUnits.length} {i18n('questions')}
 						</Text>
+						{reviewQuestions.map((question) => (
+							<ReviewQuestion text={question.questionRc} key={question.uid} />
+						))}
 					</Box>
 				) : (
 					<LoadingReview />
