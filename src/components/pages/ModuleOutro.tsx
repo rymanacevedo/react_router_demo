@@ -25,7 +25,7 @@ type ModuleOutroType = {
 };
 const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 	const { t: i18n } = useTranslation();
-	const handleCLick = () => {
+	const handleClick = () => {
 		if (moduleData.outroLink) {
 			window.open(moduleData.outroLink, '_blank');
 		}
@@ -62,7 +62,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 				<Button
 					width="200px"
 					marginTop={'10px'}
-					onClick={handleCLick}
+					onClick={handleClick}
 					variant={'ampOutline'}>
 					<Text>{moduleData?.outroButtonText}</Text>
 				</Button>
