@@ -186,7 +186,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	};
 	const handleRefresherClick = (assignment: AssignmentType) => async () => {
-		const refresher = await startRefresher(assignment.assignmentKey);
+		const refresher = await startRefresher(assignment.assignmentKey, false);
 		navigate(`moduleIntro/${refresher.assignmentKey}`);
 	};
 
@@ -195,6 +195,15 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			navigate(`review/${assignment.assignmentKey}`);
 		};
 	};
+
+	const handleSmartRefresherClick =
+		(assignment: AssignmentType) => async () => {
+			const smartRefresher = await startRefresher(
+				assignment.assignmentKey,
+				true,
+			);
+			navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
+		};
 
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
@@ -262,6 +271,14 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 											variant="ghost"
 											onClick={handleReviewClick(curriculum.assignments[0])}>
 											{i18n('review')}
+										</Button>
+										<Button
+											w="320px"
+											variant="ghost"
+											onClick={handleSmartRefresherClick(
+												curriculum.assignments[0],
+											)}>
+											{i18n('smartRefresher')}
 										</Button>
 									</>
 								)}
