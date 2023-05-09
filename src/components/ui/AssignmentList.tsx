@@ -22,7 +22,6 @@ import { useNavigate } from 'react-router-dom';
 import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
 import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
-import useAnswerHistoryService from '../../services/useAnswerHistoryService';
 
 type AssignmentType = {
 	assignmentType: string;
@@ -49,7 +48,6 @@ type SelectedCourseKeyType = {
 
 const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	const { t: i18n } = useTranslation();
-	const { getAnswerHistory } = useAnswerHistoryService();
 	const { getCurriculaCourseList } = useCourseCurriculaListService();
 	const { getAssignments } = useAssignmentByUserAssociations();
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
@@ -188,7 +186,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	};
 	const handleRefresherClick = (assignment: AssignmentType) => async () => {
-		const refresher = await startRefresher(assignment.assignmentKey);
+		const refresher = await startRefresher(assignment.assignmentKey, false);
 		navigate(`moduleIntro/${refresher.assignmentKey}`);
 	};
 
@@ -200,8 +198,9 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 
 	const handleSmartRefresherClick =
 		(assignment: AssignmentType) => async () => {
-			const smartRefresher = await getAnswerHistory(assignment.assignmentKey);
-			navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
+			// const smartRefresher = await getAnswerHistory(assignment.assignmentKey);
+			const refresher = await startRefresher(assignment.assignmentKey);
+			navigate(`review/smartrefresh/${refresher.assignmentKey}`);
 		};
 
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(

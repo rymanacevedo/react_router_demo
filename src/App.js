@@ -17,6 +17,7 @@ import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
 import TourView from './components/pages/TourView';
 import Review from './components/pages/Review';
+import SmartRefresher from './components/ui/SmartRefresh/SmartRefresher';
 
 function App() {
 	const { user } = useAuth();
@@ -67,6 +68,10 @@ function App() {
 						element={<ModuleIntroView />}
 					/>
 					<Route path="learning/review/:assignmentKey" element={<Review />} />
+					<Route
+						path="learning/review/smartrefresh/:assignmentKey"
+						element={<SmartRefresher />}
+					/>
 					<Route
 						path="learning/assignment/:assignmentKey"
 						element={<AssignmentView />}

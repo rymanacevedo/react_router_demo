@@ -42,12 +42,17 @@ const useModuleContentService = () => {
 		}
 	};
 
-	const startRefresher = async (assignmentKey) => {
+	const startRefresher = async (assignmentKey, isFocused) => {
 		try {
 			setLoading(true);
+
+			const url = `/v2/assignments/${assignmentKey}/refreshers?subaccount=${subaccount}${
+				isFocused ? '&isFocused=true' : ''
+			}`;
+
 			const startRefreshResponse = await axios({
 				method: 'POST',
-				url: `/v2/assignments/${assignmentKey}/refreshers?subaccount=${subaccount}`,
+				url: url,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,
