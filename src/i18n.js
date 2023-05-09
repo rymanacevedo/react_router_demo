@@ -207,6 +207,10 @@ const resources = {
          //   Review.tsx
          //////////////////////////////////////////////         
          questions: 'Questions',
+         viewModuleIntro: 'View module introduction',
+         letsBegin: 'Let\'s begin',
+         returnToReview: 'Return to review',
+         moduleResourses: 'Module resources',
       }
    },
    fr: {

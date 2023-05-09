@@ -1,7 +1,16 @@
-import { Box, Container, Stack, Heading, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Container,
+	Stack,
+	Heading,
+	Text,
+	Button,
+	HStack,
+	VStack,
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import LoadingReview from '../ui/loading/LoadingReview';
 import ReviewQuestion from '../ui/Review/ReviewQuestion';
@@ -44,6 +53,7 @@ const Review = () => {
 	const { t: i18n } = useTranslation();
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
+	const navigate = useNavigate();
 
 	const populateQuestions = (obj: ModuleData) => {
 		const questions: LearningUnitQuestion[] = [];
@@ -108,9 +118,45 @@ const Review = () => {
 							color={'#7E8A9B'}>
 							{questionData.learningUnits.length} {i18n('questions')}
 						</Text>
-						{reviewQuestions.map((question) => (
-							<ReviewQuestion text={question.questionRc} key={question.uid} />
-						))}
+						<HStack
+							justifyContent={'space-between'}
+							marginTop={10}
+							alignItems={'flex-start'}>
+							<VStack>
+								{reviewQuestions.map((question) => (
+									<ReviewQuestion
+										text={question.questionRc}
+										key={question.uid}
+									/>
+								))}
+							</VStack>
+
+							<Box
+								bg="ampNeutral.100"
+								minWidth={'500px'}
+								minHeight={'150px'}
+								borderRadius={12}
+								p="12px">
+								<h3>{i18n('moduleResourses')}</h3>
+								{questionData.introductionRc && (
+									<Button
+										variant={'ampOutline'}
+										marginTop={'12px'}
+										onClick={() =>
+											navigate(`/app/learning/moduleIntro/${assignmentKey}`, {
+												state: {
+													review: true,
+													numberOfLearningUnits:
+														questionData.learningUnits.length,
+													estimatedTimeToComplete: questionData.timeAllotted,
+												},
+											})
+										}>
+										{i18n('viewModuleIntro')}
+									</Button>
+								)}
+							</Box>
+						</HStack>
 					</Box>
 				) : (
 					<LoadingReview />
