@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
 import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
+import useAnswerHistoryService from '../../services/useAnswerHistoryService';
 
 type AssignmentType = {
 	assignmentType: string;
@@ -48,6 +49,7 @@ type SelectedCourseKeyType = {
 
 const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 	const { t: i18n } = useTranslation();
+	const { getAnswerHistory } = useAnswerHistoryService();
 	const { getCurriculaCourseList } = useCourseCurriculaListService();
 	const { getAssignments } = useAssignmentByUserAssociations();
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
@@ -196,6 +198,12 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		};
 	};
 
+	const handleSmartRefresherClick =
+		(assignment: AssignmentType) => async () => {
+			const smartRefresher = await getAnswerHistory(assignment.assignmentKey);
+			navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
+		};
+
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
 			const assignment: AssignmentType =
@@ -262,6 +270,14 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 											variant="ghost"
 											onClick={handleReviewClick(curriculum.assignments[0])}>
 											{i18n('review')}
+										</Button>
+										<Button
+											w="320px"
+											variant="ghost"
+											onClick={handleSmartRefresherClick(
+												curriculum.assignments[0],
+											)}>
+											{i18n('smartRefresher')}
 										</Button>
 									</>
 								)}

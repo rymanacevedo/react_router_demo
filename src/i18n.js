@@ -143,6 +143,7 @@ const resources = {
          changeCourse: 'Change Course',
          refresher: 'Refresher',
          review: 'Review',
+         smartRefresher: 'Smart Refresher',
          noCoursesAssigned: "You are not currently assigned to a course. Please check with your administrator.",
          assessment: 'Assessment',
          completedAssessment: 'Completed Assessment',
