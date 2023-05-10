@@ -42,10 +42,12 @@ const Circles = () => {
 };
 
 const ReviewQuestion = ({ text }: ReviewQuestionProps) => {
+	const modifiedText = text.includes('<img') ? 'Click here for image' : text;
+
 	return (
 		<Box style={styles.container}>
 			<Box style={styles.text}>
-				<RichContentComponent content={text} />
+				<RichContentComponent content={modifiedText} />
 			</Box>
 			<Circles />
 			<ChevronDownIcon style={styles.chevron} height={20} width={20} />
