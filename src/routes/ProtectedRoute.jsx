@@ -4,9 +4,9 @@ import Footer from '../components/Footer';
 import HeaderNav from '../components/HeaderNav';
 import { useAuth } from '../hooks/useAuth';
 
-const ProtectedRoute = ({ isAllowed, redirectPath = '/login', children }) => {
+const ProtectedRoute = ({ redirectPath = '/login', children }) => {
 	const { user } = useAuth();
-	if (!isAllowed && !user) {
+	if (!user) {
 		return <Navigate to={redirectPath} replace />;
 	}
 
