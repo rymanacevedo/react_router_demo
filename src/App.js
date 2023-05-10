@@ -28,7 +28,13 @@ import { QuizProvider } from './hooks/useQuizContext';
 export const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route>
-			<Route path="/" element={<LoginWrapper />}>
+			<Route
+				path="/"
+				element={
+					<AuthProvider>
+						<LoginWrapper />
+					</AuthProvider>
+				}>
 				<Route index path="login" element={<LoginForm />} />
 				<Route path="forgot-password" element={<ForgotPassword />} />
 				<Route path="forgot-username" element={<ForgotUsername />} />
@@ -129,5 +135,8 @@ export const router = createBrowserRouter(
 	),
 	{
 		basename: '/main',
+		future: {
+			v7_normalizeFormMethod: true,
+		},
 	},
 );
