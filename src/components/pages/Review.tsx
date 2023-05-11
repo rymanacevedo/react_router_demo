@@ -157,15 +157,12 @@ const Review = () => {
 						<Heading as="h1">{questionData.name}</Heading>
 						<Text
 							marginTop={34}
-							marginBottom={10}
+							marginBottom={'12px'}
 							fontSize={28}
 							color={'#7E8A9B'}>
 							{questionData.learningUnits.length} {i18n('questions')}
 						</Text>
-						<HStack
-							justifyContent={'space-between'}
-							marginTop={10}
-							alignItems={'flex-start'}>
+						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
 							<VStack>
 								{reviewQuestions.map((question) => {
 									const transformedQuestion = transformQuestion(
