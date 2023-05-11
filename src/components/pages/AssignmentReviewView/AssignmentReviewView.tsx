@@ -580,7 +580,7 @@ const AssignmentReviewView = () => {
 		localStorage.removeItem(
 			`questionReviewHistory${assignmentKey}${questionInFocus?.id}`,
 		);
-		navigate(`/app/learning/assignment/${assignmentKey}`);
+		navigate(`/learning/assignment/${assignmentKey}`);
 	};
 
 	const handleProgress = async () => {

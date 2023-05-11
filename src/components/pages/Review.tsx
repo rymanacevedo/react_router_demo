@@ -86,7 +86,7 @@ const Review = () => {
 	}, [assignmentKey]);
 
 	const handleViewModuleIntro = () => {
-		navigate(`/app/learning/moduleIntro/${assignmentKey}`, {
+		navigate(`/learning/moduleIntro/${assignmentKey}`, {
 			state: {
 				review: true,
 				numberOfLearningUnits: questionData.learningUnits.length,

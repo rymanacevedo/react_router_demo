@@ -6,7 +6,6 @@ import {
 	useEffect,
 	useRef,
 } from 'react';
-import { useLocalStorage } from './useLocalStorage';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useLogoutService from '../services/useLogoutService';
 import { Cookies } from 'react-cookie-consent';
@@ -15,17 +14,17 @@ import {
 	useKeepSessionAliveService,
 } from '../services/useSessionService';
 import SessionDialogComponent from '../components/ui/SessionDialogComponent';
+import { useCustomApp } from './useCustomAppProvider';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useLocalStorage('user', null);
-	const [state, setState] = useLocalStorage('state', null);
+	const { user, state, setUser, setState } = useCustomApp();
 	const nav = useNavigate();
 	const { logoutService } = useLogoutService();
-	const [searchParams] = useSearchParams();
 	const { keepAlive } = useKeepSessionAliveService();
 	const { getSessionExpiration } = useGetSessionExpirationService();
+	const [searchParams] = useSearchParams();
 	const [showSessionDialog, setShowSessionDialog] = useState(false);
 	const [staySignedIn, setStaySignedIn] = useState(false);
 	const [isSignedIn, setIsSignedIn] = useState(false);
@@ -53,7 +52,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const clearState = () => {
-		const currentState = JSON.parse(localStorage.getItem('state'));
+		const currentState = state;
 		setUser(null);
 		setState(null);
 		nav(`/login?abbrevName=${currentState.homeAccount.acctAbbrevName}`);
@@ -61,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 	};
 
 	const logout = () => {
-		const currentUser = JSON.parse(localStorage.getItem('user'));
+		const currentUser = user;
 		const key = currentUser.sessionKey;
 		logoutService(key).then((response) => {
 			if (!response || response.status !== 200) {
@@ -133,7 +132,8 @@ export const AuthProvider = ({ children }) => {
 			path: '/',
 		});
 		setIsSignedIn(true);
-		nav('/app');
+		// TODO: remove this and create an action to handle redirect
+		nav('authenticate');
 	};
 
 	const handleStaySignedIn = () => {
