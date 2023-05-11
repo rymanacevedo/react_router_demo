@@ -218,3 +218,7 @@ export enum Correctness {
 	NoAnswerSelected = 'NoAnswerSelected',
 	Correct = 'Correct',
 }
+
+export type TransformedQuestion = LearningUnitQuestion & {
+	answerHistory: AnswerHistory[];
+};

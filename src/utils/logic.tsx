@@ -1,3 +1,5 @@
+import { Item } from '../components/pages/AssignmentView/AssignmentTypes';
+
 export const findDateData = () => {
 	const now = new Date();
 	const offset = now.getTimezoneOffset() * -1;
@@ -15,4 +17,20 @@ export const findDateData = () => {
 
 	const dateString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}${offsetString}`;
 	return dateString;
+};
+
+export const extractUUIDs = (data: Item[] | null): string[] => {
+	if (!data) {
+		return [];
+	}
+
+	return data.map((item) => {
+		const regex = /questions\/(.+?)\//;
+		const match = item.publishedQuestionUri.match(regex);
+		if (match) {
+			return match[1];
+		} else {
+			return '';
+		}
+	});
 };

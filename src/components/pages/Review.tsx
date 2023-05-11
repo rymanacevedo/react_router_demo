@@ -12,15 +12,21 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
+import useAnswerHistoryService from '../../services/useAnswerHistoryService';
 import LoadingReview from '../ui/loading/LoadingReview';
 import ReviewQuestion from '../ui/Review/ReviewQuestion';
 import {
+	ApiRes,
+	Item,
 	LearningUnitQuestion,
 	ModuleData,
 	ModuleDataLearningUnit,
+	TransformedQuestion,
 } from './AssignmentView/AssignmentTypes';
 
 const Review = () => {
+	const { getAnswerHistory } = useAnswerHistoryService();
+	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
 	const [questionData, setQuestionData] = useState<ModuleData>({
 		accountUri: '',
 		children: null,
@@ -73,6 +79,13 @@ const Review = () => {
 	};
 
 	useEffect(() => {
+		const fetchAnswerHistory = async () => {
+			let response: ApiRes = await getAnswerHistory(assignmentKey);
+			if (response) {
+				setAnswerHistory(response.items);
+			}
+		};
+
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
@@ -82,6 +95,7 @@ const Review = () => {
 		};
 		if (assignmentKey) {
 			fetchData();
+			fetchAnswerHistory();
 		}
 	}, [assignmentKey]);
 
@@ -93,6 +107,26 @@ const Review = () => {
 				estimatedTimeToComplete: questionData.timeAllotted,
 			},
 		});
+	};
+
+	const transformQuestion = (
+		question: LearningUnitQuestion,
+		answerHistoryArray: Item[] | null,
+	): TransformedQuestion => {
+		const uuid = question.uid;
+		const target = answerHistoryArray?.find((item) =>
+			item.publishedQuestionUri.includes(uuid),
+		);
+		if (target) {
+			return {
+				...question,
+				answerHistory: target.answerHistory,
+			};
+		}
+		return {
+			...question,
+			answerHistory: [],
+		};
 	};
 
 	return (
@@ -133,12 +167,19 @@ const Review = () => {
 							marginTop={10}
 							alignItems={'flex-start'}>
 							<VStack>
-								{reviewQuestions.map((question) => (
-									<ReviewQuestion
-										text={question.questionRc}
-										key={question.uid}
-									/>
-								))}
+								{reviewQuestions.map((question) => {
+									const transformedQuestion = transformQuestion(
+										question,
+										answerHistory,
+									);
+									return (
+										<ReviewQuestion
+											transformedQuestion={transformedQuestion}
+											// question={question}
+											// answerHistory={answerHistory}
+										/>
+									);
+								})}
 							</VStack>
 
 							<Box
