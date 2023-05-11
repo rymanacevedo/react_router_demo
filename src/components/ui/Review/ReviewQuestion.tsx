@@ -4,6 +4,7 @@ import {
 	Accordion,
 	AccordionButton,
 	AccordionPanel,
+	Text,
 } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import {
@@ -11,8 +12,9 @@ import {
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import { getIcons, truncateText } from '../../../utils/logic';
+import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
+import ReviewContentRender from './ReviewContentRender';
 
 interface ReviewQuestionProps {
 	transformedQuestion: TransformedQuestion;
@@ -23,8 +25,6 @@ interface IconsProps {
 }
 
 const Icons = ({ answerHistory }: IconsProps) => {
-	console.log(answerHistory);
-
 	return (
 		<Box display="flex" marginLeft="auto" marginRight="27.5px">
 			{getIcons(answerHistory)}
@@ -52,7 +52,9 @@ const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
 							<AccordionButton style={{ height: '76px' }}>
 								<Box as="span" flex="1" textAlign="left" fontWeight={'bold'}>
 									{isExpanded ? (
-										`${transformedQuestion.answerHistory.length} Attempt`
+										`${transformedQuestion.answerHistory.length} ${i18n(
+											'attempts',
+										)}`
 									) : (
 										<RichContentComponent
 											content={truncateText(modifiedText)}
@@ -69,10 +71,36 @@ const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
 							</AccordionButton>
 						</h2>
 						<AccordionPanel pb={4}>
-							<RichContentComponent
-								content={modifiedText}
-								style={{ fontSize: '21px', fontWeight: 400 }}
-							/>
+							{modifiedText === i18n('clickHereForImage') ? (
+								<img
+									src={extractSrc(transformedQuestion.questionRc)}
+									alt={transformedQuestion.questionRc}
+									style={{ width: '50%', height: '50%' }}
+								/>
+							) : (
+								<RichContentComponent
+									content={modifiedText}
+									style={{ fontSize: '21px', fontWeight: 400 }}
+								/>
+							)}
+
+							<Text
+								color={'#468446'}
+								fontWeight={600}
+								fontSize={'21px'}
+								marginTop={'24px'}
+								marginBottom={'24px'}>
+								{i18n('correctAnswers')}
+							</Text>
+							{transformedQuestion.answers
+								.filter((answer) => answer.isCorrect)
+								.map((answer) => {
+									return (
+										<>
+											<ReviewContentRender content={answer.answerRc} />
+										</>
+									);
+								})}
 						</AccordionPanel>
 					</>
 				)}

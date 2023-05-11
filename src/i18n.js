@@ -214,7 +214,9 @@ const resources = {
          //////////////////////////////////////////////
          //   ReviewQuestion.tsx
          //////////////////////////////////////////////
-         clickHereForImage: 'Click here for image' 
+         clickHereForImage: 'Click here for image',
+         correctAnswers: 'The Correct Answers',
+         attempts: 'Attempts'
       }
    },
    fr: {

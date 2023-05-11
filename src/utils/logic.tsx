@@ -133,3 +133,13 @@ export const truncateText = (str: string) => {
 	}
 	return str;
 };
+
+export const extractSrc = (questionRc: string): string | undefined => {
+	const srcStartIndex: number = questionRc.indexOf('src="') + 5;
+	const srcEndIndex: number = questionRc.indexOf('"', srcStartIndex);
+	if (srcStartIndex >= 5 && srcEndIndex !== -1) {
+		const src: string = questionRc.substring(srcStartIndex, srcEndIndex);
+		return src;
+	}
+	return undefined;
+};
