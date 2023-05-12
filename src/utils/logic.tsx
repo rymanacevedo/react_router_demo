@@ -6,6 +6,7 @@ import {
 	Correctness,
 	Item,
 } from '../components/pages/AssignmentView/AssignmentTypes';
+import NumberCircle from '../css/NumberCircle';
 
 export const findDateData = () => {
 	const now = new Date();
@@ -44,83 +45,92 @@ export const extractUUIDs = (data: Item[] | null): string[] => {
 
 export const getIcons = (answerHistory: AnswerHistory[]) => {
 	const final: JSX.Element[] = [];
+	const numCircle = (
+		<NumberCircle number={(answerHistory.length - 6).toString()} />
+	);
+
+	if (answerHistory.length > 6) {
+		final.push(numCircle);
+	}
 
 	answerHistory.forEach((answer, index) => {
-		switch (answer.confidence) {
-			case Confidence.Sure:
-				if (answer.correctness === Correctness.Correct) {
+		if (index < 6) {
+			switch (answer.confidence) {
+				case Confidence.Sure:
+					if (answer.correctness === Correctness.Correct) {
+						final.push(
+							<Circle
+								key={index}
+								size="24px"
+								bg="ampSuccess.500"
+								color="white"
+								margin="2px">
+								<CheckIcon />
+							</Circle>,
+						);
+					} else {
+						final.push(
+							<Circle
+								key={index}
+								size="24px"
+								bg="#912E21"
+								border="2px solid #912E21"
+								display="flex"
+								alignItems="center"
+								justifyContent="center"
+								margin="2px">
+								<Cross2Icon color="white" />
+							</Circle>,
+						);
+					}
+					break;
+				case Confidence.OneAnswerPartSure:
+					if (answer.correctness === Correctness.Incorrect) {
+						final.push(
+							<Circle
+								key={index}
+								size="24px"
+								bg="#F8D7D3"
+								border="2px solid #912E21"
+								display="flex"
+								alignItems="center"
+								justifyContent="center"
+								margin="2px">
+								<Cross2Icon color="#912E21" />
+							</Circle>,
+						);
+					} else {
+						final.push(
+							<Circle
+								key={index}
+								size="24px"
+								bg="#DAE6DA"
+								border="2px solid #468446"
+								display="flex"
+								alignItems="center"
+								justifyContent="center"
+								margin="2px">
+								<CheckIcon color="#468446" />
+							</Circle>,
+						);
+					}
+					break;
+				case Confidence.NotSure:
 					final.push(
 						<Circle
 							key={index}
 							size="24px"
-							bg="ampSuccess.500"
-							color="white"
-							margin="2px">
-							<CheckIcon />
-						</Circle>,
-					);
-				} else {
-					final.push(
-						<Circle
-							key={index}
-							size="24px"
-							bg="#912E21"
-							border="2px solid #912E21"
+							bg="#FDF8EC"
+							border="2px solid #C29838"
 							display="flex"
 							alignItems="center"
 							justifyContent="center"
 							margin="2px">
-							<Cross2Icon color="white" />
+							<MinusIcon color="#C29838" />
 						</Circle>,
 					);
-				}
-				break;
-			case Confidence.OneAnswerPartSure:
-				if (answer.correctness === Correctness.Incorrect) {
-					final.push(
-						<Circle
-							key={index}
-							size="24px"
-							bg="#F8D7D3"
-							border="2px solid #912E21"
-							display="flex"
-							alignItems="center"
-							justifyContent="center"
-							margin="2px">
-							<Cross2Icon color="#912E21" />
-						</Circle>,
-					);
-				} else {
-					final.push(
-						<Circle
-							key={index}
-							size="24px"
-							bg="#DAE6DA"
-							border="2px solid #468446"
-							display="flex"
-							alignItems="center"
-							justifyContent="center"
-							margin="2px">
-							<CheckIcon color="#468446" />
-						</Circle>,
-					);
-				}
-				break;
-			case Confidence.NotSure:
-				final.push(
-					<Circle
-						key={index}
-						size="24px"
-						bg="#FDF8EC"
-						border="2px solid #C29838"
-						display="flex"
-						alignItems="center"
-						justifyContent="center"
-						margin="2px">
-						<MinusIcon color="#C29838" />
-					</Circle>,
-				);
-				break;
+					break;
+			}
 		}
 	});
 
