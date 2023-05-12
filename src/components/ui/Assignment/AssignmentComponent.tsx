@@ -12,7 +12,7 @@ import {
 	QuestionInFocus,
 	SelectedAnswers,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import AnswerArea from '../AnswerInput/AnswerArea';
+import AnswerArea from '../AnswerArea';
 import { useEffect, useRef, useState } from 'react';
 import { findDateData } from '../../../utils/logic';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';

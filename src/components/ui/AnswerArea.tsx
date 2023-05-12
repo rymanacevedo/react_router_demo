@@ -2,7 +2,7 @@ import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
 	SelectedAnswers,
-} from '../../pages/AssignmentView/AssignmentTypes';
+} from '../pages/AssignmentView/AssignmentTypes';
 import {
 	Box,
 	Button,
@@ -18,8 +18,9 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
-import MultipleChoiceAnswers from '../MultipleChoiceAnswers';
-import MultipleChoiceOverLay from '../MultipleChoiceOverLay';
+import MultipleChoiceAnswers from './MultiChoiceAnswerInput/MultipleChoiceAnswers';
+import MultipleChoiceOverLay from './MultiChoiceAnswerInput/MultipleChoiceOverLay';
+import MultipleSelectAnswers from './MultiSelectAnswerInput/MultipleSelectAnswers';
 import { useTranslation } from 'react-i18next';
 import { MutableRefObject } from 'react';
 
@@ -74,17 +75,35 @@ export default function AnswerArea(props: {
 					borderRadius={24}
 					p={'72px'}>
 					{!props.showOverlay ? (
+						//Matching
+						//MultipleChoice
+						//MultipleCorrect
 						<Fade in={!props.showOverlay}>
-							{' '}
-							<MultipleChoiceAnswers
-								questionInFocus={props.questionInFocus as QuestionInFocus}
-								selectedAnswers={props.selectedAnswers}
-								setSelectedAnswers={props.selectedAnswersState}
-								clearSelection={props.clearSelection}
-								setClearSelection={props.clearSelectionState}
-								setIDKResponse={props.setIDKResponse}
-								IDKResponse={props.IDKResponse}
-							/>
+							{props.questionInFocus?.questionType === 'MultipleChoice' && (
+								<MultipleChoiceAnswers
+									questionInFocus={props.questionInFocus as QuestionInFocus}
+									selectedAnswers={props.selectedAnswers}
+									setSelectedAnswers={props.selectedAnswersState}
+									clearSelection={props.clearSelection}
+									setClearSelection={props.clearSelectionState}
+									setIDKResponse={props.setIDKResponse}
+									IDKResponse={props.IDKResponse}
+								/>
+							)}
+							{props.questionInFocus?.questionType === 'MultipleCorrect' && (
+								<MultipleSelectAnswers
+									questionInFocus={props.questionInFocus as QuestionInFocus}
+									selectedAnswers={props.selectedAnswers}
+									setSelectedAnswers={props.selectedAnswersState}
+									clearSelection={props.clearSelection}
+									setClearSelection={props.clearSelectionState}
+									setIDKResponse={props.setIDKResponse}
+									IDKResponse={props.IDKResponse}
+								/>
+							)}
+							{props.questionInFocus?.questionType === 'Matching' && (
+								<Text>Matching</Text>
+							)}
 						</Fade>
 					) : (
 						<Fade in={props.showOverlay}>

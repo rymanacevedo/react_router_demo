@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
-import AnswerFeedback from './AnswerInput/AnswerFeedback';
+import AnswerFeedback from './MultiSelectAnswerFeedback';
 import { useEffect, useState } from 'react';
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
 
 export interface Answer {
 	answerId: number | string;
