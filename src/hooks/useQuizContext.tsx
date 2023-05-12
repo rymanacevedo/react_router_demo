@@ -442,25 +442,17 @@ export const QuizProvider = ({ children }: { children: any }) => {
 							}));
 						} else {
 							const updatedTwoNpaArray = [...message.TWO_NPA_ON_LU];
-							const roundNpaCount = message.TWO_NPA_IN_ROUND;
-							const prevSeenCount = updatedTwoNpaArray[index].seenCount;
-
-							const updatedNpaRoundCount =
-								prevSeenCount + 1 >= 3 ? roundNpaCount + 1 : roundNpaCount;
 
 							updatedTwoNpaArray[index] = {
 								...updatedTwoNpaArray[index],
-								seenCount: prevSeenCount + 1,
-								npaCount:
-									prevSeenCount + 1 >= 3
-										? updatedTwoNpaArray[index].npaCount + 1
-										: updatedTwoNpaArray[index].npaCount,
+								seenCount: updatedTwoNpaArray[index].seenCount + 1,
+								npaCount: updatedTwoNpaArray[index].npaCount + 1,
 							};
 
 							setMessage((prevMessage) => ({
 								...prevMessage,
 								TWO_NPA_ON_LU: updatedTwoNpaArray,
-								TWO_NPA_IN_ROUND: updatedNpaRoundCount,
+								TWO_NPA_IN_ROUND: prevMessage.TWO_NPA_IN_ROUND + 1,
 							}));
 						}
 					}
