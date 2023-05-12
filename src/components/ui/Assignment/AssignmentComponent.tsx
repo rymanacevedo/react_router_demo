@@ -506,11 +506,6 @@ export default function AssignmentComponent({
 		if (index > -1 && message.TWO_NPA_ON_LU[index].npaCount >= 2) {
 			setIsToastOpen(true);
 			setTextPrompt('TWO_NPA_ON_LU');
-			handleMessage(
-				'TWO_NPA_ON_LU',
-				true,
-				Number(questionInFocus?.publishedQuestionId),
-			);
 		}
 	}, [message.TWO_NPA_ON_LU]);
 
