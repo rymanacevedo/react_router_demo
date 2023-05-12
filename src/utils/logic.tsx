@@ -44,6 +44,7 @@ export const extractUUIDs = (data: Item[] | null): string[] => {
 };
 
 export const getIcons = (answerHistory: AnswerHistory[]) => {
+	console.log(answerHistory);
 	const final: JSX.Element[] = [];
 	const numCircle = (
 		<NumberCircle number={(answerHistory.length - 6).toString()} />
@@ -99,14 +100,4 @@ export const truncateText = (str: string) => {
 		return str.slice(0, 100) + '...';
 	}
 	return str;
-};
-
-export const extractSrc = (questionRc: string): string | undefined => {
-	const srcStartIndex: number = questionRc.indexOf('src="') + 5;
-	const srcEndIndex: number = questionRc.indexOf('"', srcStartIndex);
-	if (srcStartIndex >= 5 && srcEndIndex !== -1) {
-		const src: string = questionRc.substring(srcStartIndex, srcEndIndex);
-		return src;
-	}
-	return undefined;
 };

@@ -1,24 +1,37 @@
-import {
-	Box,
-	AccordionItem,
-	Accordion,
-	AccordionButton,
-	AccordionPanel,
-	Text,
-} from '@chakra-ui/react';
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { Box } from '@chakra-ui/react';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { getIcons, truncateText } from '../../../utils/logic';
 import {
 	AnswerHistory,
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
-import { useTranslation } from 'react-i18next';
-import ReviewContentRender from './ReviewContentRender';
+
+const styles = {
+	container: {
+		border: '1px solid #CCCCCC',
+		borderRadius: '10px',
+		padding: '10px',
+		display: 'flex',
+		alignItems: 'center',
+		width: '895px',
+		height: '76px',
+		marginBottom: '27px',
+	},
+	text: {
+		fontWeight: 'bold',
+		marginRight: '24px',
+	},
+	chevron: {
+		marginRight: '20px',
+	},
+	circle: {
+		marginInlineEnd: '4px',
+	},
+};
 
 interface ReviewQuestionProps {
 	transformedQuestion: TransformedQuestion;
-	expandAll: boolean;
 }
 
 interface IconsProps {
@@ -33,83 +46,19 @@ const Icons = ({ answerHistory }: IconsProps) => {
 	);
 };
 
-const ReviewQuestion = ({
-	transformedQuestion,
-	expandAll,
-}: ReviewQuestionProps) => {
-	const { t: i18n } = useTranslation();
+const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
 	const modifiedText = transformedQuestion.questionRc.includes('<img')
-		? i18n('clickHereForImage')
+		? 'Click here for image'
 		: transformedQuestion.questionRc;
-	const index = expandAll ? [0] : [1];
-	return (
-		<Accordion allowMultiple index={index}>
-			<AccordionItem
-				style={{
-					width: '895px',
-					border: '1px solid #CCCCCC',
-					borderRadius: '10px',
-				}}>
-				{({ isExpanded }) => (
-					<>
-						<h2>
-							<AccordionButton style={{ height: '76px' }}>
-								<Box as="span" flex="1" textAlign="left" fontWeight={'bold'}>
-									{isExpanded ? (
-										`${transformedQuestion.answerHistory.length} ${i18n(
-											'attempts',
-										)}`
-									) : (
-										<RichContentComponent
-											content={truncateText(modifiedText)}
-											style={{ fontSize: '16px', fontWeight: 600 }}
-										/>
-									)}
-								</Box>
-								<Icons answerHistory={transformedQuestion.answerHistory} />
-								{isExpanded ? (
-									<ChevronUpIcon fontSize="12px" />
-								) : (
-									<ChevronDownIcon fontSize="12px" />
-								)}
-							</AccordionButton>
-						</h2>
-						<AccordionPanel pb={4}>
-							{modifiedText === i18n('clickHereForImage') ? (
-								<img
-									src={extractSrc(transformedQuestion.questionRc)}
-									alt={transformedQuestion.questionRc}
-									style={{ width: '50%', height: '50%' }}
-								/>
-							) : (
-								<RichContentComponent
-									content={modifiedText}
-									style={{ fontSize: '21px', fontWeight: 400 }}
-								/>
-							)}
 
-							<Text
-								color={'#468446'}
-								fontWeight={600}
-								fontSize={'21px'}
-								marginTop={'24px'}
-								marginBottom={'24px'}>
-								{i18n('correctAnswers')}
-							</Text>
-							{transformedQuestion.answers
-								.filter((answer) => answer.isCorrect)
-								.map((answer) => {
-									return (
-										<>
-											<ReviewContentRender content={answer.answerRc} />
-										</>
-									);
-								})}
-						</AccordionPanel>
-					</>
-				)}
-			</AccordionItem>
-		</Accordion>
+	return (
+		<Box style={styles.container}>
+			<Box style={styles.text}>
+				<RichContentComponent content={truncateText(modifiedText)} />
+			</Box>
+			<Icons answerHistory={transformedQuestion.answerHistory} />
+			<ChevronDownIcon style={styles.chevron} height={20} width={20} />
+		</Box>
 	);
 };
 
