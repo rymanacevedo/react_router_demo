@@ -18,6 +18,7 @@ import ReviewContentRender from './ReviewContentRender';
 
 interface ReviewQuestionProps {
 	transformedQuestion: TransformedQuestion;
+	expandAll: boolean;
 }
 
 interface IconsProps {
@@ -32,14 +33,17 @@ const Icons = ({ answerHistory }: IconsProps) => {
 	);
 };
 
-const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
+const ReviewQuestion = ({
+	transformedQuestion,
+	expandAll,
+}: ReviewQuestionProps) => {
 	const { t: i18n } = useTranslation();
 	const modifiedText = transformedQuestion.questionRc.includes('<img')
 		? i18n('clickHereForImage')
 		: transformedQuestion.questionRc;
-
+	const index = expandAll ? [0] : [1];
 	return (
-		<Accordion allowMultiple>
+		<Accordion allowMultiple index={index}>
 			<AccordionItem
 				style={{
 					width: '895px',

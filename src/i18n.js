@@ -211,6 +211,7 @@ const resources = {
          letsBegin: 'Let\'s begin',
          returnToReview: 'Return to review',
          moduleResourses: 'Module resources',
+         expandAll: 'Expand all',
          //////////////////////////////////////////////
          //   ReviewQuestion.tsx
          //////////////////////////////////////////////

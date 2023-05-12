@@ -60,6 +60,12 @@ const Review = () => {
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
+	const [expandAll, setExpandAll] = useState(false);
+
+	const handleExpandAll = () => {
+		console.log('this ran');
+		setExpandAll(!expandAll);
+	};
 
 	const populateQuestions = (obj: ModuleData) => {
 		const questions: LearningUnitQuestion[] = [];
@@ -159,8 +165,24 @@ const Review = () => {
 							marginTop={34}
 							marginBottom={'12px'}
 							fontSize={28}
-							color={'#7E8A9B'}>
+							color={'#7E8A9B'}
+							position="relative">
 							{questionData.learningUnits.length} {i18n('questions')}
+							<Text
+								onClick={handleExpandAll}
+								color={'#257CB5'}
+								fontWeight={600}
+								fontSize={'16px'}
+								position="absolute"
+								right="640px"
+								top="50%"
+								variant="link"
+								_hover={{
+									cursor: 'pointer',
+								}}
+								transform="translateY(-50%)">
+								{i18n('expandAll')}
+							</Text>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
 							<VStack>
@@ -172,8 +194,7 @@ const Review = () => {
 									return (
 										<ReviewQuestion
 											transformedQuestion={transformedQuestion}
-											// question={question}
-											// answerHistory={answerHistory}
+											expandAll={expandAll}
 										/>
 									);
 								})}
