@@ -181,7 +181,7 @@ const Review = () => {
 									cursor: 'pointer',
 								}}
 								transform="translateY(-50%)">
-								{i18n('expandAll')}
+								{expandAll ? i18n('collapseAll') : i18n('expandAll')}
 							</Text>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>

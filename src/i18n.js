@@ -212,6 +212,7 @@ const resources = {
          returnToReview: 'Return to review',
          moduleResourses: 'Module resources',
          expandAll: 'Expand all',
+         collapseAll: 'Collapse all',
          //////////////////////////////////////////////
          //   ReviewQuestion.tsx
          //////////////////////////////////////////////
