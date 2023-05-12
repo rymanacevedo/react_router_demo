@@ -37,7 +37,11 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 			<Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
 				<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
 				<ModalContent p="24px" w="720px">
-					<ModalCloseButton />
+					<ModalCloseButton
+						onClick={() => {
+							nav(-1);
+						}}
+					/>
 					<ModalBody p="24px">
 						<Center>
 							<Image

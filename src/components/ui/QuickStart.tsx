@@ -7,12 +7,11 @@ const QuickStart = () => {
 	const { t: i18n } = useTranslation();
 
 	return (
-		<Flex alignSelf="flex-end">
+		<Flex ml="auto" minW="150">
 			<Link
 				as={ReactRouterLink}
 				to="tour"
 				textDecoration="none"
-				w="150"
 				color="ampWhite"
 				h="80px"
 				py="25px">

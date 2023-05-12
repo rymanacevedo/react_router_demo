@@ -223,7 +223,7 @@ const StaticAssignmentView = ({
 											style={{
 												zIndex: ansIndex,
 												pointerEvents: 'none',
-												maxHeight: '755px',
+												height: '745px',
 											}}>
 											<AnswerArea
 												id="answerArea"
