@@ -1,4 +1,3 @@
-import { Circle } from '@chakra-ui/react';
 import { CheckIcon, Cross2Icon, MinusIcon } from '@radix-ui/react-icons';
 import {
 	AnswerHistory,
@@ -6,6 +5,7 @@ import {
 	Correctness,
 	Item,
 } from '../components/pages/AssignmentView/AssignmentTypes';
+import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
 
 export const findDateData = () => {
@@ -59,75 +59,32 @@ export const getIcons = (answerHistory: AnswerHistory[]) => {
 				case Confidence.Sure:
 					if (answer.correctness === Correctness.Correct) {
 						final.push(
-							<Circle
-								key={index}
-								size="24px"
-								bg="ampSuccess.500"
-								color="white"
-								margin="2px">
-								<CheckIcon />
-							</Circle>,
+							<CustomCircle
+								color="ampSuccess.500"
+								icon={CheckIcon}
+								index={0}
+							/>,
 						);
 					} else {
 						final.push(
-							<Circle
-								key={index}
-								size="24px"
-								bg="#912E21"
-								border="2px solid #912E21"
-								display="flex"
-								alignItems="center"
-								justifyContent="center"
-								margin="2px">
-								<Cross2Icon color="white" />
-							</Circle>,
+							<CustomCircle color="#912E21" icon={Cross2Icon} index={1} />,
 						);
 					}
 					break;
 				case Confidence.OneAnswerPartSure:
 					if (answer.correctness === Correctness.Incorrect) {
 						final.push(
-							<Circle
-								key={index}
-								size="24px"
-								bg="#F8D7D3"
-								border="2px solid #912E21"
-								display="flex"
-								alignItems="center"
-								justifyContent="center"
-								margin="2px">
-								<Cross2Icon color="#912E21" />
-							</Circle>,
+							<CustomCircle color="#F8D7D3" icon={Cross2Icon} index={2} />,
 						);
 					} else {
 						final.push(
-							<Circle
-								key={index}
-								size="24px"
-								bg="#DAE6DA"
-								border="2px solid #468446"
-								display="flex"
-								alignItems="center"
-								justifyContent="center"
-								margin="2px">
-								<CheckIcon color="#468446" />
-							</Circle>,
+							<CustomCircle color="#DAE6DA" icon={CheckIcon} index={3} />,
 						);
 					}
 					break;
 				case Confidence.NotSure:
 					final.push(
-						<Circle
-							key={index}
-							size="24px"
-							bg="#FDF8EC"
-							border="2px solid #C29838"
-							display="flex"
-							alignItems="center"
-							justifyContent="center"
-							margin="2px">
-							<MinusIcon color="#C29838" />
-						</Circle>,
+						<CustomCircle color="#FDF8EC" icon={MinusIcon} index={4} />,
 					);
 					break;
 			}
