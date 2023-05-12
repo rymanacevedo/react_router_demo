@@ -203,6 +203,8 @@ const resources = {
          step: 'Step',
          of6: 'of 6',
          nextBtn: 'Next',
+         needHelp: 'Need help?',
+         viewTour: 'View the quick start tour',
          //////////////////////////////////////////////
          //   Review.tsx
          //////////////////////////////////////////////         

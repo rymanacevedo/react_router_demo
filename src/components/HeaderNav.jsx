@@ -23,7 +23,7 @@ import {
 
 import { ChevronDownIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
-
+import QuickStart from './ui/QuickStart';
 const Header = () => {
 	const location = useLocation();
 	const nav = useNavigate();
@@ -139,6 +139,7 @@ const Header = () => {
 		});
 		return (
 			<>
+				<QuickStart />
 				<ButtonGroup variant="link" boxSizing="border-box">
 					<Box display={['none', 'none', 'none', 'flex', 'flex', 'flex']}>
 						{tabs.length > 1 ? tabs.map((tab) => tab) : null}
