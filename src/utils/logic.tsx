@@ -1,4 +1,9 @@
-import { CheckIcon, Cross2Icon, MinusIcon } from '@radix-ui/react-icons';
+import {
+	CheckIcon,
+	Cross2Icon,
+	MinusIcon,
+	QuestionMarkIcon,
+} from '@radix-ui/react-icons';
 import {
 	AnswerHistory,
 	Confidence,
@@ -66,9 +71,19 @@ export const getIcons = (answerHistory: AnswerHistory[]) => {
 					}
 					break;
 				case Confidence.NotSure:
-					final.push(
-						<CustomCircle color="#FDF8EC" icon={MinusIcon} index={4} />,
-					);
+					if (answer.correctness === Correctness.NoAnswerSelected) {
+						final.push(
+							<CustomCircle
+								color="#7F8285"
+								icon={QuestionMarkIcon}
+								index={4}
+							/>,
+						);
+					} else {
+						final.push(
+							<CustomCircle color="#FDF8EC" icon={MinusIcon} index={5} />,
+						);
+					}
 					break;
 			}
 		}
