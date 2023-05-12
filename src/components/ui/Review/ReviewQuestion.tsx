@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { useTranslation } from 'react-i18next';
 import { getIcons, truncateText } from '../../../utils/logic';
 import {
 	AnswerHistory,
@@ -47,8 +48,9 @@ const Icons = ({ answerHistory }: IconsProps) => {
 };
 
 const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
+	const { t: i18n } = useTranslation();
 	const modifiedText = transformedQuestion.questionRc.includes('<img')
-		? 'Click here for image'
+		? i18n('clickHereForImage')
 		: transformedQuestion.questionRc;
 
 	return (
