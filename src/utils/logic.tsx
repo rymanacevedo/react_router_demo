@@ -3,7 +3,6 @@ import {
 	AnswerHistory,
 	Confidence,
 	Correctness,
-	Item,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
@@ -27,24 +26,7 @@ export const findDateData = () => {
 	return dateString;
 };
 
-export const extractUUIDs = (data: Item[] | null): string[] => {
-	if (!data) {
-		return [];
-	}
-
-	return data.map((item) => {
-		const regex = /questions\/(.+?)\//;
-		const match = item.publishedQuestionUri.match(regex);
-		if (match) {
-			return match[1];
-		} else {
-			return '';
-		}
-	});
-};
-
 export const getIcons = (answerHistory: AnswerHistory[]) => {
-	console.log(answerHistory);
 	const final: JSX.Element[] = [];
 	const numCircle = (
 		<NumberCircle number={(answerHistory.length - 6).toString()} />
