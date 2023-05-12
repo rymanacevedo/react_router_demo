@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-type ImageRenderPropsType = {
+type ReviewContentRenderPropsType = {
 	content: string;
 };
 
-const ReviewContentRender = ({ content }: ImageRenderPropsType) => {
+const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {

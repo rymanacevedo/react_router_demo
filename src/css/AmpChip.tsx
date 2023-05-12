@@ -24,8 +24,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			case 'ampDarkSuccessOutline': {
 				return (
 					<CheckIcon
-						height={size === 'lg' ? '20px' : '20px'}
-						width={size === 'lg' ? '12px' : '12px'}
+						height={size === 'lg' ? '40px' : '20px'}
+						width={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;

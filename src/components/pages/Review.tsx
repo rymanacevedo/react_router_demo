@@ -63,7 +63,6 @@ const Review = () => {
 	const [expandAll, setExpandAll] = useState(false);
 
 	const handleExpandAll = () => {
-		console.log('this ran');
 		setExpandAll(!expandAll);
 	};
 
