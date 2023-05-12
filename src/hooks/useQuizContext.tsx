@@ -259,10 +259,6 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				}));
 			};
 
-			const resetTwoNpaOnLu = () => {
-				return null;
-			};
-
 			const resetTwoNpaInRound = () => {
 				setMessage({
 					...message,
@@ -423,9 +419,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					}
 					break;
 				case 'TWO_NPA_ON_LU':
-					if (reset && questionId) {
-						resetTwoNpaOnLu();
-					} else if (questionId) {
+					if (questionId) {
 						const index = message.TWO_NPA_ON_LU.findIndex(
 							(obj) => obj.questionId === questionId,
 						);
@@ -451,8 +445,8 @@ export const QuizProvider = ({ children }: { children: any }) => {
 
 							setMessage((prevMessage) => ({
 								...prevMessage,
-								TWO_NPA_ON_LU: updatedTwoNpaArray,
 								TWO_NPA_IN_ROUND: prevMessage.TWO_NPA_IN_ROUND + 1,
+								TWO_NPA_ON_LU: updatedTwoNpaArray,
 							}));
 						}
 					}
