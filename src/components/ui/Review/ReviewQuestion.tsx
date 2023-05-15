@@ -15,10 +15,12 @@ import RichContentComponent from '../RichContentComponent';
 import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
+import { useEffect, useState } from 'react';
 
 interface ReviewQuestionProps {
 	transformedQuestion: TransformedQuestion;
 	expandAll: boolean;
+	onExpandAllChange: (expanded: boolean) => void;
 }
 
 interface IconsProps {
@@ -36,14 +38,37 @@ const Icons = ({ answerHistory }: IconsProps) => {
 const ReviewQuestion = ({
 	transformedQuestion,
 	expandAll,
+	onExpandAllChange,
 }: ReviewQuestionProps) => {
 	const { t: i18n } = useTranslation();
 	const modifiedText = transformedQuestion.questionRc.includes('<img')
 		? i18n('clickHereForImage')
 		: transformedQuestion.questionRc;
-	const index = expandAll ? [0] : [1];
+	const [accordionIndex, setAccordionIndex] = useState<number[]>([]); // Initially empty
+
+	const handleClick = () => {
+		if (accordionIndex.length === 0) {
+			setAccordionIndex([0]);
+		} else {
+			setAccordionIndex([]);
+		}
+	};
+
+	useEffect(() => {
+		if (expandAll) {
+			setAccordionIndex([0]);
+		} else {
+			setAccordionIndex([]);
+		}
+	}, [expandAll]);
+
+	useEffect(() => {
+		const allExpanded = accordionIndex.length > 0;
+		onExpandAllChange(allExpanded);
+	}, [accordionIndex, onExpandAllChange]);
+
 	return (
-		<Accordion allowMultiple index={index}>
+		<Accordion allowMultiple index={accordionIndex}>
 			<AccordionItem
 				style={{
 					width: '895px',
@@ -53,7 +78,7 @@ const ReviewQuestion = ({
 				{({ isExpanded }) => (
 					<>
 						<h2>
-							<AccordionButton style={{ height: '76px' }}>
+							<AccordionButton style={{ height: '76px' }} onClick={handleClick}>
 								<Box as="span" flex="1" textAlign="left" fontWeight={'bold'}>
 									{isExpanded ? (
 										`${transformedQuestion.answerHistory.length} ${i18n(

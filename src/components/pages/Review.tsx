@@ -61,6 +61,7 @@ const Review = () => {
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
 	const [expandAll, setExpandAll] = useState(false);
+	const [allExpanded, setAllExpanded] = useState(false);
 
 	const handleExpandAll = () => {
 		setExpandAll(!expandAll);
@@ -112,6 +113,10 @@ const Review = () => {
 				estimatedTimeToComplete: questionData.timeAllotted,
 			},
 		});
+	};
+
+	const handleExpandAllChange = (expanded: boolean) => {
+		setAllExpanded(expanded);
 	};
 
 	const transformQuestion = (
@@ -180,7 +185,7 @@ const Review = () => {
 									cursor: 'pointer',
 								}}
 								transform="translateY(-50%)">
-								{expandAll ? i18n('collapseAll') : i18n('expandAll')}
+								{allExpanded ? i18n('collapseAll') : i18n('expandAll')}
 							</Text>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
@@ -194,6 +199,7 @@ const Review = () => {
 										<ReviewQuestion
 											transformedQuestion={transformedQuestion}
 											expandAll={expandAll}
+											onExpandAllChange={handleExpandAllChange}
 										/>
 									);
 								})}
