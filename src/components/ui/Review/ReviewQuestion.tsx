@@ -55,6 +55,7 @@ const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
 					width: '895px',
 					border: '1px solid #CCCCCC',
 					borderRadius: '10px',
+					marginRight: '16px',
 				}}>
 				{({ isExpanded }) => (
 					<>

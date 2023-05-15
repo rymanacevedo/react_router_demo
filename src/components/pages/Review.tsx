@@ -85,7 +85,6 @@ const Review = () => {
 				setAnswerHistory(response.items);
 			}
 		};
-
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
@@ -180,8 +179,8 @@ const Review = () => {
 
 							<Box
 								bg="ampNeutral.100"
-								minWidth={'500px'}
-								minHeight={'150px'}
+								minWidth={'400px'}
+								minHeight={'263px'}
 								borderRadius={12}
 								p="12px">
 								<h3>{i18n('moduleResourses')}</h3>
