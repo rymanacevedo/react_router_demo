@@ -211,6 +211,14 @@ const resources = {
          letsBegin: 'Let\'s begin',
          returnToReview: 'Return to review',
          moduleResourses: 'Module resources',
+         expandAll: 'Expand all',
+         collapseAll: 'Collapse all',
+         //////////////////////////////////////////////
+         //   ReviewQuestion.tsx
+         //////////////////////////////////////////////
+         clickHereForImage: 'Click here for image',
+         correctAnswers: 'The Correct Answers',
+         attempts: 'Attempts'
       }
    },
    fr: {

@@ -1,5 +1,11 @@
-import { Circle, Box } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { useTranslation } from 'react-i18next';
+import { getIcons, truncateText } from '../../../utils/logic';
+import {
+	AnswerHistory,
+	TransformedQuestion,
+} from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
 
 const styles = {
@@ -26,30 +32,33 @@ const styles = {
 };
 
 interface ReviewQuestionProps {
-	text: string;
+	transformedQuestion: TransformedQuestion;
 }
 
-const Circles = () => {
+interface IconsProps {
+	answerHistory: AnswerHistory[];
+}
+
+const Icons = ({ answerHistory }: IconsProps) => {
 	return (
 		<Box display="flex" marginLeft="auto" marginRight="27.5px">
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
-			<Circle size={'24px'} bg="ampSuccess.500" style={styles.circle} />
-			<Circle size={'24px'} bg="ampSuccess.500" />
+			{getIcons(answerHistory)}
 		</Box>
 	);
 };
 
-const ReviewQuestion = ({ text }: ReviewQuestionProps) => {
-	const modifiedText = text.includes('<img') ? 'Click here for image' : text;
+const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
+	const { t: i18n } = useTranslation();
+	const modifiedText = transformedQuestion.questionRc.includes('<img')
+		? i18n('clickHereForImage')
+		: transformedQuestion.questionRc;
 
 	return (
 		<Box style={styles.container}>
 			<Box style={styles.text}>
-				<RichContentComponent content={modifiedText} />
+				<RichContentComponent content={truncateText(modifiedText)} />
 			</Box>
-			<Circles />
+			<Icons answerHistory={transformedQuestion.answerHistory} />
 			<ChevronDownIcon style={styles.chevron} height={20} width={20} />
 		</Box>
 	);
