@@ -15,12 +15,10 @@ import RichContentComponent from '../RichContentComponent';
 import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface ReviewQuestionProps {
 	transformedQuestion: TransformedQuestion;
-	expandAll: boolean;
-	onExpandAllChange: (expanded: boolean) => void;
 }
 
 interface IconsProps {
@@ -35,11 +33,7 @@ const Icons = ({ answerHistory }: IconsProps) => {
 	);
 };
 
-const ReviewQuestion = ({
-	transformedQuestion,
-	expandAll,
-	onExpandAllChange,
-}: ReviewQuestionProps) => {
+const ReviewQuestion = ({ transformedQuestion }: ReviewQuestionProps) => {
 	const { t: i18n } = useTranslation();
 	const modifiedText = transformedQuestion.questionRc.includes('<img')
 		? i18n('clickHereForImage')
@@ -53,19 +47,6 @@ const ReviewQuestion = ({
 			setAccordionIndex([]);
 		}
 	};
-
-	useEffect(() => {
-		if (expandAll) {
-			setAccordionIndex([0]);
-		} else {
-			setAccordionIndex([]);
-		}
-	}, [expandAll]);
-
-	useEffect(() => {
-		const allExpanded = accordionIndex.length > 0;
-		onExpandAllChange(allExpanded);
-	}, [accordionIndex, onExpandAllChange]);
 
 	return (
 		<Accordion allowMultiple index={accordionIndex}>
