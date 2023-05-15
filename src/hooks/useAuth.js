@@ -132,8 +132,7 @@ export const AuthProvider = ({ children }) => {
 			path: '/',
 		});
 		setIsSignedIn(true);
-		// TODO: remove this and create an action to handle redirect
-		nav('authenticate');
+		// nav('authenticate');
 	};
 
 	const handleStaySignedIn = () => {

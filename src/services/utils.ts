@@ -19,7 +19,7 @@ const replaceOrigin = (url: string, newOrigin: string) => {
 
 	return parsedURL.toString();
 };
-const fetchCallbackGet = async <T>(
+const fetchCallbackGet = async <T extends unknown>(
 	url: string,
 	sessionKey: string,
 ): Promise<{ data: T; response: Response }> => {
@@ -35,7 +35,7 @@ const fetchCallbackGet = async <T>(
 	return { data, response };
 };
 
-export const fetchDataPost = async <T>(
+export const fetchDataPost = async <T extends unknown>(
 	url: string,
 	body: any,
 ): Promise<{ data: T; response: Response }> => {
@@ -51,7 +51,7 @@ export const fetchDataPost = async <T>(
 	return { data, response };
 };
 
-export const fetchDataPut = async <T>(
+export const fetchDataPut = async <T extends unknown>(
 	url: string,
 	body: any,
 	sessionKey: string,
@@ -69,7 +69,7 @@ export const fetchDataPut = async <T>(
 	return { data, response };
 };
 
-export const authenticatedFetch = async <T>(
+export const authenticatedFetch = async <T extends unknown>(
 	url: string,
 	sessionKey: string,
 	method: string = 'GET',
@@ -93,5 +93,7 @@ export const authenticatedFetch = async <T>(
 
 	throw new Error('Invalid method, not supported');
 };
-export const badRequest = <T>(data: T) => json(data, { status: 400 });
-export const unauthorized = <T>(data: T) => json(data, { status: 401 });
+export const badRequest = <T extends unknown>(data: T) =>
+	json(data, { status: 400 });
+export const unauthorized = <T extends unknown>(data: T) =>
+	json(data, { status: 401 });

@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from 'react';
 import { useNavigate, useRouteLoaderData } from 'react-router-dom';
-import { AuthenticationData } from '../routes/Root';
+import { AuthenticationData } from './Root';
 
 export default function Authenticate() {
 	const navigate = useNavigate();
