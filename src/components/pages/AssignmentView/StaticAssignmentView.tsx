@@ -120,6 +120,7 @@ const StaticAssignmentView = ({
 					<Popover
 						isOpen={tourStep >= 3 && tourStep < 6}
 						placement={barPopoverContent[tourStep]?.placement || 'bottom'}
+						isLazy
 						initialFocusRef={barRef.current}
 						arrowSize={20}
 						gutter={20}>
@@ -146,7 +147,10 @@ const StaticAssignmentView = ({
 							</PopoverAnchor>
 						</PopoverTrigger>
 						<Box style={{ position: 'relative', zIndex: barIndex }}>
-							<PopoverContent p="24px" w="560px" h="auto">
+							<PopoverContent
+								p="24px"
+								w={isSmallerThan1000 ? '100vw' : '560px'}
+								h="auto">
 								<Box
 									position="fixed"
 									top="2px"
@@ -213,7 +217,8 @@ const StaticAssignmentView = ({
 							</Box>
 							<Popover
 								isOpen={tourStep === 2}
-								placement="left"
+								placement={isSmallerThan1000 ? 'top' : 'left'}
+								isLazy
 								initialFocusRef={answerRef.current}
 								gutter="40"
 								arrowSize={20}>
@@ -245,7 +250,10 @@ const StaticAssignmentView = ({
 										position: 'relative',
 										zIndex: tourStep === 2 ? ansIndex : 'unset',
 									}}>
-									<PopoverContent p="24px" w="560px" h="auto">
+									<PopoverContent
+										p="24px"
+										w={isSmallerThan1000 ? '100vw' : '560px'}
+										h="auto">
 										<PopoverArrow />
 										<PopoverCloseButton
 											p="24px"
@@ -290,7 +298,8 @@ const StaticAssignmentView = ({
 						</HStack>
 						<Popover
 							isOpen={tourStep === 6}
-							placement="left-start"
+							placement={isSmallerThan1000 ? 'top' : 'left-start'}
+							isLazy
 							gutter="40"
 							arrowSize={20}>
 							<PopoverTrigger>
@@ -314,7 +323,10 @@ const StaticAssignmentView = ({
 								</PopoverAnchor>
 							</PopoverTrigger>
 							<Box style={{ position: 'relative', zIndex: menuIndex }}>
-								<PopoverContent p="24px" w="560px" h="auto">
+								<PopoverContent
+									p="24px"
+									w={isSmallerThan1000 ? '100vw' : '560px'}
+									h="auto">
 									<Box position="fixed" top="40px" left="555px">
 										<PopoverArrow position="fixed" top="0" left="0" />
 									</Box>
