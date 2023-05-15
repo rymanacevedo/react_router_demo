@@ -40,6 +40,8 @@ import {
 	currentRoundAnswerOverlayDataMock,
 } from './mockAssignmentData';
 
+import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+
 const OverlayOne = ({ tourStep }: number) => (
 	<Modal isOpen={tourStep >= 2}>
 		<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
@@ -56,7 +58,7 @@ const StaticAssignmentView = ({
 }) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [questionData] = useState(questionDataMock);
 	const [menuIndex, setMenuIndex] = useState(0);
@@ -99,7 +101,7 @@ const StaticAssignmentView = ({
 
 	useEffect(() => {
 		if (tourStep === 6) {
-			setIsMenuOpen(true);
+			handleMenuOpen(true);
 			setBarIndex(0);
 			setMenuIndex(1500);
 		}
@@ -132,8 +134,6 @@ const StaticAssignmentView = ({
 									<TestProgressBarMenu
 										id={'bar'}
 										questionData={questionData}
-										isMenuOpen={isMenuOpen}
-										setIsMenuOpen={setIsMenuOpen}
 										currentRoundQuestionListData={currentRoundQuestionListData}
 										currentQuestion={questionInFocusMock}
 										currentRoundAnswerOverLayData={
