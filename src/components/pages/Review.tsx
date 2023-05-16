@@ -207,8 +207,10 @@ const Review = () => {
 									setIndex={setIndex}
 								/>
 							</VStack>
-							{true && (
+							{questionData.introductionRc && (
 								<Box
+									style={{ marginTop: '10px' }}
+									id={'moduleBox'}
 									bg="ampNeutral.100"
 									minWidth={'400px'}
 									minHeight={'263px'}
