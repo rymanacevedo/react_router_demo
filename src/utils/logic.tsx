@@ -64,11 +64,23 @@ export const getIcons = (answerHistory: AnswerHistory[]) => {
 				case Confidence.OneAnswerPartSure:
 					if (answer.correctness === Correctness.Incorrect) {
 						final.push(
-							<CustomCircle color="#F8D7D3" icon={Cross2Icon} index={2} />,
+							<CustomCircle
+								color="#F8D7D3"
+								icon={Cross2Icon}
+								index={2}
+								iconColor={'#912E21'}
+								borderColor={'#912E21'}
+							/>,
 						);
 					} else {
 						final.push(
-							<CustomCircle color="#DAE6DA" icon={CheckIcon} index={3} />,
+							<CustomCircle
+								color="#DAE6DA"
+								icon={CheckIcon}
+								index={3}
+								iconColor={'#468446'}
+								borderColor={'#468446'}
+							/>,
 						);
 					}
 					break;

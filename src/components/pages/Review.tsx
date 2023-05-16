@@ -207,7 +207,7 @@ const Review = () => {
 									setIndex={setIndex}
 								/>
 							</VStack>
-							{questionData.introductionRc && (
+							{true && (
 								<Box
 									bg="ampNeutral.100"
 									minWidth={'400px'}
