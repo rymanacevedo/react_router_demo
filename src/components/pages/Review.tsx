@@ -15,7 +15,6 @@ import useModuleContentService from '../../services/coursesServices/useModuleCon
 import useAnswerHistoryService from '../../services/useAnswerHistoryService';
 import { createReviewQuestionsArray } from '../../utils/logic';
 import LoadingReview from '../ui/loading/LoadingReview';
-// import ReviewQuestion from '../ui/Review/ReviewQuestion';
 import ReviewQuestions from '../ui/Review/ReviewQuestions';
 import {
 	ApiRes,
@@ -23,7 +22,6 @@ import {
 	LearningUnitQuestion,
 	ModuleData,
 	ModuleDataLearningUnit,
-	// TransformedQuestion,
 } from './AssignmentView/AssignmentTypes';
 
 const Review = () => {
