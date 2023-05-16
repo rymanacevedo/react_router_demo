@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import {
 	Modal,
 	ModalOverlay,
@@ -25,23 +25,32 @@ type Step1ModalProps = {
 	tourStep: number;
 	setTourStep: (value: ((prevState: number) => number) | number) => void;
 	setAnsIndex: (value: ((prevState: number) => number) | number) => void;
+	nav: NavigateFunction;
 };
 
-function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
+function Step1Modal({
+	tourStep,
+	setTourStep,
+	setAnsIndex,
+	nav,
+}: Step1ModalProps) {
 	const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
-	const nav = useNavigate();
 	const { t: i18n } = useTranslation();
+
+	const handleClose = () => {
+		nav(-1);
+		onClose();
+	};
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+			<Modal isOpen={isOpen} onClose={handleClose} size={'xl'}>
 				<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
-				<ModalContent p="24px" w="720px">
-					<ModalCloseButton
-						onClick={() => {
-							nav(-1);
-						}}
-					/>
+				<ModalContent
+					display={tourStep === 1 ? 'block' : 'none'}
+					p="24px"
+					w="720px">
+					<ModalCloseButton onClick={handleClose} />
 					<ModalBody p="24px">
 						<Center>
 							<Image
@@ -68,17 +77,16 @@ function Step1Modal({ tourStep, setTourStep, setAnsIndex }: Step1ModalProps) {
 								color="rgba(0, 0, 0, 0.5)"
 								mr={3}
 								cursor="pointer"
-								onClick={() => {
-									nav(-1);
-								}}>
+								onClick={handleClose}>
 								{i18n('skipTour')}
 							</Text>
 
 							<Button
 								onClick={() => {
-									setTourStep(tourStep + 1);
+									setTourStep((prevState) => {
+										return prevState + 1;
+									});
 									setAnsIndex(1500);
-									onClose();
 								}}>
 								{i18n('nextBtn')}
 							</Button>
@@ -94,6 +102,7 @@ const TourView = () => {
 	const [tourStep, setTourStep] = useState(1);
 	const [ansIndex, setAnsIndex] = useState(0);
 	const [barIndex, setBarIndex] = useState(0);
+	const nav = useNavigate();
 	useEffect(() => {
 		Cookies.set('seen_tour', window.btoa('seen_tour'), {
 			path: '/',
@@ -106,6 +115,7 @@ const TourView = () => {
 				tourStep={tourStep}
 				setTourStep={setTourStep}
 				setAnsIndex={setAnsIndex}
+				nav={nav}
 			/>
 			<StaticAssignmentView
 				tourStep={tourStep}
@@ -114,6 +124,7 @@ const TourView = () => {
 				setAnsIndex={setAnsIndex}
 				barIndex={barIndex}
 				setBarIndex={setBarIndex}
+				nav={nav}
 			/>
 		</>
 	);

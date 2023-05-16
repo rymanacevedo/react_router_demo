@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
 	Box,
 	Container,
@@ -16,8 +15,6 @@ import {
 	PopoverAnchor,
 	Button,
 	Text,
-	ModalOverlay,
-	Modal,
 	Heading,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
@@ -42,12 +39,6 @@ import {
 
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 
-const OverlayOne = ({ tourStep }: number) => (
-	<Modal isOpen={tourStep >= 2}>
-		<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
-	</Modal>
-);
-
 const StaticAssignmentView = ({
 	tourStep,
 	setTourStep,
@@ -55,6 +46,7 @@ const StaticAssignmentView = ({
 	setAnsIndex,
 	barIndex,
 	setBarIndex,
+	nav,
 }) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
@@ -76,7 +68,6 @@ const StaticAssignmentView = ({
 
 	const answerRef = useRef();
 	const barRef = useRef();
-	const nav = useNavigate();
 
 	const barPopoverContent = {
 		3: {
@@ -101,7 +92,7 @@ const StaticAssignmentView = ({
 
 	useEffect(() => {
 		if (tourStep === 6) {
-			handleMenuOpen(true);
+			handleMenuOpen();
 			setBarIndex(0);
 			setMenuIndex(1500);
 		}
@@ -229,6 +220,7 @@ const StaticAssignmentView = ({
 												zIndex: ansIndex,
 												pointerEvents: 'none',
 												height: '745px',
+												display: 'flex',
 											}}>
 											<AnswerArea
 												id="answerArea"
@@ -359,6 +351,7 @@ const StaticAssignmentView = ({
 
 											<Button
 												onClick={() => {
+													handleMenuOpen();
 													nav(-1);
 												}}>
 												{i18n('finishTourBtn')}
@@ -371,7 +364,6 @@ const StaticAssignmentView = ({
 					</HStack>
 				</Container>
 			</main>
-			<OverlayOne tourStep={tourStep} />
 		</>
 	);
 };
