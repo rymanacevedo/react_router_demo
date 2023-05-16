@@ -13,7 +13,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import useAnswerHistoryService from '../../services/useAnswerHistoryService';
-import { createReviewQuestionsArray } from '../../utils/logic';
+import {
+	createReviewQuestionsArray,
+	sortReviewQuestions,
+} from '../../utils/logic';
 import LoadingReview from '../ui/loading/LoadingReview';
 import ReviewQuestions from '../ui/Review/ReviewQuestions';
 import {
@@ -23,8 +26,10 @@ import {
 	ModuleData,
 	ModuleDataLearningUnit,
 } from './AssignmentView/AssignmentTypes';
+import { useQuizContext } from '../../hooks/useQuizContext';
 
 const Review = () => {
+	const { message } = useQuizContext();
 	const { getAnswerHistory } = useAnswerHistoryService();
 	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
 	const [questionData, setQuestionData] = useState<ModuleData>({
@@ -192,7 +197,10 @@ const Review = () => {
 							<VStack>
 								<ReviewQuestions
 									expandAll={expandAll}
-									reviewQuestions={reviewQuestions}
+									reviewQuestions={sortReviewQuestions(
+										reviewQuestions,
+										message,
+									)}
 									answerHistory={answerHistory}
 									onExpandAllChange={handleExpandAllChange}
 									index={index}

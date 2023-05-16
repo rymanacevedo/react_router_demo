@@ -8,6 +8,8 @@ import {
 	AnswerHistory,
 	Confidence,
 	Correctness,
+	LearningUnitQuestion,
+	QuizMessage,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
@@ -111,4 +113,31 @@ export const extractSrc = (questionRc: string): string | undefined => {
 
 export const createReviewQuestionsArray = (count: number) => {
 	return Array.from({ length: count }, (_, index) => index);
+};
+
+export const sortReviewQuestions = (
+	reviewQuestions: LearningUnitQuestion[],
+	quizMessage: QuizMessage,
+) => {
+	const npaCounts = new Map();
+	quizMessage.TWO_NPA_ON_LU.forEach(({ questionId, npaCount }) => {
+		npaCounts.set(questionId, npaCount);
+	});
+
+	reviewQuestions.sort((a, b) => {
+		const npaCountA = npaCounts.get(a.id) || 0;
+		const npaCountB = npaCounts.get(b.id) || 0;
+
+		if (npaCountA !== npaCountB) {
+			return npaCountB - npaCountA; // Sort by npaCount in descending order
+		}
+
+		// If npaCounts are the same, sort by questionRc in ascending order
+		const questionRcA = a.questionRc.toLowerCase();
+		const questionRcB = b.questionRc.toLowerCase();
+
+		return questionRcA.localeCompare(questionRcB);
+	});
+
+	return reviewQuestions;
 };
