@@ -60,7 +60,6 @@ const Review = () => {
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
-<<<<<<< HEAD
 	const [expandAll, setExpandAll] = useState(false);
 	const [index, setIndex] = useState<number[]>([]);
 	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
@@ -81,8 +80,6 @@ const Review = () => {
 		}
 		setExpandAll(expanded);
 	};
-=======
->>>>>>> origin/dev
 
 	const populateQuestions = (obj: ModuleData) => {
 		const questions: LearningUnitQuestion[] = [];
