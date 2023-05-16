@@ -43,7 +43,6 @@ export const rootLoader =
 				...bootstrapData,
 			};
 		}
-		// TODO: redirect instead here
 		return json(data);
 	};
 

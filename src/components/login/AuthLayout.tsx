@@ -1,13 +1,41 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useParams, useSearchParams } from 'react-router-dom';
+import {
+	json,
+	LoaderFunctionArgs,
+	Outlet,
+	useParams,
+	useSearchParams,
+} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import useInitialAccountDataService from '../../services/useInitialAccountDataService';
 import { ReactComponent as AmpLogo } from '../../ampLogo.svg';
 import { ReactComponent as HeadLogo } from '../../headLogo.svg';
 import { Box, Container, Flex, VStack } from '@chakra-ui/react';
 import CookieConsent from 'react-cookie-consent';
+import { z } from 'zod';
+import { bootstrap } from '../../services/auth.reactrouter';
+import { BootstrapData } from '../../routes/Root';
 
-export default function LoginWrapper() {
+const AuthLayoutContextSchema = z.object({
+	accountKey: z.string().optional(),
+	abbrevNameState: z.string(),
+	accountUid: z.string(),
+	recaptcha: z.string(),
+});
+export type AuthLayoutContext = z.infer<typeof AuthLayoutContextSchema>;
+
+export const authLayoutLoader =
+	() =>
+	async ({ request }: LoaderFunctionArgs) => {
+		let data: BootstrapData | null = null;
+		const bootstrapData = (await bootstrap(request)) as BootstrapData;
+		data = {
+			...bootstrapData,
+		};
+		return json(data);
+	};
+
+export default function AuthLayout() {
 	const { t: i18n } = useTranslation();
 	const [accountKey, setAccountKey] = useState('');
 	const [abbrevNameState, setAbbrevNameState] = useState('');
@@ -21,6 +49,7 @@ export default function LoginWrapper() {
 		useInitialAccountDataService();
 
 	const handleFetchInitialUserData = async (account: any) => {
+		// TODO: useLoaderData instead
 		const data = await fetchInitialAccountData(account);
 		const { key, abbrevName, uid, allowSelfRegistration } = data.accountInfo;
 		const { recaptchaSiteKey } = data;
