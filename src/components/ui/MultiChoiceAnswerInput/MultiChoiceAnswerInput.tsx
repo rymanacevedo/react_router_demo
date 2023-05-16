@@ -1,10 +1,10 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
-import CustomIcon from './CustomIcon';
+import CustomIcon from './MultiChoiceIcon';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
 
-const AnswerInput = ({
+const MultiChoiceAnswerInput = ({
 	questionText,
 	questionAnswerId,
 	addAnswer,
@@ -186,4 +186,4 @@ const AnswerInput = ({
 	);
 };
 
-export default AnswerInput;
+export default MultiChoiceAnswerInput;

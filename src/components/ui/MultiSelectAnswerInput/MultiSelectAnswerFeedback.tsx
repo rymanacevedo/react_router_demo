@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
-import CustomOverLayIcon from './CustomOverLayIcon';
+import MultiChoiceOverLayIcon from './MultiSelectOverLayIcon';
 import {
 	CurrentRoundAnswerOverLayData,
 	SelectedAnswers,
@@ -13,7 +13,7 @@ import {
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
 
-const AnswerFeedback = ({
+const MultiChoiceAnswerFeedback = ({
 	questionText,
 	questionAnswerId,
 	selectedAnswers,
@@ -167,7 +167,7 @@ const AnswerFeedback = ({
 			value={questionAnswerId}
 			size={'4rem'}
 			icon={
-				<CustomOverLayIcon
+				<MultiChoiceOverLayIcon
 					variant={variant}
 					isIndeterminate={isIndeterminate}
 					isChecked={isChecked}
@@ -223,4 +223,4 @@ const AnswerFeedback = ({
 	);
 };
 
-export default AnswerFeedback;
+export default MultiChoiceAnswerFeedback;

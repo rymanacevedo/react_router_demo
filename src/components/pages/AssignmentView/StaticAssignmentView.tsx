@@ -25,7 +25,7 @@ import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
 
-import AnswerArea from '../../ui/AnswerInput/AnswerArea';
+import AnswerArea from '../../ui/AnswerArea';
 import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
