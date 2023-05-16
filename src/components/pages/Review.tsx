@@ -13,15 +13,17 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import useAnswerHistoryService from '../../services/useAnswerHistoryService';
+// import { createReviewQuestionsArray } from '../../utils/logic';
 import LoadingReview from '../ui/loading/LoadingReview';
-import ReviewQuestion from '../ui/Review/ReviewQuestion';
+// import ReviewQuestion from '../ui/Review/ReviewQuestion';
+import ReviewQuestions from '../ui/Review/ReviewQuestions';
 import {
 	ApiRes,
 	Item,
 	LearningUnitQuestion,
 	ModuleData,
 	ModuleDataLearningUnit,
-	TransformedQuestion,
+	// TransformedQuestion,
 } from './AssignmentView/AssignmentTypes';
 
 const Review = () => {
@@ -61,7 +63,7 @@ const Review = () => {
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
 	const [expandAll, setExpandAll] = useState(false);
-	const [allExpanded, setAllExpanded] = useState(false);
+	// const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
 
 	const handleExpandAll = () => {
 		setExpandAll(!expandAll);
@@ -116,27 +118,7 @@ const Review = () => {
 	};
 
 	const handleExpandAllChange = (expanded: boolean) => {
-		setAllExpanded(expanded);
-	};
-
-	const transformQuestion = (
-		question: LearningUnitQuestion,
-		answerHistoryArray: Item[] | null,
-	): TransformedQuestion => {
-		const uuid = question.uid;
-		const target = answerHistoryArray?.find((item) =>
-			item.publishedQuestionUri.includes(uuid),
-		);
-		if (target) {
-			return {
-				...question,
-				answerHistory: target.answerHistory,
-			};
-		}
-		return {
-			...question,
-			answerHistory: [],
-		};
+		setExpandAll(expanded);
 	};
 
 	return (
@@ -185,24 +167,17 @@ const Review = () => {
 									cursor: 'pointer',
 								}}
 								transform="translateY(-50%)">
-								{allExpanded ? i18n('collapseAll') : i18n('expandAll')}
+								{expandAll ? i18n('collapseAll') : i18n('expandAll')}
 							</Text>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
 							<VStack>
-								{reviewQuestions.map((question) => {
-									const transformedQuestion = transformQuestion(
-										question,
-										answerHistory,
-									);
-									return (
-										<ReviewQuestion
-											transformedQuestion={transformedQuestion}
-											expandAll={expandAll}
-											onExpandAllChange={handleExpandAllChange}
-										/>
-									);
-								})}
+								<ReviewQuestions
+									expandAll={expandAll}
+									reviewQuestions={reviewQuestions}
+									answerHistory={answerHistory}
+									onExpandAllChange={handleExpandAllChange}
+								/>
 							</VStack>
 
 							<Box

@@ -110,3 +110,7 @@ export const extractSrc = (questionRc: string): string | undefined => {
 	}
 	return undefined;
 };
+
+export const createReviewQuestionsArray = (count: number) => {
+	return Array.from({ length: count }, (_, index) => index);
+};
