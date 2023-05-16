@@ -2,8 +2,8 @@ import { Box, Heading } from '@chakra-ui/react';
 import {
 	QuestionInFocus,
 	SelectedAnswers,
-} from '../pages/AssignmentView/AssignmentTypes';
-import AnswerInput from './AnswerInput/AnswerInput';
+} from '../../pages/AssignmentView/AssignmentTypes';
+import MultiSelectAnswerInput from './MultiSelectAnswerInput';
 
 export interface Answer {
 	answerId: number | string;
@@ -77,7 +77,7 @@ const MultipleChoiceAnswers = ({
 						?.slice(0, 10)
 						.map((answer: { answerRc: string; id: string | number }) => {
 							return (
-								<AnswerInput
+								<MultiSelectAnswerInput
 									key={answer.id}
 									questionText={answer.answerRc}
 									questionAnswerId={answer.id}
@@ -88,7 +88,7 @@ const MultipleChoiceAnswers = ({
 								/>
 							);
 						})}
-					<AnswerInput
+					<MultiSelectAnswerInput
 						/* eslint-disable */
 						questionText={'I don\'t know yet'}
 						/* eslint-enable */

@@ -80,7 +80,7 @@ const LearningView = () => {
 				<Heading as="h2" size="lg">
 					{i18n('yourAssignments')}
 				</Heading>
-				{courseList.length > 0 && (
+				{courseList?.length > 0 && (
 					<CourseMenu
 						courseList={courseList}
 						selectedCourseKey={selectedCourseKey}

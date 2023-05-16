@@ -1,4 +1,4 @@
-import { Answer } from '../../ui/MultipleChoiceAnswers';
+import { Answer } from '../../ui/MultiChoiceAnswerInput/MultipleChoiceAnswers';
 
 export type SelectedAnswers = {
 	answerId: number | string;

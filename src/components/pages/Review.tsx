@@ -207,23 +207,22 @@ const Review = () => {
 									setIndex={setIndex}
 								/>
 							</VStack>
-
-							<Box
-								bg="ampNeutral.100"
-								minWidth={'400px'}
-								minHeight={'263px'}
-								borderRadius={12}
-								p="12px">
-								<h3>{i18n('moduleResourses')}</h3>
-								{questionData.introductionRc && (
+							{questionData.introductionRc && (
+								<Box
+									bg="ampNeutral.100"
+									minWidth={'400px'}
+									minHeight={'263px'}
+									borderRadius={12}
+									p="12px">
+									<h3>{i18n('moduleResourses')}</h3>
 									<Button
 										variant={'ampOutline'}
 										marginTop={'12px'}
 										onClick={handleViewModuleIntro}>
 										{i18n('viewModuleIntro')}
 									</Button>
-								)}
-							</Box>
+								</Box>
+							)}
 						</HStack>
 					</Box>
 				) : (
