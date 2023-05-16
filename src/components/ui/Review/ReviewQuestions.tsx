@@ -7,7 +7,6 @@ import {
 	Text,
 	AccordionIcon,
 } from '@chakra-ui/react';
-// import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import {
 	AnswerHistory,
 	Item,
@@ -15,15 +14,10 @@ import {
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import {
-	// createReviewQuestionsArray,
-	extractSrc,
-	getIcons,
-} from '../../../utils/logic';
+import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
-// import { useState } from 'react';
 
 interface ReviewQuestionsProps {
 	reviewQuestions: LearningUnitQuestion[];
@@ -54,31 +48,14 @@ const ReviewQuestions = ({
 	setIndex,
 }: ReviewQuestionsProps) => {
 	const { t: i18n } = useTranslation();
-	// const [index, setIndex] = useState<number[]>([]);
 
 	useEffect(() => {
 		if (expandAll) {
-			setIndex(Array.from(Array(reviewQuestions.length).keys())); // Set index to an array of all question indices
+			setIndex(Array.from(Array(reviewQuestions.length).keys()));
 		} else {
-			setIndex([]); // Set index to an empty array
+			setIndex([]);
 		}
 	}, [expandAll, reviewQuestions.length, setIndex]);
-
-	// useEffect(() => {
-	// 	if (expandAll) {
-	// 		setIndex(reviewQuestions.map((_, idx) => idx));
-	// 	} else {
-	// 		setIndex([]);
-	// 	}
-	// }, [expandAll, reviewQuestions]);
-
-	// useEffect(() => {
-	// 	if (expandAll || index.length === allExpanded.length) {
-	// 		onExpandAllChange(true);
-	// 	} else {
-	// 		onExpandAllChange(false);
-	// 	}
-	// }, [index, expandAll, allExpanded, onExpandAllChange]);
 
 	const transformQuestion = (
 		question: LearningUnitQuestion,
@@ -101,7 +78,11 @@ const ReviewQuestions = ({
 	};
 
 	return (
-		<Accordion allowMultiple index={index} onChange={setIndex}>
+		<Accordion
+			allowMultiple
+			index={index}
+			onChange={setIndex}
+			marginRight={'7px'}>
 			{reviewQuestions.map((reviewQuestion) => {
 				const transformedQuestion = transformQuestion(
 					reviewQuestion,
@@ -132,7 +113,16 @@ const ReviewQuestions = ({
 											flex="1"
 											textAlign="left"
 											fontWeight={'bold'}>
-											<Text>{isExpanded ? 'helo' : 'bye'}</Text>
+											{isExpanded ? (
+												`${transformedQuestion.answerHistory.length} ${i18n(
+													'attempts',
+												)}`
+											) : (
+												<RichContentComponent
+													content={truncateText(modifiedText)}
+													style={{ fontSize: '16px', fontWeight: 600 }}
+												/>
+											)}
 										</Box>
 										<Icons answerHistory={transformedQuestion.answerHistory} />
 										<AccordionIcon />

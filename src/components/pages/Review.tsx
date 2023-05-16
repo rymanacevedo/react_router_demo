@@ -61,8 +61,8 @@ const Review = () => {
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
 	const [expandAll, setExpandAll] = useState(false);
-	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
 	const [index, setIndex] = useState<number[]>([]);
+	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
 
 	const handleExpandAll = () => {
 		if (index.length === allExpandedIndices.length) {
@@ -74,9 +74,9 @@ const Review = () => {
 
 	const handleExpandAllChange = (expanded: boolean) => {
 		if (expanded) {
-			setIndex(allExpandedIndices); // Set index to an array of all question indices
+			setIndex(allExpandedIndices);
 		} else {
-			setIndex([]); // Set index to an empty array
+			setIndex([]);
 		}
 		setExpandAll(expanded);
 	};
@@ -132,18 +132,20 @@ const Review = () => {
 	useEffect(() => {
 		const isAllExpanded = index.length === allExpandedIndices.length;
 		if (isAllExpanded) {
-			setExpandAll(true);
+			setExpandAll(false);
 		}
 	}, [index, allExpandedIndices]);
 
 	return (
 		<Container
+			style={{ maxWidth: '1464px' }}
 			id={'review'}
 			margin="0"
 			padding="0"
 			maxWidth={'100vw'}
 			overflowY={'auto'}
-			overflowX={'hidden'}>
+			overflowX={'hidden'}
+			mx="auto">
 			<Stack
 				w="100%"
 				p="12px"
@@ -175,7 +177,7 @@ const Review = () => {
 								fontWeight={600}
 								fontSize={'16px'}
 								position="absolute"
-								right="640px"
+								right="385px"
 								top="50%"
 								variant="link"
 								_hover={{
@@ -194,15 +196,15 @@ const Review = () => {
 									reviewQuestions={reviewQuestions}
 									answerHistory={answerHistory}
 									onExpandAllChange={handleExpandAllChange}
-									index={index} // Pass the index state as a prop
-									setIndex={setIndex} // Pass the setIndex function as a prop
+									index={index}
+									setIndex={setIndex}
 								/>
 							</VStack>
 
 							<Box
 								bg="ampNeutral.100"
-								minWidth={'500px'}
-								minHeight={'150px'}
+								minWidth={'400px'}
+								minHeight={'263px'}
 								borderRadius={12}
 								p="12px">
 								<h3>{i18n('moduleResourses')}</h3>
