@@ -22,13 +22,16 @@ import {
 } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 // import { useState } from 'react';
 
 interface ReviewQuestionsProps {
 	reviewQuestions: LearningUnitQuestion[];
 	answerHistory: Item[] | null;
 	expandAll: boolean;
+	index: number[];
+	setIndex: (index: number[]) => void;
+	onExpandAllChange: (expanded: boolean) => void;
 }
 
 interface IconsProps {
@@ -47,17 +50,27 @@ const ReviewQuestions = ({
 	reviewQuestions,
 	answerHistory,
 	expandAll,
+	index,
+	setIndex,
 }: ReviewQuestionsProps) => {
 	const { t: i18n } = useTranslation();
-	const [index, setIndex] = useState<number[]>([]);
+	// const [index, setIndex] = useState<number[]>([]);
 
 	useEffect(() => {
 		if (expandAll) {
-			setIndex(reviewQuestions.map((_, idx) => idx));
+			setIndex(Array.from(Array(reviewQuestions.length).keys())); // Set index to an array of all question indices
 		} else {
-			setIndex([]);
+			setIndex([]); // Set index to an empty array
 		}
-	}, [expandAll, reviewQuestions]);
+	}, [expandAll, reviewQuestions.length, setIndex]);
+
+	// useEffect(() => {
+	// 	if (expandAll) {
+	// 		setIndex(reviewQuestions.map((_, idx) => idx));
+	// 	} else {
+	// 		setIndex([]);
+	// 	}
+	// }, [expandAll, reviewQuestions]);
 
 	// useEffect(() => {
 	// 	if (expandAll || index.length === allExpanded.length) {

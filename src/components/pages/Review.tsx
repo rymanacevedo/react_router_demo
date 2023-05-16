@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import useAnswerHistoryService from '../../services/useAnswerHistoryService';
-// import { createReviewQuestionsArray } from '../../utils/logic';
+import { createReviewQuestionsArray } from '../../utils/logic';
 import LoadingReview from '../ui/loading/LoadingReview';
 // import ReviewQuestion from '../ui/Review/ReviewQuestion';
 import ReviewQuestions from '../ui/Review/ReviewQuestions';
@@ -63,10 +63,24 @@ const Review = () => {
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
 	const [expandAll, setExpandAll] = useState(false);
-	// const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
+	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
+	const [index, setIndex] = useState<number[]>([]);
 
 	const handleExpandAll = () => {
-		setExpandAll(!expandAll);
+		if (index.length === allExpandedIndices.length) {
+			setIndex([]);
+		} else {
+			setIndex(allExpandedIndices);
+		}
+	};
+
+	const handleExpandAllChange = (expanded: boolean) => {
+		if (expanded) {
+			setIndex(allExpandedIndices); // Set index to an array of all question indices
+		} else {
+			setIndex([]); // Set index to an empty array
+		}
+		setExpandAll(expanded);
 	};
 
 	const populateQuestions = (obj: ModuleData) => {
@@ -117,9 +131,12 @@ const Review = () => {
 		});
 	};
 
-	const handleExpandAllChange = (expanded: boolean) => {
-		setExpandAll(expanded);
-	};
+	useEffect(() => {
+		const isAllExpanded = index.length === allExpandedIndices.length;
+		if (isAllExpanded) {
+			setExpandAll(true);
+		}
+	}, [index, allExpandedIndices]);
 
 	return (
 		<Container
@@ -167,7 +184,9 @@ const Review = () => {
 									cursor: 'pointer',
 								}}
 								transform="translateY(-50%)">
-								{expandAll ? i18n('collapseAll') : i18n('expandAll')}
+								{index.length === allExpandedIndices.length
+									? i18n('collapseAll')
+									: i18n('expandAll')}
 							</Text>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
@@ -177,6 +196,8 @@ const Review = () => {
 									reviewQuestions={reviewQuestions}
 									answerHistory={answerHistory}
 									onExpandAllChange={handleExpandAllChange}
+									index={index} // Pass the index state as a prop
+									setIndex={setIndex} // Pass the setIndex function as a prop
 								/>
 							</VStack>
 
