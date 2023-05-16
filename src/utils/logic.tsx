@@ -1,9 +1,13 @@
-import { CheckIcon, Cross2Icon, MinusIcon } from '@radix-ui/react-icons';
+import {
+	CheckIcon,
+	Cross2Icon,
+	MinusIcon,
+	QuestionMarkIcon,
+} from '@radix-ui/react-icons';
 import {
 	AnswerHistory,
 	Confidence,
 	Correctness,
-	Item,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
@@ -25,22 +29,6 @@ export const findDateData = () => {
 
 	const dateString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}${offsetString}`;
 	return dateString;
-};
-
-export const extractUUIDs = (data: Item[] | null): string[] => {
-	if (!data) {
-		return [];
-	}
-
-	return data.map((item) => {
-		const regex = /questions\/(.+?)\//;
-		const match = item.publishedQuestionUri.match(regex);
-		if (match) {
-			return match[1];
-		} else {
-			return '';
-		}
-	});
 };
 
 export const getIcons = (answerHistory: AnswerHistory[]) => {
@@ -83,9 +71,19 @@ export const getIcons = (answerHistory: AnswerHistory[]) => {
 					}
 					break;
 				case Confidence.NotSure:
-					final.push(
-						<CustomCircle color="#FDF8EC" icon={MinusIcon} index={4} />,
-					);
+					if (answer.correctness === Correctness.NoAnswerSelected) {
+						final.push(
+							<CustomCircle
+								color="#7F8285"
+								icon={QuestionMarkIcon}
+								index={4}
+							/>,
+						);
+					} else {
+						final.push(
+							<CustomCircle color="#FDF8EC" icon={MinusIcon} index={5} />,
+						);
+					}
 					break;
 			}
 		}
