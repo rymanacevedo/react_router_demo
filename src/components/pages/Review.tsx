@@ -130,12 +130,14 @@ const Review = () => {
 
 	return (
 		<Container
+			style={{ maxWidth: '1464px' }}
 			id={'review'}
 			margin="0"
 			padding="0"
 			maxWidth={'100vw'}
 			overflowY={'auto'}
-			overflowX={'hidden'}>
+			overflowX={'hidden'}
+			mx="auto">
 			<Stack
 				w="100%"
 				p="12px"
@@ -177,8 +179,8 @@ const Review = () => {
 							{questionData.introductionRc && (
 								<Box
 									bg="ampNeutral.100"
-									minWidth={'500px'}
-									minHeight={'150px'}
+									minWidth={'400px'}
+									minHeight={'263px'}
 									borderRadius={12}
 									p="12px">
 									<h3>{i18n('moduleResourses')}</h3>
