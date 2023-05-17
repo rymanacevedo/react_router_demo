@@ -65,9 +65,8 @@ export default function AnswerArea(props: {
 			<PopoverAnchor>
 				<Box
 					style={{ marginTop: props.smallerThan1000 ? '10px' : '0px' }}
-					alignItems="stretch"
-					flex={1}
 					backgroundColor="white"
+					w={{ base: '100%', md: '50%' }}
 					boxShadow="md"
 					display="flex"
 					flexDirection="column"
