@@ -5,7 +5,7 @@ import { User } from '../services/user';
 type AuthType = {
 	auth: {
 		user: User | null;
-		state: any;
+		state: object | null;
 	};
 	setAuth: (auth: any) => void;
 };
