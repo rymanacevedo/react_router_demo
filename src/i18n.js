@@ -203,6 +203,8 @@ const resources = {
          step: 'Step',
          of6: 'of 6',
          nextBtn: 'Next',
+         needHelp: 'Need help?',
+         viewTour: 'View the quick start tour',
          //////////////////////////////////////////////
          //   Review.tsx
          //////////////////////////////////////////////         
@@ -211,6 +213,14 @@ const resources = {
          letsBegin: 'Let\'s begin',
          returnToReview: 'Return to review',
          moduleResourses: 'Module resources',
+         expandAll: 'Expand all',
+         collapseAll: 'Collapse all',
+         //////////////////////////////////////////////
+         //   ReviewQuestion.tsx
+         //////////////////////////////////////////////
+         clickHereForImage: 'Click here for image',
+         correctAnswers: 'The Correct Answers',
+         attempts: 'Attempts'
       }
    },
    fr: {

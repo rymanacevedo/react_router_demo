@@ -12,15 +12,26 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
-import LoadingReview from '../ui/loading/LoadingReview';
-import ReviewQuestion from '../ui/Review/ReviewQuestion';
+import useAnswerHistoryService from '../../services/useAnswerHistoryService';
 import {
+	createReviewQuestionsArray,
+	sortReviewQuestions,
+} from '../../utils/logic';
+import LoadingReview from '../ui/loading/LoadingReview';
+import ReviewQuestions from '../ui/Review/ReviewQuestions';
+import {
+	ApiRes,
+	Item,
 	LearningUnitQuestion,
 	ModuleData,
 	ModuleDataLearningUnit,
 } from './AssignmentView/AssignmentTypes';
+import { useQuizContext } from '../../hooks/useQuizContext';
 
 const Review = () => {
+	const { message } = useQuizContext();
+	const { getAnswerHistory } = useAnswerHistoryService();
+	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
 	const [questionData, setQuestionData] = useState<ModuleData>({
 		accountUri: '',
 		children: null,
@@ -54,6 +65,26 @@ const Review = () => {
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
+	const [expandAll, setExpandAll] = useState(false);
+	const [index, setIndex] = useState<number[]>([]);
+	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
+
+	const handleExpandAll = () => {
+		if (index.length === allExpandedIndices.length) {
+			setIndex([]);
+		} else {
+			setIndex(allExpandedIndices);
+		}
+	};
+
+	const handleExpandAllChange = (expanded: boolean) => {
+		if (expanded) {
+			setIndex(allExpandedIndices);
+		} else {
+			setIndex([]);
+		}
+		setExpandAll(expanded);
+	};
 
 	const populateQuestions = (obj: ModuleData) => {
 		const questions: LearningUnitQuestion[] = [];
@@ -73,6 +104,12 @@ const Review = () => {
 	};
 
 	useEffect(() => {
+		const fetchAnswerHistory = async () => {
+			let response: ApiRes = await getAnswerHistory(assignmentKey);
+			if (response) {
+				setAnswerHistory(response.items);
+			}
+		};
 		const fetchData = async () => {
 			let response = await fetchModuleQuestions(assignmentKey);
 			if (response) {
@@ -82,6 +119,7 @@ const Review = () => {
 		};
 		if (assignmentKey) {
 			fetchData();
+			fetchAnswerHistory();
 		}
 	}, [assignmentKey]);
 
@@ -95,14 +133,23 @@ const Review = () => {
 		});
 	};
 
+	useEffect(() => {
+		const isAllExpanded = index.length === allExpandedIndices.length;
+		if (isAllExpanded) {
+			setExpandAll(false);
+		}
+	}, [index, allExpandedIndices]);
+
 	return (
 		<Container
+			style={{ maxWidth: '1464px' }}
 			id={'review'}
 			margin="0"
 			padding="0"
 			maxWidth={'100vw'}
 			overflowY={'auto'}
-			overflowX={'hidden'}>
+			overflowX={'hidden'}
+			mx="auto">
 			<Stack
 				w="100%"
 				p="12px"
@@ -123,40 +170,61 @@ const Review = () => {
 						<Heading as="h1">{questionData.name}</Heading>
 						<Text
 							marginTop={34}
-							marginBottom={10}
+							marginBottom={'12px'}
 							fontSize={28}
-							color={'#7E8A9B'}>
+							color={'#7E8A9B'}
+							position="relative">
 							{questionData.learningUnits.length} {i18n('questions')}
+							<Text
+								onClick={handleExpandAll}
+								color={'#257CB5'}
+								fontWeight={600}
+								fontSize={'16px'}
+								position="absolute"
+								right="385px"
+								top="50%"
+								variant="link"
+								_hover={{
+									cursor: 'pointer',
+								}}
+								transform="translateY(-50%)">
+								{index.length === allExpandedIndices.length
+									? i18n('collapseAll')
+									: i18n('expandAll')}
+							</Text>
 						</Text>
-						<HStack
-							justifyContent={'space-between'}
-							marginTop={10}
-							alignItems={'flex-start'}>
+						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
 							<VStack>
-								{reviewQuestions.map((question) => (
-									<ReviewQuestion
-										text={question.questionRc}
-										key={question.uid}
-									/>
-								))}
+								<ReviewQuestions
+									expandAll={expandAll}
+									reviewQuestions={sortReviewQuestions(
+										reviewQuestions,
+										message,
+									)}
+									answerHistory={answerHistory}
+									onExpandAllChange={handleExpandAllChange}
+									index={index}
+									setIndex={setIndex}
+								/>
 							</VStack>
-
-							<Box
-								bg="ampNeutral.100"
-								minWidth={'500px'}
-								minHeight={'150px'}
-								borderRadius={12}
-								p="12px">
-								<h3>{i18n('moduleResourses')}</h3>
-								{questionData.introductionRc && (
+							{questionData.introductionRc && (
+								<Box
+									style={{ marginTop: '10px' }}
+									id={'moduleBox'}
+									bg="ampNeutral.100"
+									minWidth={'400px'}
+									minHeight={'263px'}
+									borderRadius={12}
+									p="12px">
+									<h3>{i18n('moduleResourses')}</h3>
 									<Button
 										variant={'ampOutline'}
 										marginTop={'12px'}
 										onClick={handleViewModuleIntro}>
 										{i18n('viewModuleIntro')}
 									</Button>
-								)}
-							</Box>
+								</Box>
+							)}
 						</HStack>
 					</Box>
 				) : (
