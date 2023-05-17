@@ -1,24 +1,31 @@
 import { redirect } from 'react-router-dom';
-import { User } from '../services/user';
-import { Dispatch, SetStateAction } from 'react';
+import { Suspense } from 'react';
+import { getUser, removeUser } from '../utils/user';
 
-export const logoutAction =
-	(user: User, setUser: Dispatch<SetStateAction<null>>) => async () => {
-		if (user) {
-			const accountDomain = user.accountDomain;
-			await setUser(null);
-			return redirect(`/login?abbrevName=${accountDomain}`);
-		}
+export const logoutAction = () => {
+	const user = getUser();
+	if (user) {
+		const accountDomain = user.accountDomain;
+		// TODO: error handling if logout fails
+		// await logoutSession(user.sessionKey);
+		removeUser();
+		return redirect(`/login?abbrevName=${accountDomain}`);
+	}
+	return redirect('/login');
+};
 
-		throw new Error('User is not logged in');
-	};
+export const logoutLoader = async () => {
+	const user = getUser();
+	if (user) {
+		const accountDomain = user.accountDomain;
+		// TODO: error handling if logout fails
+		// await logoutSession(user.sessionKey);
+		removeUser();
+		return redirect(`/login?abbrevName=${accountDomain}`);
+	}
+	return redirect('/login');
+};
 
-export const logoutLoader =
-	(user: User, setUser: Dispatch<SetStateAction<null>>) => async () => {
-		if (user) {
-			const accountDomain = user.accountDomain;
-			await setUser(null);
-			return redirect(`/login?abbrevName=${accountDomain}`);
-		}
-		return null;
-	};
+export default function Logout() {
+	return <Suspense fallback={<h1>Logging out...</h1>} />;
+}

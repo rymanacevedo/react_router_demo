@@ -3,60 +3,65 @@ import { useTranslation } from 'react-i18next';
 
 import {
 	AlertDialog,
-	AlertDialogOverlay,
-	AlertDialogContent,
-	AlertDialogHeader,
 	AlertDialogBody,
+	AlertDialogContent,
 	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogOverlay,
 	Button,
 	HStack,
 } from '@chakra-ui/react';
 
-type SessionDialogComponentType = {
+type Props = {
 	isOpen: boolean;
-	handleStaySignedIn: () => void;
-	onClose: () => void;
+	expiration: number;
+	fetcher: any;
 };
-
-const SessionDialogComponent = ({
-	isOpen,
-	handleStaySignedIn,
-	onClose,
-}: SessionDialogComponentType) => {
+const SessionDialogComponent = ({ isOpen, expiration, fetcher }: Props) => {
 	const { t: i18n } = useTranslation();
 	const cancelRef = useRef<HTMLButtonElement>(null);
 
+	const handleStayLoggedIn = () => {
+		fetcher.submit(null, {
+			method: 'post',
+			action: `/keep-alive?checkExpiration=${expiration}`,
+		});
+	};
+	const handleLogout = () => {
+		fetcher.load('/logout');
+	};
+
 	return (
-		<>
-			<AlertDialog
-				onClose={onClose}
-				leastDestructiveRef={cancelRef}
-				isOpen={isOpen}
-				isCentered
-				closeOnEsc={false}
-				closeOnOverlayClick={false}>
-				<AlertDialogOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto">
-					<AlertDialogContent>
-						<AlertDialogHeader fontSize="lg" fontWeight="bold">
-							{i18n('sessionExpiring')}
-						</AlertDialogHeader>
+		<AlertDialog
+			onClose={handleStayLoggedIn}
+			leastDestructiveRef={cancelRef}
+			isOpen={isOpen}
+			isCentered
+			closeOnEsc={false}
+			closeOnOverlayClick={false}>
+			<AlertDialogOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto">
+				<AlertDialogContent>
+					<AlertDialogHeader fontSize="lg" fontWeight="bold">
+						{i18n('sessionExpiring')}
+					</AlertDialogHeader>
 
-						<AlertDialogBody>{i18n('staySignedInQuestion')}</AlertDialogBody>
+					<AlertDialogBody>{i18n('staySignedInQuestion')}</AlertDialogBody>
 
-						<AlertDialogFooter justifyContent="flex-start">
-							<HStack>
-								<Button onClick={handleStaySignedIn}>
+					<AlertDialogFooter justifyContent="flex-start">
+						<HStack>
+							<fetcher.Form method="post">
+								<Button ref={cancelRef} onClick={handleStayLoggedIn}>
 									{i18n('staySignedInButton')}
 								</Button>
-								<Button variant="ampOutline" onClick={onClose} ref={cancelRef}>
+								<Button variant="ampOutline" onClick={handleLogout}>
 									{i18n('logOutButton')}
 								</Button>
-							</HStack>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialogOverlay>
-			</AlertDialog>
-		</>
+							</fetcher.Form>
+						</HStack>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialogOverlay>
+		</AlertDialog>
 	);
 };
 

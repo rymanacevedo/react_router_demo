@@ -3,7 +3,7 @@ import { API } from '../lib/environment';
 import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
-import { unauthorized } from './utils';
+import { authenticatedFetch, unauthorized } from './utils';
 
 const initialUserDataSchema = z.object({
 	sessionKey: z.string(),
@@ -255,6 +255,38 @@ export const getLoginInfo = async (fields: any, cookie: any = null) => {
 				fieldErrors: {},
 			},
 		});
+	}
+};
+
+export const getSession = async (sessionKey: string) => {
+	const url = `${API}/v2/session/keep-alive`;
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {
+			Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
+		},
+	});
+	return { response };
+};
+
+export const getSessionExpiration = async (sessionKey: string) => {
+	const url = `${API}/v2/session/expiration`;
+	return authenticatedFetch<any>(url, sessionKey);
+};
+
+export const logoutSession = async (sessionKey: string) => {
+	const url = `${API}/v2/session/logout`;
+	try {
+		const response = await fetch(url, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
+				'Content-Type': 'application/json',
+			},
+		});
+		return await response.json();
+	} catch (e: any) {
+		throw new Error(`logoutSession call failed: ${e.message}`);
 	}
 };
 

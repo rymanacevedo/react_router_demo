@@ -6,7 +6,8 @@ import { ampTheme } from './css/theme';
 import './css/index.css';
 import './i18n';
 import Fonts from './components/ui/Fonts';
-import { CustomAppProvider } from './hooks/useCustomAppProvider';
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router';
 
 // Init KF.state
 setupKFState();
@@ -15,6 +16,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<ChakraProvider theme={ampTheme}>
 		<Fonts />
-		<CustomAppProvider />
+		<RouterProvider router={router} />
 	</ChakraProvider>,
 );

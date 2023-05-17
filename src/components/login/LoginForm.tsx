@@ -25,7 +25,7 @@ import { z } from 'zod';
 import { AuthLayoutContext } from './AuthLayout';
 import AlertMessage from '../ui/AlertMessage';
 import { User } from '../../services/user';
-import { Dispatch, SetStateAction } from 'react';
+import { getUser, setUser } from '../../utils/user';
 
 type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
 	formErrors: U[];
@@ -50,54 +50,51 @@ export type ActionData<T> = {
 	errors?: T extends LoginFields ? LoginFieldsErrors : any;
 };
 
-export const loginAction =
-	(setUser: Dispatch<SetStateAction<User>>) =>
-	async ({ request }: ActionFunctionArgs) => {
-		const clonedData = request.clone();
-		// const url = new URL(request.url);
-		// const abbrevName = url.searchParams.get('abbrevName');
-		const formData = await clonedData.formData();
-		// const cookieHeader = request.headers.get('Cookie');
-		// const cookie = await hasUserCheckedMfa.parse(cookieHeader);
-		const fields = Object.fromEntries(
-			formData.entries(),
-		) as unknown as LoginFields;
+export const loginAction = async ({ request }: ActionFunctionArgs) => {
+	const clonedData = request.clone();
+	// const url = new URL(request.url);
+	// const abbrevName = url.searchParams.get('abbrevName');
+	const formData = await clonedData.formData();
+	// const cookieHeader = request.headers.get('Cookie');
+	// const cookie = await hasUserCheckedMfa.parse(cookieHeader);
+	const fields = Object.fromEntries(
+		formData.entries(),
+	) as unknown as LoginFields;
 
-		const info = await getLoginInfo(fields, null);
-		if (isUserInfo(info)) {
-			// 	set the user object in the session
-			let user: User | null;
-			user = {
-				firstName: info.completeUserDataSchema.firstName,
-				lastName: info.completeUserDataSchema.lastName,
-				roles: info.userRolesSchema,
-				sessionKey: info.initialUserDataSchema.sessionKey,
-				userKey: info.completeUserDataSchema.key,
-				accountDomain: info.userAccountSchema.subdomain,
-				deviceUid: info.initialUserDataSchema.deviceUid,
-			};
-			//TODO: await the setUser if successful
-			setUser(user);
-			return redirect('/_auth/authenticate');
-		}
+	const info = await getLoginInfo(fields, null);
+	if (isUserInfo(info)) {
+		// 	set the user object in the session
+		let user: User | null;
+		user = {
+			firstName: info.completeUserDataSchema.firstName,
+			lastName: info.completeUserDataSchema.lastName,
+			roles: info.userRolesSchema,
+			sessionKey: info.initialUserDataSchema.sessionKey,
+			userKey: info.completeUserDataSchema.key,
+			accountDomain: info.userAccountSchema.subdomain,
+			deviceUid: info.initialUserDataSchema.deviceUid,
+		};
+		setUser(user);
+		return redirect('/authenticate');
+	}
 
-		return info;
-	};
+	return info;
+};
+
+export const loginLoader = () => {
+	const user = getUser();
+	if (user) {
+		return redirect('/authenticate');
+	}
+	return null;
+};
 
 function LoginForm() {
 	const context = useOutletContext<AuthLayoutContext>();
-	// const navigate = useNavigate();
 	const data = useActionData() as any;
 	const [searchParams] = useSearchParams();
 	const redirectTo = searchParams.get('redirectTo') || '/';
 	const { t: i18n } = useTranslation();
-
-	// useEffect(() => {
-	// 	if (data) {
-	// 		navigate('_auth/authenticate');
-	// 	}
-	// }, [data]);
-
 	return (
 		<>
 			<Form method="post">
