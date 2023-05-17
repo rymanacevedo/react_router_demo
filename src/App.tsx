@@ -1,3 +1,4 @@
+import './css/App.css';
 import { z } from 'zod';
 import { UserSchema } from './services/user';
 import { generateTabs, TabsSchema } from './services/roles';
