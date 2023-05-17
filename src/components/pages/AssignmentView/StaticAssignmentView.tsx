@@ -1,6 +1,5 @@
 //@ts-nocheck
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
 	Box,
 	Container,
@@ -16,8 +15,6 @@ import {
 	PopoverAnchor,
 	Button,
 	Text,
-	ModalOverlay,
-	Modal,
 	Heading,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
@@ -40,11 +37,7 @@ import {
 	currentRoundAnswerOverlayDataMock,
 } from './mockAssignmentData';
 
-const OverlayOne = ({ tourStep }: number) => (
-	<Modal isOpen={tourStep >= 2}>
-		<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
-	</Modal>
-);
+import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 
 const StaticAssignmentView = ({
 	tourStep,
@@ -53,10 +46,11 @@ const StaticAssignmentView = ({
 	setAnsIndex,
 	barIndex,
 	setBarIndex,
+	nav,
 }) => {
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
 	const [questionData] = useState(questionDataMock);
 	const [menuIndex, setMenuIndex] = useState(0);
@@ -74,7 +68,6 @@ const StaticAssignmentView = ({
 
 	const answerRef = useRef();
 	const barRef = useRef();
-	const nav = useNavigate();
 
 	const barPopoverContent = {
 		3: {
@@ -99,7 +92,7 @@ const StaticAssignmentView = ({
 
 	useEffect(() => {
 		if (tourStep === 6) {
-			setIsMenuOpen(true);
+			handleMenuOpen();
 			setBarIndex(0);
 			setMenuIndex(1500);
 		}
@@ -118,6 +111,7 @@ const StaticAssignmentView = ({
 					<Popover
 						isOpen={tourStep >= 3 && tourStep < 6}
 						placement={barPopoverContent[tourStep]?.placement || 'bottom'}
+						isLazy
 						initialFocusRef={barRef.current}
 						arrowSize={20}
 						gutter={20}>
@@ -132,8 +126,6 @@ const StaticAssignmentView = ({
 									<TestProgressBarMenu
 										id={'bar'}
 										questionData={questionData}
-										isMenuOpen={isMenuOpen}
-										setIsMenuOpen={setIsMenuOpen}
 										currentRoundQuestionListData={currentRoundQuestionListData}
 										currentQuestion={questionInFocusMock}
 										currentRoundAnswerOverLayData={
@@ -146,7 +138,10 @@ const StaticAssignmentView = ({
 							</PopoverAnchor>
 						</PopoverTrigger>
 						<Box style={{ position: 'relative', zIndex: barIndex }}>
-							<PopoverContent p="24px" w="560px" h="auto">
+							<PopoverContent
+								p="24px"
+								w={isSmallerThan1000 ? '100vw' : '560px'}
+								h="auto">
 								<Box
 									position="fixed"
 									top="2px"
@@ -213,7 +208,8 @@ const StaticAssignmentView = ({
 							</Box>
 							<Popover
 								isOpen={tourStep === 2}
-								placement="left"
+								placement={isSmallerThan1000 ? 'top' : 'left'}
+								isLazy
 								initialFocusRef={answerRef.current}
 								gutter="40"
 								arrowSize={20}>
@@ -223,7 +219,8 @@ const StaticAssignmentView = ({
 											style={{
 												zIndex: ansIndex,
 												pointerEvents: 'none',
-												maxHeight: '755px',
+												height: '745px',
+												display: 'flex',
 											}}>
 											<AnswerArea
 												id="answerArea"
@@ -245,7 +242,10 @@ const StaticAssignmentView = ({
 										position: 'relative',
 										zIndex: tourStep === 2 ? ansIndex : 'unset',
 									}}>
-									<PopoverContent p="24px" w="560px" h="auto">
+									<PopoverContent
+										p="24px"
+										w={isSmallerThan1000 ? '100vw' : '560px'}
+										h="auto">
 										<PopoverArrow />
 										<PopoverCloseButton
 											p="24px"
@@ -290,7 +290,8 @@ const StaticAssignmentView = ({
 						</HStack>
 						<Popover
 							isOpen={tourStep === 6}
-							placement="left-start"
+							placement={isSmallerThan1000 ? 'top' : 'left-start'}
+							isLazy
 							gutter="40"
 							arrowSize={20}>
 							<PopoverTrigger>
@@ -314,7 +315,10 @@ const StaticAssignmentView = ({
 								</PopoverAnchor>
 							</PopoverTrigger>
 							<Box style={{ position: 'relative', zIndex: menuIndex }}>
-								<PopoverContent p="24px" w="560px" h="auto">
+								<PopoverContent
+									p="24px"
+									w={isSmallerThan1000 ? '100vw' : '560px'}
+									h="auto">
 									<Box position="fixed" top="40px" left="555px">
 										<PopoverArrow position="fixed" top="0" left="0" />
 									</Box>
@@ -347,6 +351,7 @@ const StaticAssignmentView = ({
 
 											<Button
 												onClick={() => {
+													handleMenuOpen();
 													nav(-1);
 												}}>
 												{i18n('finishTourBtn')}
@@ -359,7 +364,6 @@ const StaticAssignmentView = ({
 					</HStack>
 				</Container>
 			</main>
-			<OverlayOne tourStep={tourStep} />
 		</>
 	);
 };

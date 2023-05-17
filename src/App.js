@@ -76,10 +76,9 @@ function App() {
 						element={<ModuleIntroView outro />}
 					/>
 
-					<Route
-						path="learning/assignment/:assignmentKey/tour"
-						element={<TourView />}
-					/>
+					{['learning/assignment/:assignmentKey/tour', 'tour'].map((path) => (
+						<Route path={path} element={<TourView />} key={path} />
+					))}
 
 					<Route
 						path="switch-account"
