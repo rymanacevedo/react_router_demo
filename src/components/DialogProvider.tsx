@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
 import DataServiceExceptionComponent from './ui/DataServiceExceptionComponent';
+import { useNavigate } from 'react-router-dom';
 
 interface DialogProviderType {
 	showAlert: boolean;
@@ -22,15 +22,12 @@ const DialogContext = createContext<DialogProviderType | null>({
 });
 
 const DialogProvider = ({ children }: any) => {
-	const { user, logout }: AuthType | any = useAuth();
-
 	const [showAlert, setShowAlert] = useState(false);
+	const navigate = useNavigate();
 
 	const handleCloseAlert = () => {
 		setShowAlert(false);
-		if (user) {
-			logout();
-		}
+		navigate('/logout');
 	};
 
 	return (
@@ -42,7 +39,7 @@ const DialogProvider = ({ children }: any) => {
 			{children}
 			<DataServiceExceptionComponent
 				isOpen={showAlert}
-				onClose={() => handleCloseAlert()}
+				onClose={handleCloseAlert}
 			/>
 		</DialogContext.Provider>
 	);

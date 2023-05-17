@@ -91,7 +91,7 @@ export const loginLoader = () => {
 
 function LoginForm() {
 	const context = useOutletContext<AuthLayoutContext>();
-	const data = useActionData() as any;
+	const data = useActionData() as ActionData<LoginFields>;
 	const [searchParams] = useSearchParams();
 	const redirectTo = searchParams.get('redirectTo') || '/';
 	const { t: i18n } = useTranslation();
