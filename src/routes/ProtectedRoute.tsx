@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import Footer from '../components/Footer';
 import HeaderNav from '../components/HeaderNav';
-import { AuthenticationData } from './Root';
+import { AuthenticationData } from '../App';
 import { requireUser } from '../utils/user';
 import { getSessionExpiration } from '../services/auth.reactrouter';
 import { useEffect, useRef } from 'react';

@@ -25,7 +25,7 @@ export const BootstrapDataSchema = z.object({
 });
 
 export type AuthenticationData = z.infer<typeof AuthenticationDataSchema>;
-
+export type BootstrapData = z.infer<typeof BootstrapDataSchema>;
 export const appLoader = () => {
 	const user = getUser();
 	let data: AuthenticationData | null = null;

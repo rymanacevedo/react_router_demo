@@ -14,7 +14,7 @@ import { Box, Container, Flex, VStack } from '@chakra-ui/react';
 import CookieConsent from 'react-cookie-consent';
 import { z } from 'zod';
 import { bootstrap } from '../../services/auth.reactrouter';
-import { BootstrapData } from '../../routes/Root';
+import { BootstrapData } from '../../App';
 
 const AuthLayoutContextSchema = z.object({
 	accountKey: z.string().optional(),
