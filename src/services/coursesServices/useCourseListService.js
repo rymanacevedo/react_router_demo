@@ -3,6 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
 import { useDialogContext } from '../../components/DialogProvider';
+
 const useCourseListService = () => {
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -14,7 +15,7 @@ const useCourseListService = () => {
 	user.roles.forEach((role) => {
 		courseRole = role.name;
 		if (role.name === 'Learner') {
-			subaccount = role.account;
+			subaccount = role.accountKey;
 		}
 	});
 
