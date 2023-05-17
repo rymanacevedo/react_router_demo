@@ -1,29 +1,22 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
-import { getUser } from '../utils/user';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { useLocalStorage } from './useLocalStorage';
 import { User } from '../services/user';
 
-type AuthType = {
-	auth: {
-		user: User | null;
-		state: object | null;
-	};
-	setAuth: (auth: any) => void;
+// TODO: remove this file and use user.ts instead
+
+type AuthContextType = {
+	user: User;
 };
 
-const AuthContext = createContext<AuthType | null>(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-	const [auth, setAuth] = useState({
-		user: getUser(),
-		state: null,
-	});
-
+	const [user] = useLocalStorage('user', null);
 	const value = useMemo(
 		() => ({
-			auth,
-			setAuth,
+			user,
 		}),
-		[auth, setAuth],
+		[user],
 	);
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

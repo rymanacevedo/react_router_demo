@@ -37,71 +37,69 @@ const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
 
 	const Navigation = () => {
 		return (
-			<>
-				<ButtonGroup variant="link" boxSizing="border-box">
-					{tabs.length > 1
-						? tabs.map((tab) => {
-								return (
-									<ReactRouterNavLink
-										style={({ isActive }) => {
-											return {
-												borderBottom: isActive ? '5px solid white' : '',
-												color: 'white',
-												margin: '0px 8px',
-												height: '80px',
-												padding: '25px',
-												boxSizing: 'border-box',
-											};
-										}}
-										key={tab.role}
-										to={tab.navlink}
-										id={tab.id}>
-										<Text fontWeight="bold" textAlign={'center'}>
-											{tab.name}
-										</Text>
-									</ReactRouterNavLink>
-								);
-						  })
-						: null}
-					<Menu isLazy>
-						<MenuButton
-							as={isLargerThan992 ? Button : IconButton}
-							icon={isLargerThan992 ? null : <HamburgerMenuIcon />}
-							_hover={{}}
-							color={'ampWhite'}
-							padding="25px"
-							height="75px"
-							id="header-composite-profile-button"
-							rightIcon={isLargerThan992 ? <ChevronDownIcon /> : null}>
-							<Text
-								display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
-								textDecoration="none"
-								fontWeight="bold">
-								{`${user.firstName} ${user.lastName}`}
-							</Text>
-						</MenuButton>
+			<ButtonGroup variant="link" boxSizing="border-box">
+				{tabs.length > 1
+					? tabs.map((tab) => {
+							return (
+								<ReactRouterNavLink
+									style={({ isActive }) => {
+										return {
+											borderBottom: isActive ? '5px solid white' : '',
+											color: 'white',
+											margin: '0px 8px',
+											height: '80px',
+											padding: '25px',
+											boxSizing: 'border-box',
+										};
+									}}
+									key={tab.role}
+									to={tab.navlink}
+									id={tab.id}>
+									<Text fontWeight="bold" textAlign={'center'}>
+										{tab.name}
+									</Text>
+								</ReactRouterNavLink>
+							);
+					  })
+					: null}
+				<Menu isLazy>
+					<MenuButton
+						as={isLargerThan992 ? Button : IconButton}
+						icon={isLargerThan992 ? null : <HamburgerMenuIcon />}
+						_hover={{}}
+						color={'ampWhite'}
+						padding="25px"
+						height="75px"
+						id="header-composite-profile-button"
+						rightIcon={isLargerThan992 ? <ChevronDownIcon /> : null}>
+						<Text
+							display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
+							textDecoration="none"
+							fontWeight="bold">
+							{`${user.firstName} ${user.lastName}`}
+						</Text>
+					</MenuButton>
 
-						<MenuList zIndex={'10'} right={'0'}>
-							{inAssignment > -1 && !isLargerThan992 ? (
-								<MenuItem width={'100%'}>
-									<ReactRouterNavLink to="/learning">
-										<HStack>
-											{/*<ArrowLeftIcon />*/}
-											<Text fontWeight="bold">Course Home</Text>
-										</HStack>
-									</ReactRouterNavLink>
-								</MenuItem>
-							) : null}
-							<MenuItem
-								width={'100%'}
-								id="header-composite-logout-button"
-								onClick={handleLogout}>
-								<Text fontWeight="bold">Logout</Text>
+					<MenuList zIndex={'10'} right={'0'}>
+						{inAssignment > -1 && !isLargerThan992 ? (
+							<MenuItem width={'100%'}>
+								<ReactRouterNavLink to="/learning">
+									<HStack>
+										{/*<ArrowLeftIcon />*/}
+										<Text fontWeight="bold">Course Home</Text>
+									</HStack>
+								</ReactRouterNavLink>
 							</MenuItem>
-						</MenuList>
-					</Menu>
-				</ButtonGroup>
-			</>
+						) : null}
+						<MenuItem
+							width={'100%'}
+							id="header-composite-logout-button"
+							onClick={handleLogout}>
+							<Text fontWeight="bold">Logout</Text>
+						</MenuItem>
+					</MenuList>
+				</Menu>
+			</ButtonGroup>
 		);
 	};
 

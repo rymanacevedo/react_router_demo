@@ -15,7 +15,6 @@ import { requireUser } from '../utils/user';
 import { getSessionExpiration } from '../services/auth.reactrouter';
 import { useEffect, useRef } from 'react';
 import SessionDialogComponent from '../components/ui/SessionDialogComponent';
-import DataServiceExceptionComponent from '../components/ui/DataServiceExceptionComponent';
 
 const FIVE_MINUTES = 300000;
 export const protectedRouteLoader = async () => {
@@ -84,7 +83,3 @@ const ProtectedRoute = () => {
 	);
 };
 export default ProtectedRoute;
-
-export const ErrorBoundary = () => {
-	return <DataServiceExceptionComponent isOpen={true} />;
-};

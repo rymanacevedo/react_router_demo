@@ -20,10 +20,7 @@ import Register from './components/self-registration/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
-import ProtectedRoute, {
-	ErrorBoundary,
-	protectedRouteLoader,
-} from './routes/ProtectedRoute';
+import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
 import LearningView from './components/pages/LearningView';
 import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
@@ -38,7 +35,6 @@ const routesJSX = (
 		<Route
 			loader={logoutLoader}
 			action={logoutAction}
-			shouldRevalidate={() => false}
 			id={'logout'}
 			path="/logout"
 			element={<Logout />}
@@ -66,7 +62,6 @@ const routesJSX = (
 
 		<Route
 			loader={protectedRouteLoader}
-			ErrorBoundary={ErrorBoundary}
 			element={
 				<AuthProvider>
 					<DialogProvider>

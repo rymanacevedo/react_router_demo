@@ -11,11 +11,12 @@ import {
 	Button,
 	HStack,
 } from '@chakra-ui/react';
+import { FetcherWithComponents } from 'react-router-dom';
 
 type Props = {
 	isOpen: boolean;
 	expiration: number;
-	fetcher: any;
+	fetcher: FetcherWithComponents<any>;
 };
 const SessionDialogComponent = ({ isOpen, expiration, fetcher }: Props) => {
 	const { t: i18n } = useTranslation();

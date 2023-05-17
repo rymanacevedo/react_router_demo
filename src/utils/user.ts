@@ -4,7 +4,6 @@ import { redirect } from 'react-router-dom';
 export function getUser(): User | null {
 	try {
 		const value = window.localStorage.getItem('user');
-		// TODO: add zod validation here
 		if (value) {
 			const user = JSON.parse(value);
 			UserSchema.parse(user); // this will throw if the user object does not match the schema
