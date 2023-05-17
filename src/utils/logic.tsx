@@ -8,6 +8,8 @@ import {
 	AnswerHistory,
 	Confidence,
 	Correctness,
+	LearningUnitQuestion,
+	QuizMessage,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
@@ -62,11 +64,23 @@ export const getIcons = (answerHistory: AnswerHistory[]) => {
 				case Confidence.OneAnswerPartSure:
 					if (answer.correctness === Correctness.Incorrect) {
 						final.push(
-							<CustomCircle color="#F8D7D3" icon={Cross2Icon} index={2} />,
+							<CustomCircle
+								color="#F8D7D3"
+								icon={Cross2Icon}
+								index={2}
+								iconColor={'#912E21'}
+								borderColor={'#912E21'}
+							/>,
 						);
 					} else {
 						final.push(
-							<CustomCircle color="#DAE6DA" icon={CheckIcon} index={3} />,
+							<CustomCircle
+								color="#DAE6DA"
+								icon={CheckIcon}
+								index={3}
+								iconColor={'#468446'}
+								borderColor={'#468446'}
+							/>,
 						);
 					}
 					break;
@@ -107,4 +121,35 @@ export const extractSrc = (questionRc: string): string | undefined => {
 		return src;
 	}
 	return undefined;
+};
+
+export const createReviewQuestionsArray = (count: number) => {
+	return Array.from({ length: count }, (_, index) => index);
+};
+
+export const sortReviewQuestions = (
+	reviewQuestions: LearningUnitQuestion[],
+	quizMessage: QuizMessage,
+) => {
+	const npaCounts = new Map();
+	quizMessage.TWO_NPA_ON_LU.forEach(({ questionId, npaCount }) => {
+		npaCounts.set(questionId, npaCount);
+	});
+
+	reviewQuestions.sort((a, b) => {
+		const npaCountA = npaCounts.get(a.id) || 0;
+		const npaCountB = npaCounts.get(b.id) || 0;
+
+		if (npaCountA !== npaCountB) {
+			return npaCountB - npaCountA; // Sort by npaCount in descending order
+		}
+
+		// If npaCounts are the same, sort by questionRc in ascending order
+		const questionRcA = a.questionRc.toLowerCase();
+		const questionRcB = b.questionRc.toLowerCase();
+
+		return questionRcA.localeCompare(questionRcB);
+	});
+
+	return reviewQuestions;
 };

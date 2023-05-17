@@ -13,18 +13,23 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import useAnswerHistoryService from '../../services/useAnswerHistoryService';
+import {
+	createReviewQuestionsArray,
+	sortReviewQuestions,
+} from '../../utils/logic';
 import LoadingReview from '../ui/loading/LoadingReview';
-import ReviewQuestion from '../ui/Review/ReviewQuestion';
+import ReviewQuestions from '../ui/Review/ReviewQuestions';
 import {
 	ApiRes,
 	Item,
 	LearningUnitQuestion,
 	ModuleData,
 	ModuleDataLearningUnit,
-	TransformedQuestion,
 } from './AssignmentView/AssignmentTypes';
+import { useQuizContext } from '../../hooks/useQuizContext';
 
 const Review = () => {
+	const { message } = useQuizContext();
 	const { getAnswerHistory } = useAnswerHistoryService();
 	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
 	const [questionData, setQuestionData] = useState<ModuleData>({
@@ -60,6 +65,26 @@ const Review = () => {
 	const { assignmentKey } = useParams();
 	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
+	const [expandAll, setExpandAll] = useState(false);
+	const [index, setIndex] = useState<number[]>([]);
+	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
+
+	const handleExpandAll = () => {
+		if (index.length === allExpandedIndices.length) {
+			setIndex([]);
+		} else {
+			setIndex(allExpandedIndices);
+		}
+	};
+
+	const handleExpandAllChange = (expanded: boolean) => {
+		if (expanded) {
+			setIndex(allExpandedIndices);
+		} else {
+			setIndex([]);
+		}
+		setExpandAll(expanded);
+	};
 
 	const populateQuestions = (obj: ModuleData) => {
 		const questions: LearningUnitQuestion[] = [];
@@ -108,25 +133,12 @@ const Review = () => {
 		});
 	};
 
-	const transformQuestion = (
-		question: LearningUnitQuestion,
-		answerHistoryArray: Item[] | null,
-	): TransformedQuestion => {
-		const uuid = question.uid;
-		const target = answerHistoryArray?.find((item) =>
-			item.publishedQuestionUri.includes(uuid),
-		);
-		if (target) {
-			return {
-				...question,
-				answerHistory: target.answerHistory,
-			};
+	useEffect(() => {
+		const isAllExpanded = index.length === allExpandedIndices.length;
+		if (isAllExpanded) {
+			setExpandAll(false);
 		}
-		return {
-			...question,
-			answerHistory: [],
-		};
-	};
+	}, [index, allExpandedIndices]);
 
 	return (
 		<Container
@@ -163,21 +175,42 @@ const Review = () => {
 							color={'#7E8A9B'}
 							position="relative">
 							{questionData.learningUnits.length} {i18n('questions')}
+							<Text
+								onClick={handleExpandAll}
+								color={'#257CB5'}
+								fontWeight={600}
+								fontSize={'16px'}
+								position="absolute"
+								right="385px"
+								top="50%"
+								variant="link"
+								_hover={{
+									cursor: 'pointer',
+								}}
+								transform="translateY(-50%)">
+								{index.length === allExpandedIndices.length
+									? i18n('collapseAll')
+									: i18n('expandAll')}
+							</Text>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
 							<VStack>
-								{reviewQuestions.map((question) => {
-									const transformedQuestion = transformQuestion(
-										question,
-										answerHistory,
-									);
-									return (
-										<ReviewQuestion transformedQuestion={transformedQuestion} />
-									);
-								})}
+								<ReviewQuestions
+									expandAll={expandAll}
+									reviewQuestions={sortReviewQuestions(
+										reviewQuestions,
+										message,
+									)}
+									answerHistory={answerHistory}
+									onExpandAllChange={handleExpandAllChange}
+									index={index}
+									setIndex={setIndex}
+								/>
 							</VStack>
 							{questionData.introductionRc && (
 								<Box
+									style={{ marginTop: '10px' }}
+									id={'moduleBox'}
 									bg="ampNeutral.100"
 									minWidth={'400px'}
 									minHeight={'263px'}
