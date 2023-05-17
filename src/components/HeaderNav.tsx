@@ -123,7 +123,7 @@ const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
 						{(inAssignment > -1 || inReview > -1) && isLargerThan992 ? (
 							<CourseHome />
 						) : null}
-						<QuickStart justify="flex-end" />
+						<QuickStart />
 						<Navigation />
 					</Flex>
 				</Container>

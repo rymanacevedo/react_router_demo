@@ -1,4 +1,4 @@
-import { Flex, VStack, Link, Text } from '@chakra-ui/react';
+import { Flex, Link, Text, VStack } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,7 @@ const QuickStart = () => {
 	const { t: i18n } = useTranslation();
 
 	return (
-		<Flex ml="auto" minW="150">
+		<Flex justify="flex-end" ml="auto" minW="150">
 			<Link
 				as={ReactRouterLink}
 				to="tour"
