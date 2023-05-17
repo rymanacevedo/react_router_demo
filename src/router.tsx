@@ -112,10 +112,11 @@ const routesJSX = (
 				element={<ModuleIntroView />}
 			/>
 
-			<Route
-				path="learning/assignment/:assignmentKey/tour"
-				element={<TourView />}
-			/>
+			<>
+				{['learning/assignment/:assignmentKey/tour', 'tour'].map((path) => (
+					<Route key={path} path={path} element={<TourView />} />
+				))}
+			</>
 
 			<Route
 				path="switch-account"

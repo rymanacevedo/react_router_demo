@@ -10,7 +10,7 @@ import {
 	ButtonGroup,
 	Container,
 	Flex,
-    HStack,
+	HStack,
 	IconButton,
 	Image,
 	Menu,
