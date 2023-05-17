@@ -12,9 +12,12 @@ import LoginForm, {
 	loginAction,
 	loginLoader,
 } from './components/login/LoginForm';
+import MultiFactor, {
+	mfaAction,
+	mfaLoader,
+} from './components/login/MultiFactor';
 import ForgotPassword from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
-import MultiFactor from './components/login/MultiFactor';
 import SignUp from './components/login/SignUp';
 import Register from './components/self-registration/Register';
 import DialogProvider from './components/DialogProvider';
@@ -52,9 +55,14 @@ const routesJSX = (
 				action={loginAction}
 				element={<LoginForm />}
 			/>
+			<Route
+				loader={mfaLoader}
+				action={mfaAction}
+				path="mfa"
+				element={<MultiFactor />}
+			/>
 			<Route path="forgot-password" element={<ForgotPassword />} />
 			<Route path="forgot-username" element={<ForgotUsername />} />
-			<Route path="mfa" element={<MultiFactor />} />
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
 			<Route path="signup" element={<SignUp />} />
 			<Route path="register" element={<Register />} />

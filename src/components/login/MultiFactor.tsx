@@ -32,7 +32,7 @@ type LoaderData = {
 	account: string;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const mfaLoader: LoaderFunction = async ({ request }) => {
 	const user = getUser();
 	if (user) {
 		return redirect('/authenticate');

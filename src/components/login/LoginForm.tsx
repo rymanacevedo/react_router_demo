@@ -26,6 +26,8 @@ import { AuthLayoutContext } from './AuthLayout';
 import AlertMessage from '../ui/AlertMessage';
 import { User } from '../../services/user';
 import { getUser, setUser } from '../../utils/user';
+import { badRequest } from '../../services/utils';
+import { Cookies } from 'react-cookie-consent';
 
 type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
 	formErrors: U[];
@@ -52,16 +54,20 @@ export type ActionData<T> = {
 
 export const loginAction = async ({ request }: ActionFunctionArgs) => {
 	const clonedData = request.clone();
-	// const url = new URL(request.url);
-	// const abbrevName = url.searchParams.get('abbrevName');
 	const formData = await clonedData.formData();
-	// const cookieHeader = request.headers.get('Cookie');
-	// const cookie = await hasUserCheckedMfa.parse(cookieHeader);
+	const cookie = Cookies.get('device_uid');
 	const fields = Object.fromEntries(
 		formData.entries(),
 	) as unknown as LoginFields;
 
-	const info = await getLoginInfo(fields, null);
+	const result = LoginFieldsSchema.safeParse(fields);
+	if (!result.success) {
+		return badRequest({
+			fields,
+			errors: result.error.flatten(),
+		});
+	}
+	const info = await getLoginInfo(fields, cookie);
 	if (isUserInfo(info)) {
 		// 	set the user object in the session
 		let user: User | null;
