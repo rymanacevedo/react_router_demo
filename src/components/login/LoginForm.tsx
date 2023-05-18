@@ -8,17 +8,17 @@ import {
 	useSearchParams,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
-// import { Cookies } from 'react-cookie-consent';
 import {
 	Button,
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	Heading,
 	HStack,
 	Input,
 	Link,
 	Text,
+	VStack,
 } from '@chakra-ui/react';
 import { getLoginInfo, isUserInfo } from '../../services/auth.reactrouter';
 import { z } from 'zod';
@@ -111,7 +111,7 @@ export const loginLoader = () => {
 	return null;
 };
 
-function LoginForm() {
+export default function LoginForm() {
 	const context = useOutletContext<AuthLayoutContext>();
 	const data = useActionData() as ActionData<LoginFields>;
 	const [searchParams] = useSearchParams();
@@ -119,53 +119,62 @@ function LoginForm() {
 	const { t: i18n } = useTranslation();
 	return (
 		<>
+			<Heading as="h1" size="lg">
+				{i18n('welcomeMsg')}
+			</Heading>
 			<Form method="post">
-				<FormControl isInvalid={Boolean(data?.errors?.fieldErrors.username)}>
-					<FormLabel marginBottom={1}>
-						{i18n('username')}
-						<Text float="right" fontSize="12px">
-							{i18n('typicallyEmail')}
-						</Text>
-					</FormLabel>
-					<Input id="username" placeholder="name@email.com" name="username" />
-					<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
-				</FormControl>
-				<FormControl isInvalid={Boolean(data?.errors?.fieldErrors.password)}>
-					<FormLabel marginBottom={1}>
-						{i18n('password')}
-						<Text float="right" fontSize="12px">
-							{i18n('caseSensitive')}
-						</Text>
-					</FormLabel>
-					<Input
-						id="password"
-						type="password"
-						name="password"
-						autoComplete="current-password"
-					/>
-					<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-				</FormControl>
-				{/*hidden form control*/}
-				<FormControl hidden={true}>
-					<Input
-						readOnly={true}
-						id="account"
-						name="account"
-						value={context.accountKey}
-					/>
-				</FormControl>
-				<FormControl hidden={true}>
-					<Input
-						readOnly={true}
-						id="redirectTo"
-						name="redirectTo"
-						value={redirectTo}
-					/>
-				</FormControl>
+				<VStack spacing={5} w={{ base: '100%', md: '358px' }}>
+					<FormControl
+						isRequired
+						isInvalid={Boolean(data?.errors?.fieldErrors.username)}>
+						<FormLabel marginBottom={1}>
+							{i18n('username')}
+							<Text float="right" fontSize="12px">
+								{i18n('typicallyEmail')}
+							</Text>
+						</FormLabel>
+						<Input id="username" placeholder="name@email.com" name="username" />
+						<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
+					</FormControl>
+					<FormControl
+						isRequired
+						isInvalid={Boolean(data?.errors?.fieldErrors.password)}>
+						<FormLabel marginBottom={1}>
+							{i18n('password')}
+							<Text float="right" fontSize="12px">
+								{i18n('caseSensitive')}
+							</Text>
+						</FormLabel>
+						<Input
+							id="password"
+							type="password"
+							name="password"
+							autoComplete="current-password"
+						/>
+						<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+					</FormControl>
+					{/*hidden form control*/}
+					<FormControl hidden={true}>
+						<Input
+							readOnly={true}
+							id="account"
+							name="account"
+							value={context.accountKey}
+						/>
+					</FormControl>
+					<FormControl hidden={true}>
+						<Input
+							readOnly={true}
+							id="redirectTo"
+							name="redirectTo"
+							value={redirectTo}
+						/>
+					</FormControl>
 
-				<Button w="full" type="submit" name="Login">
-					{i18n('logIn')}
-				</Button>
+					<Button w="full" type="submit" name="Login">
+						{i18n('logIn')}
+					</Button>
+				</VStack>
 			</Form>
 
 			{data?.errors?.formErrors && (
@@ -192,5 +201,3 @@ function LoginForm() {
 		</>
 	);
 }
-
-export default LoginForm;
