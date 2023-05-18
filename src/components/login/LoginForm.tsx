@@ -36,13 +36,29 @@ type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
 	};
 };
 
-export const LoginFieldsSchema = z.object({
-	username: z.string().min(1),
-	password: z.string().min(1),
-	account: z.string(),
-	passcode: z.string().min(4).optional(),
-	remember: z.boolean().optional(),
-});
+export const LoginFieldsSchema = z
+	.object({
+		username: z.string().min(1),
+		password: z.string().min(1),
+		account: z.string(),
+		passcode: z.string().min(4).optional(),
+		remember: z.boolean().optional(),
+	})
+	.superRefine(({ username, password }, ctx) => {
+		if (username.length === 0) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Username is required',
+			});
+		}
+
+		if (password.length === 0) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				message: 'Password is required',
+			});
+		}
+	});
 
 export type LoginFields = z.infer<typeof LoginFieldsSchema>;
 type LoginFieldsErrors = InferSafeParseErrors<typeof LoginFieldsSchema>;
