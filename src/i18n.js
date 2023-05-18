@@ -219,7 +219,7 @@ const resources = {
          //   ReviewQuestion.tsx
          //////////////////////////////////////////////
          clickHereForImage: 'Click here for image',
-         correctAnswers: 'The Correct Answers',
+         correctAnswers: 'The Correct Answer(s)',
          attempts: 'Attempts'
       }
    },
