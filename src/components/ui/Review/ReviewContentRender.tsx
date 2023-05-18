@@ -19,6 +19,27 @@ const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 			const imgElement = imgElements[i];
 			imgElement.style.height = '50%';
 			imgElement.style.width = '50%';
+			let src = imgElement.getAttribute('src');
+
+			// For rendering in local
+			if (
+				src &&
+				window.location.href.includes('localhost:3000') &&
+				src.includes('amp_resource')
+			) {
+				src = `http://mybob.amplifire.me:8080/amp/${src}`;
+				imgElement.setAttribute('src', src);
+			}
+
+			// For rendering in lower environments
+			if (
+				src &&
+				!window.location.href.includes('localhost:3000') &&
+				src.includes('amp_resource')
+			) {
+				src = `${window.location.origin}/amp/${src}`;
+				imgElement.setAttribute('src', src);
+			}
 		}
 	}, [content]);
 

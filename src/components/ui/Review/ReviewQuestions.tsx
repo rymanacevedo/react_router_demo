@@ -6,6 +6,7 @@ import {
 	AccordionPanel,
 	Text,
 	AccordionIcon,
+	Stack,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -14,7 +15,7 @@ import {
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
+import { getIcons, truncateText } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
@@ -130,11 +131,11 @@ const ReviewQuestions = ({
 								</h2>
 								<AccordionPanel pb={4}>
 									{modifiedText === i18n('clickHereForImage') ? (
-										<img
-											src={extractSrc(transformedQuestion.questionRc)}
-											alt={transformedQuestion.questionRc}
-											style={{ width: '50%', height: '50%' }}
-										/>
+										<Stack spacing="20px" marginTop="34px">
+											<ReviewContentRender
+												content={transformedQuestion.questionRc}
+											/>
+										</Stack>
 									) : (
 										<RichContentComponent
 											content={modifiedText}
