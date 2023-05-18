@@ -30,6 +30,7 @@
     "fix": "eslint --fix --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
     "prepare": "cd .. && husky install main/.husky",
     "test": "vitest",
+    "e2e": "npx playwright test",
     "prestart": "rm -rf node_modules/.cache/"
   },
   "devDependencies": {
