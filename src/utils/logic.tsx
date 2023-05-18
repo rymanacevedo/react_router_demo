@@ -33,18 +33,83 @@ export const findDateData = () => {
 	return dateString;
 };
 
-export const getIcons = (answerHistory: AnswerHistory[]) => {
+export const getIcons = (
+	answerHistory: AnswerHistory[],
+	isExpanded: boolean,
+) => {
+	console.log(isExpanded);
+	// if isExpanded, I want to have all the icons in rows of 20.
 	const final: JSX.Element[] = [];
-	const numCircle = (
-		<NumberCircle number={(answerHistory.length - 6).toString()} />
-	);
 
-	if (answerHistory.length > 6) {
-		final.push(numCircle);
-	}
+	if (!isExpanded) {
+		const numCircle = (
+			<NumberCircle number={(answerHistory.length - 6).toString()} />
+		);
 
-	answerHistory.forEach((answer, index) => {
-		if (index < 6) {
+		if (answerHistory.length > 6) {
+			final.push(numCircle);
+		}
+		answerHistory.forEach((answer, index) => {
+			if (index < 6) {
+				switch (answer.confidence) {
+					case Confidence.Sure:
+						if (answer.correctness === Correctness.Correct) {
+							final.push(
+								<CustomCircle
+									color="ampSuccess.500"
+									icon={CheckIcon}
+									index={0}
+								/>,
+							);
+						} else {
+							final.push(
+								<CustomCircle color="#912E21" icon={Cross2Icon} index={1} />,
+							);
+						}
+						break;
+					case Confidence.OneAnswerPartSure:
+						if (answer.correctness === Correctness.Incorrect) {
+							final.push(
+								<CustomCircle
+									color="#F8D7D3"
+									icon={Cross2Icon}
+									index={2}
+									iconColor={'#912E21'}
+									borderColor={'#912E21'}
+								/>,
+							);
+						} else {
+							final.push(
+								<CustomCircle
+									color="#DAE6DA"
+									icon={CheckIcon}
+									index={3}
+									iconColor={'#468446'}
+									borderColor={'#468446'}
+								/>,
+							);
+						}
+						break;
+					case Confidence.NotSure:
+						if (answer.correctness === Correctness.NoAnswerSelected) {
+							final.push(
+								<CustomCircle
+									color="#7F8285"
+									icon={QuestionMarkIcon}
+									index={4}
+								/>,
+							);
+						} else {
+							final.push(
+								<CustomCircle color="#FDF8EC" icon={MinusIcon} index={5} />,
+							);
+						}
+						break;
+				}
+			}
+		});
+	} else {
+		answerHistory.forEach((answer) => {
 			switch (answer.confidence) {
 				case Confidence.Sure:
 					if (answer.correctness === Correctness.Correct) {
@@ -100,8 +165,8 @@ export const getIcons = (answerHistory: AnswerHistory[]) => {
 					}
 					break;
 			}
-		}
-	});
+		});
+	}
 
 	return final;
 };

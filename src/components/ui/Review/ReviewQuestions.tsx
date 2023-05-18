@@ -9,7 +9,7 @@ import {
 	Stack,
 } from '@chakra-ui/react';
 import {
-	AnswerHistory,
+	// AnswerHistory,
 	Item,
 	LearningUnitQuestion,
 	TransformedQuestion,
@@ -30,13 +30,23 @@ interface ReviewQuestionsProps {
 }
 
 interface IconsProps {
-	answerHistory: AnswerHistory[];
+	// answerHistory: AnswerHistory[];
+	isExpanded: boolean;
 }
 
-const Icons = ({ answerHistory }: IconsProps) => {
+const Icons = ({ isExpanded }: IconsProps) => {
+	console.log('isExpanded: ', isExpanded);
+	const item = {
+		roundNumber: 1,
+		confidence: 'Sure',
+		correctness: 'Correct',
+	};
+
+	const array = Array.from({ length: 21 }, () => item);
 	return (
-		<Box display="flex" marginLeft="auto" marginRight="27.5px">
-			{getIcons(answerHistory)}
+		<Box display="flex" marginLeft="auto" marginRight="27.5px" id="insideIcons">
+			{/* @ts-ignore */}
+			{getIcons(array, isExpanded)}
 		</Box>
 	);
 };
@@ -125,7 +135,13 @@ const ReviewQuestions = ({
 												/>
 											)}
 										</Box>
-										<Icons answerHistory={transformedQuestion.answerHistory} />
+										<Box maxWidth={'588px'} id="insideRender">
+											<Icons
+												// answerHistory={transformedQuestion.answerHistory}
+												isExpanded={isExpanded}
+											/>
+										</Box>
+
 										<AccordionIcon />
 									</AccordionButton>
 								</h2>
