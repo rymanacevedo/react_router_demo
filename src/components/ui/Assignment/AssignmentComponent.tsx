@@ -542,7 +542,8 @@ export default function AssignmentComponent({
 								backgroundColor="white"
 								boxShadow="md"
 								borderRadius={24}
-								p={'72px'}
+								px="72px"
+								py="44px"
 								w={{ base: '100%', md: '50%' }}>
 								<Question questionInFocus={questionInFocus} />
 							</Box>
