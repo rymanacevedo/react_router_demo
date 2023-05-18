@@ -237,7 +237,7 @@ export default function AssignmentComponent({
 						),
 					);
 				} else {
-					navigate(`/app/learning/assignmentReview/${assignmentKey}`);
+					navigate(`/learning/assignmentReview/${assignmentKey}`);
 				}
 			}
 		} catch (error) {
@@ -403,7 +403,7 @@ export default function AssignmentComponent({
 	}, [answerData]);
 
 	const handleReturnHome = () => {
-		navigate('/app/learning');
+		navigate('/learning');
 	};
 
 	useEffect(() => {

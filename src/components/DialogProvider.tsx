@@ -1,19 +1,10 @@
-import { createContext, useState, useContext } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { createContext, useContext, useState } from 'react';
 import DataServiceExceptionComponent from './ui/DataServiceExceptionComponent';
+import { useFetcher } from 'react-router-dom';
 
 interface DialogProviderType {
 	showAlert: boolean;
 	setShowAlert(showAlert: boolean): void;
-}
-
-interface AuthType {
-	user: object;
-	logout(): void;
-	showSessionDialog: boolean;
-	setShowSessionDialog(): void;
-	staySignedIn: boolean;
-	setStaySignedIn(): void;
 }
 
 const DialogContext = createContext<DialogProviderType | null>({
@@ -22,17 +13,8 @@ const DialogContext = createContext<DialogProviderType | null>({
 });
 
 const DialogProvider = ({ children }: any) => {
-	const { user, logout }: AuthType | any = useAuth();
-
 	const [showAlert, setShowAlert] = useState(false);
-
-	const handleCloseAlert = () => {
-		setShowAlert(false);
-		if (user) {
-			logout();
-		}
-	};
-
+	const fetcher = useFetcher();
 	return (
 		<DialogContext.Provider
 			value={{
@@ -42,7 +24,8 @@ const DialogProvider = ({ children }: any) => {
 			{children}
 			<DataServiceExceptionComponent
 				isOpen={showAlert}
-				onClose={() => handleCloseAlert()}
+				setShowAlert={setShowAlert}
+				fetcher={fetcher}
 			/>
 		</DialogContext.Provider>
 	);

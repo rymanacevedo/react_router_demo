@@ -1,16 +1,16 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import {
 	NavLink as ReactRouterNavLink,
+	useFetcher,
 	useLocation,
-	useNavigate,
 } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import {
 	Box,
 	Button,
 	ButtonGroup,
 	Container,
 	Flex,
+	HStack,
 	IconButton,
 	Image,
 	Menu,
@@ -23,173 +23,87 @@ import {
 
 import { ChevronDownIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
+import { User } from '../services/user';
 import QuickStart from './ui/QuickStart';
-const Header = () => {
-	const location = useLocation();
-	const nav = useNavigate();
 
-	const { user, logout } = useAuth();
+const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
+	const location = useLocation();
+	const fetcher = useFetcher();
 	const inAssignment = location.pathname.indexOf('assignment');
 	const inReview = location.pathname.indexOf('review');
 	const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const navigateAccountMap = {
-		'v8-switch-account': {
-			name: 'Switch Account',
-			navlink: 'switch-account',
-			order: 1,
-			priority: 2,
-			id: 'header-composite-switch-account-link',
-		},
-		'v8-account-link': {
-			name: 'Account',
-			navlink: 'account',
-			order: 2,
-			priority: 3,
-			id: 'header-composite-account-admin-link',
-		},
-		'v8-authoring-link': {
-			name: 'Authoring',
-			navlink: 'authoring',
-			order: 3,
-			priority: 5,
-			id: 'header-composite-authoring-link',
-		},
-		'v8-reporting-link': {
-			name: 'Reporting',
-			navlink: 'reporting',
-			order: 4,
-			priority: 6,
-			id: 'header-composite-reporting-link',
-		},
-		'v8-courses-link': {
-			name: 'Courses',
-			navlink: 'courses',
-			order: 5,
-			priority: 4,
-			id: 'header-composite-cources-link',
-		},
-		'v8-learning-link': {
-			name: 'Learning',
-			navlink: 'learning',
-			order: 6,
-			priority: 1,
-			id: 'header-composite-learning-link',
-		},
+	const handleLogout = () => {
+		fetcher.load('/logout');
 	};
 
-	const rolesMap = {
-		'System Admin': [
-			'v8-account-link',
-			'v8-authoring-link',
-			'v8-courses-link',
-			'v8-learning-link',
-			'v8-reporting-link',
-			'v8-switch-account',
-		],
-		'Setup Admin': ['v8-account-link'],
-		'Account Admin': ['v8-account-link'],
-		'Course Admin': ['v8-account-link'],
-		'Author-view-only': ['v8-authoring-link'],
-		Author: ['v8-authoring-link'],
-		Publisher: ['v8-authoring-link'],
-		NDE: ['v8-authoring-link'],
-		'Report Viewer': ['v8-reporting-link'],
-		'Data Analyst': ['v8-reporting-link'],
-		Instructor: ['v8-courses-link', 'v8-reporting-link'],
-		Learner: ['v8-learning-link'],
-	};
-
-	const tabs = [];
 	const Navigation = () => {
-		// eslint-disable-next-line @typescript-eslint/no-shadow
-		for (const { name } of user.roles) {
-			rolesMap[name].forEach((role) => {
-				if (!tabs.some((tab) => tab.key === role)) {
-					tabs.push(
-						<ReactRouterNavLink
-							style={({ isActive }) => {
-								return {
-									borderBottom: isActive ? '5px solid white' : '',
-									color: 'white',
-									margin: '0px 8px',
-									height: '80px',
-									padding: '25px',
-									boxSizing: 'border-box',
-								};
-							}}
-							key={role}
-							to={navigateAccountMap[role].navlink}
-							id={navigateAccountMap[role].id}>
-							<Text fontWeight="bold" textAlign={'center'}>
-								{navigateAccountMap[role].name}
-							</Text>
-						</ReactRouterNavLink>,
-					);
-				}
-			});
-		}
-
-		// sort tabs by navigateAccountMap order
-		tabs.sort((a, b) => {
-			return navigateAccountMap[a.key].order < navigateAccountMap[b.key].order
-				? -1
-				: 1;
-		});
 		return (
-			<>
-				<ButtonGroup variant="link" boxSizing="border-box">
-					<Box display={['none', 'none', 'none', 'flex', 'flex', 'flex']}>
-						{tabs.length > 1 ? tabs.map((tab) => tab) : null}
-					</Box>
-					<Menu isLazy>
-						<MenuButton
-							as={isLargerThan992 ? Button : IconButton}
-							icon={isLargerThan992 ? null : <HamburgerMenuIcon />}
-							_hover={{}}
-							color={'ampWhite'}
-							padding="25px"
-							height="75px"
-							id="header-composite-profile-button"
-							rightIcon={isLargerThan992 ? <ChevronDownIcon /> : null}>
-							<Text
-								display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
-								textDecoration="none"
-								fontWeight="bold">
-								{`${user.firstName} ${user.lastName}`}
-							</Text>
-						</MenuButton>
+			<ButtonGroup variant="link" boxSizing="border-box">
+				{tabs.length > 1
+					? tabs.map((tab) => {
+							return (
+								<ReactRouterNavLink
+									style={({ isActive }) => {
+										return {
+											borderBottom: isActive ? '5px solid white' : '',
+											color: 'white',
+											margin: '0px 8px',
+											height: '80px',
+											padding: '25px',
+											boxSizing: 'border-box',
+										};
+									}}
+									key={tab.role}
+									to={tab.navlink}
+									id={tab.id}>
+									<Text fontWeight="bold" textAlign={'center'}>
+										{tab.name}
+									</Text>
+								</ReactRouterNavLink>
+							);
+					  })
+					: null}
+				<Menu isLazy>
+					<MenuButton
+						as={isLargerThan992 ? Button : IconButton}
+						icon={isLargerThan992 ? null : <HamburgerMenuIcon />}
+						_hover={{}}
+						color={'ampWhite'}
+						padding="25px"
+						height="75px"
+						id="header-composite-profile-button"
+						rightIcon={isLargerThan992 ? <ChevronDownIcon /> : null}>
+						<Text
+							display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
+							textDecoration="none"
+							fontWeight="bold">
+							{`${user.firstName} ${user.lastName}`}
+						</Text>
+					</MenuButton>
 
-						<MenuList zIndex={'10'} right={'0'}>
-							{inAssignment > -1 && !isLargerThan992 ? (
-								<MenuItem width={'100%'}>
-									<CourseHome />
-								</MenuItem>
-							) : null}
-							<MenuItem
-								onClick={logout}
-								width={'100%'}
-								id="header-composite-logout-button">
-								<Text fontWeight="bold">Logout</Text>
+					<MenuList zIndex={'10'} right={'0'}>
+						{inAssignment > -1 && !isLargerThan992 ? (
+							<MenuItem width={'100%'}>
+								<ReactRouterNavLink to="/learning">
+									<HStack>
+										{/*<ArrowLeftIcon />*/}
+										<Text fontWeight="bold">Course Home</Text>
+									</HStack>
+								</ReactRouterNavLink>
 							</MenuItem>
-						</MenuList>
-					</Menu>
-				</ButtonGroup>
-			</>
+						) : null}
+						<MenuItem
+							width={'100%'}
+							id="header-composite-logout-button"
+							onClick={handleLogout}>
+							<Text fontWeight="bold">Logout</Text>
+						</MenuItem>
+					</MenuList>
+				</Menu>
+			</ButtonGroup>
 		);
 	};
-	useEffect(() => {
-		// filter tabs by priority
-		const highestPriority = Math.max(
-			...tabs.map((tab) => navigateAccountMap[tab.key].priority),
-		);
-		const filteredTabs = tabs.filter(
-			(tab) => navigateAccountMap[tab.key].priority === highestPriority,
-		);
-		const link = navigateAccountMap[filteredTabs[0].key].navlink;
-		nav(link);
-	}, [user]);
 
 	return (
 		<Box
@@ -209,7 +123,7 @@ const Header = () => {
 						{(inAssignment > -1 || inReview > -1) && isLargerThan992 ? (
 							<CourseHome />
 						) : null}
-						<QuickStart justify="flex-end" />
+						<QuickStart />
 						<Navigation />
 					</Flex>
 				</Container>
