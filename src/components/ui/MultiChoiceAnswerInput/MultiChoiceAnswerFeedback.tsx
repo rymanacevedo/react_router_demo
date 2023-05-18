@@ -82,7 +82,7 @@ const MultiChoiceAnswerFeedback = ({
 		} else if (choseIDK) {
 			setIsEnabled(true);
 			// eslint-disable-next-line
-			setText('I don\'t know yet');
+			setText("I don't know yet");
 			setVariant('ampNeutralFilled');
 			setStatus('checked');
 		} else {
@@ -159,7 +159,7 @@ const MultiChoiceAnswerFeedback = ({
 		<Checkbox
 			style={{
 				display: 'flex',
-				marginBottom: '0.5rem',
+				marginBottom: '25px',
 			}}
 			className={inReview ? '' : 'label-hover-effect'}
 			variant={'answer'}

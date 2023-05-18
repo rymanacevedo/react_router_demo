@@ -265,7 +265,7 @@ const TestProgressBarMenu = ({
 		<Box width="100vw" boxSizing="border-box">
 			<HStack
 				borderBottom={'1px'}
-				borderBottomColor="ampSecondary.300"
+				borderBottomColor="ampNeutral.500"
 				zIndex="2"
 				position={'absolute'}
 				width="100%"
@@ -318,10 +318,19 @@ const TestProgressBarMenu = ({
 				) : (
 					<Button
 						variant={'outline'}
+						color="ampPrimary.600"
 						borderColor={'ampPrimary.300'}
 						bg="ampWhite"
-						width="200px"
-						leftIcon={isMenuOpen ? <ExitIcon /> : <EnterIcon />}
+						width={40}
+						px={4}
+						py={2.5}
+						leftIcon={
+							isMenuOpen ? (
+								<ExitIcon />
+							) : (
+								<EnterIcon style={{ transform: 'rotateY(180deg)' }} />
+							)
+						}
 						onClick={() => {
 							handleMenuOpen();
 						}}>

@@ -61,14 +61,18 @@ const ProgressMenu = (props: ProgressMenuType) => {
 			in={isMenuOpen}
 			offsetX="180px"
 			offsetY="0px"
-			style={{ alignSelf: 'flex-start', paddingTop: '10px' }}>
+			style={{
+				alignSelf: 'flex-start',
+				paddingTop: '10px',
+				marginLeft: '0px',
+			}}>
 			<VStack
 				style={{
 					backgroundColor: 'white',
 				}}
 				boxShadow="2xl"
 				h="600px"
-				marginRight="24px"
+				marginRight="12px"
 				w={isMenuOpen ? '345px' : '0px'}
 				display={isMenuOpen ? 'flex' : 'none'}
 				borderRadius={24}
