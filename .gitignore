@@ -49,3 +49,6 @@ target/
 client/standalone/bob/${sys:catalina.base}
 *.pem
 *.env
+/test-results/
+/playwright-report/
+/playwright/.cache/
