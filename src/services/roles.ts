@@ -107,7 +107,14 @@ export const rolesMap: RolesMap = {
 	Learner: ['v8-learning-link'],
 };
 
+const clearState = () => {
+	tabs.length = 0;
+	permissions.length = 0;
+	redirectTo = '';
+};
+
 export const generateTabs = (user: User) => {
+	clearState();
 	for (const { name } of user.roles) {
 		rolesMap[name].forEach((link: string) => {
 			// append key to tabs array
