@@ -11,14 +11,10 @@ type MultipleCorrectAnswersProps = {
 	setSelectedAnswers: any;
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse?: boolean;
-}
+};
 
 const MultipleCorrectAnswers = (props: MultipleCorrectAnswersProps) => {
-	const {
-		questionInFocus,
-		selectedAnswers,
-		setSelectedAnswers,
-	} = props;
+	const { questionInFocus, selectedAnswers, setSelectedAnswers } = props;
 
 	const toggleAnswer = (answerObject: SelectedAnswers) => {
 		if (answerObject.answerId) {
