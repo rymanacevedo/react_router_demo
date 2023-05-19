@@ -218,3 +218,32 @@ export enum Correctness {
 	NoAnswerSelected = 'NoAnswerSelected',
 	Correct = 'Correct',
 }
+
+export type TransformedQuestion = LearningUnitQuestion & {
+	answerHistory: AnswerHistory[];
+};
+
+export type QuizMessage = {
+	FIVE_FAST_ANSWERS: number;
+	FIVE_CONSEC_SI: number;
+	SIX_DK_IN_ROUND: number;
+	FIVE_CONSEC_SC: number;
+	FULL_ROUND_OF_SC: number;
+	FIVE_FAST_REVIEWS: number;
+	TWO_FAST_REVIEWS_IN_LU: {
+		questionId: number;
+		fastReviewsOnQuestion: number;
+	}[];
+	TEN_LONG_REVIEWS: number;
+	TWO_NPA_IN_ROUND: number;
+	TWO_IDENTICAL_SI: {
+		questionId: number;
+		siCount: number;
+		answerIdArray: number[];
+	}[];
+	TWO_NPA_ON_LU: {
+		questionId: number;
+		seenCount: number;
+		npaCount: number;
+	}[];
+};

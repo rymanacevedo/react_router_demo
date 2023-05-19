@@ -69,7 +69,6 @@ const MultipleChoiceAnswers = ({
 				marginTop="34px"
 				display="flex"
 				flexDirection={'column'}
-				justifyContent="space-between"
 				minHeight={350}
 				h="100%">
 				<>
@@ -90,7 +89,7 @@ const MultipleChoiceAnswers = ({
 						})}
 					<MultiChoiceAnswerInput
 						/* eslint-disable */
-						questionText={'I don\'t know yet'}
+						questionText={"I don't know yet"}
 						/* eslint-enable */
 						questionAnswerId={''}
 						addAnswer={() => {

@@ -14,7 +14,7 @@ const useAssignmentByUserAssociations = () => {
 	let subaccount = '';
 	user.roles.forEach((role) => {
 		if (role.name === 'Learner') {
-			subaccount = role.account;
+			subaccount = role.accountKey;
 		}
 	});
 

@@ -10,7 +10,7 @@ const CourseHome = () => {
 	return (
 		<Link
 			as={ReactRouterLink}
-			to="/app/learning"
+			to="/learning"
 			textDecoration="none"
 			w="full"
 			color="ampWhite"

@@ -150,7 +150,7 @@ const MultiChoiceAnswerInput = ({
 		<Checkbox
 			style={{
 				display: 'flex',
-				marginBottom: '0.5rem',
+				marginBottom: '25px',
 				cursor: 'pointer',
 			}}
 			className={'label-hover-effect'}

@@ -26,9 +26,11 @@ const Question = ({
 			) : (
 				<Heading as="h3">Question</Heading>
 			)}
-			<Stack spacing="20px" marginTop="34px">
-				<RichContentComponent content={questionInFocus?.introductionRc} />
-			</Stack>
+			{questionInFocus?.introductionRc ? (
+				<Stack spacing="20px" marginTop="34px">
+					<RichContentComponent content={questionInFocus.introductionRc} />
+				</Stack>
+			) : null}
 			<Stack spacing="20px" marginTop="34px">
 				<RichContentComponent content={questionInFocus?.questionRc} />
 			</Stack>

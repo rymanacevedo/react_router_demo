@@ -259,17 +259,6 @@ export const QuizProvider = ({ children }: { children: any }) => {
 				}));
 			};
 
-			const resetTwoNpaOnLu = () => {
-				const updatedTwoNPAOnLu = message.TWO_NPA_ON_LU.filter(
-					(question) => question.questionId !== questionId,
-				);
-
-				setMessage((prevMessage) => ({
-					...prevMessage,
-					TWO_NPA_ON_LU: updatedTwoNPAOnLu,
-				}));
-			};
-
 			const resetTwoNpaInRound = () => {
 				setMessage({
 					...message,
@@ -433,9 +422,7 @@ export const QuizProvider = ({ children }: { children: any }) => {
 					}
 					break;
 				case 'TWO_NPA_ON_LU':
-					if (reset && questionId) {
-						resetTwoNpaOnLu();
-					} else if (questionId) {
+					if (questionId) {
 						const index = message.TWO_NPA_ON_LU.findIndex(
 							(obj) => obj.questionId === questionId,
 						);
@@ -456,19 +443,17 @@ export const QuizProvider = ({ children }: { children: any }) => {
 							}));
 						} else {
 							const updatedTwoNpaArray = [...message.TWO_NPA_ON_LU];
+
 							updatedTwoNpaArray[index] = {
 								...updatedTwoNpaArray[index],
 								seenCount: updatedTwoNpaArray[index].seenCount + 1,
 								npaCount: updatedTwoNpaArray[index].npaCount + 1,
 							};
-							setMessage((prevMessage) => ({
-								...prevMessage,
-								TWO_NPA_ON_LU: updatedTwoNpaArray,
-							}));
 
 							setMessage((prevMessage) => ({
 								...prevMessage,
 								TWO_NPA_IN_ROUND: prevMessage.TWO_NPA_IN_ROUND + 1,
+								TWO_NPA_ON_LU: updatedTwoNpaArray,
 							}));
 						}
 					}
