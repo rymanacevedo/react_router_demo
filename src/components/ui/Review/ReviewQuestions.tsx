@@ -36,8 +36,11 @@ interface IconsProps {
 
 const Icons = ({ answerHistory, isExpanded }: IconsProps) => {
 	if (isExpanded && answerHistory.length > 20) {
+		let beginningAnswerHistory: AnswerHistory[] = [];
 		let remainingAnswerHistory: AnswerHistory[] = [];
+
 		if (answerHistory.length > 20) {
+			beginningAnswerHistory = answerHistory.slice(0, 20);
 			remainingAnswerHistory = answerHistory.slice(20);
 		}
 		return (
@@ -47,7 +50,7 @@ const Icons = ({ answerHistory, isExpanded }: IconsProps) => {
 					marginLeft="auto"
 					marginRight="27.5px"
 					id="insideIcons">
-					{getIcons(answerHistory, isExpanded)}
+					{getIcons(beginningAnswerHistory, isExpanded)}
 				</Box>
 				<Box
 					display="flex"

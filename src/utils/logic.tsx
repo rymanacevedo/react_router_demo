@@ -99,7 +99,13 @@ export const getIcons = (
 							);
 						} else {
 							final.push(
-								<CustomCircle color="#FDF8EC" icon={MinusIcon} index={5} />,
+								<CustomCircle
+									color="#FDF8EC"
+									borderColor={'#C29838'}
+									iconColor={'#C29838'}
+									icon={MinusIcon}
+									index={5}
+								/>,
 							);
 						}
 						break;
@@ -158,7 +164,13 @@ export const getIcons = (
 						);
 					} else {
 						final.push(
-							<CustomCircle color="#FDF8EC" icon={MinusIcon} index={5} />,
+							<CustomCircle
+								color="#FDF8EC"
+								borderColor={'#C29838'}
+								iconColor={'#C29838'}
+								icon={MinusIcon}
+								index={5}
+							/>,
 						);
 					}
 					break;
