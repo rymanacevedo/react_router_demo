@@ -19,7 +19,6 @@ const MultiCorrectAnswerInput = ({
 	const [isChecked, setIsChecked] = useState(false);
 
 	useEffect(() => {
-		console.log('selectedAnswers', selectedAnswers);
 		setIsChecked(
 			Boolean(
 				selectedAnswers?.find(
