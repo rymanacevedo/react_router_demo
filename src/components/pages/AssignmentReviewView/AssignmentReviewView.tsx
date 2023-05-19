@@ -23,7 +23,7 @@ import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import MultipleChoiceOverLay from '../../ui/MultiChoiceAnswerInput/MultipleChoiceOverLay';
+import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceOverLay';
 import {
 	AnswerData,
 	Confidence,
@@ -40,7 +40,7 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import WhatYouNeedToKnowComponent from '../../ui/WhatYouNeedToKnowComponent';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import ExplanationTitle from '../../ui/ExplanationTitle';
-import MultipleChoiceAnswers from '../../ui/MultiChoiceAnswerInput/MultipleChoiceAnswers';
+import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceAnswers';
 import { findDateData } from '../../../utils/logic';
 import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
@@ -733,7 +733,9 @@ const AssignmentReviewView = () => {
 								/>
 							</Box>
 							<Box
-								style={{ marginTop: isSmallerThan1000 ? '10px' : '0px' }}
+								style={{
+									marginTop: isSmallerThan1000 ? '10px' : '0px',
+								}}
 								flex={1}
 								backgroundColor="white"
 								boxShadow="md"

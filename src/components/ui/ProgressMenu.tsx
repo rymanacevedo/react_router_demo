@@ -141,7 +141,11 @@ const ProgressMenu = (props: ProgressMenuType) => {
 					</Text>
 					<HStack>
 						<LapTimerIcon
-							style={{ color: 'white', height: '19px', width: '19px' }}
+							style={{
+								color: 'white',
+								height: '19px',
+								width: '19px',
+							}}
 						/>
 						<CountUpTimer />
 					</HStack>

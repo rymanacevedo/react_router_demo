@@ -313,7 +313,11 @@ const StaticAssignmentView = ({
 									</Box>
 								</PopoverAnchor>
 							</PopoverTrigger>
-							<Box style={{ position: 'relative', zIndex: menuIndex }}>
+							<Box
+								style={{
+									position: 'relative',
+									zIndex: menuIndex,
+								}}>
 								<PopoverContent p="24px" w="560px" h="auto">
 									<Box position="fixed" top="40px" left="555px">
 										<PopoverArrow position="fixed" top="0" left="0" />

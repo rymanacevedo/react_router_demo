@@ -73,7 +73,7 @@ function App() {
 					/>
 					<Route
 						path="learning/assignment/:assignmentKey/outro"
-						element={<ModuleIntroView outro />}
+						element={<ModuleIntroView />}
 					/>
 
 					<Route

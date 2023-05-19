@@ -87,7 +87,10 @@ function MultiFactor() {
 			if (mfaData.deviceUid) {
 				const cookieKey = 'device_uid';
 				const cookieValue = window.base64.encode(mfaData.deviceUid);
-				Cookies.set(cookieKey, cookieValue, { expires: 90, path: null });
+				Cookies.set(cookieKey, cookieValue, {
+					expires: 90,
+					path: null,
+				});
 			}
 
 			login({

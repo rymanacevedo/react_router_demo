@@ -1,5 +1,5 @@
 import i18n from "i18next";
-import {initReactI18next} from "react-i18next";
+import { initReactI18next } from "react-i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // the translations
@@ -73,7 +73,7 @@ const resources = {
          forgotUsernameErrorText: "We could not send an email to this email address. Please check your email address and try again or contact support for assistance.",
          accountUrlErrorText: "Account not recognized. Please check the account name in the URL.",
          passcode: "Passcode",
-         pleaseEnterPasscode: "Please enter your passcode.",        
+         pleaseEnterPasscode: "Please enter your passcode.",
          usernameUnavailable: "This username is already in use. Please try another.",
          selfRegisterNotAllowed: "You are not allowed to self register for this account.",
          userAlreadyExistsClickBelowToLogin: 'A user with this email address already exists. Please click below to log in.',
@@ -81,12 +81,12 @@ const resources = {
          /////////////////////////////////////////////
          //   TestProgressBarMenu.tsx
          //////////////////////////////////////////////
-         theScienceOfLearning:'The Science of Learning',
+         theScienceOfLearning: 'The Science of Learning',
          about: 'About',
-         minsLeft:'mins left',
+         minsLeft: 'mins left',
          question: 'Question',
          questions: 'Questions',
-         showProgress:'Show Progress',
+         showProgress: 'Show Progress',
          hideProgress: 'Hide Progress',
          viewMoreProgress: 'View More Progress',
          //////////////////////////////////
@@ -98,7 +98,7 @@ const resources = {
          minute: 'minute',
          hour: 'hour',
          hours: 'hours',
-         minToComplete:'min to complete',
+         minToComplete: 'min to complete',
          attempts: 'Attempts',
          refresherAvailable: 'Refresher Available',
          //////////////////////////////////
@@ -130,12 +130,12 @@ const resources = {
          appErrorText: 'Looks like you hit a snag in our system. Please wait a minute or two and try again.',
          appErrorRestartButtonText: 'restart application',
          /////////////////////////////////////////////
-          //   SessionDialogComponent.tsx
-          //////////////////////////////////////////////
-          sessionExpiring: 'Your session is about to expire',
-          staySignedInQuestion: 'Do you want to stay signed in?',
-          staySignedInButton: 'Stay Signed In',
-          logOutButton: 'Logout Now',
+         //   SessionDialogComponent.tsx
+         //////////////////////////////////////////////
+         sessionExpiring: 'Your session is about to expire',
+         staySignedInQuestion: 'Do you want to stay signed in?',
+         staySignedInButton: 'Stay Signed In',
+         logOutButton: 'Logout Now',
          /////////////////////////////////////////////
          //   AssignmentList.tsx
          //////////////////////////////////////////////
@@ -162,20 +162,23 @@ const resources = {
          revealCorrectAns: 'Reveal Correct Answer',
          addLearn: 'Additional Learning',
          prevQ: 'Previous Question',
-         reviewing:'Reviewing',
-         keepGoing:'Keep Going',
-			reviewCorrectAns: 'Review correct answers',
+         reviewing: 'Reviewing',
+         keepGoing: 'Keep Going',
+         reviewCorrectAns: 'Review correct answers',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////
          ReviewQ: 'Reviewing: Question',
          of: 'of',
+         iAmSure: 'I am sure',
+         iAmUnsure: 'I am unsure',
+         iDontKnow: 'I don\'t know',
          //////////////////////////////////////////////
          //   DataServiceExceptionComponent.tsx
          //////////////////////////////////////////////
          leaveFeedbackText: 'Leave feedback on this question',
          IDisagreeWithTheAnswer: 'I disagree with the answer',
-         thisQuestionCouldBeImproved: 'This question could be improved',         
+         thisQuestionCouldBeImproved: 'This question could be improved',
          iStillDontUnderstand: 'I still don’t understand',
          other: 'Other (explain)',
          placeHolderText: 'Placeholder for longer, short answer text input',
@@ -183,20 +186,20 @@ const resources = {
          wasThisExplanationHelpful: 'Was this explanation helpful?',
          leaveFeedback: 'Leave feedback',
          courseHome: 'Course Home',
-          //////////////////////////////////////////////
+         //////////////////////////////////////////////
          //   StaticAssignmentView.tsx
          //////////////////////////////////////////////
-         step1ModalTitle:'How to use Amplifire',
+         step1ModalTitle: 'How to use Amplifire',
          step1ModalContent: 'Our goal is to provide you with a focused, efficient path to mastering and retaining the information you need to be successful. The adaptive system you are using was developed based on scientific studies of how people can learn most efficiently. Click through the tour to get to know how Amplifire works.',
-         step2PopoverTitle:'We first ask questions 🤔',
-         step2PopoverContent:'By first answering questions, we prime your brain to acquire new knowledge, creating a mental framework for the material to be learned.',
-         step3PopoverTitle:'Your estimated time left ⏰',
+         step2PopoverTitle: 'We first ask questions 🤔',
+         step2PopoverContent: 'By first answering questions, we prime your brain to acquire new knowledge, creating a mental framework for the material to be learned.',
+         step3PopoverTitle: 'Your estimated time left ⏰',
          step3PopoverContent: 'This is approximately how much time we think it will take you to complete this module. It will fluctuate throughout based on how you answer.',
-         step4PopoverTitle:'Your Progress 📊',
+         step4PopoverTitle: 'Your Progress 📊',
          step4PopoverContent: 'Amplifire comes at you in rounds. A micro testing burst followed by a learning burst. These icons indicate how you are doing in your current round. You can also use the blue bar to see your overall progress in this module',
-         step5PopoverTitle:'Your detailed progress 📊',
+         step5PopoverTitle: 'Your detailed progress 📊',
          step5PopoverContent: 'You can see your detailed progress that includes feedback, your road to mastery, and how long you\'ve spent in this session of learning.',
-         step6PopoverTitle:'Feedback 👋',
+         step6PopoverTitle: 'Feedback 👋',
          step6PopoverContent: 'Amplifire will help remind, encourage, and celebrate success with you as you learn',
          skipTour: 'Skip the tour',
          finishTourBtn: 'Finish tour',
@@ -297,18 +300,18 @@ const resources = {
 };
 //German, Portuguese, Italian, and Spanish
 i18n
-      .use(LanguageDetector)
-      .use(initReactI18next) // passes i18n down to react-i18next
-      .init({
-         resources,
-         // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
-         // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
-         // if you're using a language detector, do not define the lng option
-         detection: {order: ['navigator']},
-         interpolation: {
-            escapeValue: false // react already safes from xss
-         }
-      });
+   .use(LanguageDetector)
+   .use(initReactI18next) // passes i18n down to react-i18next
+   .init({
+      resources,
+      // language to use, more information here: https://www.i18next.com/overview/configuration-options#languages-namespaces-resources
+      // you can use the i18n.changeLanguage function to change the language manually: https://www.i18next.com/overview/api#changelanguage
+      // if you're using a language detector, do not define the lng option
+      detection: { order: ['navigator'] },
+      interpolation: {
+         escapeValue: false // react already safes from xss
+      }
+   });
 i18n.services.formatter.add('capitalize', (value, lng, options) => {
    return `${value.substr(0, 1).toUpperCase()}${value.substr(1)}`;
 });

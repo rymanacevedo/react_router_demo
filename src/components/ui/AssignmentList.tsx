@@ -177,11 +177,15 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			assignment.status === 'IN_PROGRESS'
 		) {
 			navigate(`assignment/${assignment.assignmentKey}`, {
-				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
+				state: {
+					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
+				},
 			});
 		} else {
 			navigate(`assignment/${assignment.assignmentKey}`, {
-				state: { estimatedTimeToComplete: assignment.estimatedTimeToComplete },
+				state: {
+					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
+				},
 			});
 		}
 	};

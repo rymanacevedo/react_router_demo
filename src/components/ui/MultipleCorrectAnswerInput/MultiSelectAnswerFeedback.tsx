@@ -162,7 +162,7 @@ const MultiChoiceAnswerFeedback = ({
 				marginBottom: '0.5rem',
 			}}
 			className={inReview ? '' : 'label-hover-effect'}
-			variant={'answer'}
+			variant={'multiChoiceAnswer'}
 			colorScheme={'transparent'}
 			value={questionAnswerId}
 			size={'4rem'}
@@ -180,7 +180,11 @@ const MultiChoiceAnswerFeedback = ({
 					<Flex>
 						<Text>You answered &nbsp;</Text>
 						<Badge variant={variant}>
-							<span style={{ display: 'flex', alignItems: 'center' }}>
+							<span
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+								}}>
 								{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
 							</span>
 						</Badge>
@@ -195,7 +199,11 @@ const MultiChoiceAnswerFeedback = ({
 							and&nbsp;
 						</span>
 						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-							<span style={{ display: 'flex', alignItems: 'center' }}>
+							<span
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+								}}>
 								{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
 							</span>
 						</Badge>

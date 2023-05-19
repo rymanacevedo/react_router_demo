@@ -137,7 +137,12 @@ function LoginForm() {
 					initialUserData.sessionKey,
 				);
 
-				login({ initialUserData, completeUserData, userRoles, userAccount });
+				login({
+					initialUserData,
+					completeUserData,
+					userRoles,
+					userAccount,
+				});
 			}
 
 			if (
