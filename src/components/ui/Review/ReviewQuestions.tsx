@@ -9,13 +9,13 @@ import {
 	Stack,
 } from '@chakra-ui/react';
 import {
-	// AnswerHistory,
+	AnswerHistory,
 	Item,
 	LearningUnitQuestion,
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import { getIcons, truncateText } from '../../../utils/logic';
+import { truncateText, getIcons } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
@@ -30,25 +30,45 @@ interface ReviewQuestionsProps {
 }
 
 interface IconsProps {
-	// answerHistory: AnswerHistory[];
+	answerHistory: AnswerHistory[];
 	isExpanded: boolean;
 }
 
-const Icons = ({ isExpanded }: IconsProps) => {
-	console.log('isExpanded: ', isExpanded);
-	const item = {
-		roundNumber: 1,
-		confidence: 'Sure',
-		correctness: 'Correct',
-	};
-
-	const array = Array.from({ length: 21 }, () => item);
-	return (
-		<Box display="flex" marginLeft="auto" marginRight="27.5px" id="insideIcons">
-			{/* @ts-ignore */}
-			{getIcons(array, isExpanded)}
-		</Box>
-	);
+const Icons = ({ answerHistory, isExpanded }: IconsProps) => {
+	if (isExpanded && answerHistory.length > 20) {
+		let remainingAnswerHistory: AnswerHistory[] = [];
+		if (answerHistory.length > 20) {
+			remainingAnswerHistory = answerHistory.slice(20);
+		}
+		return (
+			<>
+				<Box
+					display="flex"
+					marginLeft="auto"
+					marginRight="27.5px"
+					id="insideIcons">
+					{getIcons(answerHistory, isExpanded)}
+				</Box>
+				<Box
+					display="flex"
+					justifyContent="flex-end"
+					marginRight="27.5px"
+					id="insideIcons">
+					{getIcons(remainingAnswerHistory, isExpanded)}
+				</Box>
+			</>
+		);
+	} else {
+		return (
+			<Box
+				display="flex"
+				marginLeft="auto"
+				marginRight="27.5px"
+				id="insideIcons">
+				{getIcons(answerHistory, isExpanded)}
+			</Box>
+		);
+	}
 };
 
 const ReviewQuestions = ({
@@ -135,9 +155,9 @@ const ReviewQuestions = ({
 												/>
 											)}
 										</Box>
-										<Box maxWidth={'588px'} id="insideRender">
+										<Box id="insideRender">
 											<Icons
-												// answerHistory={transformedQuestion.answerHistory}
+												answerHistory={transformedQuestion.answerHistory}
 												isExpanded={isExpanded}
 											/>
 										</Box>

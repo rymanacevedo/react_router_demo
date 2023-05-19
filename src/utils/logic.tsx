@@ -37,8 +37,6 @@ export const getIcons = (
 	answerHistory: AnswerHistory[],
 	isExpanded: boolean,
 ) => {
-	console.log(isExpanded);
-	// if isExpanded, I want to have all the icons in rows of 20.
 	const final: JSX.Element[] = [];
 
 	if (!isExpanded) {
