@@ -27,7 +27,7 @@ const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 			if (src && isLocal && src.includes('amp_resource')) {
 				src = `http://mybob.amplifire.me:8080/amp/${src}`;
 				imgElement.setAttribute('src', src);
-			} else if (src && !isLocal && src.includes('amp_resource')) {
+			} else if (src && src.includes('amp_resource')) {
 				// For rendering in lower environments
 				src = `${window.location.origin}/amp/${src}`;
 				imgElement.setAttribute('src', src);
