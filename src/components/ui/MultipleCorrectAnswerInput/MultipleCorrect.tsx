@@ -50,7 +50,7 @@ const MultipleCorrect: React.FC<MultipleCorrectProps> = (props) => {
 				},
 			);
 			props.updateSelectedAnswersState(selectedAnswersWithConfidence);
-			props.setTotalAnswerConfidence('NotSure');
+			props.setTotalAnswerConfidence('PartSure');
 			setSubmited(true);
 		} else if (assignmentTakerConfidence === 'SURE') {
 			const selectedAnswersWithConfidence = props.selectedAnswers.map(
