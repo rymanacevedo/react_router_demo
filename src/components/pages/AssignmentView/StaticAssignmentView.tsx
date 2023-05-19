@@ -13,6 +13,7 @@ import {
 	PopoverArrow,
 	PopoverCloseButton,
 	PopoverAnchor,
+	Stack,
 	Button,
 	Text,
 	Heading,
@@ -186,24 +187,21 @@ const StaticAssignmentView = ({
 							</PopoverContent>
 						</Box>
 					</Popover>
-					<HStack width="100%">
-						<HStack
+					<HStack justify="center" align="space-between">
+						<Stack
+							maxW="1496"
 							w="100%"
 							p="12px"
-							justifyContent={'center'}
-							flexWrap={isSmallerThan1000 ? 'wrap' : 'nowrap'}>
+							pr="0px"
+							alignItems="stretch"
+							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
 							<Box
-								style={{
-									backgroundColor: 'white',
-									margin: '6px',
-								}}
-								boxShadow="2xl"
-								w="100%"
-								maxWidth={726}
-								h={isSmallerThan1000 ? '' : '745px'}
-								overflow="hidden"
+								backgroundColor="white"
+								boxShadow="md"
 								borderRadius={24}
-								p={'72px'}>
+								px="72px"
+								py="44px"
+								w={{ base: '100%', md: '50%' }}>
 								<Question questionInFocus={questionInFocusMock} />
 							</Box>
 							<Popover
@@ -219,8 +217,7 @@ const StaticAssignmentView = ({
 											style={{
 												zIndex: ansIndex,
 												pointerEvents: 'none',
-												height: '745px',
-												display: 'flex',
+												flexGrow: '1',
 											}}>
 											<AnswerArea
 												id="answerArea"
@@ -287,7 +284,7 @@ const StaticAssignmentView = ({
 									</PopoverContent>
 								</Box>
 							</Popover>
-						</HStack>
+						</Stack>
 						<Popover
 							isOpen={tourStep === 6}
 							placement={isSmallerThan1000 ? 'top' : 'left-start'}
