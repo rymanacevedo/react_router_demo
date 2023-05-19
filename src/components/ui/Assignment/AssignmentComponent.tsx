@@ -237,7 +237,7 @@ export default function AssignmentComponent({
 						),
 					);
 				} else {
-					navigate(`/app/learning/assignmentReview/${assignmentKey}`);
+					navigate(`/learning/assignmentReview/${assignmentKey}`);
 				}
 			}
 		} catch (error) {
@@ -403,7 +403,7 @@ export default function AssignmentComponent({
 	}, [answerData]);
 
 	const handleReturnHome = () => {
-		navigate('/app/learning');
+		navigate('/learning');
 	};
 
 	useEffect(() => {
@@ -530,19 +530,21 @@ export default function AssignmentComponent({
 						currentQuestion={questionInFocus}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
-					<HStack width="100%">
+					<HStack justify="center" align="space-between">
 						<Stack
+							maxW="1496"
 							w="100%"
 							p="12px"
+							pr="0px"
 							alignItems="stretch"
-							justifyContent={'center'}
 							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
 							<Box
 								backgroundColor="white"
 								boxShadow="md"
 								borderRadius={24}
-								flex={1}
-								p={'72px'}>
+								px="72px"
+								py="44px"
+								w={{ base: '100%', md: '50%' }}>
 								<Question questionInFocus={questionInFocus} />
 							</Box>
 							<AnswerArea

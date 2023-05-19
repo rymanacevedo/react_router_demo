@@ -1,26 +1,40 @@
-import React, { useRef } from 'react';
+import React, { Dispatch, SetStateAction, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
 	AlertDialog,
-	AlertDialogOverlay,
-	AlertDialogContent,
-	AlertDialogHeader,
 	AlertDialogBody,
+	AlertDialogContent,
 	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogOverlay,
 	Button,
 } from '@chakra-ui/react';
+import { FetcherWithComponents } from 'react-router-dom';
 
-const DataServiceExceptionComponent = (props: any) => {
+type Props = {
+	isOpen: boolean;
+	fetcher: FetcherWithComponents<any>;
+	setShowAlert: Dispatch<SetStateAction<boolean>>;
+};
+const DataServiceExceptionComponent = ({
+	isOpen,
+	setShowAlert,
+	fetcher,
+}: Props) => {
 	const { t: i18n } = useTranslation();
 	const cancelRef = useRef<HTMLButtonElement>(null);
 
+	const handleCloseAlert = () => {
+		setShowAlert(false);
+		fetcher.load('/logout');
+	};
 	return (
 		<>
 			<AlertDialog
-				onClose={props.onClose}
+				onClose={handleCloseAlert}
 				leastDestructiveRef={cancelRef}
-				isOpen={props.isOpen}
+				isOpen={isOpen}
 				isCentered
 				closeOnEsc={false}
 				closeOnOverlayClick={false}>
@@ -29,13 +43,13 @@ const DataServiceExceptionComponent = (props: any) => {
 						<AlertDialogHeader fontSize="lg" fontWeight="bold">
 							{i18n('appErrorTitle')}
 						</AlertDialogHeader>
-
 						<AlertDialogBody>{i18n('appErrorText')}</AlertDialogBody>
-
 						<AlertDialogFooter>
-							<Button onClick={props.onClose} ref={cancelRef}>
-								{i18n('appErrorRestartButtonText')}
-							</Button>
+							<fetcher.Form method="post">
+								<Button onClick={handleCloseAlert} ref={cancelRef}>
+									{i18n('appErrorRestartButtonText')}
+								</Button>
+							</fetcher.Form>
 						</AlertDialogFooter>
 					</AlertDialogContent>
 				</AlertDialogOverlay>
