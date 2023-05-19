@@ -6,25 +6,21 @@ import {
 } from 'react-router-dom';
 import {
 	Box,
-	Button,
 	ButtonGroup,
 	Container,
 	Flex,
 	HStack,
-	IconButton,
 	Image,
 	Menu,
-	MenuButton,
 	MenuItem,
 	MenuList,
 	Text,
 	useMediaQuery,
 } from '@chakra-ui/react';
-
-import { ChevronDownIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import CourseHome from './ui/CourseHome';
 import { User } from '../services/user';
 import QuickStart from './ui/QuickStart';
+import CustomMenuButton from './ui/CustomMenuButton';
 
 const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
 	const location = useLocation();
@@ -65,23 +61,7 @@ const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
 					  })
 					: null}
 				<Menu isLazy>
-					<MenuButton
-						as={isLargerThan992 ? Button : IconButton}
-						icon={isLargerThan992 ? null : <HamburgerMenuIcon />}
-						_hover={{}}
-						color={'ampWhite'}
-						padding="25px"
-						height="75px"
-						id="header-composite-profile-button"
-						rightIcon={isLargerThan992 ? <ChevronDownIcon /> : null}>
-						<Text
-							display={['none', 'none', 'none', 'flex', 'flex', 'flex']}
-							textDecoration="none"
-							fontWeight="bold">
-							{`${user.firstName} ${user.lastName}`}
-						</Text>
-					</MenuButton>
-
+					<CustomMenuButton largerThan992={isLargerThan992} user={user} />
 					<MenuList zIndex={'10'} right={'0'}>
 						{inAssignment > -1 && !isLargerThan992 ? (
 							<MenuItem width={'100%'}>
