@@ -6,6 +6,8 @@ type ReviewContentRenderPropsType = {
 
 const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 	const containerRef = useRef<HTMLDivElement>(null);
+	// TODO: apply .env variables to this instead of isLocal
+	const isLocal = window.location.href.includes('localhost:3000');
 
 	useEffect(() => {
 		const containerNode = containerRef.current;
@@ -22,21 +24,13 @@ const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 			let src = imgElement.getAttribute('src');
 
 			// For rendering in local
-			if (
-				src &&
-				window.location.href.includes('localhost:3000') &&
-				src.includes('amp_resource')
-			) {
+			if (src && isLocal && src.includes('amp_resource')) {
 				src = `http://mybob.amplifire.me:8080/amp/${src}`;
 				imgElement.setAttribute('src', src);
 			}
 
 			// For rendering in lower environments
-			if (
-				src &&
-				!window.location.href.includes('localhost:3000') &&
-				src.includes('amp_resource')
-			) {
+			if (src && !isLocal && src.includes('amp_resource')) {
 				src = `${window.location.origin}/amp/${src}`;
 				imgElement.setAttribute('src', src);
 			}
