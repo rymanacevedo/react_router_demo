@@ -98,6 +98,7 @@ export const getIcons = (
 								/>,
 							);
 						} else {
+							// TODO: add to chakra-ui theme file for color scheme
 							final.push(
 								<CustomCircle
 									color="#FDF8EC"
