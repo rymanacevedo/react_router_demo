@@ -58,7 +58,8 @@ const WhatYouNeedToKnowComponent = ({
 			minH="40vh"
 			overflow="hidden"
 			borderRadius={24}
-			padding={'34px 120px'}>
+			padding={'34px 120px'}
+			maxW="1496">
 			<Heading as="h3">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
 				<RichContentComponent content={questionInFocus?.explanationRc} />
