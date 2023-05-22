@@ -123,14 +123,14 @@ const MultipleCorrect = (props: MultipleCorrectProps) => {
 						display={'flex'}
 						marginTop={'12px'}>
 						<Button
-							onClick={handleMultiCorrectSubmission('IDK')}
+							onClick={() => handleMultiCorrectSubmission('IDK')}
 							variant={'ampOutline'}
 							w="150px"
 							isDisabled={Boolean(props.selectedAnswers.length)}>
 							<Text>{i18n('iDontKnow')}</Text>
 						</Button>
 						<Button
-							onClick={handleMultiCorrectSubmission('UNSURE')}
+							onClick={() => handleMultiCorrectSubmission('UNSURE')}
 							variant={'ampSolid'}
 							w="150px"
 							bg="ampSecondary.500"
@@ -138,7 +138,7 @@ const MultipleCorrect = (props: MultipleCorrectProps) => {
 							<Text>{i18n('iAmUnsure')}</Text>
 						</Button>
 						<Button
-							onClick={handleMultiCorrectSubmission('SURE')}
+							onClick={() => handleMultiCorrectSubmission('SURE')}
 							variant={'ampSolid'}
 							w="150px"
 							isDisabled={!props.selectedAnswers.length as boolean}>
