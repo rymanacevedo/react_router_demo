@@ -265,7 +265,7 @@ const TestProgressBarMenu = ({
 		<Box width="100vw" boxSizing="border-box">
 			<HStack
 				borderBottom={'1px'}
-				borderBottomColor="ampNeutral.500"
+				borderBottomColor="ampPrimary.200"
 				zIndex="2"
 				position={'absolute'}
 				width="100%"

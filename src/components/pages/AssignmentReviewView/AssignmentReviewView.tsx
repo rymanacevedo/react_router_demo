@@ -815,6 +815,7 @@ const AssignmentReviewView = () => {
 								}}
 								boxShadow="xl"
 								w="100%"
+								maxW="1496px"
 								overflow="hidden"
 								borderRadius={24}
 								p={8}>
