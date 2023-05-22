@@ -1,8 +1,8 @@
-import { Answer } from '../../ui/MultiChoiceAnswerInput/MultipleChoiceAnswers';
+import { Answer } from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceAnswers';
 
 export type SelectedAnswers = {
 	answerId: number | string;
-	confidence: number;
+	confidence?: number;
 	selectedOptionId: number;
 	self: any;
 };

@@ -134,7 +134,7 @@ const AnswerInput = () => {
 		<>
 			<Checkbox
 				className={'label-hover-effect'}
-				variant={'answer'}
+				variant={'multiChoiceAnswer'}
 				colorScheme={'transparent'}
 				size={'4rem'}
 				icon={

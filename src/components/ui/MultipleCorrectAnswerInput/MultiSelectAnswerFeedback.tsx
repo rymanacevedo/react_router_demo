@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
-import MultiChoiceOverLayIcon from './MultiChoiceOverLayIcon';
+import MultiChoiceOverLayIcon from './MultiSelectOverLayIcon';
 import {
 	CurrentRoundAnswerOverLayData,
 	SelectedAnswers,
@@ -82,7 +82,7 @@ const MultiChoiceAnswerFeedback = ({
 		} else if (choseIDK) {
 			setIsEnabled(true);
 			// eslint-disable-next-line
-			setText("I don't know yet");
+			setText('I don\'t know yet');
 			setVariant('ampNeutralFilled');
 			setStatus('checked');
 		} else {
@@ -159,10 +159,10 @@ const MultiChoiceAnswerFeedback = ({
 		<Checkbox
 			style={{
 				display: 'flex',
-				marginBottom: '25px',
+				marginBottom: '0.5rem',
 			}}
 			className={inReview ? '' : 'label-hover-effect'}
-			variant={'answer'}
+			variant={'multiChoiceAnswer'}
 			colorScheme={'transparent'}
 			value={questionAnswerId}
 			size={'4rem'}
@@ -180,7 +180,11 @@ const MultiChoiceAnswerFeedback = ({
 					<Flex>
 						<Text>You answered &nbsp;</Text>
 						<Badge variant={variant}>
-							<span style={{ display: 'flex', alignItems: 'center' }}>
+							<span
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+								}}>
 								{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
 							</span>
 						</Badge>
@@ -195,7 +199,11 @@ const MultiChoiceAnswerFeedback = ({
 							and&nbsp;
 						</span>
 						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-							<span style={{ display: 'flex', alignItems: 'center' }}>
+							<span
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+								}}>
 								{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
 							</span>
 						</Badge>

@@ -154,7 +154,7 @@ const MultiChoiceAnswerInput = ({
 				cursor: 'pointer',
 			}}
 			className={'label-hover-effect'}
-			variant={'answer'}
+			variant={'multiChoiceAnswer'}
 			colorScheme={'transparent'}
 			value={questionAnswerId}
 			size={'4rem'}

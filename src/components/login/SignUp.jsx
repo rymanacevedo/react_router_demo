@@ -83,14 +83,23 @@ function SignUp() {
 
 	const handleConfirmPasswordValidation = () => {
 		if (!confirmPassword) {
-			setFormError((prevValue) => ({ ...prevValue, confirmPassword: true }));
+			setFormError((prevValue) => ({
+				...prevValue,
+				confirmPassword: true,
+			}));
 		}
 
 		if (confirmPassword !== password) {
 			setErrorMessage(i18n('passwordsDoNotMatch'));
-			setFormError((prevValue) => ({ ...prevValue, confirmPassword: true }));
+			setFormError((prevValue) => ({
+				...prevValue,
+				confirmPassword: true,
+			}));
 		} else if (confirmPassword && confirmPassword === password) {
-			setFormError((prevValue) => ({ ...prevValue, confirmPassword: false }));
+			setFormError((prevValue) => ({
+				...prevValue,
+				confirmPassword: false,
+			}));
 			setErrorMessage('');
 		}
 	};

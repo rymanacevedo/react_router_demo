@@ -50,7 +50,7 @@ const ModuleIntroView = () => {
 					moduleData={data}
 					numberOfLearningUnits={state?.numberOfLearningUnits}
 					estimatedTimeToComplete={state?.estimatedTimeToComplete}
-					action={!state.review ? beginAssignment : backToReview}
+					action={!state?.review ? beginAssignment : backToReview}
 					review={state.review}
 				/>
 			</Container>

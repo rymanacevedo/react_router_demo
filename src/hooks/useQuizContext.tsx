@@ -363,7 +363,10 @@ export const QuizProvider = ({ children }: { children: any }) => {
 								...prevMessage,
 								TWO_FAST_REVIEWS_IN_LU: [
 									...prevMessage.TWO_FAST_REVIEWS_IN_LU,
-									{ questionId: Number(questionId), fastReviewsOnQuestion: 0 },
+									{
+										questionId: Number(questionId),
+										fastReviewsOnQuestion: 0,
+									},
 								],
 							}));
 						}
@@ -426,7 +429,11 @@ export const QuizProvider = ({ children }: { children: any }) => {
 
 						const newTwoNpaEntry = [
 							...message.TWO_NPA_ON_LU,
-							{ questionId: Number(questionId), seenCount: 1, npaCount: 0 },
+							{
+								questionId: Number(questionId),
+								seenCount: 1,
+								npaCount: 0,
+							},
 						];
 
 						if (index === -1) {

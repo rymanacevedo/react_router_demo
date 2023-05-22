@@ -180,7 +180,9 @@ function ForgotPassword() {
 					justify="center">
 					<Center>
 						<Text align="center" mb={5}>
-							{i18n('forgotPasswordSuccess', { email: emailAddress })}
+							{i18n('forgotPasswordSuccess', {
+								email: emailAddress,
+							})}
 						</Text>
 					</Center>
 					<Center>

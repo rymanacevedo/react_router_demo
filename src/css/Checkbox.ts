@@ -14,7 +14,7 @@ const Checkbox = defineStyleConfig({
 		},
 	},
 	variants: {
-		answer: {
+		multiChoiceAnswer: {
 			control: {
 				_focus: {
 					borderRadius: '50%',
@@ -27,6 +27,20 @@ const Checkbox = defineStyleConfig({
 			control: {
 				border: '2px solid',
 				borderRadius: 'sm',
+			},
+		},
+		multiCorrectAnswer: {
+			control: {
+				_focus: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+				},
+				_hover: {},
+				border: '2px solid black',
+				size: '40rem',
+				width: '2.5rem',
+				height: '2.5rem',
+				borderRadius: '20%',
+				iconSize: '1rem',
 			},
 		},
 	},

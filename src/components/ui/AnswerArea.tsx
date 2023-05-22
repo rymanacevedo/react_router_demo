@@ -18,11 +18,11 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
-import MultipleChoiceAnswers from './MultiChoiceAnswerInput/MultipleChoiceAnswers';
-import MultipleChoiceOverLay from './MultiChoiceAnswerInput/MultipleChoiceOverLay';
-import MultipleSelectAnswers from './MultiSelectAnswerInput/MultipleSelectAnswers';
-import { useTranslation } from 'react-i18next';
 import { MutableRefObject } from 'react';
+import { MultipleChoice } from './MultipleChoiceAnswerInput/MultipleChoice';
+import MultipleChoiceOverLay from './MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
+import MultipleCorrect from './MultipleCorrectAnswerInput/MultipleCorrect';
+import { useTranslation } from 'react-i18next';
 
 export default function AnswerArea(props: {
 	isOpen: boolean;
@@ -46,6 +46,7 @@ export default function AnswerArea(props: {
 	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
 	IDKResponse: boolean;
+	setTotalAnswerConfidence: (value: string) => void;
 }) {
 	const { t: i18n } = useTranslation();
 
@@ -63,90 +64,111 @@ export default function AnswerArea(props: {
 			initialFocusRef={props.initialFocusRef}
 			arrowSize={20}>
 			<PopoverAnchor>
-				<Box
-					style={{ marginTop: props.smallerThan1000 ? '10px' : '0px' }}
-					backgroundColor="white"
-					w={{ base: '100%', md: '50%' }}
-					boxShadow="md"
-					display="flex"
-					flexDirection="column"
-					justifyContent="space-between"
-					borderRadius={24}
-					px="72px"
-					py="44px">
-					{!props.showOverlay ? (
-						//Matching
-						//MultipleChoice
-						//MultipleCorrect
-						<Fade in={!props.showOverlay}>
-							{props.questionInFocus?.questionType === 'MultipleChoice' && (
-								<MultipleChoiceAnswers
-									questionInFocus={props.questionInFocus as QuestionInFocus}
-									selectedAnswers={props.selectedAnswers}
-									setSelectedAnswers={props.selectedAnswersState}
-									clearSelection={props.clearSelection}
-									setClearSelection={props.clearSelectionState}
-									setIDKResponse={props.setIDKResponse}
-									IDKResponse={props.IDKResponse}
-								/>
-							)}
-							{props.questionInFocus?.questionType === 'MultipleCorrect' && (
-								<MultipleSelectAnswers
-									questionInFocus={props.questionInFocus as QuestionInFocus}
-									selectedAnswers={props.selectedAnswers}
-									setSelectedAnswers={props.selectedAnswersState}
-									clearSelection={props.clearSelection}
-									setClearSelection={props.clearSelectionState}
-									setIDKResponse={props.setIDKResponse}
-									IDKResponse={props.IDKResponse}
-								/>
-							)}
-							{props.questionInFocus?.questionType === 'Matching' && (
-								<Text>Matching</Text>
-							)}
-						</Fade>
-					) : (
-						<Fade in={props.showOverlay}>
-							{' '}
-							<MultipleChoiceOverLay
-								questionInFocus={props.questionInFocus}
-								selectedAnswers={props.selectedAnswers}
-								setSelectedAnswers={props.selectedAnswersState}
-								clearSelection={props.clearSelection}
-								setClearSelection={props.clearSelectionState}
-								currentRoundAnswerOverLayData={
-									props.currentRoundAnswerOverLayData
-								}
-							/>
-						</Fade>
-					)}
-					<Divider marginTop="43px" />
-					<HStack
-						justifyContent={'space-between'}
-						display={'flex'}
-						marginTop={'12px'}>
-						<Button
+				<>
+					{props.questionInFocus?.questionType === 'MultipleChoice' && (
+						<MultipleChoice
+							questionInFocus={props.questionInFocus}
+							selectedAnswers={props.selectedAnswers}
+							selectedAnswersState={props.selectedAnswersState}
+							clearSelection={props.clearSelection}
+							clearSelectionState={props.clearSelectionState}
+							currentRoundAnswerOverLayData={
+								props.currentRoundAnswerOverLayData
+							}
 							onClick={props.onClick}
-							variant={'ampSolid'}
-							w="150px"
-							isDisabled={!props.IDKResponse && !props.selectedAnswers.length}>
-							<Text>
-								{i18n(props.showOverlay ? 'continueBtnText' : 'submitBtnText')}
-							</Text>
-						</Button>
-						<Button
-							_hover={{ backgroundColor: 'white' }}
-							height="12px"
-							variant="ghost"
-							onClick={props.clearSelectionFunction}>
-							{!props.showOverlay && (
-								<Text fontSize={'14px'} color={'ampSecondary.500'}>
-									{i18n('clearSelection')}
-								</Text>
+							clearSelectionFunction={props.clearSelectionFunction}
+							setIDKResponse={props.setIDKResponse}
+							IDKResponse={props.IDKResponse}
+							smallerThan1000={props.smallerThan1000}
+							showOverlay={props.showOverlay}
+						/>
+					)}
+					{props.questionInFocus?.questionType === 'MultipleCorrect' && (
+						<MultipleCorrect
+							questionInFocus={props.questionInFocus}
+							selectedAnswers={props.selectedAnswers}
+							updateSelectedAnswersState={props.selectedAnswersState}
+							clearSelection={props.clearSelection}
+							clearSelectionState={props.clearSelectionState}
+							currentRoundAnswerOverLayData={
+								props.currentRoundAnswerOverLayData
+							}
+							onClick={props.onClick}
+							clearSelectionFunction={props.clearSelectionFunction}
+							setIDKResponse={props.setIDKResponse}
+							IDKResponse={props.IDKResponse}
+							smallerThan1000={props.smallerThan1000}
+							showOverlay={props.showOverlay}
+							setTotalAnswerConfidence={props.setTotalAnswerConfidence}
+						/>
+					)}
+					{props.questionInFocus?.questionType === 'Matching' && (
+						//TODO: refactor this out when we have the matching component files
+						<Box
+							style={{
+								marginTop: props.smallerThan1000 ? '10px' : '0px',
+							}}
+							alignItems="stretch"
+							flex={1}
+							backgroundColor="white"
+							boxShadow="md"
+							display="flex"
+							flexDirection="column"
+							justifyContent="space-between"
+							borderRadius={24}
+							p={'72px'}>
+							{!props.showOverlay ? (
+								<Fade in={!props.showOverlay}>
+									<Text>Under construction</Text>
+								</Fade>
+							) : (
+								<Fade in={props.showOverlay}>
+									{' '}
+									<MultipleChoiceOverLay
+										questionInFocus={props.questionInFocus}
+										selectedAnswers={props.selectedAnswers}
+										setSelectedAnswers={props.selectedAnswersState}
+										clearSelection={props.clearSelection}
+										setClearSelection={props.clearSelectionState}
+										currentRoundAnswerOverLayData={
+											props.currentRoundAnswerOverLayData
+										}
+									/>
+								</Fade>
 							)}
-						</Button>
-					</HStack>
-				</Box>
+							<Divider marginTop="43px" />
+							<HStack
+								justifyContent={'space-between'}
+								display={'flex'}
+								marginTop={'12px'}>
+								<Button
+									onClick={props.onClick}
+									variant={'ampSolid'}
+									w="150px"
+									isDisabled={
+										!props.IDKResponse && !props.selectedAnswers.length
+									}>
+									<Text>
+										{i18n(
+											props.showOverlay ? 'continueBtnText' : 'submitBtnText',
+										)}
+									</Text>
+								</Button>
+								<Button
+									_hover={{ backgroundColor: 'white' }}
+									height="12px"
+									variant="ghost"
+									onClick={props.clearSelectionFunction}>
+									{!props.showOverlay && (
+										<Text fontSize={'14px'} color={'ampSecondary.500'}>
+											{i18n('clearSelection')}
+										</Text>
+									)}
+								</Button>
+							</HStack>
+						</Box>
+					)}
+				</>
 			</PopoverAnchor>
 			{/* TODO: a hack, is to wrap a box around instead of added zindex to the theme file https://chakra-ui.com/docs/styled-system/theme#z-index-values*/}
 			<Box style={{ zIndex: 1401 }}>
@@ -170,7 +192,10 @@ export default function AnswerArea(props: {
 									Click <strong>once</strong> if you are <strong>unsure</strong>
 								</Heading>
 								<img
-									style={{ marginTop: '24px', marginBottom: '24px' }}
+									style={{
+										marginTop: '24px',
+										marginBottom: '24px',
+									}}
 									src={`${import.meta.env.VITE_PUBLIC_URL}/images/unsure.gif`}
 									alt="unsure gif"
 								/>
@@ -185,7 +210,10 @@ export default function AnswerArea(props: {
 									Click <strong>twice</strong> if you are <strong>sure</strong>
 								</Heading>
 								<img
-									style={{ marginTop: '24px', marginBottom: '24px' }}
+									style={{
+										marginTop: '24px',
+										marginBottom: '24px',
+									}}
 									src={`${import.meta.env.VITE_PUBLIC_URL}/images/sure.gif`}
 									alt="sure gif"
 								/>

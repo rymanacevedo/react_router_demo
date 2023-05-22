@@ -78,6 +78,8 @@ export default function AssignmentComponent({
 		useState<boolean>(true);
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
+	const [totalAnswerConfidence, setTotalAnswerConfidence] =
+		useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
 		answerList: [],
@@ -278,6 +280,7 @@ export default function AssignmentComponent({
 				answerDate: findDateData(),
 				questionSeconds: questionSecondsRef.current,
 				answerList: [...selectedAnswers],
+				confidence: totalAnswerConfidence,
 			};
 		});
 	};
@@ -563,6 +566,7 @@ export default function AssignmentComponent({
 								clearSelectionFunction={clearSelectionButtonFunc}
 								IDKResponse={IDKResponse}
 								setIDKResponse={setIDKResponse}
+								setTotalAnswerConfidence={setTotalAnswerConfidence}
 							/>
 						</Stack>
 						<ProgressMenu
