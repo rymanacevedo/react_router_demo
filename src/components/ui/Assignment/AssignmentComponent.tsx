@@ -555,7 +555,7 @@ export default function AssignmentComponent({
 								onClose={onClose}
 								smallerThan1000={isSmallerThan1000}
 								initialFocusRef={initRef}
-								showOverlay={showOverlay}
+								showFeedback={showOverlay}
 								questionInFocus={questionInFocus}
 								selectedAnswers={selectedAnswers}
 								selectedAnswersState={setSelectedAnswers}

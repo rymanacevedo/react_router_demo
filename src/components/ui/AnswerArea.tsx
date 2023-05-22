@@ -18,18 +18,15 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
-import { MutableRefObject } from 'react';
 import { MultipleChoice } from './MultipleChoiceAnswerInput/MultipleChoice';
 import MultipleChoiceOverLay from './MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import MultipleCorrect from './MultipleCorrectAnswerInput/MultipleCorrect';
 import { useTranslation } from 'react-i18next';
+import { MutableRefObject } from 'react';
 
-export default function AnswerArea(props: {
+type Props = {
 	isOpen: boolean;
 	onClose: () => void;
-	smallerThan1000: boolean;
-	initialFocusRef: MutableRefObject<null>;
-	showOverlay: boolean;
 	questionInFocus: QuestionInFocus;
 	selectedAnswers: SelectedAnswers[];
 	selectedAnswersState: (
@@ -46,8 +43,30 @@ export default function AnswerArea(props: {
 	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
 	IDKResponse: boolean;
+	smallerThan1000: boolean;
+	showFeedback: boolean;
 	setTotalAnswerConfidence: (value: string) => void;
-}) {
+	initialFocusRef: MutableRefObject<null>;
+};
+
+export default function AnswerArea({
+	isOpen,
+	onClose,
+	questionInFocus,
+	selectedAnswers,
+	selectedAnswersState,
+	clearSelection,
+	clearSelectionState,
+	currentRoundAnswerOverLayData,
+	onClick,
+	clearSelectionFunction,
+	setIDKResponse,
+	IDKResponse,
+	smallerThan1000,
+	showFeedback,
+	setTotalAnswerConfidence,
+	initialFocusRef,
+}: Props) {
 	const { t: i18n } = useTranslation();
 
 	return (
@@ -57,54 +76,50 @@ export default function AnswerArea(props: {
 			isLazy={true}
 			offset={[-150, 0]}
 			arrowPadding={220}
-			isOpen={props.isOpen}
-			onClose={props.onClose}
-			defaultIsOpen={props.isOpen}
-			placement={props.smallerThan1000 ? 'auto' : 'left'}
-			initialFocusRef={props.initialFocusRef}
+			isOpen={isOpen}
+			onClose={onClose}
+			defaultIsOpen={isOpen}
+			placement={smallerThan1000 ? 'auto' : 'left'}
+			initialFocusRef={initialFocusRef}
 			arrowSize={20}>
 			<PopoverAnchor>
 				<>
-					{props.questionInFocus?.questionType === 'MultipleChoice' && (
+					{questionInFocus?.questionType === 'MultipleChoice' && (
 						<MultipleChoice
-							questionInFocus={props.questionInFocus}
-							selectedAnswers={props.selectedAnswers}
-							selectedAnswersState={props.selectedAnswersState}
-							clearSelection={props.clearSelection}
-							clearSelectionState={props.clearSelectionState}
-							currentRoundAnswerOverLayData={
-								props.currentRoundAnswerOverLayData
-							}
-							onClick={props.onClick}
-							clearSelectionFunction={props.clearSelectionFunction}
-							setIDKResponse={props.setIDKResponse}
-							IDKResponse={props.IDKResponse}
-							smallerThan1000={props.smallerThan1000}
-							showOverlay={props.showOverlay}
+							questionInFocus={questionInFocus}
+							selectedAnswers={selectedAnswers}
+							selectedAnswersState={selectedAnswersState}
+							clearSelection={clearSelection}
+							clearSelectionState={clearSelectionState}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+							onClick={onClick}
+							clearSelectionFunction={clearSelectionFunction}
+							setIDKResponse={setIDKResponse}
+							IDKResponse={IDKResponse}
+							smallerThan1000={smallerThan1000}
+							showOverlay={showFeedback}
 						/>
 					)}
-					{props.questionInFocus?.questionType === 'MultipleCorrect' && (
+					{questionInFocus?.questionType === 'MultipleCorrect' && (
 						<MultipleCorrect
-							questionInFocus={props.questionInFocus}
-							selectedAnswers={props.selectedAnswers}
-							updateSelectedAnswersState={props.selectedAnswersState}
-							clearSelection={props.clearSelection}
-							clearSelectionState={props.clearSelectionState}
-							currentRoundAnswerOverLayData={
-								props.currentRoundAnswerOverLayData
-							}
-							onClick={props.onClick}
-							setIDKResponse={props.setIDKResponse}
-							smallerThan1000={props.smallerThan1000}
-							showOverlay={props.showOverlay}
-							setTotalAnswerConfidence={props.setTotalAnswerConfidence}
+							questionInFocus={questionInFocus}
+							selectedAnswers={selectedAnswers}
+							updateSelectedAnswersState={selectedAnswersState}
+							clearSelection={clearSelection}
+							clearSelectionState={clearSelectionState}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+							onClick={onClick}
+							setIDKResponse={setIDKResponse}
+							smallerThan1000={smallerThan1000}
+							showOverlay={showFeedback}
+							setTotalAnswerConfidence={setTotalAnswerConfidence}
 						/>
 					)}
-					{props.questionInFocus?.questionType === 'Matching' && (
+					{questionInFocus?.questionType === 'Matching' && (
 						//TODO: refactor this out when we have the matching component files
 						<Box
 							style={{
-								marginTop: props.smallerThan1000 ? '10px' : '0px',
+								marginTop: smallerThan1000 ? '10px' : '0px',
 							}}
 							alignItems="stretch"
 							flex={1}
@@ -115,21 +130,21 @@ export default function AnswerArea(props: {
 							justifyContent="space-between"
 							borderRadius={24}
 							p={'72px'}>
-							{!props.showOverlay ? (
-								<Fade in={!props.showOverlay}>
+							{!showFeedback ? (
+								<Fade in={!showFeedback}>
 									<Text>Under construction</Text>
 								</Fade>
 							) : (
-								<Fade in={props.showOverlay}>
+								<Fade in={showFeedback}>
 									{' '}
 									<MultipleChoiceOverLay
-										questionInFocus={props.questionInFocus}
-										selectedAnswers={props.selectedAnswers}
-										setSelectedAnswers={props.selectedAnswersState}
-										clearSelection={props.clearSelection}
-										setClearSelection={props.clearSelectionState}
+										questionInFocus={questionInFocus}
+										selectedAnswers={selectedAnswers}
+										setSelectedAnswers={selectedAnswersState}
+										clearSelection={clearSelection}
+										setClearSelection={clearSelectionState}
 										currentRoundAnswerOverLayData={
-											props.currentRoundAnswerOverLayData
+											currentRoundAnswerOverLayData
 										}
 									/>
 								</Fade>
@@ -140,24 +155,20 @@ export default function AnswerArea(props: {
 								display={'flex'}
 								marginTop={'12px'}>
 								<Button
-									onClick={props.onClick}
+									onClick={onClick}
 									variant={'ampSolid'}
 									w="150px"
-									isDisabled={
-										!props.IDKResponse && !props.selectedAnswers.length
-									}>
+									isDisabled={!IDKResponse && !selectedAnswers.length}>
 									<Text>
-										{i18n(
-											props.showOverlay ? 'continueBtnText' : 'submitBtnText',
-										)}
+										{i18n(showFeedback ? 'continueBtnText' : 'submitBtnText')}
 									</Text>
 								</Button>
 								<Button
 									_hover={{ backgroundColor: 'white' }}
 									height="12px"
 									variant="ghost"
-									onClick={props.clearSelectionFunction}>
-									{!props.showOverlay && (
+									onClick={clearSelectionFunction}>
+									{!showFeedback && (
 										<Text fontSize={'14px'} color={'ampSecondary.500'}>
 											{i18n('clearSelection')}
 										</Text>
@@ -171,8 +182,8 @@ export default function AnswerArea(props: {
 			{/* TODO: a hack, is to wrap a box around instead of added zindex to the theme file https://chakra-ui.com/docs/styled-system/theme#z-index-values*/}
 			<Box style={{ zIndex: 1401 }}>
 				<PopoverContent
-					p={props.smallerThan1000 ? 12 : 10}
-					h={props.smallerThan1000 ? 'auto' : 485}
+					p={smallerThan1000 ? 12 : 10}
+					h={smallerThan1000 ? 'auto' : 485}
 					w={560}>
 					<PopoverArrow />
 					<Heading as="h3" mb={3}>
@@ -225,7 +236,7 @@ export default function AnswerArea(props: {
 						<Text mt={'5px'}>
 							You can click three times to unselect your answer.
 						</Text>
-						<Button mt={4} onClick={props.onClose} ref={props.initialFocusRef}>
+						<Button mt={4} onClick={onClose} ref={initialFocusRef}>
 							Continue
 						</Button>
 					</PopoverBody>

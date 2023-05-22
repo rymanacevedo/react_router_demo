@@ -1,22 +1,22 @@
 //@ts-nocheck
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
 	Box,
-	Container,
-	HStack,
-	useMediaQuery,
-	Popover,
-	PopoverTrigger,
-	PopoverContent,
-	PopoverBody,
-	PopoverFooter,
-	PopoverArrow,
-	PopoverCloseButton,
-	PopoverAnchor,
-	Stack,
 	Button,
-	Text,
+	Container,
 	Heading,
+	HStack,
+	Popover,
+	PopoverAnchor,
+	PopoverArrow,
+	PopoverBody,
+	PopoverCloseButton,
+	PopoverContent,
+	PopoverFooter,
+	PopoverTrigger,
+	Stack,
+	Text,
+	useMediaQuery,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
@@ -26,16 +26,16 @@ import { useTranslation } from 'react-i18next';
 import AnswerArea from '../../ui/AnswerArea';
 import {
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
 	CurrentRoundQuestionListData,
+	QuestionInFocus,
 	SelectedAnswers,
 } from './AssignmentTypes';
 
 import {
+	currentRoundAnswerOverlayDataMock,
 	currentRoundQuestionListDataMock,
 	questionDataMock,
 	questionInFocusDataMock,
-	currentRoundAnswerOverlayDataMock,
 } from './mockAssignmentData';
 
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
@@ -100,227 +100,149 @@ const StaticAssignmentView = ({
 	}, [tourStep]);
 
 	return (
-		<>
-			<main id="learning-assignment" pointerEvents="none">
-				<Container
-					id={'learning-assignment'}
-					margin="0"
-					padding="0"
-					maxWidth={'100vw'}
-					overflowY={'hidden'}
-					overflowX={'hidden'}>
-					<Popover
-						isOpen={tourStep >= 3 && tourStep < 6}
-						placement={barPopoverContent[tourStep]?.placement || 'bottom'}
-						isLazy
-						initialFocusRef={barRef.current}
-						arrowSize={20}
-						gutter={20}>
-						<PopoverTrigger>
-							<PopoverAnchor>
-								<Box
-									style={{
-										zIndex: barIndex,
-										pointerEvents: 'none',
-										position: 'relative',
-									}}>
-									<TestProgressBarMenu
-										id={'bar'}
-										questionData={questionData}
-										currentRoundQuestionListData={currentRoundQuestionListData}
-										currentQuestion={questionInFocusMock}
-										currentRoundAnswerOverLayData={
-											currentRoundAnswerOverLayData
-										}
-										ref={barRef.current}
-										tabIndex="0"
-									/>
-								</Box>
-							</PopoverAnchor>
-						</PopoverTrigger>
-						<Box style={{ position: 'relative', zIndex: barIndex }}>
-							<PopoverContent
-								p="24px"
-								w={isSmallerThan1000 ? '100vw' : '560px'}
-								h="auto">
-								<Box
-									position="fixed"
-									top="2px"
-									left={barPopoverContent[tourStep]?.arrowOffset}>
-									<PopoverArrow position="fixed" top="0" left="0" />
-								</Box>
-								<PopoverCloseButton
-									p="24px"
-									onClick={() => {
-										nav(-1);
-									}}
-								/>
-								<PopoverBody p="24px" pl="0">
-									<Heading fontSize={24} as="h2" mb={3}>
-										{i18n(barPopoverContent[tourStep]?.title)}
-									</Heading>
-									<Text>{i18n(barPopoverContent[tourStep]?.content)}</Text>
-								</PopoverBody>
-								<PopoverFooter border="0" p="0" justifyContent="flex-start">
-									<HStack spacing={5}>
-										<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
-											{i18n('step')} {tourStep} {i18n('of6')}
-										</Text>
-										<Text
-											as="u"
-											color="rgba(0, 0, 0, 0.5)"
-											cursor="pointer"
-											onClick={() => {
-												nav(-1);
-											}}>
-											{i18n('skipTour')}
-										</Text>
-
-										<Button
-											onClick={() => {
-												setTourStep(tourStep + 1);
-											}}>
-											{i18n('nextBtn')}
-										</Button>
-									</HStack>
-								</PopoverFooter>
-							</PopoverContent>
-						</Box>
-					</Popover>
-					<HStack justify="center" align="space-between">
-						<Stack
-							maxW="1496"
-							w="100%"
-							p="12px"
-							pr="0px"
-							alignItems="stretch"
-							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+		<main id="learning-assignment" pointerEvents="none">
+			<Container
+				id={'learning-assignment'}
+				margin="0"
+				padding="0"
+				maxWidth={'100vw'}
+				overflowY={'hidden'}
+				overflowX={'hidden'}>
+				<Popover
+					isOpen={tourStep >= 3 && tourStep < 6}
+					placement={barPopoverContent[tourStep]?.placement || 'bottom'}
+					isLazy
+					initialFocusRef={barRef.current}
+					arrowSize={20}
+					gutter={20}>
+					<PopoverTrigger>
+						<PopoverAnchor>
 							<Box
-								backgroundColor="white"
-								boxShadow="md"
-								borderRadius={24}
-								px="72px"
-								py="44px"
-								w={{ base: '100%', md: '50%' }}
-								minWidth={{ base: '100%', md: '50%' }}>
-								<Question questionInFocus={questionInFocusMock} />
+								style={{
+									zIndex: barIndex,
+									pointerEvents: 'none',
+									position: 'relative',
+								}}>
+								<TestProgressBarMenu
+									id={'bar'}
+									questionData={questionData}
+									currentRoundQuestionListData={currentRoundQuestionListData}
+									currentQuestion={questionInFocusMock}
+									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									ref={barRef.current}
+									tabIndex="0"
+								/>
 							</Box>
-							<Popover
-								isOpen={tourStep === 2}
-								placement={isSmallerThan1000 ? 'top' : 'left'}
-								isLazy
-								initialFocusRef={answerRef.current}
-								gutter="40"
-								arrowSize={20}>
-								<PopoverTrigger>
-									<PopoverAnchor>
-										<Box
-											style={{
-												zIndex: ansIndex,
-												pointerEvents: 'none',
-											}}
-											w={{ base: '100%', md: '50%' }}
-											minWidth="100%">
-											<AnswerArea
-												id="answerArea"
-												smallerThan1000={isSmallerThan1000}
-												questionInFocus={questionInFocusMock}
-												currentRoundAnswerOverLayData={
-													currentRoundAnswerOverLayData
-												}
-												selectedAnswers={selectedAnswers}
-												selectedAnswersState={setSelectedAnswers}
-												ref={answerRef.current}
-												tabIndex="0"
-											/>
-										</Box>
-									</PopoverAnchor>
-								</PopoverTrigger>
-								<Box
-									style={{
-										position: 'relative',
-										zIndex: tourStep === 2 ? ansIndex : 'unset',
-									}}>
-									<PopoverContent
-										p="24px"
-										w={isSmallerThan1000 ? '100vw' : '560px'}
-										h="auto">
-										<PopoverArrow />
-										<PopoverCloseButton
-											p="24px"
-											onClick={() => {
-												nav(-1);
-											}}
-										/>
-										<PopoverBody p="24px" pl="0">
-											<Heading fontSize={24} as="h2" mb={3}>
-												{i18n('step2PopoverTitle')}
-											</Heading>
-											<Text>{i18n('step2PopoverContent')}</Text>
-										</PopoverBody>
-										<PopoverFooter border="0" p="0" justifyContent="flex-start">
-											<HStack spacing={5}>
-												<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
-													{i18n('step')} {tourStep} {i18n('of6')}
-												</Text>
-												<Text
-													as="u"
-													color="rgba(0, 0, 0, 0.5)"
-													cursor="pointer"
-													onClick={() => {
-														nav(-1);
-													}}>
-													{i18n('skipTour')}
-												</Text>
+						</PopoverAnchor>
+					</PopoverTrigger>
+					<Box style={{ position: 'relative', zIndex: barIndex }}>
+						<PopoverContent
+							p="24px"
+							w={isSmallerThan1000 ? '100vw' : '560px'}
+							h="auto">
+							<Box
+								position="fixed"
+								top="2px"
+								left={barPopoverContent[tourStep]?.arrowOffset}>
+								<PopoverArrow position="fixed" top="0" left="0" />
+							</Box>
+							<PopoverCloseButton
+								p="24px"
+								onClick={() => {
+									nav(-1);
+								}}
+							/>
+							<PopoverBody p="24px" pl="0">
+								<Heading fontSize={24} as="h2" mb={3}>
+									{i18n(barPopoverContent[tourStep]?.title)}
+								</Heading>
+								<Text>{i18n(barPopoverContent[tourStep]?.content)}</Text>
+							</PopoverBody>
+							<PopoverFooter border="0" p="0" justifyContent="flex-start">
+								<HStack spacing={5}>
+									<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
+										{i18n('step')} {tourStep} {i18n('of6')}
+									</Text>
+									<Text
+										as="u"
+										color="rgba(0, 0, 0, 0.5)"
+										cursor="pointer"
+										onClick={() => {
+											nav(-1);
+										}}>
+										{i18n('skipTour')}
+									</Text>
 
-												<Button
-													onClick={() => {
-														setTourStep(tourStep + 1);
-														setAnsIndex(0);
-														setBarIndex(1500);
-													}}>
-													{i18n('nextBtn')}
-												</Button>
-											</HStack>
-										</PopoverFooter>
-									</PopoverContent>
-								</Box>
-							</Popover>
-						</Stack>
+									<Button
+										onClick={() => {
+											setTourStep(tourStep + 1);
+										}}>
+										{i18n('nextBtn')}
+									</Button>
+								</HStack>
+							</PopoverFooter>
+						</PopoverContent>
+					</Box>
+				</Popover>
+				<HStack justify="center" align="space-between">
+					<Stack
+						maxW="1496"
+						w="100%"
+						p="12px"
+						pr="0px"
+						alignItems="stretch"
+						direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+						<Box
+							backgroundColor="white"
+							boxShadow="md"
+							borderRadius={24}
+							px="72px"
+							py="44px"
+							w={{ base: '100%', md: '50%' }}
+							minWidth={{ base: '100%', md: '50%' }}>
+							<Question questionInFocus={questionInFocusMock} />
+						</Box>
 						<Popover
-							isOpen={tourStep === 6}
-							placement={isSmallerThan1000 ? 'top' : 'left-start'}
+							isOpen={tourStep === 2}
+							placement={isSmallerThan1000 ? 'top' : 'left'}
 							isLazy
+							initialFocusRef={answerRef.current}
 							gutter="40"
 							arrowSize={20}>
 							<PopoverTrigger>
 								<PopoverAnchor>
 									<Box
 										style={{
-											zIndex: menuIndex,
+											zIndex: ansIndex,
 											pointerEvents: 'none',
-											marginTop: 'unset',
-										}}>
-										<ProgressMenu
-											isMenuOpen={isMenuOpen}
-											currentRoundQuestionListData={
-												currentRoundQuestionListData
-											}
+										}}
+										w={{ base: '100%', md: '50%' }}
+										minWidth="100%">
+										<AnswerArea
+											id="answerArea"
+											smallerThan1000={isSmallerThan1000}
+											questionInFocus={questionInFocusMock}
 											currentRoundAnswerOverLayData={
 												currentRoundAnswerOverLayData
 											}
+											selectedAnswers={selectedAnswers}
+											selectedAnswersState={setSelectedAnswers}
+											ref={answerRef.current}
+											tabIndex="0"
 										/>
 									</Box>
 								</PopoverAnchor>
 							</PopoverTrigger>
-							<Box style={{ position: 'relative', zIndex: menuIndex }}>
+							<Box
+								style={{
+									position: 'relative',
+									zIndex: tourStep === 2 ? ansIndex : 'unset',
+								}}>
 								<PopoverContent
 									p="24px"
 									w={isSmallerThan1000 ? '100vw' : '560px'}
 									h="auto">
-									<Box position="fixed" top="40px" left="555px">
-										<PopoverArrow position="fixed" top="0" left="0" />
-									</Box>
+									<PopoverArrow />
 									<PopoverCloseButton
 										p="24px"
 										onClick={() => {
@@ -329,9 +251,9 @@ const StaticAssignmentView = ({
 									/>
 									<PopoverBody p="24px" pl="0">
 										<Heading fontSize={24} as="h2" mb={3}>
-											{i18n('step6PopoverTitle')}
+											{i18n('step2PopoverTitle')}
 										</Heading>
-										<Text>{i18n('step6PopoverContent')}</Text>
+										<Text>{i18n('step2PopoverContent')}</Text>
 									</PopoverBody>
 									<PopoverFooter border="0" p="0" justifyContent="flex-start">
 										<HStack spacing={5}>
@@ -350,20 +272,92 @@ const StaticAssignmentView = ({
 
 											<Button
 												onClick={() => {
-													handleMenuOpen();
-													nav(-1);
+													setTourStep(tourStep + 1);
+													setAnsIndex(0);
+													setBarIndex(1500);
 												}}>
-												{i18n('finishTourBtn')}
+												{i18n('nextBtn')}
 											</Button>
 										</HStack>
 									</PopoverFooter>
 								</PopoverContent>
 							</Box>
 						</Popover>
-					</HStack>
-				</Container>
-			</main>
-		</>
+					</Stack>
+					<Popover
+						isOpen={tourStep === 6}
+						placement={isSmallerThan1000 ? 'top' : 'left-start'}
+						isLazy
+						gutter="40"
+						arrowSize={20}>
+						<PopoverTrigger>
+							<PopoverAnchor>
+								<Box
+									style={{
+										zIndex: menuIndex,
+										pointerEvents: 'none',
+										marginTop: 'unset',
+									}}>
+									<ProgressMenu
+										isMenuOpen={isMenuOpen}
+										currentRoundQuestionListData={currentRoundQuestionListData}
+										currentRoundAnswerOverLayData={
+											currentRoundAnswerOverLayData
+										}
+									/>
+								</Box>
+							</PopoverAnchor>
+						</PopoverTrigger>
+						<Box style={{ position: 'relative', zIndex: menuIndex }}>
+							<PopoverContent
+								p="24px"
+								w={isSmallerThan1000 ? '100vw' : '560px'}
+								h="auto">
+								<Box position="fixed" top="40px" left="555px">
+									<PopoverArrow position="fixed" top="0" left="0" />
+								</Box>
+								<PopoverCloseButton
+									p="24px"
+									onClick={() => {
+										nav(-1);
+									}}
+								/>
+								<PopoverBody p="24px" pl="0">
+									<Heading fontSize={24} as="h2" mb={3}>
+										{i18n('step6PopoverTitle')}
+									</Heading>
+									<Text>{i18n('step6PopoverContent')}</Text>
+								</PopoverBody>
+								<PopoverFooter border="0" p="0" justifyContent="flex-start">
+									<HStack spacing={5}>
+										<Text color="rgba(0, 0, 0, 0.5)" mr="auto">
+											{i18n('step')} {tourStep} {i18n('of6')}
+										</Text>
+										<Text
+											as="u"
+											color="rgba(0, 0, 0, 0.5)"
+											cursor="pointer"
+											onClick={() => {
+												nav(-1);
+											}}>
+											{i18n('skipTour')}
+										</Text>
+
+										<Button
+											onClick={() => {
+												handleMenuOpen();
+												nav(-1);
+											}}>
+											{i18n('finishTourBtn')}
+										</Button>
+									</HStack>
+								</PopoverFooter>
+							</PopoverContent>
+						</Box>
+					</Popover>
+				</HStack>
+			</Container>
+		</main>
 	);
 };
 
