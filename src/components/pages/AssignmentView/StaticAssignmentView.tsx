@@ -201,7 +201,8 @@ const StaticAssignmentView = ({
 								borderRadius={24}
 								px="72px"
 								py="44px"
-								w={{ base: '100%', md: '50%' }}>
+								w={{ base: '100%', md: '50%' }}
+								minWidth={{ base: '100%', md: '50%' }}>
 								<Question questionInFocus={questionInFocusMock} />
 							</Box>
 							<Popover
@@ -217,8 +218,9 @@ const StaticAssignmentView = ({
 											style={{
 												zIndex: ansIndex,
 												pointerEvents: 'none',
-												flexGrow: '1',
-											}}>
+											}}
+											w={{ base: '100%', md: '50%' }}
+											minWidth="100%">
 											<AnswerArea
 												id="answerArea"
 												smallerThan1000={isSmallerThan1000}
