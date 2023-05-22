@@ -6,6 +6,7 @@ import {
 	AccordionPanel,
 	Text,
 	AccordionIcon,
+	Stack,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -14,7 +15,7 @@ import {
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import { extractSrc, getIcons, truncateText } from '../../../utils/logic';
+import { truncateText, getIcons } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
@@ -30,14 +31,47 @@ interface ReviewQuestionsProps {
 
 interface IconsProps {
 	answerHistory: AnswerHistory[];
+	isExpanded: boolean;
 }
 
-const Icons = ({ answerHistory }: IconsProps) => {
-	return (
-		<Box display="flex" marginLeft="auto" marginRight="27.5px">
-			{getIcons(answerHistory)}
-		</Box>
-	);
+const Icons = ({ answerHistory, isExpanded }: IconsProps) => {
+	if (isExpanded && answerHistory.length > 20) {
+		let beginningAnswerHistory: AnswerHistory[] = [];
+		let remainingAnswerHistory: AnswerHistory[] = [];
+
+		if (answerHistory.length > 20) {
+			beginningAnswerHistory = answerHistory.slice(0, 20);
+			remainingAnswerHistory = answerHistory.slice(20);
+		}
+		return (
+			<>
+				<Box
+					display="flex"
+					marginLeft="auto"
+					marginRight="27.5px"
+					id="insideIcons">
+					{getIcons(beginningAnswerHistory, isExpanded)}
+				</Box>
+				<Box
+					display="flex"
+					justifyContent="flex-end"
+					marginRight="27.5px"
+					id="insideIcons">
+					{getIcons(remainingAnswerHistory, isExpanded)}
+				</Box>
+			</>
+		);
+	} else {
+		return (
+			<Box
+				display="flex"
+				marginLeft="auto"
+				marginRight="27.5px"
+				id="insideIcons">
+				{getIcons(answerHistory, isExpanded)}
+			</Box>
+		);
+	}
 };
 
 const ReviewQuestions = ({
@@ -124,17 +158,23 @@ const ReviewQuestions = ({
 												/>
 											)}
 										</Box>
-										<Icons answerHistory={transformedQuestion.answerHistory} />
+										<Box id="insideRender">
+											<Icons
+												answerHistory={transformedQuestion.answerHistory}
+												isExpanded={isExpanded}
+											/>
+										</Box>
+
 										<AccordionIcon />
 									</AccordionButton>
 								</h2>
 								<AccordionPanel pb={4}>
 									{modifiedText === i18n('clickHereForImage') ? (
-										<img
-											src={extractSrc(transformedQuestion.questionRc)}
-											alt={transformedQuestion.questionRc}
-											style={{ width: '50%', height: '50%' }}
-										/>
+										<Stack spacing="20px" marginTop="34px">
+											<ReviewContentRender
+												content={transformedQuestion.questionRc}
+											/>
+										</Stack>
 									) : (
 										<RichContentComponent
 											content={modifiedText}
