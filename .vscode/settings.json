@@ -1,14 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "eslint.codeActionsOnSave.rules": {
-        "singleQuote": true,
-        "trailingComma": "all",
-        "jsxBracketSameLine": true,
-        "printWidth": 80,
-        "tabWidth": 2,
-        "useTabs": true,
-        "semi": true
-    },
+    "eslint.codeActionsOnSave.rules": null,
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "typescript.tsdk": "node_modules/typescript/lib",
 }
