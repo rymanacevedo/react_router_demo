@@ -9,7 +9,7 @@ import {
 import MultipleCorrectAnswers from './MultipleCorrectAnswers';
 import MultipleChoiceOverLay from './MultipleChoiceFeedback';
 
-export interface MultipleCorrectProps {
+export type MultipleCorrectProps = {
 	questionInFocus: QuestionInFocus;
 	selectedAnswers: SelectedAnswers[];
 	updateSelectedAnswersState: (
@@ -29,7 +29,7 @@ export interface MultipleCorrectProps {
 	smallerThan1000: boolean;
 	showOverlay: boolean;
 	setTotalAnswerConfidence: (value: string) => void;
-}
+};
 
 const MultipleCorrect = (props: MultipleCorrectProps) => {
 	const { t: i18n } = useTranslation();
