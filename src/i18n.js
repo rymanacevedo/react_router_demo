@@ -153,6 +153,7 @@ const resources = {
          clearSelection: 'Clear selection',
          nextQ: 'Next Question',
          completeMod: "Congratulations, you've completed this module!",
+         selectAllthatApply: 'Select all that apply',
          /////////////////////////////////////////////
          //   LearningReviewView.tsx
          //////////////////////////////////////////////

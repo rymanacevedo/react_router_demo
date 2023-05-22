@@ -10,7 +10,7 @@ export interface Answer {
 	self: string;
 }
 
-const MultipleChoiceOverLay = ({
+const MultipleChoiceFeedback = ({
 	questionInFocus,
 	selectedAnswers,
 	currentRoundAnswerOverLayData,
@@ -85,4 +85,4 @@ const MultipleChoiceOverLay = ({
 	);
 };
 
-export default MultipleChoiceOverLay;
+export default MultipleChoiceFeedback;

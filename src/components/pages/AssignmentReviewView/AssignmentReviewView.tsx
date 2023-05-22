@@ -23,7 +23,7 @@ import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceOverLay';
+import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import {
 	AnswerData,
 	Confidence,

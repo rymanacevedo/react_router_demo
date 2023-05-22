@@ -1,4 +1,3 @@
-// MultipleChoice.tsx
 import { Box, Button, Divider, Fade, HStack, Text } from '@chakra-ui/react';
 
 import { useTranslation } from 'react-i18next';
@@ -8,7 +7,7 @@ import {
 	SelectedAnswers,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleChoiceAnswers from './MultipleChoiceAnswers';
-import MultipleChoiceOverLay from './MultipleChoiceOverLay';
+import MultipleChoiceOverLay from './MultipleChoiceFeedBack';
 
 type MultipleChoiceProps = {
 	questionInFocus: QuestionInFocus;
@@ -64,7 +63,7 @@ export const MultipleChoice = ({
 			{!showOverlay ? (
 				<Fade in={!showOverlay}>
 					<MultipleChoiceAnswers
-						questionInFocus={questionInFocus as QuestionInFocus}
+						questionInFocus={questionInFocus}
 						selectedAnswers={selectedAnswers}
 						setSelectedAnswers={selectedAnswersState}
 						clearSelection={clearSelection}

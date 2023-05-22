@@ -1,4 +1,5 @@
 import { Box, Heading } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import {
 	QuestionInFocus,
 	SelectedAnswers,
@@ -8,13 +9,21 @@ import MultiCorrectAnswerInput from './MultiCorrectAnswerInput';
 type MultipleCorrectAnswersProps = {
 	questionInFocus: QuestionInFocus;
 	selectedAnswers?: SelectedAnswers[];
-	setSelectedAnswers: any;
-	setIDKResponse: (Arg0: boolean) => void;
+	setSelectedAnswers: (
+		value:
+			| ((prevState: SelectedAnswers[]) => SelectedAnswers[])
+			| SelectedAnswers[],
+	) => void;
+	setIDKResponse: (value: boolean) => void;
 	IDKResponse?: boolean;
 };
 
-const MultipleCorrectAnswers = (props: MultipleCorrectAnswersProps) => {
-	const { questionInFocus, selectedAnswers, setSelectedAnswers } = props;
+const MultipleCorrectAnswers = ({
+	questionInFocus,
+	selectedAnswers,
+	setSelectedAnswers,
+}: MultipleCorrectAnswersProps) => {
+	const { t: i18n } = useTranslation();
 
 	const toggleAnswer = (answerObject: SelectedAnswers) => {
 		if (answerObject.answerId) {
@@ -35,7 +44,7 @@ const MultipleCorrectAnswers = (props: MultipleCorrectAnswersProps) => {
 
 	return (
 		<Box>
-			<Heading as="h3">Select all that apply</Heading>
+			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"

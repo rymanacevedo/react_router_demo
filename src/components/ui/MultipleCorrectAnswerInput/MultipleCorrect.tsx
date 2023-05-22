@@ -7,7 +7,7 @@ import {
 	SelectedAnswers,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleCorrectAnswers from './MultipleCorrectAnswers';
-import MultipleChoiceOverLay from './MultipleSelectOverLay';
+import MultipleChoiceOverLay from './MultipleChoiceFeedback';
 
 export interface MultipleCorrectProps {
 	questionInFocus: QuestionInFocus;
@@ -31,7 +31,7 @@ export interface MultipleCorrectProps {
 	setTotalAnswerConfidence: (value: string) => void;
 }
 
-const MultipleCorrect: React.FC<MultipleCorrectProps> = (props) => {
+const MultipleCorrect = (props: MultipleCorrectProps) => {
 	const { t: i18n } = useTranslation();
 
 	const [submited, setSubmited] = useState(false);
@@ -123,14 +123,14 @@ const MultipleCorrect: React.FC<MultipleCorrectProps> = (props) => {
 						display={'flex'}
 						marginTop={'12px'}>
 						<Button
-							onClick={() => handleMultiCorrectSubmission('IDK')}
+							onClick={handleMultiCorrectSubmission('IDK')}
 							variant={'ampOutline'}
 							w="150px"
 							isDisabled={Boolean(props.selectedAnswers.length)}>
 							<Text>{i18n('iDontKnow')}</Text>
 						</Button>
 						<Button
-							onClick={() => handleMultiCorrectSubmission('UNSURE')}
+							onClick={handleMultiCorrectSubmission('UNSURE')}
 							variant={'ampSolid'}
 							w="150px"
 							bg="ampSecondary.500"
@@ -138,7 +138,7 @@ const MultipleCorrect: React.FC<MultipleCorrectProps> = (props) => {
 							<Text>{i18n('iAmUnsure')}</Text>
 						</Button>
 						<Button
-							onClick={() => handleMultiCorrectSubmission('SURE')}
+							onClick={handleMultiCorrectSubmission('SURE')}
 							variant={'ampSolid'}
 							w="150px"
 							isDisabled={!props.selectedAnswers.length as boolean}>

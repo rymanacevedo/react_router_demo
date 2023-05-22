@@ -1,7 +1,7 @@
 import { Checkbox } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import { SelectedAnswers } from '../../pages/AssignmentView/AssignmentTypes';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 const MultiCorrectAnswerInput = ({
 	questionText,
@@ -12,7 +12,7 @@ const MultiCorrectAnswerInput = ({
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
-	toggleAnswer: (answerObject: any) => void;
+	toggleAnswer: (answerObject: SelectedAnswers) => void;
 	selectedAnswers?: Array<SelectedAnswers>;
 	isDisabled?: boolean;
 }) => {
@@ -28,7 +28,7 @@ const MultiCorrectAnswerInput = ({
 		);
 	}, [selectedAnswers, questionAnswerId]);
 
-	const handleOnChnage = (e: any) => {
+	const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
 		toggleAnswer({
 			answerId: Number(e.target.value),
 			selectedOptionId: 0,
@@ -48,7 +48,8 @@ const MultiCorrectAnswerInput = ({
 			value={questionAnswerId}
 			isChecked={Boolean(isChecked)}
 			disabled={isDisabled}
-			onChange={handleOnChnage}>
+			onChange={handleOnChange}>
+			{' '}
 			<RichContentComponent
 				style={{
 					position: 'relative',

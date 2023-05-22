@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react';
 import { MutableRefObject } from 'react';
 import { MultipleChoice } from './MultipleChoiceAnswerInput/MultipleChoice';
-import MultipleChoiceOverLay from './MultipleChoiceAnswerInput/MultipleChoiceOverLay';
+import MultipleChoiceOverLay from './MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import MultipleCorrect from './MultipleCorrectAnswerInput/MultipleCorrect';
 import { useTranslation } from 'react-i18next';
 
