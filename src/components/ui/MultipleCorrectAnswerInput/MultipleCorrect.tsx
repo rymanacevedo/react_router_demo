@@ -23,131 +23,131 @@ export type MultipleCorrectProps = {
 	) => void;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
 	onClick: () => void;
-	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
-	IDKResponse: boolean;
 	smallerThan1000: boolean;
 	showOverlay: boolean;
 	setTotalAnswerConfidence: (value: string) => void;
 };
 
-const MultipleCorrect = (props: MultipleCorrectProps) => {
+const MultipleCorrect = ({
+	questionInFocus,
+	selectedAnswers,
+	updateSelectedAnswersState,
+	clearSelection,
+	clearSelectionState,
+	currentRoundAnswerOverLayData,
+	onClick,
+	setIDKResponse,
+	smallerThan1000,
+	showOverlay,
+	setTotalAnswerConfidence,
+}: MultipleCorrectProps) => {
 	const { t: i18n } = useTranslation();
 
-	const [submited, setSubmited] = useState(false);
+	const [submitted, setSubmitted] = useState(false);
 
-	const handleMultiCorrectSubmission = (assignmentTakerConfidence?: string) => {
-		if (assignmentTakerConfidence === 'IDK') {
-			props.setTotalAnswerConfidence('NotSure');
-			setSubmited(true);
-		} else if (assignmentTakerConfidence === 'UNSURE') {
-			const selectedAnswersWithConfidence = props.selectedAnswers.map(
-				(answer) => {
-					return {
-						...answer,
-						confidence: 50,
-					};
-				},
-			);
-			props.updateSelectedAnswersState(selectedAnswersWithConfidence);
-			props.setTotalAnswerConfidence('PartSure');
-			setSubmited(true);
-		} else if (assignmentTakerConfidence === 'SURE') {
-			const selectedAnswersWithConfidence = props.selectedAnswers.map(
-				(answer) => {
-					return {
-						...answer,
-						confidence: 100,
-					};
-				},
-			);
+	const handleSubmission = (confidence: string) => {
+		if (confidence === 'IDK') {
+			setTotalAnswerConfidence('NotSure');
+			setSubmitted(true);
+		} else if (confidence === 'UNSURE') {
+			const selectedAnswersWithConfidence = selectedAnswers.map((answer) => {
+				return {
+					...answer,
+					confidence: 50,
+				};
+			});
+			updateSelectedAnswersState(selectedAnswersWithConfidence);
+			setTotalAnswerConfidence('PartSure');
+			setSubmitted(true);
+		} else if (confidence === 'SURE') {
+			const selectedAnswersWithConfidence = selectedAnswers.map((answer) => {
+				return {
+					...answer,
+					confidence: 100,
+				};
+			});
 
-			props.updateSelectedAnswersState(selectedAnswersWithConfidence);
-			props.setTotalAnswerConfidence('Sure');
-			setSubmited(true);
+			updateSelectedAnswersState(selectedAnswersWithConfidence);
+			setTotalAnswerConfidence('Sure');
+			setSubmitted(true);
 		}
 	};
 
 	useEffect(() => {
-		if (submited) {
-			props.onClick();
+		if (submitted) {
+			onClick();
 		}
-	}, [submited]);
+	}, [submitted]);
 
 	return (
-		<>
-			{props.questionInFocus?.questionType === 'MultipleCorrect' && (
-				<Box
-					style={{
-						marginTop: props.smallerThan1000 ? '10px' : '0px',
-					}}
-					alignItems="stretch"
-					flex={1}
-					backgroundColor="white"
-					boxShadow="md"
-					display="flex"
-					flexDirection="column"
-					justifyContent="space-between"
-					borderRadius={24}
-					p={'72px'}>
-					{!props.showOverlay ? (
-						//Matching
-						//MultipleChoice
-						//MultipleCorrect
-						<Fade in={!props.showOverlay}>
-							<MultipleCorrectAnswers
-								questionInFocus={props.questionInFocus as QuestionInFocus}
-								selectedAnswers={props.selectedAnswers}
-								setSelectedAnswers={props.updateSelectedAnswersState}
-								setIDKResponse={props.setIDKResponse}
-							/>
-						</Fade>
-					) : (
-						<Fade in={props.showOverlay}>
-							{' '}
-							<MultipleChoiceOverLay
-								questionInFocus={props.questionInFocus}
-								selectedAnswers={props.selectedAnswers}
-								setSelectedAnswers={props.updateSelectedAnswersState}
-								clearSelection={props.clearSelection}
-								setClearSelection={props.clearSelectionState}
-								currentRoundAnswerOverLayData={
-									props.currentRoundAnswerOverLayData
-								}
-							/>
-						</Fade>
-					)}
-					<Divider marginTop="43px" />
-					<HStack
-						justifyContent={'space-between'}
-						display={'flex'}
-						marginTop={'12px'}>
-						<Button
-							onClick={() => handleMultiCorrectSubmission('IDK')}
-							variant={'ampOutline'}
-							w="150px"
-							isDisabled={Boolean(props.selectedAnswers.length)}>
-							<Text>{i18n('iDontKnow')}</Text>
-						</Button>
-						<Button
-							onClick={() => handleMultiCorrectSubmission('UNSURE')}
-							variant={'ampSolid'}
-							w="150px"
-							bg="ampSecondary.500"
-							isDisabled={!props.selectedAnswers.length as boolean}>
-							<Text>{i18n('iAmUnsure')}</Text>
-						</Button>
-						<Button
-							onClick={() => handleMultiCorrectSubmission('SURE')}
-							variant={'ampSolid'}
-							w="150px"
-							isDisabled={!props.selectedAnswers.length as boolean}>
-							<Text>{i18n('iAmSure')}</Text>
-						</Button>
-					</HStack>
-				</Box>
+		<Box
+			style={{
+				marginTop: smallerThan1000 ? '10px' : '0px',
+			}}
+			alignItems="stretch"
+			flex={1}
+			backgroundColor="white"
+			boxShadow="md"
+			display="flex"
+			flexDirection="column"
+			justifyContent="space-between"
+			borderRadius={24}
+			p={'72px'}>
+			{!showOverlay ? (
+				//Matching
+				//MultipleChoice
+				//MultipleCorrect
+				<Fade in={!showOverlay}>
+					<MultipleCorrectAnswers
+						questionInFocus={questionInFocus}
+						selectedAnswers={selectedAnswers}
+						setSelectedAnswers={updateSelectedAnswersState}
+						setIDKResponse={setIDKResponse}
+					/>
+				</Fade>
+			) : (
+				<Fade in={showOverlay}>
+					{' '}
+					<MultipleChoiceOverLay
+						questionInFocus={questionInFocus}
+						selectedAnswers={selectedAnswers}
+						setSelectedAnswers={updateSelectedAnswersState}
+						clearSelection={clearSelection}
+						setClearSelection={clearSelectionState}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+					/>
+				</Fade>
 			)}
-		</>
+			<Divider marginTop="43px" />
+			<HStack
+				justifyContent={'space-between'}
+				display={'flex'}
+				marginTop={'12px'}>
+				<Button
+					onClick={() => handleSubmission('IDK')}
+					variant={'ampOutline'}
+					w="150px"
+					isDisabled={Boolean(selectedAnswers.length)}>
+					<Text>{i18n('iDontKnow')}</Text>
+				</Button>
+				<Button
+					onClick={() => handleSubmission('UNSURE')}
+					variant={'ampSolid'}
+					w="150px"
+					bg="ampSecondary.500"
+					isDisabled={Boolean(!selectedAnswers.length)}>
+					<Text>{i18n('iAmUnsure')}</Text>
+				</Button>
+				<Button
+					onClick={() => handleSubmission('SURE')}
+					variant={'ampSolid'}
+					w="150px"
+					isDisabled={Boolean(!selectedAnswers.length)}>
+					<Text>{i18n('iAmSure')}</Text>
+				</Button>
+			</HStack>
+		</Box>
 	);
 };
 

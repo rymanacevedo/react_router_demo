@@ -94,9 +94,7 @@ export default function AnswerArea(props: {
 								props.currentRoundAnswerOverLayData
 							}
 							onClick={props.onClick}
-							clearSelectionFunction={props.clearSelectionFunction}
 							setIDKResponse={props.setIDKResponse}
-							IDKResponse={props.IDKResponse}
 							smallerThan1000={props.smallerThan1000}
 							showOverlay={props.showOverlay}
 							setTotalAnswerConfidence={props.setTotalAnswerConfidence}
