@@ -7,6 +7,7 @@ import {
 	Button,
 	HStack,
 	VStack,
+	Spacer,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -68,6 +69,7 @@ const Review = () => {
 	const [expandAll, setExpandAll] = useState(false);
 	const [index, setIndex] = useState<number[]>([]);
 	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
+	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 	const handleExpandAll = () => {
 		if (index.length === allExpandedIndices.length) {
@@ -160,7 +162,7 @@ const Review = () => {
 					<Box
 						backgroundColor="white"
 						margin="6px"
-						boxShadow="2xl"
+						boxShadow={isSafari ? 'none' : '2xl'}
 						w="100%"
 						overflow="hidden"
 						borderRadius={24}
@@ -169,29 +171,35 @@ const Review = () => {
 						flexDirection="column">
 						<Heading as="h1">{questionData.name}</Heading>
 						<Text
+							id="questionsBox"
 							marginTop={34}
+							marginLeft={3}
 							marginBottom={'12px'}
 							fontSize={28}
 							color={'#7E8A9B'}
 							position="relative">
 							{questionData.learningUnits.length} {i18n('questions')}
-							<Text
-								onClick={handleExpandAll}
-								color={'#257CB5'}
-								fontWeight={600}
-								fontSize={'16px'}
-								position="absolute"
-								right="385px"
-								top="50%"
-								variant="link"
-								_hover={{
-									cursor: 'pointer',
-								}}
-								transform="translateY(-50%)">
-								{index.length === allExpandedIndices.length
-									? i18n('collapseAll')
-									: i18n('expandAll')}
-							</Text>
+							<HStack width="100%" justifyContent="flex-end">
+								<Spacer />
+								<Text
+									id="expandAllBox"
+									onClick={handleExpandAll}
+									color={'#257CB5'}
+									fontWeight={600}
+									fontSize={'16px'}
+									position="absolute"
+									right="385px"
+									top="50%"
+									variant="link"
+									_hover={{
+										cursor: 'pointer',
+									}}
+									transform="translateY(-50%)">
+									{index.length === allExpandedIndices.length
+										? i18n('collapseAll')
+										: i18n('expandAll')}
+								</Text>
+							</HStack>
 						</Text>
 						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
 							<VStack>
