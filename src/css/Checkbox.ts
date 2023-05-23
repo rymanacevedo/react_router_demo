@@ -44,6 +44,9 @@ const Checkbox = defineStyleConfig({
 				height: '2.75rem',
 				borderRadius: '12px',
 			},
+			icon: {
+				fontSize: '15px',
+			},
 		},
 	},
 });
