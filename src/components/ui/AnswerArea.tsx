@@ -83,7 +83,7 @@ export default function AnswerArea({
 			initialFocusRef={initialFocusRef}
 			arrowSize={20}>
 			<PopoverAnchor>
-				<>
+				<Box minW="50%">
 					{questionInFocus?.questionType === 'MultipleChoice' && (
 						<MultipleChoice
 							questionInFocus={questionInFocus}
@@ -177,13 +177,13 @@ export default function AnswerArea({
 							</HStack>
 						</Box>
 					)}
-				</>
+				</Box>
 			</PopoverAnchor>
 			{/* TODO: a hack, is to wrap a box around instead of added zindex to the theme file https://chakra-ui.com/docs/styled-system/theme#z-index-values*/}
 			<Box style={{ zIndex: 1401 }}>
 				<PopoverContent
 					p={smallerThan1000 ? 12 : 10}
-					h={smallerThan1000 ? 'auto' : 485}
+					h={smallerThan1000 ? 'auto' : 425}
 					w={560}>
 					<PopoverArrow />
 					<Heading as="h3" mb={3}>
@@ -205,7 +205,7 @@ export default function AnswerArea({
 										marginTop: '24px',
 										marginBottom: '24px',
 									}}
-									src={`${import.meta.env.VITE_PUBLIC_URL}/images/unsure.gif`}
+									src="/images/unsure.gif"
 									alt="unsure gif"
 								/>
 							</Box>
@@ -223,7 +223,7 @@ export default function AnswerArea({
 										marginTop: '24px',
 										marginBottom: '24px',
 									}}
-									src={`${import.meta.env.VITE_PUBLIC_URL}/images/sure.gif`}
+									src="/images/sure.gif"
 									alt="sure gif"
 								/>
 							</Box>
