@@ -28,7 +28,7 @@ import {
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from './AssignmentTypes';
 
 import {
@@ -52,7 +52,7 @@ const StaticAssignmentView = ({
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
+	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [questionData] = useState(questionDataMock);
 	const [menuIndex, setMenuIndex] = useState(0);
 

@@ -10,7 +10,7 @@ import {
 	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerArea from '../AnswerArea';
 import { useEffect, useRef, useState } from 'react';
@@ -140,7 +140,7 @@ export default function AssignmentComponent({
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
 
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
+	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [showOverlay, setShowOverlay] = useState(false);

@@ -1,7 +1,7 @@
 import { Box, Heading } from '@chakra-ui/react';
 import {
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiChoiceAnswerInput from './MultiChoiceAnswerInput';
 
@@ -28,7 +28,7 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse: boolean;
 }) => {
-	const addAnswer = (answerObject: SelectedAnswers) => {
+	const addAnswer = (answerObject: SelectedAnswer) => {
 		if (answerObject.answerId) {
 			setSelectedAnswers((prevAnswers: any[]) => {
 				let currentAnswer = prevAnswers.find(

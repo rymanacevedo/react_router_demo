@@ -4,18 +4,18 @@ import { useTranslation } from 'react-i18next';
 import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleCorrectAnswers from './MultipleCorrectAnswers';
 import MultipleChoiceOverLay from './MultipleChoiceFeedback';
 
 export type MultipleCorrectProps = {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: SelectedAnswers[];
+	selectedAnswers: SelectedAnswer[];
 	updateSelectedAnswersState: (
 		value:
-			| ((prevState: SelectedAnswers[]) => SelectedAnswers[])
-			| SelectedAnswers[],
+			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
+			| SelectedAnswer[],
 	) => void;
 	clearSelection: boolean;
 	clearSelectionState: (

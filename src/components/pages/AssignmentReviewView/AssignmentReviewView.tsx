@@ -7,12 +7,12 @@ import {
 	Divider,
 	Fade,
 	HStack,
-	Stack,
 	Modal,
 	ModalCloseButton,
 	ModalContent,
 	ModalOverlay,
 	ResponsiveValue,
+	Stack,
 	Text,
 	useDisclosure,
 	useMediaQuery,
@@ -33,7 +33,7 @@ import {
 	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../AssignmentView/AssignmentTypes';
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
@@ -140,7 +140,7 @@ const AssignmentReviewView = () => {
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers[]>([]);
+	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
 	const [questionData, setQuestionData] = useState<ModuleData>({
