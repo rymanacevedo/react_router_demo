@@ -37,7 +37,12 @@ const MultiSelectInput = ({
 	};
 	return (
 		<Checkbox
-			borderColor={'black'}
+			style={{
+				display: 'flex',
+				marginBottom: '25px',
+				cursor: 'pointer',
+			}}
+			borderColor={'#1e1f20'}
 			variant={'multiSelect'}
 			value={questionAnswerId}
 			isChecked={Boolean(isChecked)}
