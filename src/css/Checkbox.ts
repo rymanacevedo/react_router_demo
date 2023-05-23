@@ -34,8 +34,12 @@ const Checkbox = defineStyleConfig({
 				_focus: {
 					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
 				},
-				_hover: {},
-				border: '1.5px solid #20252B',
+				_hover: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					outline: '2px solid transparent',
+					outlineOffset: '2px',
+				},
+				border: '1.5px solid',
 				width: '2.75rem',
 				height: '2.75rem',
 				borderRadius: '12px',

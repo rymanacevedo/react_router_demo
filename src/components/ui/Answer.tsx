@@ -131,32 +131,30 @@ const AnswerInput = () => {
 		}
 	};
 	return (
-		<>
-			<Checkbox
-				className={'label-hover-effect'}
-				variant={'multiChoiceAnswer'}
-				colorScheme={'transparent'}
-				size={'4rem'}
-				icon={
-					<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
-				}
-				isChecked={isChecked}
-				isIndeterminate={isIndeterminate}
-				onChange={(e) => checkStatus(e)}>
-				<SlideFade in={isEnabled}>
-					<Badge variant={variant}>{text}</Badge>
-				</SlideFade>
-				<Slide
-					in={isEnabled}
-					direction="top"
-					style={{
-						position: 'relative',
-						top: `${!isEnabled ? '10px' : ''}`,
-					}}>
-					<span id={'answer-content'}>Biology</span>
-				</Slide>
-			</Checkbox>
-		</>
+		<Checkbox
+			className={'label-hover-effect'}
+			variant={'multiChoiceAnswer'}
+			colorScheme={'transparent'}
+			size={'4rem'}
+			icon={
+				<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
+			}
+			isChecked={isChecked}
+			isIndeterminate={isIndeterminate}
+			onChange={(e) => checkStatus(e)}>
+			<SlideFade in={isEnabled}>
+				<Badge variant={variant}>{text}</Badge>
+			</SlideFade>
+			<Slide
+				in={isEnabled}
+				direction="top"
+				style={{
+					position: 'relative',
+					top: `${!isEnabled ? '10px' : ''}`,
+				}}>
+				<span id={'answer-content'}>Biology</span>
+			</Slide>
+		</Checkbox>
 	);
 };
 

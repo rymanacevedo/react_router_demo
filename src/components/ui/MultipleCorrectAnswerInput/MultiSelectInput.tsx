@@ -37,7 +37,8 @@ const MultiSelectInput = ({
 	};
 	return (
 		<Checkbox
-			className={'multiselect-label-hover-effect'}
+			className={'label-hover-effect'}
+			borderColor={'black'}
 			variant={'multiSelect'}
 			value={questionAnswerId}
 			isChecked={Boolean(isChecked)}
