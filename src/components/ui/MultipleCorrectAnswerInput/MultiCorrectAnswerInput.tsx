@@ -12,7 +12,7 @@ const MultiCorrectAnswerInput = ({
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
-	toggleAnswer: (answerObject: SelectedAnswer) => void;
+	toggleAnswer: (answer: SelectedAnswer) => void;
 	selectedAnswers?: Array<SelectedAnswer>;
 	isDisabled?: boolean;
 }) => {
@@ -37,31 +37,13 @@ const MultiCorrectAnswerInput = ({
 	};
 	return (
 		<Checkbox
-			style={{
-				display: 'flex',
-				marginBottom: '12px',
-				cursor: 'pointer',
-			}}
-			iconSize="1rem"
 			className={'multiselect-label-hover-effect'}
 			variant={'multiCorrectAnswer'}
 			value={questionAnswerId}
 			isChecked={Boolean(isChecked)}
 			disabled={isDisabled}
 			onChange={handleOnChange}>
-			{' '}
-			<RichContentComponent
-				style={{
-					position: 'relative',
-					top: 5,
-					bottom: 0,
-					left: 0,
-					right: 0,
-					transform: 'translateY(-5.7812px)',
-					transition: 'transform 0.3s ease-in-out',
-				}}
-				content={questionText}
-			/>
+			<RichContentComponent content={questionText} />
 		</Checkbox>
 	);
 };

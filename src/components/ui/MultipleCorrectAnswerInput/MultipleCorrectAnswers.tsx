@@ -49,7 +49,6 @@ const MultipleCorrectAnswers = ({
 				marginTop="34px"
 				display="flex"
 				flexDirection={'column'}
-				justifyContent="space-between"
 				minHeight={350}
 				h="100%">
 				<>
