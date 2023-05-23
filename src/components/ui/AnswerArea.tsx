@@ -24,6 +24,9 @@ import MultipleCorrect from './MultipleCorrectAnswerInput/MultipleCorrect';
 import { useTranslation } from 'react-i18next';
 import { MutableRefObject } from 'react';
 
+import sure from '../../assets/sure.gif';
+import unsure from '../../assets/unsure.gif';
+
 type Props = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -205,7 +208,7 @@ export default function AnswerArea({
 										marginTop: '24px',
 										marginBottom: '24px',
 									}}
-									src="/images/unsure.gif"
+									src={unsure}
 									alt="unsure gif"
 								/>
 							</Box>
@@ -223,7 +226,7 @@ export default function AnswerArea({
 										marginTop: '24px',
 										marginBottom: '24px',
 									}}
-									src="/images/sure.gif"
+									src={sure}
 									alt="sure gif"
 								/>
 							</Box>
