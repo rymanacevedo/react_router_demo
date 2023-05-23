@@ -4,7 +4,7 @@ import RichContentComponent from '../RichContentComponent';
 import MultiChoiceOverLayIcon from './MultiChoiceOverLayIcon';
 import {
 	CurrentRoundAnswerOverLayData,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import {
 	CheckIcon,
@@ -42,7 +42,7 @@ const MultiChoiceAnswerFeedback = ({
 	const choseIDK = IDK && selectedAnswers?.length === 0;
 
 	function checkSelectedAnswers(
-		selectedAnswersArg: SelectedAnswers[],
+		selectedAnswersArg: SelectedAnswer[],
 		questionAnswerIdArg: string | number,
 	) {
 		const match = selectedAnswersArg.find(

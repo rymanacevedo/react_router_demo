@@ -314,12 +314,3 @@ a.white-text {
     color: #257CB5;
     transition: all 300ms ease;
 }
-
-.multiselect-label-hover-effect #chakra-checkbox__input {
-    border: 4px solid transparent;
-    transition: border-color 300ms ease-in-out;
-}
-
-.multiselect-label-hover-effect:hover {
-    border-color: #257CB5;
-}

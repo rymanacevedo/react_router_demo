@@ -1,6 +1,6 @@
 import { Answer } from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceAnswers';
 
-export type SelectedAnswers = {
+export type SelectedAnswer = {
 	answerId: number | string;
 	confidence?: number;
 	selectedOptionId: number;

@@ -2,38 +2,38 @@ import { Box, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import MultiCorrectAnswerInput from './MultiCorrectAnswerInput';
+import MultiSelectInput from './MultiSelectInput';
 
 type MultipleCorrectAnswersProps = {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers?: SelectedAnswers[];
+	selectedAnswers?: SelectedAnswer[];
 	setSelectedAnswers: (
 		value:
-			| ((prevState: SelectedAnswers[]) => SelectedAnswers[])
-			| SelectedAnswers[],
+			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
+			| SelectedAnswer[],
 	) => void;
 	setIDKResponse: (value: boolean) => void;
 	IDKResponse?: boolean;
 };
 
-const MultipleCorrectAnswers = ({
+const MultiSelect = ({
 	questionInFocus,
 	selectedAnswers,
 	setSelectedAnswers,
 }: MultipleCorrectAnswersProps) => {
 	const { t: i18n } = useTranslation();
 
-	const toggleAnswer = (answerObject: SelectedAnswers) => {
-		if (answerObject.answerId) {
-			setSelectedAnswers((prevState: SelectedAnswers[]) => {
+	const toggleAnswer = (answer: SelectedAnswer) => {
+		if (answer.answerId) {
+			setSelectedAnswers((prevState: SelectedAnswer[]) => {
 				const updatedSelectedAnswers = [...(prevState || [])];
 				const index = updatedSelectedAnswers.findIndex(
-					(answer) => answer.answerId === answerObject.answerId,
+					(a) => a.answerId === answer.answerId,
 				);
 				if (index === -1) {
-					updatedSelectedAnswers.push(answerObject);
+					updatedSelectedAnswers.push(answer);
 				} else {
 					updatedSelectedAnswers.splice(index, 1);
 				}
@@ -48,28 +48,26 @@ const MultipleCorrectAnswers = ({
 			<Box
 				marginTop="34px"
 				display="flex"
+				justifyContent="space-around"
 				flexDirection={'column'}
-				justifyContent="space-between"
 				minHeight={350}
 				h="100%">
 				<>
-					{questionInFocus?.answerList
-						?.slice(0, 10)
-						.map((answer: { answerRc: string; id: string | number }) => {
-							return (
-								<MultiCorrectAnswerInput
-									key={answer.id}
-									questionText={answer.answerRc}
-									questionAnswerId={answer.id}
-									toggleAnswer={toggleAnswer}
-									selectedAnswers={selectedAnswers}
-								/>
-							);
-						})}
+					{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
+						return (
+							<MultiSelectInput
+								key={answer.id}
+								questionText={answer.answerRc}
+								questionAnswerId={answer.id}
+								toggleAnswer={toggleAnswer}
+								selectedAnswers={selectedAnswers}
+							/>
+						);
+					})}
 				</>
 			</Box>
 		</Box>
 	);
 };
 
-export default MultipleCorrectAnswers;
+export default MultiSelect;

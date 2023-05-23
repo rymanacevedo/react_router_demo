@@ -1,7 +1,7 @@
 import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../pages/AssignmentView/AssignmentTypes';
 import {
 	Box,
@@ -28,11 +28,11 @@ type Props = {
 	isOpen: boolean;
 	onClose: () => void;
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: SelectedAnswers[];
+	selectedAnswers: SelectedAnswer[];
 	selectedAnswersState: (
 		value:
-			| ((prevState: SelectedAnswers[]) => SelectedAnswers[])
-			| SelectedAnswers[],
+			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
+			| SelectedAnswer[],
 	) => void;
 	clearSelection: boolean;
 	clearSelectionState: (
@@ -101,6 +101,7 @@ export default function AnswerArea({
 						/>
 					)}
 					{questionInFocus?.questionType === 'MultipleCorrect' && (
+						//     The backend use MultipleCorrect as the term for MultiSelect
 						<MultipleCorrect
 							questionInFocus={questionInFocus}
 							selectedAnswers={selectedAnswers}

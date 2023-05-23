@@ -1,9 +1,10 @@
 import { Box, Heading } from '@chakra-ui/react';
 import {
 	QuestionInFocus,
-	SelectedAnswers,
+	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import MultiChoiceAnswerInput from './MultiChoiceAnswerInput';
+import MultipleChoiceInput from './MultipleChoiceInput';
+import { useTranslation } from 'react-i18next';
 
 export interface Answer {
 	answerId: number | string;
@@ -28,34 +29,31 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse: boolean;
 }) => {
-	const addAnswer = (answerObject: SelectedAnswers) => {
-		if (answerObject.answerId) {
+	const { t: i18n } = useTranslation();
+	const addAnswer = (answer: SelectedAnswer) => {
+		if (answer.answerId) {
 			setSelectedAnswers((prevAnswers: any[]) => {
-				let currentAnswer = prevAnswers.find(
-					(answer) => answer.confidence === 100,
-				);
-				if (answerObject.confidence === 100) {
-					return [answerObject];
-				} else if (!answerObject.confidence) {
-					return prevAnswers.filter(
-						(answer) => answer.answerId !== answerObject.answerId,
-					);
+				let currentAnswer = prevAnswers.find((a) => a.confidence === 100);
+				if (answer.confidence === 100) {
+					return [answer];
+				} else if (!answer.confidence) {
+					return prevAnswers.filter((a) => a.answerId !== answer.answerId);
 				} else if (
 					currentAnswer?.confidence === 100 &&
-					answerObject.confidence === 50
+					answer.confidence === 50
 				) {
-					let updatedAnswers = prevAnswers.map((answer) => {
-						return { ...answer, confidence: 50 };
+					let updatedAnswers = prevAnswers.map((a) => {
+						return { ...a, confidence: 50 };
 					});
-					return [...updatedAnswers, answerObject];
+					return [...updatedAnswers, answer];
 				} else {
 					const updatedAnswers = prevAnswers.filter(
-						(answer) => answer.answerId !== answerObject.answerId,
+						(a) => a.answerId !== answer.answerId,
 					);
 					if (updatedAnswers.length >= 2) {
 						updatedAnswers.shift();
 					}
-					return [...updatedAnswers, answerObject];
+					return [...updatedAnswers, answer];
 				}
 			});
 			setIDKResponse(false);
@@ -64,7 +62,7 @@ const MultipleChoiceAnswers = ({
 
 	return (
 		<Box>
-			<Heading as="h3">Answer</Heading>
+			<Heading as="h3">{i18n('answer')}</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"
@@ -72,25 +70,21 @@ const MultipleChoiceAnswers = ({
 				minHeight={350}
 				h="100%">
 				<>
-					{questionInFocus?.answerList
-						?.slice(0, 10)
-						.map((answer: { answerRc: string; id: string | number }) => {
-							return (
-								<MultiChoiceAnswerInput
-									key={answer.id}
-									questionText={answer.answerRc}
-									questionAnswerId={answer.id}
-									addAnswer={addAnswer}
-									selectedAnswers={selectedAnswers}
-									IDK={false}
-									setIDKResponse={setIDKResponse}
-								/>
-							);
-						})}
-					<MultiChoiceAnswerInput
-						/* eslint-disable */
+					{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
+						return (
+							<MultipleChoiceInput
+								key={answer.id}
+								questionText={answer.answerRc}
+								questionAnswerId={answer.id}
+								addAnswer={addAnswer}
+								selectedAnswers={selectedAnswers}
+								IDK={false}
+								setIDKResponse={setIDKResponse}
+							/>
+						);
+					})}
+					<MultipleChoiceInput
 						questionText={"I don't know yet"}
-						/* eslint-enable */
 						questionAnswerId={''}
 						addAnswer={() => {
 							setSelectedAnswers([]);

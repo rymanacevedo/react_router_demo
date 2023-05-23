@@ -29,18 +29,23 @@ const Checkbox = defineStyleConfig({
 				borderRadius: 'sm',
 			},
 		},
-		multiCorrectAnswer: {
+		multiSelect: {
 			control: {
 				_focus: {
 					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
 				},
-				_hover: {},
-				border: '2px solid black',
-				size: '40rem',
-				width: '2.5rem',
-				height: '2.5rem',
-				borderRadius: '20%',
-				iconSize: '1rem',
+				_hover: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					outline: '2px solid transparent',
+					outlineOffset: '2px',
+				},
+				border: '1.5px solid',
+				width: '2.75rem',
+				height: '2.75rem',
+				borderRadius: '12px',
+			},
+			icon: {
+				fontSize: '15px',
 			},
 		},
 	},
