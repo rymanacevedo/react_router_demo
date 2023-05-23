@@ -101,6 +101,7 @@ export default function AnswerArea({
 						/>
 					)}
 					{questionInFocus?.questionType === 'MultipleCorrect' && (
+						//     The backend use MultipleCorrect as the term for MultiSelect
 						<MultipleCorrect
 							questionInFocus={questionInFocus}
 							selectedAnswers={selectedAnswers}

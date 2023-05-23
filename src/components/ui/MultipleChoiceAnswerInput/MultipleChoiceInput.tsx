@@ -4,7 +4,7 @@ import RichContentComponent from '../RichContentComponent';
 import CustomIcon from './MultiChoiceIcon';
 import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 
-const MultiChoiceAnswerInput = ({
+const MultipleChoiceInput = ({
 	questionText,
 	questionAnswerId,
 	addAnswer,
@@ -186,4 +186,4 @@ const MultiChoiceAnswerInput = ({
 	);
 };
 
-export default MultiChoiceAnswerInput;
+export default MultipleChoiceInput;

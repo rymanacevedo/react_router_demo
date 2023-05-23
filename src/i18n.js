@@ -1,5 +1,5 @@
 import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import {initReactI18next} from "react-i18next";
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // the translations
@@ -85,6 +85,7 @@ const resources = {
          about: 'About',
          minsLeft: 'mins left',
          question: 'Question',
+         answer: 'Answer',
          questions: 'Questions',
          showProgress: 'Show Progress',
          hideProgress: 'Hide Progress',
@@ -211,8 +212,7 @@ const resources = {
          viewTour: 'View the quick start tour',
          //////////////////////////////////////////////
          //   Review.tsx
-         //////////////////////////////////////////////         
-         questions: 'Questions',
+         //////////////////////////////////////////////
          viewModuleIntro: 'View module introduction',
          letsBegin: 'Let\'s begin',
          returnToReview: 'Return to review',
@@ -224,7 +224,6 @@ const resources = {
          //////////////////////////////////////////////
          clickHereForImage: 'Click here for image',
          correctAnswers: 'The Correct Answer(s)',
-         attempts: 'Attempts'
       }
    },
    fr: {

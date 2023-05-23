@@ -4,7 +4,7 @@ import {
 	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import MultiCorrectAnswerInput from './MultiCorrectAnswerInput';
+import MultiSelectInput from './MultiSelectInput';
 
 type MultipleCorrectAnswersProps = {
 	questionInFocus: QuestionInFocus;
@@ -18,7 +18,7 @@ type MultipleCorrectAnswersProps = {
 	IDKResponse?: boolean;
 };
 
-const MultipleCorrectAnswers = ({
+const MultiSelect = ({
 	questionInFocus,
 	selectedAnswers,
 	setSelectedAnswers,
@@ -48,13 +48,14 @@ const MultipleCorrectAnswers = ({
 			<Box
 				marginTop="34px"
 				display="flex"
+				justifyContent="space-around"
 				flexDirection={'column'}
 				minHeight={350}
 				h="100%">
 				<>
 					{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
 						return (
-							<MultiCorrectAnswerInput
+							<MultiSelectInput
 								key={answer.id}
 								questionText={answer.answerRc}
 								questionAnswerId={answer.id}
@@ -69,4 +70,4 @@ const MultipleCorrectAnswers = ({
 	);
 };
 
-export default MultipleCorrectAnswers;
+export default MultiSelect;

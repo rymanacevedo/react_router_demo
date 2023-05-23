@@ -10,7 +10,7 @@ export interface Answer {
 	self: string;
 }
 
-const MultipleChoiceFeedback = ({
+const MultiSelectFeedback = ({
 	questionInFocus,
 	selectedAnswers,
 	currentRoundAnswerOverLayData,
@@ -85,4 +85,4 @@ const MultipleChoiceFeedback = ({
 	);
 };
 
-export default MultipleChoiceFeedback;
+export default MultiSelectFeedback;

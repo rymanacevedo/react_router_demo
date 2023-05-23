@@ -3,7 +3,8 @@ import {
 	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import MultiChoiceAnswerInput from './MultiChoiceAnswerInput';
+import MultipleChoiceInput from './MultipleChoiceInput';
+import { useTranslation } from 'react-i18next';
 
 export interface Answer {
 	answerId: number | string;
@@ -28,6 +29,7 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse: boolean;
 }) => {
+	const { t: i18n } = useTranslation();
 	const addAnswer = (answer: SelectedAnswer) => {
 		if (answer.answerId) {
 			setSelectedAnswers((prevAnswers: any[]) => {
@@ -60,7 +62,7 @@ const MultipleChoiceAnswers = ({
 
 	return (
 		<Box>
-			<Heading as="h3">Answer</Heading>
+			<Heading as="h3">{i18n('answer')}</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"
@@ -70,7 +72,7 @@ const MultipleChoiceAnswers = ({
 				<>
 					{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
 						return (
-							<MultiChoiceAnswerInput
+							<MultipleChoiceInput
 								key={answer.id}
 								questionText={answer.answerRc}
 								questionAnswerId={answer.id}
@@ -81,7 +83,7 @@ const MultipleChoiceAnswers = ({
 							/>
 						);
 					})}
-					<MultiChoiceAnswerInput
+					<MultipleChoiceInput
 						questionText={"I don't know yet"}
 						questionAnswerId={''}
 						addAnswer={() => {

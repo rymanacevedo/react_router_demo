@@ -3,7 +3,7 @@ import RichContentComponent from '../RichContentComponent';
 import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-const MultiCorrectAnswerInput = ({
+const MultiSelectInput = ({
 	questionText,
 	questionAnswerId,
 	toggleAnswer,
@@ -13,7 +13,7 @@ const MultiCorrectAnswerInput = ({
 	questionText: string;
 	questionAnswerId: number | string;
 	toggleAnswer: (answer: SelectedAnswer) => void;
-	selectedAnswers?: Array<SelectedAnswer>;
+	selectedAnswers?: SelectedAnswer[];
 	isDisabled?: boolean;
 }) => {
 	const [isChecked, setIsChecked] = useState(false);
@@ -38,7 +38,7 @@ const MultiCorrectAnswerInput = ({
 	return (
 		<Checkbox
 			className={'multiselect-label-hover-effect'}
-			variant={'multiCorrectAnswer'}
+			variant={'multiSelect'}
 			value={questionAnswerId}
 			isChecked={Boolean(isChecked)}
 			disabled={isDisabled}
@@ -48,4 +48,4 @@ const MultiCorrectAnswerInput = ({
 	);
 };
 
-export default MultiCorrectAnswerInput;
+export default MultiSelectInput;
