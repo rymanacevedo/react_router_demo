@@ -5,6 +5,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReCAPTCHA from 'react-google-recaptcha';
 import useForgotPasswordService from '../../services/useForgotPasswordService';
+import { AuthLayoutContext } from './AuthLayout';
 
 import {
 	Alert,
@@ -35,7 +36,7 @@ function ForgotPassword() {
 	const recaptchaRef = useRef();
 	const [formError, setFormError] = useState(false);
 
-	const context = useOutletContext();
+	const context = useOutletContext<AuthLayoutContext>();
 
 	const { fetchForgotPassword } = useForgotPasswordService();
 
