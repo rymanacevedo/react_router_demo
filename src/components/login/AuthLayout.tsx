@@ -18,6 +18,7 @@ const AuthLayoutContextSchema = z.object({
 	abbrevNameState: z.string(),
 	accountUid: z.string(),
 	recaptcha: z.string(),
+	error: z.boolean(),
 });
 export type AuthLayoutContext = z.infer<typeof AuthLayoutContextSchema>;
 
@@ -76,6 +77,7 @@ export default function AuthLayout() {
 							accountUid: accountUid,
 							recaptcha: recaptcha,
 							allowSelfRegistration: selfRegistration,
+							error: error,
 						}}
 					/>
 					{error && <AlertMessage text={'No account info provided'} />}
