@@ -5,6 +5,8 @@ import { generateTabs, TabsSchema } from './services/roles';
 import { Suspense } from 'react';
 import { json, Outlet } from 'react-router-dom';
 import { getUser } from './utils/user';
+import CookieConsent from 'react-cookie-consent';
+import { useTranslation } from 'react-i18next';
 
 export const AuthenticationDataSchema = z.object({
 	user: UserSchema,
@@ -21,6 +23,7 @@ export const BootstrapDataSchema = z.object({
 		parentUid: z.string().optional(),
 		demo: z.boolean().optional(),
 		modifiedTime: z.number().optional(),
+		allowSelfRegistration: z.boolean(),
 	}),
 	recaptchaSiteKey: z.string(),
 });
@@ -44,9 +47,38 @@ export const appLoader = () => {
 };
 
 export default function App() {
+	const { t: i18n } = useTranslation();
 	return (
 		<Suspense fallback={<>Loading...</>}>
 			<Outlet />
+			<CookieConsent
+				cookieName="cookie_message_accepted"
+				expires={3600}
+				disableStyles
+				containerClasses="cookie-container"
+				contentClasses="cookie-content"
+				buttonClasses="cookie-button"
+				buttonText="I ACCEPT">
+				<p>
+					{i18n('cookiesMessage')}{' '}
+					<a
+						className="white-text"
+						href="src/components/login/LoginForm"
+						target="_blank"
+						rel="noopener noreferrer">
+						{' '}
+						{i18n('privacyPolicy')}{' '}
+					</a>{' '}
+					and{' '}
+					<a
+						className="white-text"
+						href="src/components/login/LoginForm"
+						target="_blank"
+						rel="noopener noreferrer">
+						{i18n('termsAndConditions')}
+					</a>
+				</p>
+			</CookieConsent>
 		</Suspense>
 	);
 }

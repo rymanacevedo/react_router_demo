@@ -111,7 +111,7 @@ export async function bootstrap(request: Request) {
 			return await response.json();
 		}
 
-		return false;
+		return null;
 	} catch (e: any) {
 		throw new Error(
 			`bootstrap call failed, check if your database is running and restart your backend: ${e.message}`,
