@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import {
 	Form,
 	Link as ReactRouterLink,
+	redirect,
 	useActionData,
 	useOutletContext,
 } from 'react-router-dom';
@@ -26,8 +27,48 @@ import { AuthLayoutContext } from '../login/AuthLayout';
 import { ActionData } from '../login/LoginForm';
 import { RegisterSchema } from '../../lib/validator';
 import { z } from 'zod';
+import { ActionFunction } from 'react-router';
+import { badRequest } from '../../services/utils';
+import { getRegisterData } from '../../services/register';
 
 export type RegisterFields = z.infer<typeof RegisterSchema>;
+
+export const registerAction: ActionFunction = async ({ request }) => {
+	const clonedData = request.clone();
+	const formData = await clonedData.formData();
+	// const session = await getSession(request.headers.get('Cookie'));
+	const fields = Object.fromEntries(
+		formData.entries(),
+	) as unknown as RegisterFields;
+
+	const result = RegisterSchema.safeParse(fields);
+	if (!result.success) {
+		return badRequest({
+			fields,
+			errors: result.error.flatten(),
+		});
+	}
+	const { data, response } = await getRegisterData(fields);
+	let items = data.items;
+	if (!response.ok) {
+		let errorMessage;
+		//TODO: setErrorMessage(i18n('unknown error'));
+		if (items && items.length > 0) {
+			errorMessage = items[0].message;
+		}
+		return badRequest({
+			fields,
+			errors: {
+				formErrors: [
+					errorMessage ? errorMessage : 'unknown error, possible solr issues',
+				],
+				fieldErrors: {},
+			},
+		});
+	}
+
+	return redirect('/success');
+};
 export default function Register() {
 	const context = useOutletContext<AuthLayoutContext>();
 	const actionData = useActionData() as ActionData<RegisterFields>;
