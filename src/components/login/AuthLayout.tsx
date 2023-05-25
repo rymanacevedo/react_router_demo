@@ -9,9 +9,10 @@ import { ReactComponent as AmpLogo } from '../../ampLogo.svg';
 import { ReactComponent as HeadLogo } from '../../headLogo.svg';
 import { Box, Container, Flex, VStack } from '@chakra-ui/react';
 import { z } from 'zod';
-import { bootstrap } from '../../services/auth.reactrouter';
+import { bootstrap, isBootStrapData } from '../../services/auth.reactrouter';
 import { BootstrapData } from '../../App';
 import AlertMessage from '../ui/AlertMessage';
+import { unauthorized } from '../../services/utils';
 
 const AuthLayoutContextSchema = z.object({
 	accountKey: z.string().optional(),
@@ -24,11 +25,27 @@ export type AuthLayoutContext = z.infer<typeof AuthLayoutContextSchema>;
 
 export const authLayoutLoader = async ({ request }: LoaderFunctionArgs) => {
 	const bootstrapData = (await bootstrap(request)) as BootstrapData | null;
+
+	if (bootstrapData !== null && bootstrapData.items) {
+		const error = bootstrapData.items[0];
+		const { message } = error;
+
+		return unauthorized({
+			fields: bootstrapData,
+			errors: {
+				fieldErrors: {
+					abbrevName: [`${message}`],
+				},
+			},
+		});
+	}
+
 	return json(bootstrapData);
 };
 
 export default function AuthLayout() {
-	const data = useLoaderData() as BootstrapData;
+	// TODO: add datatype for LoaderData
+	const data = useLoaderData() as BootstrapData | any;
 	const [accountKey, setAccountKey] = useState('');
 	const [abbrevNameState, setAbbrevNameState] = useState('');
 	const [accountUid, setAccountUid] = useState('');
@@ -37,7 +54,7 @@ export default function AuthLayout() {
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
-		if (data) {
+		if (data && isBootStrapData(data)) {
 			const { key, abbrevName, uid, allowSelfRegistration } = data.accountInfo;
 			const { recaptchaSiteKey } = data;
 			setAccountKey(key);
@@ -80,7 +97,14 @@ export default function AuthLayout() {
 							error: error,
 						}}
 					/>
-					{error && <AlertMessage text={'No account info provided'} />}
+					{error && (
+						<AlertMessage
+							text={
+								data?.errors.fieldErrors.abbrevName ||
+								'No account info provided'
+							}
+						/>
+					)}
 				</VStack>
 			</Flex>
 		</Container>

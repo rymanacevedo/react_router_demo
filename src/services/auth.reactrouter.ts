@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
 import { authenticatedFetch, unauthorized } from './utils';
+import { BootstrapData, BootstrapDataSchema } from '../App';
 
 const initialUserDataSchema = z.object({
 	sessionKey: z.string(),
@@ -292,4 +293,8 @@ export const logoutSession = async (sessionKey: string) => {
 
 export const isUserInfo = (info: any): info is UserInfo => {
 	return UserInfoSchema.safeParse(info).success;
+};
+
+export const isBootStrapData = (data: any): data is BootstrapData => {
+	return BootstrapDataSchema.safeParse(data).success;
 };

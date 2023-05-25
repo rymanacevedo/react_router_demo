@@ -26,6 +26,14 @@ export const BootstrapDataSchema = z.object({
 		allowSelfRegistration: z.boolean(),
 	}),
 	recaptchaSiteKey: z.string(),
+	items: z
+		.array(
+			z.object({
+				messageCode: z.string(),
+				message: z.string(),
+			}),
+		)
+		.optional(),
 });
 
 export type AuthenticationData = z.infer<typeof AuthenticationDataSchema>;
