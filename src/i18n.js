@@ -15,6 +15,7 @@ const resources = {
          submitBtnText: "Submit",
          yes: 'Yes',
          no: 'No',
+         iAccept: 'I ACCEPT',
          ///////////////////////////////////////
          //           Login Page Text
          //////////////////////////////////////

@@ -126,6 +126,7 @@ export default function LoginForm() {
 				<VStack spacing={5} w={{ base: '100%', md: '358px' }}>
 					<FormControl
 						isRequired
+						isDisabled={context.error}
 						isInvalid={Boolean(data?.errors?.fieldErrors.username)}>
 						<FormLabel marginBottom={1}>
 							{i18n('username')}
@@ -138,6 +139,7 @@ export default function LoginForm() {
 					</FormControl>
 					<FormControl
 						isRequired
+						isDisabled={context.error}
 						isInvalid={Boolean(data?.errors?.fieldErrors.password)}>
 						<FormLabel marginBottom={1}>
 							{i18n('password')}
@@ -171,7 +173,11 @@ export default function LoginForm() {
 						/>
 					</FormControl>
 
-					<Button w="full" type="submit" name="Login">
+					<Button
+						isDisabled={context.error}
+						w="full"
+						type="submit"
+						name="Login">
 						{i18n('logIn')}
 					</Button>
 				</VStack>

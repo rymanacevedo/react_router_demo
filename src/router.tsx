@@ -50,7 +50,10 @@ const routesJSX = (
 			action={keepAliveAction}
 		/>
 		<Route path="/authenticate" element={<Authenticate />} />
-		<Route loader={authLayoutLoader} element={<AuthLayout />}>
+		<Route
+			shouldRevalidate={() => false}
+			loader={authLayoutLoader}
+			element={<AuthLayout />}>
 			<Route
 				path="login"
 				loader={loginLoader}
