@@ -105,10 +105,10 @@ export default function ForgotPassword() {
 	const context = useOutletContext<AuthLayoutContext>();
 	const { t: i18n } = useTranslation();
 	const recaptchaRef = useRef<ReCAPTCHAType | null>(null);
-	const mailParts = actionData.fields.username.split('@');
-	const obsfucatedEmail = `${mailParts[0].slice(0, 1)}...${mailParts[0].slice(
-		-1,
-	)}@${mailParts[1]}`;
+	const mailParts = actionData?.fields?.username.split('@');
+	const obsfucatedEmail = mailParts
+		? `${mailParts[0].slice(0, 1)}...${mailParts[0].slice(-1)}@${mailParts[1]}`
+		: '';
 
 	return (
 		<VStack spacing={5} w={{ base: '100%', md: '358px' }}>
