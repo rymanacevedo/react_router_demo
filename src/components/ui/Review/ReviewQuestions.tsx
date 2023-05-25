@@ -9,6 +9,7 @@ import {
 	Stack,
 	VStack,
 	HStack,
+	Button,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -21,6 +22,8 @@ import { truncateText, getIcons } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
+import { Divider } from '@chakra-ui/react';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
 
 interface ReviewQuestionsProps {
 	reviewQuestions: LearningUnitQuestion[];
@@ -203,6 +206,21 @@ const ReviewQuestions = ({
 														</>
 													);
 												})}
+											<Divider />
+											<Button
+												height="40px"
+												width="200px"
+												borderRadius="6px"
+												bg="#FFFFFF"
+												color="#2D5172"
+												borderColor="#839EB6"
+												borderWidth="1px"
+												rightIcon={<ArrowRightIcon />}
+												mt="24px"
+												ml="8px"
+												mb="8px">
+												{i18n('viewTheQuestion')}
+											</Button>
 										</AccordionPanel>
 									</>
 								)}
