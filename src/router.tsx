@@ -16,7 +16,9 @@ import MultiFactor, {
 	mfaAction,
 	mfaLoader,
 } from './components/login/MultiFactor';
-import ForgotPassword from './components/login/ForgotPassword';
+import ForgotPassword, {
+	forgotPasswordAction,
+} from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
 import SignUp from './components/login/SignUp';
 import Register from './components/self-registration/Register';
@@ -61,7 +63,11 @@ const routesJSX = (
 				path="mfa"
 				element={<MultiFactor />}
 			/>
-			<Route path="forgot-password" element={<ForgotPassword />} />
+			<Route
+				path="forgot-password"
+				element={<ForgotPassword />}
+				action={forgotPasswordAction}
+			/>
 			<Route path="forgot-username" element={<ForgotUsername />} />
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
 			<Route path="signup" element={<SignUp />} />
