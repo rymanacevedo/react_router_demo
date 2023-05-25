@@ -66,7 +66,7 @@ export default function App() {
 				containerClasses="cookie-container"
 				contentClasses="cookie-content"
 				buttonClasses="cookie-button"
-				buttonText="I ACCEPT">
+				buttonText={i18n('iAccept')}>
 				<p>
 					{i18n('cookiesMessage')}{' '}
 					<a
