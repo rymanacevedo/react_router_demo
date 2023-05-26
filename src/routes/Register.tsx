@@ -121,6 +121,7 @@ export default function Register() {
 						<VStack>
 							<FormControl
 								isRequired
+								isDisabled={context.error}
 								isInvalid={Boolean(actionData?.errors?.fieldErrors.firstName)}>
 								<FormLabel marginBottom={1}>{i18n('first name')}</FormLabel>
 								<Input
@@ -133,6 +134,7 @@ export default function Register() {
 
 							<FormControl
 								isRequired
+								isDisabled={context.error}
 								isInvalid={Boolean(actionData?.errors?.fieldErrors.lastName)}>
 								<FormLabel marginBottom={1}>{i18n('last name')}</FormLabel>
 								<Input id="lastName" placeholder="last name" name="lastName" />
@@ -141,6 +143,7 @@ export default function Register() {
 
 							<FormControl
 								isRequired
+								isDisabled={context.error}
 								isInvalid={Boolean(
 									actionData?.errors?.fieldErrors.emailAddress,
 								)}>
@@ -157,6 +160,7 @@ export default function Register() {
 						<VStack>
 							<FormControl
 								isRequired
+								isDisabled={context.error}
 								isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}>
 								<FormLabel marginBottom={1}>{i18n('username')}</FormLabel>
 								<Input
@@ -169,6 +173,7 @@ export default function Register() {
 
 							<FormControl
 								isRequired
+								isDisabled={context.error}
 								isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}>
 								<FormLabel marginBottom={1}>{i18n('password')}</FormLabel>
 								<Input
@@ -182,6 +187,7 @@ export default function Register() {
 
 							<FormControl
 								isRequired
+								isDisabled={context.error}
 								isInvalid={Boolean(
 									actionData?.errors?.fieldErrors.confirmPassword,
 								)}>
@@ -219,7 +225,9 @@ export default function Register() {
 					{context.recaptcha && (
 						<ReCAPTCHA ref={recaptchaRef} sitekey={context.recaptcha} />
 					)}
-					<Button type="submit">{i18n('submitBtnText')}</Button>
+					<Button isDisabled={context.error} type="submit">
+						{i18n('submitBtnText')}
+					</Button>
 					{renderText()}
 				</VStack>
 			</Form>
