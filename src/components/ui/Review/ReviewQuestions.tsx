@@ -24,6 +24,7 @@ import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
 import { Divider } from '@chakra-ui/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface ReviewQuestionsProps {
 	reviewQuestions: LearningUnitQuestion[];
@@ -86,6 +87,8 @@ const ReviewQuestions = ({
 	index,
 	setIndex,
 }: ReviewQuestionsProps) => {
+	const { assignmentKey } = useParams();
+	const navigate = useNavigate();
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
@@ -114,6 +117,11 @@ const ReviewQuestions = ({
 			...question,
 			answerHistory: [],
 		};
+	};
+
+	const handleViewQuestion = (questionId: number) => {
+		// TODO: need assignment key and questionID. UseParams
+		navigate(`../../learning/review/${assignmentKey}/${questionId}`);
 	};
 
 	return (
@@ -208,6 +216,9 @@ const ReviewQuestions = ({
 												})}
 											<Divider />
 											<Button
+												onClick={() => {
+													handleViewQuestion(transformedQuestion.id);
+												}}
 												height="40px"
 												width="200px"
 												borderRadius="6px"
