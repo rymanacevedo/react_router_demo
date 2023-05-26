@@ -5,6 +5,7 @@ import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
 import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
+import { BootstrapData, BootstrapDataSchema } from '../App';
 
 const initialUserDataSchema = z.object({
 	sessionKey: z.string(),
@@ -112,7 +113,7 @@ export async function bootstrap(request: Request) {
 			return await response.json();
 		}
 
-		return false;
+		return null;
 	} catch (e: any) {
 		throw new Error(
 			`bootstrap call failed, check if your database is running and restart your backend: ${e.message}`,
@@ -303,4 +304,8 @@ export const getForgotPasswordData = async (fields: ForgotPasswordFields) => {
 		captchaResp: fields['g-recaptcha-response'],
 	};
 	return fetchDataPost<any>(url, forgotPasswordBody);
+};
+
+export const isBootStrapData = (data: any): data is BootstrapData => {
+	return BootstrapDataSchema.safeParse(data).success;
 };
