@@ -4,7 +4,6 @@ import {
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
-	Flex,
 	Heading,
 	HStack,
 	VStack,
@@ -96,7 +95,14 @@ export const forgotPasswordAction = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 
-	return redirect('/success?successMessageToShow=forgotPassword');
+	const mailParts = fields?.username.split('@');
+	const obsfucatedEmail = mailParts
+		? `${mailParts[0].slice(0, 1)}...${mailParts[0].slice(-1)}@${mailParts[1]}`
+		: '';
+
+	return redirect(
+		`/success?successMessageToShow=forgotPassword&obsfucatedEmail=${obsfucatedEmail}`,
+	);
 };
 
 export default function ForgotPassword() {
@@ -105,10 +111,6 @@ export default function ForgotPassword() {
 	const context = useOutletContext<AuthLayoutContext>();
 	const { t: i18n } = useTranslation();
 	const recaptchaRef = useRef<ReCAPTCHAType | null>(null);
-	const mailParts = actionData?.fields?.username.split('@');
-	const obsfucatedEmail = mailParts
-		? `${mailParts[0].slice(0, 1)}...${mailParts[0].slice(-1)}@${mailParts[1]}`
-		: '';
 
 	return (
 		<VStack spacing={5} w={{ base: '100%', md: '358px' }}>
@@ -178,23 +180,6 @@ export default function ForgotPassword() {
 							text={actionData.errors.fieldErrors['g-recaptcha-response'][0]}
 						/>
 					))}
-			<Flex
-				direction="column"
-				grow={1}
-				w={{ base: '100%', md: '358px' }}
-				align="center"
-				justify="center">
-				<Center>
-					<Text align="center" mb={5}>
-						{i18n('forgotPasswordSuccess', {
-							email: obsfucatedEmail,
-						})}
-					</Text>
-				</Center>
-				<Center>
-					<Text align="center">{i18n('pleaseCloseWindow')}</Text>
-				</Center>
-			</Flex>
 		</VStack>
 	);
 }
