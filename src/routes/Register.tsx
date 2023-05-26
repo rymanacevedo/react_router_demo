@@ -115,103 +115,113 @@ export default function Register() {
 				{i18n('enrollCompleteFormText')}
 			</Heading>
 			<Form method="post">
-				<HStack spacing={5}>
-					{/*<PersonalDetails actionData={actionData} />*/}
-					<VStack>
-						<FormControl
-							isRequired
-							isInvalid={Boolean(actionData?.errors?.fieldErrors.firstName)}>
-							<FormLabel marginBottom={1}>{i18n('first name')}</FormLabel>
-							<Input id="firstName" placeholder="first name" name="firstName" />
-							<FormErrorMessage>{i18n('enterFirstName')}</FormErrorMessage>
-						</FormControl>
+				<VStack spacing={5}>
+					<HStack spacing={5}>
+						{/*<PersonalDetails actionData={actionData} />*/}
+						<VStack>
+							<FormControl
+								isRequired
+								isInvalid={Boolean(actionData?.errors?.fieldErrors.firstName)}>
+								<FormLabel marginBottom={1}>{i18n('first name')}</FormLabel>
+								<Input
+									id="firstName"
+									placeholder="first name"
+									name="firstName"
+								/>
+								<FormErrorMessage>{i18n('enterFirstName')}</FormErrorMessage>
+							</FormControl>
 
-						<FormControl
-							isRequired
-							isInvalid={Boolean(actionData?.errors?.fieldErrors.lastName)}>
-							<FormLabel marginBottom={1}>{i18n('last name')}</FormLabel>
-							<Input id="lastName" placeholder="last name" name="lastName" />
-							<FormErrorMessage>{i18n('enterLastName')}</FormErrorMessage>
-						</FormControl>
+							<FormControl
+								isRequired
+								isInvalid={Boolean(actionData?.errors?.fieldErrors.lastName)}>
+								<FormLabel marginBottom={1}>{i18n('last name')}</FormLabel>
+								<Input id="lastName" placeholder="last name" name="lastName" />
+								<FormErrorMessage>{i18n('enterLastName')}</FormErrorMessage>
+							</FormControl>
 
-						<FormControl
-							isRequired
-							isInvalid={Boolean(actionData?.errors?.fieldErrors.emailAddress)}>
-							<FormLabel marginBottom={1}>{i18n('email')}</FormLabel>
-							<Input
-								id="emailAddress"
-								placeholder="name@email.com"
-								name="emailAddress"
-							/>
-							<FormErrorMessage>{i18n('enterEmailAddress')}</FormErrorMessage>
-						</FormControl>
-					</VStack>
-					{/*<UserDetails actionData={actionData} />*/}
-					<VStack>
-						<FormControl
-							isRequired
-							isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}>
-							<FormLabel marginBottom={1}>{i18n('username')}</FormLabel>
-							<Input
-								id="username"
-								placeholder="name@email.com"
-								name="username"
-							/>
-							<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
-						</FormControl>
+							<FormControl
+								isRequired
+								isInvalid={Boolean(
+									actionData?.errors?.fieldErrors.emailAddress,
+								)}>
+								<FormLabel marginBottom={1}>{i18n('email')}</FormLabel>
+								<Input
+									id="emailAddress"
+									placeholder="name@email.com"
+									name="emailAddress"
+								/>
+								<FormErrorMessage>{i18n('enterEmailAddress')}</FormErrorMessage>
+							</FormControl>
+						</VStack>
+						{/*<UserDetails actionData={actionData} />*/}
+						<VStack>
+							<FormControl
+								isRequired
+								isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}>
+								<FormLabel marginBottom={1}>{i18n('username')}</FormLabel>
+								<Input
+									id="username"
+									placeholder="name@email.com"
+									name="username"
+								/>
+								<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
+							</FormControl>
 
-						<FormControl
-							isRequired
-							isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}>
-							<FormLabel marginBottom={1}>{i18n('password')}</FormLabel>
-							<Input
-								id="password"
-								placeholder="password"
-								type="password"
-								name="password"
-							/>
-							<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-						</FormControl>
+							<FormControl
+								isRequired
+								isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}>
+								<FormLabel marginBottom={1}>{i18n('password')}</FormLabel>
+								<Input
+									id="password"
+									placeholder="password"
+									type="password"
+									name="password"
+								/>
+								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+							</FormControl>
 
-						<FormControl
-							isRequired
-							isInvalid={Boolean(
-								actionData?.errors?.fieldErrors.confirmPassword,
-							)}>
-							<FormLabel marginBottom={1}>{i18n('confirmPassword')}</FormLabel>
-							<Input
-								id="confirmPassword"
-								placeholder="confirm password"
-								type="password"
-								name="confirmPassword"
-							/>
-							<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-						</FormControl>
-					</VStack>
-				</HStack>
-				{/*hidden form control*/}
-				<FormControl hidden={true}>
-					<Input
-						readOnly={true}
-						id="accountUid"
-						name="accountUid"
-						value={context.accountUid}
-					/>
-				</FormControl>
-				{/*hidden form control*/}
-				<FormControl hidden={true}>
-					<Input
-						readOnly={true}
-						id="subAccount"
-						name="subAccount"
-						value={context.abbrevNameState}
-					/>
-				</FormControl>
-				{context.recaptcha && (
-					<ReCAPTCHA ref={recaptchaRef} sitekey={context.recaptcha} />
-				)}
-				<Button type="submit">{i18n('submitBtnText')}</Button>
-				{renderText()}
+							<FormControl
+								isRequired
+								isInvalid={Boolean(
+									actionData?.errors?.fieldErrors.confirmPassword,
+								)}>
+								<FormLabel marginBottom={1}>
+									{i18n('confirmPassword')}
+								</FormLabel>
+								<Input
+									id="confirmPassword"
+									placeholder="confirm password"
+									type="password"
+									name="confirmPassword"
+								/>
+								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+							</FormControl>
+						</VStack>
+					</HStack>
+					{/*hidden form control*/}
+					<FormControl hidden={true}>
+						<Input
+							readOnly={true}
+							id="accountUid"
+							name="accountUid"
+							value={context.accountUid}
+						/>
+					</FormControl>
+					{/*hidden form control*/}
+					<FormControl hidden={true}>
+						<Input
+							readOnly={true}
+							id="subAccount"
+							name="subAccount"
+							value={context.abbrevNameState}
+						/>
+					</FormControl>
+					{context.recaptcha && (
+						<ReCAPTCHA ref={recaptchaRef} sitekey={context.recaptcha} />
+					)}
+					<Button type="submit">{i18n('submitBtnText')}</Button>
+					{renderText()}
+				</VStack>
 			</Form>
 			{(actionData?.errors?.formErrors &&
 				actionData.errors.formErrors.length > 0 && (
