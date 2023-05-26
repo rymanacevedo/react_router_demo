@@ -1,5 +1,4 @@
 import { Center, Flex, Link, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	json,
@@ -53,7 +52,7 @@ export default function Success() {
 		</Flex>
 	);
 
-	const sighUpSuccess = (
+	const signUpSuccess = (
 		<Center height="100%">
 			<VStack>
 				<Text>{i18n('userCreated')}</Text>
@@ -120,7 +119,7 @@ export default function Success() {
 			case 'forgotUsername':
 				return forgotUsernameSuccess;
 			case 'signUp':
-				return sighUpSuccess;
+				return signUpSuccess;
 			case 'forgotPassword':
 				return forgotPasswordSuccess;
 			case 'register':
