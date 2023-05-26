@@ -34,6 +34,7 @@ import Review from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
+import Success, { successLoader } from './routes/Success';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -71,6 +72,7 @@ const routesJSX = (
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
 			<Route path="signup" element={<SignUp />} />
 			<Route action={registerAction} path="register" element={<Register />} />
+			<Route path="success" loader={successLoader} element={<Success />} />
 		</Route>
 
 		<Route

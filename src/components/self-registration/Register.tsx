@@ -67,7 +67,7 @@ export const registerAction: ActionFunction = async ({ request }) => {
 		});
 	}
 
-	return redirect('/success');
+	return redirect('/success?successMessageToShow=register', {});
 };
 export default function Register() {
 	const context = useOutletContext<AuthLayoutContext>();
