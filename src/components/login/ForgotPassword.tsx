@@ -96,7 +96,7 @@ export const forgotPasswordAction = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 
-	return redirect('/success');
+	return redirect('/success?successMessageToShow=forgotPassword');
 };
 
 export default function ForgotPassword() {
