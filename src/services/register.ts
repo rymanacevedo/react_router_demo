@@ -1,4 +1,4 @@
-import { RegisterFields } from '../components/self-registration/Register';
+import { RegisterFields } from '../routes/Register';
 import { fetchDataPost } from './utils';
 
 export const getRegisterData = async (fields: RegisterFields) => {

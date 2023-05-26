@@ -19,9 +19,7 @@ import MultiFactor, {
 import ForgotPassword from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
 import SignUp from './components/login/SignUp';
-import Register, {
-	registerAction,
-} from './components/self-registration/Register';
+import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';

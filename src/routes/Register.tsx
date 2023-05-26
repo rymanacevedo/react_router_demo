@@ -8,6 +8,14 @@ import {
 } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
+import { RegisterSchema } from '../lib/validator';
+import { ActionFunction } from 'react-router';
+import { z } from 'zod';
+import { badRequest } from '../services/utils';
+import { getRegisterData } from '../services/register';
+import { AuthLayoutContext } from '../components/login/AuthLayout';
+import { ActionData } from '../components/login/LoginForm';
+import AlertMessage from '../components/ui/AlertMessage';
 import {
 	Button,
 	FormControl,
@@ -22,14 +30,6 @@ import {
 	UnorderedList,
 	VStack,
 } from '@chakra-ui/react';
-import AlertMessage from '../ui/AlertMessage';
-import { AuthLayoutContext } from '../login/AuthLayout';
-import { ActionData } from '../login/LoginForm';
-import { RegisterSchema } from '../../lib/validator';
-import { z } from 'zod';
-import { ActionFunction } from 'react-router';
-import { badRequest } from '../../services/utils';
-import { getRegisterData } from '../../services/register';
 
 export type RegisterFields = z.infer<typeof RegisterSchema>;
 
@@ -67,7 +67,7 @@ export const registerAction: ActionFunction = async ({ request }) => {
 		});
 	}
 
-	return redirect('/success?successMessageToShow=register', {});
+	return redirect('/success?successMessageToShow=register');
 };
 export default function Register() {
 	const context = useOutletContext<AuthLayoutContext>();
