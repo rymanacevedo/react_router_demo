@@ -107,7 +107,10 @@ const routesJSX = (
 				path="learning/assignmentReview/:assignmentKey"
 				element={<AssignmentReviewView />}
 			/>
-			<Route path="learning/review/review1" element={<ReviewView />} />
+			<Route
+				path="learning/review/:assignmentKey/:questionId"
+				element={<ReviewView />}
+			/>
 			<Route
 				path="learning/moduleIntro/:assignmentKey"
 				element={<ModuleIntroView />}
