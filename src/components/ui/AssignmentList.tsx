@@ -25,6 +25,7 @@ import useModuleContentService from '../../services/coursesServices/useModuleCon
 
 type AssignmentType = {
 	assignmentType: string;
+	assignmentUid: string;
 	status: string;
 	estimatedTimeToComplete: number;
 	assignmentKey: string;
@@ -181,6 +182,8 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
 			});
+		} else if (assignment.assignmentType === 'TimedAssessment') {
+			navigate(`timedAssessment/${assignment.assignmentUid}`);
 		} else {
 			navigate(`assignment/${assignment.assignmentKey}`, {
 				state: {

@@ -129,6 +129,8 @@ const routesJSX = (
 				))}
 			</>
 
+			<Route path="learning/timedAssessment/:assignmentUid" />
+
 			<Route
 				path="switch-account"
 				element={
