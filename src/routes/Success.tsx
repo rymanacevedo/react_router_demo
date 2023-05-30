@@ -1,5 +1,4 @@
 import { Center, Flex, Link, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
 	json,
@@ -14,6 +13,7 @@ export const successLoader: LoaderFunction = async ({ request }) => {
 	const successMessageToShow = new URL(request.url).searchParams.get(
 		'successMessageToShow',
 	);
+
 	const obsfucatedEmail = new URL(request.url).searchParams.get(
 		'obsfucatedEmail',
 	);

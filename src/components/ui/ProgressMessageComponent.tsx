@@ -41,48 +41,59 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	useEffect(() => {
 		switch (textPrompt) {
 			case 'FIVE_FAST_ANSWERS':
+				//priority 2000
 				setToastText(i18n('fiveFastAnswers'));
 				setNegativeFeedback();
 				break;
-			case 'FIVE_CONSEC_SI':
-				setToastText(i18n('fiveSureIncorrectAnswers'));
-				setNegativeFeedback();
-				break;
-			case 'SIX_DK_IN_ROUND':
-				setToastText(i18n('sixDontKnowInRound'));
-				setEncouragementFeedback();
-				break;
-			case 'FIVE_CONSEC_SC':
-				setToastText(i18n('fiveSureCorrectAnswers'));
-				setPossitiveFeedback();
-				break;
-			case 'FULL_ROUND_OF_SC':
-				setToastText(i18n('fullRoundSureCorrect'));
-				setPossitiveFeedback();
-				break;
 			case 'FIVE_FAST_REVIEWS':
+				//priority 1900
 				setToastText(i18n('fiveFastReviews'));
 				setNegativeFeedback();
 				break;
-			case 'TWO_FAST_REVIEWS_IN_LU':
-				setToastText(i18n('twoFastReviewsInLu'));
-				setNegativeFeedback();
-				break;
-			case 'TWO_IDENTICAL_SI':
-				setToastText(i18n('twoIdenticalSureIncorrects'));
-				setNegativeFeedback();
-				break;
-			case 'TEN_LONG_REVIEWS':
-				setToastText(i18n('tenLongReviews'));
-				setPossitiveFeedback();
-				break;
 			case 'TWO_NPA_ON_LU':
+				// priority 1800
 				setToastText(i18n('twoNpaOnLu'));
 				setNegativeFeedback();
 				break;
 			case 'TWO_NPA_IN_ROUND':
+				//priority 1700
 				setToastText(i18n('twoNpaInRound'));
 				setEncouragementFeedback();
+				break;
+			case 'TWO_FAST_REVIEWS_IN_LU':
+				//priority 1600
+				setToastText(i18n('twoFastReviewsInLu'));
+				setNegativeFeedback();
+				break;
+			case 'SIX_DK_IN_ROUND':
+				// priority 1500
+				setToastText(i18n('sixDontKnowInRound'));
+				setEncouragementFeedback();
+				break;
+			case 'TWO_IDENTICAL_SI':
+				//priority 1200
+				setToastText(i18n('twoIdenticalSureIncorrects'));
+				setNegativeFeedback();
+				break;
+			case 'FIVE_CONSEC_SI':
+				//priority 1000
+				setToastText(i18n('fiveSureIncorrectAnswers'));
+				setNegativeFeedback();
+				break;
+			case 'FULL_ROUND_OF_SC':
+				//priority 700
+				setToastText(i18n('fullRoundSureCorrect'));
+				setPossitiveFeedback();
+				break;
+			case 'FIVE_CONSEC_SC':
+				//priority 500
+				setToastText(i18n('fiveSureCorrectAnswers'));
+				setPossitiveFeedback();
+				break;
+			case 'TEN_LONG_REVIEWS':
+				//priority 400
+				setToastText(i18n('tenLongReviews'));
+				setPossitiveFeedback();
 				break;
 			default:
 				// TODO: we should throw an error here
