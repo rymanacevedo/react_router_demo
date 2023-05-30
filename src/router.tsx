@@ -32,6 +32,9 @@ import Review from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
+import ReviewView, {
+	reviewViewLoader,
+} from './components/ui/Review/ReviewView';
 import Success, { successLoader } from './routes/Success';
 
 const routesJSX = (
@@ -110,6 +113,11 @@ const routesJSX = (
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				element={<AssignmentReviewView />}
+			/>
+			<Route
+				loader={reviewViewLoader}
+				path="learning/review/:assignmentKey/:questionId"
+				element={<ReviewView />}
 			/>
 			<Route
 				path="learning/moduleIntro/:assignmentKey"
