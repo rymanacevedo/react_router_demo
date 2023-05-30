@@ -119,9 +119,15 @@ const ReviewQuestions = ({
 		};
 	};
 
-	const handleViewQuestion = (questionId: number) => {
+	const handleViewQuestion = (
+		questionId: number,
+		reviewQuestion: LearningUnitQuestion,
+		questionIndex: number,
+	) => {
 		// TODO: need assignment key and questionID. UseParams
-		navigate(`../../learning/review/${assignmentKey}/${questionId}`);
+		navigate(`../../learning/review/${assignmentKey}/${questionId}`, {
+			state: { reviewQuestion, questionIndex },
+		});
 	};
 
 	return (
@@ -132,7 +138,7 @@ const ReviewQuestions = ({
 					index={index}
 					onChange={setIndex}
 					marginRight={'7px'}>
-					{reviewQuestions.map((reviewQuestion) => {
+					{reviewQuestions.map((reviewQuestion, questionIndex) => {
 						const transformedQuestion = transformQuestion(
 							reviewQuestion,
 							answerHistory,
@@ -217,7 +223,11 @@ const ReviewQuestions = ({
 											<Divider />
 											<Button
 												onClick={() => {
-													handleViewQuestion(transformedQuestion.id);
+													handleViewQuestion(
+														transformedQuestion.id,
+														reviewQuestion,
+														questionIndex,
+													);
 												}}
 												height="40px"
 												width="200px"

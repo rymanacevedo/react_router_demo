@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */ //TODO: this will be removed in next ticket (VE-215)
+/* eslint-disable @typescript-eslint/no-unused-vars */ //TODO: this will be removed in next ticket (VE-215)
 import { Box, Container, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
@@ -10,25 +12,18 @@ import {
 	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import AnswerArea from '../AnswerArea';
+// import AnswerArea from '../AnswerArea'; //TODO: this will be added back in VE-215
 import { useEffect, useRef, useState } from 'react';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
-import { useNavigate } from 'react-router-dom';
-import LoadingAssignmentView from '../loading/LoadingAssignmentView';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+// import LoadingAssignmentView from '../loading/LoadingAssignmentView'; //TODO: this will bethis will be added back in VE-215
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
-
-type Props = {
-	isInstructionalOverlayOpen?: boolean;
-	onClose?: () => void;
-	initRef?: any;
-	assignmentKey?: string;
-};
 
 const initState = {
 	self: null,
@@ -55,12 +50,12 @@ const initState = {
 	answerList: [],
 };
 
-export default function ReviewView({
-	// isInstructionalOverlayOpen,
-	// onClose,
-	initRef,
-	assignmentKey,
-}: Props) {
+const ReviewView = () => {
+	const location = useLocation();
+	const { moduleName, questionIndex } = location.state;
+	console.log(moduleName);
+	console.log(questionIndex);
+	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
 	const {
@@ -158,6 +153,7 @@ export default function ReviewView({
 			} else {
 				let res = await fetchModuleQuestions(assignmentKey);
 				moduleQuestionsResponse = res;
+				setQuestionData(moduleQuestionsResponse);
 				// updateModuleLearningUnitsData(res, assignmentKey);
 			}
 
@@ -169,8 +165,8 @@ export default function ReviewView({
 				handleMessage('FULL_ROUND_OF_SC', true);
 				handleMessage('FIVE_FAST_ANSWERS', true);
 			}
-
-			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
+			console.log(currentRoundQuestionsResponse);
+			if (moduleQuestionsResponse) {
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
 					currentRoundQuestionsResponse?.masteredQuestionCount
@@ -183,6 +179,7 @@ export default function ReviewView({
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
+					console.log(moduleQuestionsResponse);
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(revSkipRes);
 					setQuestionInFocus(
@@ -261,9 +258,7 @@ export default function ReviewView({
 		setIsToastOpen(false);
 	};
 
-	console.log('This was reached.');
-
-	return currentRoundQuestionListData ? (
+	return (
 		<>
 			{!outro ? (
 				<Container
@@ -301,7 +296,8 @@ export default function ReviewView({
 								w={{ base: '100%', md: '50%' }}>
 								<Question questionInFocus={questionInFocus} />
 							</Box>
-							<AnswerArea
+							{/* TODO: this will be added back in next ticket (VE-215) */}
+							{/* <AnswerArea
 								isOpen={false}
 								onClose={() => {
 									console.log('onClose');
@@ -322,7 +318,7 @@ export default function ReviewView({
 								setTotalAnswerConfidence={() => {
 									console.log('hey');
 								}}
-							/>
+							/> */}
 						</Stack>
 						<ProgressMenu
 							textPrompt={textPrompt}
@@ -335,7 +331,7 @@ export default function ReviewView({
 				<ModuleOutro moduleData={questionData} action={handleReturnHome} />
 			)}
 		</>
-	) : (
-		<LoadingAssignmentView />
 	);
-}
+};
+
+export default ReviewView;
