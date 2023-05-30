@@ -13,13 +13,20 @@ export const successLoader: LoaderFunction = async ({ request }) => {
 	const successMessageToShow = new URL(request.url).searchParams.get(
 		'successMessageToShow',
 	);
-	return json({ message: successMessageToShow });
+
+	const obsfucatedEmail = new URL(request.url).searchParams.get(
+		'obsfucatedEmail',
+	);
+	return json({
+		message: successMessageToShow,
+		obsfucatedEmail: obsfucatedEmail,
+	});
 };
 
 export default function Success() {
 	const { t: i18n } = useTranslation();
 	const context = useOutletContext() as AuthLayoutContext;
-	const { message } = useLoaderData() as any;
+	const { message, obsfucatedEmail } = useLoaderData() as any;
 
 	const forgotUsernameSuccess = (
 		<Flex
@@ -83,7 +90,7 @@ export default function Success() {
 			justify="center">
 			<Center>
 				<Text align="center" mb={5}>
-					{/* TODO: {i18n('forgotPasswordSuccess', { email: emailAddress })}*/}
+					{i18n('forgotPasswordSuccess', { email: obsfucatedEmail })}
 				</Text>
 			</Center>
 			<Center>

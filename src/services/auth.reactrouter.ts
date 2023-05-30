@@ -3,7 +3,8 @@ import { API } from '../lib/environment';
 import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
-import { authenticatedFetch, unauthorized } from './utils';
+import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
+import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
 import { BootstrapData, BootstrapDataSchema } from '../App';
 
 const initialUserDataSchema = z.object({
@@ -293,6 +294,16 @@ export const logoutSession = async (sessionKey: string) => {
 
 export const isUserInfo = (info: any): info is UserInfo => {
 	return UserInfoSchema.safeParse(info).success;
+};
+
+export const getForgotPasswordData = async (fields: ForgotPasswordFields) => {
+	const url = `${API}/v2/bootstrap/forgot-password`;
+	const forgotPasswordBody = {
+		username: fields.username,
+		accountUid: fields.accountUid,
+		captchaResp: fields['g-recaptcha-response'],
+	};
+	return fetchDataPost<any>(url, forgotPasswordBody);
 };
 
 export const isBootStrapData = (data: any): data is BootstrapData => {
