@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
 import { authenticatedFetch, unauthorized } from './utils';
+import { BootstrapData, BootstrapDataSchema } from '../App';
 
 const initialUserDataSchema = z.object({
 	sessionKey: z.string(),
@@ -111,7 +112,7 @@ export async function bootstrap(request: Request) {
 			return await response.json();
 		}
 
-		return false;
+		return null;
 	} catch (e: any) {
 		throw new Error(
 			`bootstrap call failed, check if your database is running and restart your backend: ${e.message}`,
@@ -292,4 +293,8 @@ export const logoutSession = async (sessionKey: string) => {
 
 export const isUserInfo = (info: any): info is UserInfo => {
 	return UserInfoSchema.safeParse(info).success;
+};
+
+export const isBootStrapData = (data: any): data is BootstrapData => {
+	return BootstrapDataSchema.safeParse(data).success;
 };
