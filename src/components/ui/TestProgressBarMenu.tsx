@@ -26,11 +26,13 @@ type ProgressBarMenu = {
 	inReview?: boolean;
 	questionIndex?: number;
 	viewCorrect?: boolean;
+	showType?: boolean;
 };
 
 type ModuleTitleType = {
 	assignmentType: string;
 	title: string;
+	showType?: boolean;
 };
 
 type RoundNumberType = {
@@ -39,10 +41,11 @@ type RoundNumberType = {
 };
 
 //refactor to accept assignment type, title, time left, progress props
-const ModuleTitle = ({ assignmentType, title }: ModuleTitleType) => {
+
+const ModuleTitle = ({ assignmentType, title, showType }: ModuleTitleType) => {
 	return (
 		<Heading as="h1" fontSize={'21px'}>
-			{assignmentType}: {title}
+			{!showType ? `${assignmentType}: ${title}` : title}
 		</Heading>
 	);
 };
@@ -237,6 +240,7 @@ const TestProgressBarMenu = ({
 	currentRoundAnswerOverLayData,
 	questionIndex,
 	viewCorrect,
+	showType,
 }: ProgressBarMenu) => {
 	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
@@ -276,7 +280,11 @@ const TestProgressBarMenu = ({
 				paddingRight="24px"
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
 				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
-					<ModuleTitle title={title} assignmentType={assignmentType} />
+					<ModuleTitle
+						title={title}
+						assignmentType={assignmentType}
+						showType={showType}
+					/>
 					<ModuleTimeRemaining />
 				</VStack>
 				<VStack

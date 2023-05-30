@@ -272,6 +272,7 @@ const ReviewView = () => {
 						isToastOpen={isToastOpen}
 					/>
 					<TestProgressBarMenu
+						showType={true}
 						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}
