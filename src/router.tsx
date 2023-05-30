@@ -37,6 +37,9 @@ import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
 import ReviewView, {
 	reviewViewLoader,
 } from './components/ui/Review/ReviewView';
+import TimedAssessment, {
+	timedAssessmentLoader,
+} from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
 
 const routesJSX = (
@@ -144,6 +147,12 @@ const routesJSX = (
 					<Route key={path} path={path} element={<TourView />} />
 				))}
 			</>
+
+			<Route
+				loader={timedAssessmentLoader}
+				path="learning/timedAssessment/:assignmentUid"
+				element={<TimedAssessment />}
+			/>
 
 			<Route
 				path="switch-account"

@@ -23,8 +23,9 @@ import useCourseCurriculaListService from '../../services/coursesServices/useCou
 import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 
-type AssignmentType = {
+type Assignment = {
 	assignmentType: string;
+	assignmentUid: string;
 	status: string;
 	estimatedTimeToComplete: number;
 	assignmentKey: string;
@@ -81,7 +82,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	}, [selectedCourseKey]);
 
-	const getAssignmentText = (assignment: AssignmentType) => {
+	const getAssignmentText = (assignment: Assignment) => {
 		if (
 			assignment?.assignmentType === 'Assessment' &&
 			assignment?.status === 'COMPLETED'
@@ -107,7 +108,6 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 							}`}
 						</Text>
 					);
-					break;
 				}
 				case 'IN_PROGRESS': {
 					return (
@@ -125,11 +125,9 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 							left`}
 						</Text>
 					);
-					break;
 				}
 				case 'COMPLETED': {
 					return <Text fontSize={'12px'}>{i18n('refresherAvailable')}</Text>;
-					break;
 				}
 			}
 		} else {
@@ -145,18 +143,18 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 								}	${i18n('minToComplete')}`}
 						</Text>
 					);
-					break;
 				}
 				case 'COMPLETED': {
 					return <Text fontSize={'12px'}>{i18n('attempts')}</Text>;
-					break;
 				}
 			}
 		}
 	};
 
-	const handleAssignmentClick = (assignment: AssignmentType) => () => {
-		if (assignment.status === 'COMPLETED') {
+	const handleAssignmentClick = (assignment: Assignment) => () => {
+		if (assignment.assignmentType === 'TimedAssessment') {
+			navigate(`timedAssessment/${assignment.assignmentUid}`);
+		} else if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {
 				setRefreshIsOpen('');
 			} else {
@@ -189,31 +187,26 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			});
 		}
 	};
-	const handleRefresherClick = (assignment: AssignmentType) => async () => {
+	const handleRefresherClick = (assignment: Assignment) => async () => {
 		const refresher = await startRefresher(assignment.assignmentKey, false);
 		navigate(`moduleIntro/${refresher.assignmentKey}`);
 	};
 
-	const handleReviewClick = (assignment: AssignmentType) => {
+	const handleReviewClick = (assignment: Assignment) => {
 		return () => {
 			navigate(`review/${assignment.assignmentKey}`);
 		};
 	};
 
-	const handleSmartRefresherClick =
-		(assignment: AssignmentType) => async () => {
-			const smartRefresher = await startRefresher(
-				assignment.assignmentKey,
-				true,
-			);
-			navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
-		};
+	const handleSmartRefresherClick = (assignment: Assignment) => async () => {
+		const smartRefresher = await startRefresher(assignment.assignmentKey, true);
+		navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
+	};
 
 	const assignmentList = assignmentListData?.displayCurriculum.children.map(
 		(curriculum, index) => {
-			const assignment: AssignmentType =
+			const assignment: Assignment =
 				curriculum.assignments[curriculum.assignments.length - 1];
-
 			return (
 				<Popover
 					key={index}
