@@ -95,7 +95,7 @@ export const forgotPasswordAction = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 
-	const mailParts = fields?.username.split('@');
+	const mailParts = fields.username.split('@');
 	const obsfucatedEmail = mailParts
 		? `${mailParts[0].slice(0, 1)}...${mailParts[0].slice(-1)}@${mailParts[1]}`
 		: '';
