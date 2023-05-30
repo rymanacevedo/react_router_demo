@@ -32,6 +32,9 @@ import Review from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
+import TimedAssessment, {
+	timedAssessmentLoader,
+} from './routes/TimedAssessment';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -129,7 +132,11 @@ const routesJSX = (
 				))}
 			</>
 
-			<Route path="learning/timedAssessment/:assignmentUid" />
+			<Route
+				loader={timedAssessmentLoader}
+				path="learning/timedAssessment/:assignmentUid"
+				element={<TimedAssessment />}
+			/>
 
 			<Route
 				path="switch-account"
