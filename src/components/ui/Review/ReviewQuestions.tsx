@@ -124,7 +124,7 @@ const ReviewQuestions = ({
 		reviewQuestion: LearningUnitQuestion,
 		questionIndex: number,
 	) => {
-		navigate(`../../learning/review/${assignmentKey}/${questionId}`, {
+		navigate(`/learning/review/${assignmentKey}/${questionId}`, {
 			state: { reviewQuestion, questionIndex },
 		});
 	};

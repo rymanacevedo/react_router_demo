@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */ //TODO: this will be removed in next ticket (VE-215)
-/* eslint-disable @typescript-eslint/no-unused-vars */ //TODO: this will be removed in next ticket (VE-215)
-import { Box, Container, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
+import { Box, Container, HStack, Stack } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 
@@ -10,15 +8,14 @@ import {
 	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
-	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 // import AnswerArea from '../AnswerArea'; //TODO: this will be added back in VE-215
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { LoaderFunction, useNavigate, useParams } from 'react-router-dom';
 // import LoadingAssignmentView from '../loading/LoadingAssignmentView'; //TODO: this will bethis will be added back in VE-215
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
@@ -49,11 +46,11 @@ const initState = {
 	avatarMessage: null,
 	answerList: [],
 };
+export const reviewViewLoader: LoaderFunction = async () => {
+	return null;
+};
 
 const ReviewView = () => {
-	const location = useLocation();
-	// Unused for now but will be used in next ticket (VE-215)
-	const { moduleName, questionIndex } = location.state;
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
@@ -62,10 +59,8 @@ const ReviewView = () => {
 		moduleLearningUnitsData,
 		// updateModuleLearningUnitsData,
 	} = useQuizContext();
-	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt] = useState<string>('');
-	const [clearSelection, setClearSelection] = useState(false);
 	const { getCurrentRound, getCurrentRoundSkipReview } =
 		useCurrentRoundService();
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -101,10 +96,9 @@ const ReviewView = () => {
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
 
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
-	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
+	const [currentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
-	const [showOverlay, setShowOverlay] = useState(false);
+
 	const [questionData, setQuestionData] = useState<ModuleData>({
 		accountUri: '',
 		children: null,
@@ -132,16 +126,7 @@ const ReviewView = () => {
 		versionId: 0,
 	});
 
-	const [IDKResponse, setIDKResponse] = useState(false);
-	const intervalRef = useRef<ReturnType<typeof setInterval>>();
-	const questionSecondsRef = useRef(0);
 	const [outro, setOutro] = useState(false);
-
-	const clearSelectionButtonFunc = () => {
-		setSelectedAnswers([]);
-		setClearSelection(true);
-		setIDKResponse(false);
-	};
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -205,39 +190,6 @@ const ReviewView = () => {
 			}
 		} catch (error) {
 			console.error(error);
-		}
-	};
-
-	const startTimer = () => {
-		intervalRef.current = setInterval(() => {
-			questionSecondsRef.current = questionSecondsRef.current + 1;
-		}, 1000);
-
-		return () => clearInterval(intervalRef.current);
-	};
-
-	const getNextTask = () => {
-		setIsToastOpen(false);
-		clearSelectionButtonFunc();
-		setShowOverlay(false);
-		fetchModuleQuestionsData().then(() => {
-			setCurrentRoundAnswerOverLayData(initState);
-			startTimer();
-		});
-	};
-
-	const continueBtnFunc = () => {
-		if (showOverlay) {
-			if (
-				currentRoundQuestionListData?.totalQuestionCount ===
-				currentRoundQuestionListData?.masteredQuestionCount
-			) {
-				setOutro(true);
-			} else {
-				getNextTask();
-			}
-		} else {
-			// submitAnswer();
 		}
 	};
 
