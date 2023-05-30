@@ -28,6 +28,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import { useFetcher } from 'react-router-dom';
+import { ActionData } from '../login/LoginForm';
+import { QuestionFeedbackFields } from '../../routes/QuestionFeedback';
 
 const WhatYouNeedToKnowComponent = ({
 	questionInFocus,
@@ -41,12 +44,9 @@ const WhatYouNeedToKnowComponent = ({
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
 	const [radioValue, setRadioValue] = useState('');
-	const [textAreaValue, setTextAreaValue] = useState('');
 	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-	const submitHandler = async (e: React.FormEvent) => {
-		e.preventDefault();
-	};
+	const fetcher = useFetcher();
+	const data = fetcher.data as ActionData<QuestionFeedbackFields>;
 
 	return (
 		<Box
@@ -60,7 +60,7 @@ const WhatYouNeedToKnowComponent = ({
 			borderRadius={24}
 			padding={'34px 120px'}
 			maxW="1496">
-			<Heading as="h3">{i18n('whatYouNeedToKnow')}</Heading>
+			<Heading as="h2">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
 				<RichContentComponent content={questionInFocus?.explanationRc} />
 			</Stack>
@@ -156,65 +156,67 @@ const WhatYouNeedToKnowComponent = ({
 			</Collapse>
 			<Collapse in={isOpen} animateOpacity>
 				<Box
-					as="form"
-					onSubmit={submitHandler}
 					color="black"
 					bg="ampNeutral.50"
 					borderRadius={'12px'}
 					boxSizing="border-box"
 					p="24px"
 					marginTop={'16px'}>
-					<Heading fontWeight={'600'} fontSize={'21px'}>
+					<Heading as="h3" size="md">
 						{i18n('leaveFeedbackText')}
 					</Heading>
-					<FormControl isRequired={true}>
-						<RadioGroup
-							marginTop={'16px'}
-							onChange={setRadioValue}
-							value={radioValue}>
-							<HStack spacing={40}>
-								<VStack alignItems={'left'}>
-									<Radio value="disagree">
-										{i18n('IDisagreeWithTheAnswer')}
-									</Radio>
-									<Radio value="qImprove">
-										{i18n('thisQuestionCouldBeImproved')}
-									</Radio>
-								</VStack>
-								<VStack alignItems={'left'}>
-									<Radio value="idk">{i18n('iStillDontUnderstand')}</Radio>
-									<Radio value="other">{i18n('other')}</Radio>
-								</VStack>
-							</HStack>
-						</RadioGroup>
-					</FormControl>
-					<FormControl isRequired={radioValue === 'other'}>
-						<Textarea
-							maxLength={500}
-							bg="ampWhite"
-							marginTop="16px"
-							minHeight="150px"
-							value={textAreaValue}
-							placeholder={i18n('placeHolderText')}
-							onChange={(e) => {
-								setTextAreaValue(e.target.value);
-							}}
-						/>
-					</FormControl>
+					<fetcher.Form method="post" action="/feedback">
+						<FormControl isRequired>
+							<RadioGroup
+								id="feedbackType"
+								name="feedbackType"
+								marginTop={'16px'}
+								onChange={setRadioValue}
+								value={radioValue}>
+								<HStack spacing={40}>
+									<VStack alignItems={'left'}>
+										<Radio value="disagree">
+											{i18n('IDisagreeWithTheAnswer')}
+										</Radio>
+										<Radio value="qImprove">
+											{i18n('thisQuestionCouldBeImproved')}
+										</Radio>
+									</VStack>
+									<VStack alignItems={'left'}>
+										<Radio value="idk">{i18n('iStillDontUnderstand')}</Radio>
+										<Radio value="other">{i18n('other')}</Radio>
+									</VStack>
+								</HStack>
+							</RadioGroup>
+						</FormControl>
+						<FormControl
+							isRequired={radioValue === 'other'}
+							isInvalid={Boolean(data?.errors?.fieldErrors.feedback)}>
+							<Textarea
+								id="feedback"
+								name="feedback"
+								maxLength={500}
+								bg="ampWhite"
+								marginTop="16px"
+								minHeight="150px"
+								placeholder={i18n('placeHolderText')}
+							/>
+						</FormControl>
 
-					<ButtonGroup width="100%" marginTop={'16px'}>
-						<Button variant="ampSolid" type="submit">
-							<Text>{i18n('submitBtnText')}</Text>
-						</Button>
-						<Button
-							variant="ampOutline"
-							onClick={() => {
-								onToggle();
-								setRadioValue('');
-							}}>
-							<Text>{i18n('cancelBtnText')}</Text>
-						</Button>
-					</ButtonGroup>
+						<ButtonGroup width="100%" marginTop={'16px'}>
+							<Button type="submit" variant="ampSolid">
+								<Text>{i18n('submitBtnText')}</Text>
+							</Button>
+							<Button
+								variant="ampOutline"
+								onClick={() => {
+									onToggle();
+									setRadioValue('');
+								}}>
+								<Text>{i18n('cancelBtnText')}</Text>
+							</Button>
+						</ButtonGroup>
+					</fetcher.Form>
 				</Box>
 			</Collapse>
 		</Box>
