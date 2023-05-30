@@ -16,7 +16,9 @@ import MultiFactor, {
 	mfaAction,
 	mfaLoader,
 } from './components/login/MultiFactor';
-import ForgotPassword from './components/login/ForgotPassword';
+import ForgotPassword, {
+	forgotPasswordAction,
+} from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
 import SignUp from './components/login/SignUp';
 import Register, { registerAction } from './routes/Register';
@@ -32,6 +34,9 @@ import Review from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
+import ReviewView, {
+	reviewViewLoader,
+} from './components/ui/Review/ReviewView';
 import TimedAssessment, {
 	timedAssessmentLoader,
 } from './routes/TimedAssessment';
@@ -68,7 +73,11 @@ const routesJSX = (
 				path="mfa"
 				element={<MultiFactor />}
 			/>
-			<Route path="forgot-password" element={<ForgotPassword />} />
+			<Route
+				path="forgot-password"
+				element={<ForgotPassword />}
+				action={forgotPasswordAction}
+			/>
 			<Route path="forgot-username" element={<ForgotUsername />} />
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
 			<Route path="signup" element={<SignUp />} />
@@ -113,6 +122,11 @@ const routesJSX = (
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				element={<AssignmentReviewView />}
+			/>
+			<Route
+				loader={reviewViewLoader}
+				path="learning/review/:assignmentKey/:questionId"
+				element={<ReviewView />}
 			/>
 			<Route
 				path="learning/moduleIntro/:assignmentKey"

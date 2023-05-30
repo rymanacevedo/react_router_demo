@@ -9,6 +9,7 @@ import {
 	Stack,
 	VStack,
 	HStack,
+	Button,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -21,6 +22,9 @@ import { truncateText, getIcons } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
+import { Divider } from '@chakra-ui/react';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { useNavigate, useParams } from 'react-router-dom';
 
 interface ReviewQuestionsProps {
 	reviewQuestions: LearningUnitQuestion[];
@@ -83,6 +87,8 @@ const ReviewQuestions = ({
 	index,
 	setIndex,
 }: ReviewQuestionsProps) => {
+	const { assignmentKey } = useParams();
+	const navigate = useNavigate();
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
@@ -113,6 +119,16 @@ const ReviewQuestions = ({
 		};
 	};
 
+	const handleViewQuestion = (
+		questionId: number,
+		reviewQuestion: LearningUnitQuestion,
+		questionIndex: number,
+	) => {
+		navigate(`/learning/review/${assignmentKey}/${questionId}`, {
+			state: { reviewQuestion, questionIndex },
+		});
+	};
+
 	return (
 		<VStack alignItems="flex-start" width="100%">
 			<HStack width="100%" justifyContent="space-between" alignItems="center">
@@ -121,7 +137,7 @@ const ReviewQuestions = ({
 					index={index}
 					onChange={setIndex}
 					marginRight={'7px'}>
-					{reviewQuestions.map((reviewQuestion) => {
+					{reviewQuestions.map((reviewQuestion, questionIndex) => {
 						const transformedQuestion = transformQuestion(
 							reviewQuestion,
 							answerHistory,
@@ -203,6 +219,28 @@ const ReviewQuestions = ({
 														</>
 													);
 												})}
+											<Divider />
+											<Button
+												onClick={() => {
+													handleViewQuestion(
+														transformedQuestion.id,
+														reviewQuestion,
+														questionIndex,
+													);
+												}}
+												height="40px"
+												width="200px"
+												borderRadius="6px"
+												bg="#FFFFFF"
+												color="#2D5172"
+												borderColor="#839EB6"
+												borderWidth="1px"
+												rightIcon={<ArrowRightIcon />}
+												mt="24px"
+												ml="8px"
+												mb="8px">
+												{i18n('viewTheQuestion')}
+											</Button>
 										</AccordionPanel>
 									</>
 								)}
