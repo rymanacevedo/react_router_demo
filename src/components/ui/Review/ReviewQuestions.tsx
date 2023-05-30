@@ -124,7 +124,6 @@ const ReviewQuestions = ({
 		reviewQuestion: LearningUnitQuestion,
 		questionIndex: number,
 	) => {
-		// TODO: need assignment key and questionID. UseParams
 		navigate(`../../learning/review/${assignmentKey}/${questionId}`, {
 			state: { reviewQuestion, questionIndex },
 		});

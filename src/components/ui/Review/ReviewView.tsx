@@ -52,9 +52,8 @@ const initState = {
 
 const ReviewView = () => {
 	const location = useLocation();
+	// Unused for now but will be used in next ticket (VE-215)
 	const { moduleName, questionIndex } = location.state;
-	console.log(moduleName);
-	console.log(questionIndex);
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
@@ -165,7 +164,7 @@ const ReviewView = () => {
 				handleMessage('FULL_ROUND_OF_SC', true);
 				handleMessage('FIVE_FAST_ANSWERS', true);
 			}
-			console.log(currentRoundQuestionsResponse);
+
 			if (moduleQuestionsResponse) {
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
@@ -179,7 +178,6 @@ const ReviewView = () => {
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
-					console.log(moduleQuestionsResponse);
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(revSkipRes);
 					setQuestionInFocus(
