@@ -19,7 +19,7 @@ import MultiFactor, {
 import ForgotPassword from './components/login/ForgotPassword';
 import ForgotUsername from './components/login/ForgotUsername';
 import SignUp from './components/login/SignUp';
-import Register from './components/self-registration/Register';
+import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
@@ -32,6 +32,7 @@ import Review from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
+import Success, { successLoader } from './routes/Success';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -68,7 +69,8 @@ const routesJSX = (
 			<Route path="forgot-username" element={<ForgotUsername />} />
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
 			<Route path="signup" element={<SignUp />} />
-			<Route path="register" element={<Register />} />
+			<Route action={registerAction} path="register" element={<Register />} />
+			<Route path="success" loader={successLoader} element={<Success />} />
 		</Route>
 
 		<Route

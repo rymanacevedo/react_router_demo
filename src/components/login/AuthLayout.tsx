@@ -65,6 +65,15 @@ export default function AuthLayout() {
 		} else {
 			setError(true);
 		}
+
+		return () => {
+			setAccountKey('');
+			setAbbrevNameState('');
+			setAccountUid('');
+			setRecaptcha('');
+			setSelfRegistration(false);
+			setError(false);
+		};
 	}, []);
 
 	return (
