@@ -1,7 +1,6 @@
 import { Heading, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './Review/ReviewContentRender';
-// import RichContentComponent from './RichContentComponent';
 
 const Question = ({
 	questionInFocus,

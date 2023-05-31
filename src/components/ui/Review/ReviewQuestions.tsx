@@ -136,7 +136,6 @@ const ReviewQuestions = ({
 		navigate(`/learning/review/${assignmentKey}/${questionId}`, {
 			state: {
 				questionIndex,
-				answerHistory,
 				transformedQuestion,
 				reviewQuestions,
 			},

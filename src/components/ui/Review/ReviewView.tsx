@@ -185,7 +185,7 @@ const ReviewView = () => {
 					isToastOpen={isToastOpen}
 				/>
 				<TestProgressBarMenu
-					isReview={true}
+					isInReviewView={true}
 					answerHistory={transformedQuestion.answerHistory}
 					showType={true}
 					questionData={questionData}
