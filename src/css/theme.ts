@@ -6,6 +6,7 @@ import { Checkbox } from './Checkbox';
 import { Link } from './Link';
 import { Divider } from './Divider';
 import Heading from './Heading';
+import { Card } from './Card';
 
 export const ampTheme = extendTheme({
 	styles: {
@@ -193,6 +194,7 @@ export const ampTheme = extendTheme({
 	components: {
 		Button,
 		Badge,
+		Card,
 		Tag,
 		Checkbox,
 		Link,
