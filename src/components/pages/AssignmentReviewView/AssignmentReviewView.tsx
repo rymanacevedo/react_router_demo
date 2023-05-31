@@ -687,6 +687,8 @@ const AssignmentReviewView = () => {
 		}
 	};
 
+	console.log(selectedAnswers);
+	console.log(questionInFocus);
 	return (
 		<main id="learning-assignment">
 			{currentRoundQuestionListData ? (
@@ -703,6 +705,7 @@ const AssignmentReviewView = () => {
 						isToastOpen={isToastOpen}
 					/>
 					<TestProgressBarMenu
+						isReview={false} // Change this to isInReviewPage
 						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}

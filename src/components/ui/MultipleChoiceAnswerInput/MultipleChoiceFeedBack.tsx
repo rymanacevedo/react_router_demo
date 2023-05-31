@@ -20,8 +20,8 @@ const MultipleChoiceFeedBack = ({
 	questionInFocus: QuestionInFocus;
 	selectedAnswers: any[];
 	setSelectedAnswers: any;
-	clearSelection: any;
-	setClearSelection: any;
+	clearSelection?: any;
+	setClearSelection?: any;
 	currentRoundAnswerOverLayData?: any;
 	inReview?: boolean;
 	revealAnswer?: boolean;

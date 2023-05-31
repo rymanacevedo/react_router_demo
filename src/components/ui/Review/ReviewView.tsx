@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Container, HStack, Stack } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
@@ -8,6 +10,8 @@ import {
 	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
+	SelectedAnswer,
+	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 // import AnswerArea from '../AnswerArea'; //TODO: this will be added back in VE-215
 import { useEffect, useState } from 'react';
@@ -22,6 +26,10 @@ import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { useLocation } from 'react-router-dom';
+// import AnswerArea from '../AnswerArea';
+import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
+import { findRoundAnswersData } from '../../pages/AssignmentView/findRoundAnswersData';
+import AnswerArea from '../AnswerArea';
 
 const initState = {
 	self: null,
@@ -53,12 +61,14 @@ export const reviewViewLoader: LoaderFunction = async () => {
 
 const ReviewView = () => {
 	const location = useLocation();
-	const { transformedQuestion } = location.state;
+	const { transformedQuestion, questionIndex, reviewQuestions } =
+		location.state;
+	console.log(questionIndex + 1);
+	console.log(reviewQuestions.length);
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
 	const {
-		handleMessage,
 		moduleLearningUnitsData,
 		// updateModuleLearningUnitsData,
 	} = useQuizContext();
@@ -67,7 +77,8 @@ const ReviewView = () => {
 	const { getCurrentRound, getCurrentRoundSkipReview } =
 		useCurrentRoundService();
 	const { fetchModuleQuestions } = useModuleContentService();
-
+	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+	const [clearSelection, setClearSelection] = useState(false);
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
 		answerList: [],
 		answered: false,
@@ -129,7 +140,15 @@ const ReviewView = () => {
 		versionId: 0,
 	});
 
-	const [outro, setOutro] = useState(false);
+	const [outro] = useState(false);
+
+	const renameAnswerAttribute = (object: TransformedQuestion) => {
+		if ('answers' in object) {
+			object.answerList = object.answers;
+			delete object.answers;
+		}
+		return object;
+	};
 
 	const fetchModuleQuestionsData = async () => {
 		try {
@@ -139,26 +158,20 @@ const ReviewView = () => {
 				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
 			} else {
 				let res = await fetchModuleQuestions(assignmentKey);
+				console.log(res);
 				moduleQuestionsResponse = res;
 				setQuestionData(moduleQuestionsResponse);
 				// updateModuleLearningUnitsData(res, assignmentKey);
 			}
 
 			let revSkipRes = {} as CurrentRoundQuestionListData;
-
-			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
-				handleMessage('FIVE_CONSEC_SC', true);
-				handleMessage('SIX_DK_IN_ROUND', true);
-				handleMessage('FULL_ROUND_OF_SC', true);
-				handleMessage('FIVE_FAST_ANSWERS', true);
-			}
-
+			console.log(moduleQuestionsResponse);
 			if (moduleQuestionsResponse) {
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
 					currentRoundQuestionsResponse?.masteredQuestionCount
 				) {
-					setOutro(true);
+					// setOutro(true);
 				} else if (
 					currentRoundQuestionsResponse.questionList.every(
 						(question: QuestionInFocus) =>
@@ -166,14 +179,15 @@ const ReviewView = () => {
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
+					alert(revSkipRes);
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(revSkipRes);
 					setQuestionInFocus(
 						findQuestionInFocus(
 							moduleQuestionsResponse,
-							revSkipRes,
-							false,
-							false,
+							currentRoundQuestionsResponse,
+							true,
+							true,
 						),
 					);
 				} else if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
@@ -191,6 +205,15 @@ const ReviewView = () => {
 					navigate(`/learning/assignmentReview/${assignmentKey}`);
 				}
 			}
+
+			// const foundQuestionInFocus = findQuestionInFocus(
+			// 	moduleQuestionsResponse,
+			// 	currentRoundQuestionsResponse,
+			// 	true,
+			// 	true,
+			// )[questionIndex];
+
+			// setSelectedAnswers(findRoundAnswersData(foundQuestionInFocus));
 		} catch (error) {
 			console.error(error);
 		}
@@ -210,6 +233,16 @@ const ReviewView = () => {
 		handleMenuOpen();
 		setIsToastOpen(false);
 	};
+
+	// const continueBtnFunc = () => {
+	// 	console.log('continue');
+	// };
+
+	// const clearSelectionButtonFunc = () => {
+	// 	console.log('clear');
+	// };
+
+	console.log(transformedQuestion);
 
 	return (
 		<>
@@ -250,31 +283,36 @@ const ReviewView = () => {
 								px="72px"
 								py="44px"
 								w={{ base: '100%', md: '50%' }}>
-								<Question questionInFocus={questionInFocus} />
+								<Question
+									review={true}
+									questionIndex={questionIndex + 1}
+									numberOfQInReview={reviewQuestions.length}
+									questionInFocus={transformedQuestion}
+								/>
 							</Box>
 							{/* TODO: this will be added back in next ticket (VE-215) */}
-							{/* <AnswerArea
-								isOpen={false}
-								onClose={() => {
-									console.log('onClose');
-								}}
-								smallerThan1000={isSmallerThan1000}
-								initialFocusRef={initRef}
-								showFeedback={showOverlay}
-								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswers}
-								selectedAnswersState={setSelectedAnswers}
-								clearSelection={clearSelection}
-								clearSelectionState={setClearSelection}
-								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								onClick={continueBtnFunc}
-								clearSelectionFunction={clearSelectionButtonFunc}
-								IDKResponse={IDKResponse}
-								setIDKResponse={setIDKResponse}
-								setTotalAnswerConfidence={() => {
-									console.log('hey');
-								}}
-							/> */}
+							<Box
+								backgroundColor="white"
+								boxShadow="md"
+								borderRadius={24}
+								px="72px"
+								py="44px"
+								w={{ base: '100%', md: '50%' }}>
+								<MultipleChoiceOverLay
+									questionInFocus={
+										renameAnswerAttribute(
+											transformedQuestion,
+										) as unknown as QuestionInFocus
+									}
+									selectedAnswers={selectedAnswers}
+									setSelectedAnswers={setSelectedAnswers}
+									clearSelection={clearSelection}
+									setClearSelection={setClearSelection}
+									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									inReview={true}
+									revealAnswer={true}
+								/>
+							</Box>
 						</Stack>
 						<ProgressMenu
 							textPrompt={textPrompt}

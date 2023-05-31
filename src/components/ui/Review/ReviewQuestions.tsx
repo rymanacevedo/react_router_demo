@@ -138,6 +138,7 @@ const ReviewQuestions = ({
 				questionIndex,
 				answerHistory,
 				transformedQuestion,
+				reviewQuestions,
 			},
 		});
 	};
