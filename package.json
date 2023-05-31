@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/anatomy": "^2.1.2",
     "@chakra-ui/react": "^2.4.2",
     "@chakra-ui/theme": "^2.1.13",
     "@chakra-ui/theme-tools": "^2.0.12",

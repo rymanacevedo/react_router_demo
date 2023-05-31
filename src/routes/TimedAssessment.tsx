@@ -1,5 +1,13 @@
 import { LoaderFunction } from 'react-router';
-import { Box, Container, HStack, Stack } from '@chakra-ui/react';
+import {
+	Box,
+	Container,
+	Divider,
+	Heading,
+	HStack,
+	Stack,
+} from '@chakra-ui/react';
+import PracticeTestCard from '../components/ui/PracticeTestCard';
 
 export const timedAssessmentLoader: LoaderFunction = async () => {
 	return null;
@@ -18,12 +26,33 @@ export default function TimedAssessment() {
 				<h1>Timed Assessment</h1>
 				<HStack justify="center" align="space-between">
 					<Stack
-						maxW="1496"
 						w="100%"
 						p="12px"
 						pr="0px"
 						alignItems="stretch"
 						direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+						<Box
+							boxShadow="md"
+							borderRadius={24}
+							px="72px"
+							py="44px"
+							w={{ base: '100%', md: '50%' }}>
+							<Heading as="h2" fontSize="lg">
+								{/*TODO: i18n*/}
+								Practice test navigation
+							</Heading>
+							<Divider />
+
+							{/*unselected, flagged, selected, flagged/selected*/}
+							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (
+								<PracticeTestCard
+									size="sm"
+									variant="flagged"
+									text={questionNumber.toString()}
+								/>
+							))}
+						</Box>
+
 						{/*QuestionArea*/}
 						<Box
 							backgroundColor="white"
@@ -31,7 +60,7 @@ export default function TimedAssessment() {
 							borderRadius={24}
 							px="72px"
 							py="44px"
-							w={{ base: '100%', md: '50%' }}></Box>{' '}
+							w={{ base: '100%', md: '50%' }}></Box>
 						{/*<AnswerArea*/}
 						<Box
 							backgroundColor="white"
