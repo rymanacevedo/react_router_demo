@@ -31,7 +31,7 @@ type ProgressBarMenu = {
 	viewCorrect?: boolean;
 	showType?: boolean;
 	answerHistory?: AnswerHistory[];
-	isReview: boolean;
+	isInReviewView: boolean;
 };
 
 type ModuleTitleType = {
@@ -247,7 +247,7 @@ const TestProgressBarMenu = ({
 	viewCorrect,
 	showType,
 	answerHistory,
-	isReview,
+	isInReviewView,
 }: ProgressBarMenu) => {
 	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
@@ -273,7 +273,7 @@ const TestProgressBarMenu = ({
 	const title = questionData?.name;
 
 	const rightSideProgressRender = () => {
-		if (isReview) {
+		if (isInReviewView) {
 			return (
 				<Box>
 					<Flex align="center">
@@ -341,7 +341,7 @@ const TestProgressBarMenu = ({
 				<VStack
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
-					{!isReview && (
+					{!isInReviewView && (
 						<RoundNumberAndPhase
 							roundNumber={currentRoundQuestionListData?.roundNumber}
 							roundPhase={currentRoundQuestionListData?.roundPhase}

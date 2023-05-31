@@ -32,8 +32,6 @@ const MultipleChoiceFeedBack = ({
 	useEffect(() => {
 		if (isInReviewView) {
 			setWasCorrectAnswerChosen(true);
-			// find the answer to set to selected
-			console.log(questionInFocus);
 		} else if (
 			currentRoundAnswerOverLayData?.correctAnswerIds &&
 			selectedAnswers
