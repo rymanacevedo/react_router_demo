@@ -1,18 +1,24 @@
 import { Box, Text } from '@chakra-ui/react';
 
 type CountUpTimerProps = {
-	hours: number;
-	minutes: number;
 	seconds: number;
 };
 
-const CountUpTimer = ({ hours, minutes, seconds }: CountUpTimerProps) => {
+const CountUpTimer = ({ seconds }: CountUpTimerProps) => {
+	const convertSecondsToTime = (timerSeconds: number): string => {
+		const hours = Math.floor(timerSeconds / 3600);
+		const minutes = Math.floor((timerSeconds - hours * 3600) / 60);
+		const convertedSeconds = timerSeconds - hours * 3600 - minutes * 60;
+
+		return `${hours.toString().padStart(2, '0')}:${minutes
+			.toString()
+			.padStart(2, '0')}:${convertedSeconds.toString().padStart(2, '0')}`;
+	};
+
 	return (
 		<Box>
 			<Text fontSize="21px" fontWeight="600" color="ampWhite">
-				{hours.toString().padStart(2, '0')}:
-				{minutes.toString().padStart(2, '0')}:
-				{seconds.toString().padStart(2, '0')}
+				{convertSecondsToTime(seconds)}
 			</Text>
 		</Box>
 	);

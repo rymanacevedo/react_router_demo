@@ -30,7 +30,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 		currentRoundAnswerOverLayData,
 		textPrompt,
 	} = props;
-	const { isMenuOpen, hours, minutes, seconds } = useProgressMenuContext();
+	const { isMenuOpen, seconds } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
 	const dataSource = !currentRoundAnswerOverLayData?.answerDate
 		? currentRoundQuestionListData
@@ -151,7 +151,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 								width: '19px',
 							}}
 						/>
-						<CountUpTimer hours={hours} minutes={minutes} seconds={seconds} />
+						<CountUpTimer seconds={seconds} />
 					</HStack>
 				</Box>
 			</VStack>
