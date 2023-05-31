@@ -18,6 +18,7 @@ import FireProgressToast from '../ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { useLocation } from 'react-router-dom';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
+import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
 
 const initState = {
 	self: null,
@@ -171,7 +172,6 @@ const ReviewView = () => {
 
 	return (
 		<>
-			(
 			<Container
 				id={'learning-assignment'}
 				margin="0"
@@ -193,15 +193,17 @@ const ReviewView = () => {
 					currentQuestion={questionInFocus}
 					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 				/>
-				<HStack justify="center" align="space-between">
+				<HStack justify="center" align="space-between" marginTop="4px">
 					<Stack
 						maxW="1496"
 						w="100%"
 						p="12px"
 						pr="0px"
 						alignItems="stretch"
-						direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+						direction={['column', 'column', 'row', 'row', 'row', 'row']}
+						spacing={19}>
 						<Box
+							id="questionBox"
 							backgroundColor="white"
 							boxShadow="md"
 							borderRadius={24}
@@ -216,6 +218,7 @@ const ReviewView = () => {
 							/>
 						</Box>
 						<Box
+							id="answerBox"
 							backgroundColor="white"
 							boxShadow="md"
 							borderRadius={24}
@@ -245,8 +248,16 @@ const ReviewView = () => {
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 				</HStack>
+				<Box w="100%" overflow="hidden" padding="15px 120px" mt={0}>
+					<WhatYouNeedToKnowComponent
+						questionInFocus={
+							renameAnswerAttribute(
+								transformedQuestion,
+							) as unknown as QuestionInFocus
+						}
+					/>
+				</Box>
 			</Container>
-			)
 		</>
 	);
 };

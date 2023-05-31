@@ -10,6 +10,7 @@ import {
 	VStack,
 	HStack,
 	Button,
+	Flex,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -39,12 +40,14 @@ interface IconsProps {
 	answerHistory?: AnswerHistory[];
 	isExpanded: boolean;
 	addMargins: boolean;
+	isInReviewView: boolean;
 }
 
 export const Icons = ({
 	answerHistory,
 	isExpanded,
 	addMargins,
+	isInReviewView,
 }: IconsProps) => {
 	if (answerHistory) {
 		if (isExpanded && answerHistory.length > 20) {
@@ -55,24 +58,46 @@ export const Icons = ({
 				beginningAnswerHistory = answerHistory.slice(0, 20);
 				remainingAnswerHistory = answerHistory.slice(20);
 			}
-			return (
-				<>
-					<Box
-						display="flex"
-						marginLeft="auto"
-						marginRight="27.5px"
-						id="insideIcons">
-						{getIcons(beginningAnswerHistory, isExpanded)}
-					</Box>
-					<Box
-						display="flex"
-						justifyContent="flex-end"
-						marginRight="27.5px"
-						id="insideIcons">
-						{getIcons(remainingAnswerHistory, isExpanded)}
-					</Box>
-				</>
-			);
+
+			if (isInReviewView) {
+				return (
+					<Flex flexDirection="column">
+						<Box
+							display="flex"
+							marginLeft="auto"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(beginningAnswerHistory, isExpanded)}
+						</Box>
+						<Box
+							display="flex"
+							justifyContent="flex-end"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(remainingAnswerHistory, isExpanded)}
+						</Box>
+					</Flex>
+				);
+			} else {
+				return (
+					<>
+						<Box
+							display="flex"
+							marginLeft="auto"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(beginningAnswerHistory, isExpanded)}
+						</Box>
+						<Box
+							display="flex"
+							justifyContent="flex-end"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(remainingAnswerHistory, isExpanded)}
+						</Box>
+					</>
+				);
+			}
 		} else {
 			return (
 				<Box
@@ -193,6 +218,7 @@ const ReviewQuestions = ({
 												</Box>
 												<Box id="insideRender">
 													<Icons
+														isInReviewView={false}
 														addMargins={true}
 														answerHistory={transformedQuestion.answerHistory}
 														isExpanded={isExpanded}

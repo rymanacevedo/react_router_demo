@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	Box,
 	Button,
@@ -281,6 +282,7 @@ const TestProgressBarMenu = ({
 							Attempts
 						</Text>
 						<Icons
+							isInReviewView={true}
 							addMargins={false}
 							answerHistory={answerHistory}
 							isExpanded={true}
