@@ -7,6 +7,8 @@ import {
 	ModuleData,
 	RoundData,
 } from '../lib/validator';
+import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
+import { API } from '../lib/environment';
 
 export const getCourseList = async (
 	user: any,
@@ -132,4 +134,14 @@ export const putCurrentRound = async (
 		'PUT',
 		answerData,
 	);
+};
+
+export const putFeedback = async (
+	user: User,
+	fields: QuestionFeedbackFields,
+	subAccount: string,
+): Promise<any> => {
+	const url = `${API}/v2/curricula/questions/feedback?subaccount=${subAccount}`;
+	const body = {};
+	return authenticatedFetch<any>(url, user.sessionKey, 'PUT', body);
 };

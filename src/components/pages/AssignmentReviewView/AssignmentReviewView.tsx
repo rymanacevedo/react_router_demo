@@ -22,7 +22,7 @@ import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
 import ProgressMenu from '../../ui/ProgressMenu';
 import Question from '../../ui/Question';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { json, useLoaderData, useNavigate } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import {
@@ -48,6 +48,7 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
+import { LoaderFunction } from 'react-router';
 
 const initState = {
 	self: null,
@@ -74,8 +75,14 @@ const initState = {
 	answerList: [],
 };
 
+export const assignmentReviewLoader: LoaderFunction = ({ params }) => {
+	return json(params);
+};
+
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
+	const { selectedCourseKey } = useQuizContext();
+	const { assignmentKey } = useLoaderData() as any;
 	const {
 		message,
 		handleMessage,
@@ -198,7 +205,6 @@ const AssignmentReviewView = () => {
 	const [clearSelection, setClearSelection] = useState(false);
 	const [viewCorrect, setViewCorrect] = useState(false);
 	const [questionIndex, setQuestionIndex] = useState(0);
-	const { assignmentKey } = useParams();
 	const [lastRevQData, setLastRevQData] = useState({
 		roundId: 0,
 		questionId: 0,
@@ -805,7 +811,11 @@ const AssignmentReviewView = () => {
 							justifyContent={'center'}
 							w="100%">
 							{showExplanation && !tryAgain && (
-								<WhatYouNeedToKnowComponent questionInFocus={questionInFocus} />
+								<WhatYouNeedToKnowComponent
+									assignmentKey={assignmentKey}
+									courseKey={selectedCourseKey}
+									questionInFocus={questionInFocus}
+								/>
 							)}
 							<Box
 								style={{
@@ -875,6 +885,8 @@ const AssignmentReviewView = () => {
 				<ModalContent w="80vw" borderRadius={24}>
 					<ModalCloseButton />
 					<WhatYouNeedToKnowComponent
+						assignmentKey={assignmentKey}
+						courseKey={selectedCourseKey}
 						questionInFocus={questionInFocus}
 						onClick={closeExplainModal}
 						isModal={true}

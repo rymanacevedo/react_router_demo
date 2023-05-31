@@ -11,6 +11,7 @@ import {
 	FormControl,
 	Heading,
 	HStack,
+	Input,
 	Radio,
 	RadioGroup,
 	Stack,
@@ -34,10 +35,14 @@ import { QuestionFeedbackFields } from '../../routes/QuestionFeedback';
 
 const WhatYouNeedToKnowComponent = ({
 	questionInFocus,
+	courseKey,
+	assignmentKey,
 	onClick,
 	isModal,
 }: {
 	questionInFocus: QuestionInFocus;
+	courseKey: string;
+	assignmentKey: string;
 	onClick?: () => void;
 	isModal?: boolean;
 }) => {
@@ -200,6 +205,46 @@ const WhatYouNeedToKnowComponent = ({
 								marginTop="16px"
 								minHeight="150px"
 								placeholder={i18n('placeHolderText')}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="id"
+								name="id"
+								value={questionInFocus.publishedQuestionId}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="questionVersionId"
+								name="questionVersionId"
+								value={questionInFocus.questionVersionId}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="questionUid"
+								name="questionUid"
+								value={questionInFocus.publishedQuestionAuthoringKey}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="courseKey"
+								name="courseKey"
+								value={courseKey}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="assignmentKey"
+								name="assignmentKey"
+								value={assignmentKey}
 							/>
 						</FormControl>
 

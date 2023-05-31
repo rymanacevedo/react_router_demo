@@ -4,8 +4,13 @@ import { badRequest } from '../services/utils';
 
 const QuestionFeedbackFieldsSchema = z
 	.object({
-		feedbackType: z.string().min(1),
+		id: z.string().min(1),
+		courseKey: z.string().min(1),
+		assignmentKey: z.string().min(1),
+		questionUid: z.string().min(1),
+		questionVersionId: z.number().min(1),
 		feedback: z.string(),
+		feedbackType: z.string().min(1),
 	})
 	.superRefine(({ feedbackType, feedback }, ctx) => {
 		if (feedbackType === 'other' && feedback.length === 0) {
