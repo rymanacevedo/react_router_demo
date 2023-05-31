@@ -7,6 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const baseStyle = definePartsStyle({
 	container: {
+		fontWeight: 'bold',
 		backgroundColor: 'white',
 		color: 'ampPrimary.600',
 		alignItems: 'center',

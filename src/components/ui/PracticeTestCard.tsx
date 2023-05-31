@@ -8,7 +8,14 @@ type Options = {
 
 export default function PracticeTestCard({ variant, text, size }: Options) {
 	return (
-		<Card key={variant} variant={variant} size={size}>
+		<Card
+			marginRight={'8px'}
+			marginBottom={'8px'}
+			marginTop={'8px'}
+			display={'inline-flex'}
+			key={variant}
+			variant={variant}
+			size={size}>
 			<CardBody>
 				<Text>{text}</Text>
 			</CardBody>

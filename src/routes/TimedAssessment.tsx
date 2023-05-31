@@ -32,22 +32,22 @@ export default function TimedAssessment() {
 						alignItems="stretch"
 						direction={['column', 'column', 'row', 'row', 'row', 'row']}>
 						<Box
+							backgroundColor="#D5D7D8"
 							boxShadow="md"
 							borderRadius={24}
 							px="72px"
 							py="44px"
 							w={{ base: '100%', md: '50%' }}>
-							<Heading as="h2" fontSize="lg">
+							<Heading as="h2" fontSize="xl">
 								{/*TODO: i18n*/}
 								Practice test navigation
 							</Heading>
 							<Divider />
-
 							{/*unselected, flagged, selected, flagged/selected*/}
 							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (
 								<PracticeTestCard
 									size="sm"
-									variant="flagged"
+									variant="unselected"
 									text={questionNumber.toString()}
 								/>
 							))}
