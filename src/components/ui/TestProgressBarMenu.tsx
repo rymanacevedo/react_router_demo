@@ -7,16 +7,19 @@ import {
 	Text,
 	useMediaQuery,
 	VStack,
+	Flex,
 } from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';
 import { ChevronDownIcon, EnterIcon, ExitIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
 import {
+	AnswerHistory,
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
 } from '../pages/AssignmentView/AssignmentTypes';
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
+import { Icons } from './Review/ReviewQuestions';
 
 type ProgressBarMenu = {
 	questionData: any;
@@ -27,6 +30,8 @@ type ProgressBarMenu = {
 	questionIndex?: number;
 	viewCorrect?: boolean;
 	showType?: boolean;
+	answerHistory?: AnswerHistory[];
+	isReview: boolean;
 };
 
 type ModuleTitleType = {
@@ -241,6 +246,8 @@ const TestProgressBarMenu = ({
 	questionIndex,
 	viewCorrect,
 	showType,
+	answerHistory,
+	isReview,
 }: ProgressBarMenu) => {
 	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
 	const { t: i18n } = useTranslation();
@@ -264,6 +271,50 @@ const TestProgressBarMenu = ({
 
 	const assignmentType = questionData?.kind;
 	const title = questionData?.name;
+
+	const rightSideProgressRender = () => {
+		if (isReview) {
+			return (
+				<Box>
+					<Flex align="center">
+						<Text fontWeight="bold" mr={5}>
+							Attempts
+						</Text>
+						<Icons
+							addMargins={false}
+							answerHistory={answerHistory}
+							isExpanded={true}
+						/>
+					</Flex>
+				</Box>
+			);
+		} else {
+			return (
+				<Button
+					variant={'outline'}
+					color="ampPrimary.600"
+					borderColor={'ampPrimary.300'}
+					bg="ampWhite"
+					width={40}
+					px={4}
+					py={2.5}
+					leftIcon={
+						isMenuOpen ? (
+							<ExitIcon />
+						) : (
+							<EnterIcon style={{ transform: 'rotateY(180deg)' }} />
+						)
+					}
+					onClick={() => {
+						handleMenuOpen();
+					}}>
+					<Text fontSize={'16px'} fontWeight="600">
+						{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}
+					</Text>
+				</Button>
+			);
+		}
+	};
 
 	return (
 		<Box width="100vw" boxSizing="border-box">
@@ -290,10 +341,13 @@ const TestProgressBarMenu = ({
 				<VStack
 					alignSelf={'center'}
 					style={{ marginTop: isSmallerThan1000 ? '12px' : '' }}>
-					<RoundNumberAndPhase
-						roundNumber={currentRoundQuestionListData?.roundNumber}
-						roundPhase={currentRoundQuestionListData?.roundPhase}
-					/>
+					{!isReview && (
+						<RoundNumberAndPhase
+							roundNumber={currentRoundQuestionListData?.roundNumber}
+							roundPhase={currentRoundQuestionListData?.roundPhase}
+						/>
+					)}
+
 					<AnswerHistoryComponent
 						totalQuestionCount={
 							currentRoundQuestionListData?.totalQuestionCount
@@ -324,28 +378,7 @@ const TestProgressBarMenu = ({
 						{<ChevronDownIcon />}
 					</Button>
 				) : (
-					<Button
-						variant={'outline'}
-						color="ampPrimary.600"
-						borderColor={'ampPrimary.300'}
-						bg="ampWhite"
-						width={40}
-						px={4}
-						py={2.5}
-						leftIcon={
-							isMenuOpen ? (
-								<ExitIcon />
-							) : (
-								<EnterIcon style={{ transform: 'rotateY(180deg)' }} />
-							)
-						}
-						onClick={() => {
-							handleMenuOpen();
-						}}>
-						<Text fontSize={'16px'} fontWeight="600">
-							{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}
-						</Text>
-					</Button>
+					rightSideProgressRender()
 				)}
 			</HStack>
 			<Progress

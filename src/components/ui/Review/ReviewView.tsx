@@ -21,6 +21,7 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import { useLocation } from 'react-router-dom';
 
 const initState = {
 	self: null,
@@ -51,6 +52,8 @@ export const reviewViewLoader: LoaderFunction = async () => {
 };
 
 const ReviewView = () => {
+	const location = useLocation();
+	const { transformedQuestion } = location.state;
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
@@ -224,6 +227,8 @@ const ReviewView = () => {
 						isToastOpen={isToastOpen}
 					/>
 					<TestProgressBarMenu
+						isReview={true}
+						answerHistory={transformedQuestion.answerHistory}
 						showType={true}
 						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}
