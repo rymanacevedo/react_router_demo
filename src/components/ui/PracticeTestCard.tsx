@@ -9,7 +9,8 @@ type Options = {
 export default function PracticeTestCard({ variant, text, size }: Options) {
 	return (
 		<Card
-			marginRight={'8px'}
+			marginRight={'5px'}
+			marginLeft={'5px'}
 			marginBottom={'8px'}
 			marginTop={'8px'}
 			display={'inline-flex'}

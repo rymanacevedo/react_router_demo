@@ -225,7 +225,12 @@ const resources = {
          //////////////////////////////////////////////
          clickHereForImage: 'Click here for image',
          correctAnswers: 'The Correct Answer(s)',
-         viewTheQuestion: 'View the Question'
+         viewTheQuestion: 'View the Question',
+         //////////////////////////////////////////////
+         //   TimedAssessment.tsx
+         //////////////////////////////////////////////
+         practiceTestNavigation: 'Practice test navigation',
+         finishPracticeTest: 'Finish practice test'
       }
    },
    fr: {

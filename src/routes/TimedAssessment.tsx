@@ -1,6 +1,7 @@
 import { LoaderFunction } from 'react-router';
 import {
 	Box,
+	Button,
 	Container,
 	Divider,
 	Heading,
@@ -8,12 +9,14 @@ import {
 	Stack,
 } from '@chakra-ui/react';
 import PracticeTestCard from '../components/ui/PracticeTestCard';
+import { useTranslation } from 'react-i18next';
 
 export const timedAssessmentLoader: LoaderFunction = async () => {
 	return null;
 };
 
 export default function TimedAssessment() {
+	const { t: i18n } = useTranslation();
 	return (
 		<main id="timed-assessment">
 			<Container
@@ -39,10 +42,9 @@ export default function TimedAssessment() {
 							py="44px"
 							w={{ base: '100%', md: '50%' }}>
 							<Heading as="h2" fontSize="xl">
-								{/*TODO: i18n*/}
-								Practice test navigation
+								{i18n('practiceTestNavigation')}
 							</Heading>
-							<Divider />
+							<Divider marginTop="4px" marginBottom="4px" />
 							{/*unselected, flagged, selected, flagged/selected*/}
 							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (
 								<PracticeTestCard
@@ -51,6 +53,14 @@ export default function TimedAssessment() {
 									text={questionNumber.toString()}
 								/>
 							))}
+
+							<Button
+								display="block"
+								marginRight="auto"
+								marginLeft="auto"
+								variant="ampSolid">
+								{i18n('finishPracticeTest')}
+							</Button>
 						</Box>
 
 						{/*QuestionArea*/}
