@@ -29,7 +29,6 @@ import { useLocation } from 'react-router-dom';
 // import AnswerArea from '../AnswerArea';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import { findRoundAnswersData } from '../../pages/AssignmentView/findRoundAnswersData';
-import AnswerArea from '../AnswerArea';
 
 const initState = {
 	self: null,
@@ -63,15 +62,10 @@ const ReviewView = () => {
 	const location = useLocation();
 	const { transformedQuestion, questionIndex, reviewQuestions } =
 		location.state;
-	console.log(questionIndex + 1);
-	console.log(reviewQuestions.length);
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const navigate = useNavigate();
-	const {
-		moduleLearningUnitsData,
-		// updateModuleLearningUnitsData,
-	} = useQuizContext();
+	const { moduleLearningUnitsData } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt] = useState<string>('');
 	const { getCurrentRound, getCurrentRoundSkipReview } =
@@ -145,7 +139,6 @@ const ReviewView = () => {
 	const renameAnswerAttribute = (object: TransformedQuestion) => {
 		if ('answers' in object) {
 			object.answerList = object.answers;
-			delete object.answers;
 		}
 		return object;
 	};
@@ -158,14 +151,16 @@ const ReviewView = () => {
 				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
 			} else {
 				let res = await fetchModuleQuestions(assignmentKey);
-				console.log(res);
 				moduleQuestionsResponse = res;
 				setQuestionData(moduleQuestionsResponse);
-				// updateModuleLearningUnitsData(res, assignmentKey);
 			}
 
 			let revSkipRes = {} as CurrentRoundQuestionListData;
-			console.log(moduleQuestionsResponse);
+			console.log(currentRoundQuestionsResponse);
+			console.log(
+				currentRoundQuestionsResponse?.totalQuestionCount ===
+					currentRoundQuestionsResponse?.masteredQuestionCount,
+			);
 			if (moduleQuestionsResponse) {
 				if (
 					currentRoundQuestionsResponse?.totalQuestionCount ===
@@ -179,7 +174,6 @@ const ReviewView = () => {
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
-					alert(revSkipRes);
 					setQuestionData(moduleQuestionsResponse);
 					setCurrentRoundQuestionListData(revSkipRes);
 					setQuestionInFocus(
@@ -205,15 +199,6 @@ const ReviewView = () => {
 					navigate(`/learning/assignmentReview/${assignmentKey}`);
 				}
 			}
-
-			// const foundQuestionInFocus = findQuestionInFocus(
-			// 	moduleQuestionsResponse,
-			// 	currentRoundQuestionsResponse,
-			// 	true,
-			// 	true,
-			// )[questionIndex];
-
-			// setSelectedAnswers(findRoundAnswersData(foundQuestionInFocus));
 		} catch (error) {
 			console.error(error);
 		}
@@ -223,26 +208,31 @@ const ReviewView = () => {
 		navigate('/learning');
 	};
 
+	const getCorrectAnswers = (question: TransformedQuestion) => {
+		const correctAnswers = question.answers.filter(
+			(answer) => answer.isCorrect,
+		);
+
+		return correctAnswers.map((answer) => ({
+			answerId: answer.id,
+			selectedOptionId: 0,
+			self: answer.self,
+			confidence: 100,
+		}));
+	};
+
 	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
 		}
+		const correctAnswers = getCorrectAnswers(transformedQuestion);
+		setSelectedAnswers(correctAnswers);
 	}, [assignmentKey]);
 
 	const expandProgressMenu = () => {
 		handleMenuOpen();
 		setIsToastOpen(false);
 	};
-
-	// const continueBtnFunc = () => {
-	// 	console.log('continue');
-	// };
-
-	// const clearSelectionButtonFunc = () => {
-	// 	console.log('clear');
-	// };
-
-	console.log(transformedQuestion);
 
 	return (
 		<>
@@ -290,7 +280,6 @@ const ReviewView = () => {
 									questionInFocus={transformedQuestion}
 								/>
 							</Box>
-							{/* TODO: this will be added back in next ticket (VE-215) */}
 							<Box
 								backgroundColor="white"
 								boxShadow="md"
@@ -299,6 +288,7 @@ const ReviewView = () => {
 								py="44px"
 								w={{ base: '100%', md: '50%' }}>
 								<MultipleChoiceOverLay
+									isInReviewView={true}
 									questionInFocus={
 										renameAnswerAttribute(
 											transformedQuestion,
@@ -310,7 +300,7 @@ const ReviewView = () => {
 									setClearSelection={setClearSelection}
 									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 									inReview={true}
-									revealAnswer={true}
+									revealAnswer={false}
 								/>
 							</Box>
 						</Stack>
