@@ -45,7 +45,6 @@ export default function TimedAssessment() {
 								{i18n('practiceTestNavigation')}
 							</Heading>
 							<Divider marginTop="4px" marginBottom="4px" />
-							{/*unselected, flagged, selected*/}
 							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (
 								<PracticeTestCard
 									size="sm"
