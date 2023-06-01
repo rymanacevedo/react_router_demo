@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-
+import { useRef, useState, ChangeEvent, FormEvent } from 'react';
 import {
 	Link as ReactRouterLink,
 	useNavigate,
@@ -8,6 +7,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import ReCAPTCHA from 'react-google-recaptcha';
 import useForgotUsernameService from '../../services/useForgotUsernameService';
+import { z } from 'zod';
 
 import {
 	Alert,
@@ -24,25 +24,29 @@ import {
 	VStack,
 	FormErrorMessage,
 	Heading,
+	RequiredIndicator,
 } from '@chakra-ui/react';
+import { AuthLayoutContext } from './AuthLayout';
 
-function ForgotUsername() {
+const emailSchema = z.string().email({ message: 'Invalid email address' });
+
+function ForgotUsername(): JSX.Element {
 	const navigate = useNavigate();
 	const { t: i18n } = useTranslation();
 	const [emailAddress, setEmailAddress] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const [recaptchaRes, setRecaptchaRes] = useState(null);
+	const [recaptchaRes, setRecaptchaRes] = useState<string | null>(null);
 	const [verified, setVerified] = useState(false);
 	const [showForm, setShowForm] = useState(true);
 	const [success, setSuccess] = useState(false);
 	const [formError, setFormError] = useState(false);
 
-	const recaptchaRef = useRef();
+	const recaptchaRef = useRef<ReCAPTCHA>(null);
 	const { fetchForgotUsername } = useForgotUsernameService();
-	const context = useOutletContext();
+	const context = useOutletContext<AuthLayoutContext>();
 
-	const handleEmailChange = (e) => {
+	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setEmailAddress(e.target.value);
 	};
 
@@ -57,22 +61,22 @@ function ForgotUsername() {
 	};
 
 	const handleEmailValidation = () => {
-		const emailRegex = /^[A-Za-z0-9_\-@.#$&{}]+@[^@]+\.[^@]+$/;
-		if (!emailAddress.match(emailRegex)) {
-			setFormError(true);
-		} else {
+		try {
+			emailSchema.parse(emailAddress);
 			setFormError(false);
+		} catch (error) {
+			setFormError(true);
 		}
 	};
 
-	const onChange = (value) => {
+	const onChange = (value: string | null) => {
 		if (value) {
 			setRecaptchaRes(value);
 			setVerified(true);
 		}
 	};
 
-	const submitHandler = async (e) => {
+	const submitHandler = async (e: FormEvent) => {
 		e.preventDefault();
 
 		if (!emailAddress) {
@@ -84,17 +88,25 @@ function ForgotUsername() {
 		}
 
 		if (verified && emailAddress) {
-			recaptchaRef.current.reset();
+			if (recaptchaRef.current) {
+				recaptchaRef.current.reset();
+			}
 			setEmailAddress('');
-			const forgotUsernameApiResponse = await fetchForgotUsername(
-				emailAddress,
-				context.accountUid,
-				recaptchaRes,
-			);
 
-			if (forgotUsernameApiResponse === 200) {
-				handleSuccess();
-			} else {
+			try {
+				emailSchema.parse(emailAddress);
+				const forgotUsernameApiResponse = await fetchForgotUsername(
+					emailAddress,
+					context.accountUid,
+					recaptchaRes!,
+				);
+
+				if (forgotUsernameApiResponse === 200) {
+					handleSuccess();
+				} else {
+					handleError();
+				}
+			} catch (error) {
 				handleError();
 			}
 		}
@@ -110,14 +122,16 @@ function ForgotUsername() {
 					method="post"
 					onSubmit={submitHandler}
 					noValidate>
-					<Heading align="center" fontSize="28px">
+					<Heading style={{ alignItems: 'center', fontSize: '28px' }}>
 						{i18n('pleaseEnterEmailAddress')}
 					</Heading>
 
 					<Text align="center">{i18n('weWillSendEmail')}</Text>
 
 					<FormControl isRequired isInvalid={formError}>
-						<FormLabel marginBottom={1} requiredIndicator>
+						<FormLabel
+							marginBottom={1}
+							requiredIndicator={<RequiredIndicator />}>
 							{i18n('emailLabel')}
 						</FormLabel>
 						<Input
