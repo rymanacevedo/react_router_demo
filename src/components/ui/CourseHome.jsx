@@ -18,9 +18,7 @@ const CourseHome = () => {
 			color="ampWhite"
 			h="80px"
 			py="25px"
-			onClick={() => {
-				clearTimer();
-			}}>
+			onClick={clearTimer}>
 			<HStack>
 				<Icon as={ArrowLeftIcon} />
 				<Text>{i18n('courseHome')}</Text>
