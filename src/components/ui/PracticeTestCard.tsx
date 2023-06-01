@@ -1,14 +1,27 @@
-import { Card, CardBody, Text } from '@chakra-ui/react';
+import {
+	Card as ChakraCard,
+	CardBody,
+	CardProps as ChakraCardProps,
+	Text,
+} from '@chakra-ui/react';
 
-type Options = {
+type CardValue = 'unselected' | 'flagged' | 'selected' | 'answered';
+type CardValues = CardValue[];
+interface Options extends ChakraCardProps {
 	size: 'sm' | 'md';
-	variant: 'unselected' | 'flagged' | 'selected' | 'selectedFlagged';
+	variant: 'multiPartCard';
 	text: string;
-};
+	values: CardValues;
+}
 
-export default function PracticeTestCard({ variant, text, size }: Options) {
+export default function PracticeTestCard({
+	variant,
+	text,
+	size,
+	...values
+}: Options) {
 	return (
-		<Card
+		<ChakraCard
 			marginRight={'5px'}
 			marginLeft={'5px'}
 			marginBottom={'8px'}
@@ -16,10 +29,11 @@ export default function PracticeTestCard({ variant, text, size }: Options) {
 			display={'inline-flex'}
 			key={variant}
 			variant={variant}
-			size={size}>
+			size={size}
+			{...values}>
 			<CardBody>
 				<Text>{text}</Text>
 			</CardBody>
-		</Card>
+		</ChakraCard>
 	);
 }

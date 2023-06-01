@@ -8,8 +8,8 @@ import {
 	HStack,
 	Stack,
 } from '@chakra-ui/react';
-import PracticeTestCard from '../components/ui/PracticeTestCard';
 import { useTranslation } from 'react-i18next';
+import PracticeTestCard from '../components/ui/PracticeTestCard';
 
 export const timedAssessmentLoader: LoaderFunction = async () => {
 	return null;
@@ -45,14 +45,22 @@ export default function TimedAssessment() {
 								{i18n('practiceTestNavigation')}
 							</Heading>
 							<Divider marginTop="4px" marginBottom="4px" />
-							{/*unselected, flagged, selected, flagged/selected*/}
-							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (
-								<PracticeTestCard
-									size="sm"
-									variant="unselected"
-									text={questionNumber.toString()}
-								/>
-							))}
+							<PracticeTestCard
+								size="sm"
+								variant="multiPartCard"
+								values={['unselected']}
+								text="1"
+							/>
+
+							{/*unselected, flagged, selected*/}
+							{/*{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (*/}
+							{/*	<PracticeTestCard*/}
+							{/*		size="sm"*/}
+							{/*		variant="multiPartCard"*/}
+							{/*		values={['unselected', 'flagged', 'selected']}*/}
+							{/*		text={questionNumber.toString()}*/}
+							{/*	/>*/}
+							{/*))}*/}
 
 							<Button
 								display="block"
