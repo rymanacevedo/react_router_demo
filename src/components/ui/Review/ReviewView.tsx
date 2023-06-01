@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Container, HStack, Stack } from '@chakra-ui/react';
+import { Box, Container, HStack, Stack, VStack } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
@@ -248,7 +248,13 @@ const ReviewView = () => {
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 				</HStack>
-				<Box w="100%" overflow="hidden" padding="15px 120px" mt={0}>
+				<VStack
+					p="12px"
+					rounded="md"
+					shadow="md"
+					display={'flex'}
+					justifyContent={'center'}
+					w="100%">
 					<WhatYouNeedToKnowComponent
 						questionInFocus={
 							renameAnswerAttribute(
@@ -256,7 +262,7 @@ const ReviewView = () => {
 							) as unknown as QuestionInFocus
 						}
 					/>
-				</Box>
+				</VStack>
 			</Container>
 		</>
 	);
