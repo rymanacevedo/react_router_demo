@@ -1,9 +1,9 @@
 import {
 	createContext,
+	useCallback,
 	useContext,
 	useMemo,
 	useState,
-	useCallback,
 } from 'react';
 import { ModuleData } from '../components/pages/AssignmentView/AssignmentTypes';
 
@@ -44,7 +44,7 @@ export type QuizContextType = {
 		roundNumber?: number,
 		answerId?: number,
 	) => void;
-	selectedCourseKey: string;
+	selectedCourseKey: string | null;
 	setSelectedCourseKey: (selectedCourseKey: string) => void;
 	incrimentTwoFastReviewsInLu: () => void;
 	updateModuleLearningUnitsData: (
@@ -97,7 +97,7 @@ const QuizContext = createContext<QuizContextType>({
 		TWO_NPA_ON_LU: [],
 	},
 	handleMessage: () => {},
-	selectedCourseKey: '',
+	selectedCourseKey: null,
 	setSelectedCourseKey: () => {},
 	incrimentTwoFastReviewsInLu: () => {},
 	updateModuleLearningUnitsData: () => {},

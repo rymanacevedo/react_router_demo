@@ -5,7 +5,7 @@ import { badRequest } from '../services/utils';
 const QuestionFeedbackFieldsSchema = z
 	.object({
 		id: z.string().min(1),
-		courseKey: z.string().min(1),
+		courseKey: z.string().min(1).nullable(),
 		assignmentKey: z.string().min(1),
 		questionUid: z.string().min(1),
 		questionVersionId: z.number().min(1),
@@ -31,7 +31,13 @@ export const questionFeedbackAction: ActionFunction = async ({ request }) => {
 		formData.entries(),
 	) as unknown as QuestionFeedbackFields;
 
-	const result = QuestionFeedbackFieldsSchema.safeParse(fields);
+	const modifiedFields = {
+		...fields,
+		questionVersionId: Number(fields.questionVersionId),
+		courseKey: fields.courseKey === '' ? null : fields.courseKey,
+	};
+
+	const result = QuestionFeedbackFieldsSchema.safeParse(modifiedFields);
 	if (!result.success) {
 		return badRequest({
 			fields,

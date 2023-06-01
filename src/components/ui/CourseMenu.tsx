@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
 	courseList: { key: string; name: string }[];
-	selectedCourseKey: string;
+	selectedCourseKey: string | null;
 	setSelectedCourseKey: (key: string) => void;
 	setCourseTitle: (title: string) => void;
 };

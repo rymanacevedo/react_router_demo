@@ -41,7 +41,7 @@ const WhatYouNeedToKnowComponent = ({
 	isModal,
 }: {
 	questionInFocus: QuestionInFocus;
-	courseKey: string;
+	courseKey: string | null;
 	assignmentKey: string;
 	onClick?: () => void;
 	isModal?: boolean;
@@ -236,7 +236,7 @@ const WhatYouNeedToKnowComponent = ({
 								readOnly={true}
 								id="courseKey"
 								name="courseKey"
-								value={courseKey}
+								value={courseKey ?? ''}
 							/>
 						</FormControl>
 						<FormControl hidden={true}>
