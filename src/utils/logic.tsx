@@ -229,3 +229,13 @@ export const sortReviewQuestions = (
 
 	return reviewQuestions;
 };
+
+export const convertSecondsToTime = (timerSeconds: number): string => {
+	const hours = Math.floor(timerSeconds / 3600);
+	const minutes = Math.floor((timerSeconds - hours * 3600) / 60);
+	const convertedSeconds = timerSeconds - hours * 3600 - minutes * 60;
+
+	return `${hours.toString().padStart(2, '0')}:${minutes
+		.toString()
+		.padStart(2, '0')}:${convertedSeconds.toString().padStart(2, '0')}`;
+};

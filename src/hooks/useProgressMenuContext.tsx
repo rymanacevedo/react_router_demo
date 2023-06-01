@@ -1,26 +1,20 @@
-import {
-	createContext,
-	useContext,
-	useMemo,
-	useState,
-	useRef,
-	useEffect,
-} from 'react';
+import { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+import useInterval from './useInterval';
 
 type ProgressMenuContextType = {
 	isMenuOpen: boolean;
 	handleMenuOpen: () => void;
-	hours: number;
-	minutes: number;
 	seconds: number;
+	clearTimer: () => void;
 };
 
 const ProgressMenuContext = createContext<ProgressMenuContextType>({
 	isMenuOpen: false,
 	handleMenuOpen: () => {},
-	hours: 0,
-	minutes: 0,
 	seconds: 0,
+	clearTimer: () => {},
 });
 
 const useProgressMenuContext = () => {
@@ -35,42 +29,44 @@ const useProgressMenuContext = () => {
 
 const ProgressMenuContextProvider = ({ children }: { children: any }) => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [timeState, setTimeState] = useState([0, 0, 0]);
-	const [hours, minutes, seconds] = timeState;
-	const countUpRef = useRef<ReturnType<typeof setInterval>>();
+	const [seconds, setSeconds] = useState(0);
+	const location = useLocation();
+	const inAssignment = location.pathname.indexOf('assignment');
+	const inReview = location.pathname.indexOf('review');
+
+	const timerFunc = () => {
+		setSeconds((prevSeconds) => prevSeconds + 1);
+		return seconds;
+	};
+
+	const startTimer = useInterval(timerFunc, 1000);
+
+	const clearTimer = () => {
+		startTimer(false);
+		setSeconds(0);
+	};
+
 	useEffect(() => {
-		const interval = () => {
-			countUpRef.current = setInterval(() => {
-				setTimeState((currentTime) => {
-					const [currentHours, currentMinutes, currentSeconds] = currentTime;
-					let newHours = currentHours,
-						newMinutes = currentMinutes,
-						newSeconds = currentSeconds + 1;
-					if (newSeconds >= 60) {
-						newMinutes += 1;
-						newSeconds = 0;
-					}
-					if (newMinutes >= 60) {
-						newHours += 1;
-						newMinutes = 0;
-					}
-					return [newHours, newMinutes, newSeconds];
-				});
-			}, 1000);
+		if (inAssignment > -1 || inReview > -1) {
+			startTimer(true);
+		}
+		return () => {
+			clearTimer();
 		};
-
-		interval();
-
-		return () => clearInterval(countUpRef.current);
-	}, []);
+	}, [inAssignment, inReview, startTimer]);
 
 	const handleMenuOpen = () => {
 		setIsMenuOpen((prevState) => !prevState);
 	};
 
 	const value = useMemo(
-		() => ({ isMenuOpen, handleMenuOpen, hours, minutes, seconds }),
-		[isMenuOpen, handleMenuOpen, hours, minutes, seconds],
+		() => ({
+			isMenuOpen,
+			handleMenuOpen,
+			seconds,
+			clearTimer,
+		}),
+		[isMenuOpen, handleMenuOpen, seconds, clearTimer],
 	);
 
 	return (
