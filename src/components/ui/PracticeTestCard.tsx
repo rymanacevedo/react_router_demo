@@ -22,8 +22,8 @@ export default function PracticeTestCard({
 }: Options) {
 	return (
 		<ChakraCard
-			marginRight={'5px'}
-			marginLeft={'5px'}
+			marginRight={'4px'}
+			marginLeft={'4px'}
 			marginBottom={'8px'}
 			marginTop={'8px'}
 			display={'inline-flex'}
