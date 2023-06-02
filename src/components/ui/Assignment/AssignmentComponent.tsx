@@ -528,6 +528,7 @@ export default function AssignmentComponent({
 						isToastOpen={isToastOpen}
 					/>
 					<TestProgressBarMenu
+						isInReviewView={false}
 						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}
