@@ -6,6 +6,7 @@ import { redirect } from 'react-router-dom';
 import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
 import { BootstrapData, BootstrapDataSchema } from '../App';
+import { ForgotUsernameFields } from '../components/login/ForgotUsername';
 
 const initialUserDataSchema = z.object({
 	sessionKey: z.string(),
@@ -308,4 +309,14 @@ export const getForgotPasswordData = async (fields: ForgotPasswordFields) => {
 
 export const isBootStrapData = (data: any): data is BootstrapData => {
 	return BootstrapDataSchema.safeParse(data).success;
+};
+
+export const getForgotUsernameData = async (fields: ForgotUsernameFields) => {
+	const url = `${API}/v2/bootstrap/forgot-username`;
+	const forgotUserBody = {
+		emailAddress: fields.email,
+		accountUid: fields.accountUid,
+		captchaResp: fields['g-recaptcha-response'],
+	};
+	return fetchDataPost<any>(url, forgotUserBody);
 };

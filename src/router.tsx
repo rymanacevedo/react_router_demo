@@ -19,7 +19,9 @@ import MultiFactor, {
 import ForgotPassword, {
 	forgotPasswordAction,
 } from './components/login/ForgotPassword';
-import ForgotUsername from './components/login/ForgotUsername';
+import ForgotUsername, {
+	forgotUsernameAction,
+} from './components/login/ForgotUsername';
 import SignUp from './components/login/SignUp';
 import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
@@ -78,7 +80,11 @@ const routesJSX = (
 				element={<ForgotPassword />}
 				action={forgotPasswordAction}
 			/>
-			<Route path="forgot-username" element={<ForgotUsername />} />
+			<Route
+				action={forgotUsernameAction}
+				path="forgot-username"
+				element={<ForgotUsername />}
+			/>
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
 			<Route path="signup" element={<SignUp />} />
 			<Route action={registerAction} path="register" element={<Register />} />
