@@ -42,13 +42,13 @@ export const ForgotUsernameFieldsSchema = z.object({
 });
 
 export type ForgotUsernameFields = z.infer<typeof ForgotUsernameFieldsSchema>;
-type ForgotPasswordFieldsErrors = InferSafeParseErrors<
+type ForgotUsernameFieldsErrors = InferSafeParseErrors<
 	typeof ForgotUsernameFieldsSchema
 >;
 
 export type ActionData<T> = {
 	fields: T;
-	errors?: T extends ForgotUsernameFields ? ForgotPasswordFieldsErrors : any;
+	errors?: T extends ForgotUsernameFields ? ForgotUsernameFieldsErrors : any;
 };
 
 export const forgotUsernameAction: ActionFunction = async ({
@@ -56,7 +56,6 @@ export const forgotUsernameAction: ActionFunction = async ({
 }: ActionFunctionArgs) => {
 	const clonedData = request.clone();
 	const formData = await clonedData.formData();
-	// const session = await getSession(request.headers.get('Cookie'));
 	const fields = Object.fromEntries(
 		formData.entries(),
 	) as unknown as ForgotUsernameFields;
@@ -94,7 +93,7 @@ export const forgotUsernameAction: ActionFunction = async ({
 		});
 	}
 
-	return redirect('/success');
+	return redirect('/success?message=forgotUsername');
 };
 
 export default function ForgotUsername() {
