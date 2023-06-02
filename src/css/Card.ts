@@ -1,9 +1,24 @@
 import { cardAnatomy } from '@chakra-ui/anatomy';
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
+import { createMultiStyleConfigHelpers, defineStyle } from '@chakra-ui/react';
 import flag from '../assets/flag.png';
 
 const { definePartsStyle, defineMultiStyleConfig } =
 	createMultiStyleConfigHelpers(cardAnatomy.keys);
+
+const flagStyle = {
+	backgroundImage: `url(${flag})`,
+	backgroundRepeat: 'no-repeat',
+	backgroundPosition: 'right top',
+	backgroundSize: '12px 12px',
+};
+
+const selected = {
+	borderWidth: '3px',
+};
+
+const answered = {
+	backgroundColor: '#9FC6DF',
+};
 
 const baseStyle = definePartsStyle({
 	container: {
@@ -30,37 +45,42 @@ const sizes = {
 	}),
 };
 
+const multiPartCard = defineStyle((props) => {
+	const { values } = props;
+	let styles = {};
+	values.forEach((value: string) => {
+		switch (value) {
+			case 'selected':
+				styles = {
+					...styles,
+					...selected,
+				};
+				break;
+			case 'answered':
+				styles = {
+					...styles,
+					...answered,
+				};
+				break;
+			case 'flagged':
+				styles = {
+					...styles,
+					...flagStyle,
+				};
+				break;
+			default:
+				break;
+		}
+	});
+	return {
+		container: {
+			...styles,
+		},
+	};
+});
+
 const variants = {
-	unselected: definePartsStyle({
-		container: {},
-	}),
-
-	flagged: definePartsStyle({
-		container: {
-			borderWidth: '3px',
-			backgroundImage: `url(${flag})`,
-			backgroundRepeat: 'no-repeat',
-			backgroundPosition: 'right top',
-			backgroundSize: '12px 12px',
-		},
-	}),
-
-	selected: definePartsStyle({
-		container: {
-			backgroundColor: '#9FC6DF',
-		},
-	}),
-
-	selectedFlagged: definePartsStyle({
-		container: {
-			backgroundColor: '#9FC6DF',
-			borderWidth: '3px',
-			backgroundImage: `url(${flag})`,
-			backgroundRepeat: 'no-repeat',
-			backgroundPosition: 'right top',
-			backgroundSize: '12px 12px',
-		},
-	}),
+	multiPartCard,
 };
 const Card = defineMultiStyleConfig({
 	baseStyle,
