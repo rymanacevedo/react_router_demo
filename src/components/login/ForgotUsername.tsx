@@ -93,7 +93,7 @@ export const forgotUsernameAction: ActionFunction = async ({
 		});
 	}
 
-	return redirect('/success?message=forgotUsername');
+	return redirect('/success?successMessageToShow=forgotUsername');
 };
 
 export default function ForgotUsername() {
