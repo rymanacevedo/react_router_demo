@@ -20,11 +20,11 @@ import {
 	Input,
 	Text,
 } from '@chakra-ui/react';
-import { AuthLayoutContext } from './AuthLayout';
+import { AuthLayoutContext } from '../components/login/AuthLayout';
 import { z } from 'zod';
-import AlertMessage from '../../components/ui/AlertMessage';
-import { badRequest } from '../../services/utils';
-import { getForgotUsernameData } from '../../services/auth.reactrouter';
+import AlertMessage from '../components/ui/AlertMessage';
+import { badRequest } from '../services/utils';
+import { getForgotUsernameData } from '../services/auth.reactrouter';
 
 type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
 	formErrors: U[];

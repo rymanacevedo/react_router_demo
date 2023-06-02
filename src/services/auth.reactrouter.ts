@@ -6,7 +6,7 @@ import { redirect } from 'react-router-dom';
 import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
 import { BootstrapData, BootstrapDataSchema } from '../App';
-import { ForgotUsernameFields } from '../components/login/ForgotUsername';
+import { ForgotUsernameFields } from '../routes/ForgotUsername';
 
 const initialUserDataSchema = z.object({
 	sessionKey: z.string(),
