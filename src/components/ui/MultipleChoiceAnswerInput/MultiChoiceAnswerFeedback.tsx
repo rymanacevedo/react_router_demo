@@ -22,6 +22,7 @@ const MultiChoiceAnswerFeedback = ({
 	wasCorrectAnswerChosen,
 	inReview,
 	revealAnswer,
+	isInReviewView,
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
@@ -31,6 +32,7 @@ const MultiChoiceAnswerFeedback = ({
 	wasCorrectAnswerChosen?: boolean;
 	inReview?: boolean;
 	revealAnswer?: boolean;
+	isInReviewView?: boolean;
 }) => {
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
@@ -153,7 +155,8 @@ const MultiChoiceAnswerFeedback = ({
 		}
 	};
 
-	const revealAnswerDisplayCondition = revealAnswer && text === '';
+	const revealAnswerDisplayCondition =
+		(revealAnswer && text === '') || isInReviewView;
 
 	return (
 		<Checkbox
@@ -221,7 +224,9 @@ const MultiChoiceAnswerFeedback = ({
 					left: 0,
 					right: 0,
 					transform: `${
-						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+						isEnabled || isInReviewView
+							? 'translateY(0px)'
+							: 'translateY(-16.7812px)'
 					}`,
 					transition: 'transform 0.3s ease-in-out',
 				}}

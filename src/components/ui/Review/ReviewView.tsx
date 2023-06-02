@@ -1,26 +1,24 @@
-import { Box, Container, HStack, Stack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { Box, Container, HStack, Stack, VStack } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
-
 import {
-	Correctness,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
+	SelectedAnswer,
+	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
-// import AnswerArea from '../AnswerArea'; //TODO: this will be added back in VE-215
-import { useEffect, useState } from 'react';
-import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
-import { LoaderFunction, useNavigate, useParams } from 'react-router-dom';
-// import LoadingAssignmentView from '../loading/LoadingAssignmentView'; //TODO: this will bethis will be added back in VE-215
+import { LoaderFunction, useParams } from 'react-router-dom';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
-import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import { useLocation } from 'react-router-dom';
+import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
+import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
 
 const initState = {
 	self: null,
@@ -51,21 +49,18 @@ export const reviewViewLoader: LoaderFunction = async () => {
 };
 
 const ReviewView = () => {
+	const location = useLocation();
+	const { transformedQuestion, questionIndex, reviewQuestions } =
+		location.state;
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
-	const navigate = useNavigate();
-	const {
-		handleMessage,
-		moduleLearningUnitsData,
-		// updateModuleLearningUnitsData,
-	} = useQuizContext();
+	const { moduleLearningUnitsData } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt] = useState<string>('');
-	const { getCurrentRound, getCurrentRoundSkipReview } =
-		useCurrentRoundService();
 	const { fetchModuleQuestions } = useModuleContentService();
-
-	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>({
+	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+	const [clearSelection, setClearSelection] = useState(false);
+	const [questionInFocus] = useState<QuestionInFocus>({
 		answerList: [],
 		answered: false,
 		confidence: null,
@@ -93,7 +88,7 @@ const ReviewView = () => {
 		reviewSeconds: 0,
 	});
 
-	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
+	const [currentRoundQuestionListData] =
 		useState<CurrentRoundQuestionListData>();
 
 	const [currentRoundAnswerOverLayData] =
@@ -126,11 +121,15 @@ const ReviewView = () => {
 		versionId: 0,
 	});
 
-	const [outro, setOutro] = useState(false);
+	const renameAnswerAttribute = (object: TransformedQuestion) => {
+		if ('answers' in object) {
+			object.answerList = object.answers;
+		}
+		return object;
+	};
 
 	const fetchModuleQuestionsData = async () => {
 		try {
-			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
 			let moduleQuestionsResponse = {} as ModuleData;
 			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
 				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
@@ -138,69 +137,32 @@ const ReviewView = () => {
 				let res = await fetchModuleQuestions(assignmentKey);
 				moduleQuestionsResponse = res;
 				setQuestionData(moduleQuestionsResponse);
-				// updateModuleLearningUnitsData(res, assignmentKey);
 			}
-
-			let revSkipRes = {} as CurrentRoundQuestionListData;
-
-			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
-				handleMessage('FIVE_CONSEC_SC', true);
-				handleMessage('SIX_DK_IN_ROUND', true);
-				handleMessage('FULL_ROUND_OF_SC', true);
-				handleMessage('FIVE_FAST_ANSWERS', true);
-			}
-
-			if (moduleQuestionsResponse) {
-				if (
-					currentRoundQuestionsResponse?.totalQuestionCount ===
-					currentRoundQuestionsResponse?.masteredQuestionCount
-				) {
-					setOutro(true);
-				} else if (
-					currentRoundQuestionsResponse.questionList.every(
-						(question: QuestionInFocus) =>
-							question.correctness === Correctness.Correct,
-					)
-				) {
-					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
-					setQuestionData(moduleQuestionsResponse);
-					setCurrentRoundQuestionListData(revSkipRes);
-					setQuestionInFocus(
-						findQuestionInFocus(
-							moduleQuestionsResponse,
-							revSkipRes,
-							false,
-							false,
-						),
-					);
-				} else if (currentRoundQuestionsResponse.roundPhase === 'QUIZ') {
-					setQuestionData(moduleQuestionsResponse);
-					setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
-					setQuestionInFocus(
-						findQuestionInFocus(
-							moduleQuestionsResponse,
-							currentRoundQuestionsResponse,
-							false,
-							false,
-						),
-					);
-				} else {
-					navigate(`/learning/assignmentReview/${assignmentKey}`);
-				}
-			}
+			setQuestionData(moduleQuestionsResponse);
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	const handleReturnHome = () => {
-		navigate('/learning');
+	const getCorrectAnswers = (question: TransformedQuestion) => {
+		const correctAnswers = question.answers.filter(
+			(answer) => answer.isCorrect,
+		);
+
+		return correctAnswers.map((answer) => ({
+			answerId: answer.id,
+			selectedOptionId: 0,
+			self: answer.self,
+			confidence: 100,
+		}));
 	};
 
 	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
 		}
+		const correctAnswers = getCorrectAnswers(transformedQuestion);
+		setSelectedAnswers(correctAnswers);
 	}, [assignmentKey]);
 
 	const expandProgressMenu = () => {
@@ -210,77 +172,98 @@ const ReviewView = () => {
 
 	return (
 		<>
-			{!outro ? (
-				<Container
-					id={'learning-assignment'}
-					margin="0"
-					padding="0"
-					maxWidth={'100vw'}
-					overflowY={'hidden'}
-					overflowX={'hidden'}>
-					<FireProgressToast
+			<Container
+				id={'learning-assignment'}
+				margin="0"
+				padding="0"
+				maxWidth={'100vw'}
+				overflowY={'hidden'}
+				overflowX={'hidden'}>
+				<FireProgressToast
+					textPrompt={textPrompt}
+					expandProgressMenu={expandProgressMenu}
+					isToastOpen={isToastOpen}
+				/>
+				<TestProgressBarMenu
+					isInReviewView={true}
+					answerHistory={transformedQuestion.answerHistory}
+					showType={true}
+					questionData={questionData}
+					currentRoundQuestionListData={currentRoundQuestionListData}
+					currentQuestion={questionInFocus}
+					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+				/>
+				<HStack justify="center" align="space-between" marginTop="4px">
+					<Stack
+						maxW="1496"
+						w="100%"
+						p="12px"
+						pr="0px"
+						alignItems="stretch"
+						direction={['column', 'column', 'row', 'row', 'row', 'row']}
+						spacing={19}>
+						<Box
+							id="questionBox"
+							backgroundColor="white"
+							boxShadow="md"
+							borderRadius={24}
+							px="72px"
+							py="44px"
+							w={{ base: '100%', md: '50%' }}>
+							<Question
+								review={true}
+								questionIndex={questionIndex + 1}
+								numberOfQInReview={reviewQuestions.length}
+								questionInFocus={transformedQuestion}
+							/>
+						</Box>
+						<Box
+							id="answerBox"
+							backgroundColor="white"
+							boxShadow="md"
+							borderRadius={24}
+							px="72px"
+							py="44px"
+							w={{ base: '100%', md: '50%' }}>
+							<MultipleChoiceOverLay
+								isInReviewView={true}
+								questionInFocus={
+									renameAnswerAttribute(
+										transformedQuestion,
+									) as unknown as QuestionInFocus
+								}
+								selectedAnswers={selectedAnswers}
+								setSelectedAnswers={setSelectedAnswers}
+								clearSelection={clearSelection}
+								setClearSelection={setClearSelection}
+								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+								inReview={true}
+								revealAnswer={false}
+							/>
+						</Box>
+					</Stack>
+					<ProgressMenu
 						textPrompt={textPrompt}
-						expandProgressMenu={expandProgressMenu}
-						isToastOpen={isToastOpen}
-					/>
-					<TestProgressBarMenu
-						showType={true}
-						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentQuestion={questionInFocus}
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
-					<HStack justify="center" align="space-between">
-						<Stack
-							maxW="1496"
-							w="100%"
-							p="12px"
-							pr="0px"
-							alignItems="stretch"
-							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
-							<Box
-								backgroundColor="white"
-								boxShadow="md"
-								borderRadius={24}
-								px="72px"
-								py="44px"
-								w={{ base: '100%', md: '50%' }}>
-								<Question questionInFocus={questionInFocus} />
-							</Box>
-							{/* TODO: this will be added back in next ticket (VE-215) */}
-							{/* <AnswerArea
-								isOpen={false}
-								onClose={() => {
-									console.log('onClose');
-								}}
-								smallerThan1000={isSmallerThan1000}
-								initialFocusRef={initRef}
-								showFeedback={showOverlay}
-								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswers}
-								selectedAnswersState={setSelectedAnswers}
-								clearSelection={clearSelection}
-								clearSelectionState={setClearSelection}
-								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								onClick={continueBtnFunc}
-								clearSelectionFunction={clearSelectionButtonFunc}
-								IDKResponse={IDKResponse}
-								setIDKResponse={setIDKResponse}
-								setTotalAnswerConfidence={() => {
-									console.log('hey');
-								}}
-							/> */}
-						</Stack>
-						<ProgressMenu
-							textPrompt={textPrompt}
-							currentRoundQuestionListData={currentRoundQuestionListData}
-							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-						/>
-					</HStack>
-				</Container>
-			) : (
-				<ModuleOutro moduleData={questionData} action={handleReturnHome} />
-			)}
+				</HStack>
+				<VStack
+					p="12px"
+					rounded="md"
+					shadow="md"
+					display={'flex'}
+					justifyContent={'center'}
+					w="100%">
+					<WhatYouNeedToKnowComponent
+						questionInFocus={
+							renameAnswerAttribute(
+								transformedQuestion,
+							) as unknown as QuestionInFocus
+						}
+					/>
+				</VStack>
+			</Container>
 		</>
 	);
 };

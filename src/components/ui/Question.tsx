@@ -1,6 +1,6 @@
 import { Heading, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import RichContentComponent from './RichContentComponent';
+import ReviewContentRender from './Review/ReviewContentRender';
 
 const Question = ({
 	questionInFocus,
@@ -28,11 +28,11 @@ const Question = ({
 			)}
 			{questionInFocus?.introductionRc ? (
 				<Stack spacing="20px" marginTop="34px">
-					<RichContentComponent content={questionInFocus.introductionRc} />
+					<ReviewContentRender content={questionInFocus.introductionRc} />
 				</Stack>
 			) : null}
 			<Stack spacing="20px" marginTop="34px">
-				<RichContentComponent content={questionInFocus?.questionRc} />
+				<ReviewContentRender content={questionInFocus?.questionRc} />
 			</Stack>
 		</>
 	);

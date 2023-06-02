@@ -10,6 +10,7 @@ import {
 	VStack,
 	HStack,
 	Button,
+	Flex,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -36,47 +37,80 @@ interface ReviewQuestionsProps {
 }
 
 interface IconsProps {
-	answerHistory: AnswerHistory[];
+	answerHistory?: AnswerHistory[];
 	isExpanded: boolean;
+	addMargins: boolean;
+	isInReviewView: boolean;
 }
 
-const Icons = ({ answerHistory, isExpanded }: IconsProps) => {
-	if (isExpanded && answerHistory.length > 20) {
-		let beginningAnswerHistory: AnswerHistory[] = [];
-		let remainingAnswerHistory: AnswerHistory[] = [];
+export const Icons = ({
+	answerHistory,
+	isExpanded,
+	addMargins,
+	isInReviewView,
+}: IconsProps) => {
+	if (answerHistory) {
+		if (isExpanded && answerHistory.length > 20) {
+			let beginningAnswerHistory: AnswerHistory[] = [];
+			let remainingAnswerHistory: AnswerHistory[] = [];
 
-		if (answerHistory.length > 20) {
-			beginningAnswerHistory = answerHistory.slice(0, 20);
-			remainingAnswerHistory = answerHistory.slice(20);
+			if (answerHistory.length > 20) {
+				beginningAnswerHistory = answerHistory.slice(0, 20);
+				remainingAnswerHistory = answerHistory.slice(20);
+			}
+
+			if (isInReviewView) {
+				return (
+					<Flex flexDirection="column">
+						<Box
+							display="flex"
+							marginLeft="auto"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(beginningAnswerHistory, isExpanded)}
+						</Box>
+						<Box
+							display="flex"
+							justifyContent="flex-end"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(remainingAnswerHistory, isExpanded)}
+						</Box>
+					</Flex>
+				);
+			} else {
+				return (
+					<>
+						<Box
+							display="flex"
+							marginLeft="auto"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(beginningAnswerHistory, isExpanded)}
+						</Box>
+						<Box
+							display="flex"
+							justifyContent="flex-end"
+							marginRight="27.5px"
+							id="insideIcons">
+							{getIcons(remainingAnswerHistory, isExpanded)}
+						</Box>
+					</>
+				);
+			}
+		} else {
+			return (
+				<Box
+					display="flex"
+					marginLeft={addMargins ? 'auto' : 'none'}
+					marginRight={addMargins ? '27.5px' : 'none'}
+					id="insideIcons">
+					{getIcons(answerHistory, isExpanded)}
+				</Box>
+			);
 		}
-		return (
-			<>
-				<Box
-					display="flex"
-					marginLeft="auto"
-					marginRight="27.5px"
-					id="insideIcons">
-					{getIcons(beginningAnswerHistory, isExpanded)}
-				</Box>
-				<Box
-					display="flex"
-					justifyContent="flex-end"
-					marginRight="27.5px"
-					id="insideIcons">
-					{getIcons(remainingAnswerHistory, isExpanded)}
-				</Box>
-			</>
-		);
 	} else {
-		return (
-			<Box
-				display="flex"
-				marginLeft="auto"
-				marginRight="27.5px"
-				id="insideIcons">
-				{getIcons(answerHistory, isExpanded)}
-			</Box>
-		);
+		return null;
 	}
 };
 
@@ -121,11 +155,15 @@ const ReviewQuestions = ({
 
 	const handleViewQuestion = (
 		questionId: number,
-		reviewQuestion: LearningUnitQuestion,
+		transformedQuestion: TransformedQuestion,
 		questionIndex: number,
 	) => {
 		navigate(`/learning/review/${assignmentKey}/${questionId}`, {
-			state: { reviewQuestion, questionIndex },
+			state: {
+				questionIndex,
+				transformedQuestion,
+				reviewQuestions,
+			},
 		});
 	};
 
@@ -180,6 +218,8 @@ const ReviewQuestions = ({
 												</Box>
 												<Box id="insideRender">
 													<Icons
+														isInReviewView={false}
+														addMargins={true}
 														answerHistory={transformedQuestion.answerHistory}
 														isExpanded={isExpanded}
 													/>
@@ -224,7 +264,7 @@ const ReviewQuestions = ({
 												onClick={() => {
 													handleViewQuestion(
 														transformedQuestion.id,
-														reviewQuestion,
+														transformedQuestion,
 														questionIndex,
 													);
 												}}

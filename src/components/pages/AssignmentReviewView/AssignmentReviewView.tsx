@@ -703,6 +703,7 @@ const AssignmentReviewView = () => {
 						isToastOpen={isToastOpen}
 					/>
 					<TestProgressBarMenu
+						isInReviewView={false}
 						questionData={questionData}
 						currentRoundQuestionListData={currentRoundQuestionListData}
 						currentQuestion={questionInFocus}

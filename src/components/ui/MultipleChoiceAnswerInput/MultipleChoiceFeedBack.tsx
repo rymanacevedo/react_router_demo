@@ -11,24 +11,31 @@ export interface Answer {
 }
 
 const MultipleChoiceFeedBack = ({
+	isInReviewView,
 	questionInFocus,
 	selectedAnswers,
 	currentRoundAnswerOverLayData,
 	inReview,
 	revealAnswer,
 }: {
+	isInReviewView?: boolean;
 	questionInFocus: QuestionInFocus;
 	selectedAnswers: any[];
 	setSelectedAnswers: any;
-	clearSelection: any;
-	setClearSelection: any;
+	clearSelection?: any;
+	setClearSelection?: any;
 	currentRoundAnswerOverLayData?: any;
 	inReview?: boolean;
 	revealAnswer?: boolean;
 }) => {
 	const [wasCorrectAnswerChosen, setWasCorrectAnswerChosen] = useState(false);
 	useEffect(() => {
-		if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
+		if (isInReviewView) {
+			setWasCorrectAnswerChosen(true);
+		} else if (
+			currentRoundAnswerOverLayData?.correctAnswerIds &&
+			selectedAnswers
+		) {
 			setWasCorrectAnswerChosen(
 				Boolean(
 					selectedAnswers.find(
@@ -55,6 +62,7 @@ const MultipleChoiceFeedBack = ({
 						.map((answer: { answerRc: string; id: string | number }) => {
 							return (
 								<AnswerFeedback
+									isInReviewView={isInReviewView}
 									key={answer.id}
 									questionText={answer.answerRc}
 									questionAnswerId={answer.id}

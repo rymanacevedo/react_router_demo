@@ -221,6 +221,7 @@ export enum Correctness {
 
 export type TransformedQuestion = LearningUnitQuestion & {
 	answerHistory: AnswerHistory[];
+	answerList?: LearningUnitQuestionAnswer[];
 };
 
 export type QuizMessage = {
