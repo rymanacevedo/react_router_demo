@@ -192,7 +192,7 @@ const ReviewView = () => {
 		}
 		const correctAnswers = getCorrectAnswers(transformedQuestion);
 		setSelectedAnswers(correctAnswers);
-	}, [assignmentKey]);
+	}, [assignmentKey, transformedQuestion]);
 
 	const expandProgressMenu = () => {
 		handleMenuOpen();
