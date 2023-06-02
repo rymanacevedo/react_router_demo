@@ -1,5 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
-import { Box, Container, HStack, Stack, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Container,
+	HStack,
+	Stack,
+	VStack,
+} from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
@@ -16,9 +25,10 @@ import { LoaderFunction, useParams } from 'react-router-dom';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
+import { useTranslation } from 'react-i18next';
 
 const initState = {
 	self: null,
@@ -49,9 +59,13 @@ export const reviewViewLoader: LoaderFunction = async () => {
 };
 
 const ReviewView = () => {
+	const { t: i18n } = useTranslation();
 	const location = useLocation();
 	const { transformedQuestion, questionIndex, reviewQuestions } =
 		location.state;
+	console.log(reviewQuestions);
+	// console.log(currentQuestionIndex);
+	const navigate = useNavigate();
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { moduleLearningUnitsData } = useQuizContext();
@@ -60,6 +74,10 @@ const ReviewView = () => {
 	const { fetchModuleQuestions } = useModuleContentService();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [clearSelection, setClearSelection] = useState(false);
+	const [displayedQuestion, setDisplayedQuestion] =
+		useState<TransformedQuestion>(reviewQuestions[questionIndex]);
+	const [currentQuestionIndex, setCurrentQuestionIndex] =
+		useState<number>(questionIndex);
 	const [questionInFocus] = useState<QuestionInFocus>({
 		answerList: [],
 		answered: false,
@@ -170,6 +188,46 @@ const ReviewView = () => {
 		setIsToastOpen(false);
 	};
 
+	const handleClickNext = () => {
+		const nextQuestionIndex = currentQuestionIndex + 1;
+		if (nextQuestionIndex < reviewQuestions.length) {
+			const nextQuestion = reviewQuestions[nextQuestionIndex];
+			const nextQuestionId = nextQuestion.id;
+			setDisplayedQuestion(nextQuestion);
+			setCurrentQuestionIndex(nextQuestionIndex);
+			navigate(`/learning/review/${assignmentKey}/${nextQuestionId}`, {
+				state: {
+					questionIndex: nextQuestionIndex,
+					transformedQuestion: nextQuestion,
+					reviewQuestions,
+				},
+			});
+		}
+	};
+
+	const handleClickBack = () => {
+		// decrement the questionIndex
+		// set the state of the question
+		const previousQuestionIndex = currentQuestionIndex - 1;
+		if (previousQuestionIndex >= 0) {
+			const previousQuestion = reviewQuestions[previousQuestionIndex];
+			const previousQuestionId = previousQuestion.id;
+			// Update any other necessary state
+			setDisplayedQuestion(previousQuestion);
+			setCurrentQuestionIndex(previousQuestionIndex);
+			navigate(`/learning/review/${assignmentKey}/${previousQuestionId}`, {
+				state: {
+					questionIndex: previousQuestionIndex,
+					transformedQuestion: previousQuestion,
+					reviewQuestions,
+				},
+			});
+		}
+	};
+
+	console.log('transformedQuestion: ', transformedQuestion.answerHistory);
+	console.log('displayedQuestion: ', displayedQuestion.answerHistory);
+
 	return (
 		<>
 			<Container
@@ -212,9 +270,9 @@ const ReviewView = () => {
 							w={{ base: '100%', md: '50%' }}>
 							<Question
 								review={true}
-								questionIndex={questionIndex + 1}
+								questionIndex={currentQuestionIndex + 1}
 								numberOfQInReview={reviewQuestions.length}
-								questionInFocus={transformedQuestion}
+								questionInFocus={displayedQuestion}
 							/>
 						</Box>
 						<Box
@@ -262,6 +320,26 @@ const ReviewView = () => {
 							) as unknown as QuestionInFocus
 						}
 					/>
+					<Box
+						width="1496px"
+						backgroundColor="white"
+						boxShadow="md"
+						borderRadius={24}
+						px="72px"
+						py="44px"
+						display="flex"
+						justifyContent="space-between">
+						<Button
+							onClick={handleClickBack}
+							isDisabled={currentQuestionIndex === 0}>
+							{i18n('previousBtn')}
+						</Button>
+						<Button
+							onClick={handleClickNext}
+							isDisabled={currentQuestionIndex + 1 === reviewQuestions.length}>
+							{i18n('nextBtn')}
+						</Button>
+					</Box>
 				</VStack>
 			</Container>
 		</>

@@ -230,7 +230,11 @@ const resources = {
          //   TimedAssessment.tsx
          //////////////////////////////////////////////
          practiceTestNavigation: 'Practice test navigation',
-         finishPracticeTest: 'Finish practice test'
+         finishPracticeTest: 'Finish practice test',
+         //////////////////////////////////////////////
+         //   ReviewView.tsx
+         //////////////////////////////////////////////
+         previousBtn: 'Previous'
       }
    },
    fr: {
