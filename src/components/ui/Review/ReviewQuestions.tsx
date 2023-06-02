@@ -71,7 +71,7 @@ export const Icons = ({
 						</Box>
 						<Box
 							display="flex"
-							justifyContent="flex-end"
+							justifyContent="flex-start"
 							marginRight="27.5px"
 							id="insideIcons">
 							{getIcons(remainingAnswerHistory, isExpanded)}
