@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import {
 	Box,
@@ -8,12 +6,15 @@ import {
 	HStack,
 	Stack,
 	VStack,
+	Text,
 } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
+	ApiRes,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
+	Item,
 	ModuleData,
 	QuestionInFocus,
 	SelectedAnswer,
@@ -29,6 +30,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
 import { useTranslation } from 'react-i18next';
+import { transformQuestion } from '../../../utils/logic';
+import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
 
 const initState = {
 	self: null,
@@ -63,8 +66,6 @@ const ReviewView = () => {
 	const location = useLocation();
 	const { transformedQuestion, questionIndex, reviewQuestions } =
 		location.state;
-	console.log(reviewQuestions);
-	// console.log(currentQuestionIndex);
 	const navigate = useNavigate();
 	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
@@ -138,6 +139,15 @@ const ReviewView = () => {
 		uid: '',
 		versionId: 0,
 	});
+	const { getAnswerHistory } = useAnswerHistoryService();
+	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
+
+	const fetchAnswerHistory = async () => {
+		let response: ApiRes = await getAnswerHistory(assignmentKey);
+		if (response) {
+			setAnswerHistory(response.items);
+		}
+	};
 
 	const renameAnswerAttribute = (object: TransformedQuestion) => {
 		if ('answers' in object) {
@@ -178,6 +188,7 @@ const ReviewView = () => {
 	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
+			fetchAnswerHistory();
 		}
 		const correctAnswers = getCorrectAnswers(transformedQuestion);
 		setSelectedAnswers(correctAnswers);
@@ -198,7 +209,7 @@ const ReviewView = () => {
 			navigate(`/learning/review/${assignmentKey}/${nextQuestionId}`, {
 				state: {
 					questionIndex: nextQuestionIndex,
-					transformedQuestion: nextQuestion,
+					transformedQuestion: transformQuestion(nextQuestion, answerHistory),
 					reviewQuestions,
 				},
 			});
@@ -206,27 +217,24 @@ const ReviewView = () => {
 	};
 
 	const handleClickBack = () => {
-		// decrement the questionIndex
-		// set the state of the question
 		const previousQuestionIndex = currentQuestionIndex - 1;
 		if (previousQuestionIndex >= 0) {
 			const previousQuestion = reviewQuestions[previousQuestionIndex];
 			const previousQuestionId = previousQuestion.id;
-			// Update any other necessary state
 			setDisplayedQuestion(previousQuestion);
 			setCurrentQuestionIndex(previousQuestionIndex);
 			navigate(`/learning/review/${assignmentKey}/${previousQuestionId}`, {
 				state: {
 					questionIndex: previousQuestionIndex,
-					transformedQuestion: previousQuestion,
+					transformedQuestion: transformQuestion(
+						previousQuestion,
+						answerHistory,
+					),
 					reviewQuestions,
 				},
 			});
 		}
 	};
-
-	console.log('transformedQuestion: ', transformedQuestion.answerHistory);
-	console.log('displayedQuestion: ', displayedQuestion.answerHistory);
 
 	return (
 		<>
@@ -321,20 +329,34 @@ const ReviewView = () => {
 						}
 					/>
 					<Box
+						height={'101px'}
+						style={{ marginTop: '24px' }}
 						width="1496px"
 						backgroundColor="white"
 						boxShadow="md"
 						borderRadius={24}
 						px="72px"
-						py="44px"
+						py="30px"
 						display="flex"
 						justifyContent="space-between">
 						<Button
+							height={'48px'}
+							width={'110px'}
 							onClick={handleClickBack}
 							isDisabled={currentQuestionIndex === 0}>
 							{i18n('previousBtn')}
 						</Button>
+						<Text
+							fontWeight={600}
+							fontSize={16}
+							color={'#7E8A9B'}
+							marginTop={'10px'}>
+							{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
+							{reviewQuestions.length}
+						</Text>
 						<Button
+							height={'48px'}
+							width={'110px'}
 							onClick={handleClickNext}
 							isDisabled={currentQuestionIndex + 1 === reviewQuestions.length}>
 							{i18n('nextBtn')}
