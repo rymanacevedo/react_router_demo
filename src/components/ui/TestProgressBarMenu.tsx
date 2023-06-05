@@ -332,7 +332,11 @@ const TestProgressBarMenu = ({
 				paddingLeft="24px"
 				paddingRight="24px"
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
-				<VStack align={'left'} display={isSmallerThan1000 ? 'none' : 'block'}>
+				<VStack
+					align={'left'}
+					display={isSmallerThan1000 ? 'none' : 'block'}
+					position={'relative'}
+					top={'3px'}>
 					<ModuleTitle
 						title={title}
 						assignmentType={assignmentType}

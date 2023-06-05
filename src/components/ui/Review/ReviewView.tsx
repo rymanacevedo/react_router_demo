@@ -33,6 +33,7 @@ import { transformQuestion } from '../../../utils/logic';
 import { getAnswerHistory } from '../../../services/learning';
 import { requireUser } from '../../../utils/user';
 import { badRequest } from '../../../services/utils';
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
 const initState = {
 	self: null,
@@ -329,6 +330,7 @@ const ReviewView = () => {
 					/>
 				</HStack>
 				<VStack
+					marginLeft={'13px'}
 					p="12px"
 					rounded="md"
 					shadow="md"
@@ -354,6 +356,7 @@ const ReviewView = () => {
 						display="flex"
 						justifyContent="space-between">
 						<Button
+							leftIcon={<ArrowLeftIcon />}
 							height={'48px'}
 							width={'110px'}
 							onClick={handleClickBack}
@@ -369,6 +372,7 @@ const ReviewView = () => {
 							{reviewQuestions.length}
 						</Text>
 						<Button
+							rightIcon={<ArrowRightIcon />}
 							height={'48px'}
 							width={'110px'}
 							onClick={handleClickNext}

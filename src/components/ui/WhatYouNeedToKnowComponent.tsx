@@ -19,7 +19,7 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
-import RichContentComponent from './RichContentComponent';
+import ReviewContentRender from './Review/ReviewContentRender';
 import {
 	ChevronDownIcon,
 	ChevronRightIcon,
@@ -62,7 +62,7 @@ const WhatYouNeedToKnowComponent = ({
 			maxW="1496">
 			<Heading as="h3">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
-				<RichContentComponent content={questionInFocus?.explanationRc} />
+				<ReviewContentRender content={questionInFocus?.explanationRc} />
 			</Stack>
 			{questionInFocus?.moreInformationRc?.length && (
 				<>
@@ -101,7 +101,7 @@ const WhatYouNeedToKnowComponent = ({
 										</AccordionButton>
 									</Heading>
 									<AccordionPanel padding={'0px'}>
-										<RichContentComponent
+										<ReviewContentRender
 											content={questionInFocus?.moreInformationRc}
 										/>
 									</AccordionPanel>
