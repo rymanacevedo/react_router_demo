@@ -66,6 +66,8 @@ type LoginFieldsErrors = InferSafeParseErrors<typeof LoginFieldsSchema>;
 export type ActionData<T> = {
 	fields: T;
 	errors?: T extends LoginFields ? LoginFieldsErrors : any;
+	response?: Response;
+	data?: any;
 };
 
 export const loginAction = async ({ request }: ActionFunctionArgs) => {

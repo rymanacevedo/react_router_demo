@@ -59,9 +59,11 @@ export const questionFeedbackAction: ActionFunction = async ({ request }) => {
 		});
 	}
 
-	const feedback = await postFeedback(user, modifiedFields, subaccount);
+	const { data, response } = await postFeedback(
+		user,
+		modifiedFields,
+		subaccount,
+	);
 
-	console.log(feedback);
-
-	return null;
+	return { data, response };
 };

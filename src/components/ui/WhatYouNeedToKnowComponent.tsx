@@ -27,9 +27,10 @@ import {
 	Pencil1Icon,
 } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 import { useFetcher } from 'react-router-dom';
+import Overlay from './Overlay';
 import { ActionData } from '../login/LoginForm';
 import { QuestionFeedbackFields } from '../../routes/QuestionFeedback';
 
@@ -52,6 +53,13 @@ const WhatYouNeedToKnowComponent = ({
 	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 	const fetcher = useFetcher();
 	const data = fetcher.data as ActionData<QuestionFeedbackFields>;
+	const ref = useRef<HTMLFormElement>(null);
+
+	useEffect(() => {
+		if (fetcher.state === 'idle' && fetcher.data?.response?.ok && ref.current) {
+			ref.current.reset();
+		}
+	}, [fetcher]);
 
 	return (
 		<Box
@@ -161,6 +169,7 @@ const WhatYouNeedToKnowComponent = ({
 			</Collapse>
 			<Collapse in={isOpen} animateOpacity>
 				<Box
+					position="relative"
 					color="black"
 					bg="ampNeutral.50"
 					borderRadius={'12px'}
@@ -170,7 +179,17 @@ const WhatYouNeedToKnowComponent = ({
 					<Heading as="h3" size="md">
 						{i18n('leaveFeedbackText')}
 					</Heading>
-					<fetcher.Form method="post" action="/feedback">
+					{fetcher.state === 'idle' && data ? (
+						data?.response?.ok ? (
+							<Overlay
+								isOpen={fetcher.data?.response?.ok}
+								text={i18n('thankYouForYourFeedback')}
+							/>
+						) : data?.errors ? (
+							<Text>{fetcher.data?.errors}</Text>
+						) : null
+					) : null}
+					<fetcher.Form ref={ref} method="POST" action="/feedback">
 						<FormControl isRequired>
 							<RadioGroup
 								id="feedbackType"
@@ -198,7 +217,7 @@ const WhatYouNeedToKnowComponent = ({
 						</FormControl>
 						<FormControl
 							isRequired={radioValue === 'Other'}
-							isInvalid={Boolean(data?.errors?.fieldErrors.feedback)}>
+							isInvalid={Boolean(fetcher.data?.errors?.fieldErrors.feedback)}>
 							<Textarea
 								id="feedback"
 								name="feedback"

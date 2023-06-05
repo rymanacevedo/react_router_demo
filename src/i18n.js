@@ -168,6 +168,7 @@ const resources = {
          reviewing: 'Reviewing',
          keepGoing: 'Keep Going',
          reviewCorrectAns: 'Review correct answers',
+         thankYouForYourFeedback: 'Thank you for your feedback',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////
