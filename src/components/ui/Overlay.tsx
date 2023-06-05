@@ -21,7 +21,9 @@ export default function Overlay({
 					h="100%"
 					zIndex={100}
 					backgroundColor="rgba(0, 0, 0, 0.7)">
-					<Text color="white">{text}</Text>
+					<Text fontWeight="bold" color="white">
+						{text}
+					</Text>
 				</Box>
 			) : null}
 		</>

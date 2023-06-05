@@ -168,7 +168,8 @@ const resources = {
          reviewing: 'Reviewing',
          keepGoing: 'Keep Going',
          reviewCorrectAns: 'Review correct answers',
-         thankYouForYourFeedback: 'Thank you for your feedback',
+         thankYouForYourFeedback: 'Thank you for your feedback.',
+         typeYourCommentsHere: 'Type your comments here (500 character limit).',
          /////////////////////////////////////////////
          //   Question.tsx
          //////////////////////////////////////////////

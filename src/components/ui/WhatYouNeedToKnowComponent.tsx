@@ -225,7 +225,7 @@ const WhatYouNeedToKnowComponent = ({
 								bg="ampWhite"
 								marginTop="16px"
 								minHeight="150px"
-								placeholder={i18n('placeHolderText')}
+								placeholder={'Type your comments here (500 character limit).'}
 							/>
 						</FormControl>
 						<FormControl hidden={true}>
