@@ -164,13 +164,6 @@ const ReviewView = () => {
 	});
 	const [answerHistory] = useState<Item[] | null>(data);
 
-	// const fetchAnswerHistory = async () => {
-	// 	let response: ApiRes = await getAnswerHistory(assignmentKey);
-	// 	if (response) {
-	// 		setAnswerHistory(response.items);
-	// 	}
-	// };
-
 	const renameAnswerAttribute = (object: TransformedQuestion) => {
 		if ('answers' in object) {
 			object.answerList = object.answers;
