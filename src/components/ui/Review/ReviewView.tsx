@@ -338,6 +338,7 @@ const ReviewView = () => {
 					justifyContent={'center'}
 					w="100%">
 					<WhatYouNeedToKnowComponent
+						isInReviewView={true}
 						questionInFocus={
 							renameAnswerAttribute(
 								transformedQuestion,

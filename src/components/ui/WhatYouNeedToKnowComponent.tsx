@@ -33,10 +33,12 @@ const WhatYouNeedToKnowComponent = ({
 	questionInFocus,
 	onClick,
 	isModal,
+	isInReviewView,
 }: {
 	questionInFocus: QuestionInFocus;
 	onClick?: () => void;
 	isModal?: boolean;
+	isInReviewView?: boolean;
 }) => {
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
@@ -113,9 +115,9 @@ const WhatYouNeedToKnowComponent = ({
 				</>
 			)}
 
-			<Divider />
+			{!isInReviewView && <Divider />}
 			<Collapse in={!isOpen} animateOpacity>
-				<VStack marginTop={'16px'}>
+				<VStack marginTop={'16px'} display={isInReviewView ? 'none' : 'flex'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
 						<Text float="left" fontSize="14px">
 							{i18n('wasThisExplanationHelpful')}
