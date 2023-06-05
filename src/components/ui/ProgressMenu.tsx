@@ -14,12 +14,12 @@ import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
 import {
 	CurrentRoundAnswerOverLayData,
-	CurrentRoundQuestionListData,
+	RoundData,
 } from '../pages/AssignmentView/AssignmentTypes';
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressMenuType = {
-	currentRoundQuestionListData: CurrentRoundQuestionListData | undefined;
+	currentRoundQuestionListData: RoundData | undefined;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData | undefined;
 	textPrompt?: string;
 };

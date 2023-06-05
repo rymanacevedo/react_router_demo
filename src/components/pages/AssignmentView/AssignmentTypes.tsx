@@ -52,8 +52,8 @@ export type QuestionInFocus = {
 	questionRc: string;
 	name?: string;
 	reviewSeconds: number;
-	introductionRc?: string;
-	explanationRc?: string;
+	introductionRc: string | null;
+	explanationRc: string | null;
 	moreInformationRc?: string;
 	publishedQuestionId: number | string;
 	answerList: {
@@ -94,7 +94,7 @@ export type QuestionInFocus = {
 	quizSeconds: number;
 };
 
-export type CurrentRoundQuestionListData = {
+export type RoundData = {
 	totalQuestionCount: any;
 	masteredQuestionCount: any;
 	notSureCount: any;
@@ -144,7 +144,7 @@ type LearningUnitQuestionAnswer = {
 	answerRc: string;
 	id: number;
 	isCorrect: boolean;
-	optionRc: null;
+	optionRc: string | null;
 	self: string;
 	uid: string;
 	versionId: number;
@@ -152,10 +152,10 @@ type LearningUnitQuestionAnswer = {
 
 export type LearningUnitQuestion = {
 	answers: LearningUnitQuestionAnswer[];
-	explanationRc: null;
-	hasModalIntroduction: boolean;
+	explanationRc: string | null;
+	hasModuleIntroduction: boolean;
 	id: number;
-	introductionRc: null;
+	introductionRc: string | null;
 	learningUnitId: number;
 	learningUnitUid: string;
 	learningUnitUri: string;
@@ -168,10 +168,10 @@ export type LearningUnitQuestion = {
 	versionId: number;
 };
 
-export type ModuleDataLearningUnit = {
+export type LearningUnit = {
 	id: number;
-	introductionRc: null;
-	moreInformationRc: null;
+	introductionRc: string;
+	moreInformationRc: string;
 	name: string;
 	questions: LearningUnitQuestion[];
 	self: string;
@@ -192,7 +192,7 @@ export type ModuleData = {
 	isRecommendedModulesEnabled: boolean;
 	key: string;
 	kind: string;
-	learningUnits: ModuleDataLearningUnit[];
+	learningUnits: LearningUnit[];
 	locale: string;
 	name: string;
 	outroButtonText: string | null;

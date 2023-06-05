@@ -1,108 +1,81 @@
-import { Confidence, Correctness, QuestionInFocus } from './AssignmentTypes';
+import {
+	Confidence,
+	Correctness,
+	LearningUnit,
+	LearningUnitQuestion,
+	ModuleData,
+	QuestionInFocus,
+	RoundData,
+} from './AssignmentTypes';
 
+/**
+ * Finds the question in focus
+ * @param moduleData
+ * @param roundData
+ * @param inReview
+ * @param viewCorrect
+ * @param questionIndex
+ */
 export const findQuestionInFocus = (
-	questionListDataPeram: { learningUnits: any },
-	currentRoundQuestionListDataPeram: { questionList: any },
+	moduleData: ModuleData,
+	roundData: RoundData,
 	inReview: boolean,
 	viewCorrect: boolean,
-) => {
-	//this function takes the questions and answers lists from each source and combines relevent data then produces the question that should be in focus
-	const learningUnits = questionListDataPeram?.learningUnits;
-	const questionList = currentRoundQuestionListDataPeram?.questionList.map(
-		(question: {
-			publishedQuestionId: number;
-			answerList: any;
-			name: string;
-			questionRc: string;
-			moreInformationRc: string;
-			questionType: string;
-			explanationRc: string;
-			hasModuleIntroduction: boolean;
-			introductionRc: string;
-		}) => {
+	questionIndex?: number,
+): QuestionInFocus => {
+	const learningUnits = moduleData?.learningUnits;
+	const questionList: QuestionInFocus[] = roundData?.questionList.map(
+		(question: QuestionInFocus) => {
 			let updatedQuestion = question;
-			learningUnits.forEach(
-				(learningUnit: {
-					moreInformationRc: string;
-					questions: {
-						moreInformationRc: string;
-						publishedQuestionId: number;
-						id: number;
-						answers: any;
-						name: string;
-						questionRc: string;
-						questionType: string;
-						explanationRc: string;
-						hasModuleIntroduction: boolean;
-						introductionRc: string;
-					}[];
-				}) => {
-					//matched questions
-					let matchedQuestion = learningUnit?.questions.filter(
-						(unitQuestion) => {
-							return unitQuestion.id === question?.publishedQuestionId;
-						},
-					);
-					if (matchedQuestion.length) {
-						let updatedAnswerList = question?.answerList;
-						const {
-							name,
-							questionRc,
-							questionType,
-							explanationRc,
-							hasModuleIntroduction,
-							introductionRc,
-						} = matchedQuestion[0];
-						updatedQuestion = {
-							...question,
-							moreInformationRc: learningUnit?.moreInformationRc,
-							name: name,
-							questionRc: questionRc,
-							questionType: questionType,
-							explanationRc: explanationRc,
-							hasModuleIntroduction: hasModuleIntroduction,
-							introductionRc: introductionRc,
-							answerList: [
-								...updatedAnswerList.map(
-									(answer: {
-										publishedAnswerId: number;
-										answerRc: string;
-										optionRc: string;
-										isCorrect: boolean;
-									}) => {
-										let updatedAnswerObj = answer;
-										matchedQuestion[0].answers.forEach(
-											(learningUnitAnswer: {
-												id: number;
-												answerRc: string;
-												optionRc: string;
-												isCorrect: boolean;
-											}) => {
-												//matched answers
-												if (
-													answer.publishedAnswerId === learningUnitAnswer.id
-												) {
-													updatedAnswerObj = {
-														...answer,
-														answerRc: learningUnitAnswer.answerRc,
-														optionRc: learningUnitAnswer.optionRc,
-														isCorrect: learningUnitAnswer.isCorrect,
-													};
-												}
-											},
-										);
-										return updatedAnswerObj;
-									},
-								),
-							],
-						};
-					}
-				},
-			);
+			learningUnits.forEach((learningUnit: LearningUnit) => {
+				//matched questions
+				const matchedQuestion: LearningUnitQuestion =
+					learningUnit?.questions.filter((q: LearningUnitQuestion) => {
+						return q.id === question?.publishedQuestionId;
+					})[0];
+				if (matchedQuestion) {
+					let updatedAnswerList = question?.answerList;
+					const {
+						name,
+						questionRc,
+						questionType,
+						explanationRc,
+						hasModuleIntroduction,
+						introductionRc,
+					} = matchedQuestion;
+					updatedQuestion = {
+						...question,
+						moreInformationRc: learningUnit?.moreInformationRc,
+						name,
+						questionRc,
+						questionType,
+						explanationRc,
+						hasModuleIntroduction,
+						introductionRc,
+						answerList: [
+							...updatedAnswerList.map((answer) => {
+								let updatedAnswerObj = answer;
+								matchedQuestion.answers.forEach((learningUnitAnswer) => {
+									//matched answers
+									if (answer.publishedAnswerId === learningUnitAnswer.id) {
+										updatedAnswerObj = {
+											...answer,
+											answerRc: learningUnitAnswer.answerRc,
+											optionRc: learningUnitAnswer.optionRc,
+											isCorrect: learningUnitAnswer.isCorrect,
+										};
+									}
+								});
+								return updatedAnswerObj;
+							}),
+						],
+					} as QuestionInFocus;
+				}
+			});
 			return updatedQuestion;
 		},
 	);
-	if (inReview) {
+	if (inReview && questionIndex !== undefined) {
 		return questionList.filter((q: QuestionInFocus) => {
 			if (viewCorrect) {
 				return (
@@ -115,13 +88,11 @@ export const findQuestionInFocus = (
 					q.correctness === Correctness.Correct
 				);
 			}
-		});
+		})[questionIndex];
 	} else {
-		const firstUnansweredQuestion = questionList.find(
-			(question: { answered: boolean }) => {
-				return !question.answered;
-			},
-		);
+		const firstUnansweredQuestion = questionList.find((question) => {
+			return !question.answered;
+		});
 
 		return firstUnansweredQuestion || questionList[0];
 	}

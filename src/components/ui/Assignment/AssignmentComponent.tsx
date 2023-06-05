@@ -7,9 +7,9 @@ import {
 	Confidence,
 	Correctness,
 	CurrentRoundAnswerOverLayData,
-	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
+	RoundData,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerArea from '../AnswerArea';
@@ -138,7 +138,7 @@ export default function AssignmentComponent({
 	});
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
-		useState<CurrentRoundQuestionListData>();
+		useState<RoundData>();
 
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
@@ -194,7 +194,7 @@ export default function AssignmentComponent({
 				updateModuleLearningUnitsData(res, assignmentKey);
 			}
 
-			let revSkipRes = {} as CurrentRoundQuestionListData;
+			let revSkipRes: RoundData;
 
 			if (currentRoundQuestionsResponse.roundPhase === 'REVIEW') {
 				handleMessage('FIVE_CONSEC_SC', true);

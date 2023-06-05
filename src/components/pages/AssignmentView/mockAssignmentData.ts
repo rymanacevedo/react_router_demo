@@ -359,7 +359,7 @@ const questionDataMock = {
 const questionInFocusDataMock = {
 	id: 148185,
 	publishedQuestionId: 19591,
-	publishedQuestionAuthoringKey: '0749f150-39b5-4ef3-80e0-f011da0b6cbc',
+	uid: '0749f150-39b5-4ef3-80e0-f011da0b6cbc',
 	questionVersionId: 2,
 	publishedQuestionUri:
 		'http://localapi.amplifire.me:8080/v2/curricula/questions/0749f150-39b5-4ef3-80e0-f011da0b6cbc/version/2',
@@ -476,7 +476,7 @@ const currentRoundQuestionListDataMock = {
 		{
 			id: 148184,
 			publishedQuestionId: 19589,
-			publishedQuestionAuthoringKey: 'de12173b-391c-4ae0-9ec4-944b1b7f1393',
+			uid: 'de12173b-391c-4ae0-9ec4-944b1b7f1393',
 			questionVersionId: 2,
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/de12173b-391c-4ae0-9ec4-944b1b7f1393/version/2',
@@ -557,7 +557,7 @@ const currentRoundQuestionListDataMock = {
 		{
 			id: 148185,
 			publishedQuestionId: 19591,
-			publishedQuestionAuthoringKey: '0749f150-39b5-4ef3-80e0-f011da0b6cbc',
+			uid: '0749f150-39b5-4ef3-80e0-f011da0b6cbc',
 			questionVersionId: 2,
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/0749f150-39b5-4ef3-80e0-f011da0b6cbc/version/2',
@@ -638,7 +638,7 @@ const currentRoundQuestionListDataMock = {
 		{
 			id: 148186,
 			publishedQuestionId: 19592,
-			publishedQuestionAuthoringKey: 'b2ca4d98-a3ab-4b7b-9416-a56d809a7926',
+			uid: 'b2ca4d98-a3ab-4b7b-9416-a56d809a7926',
 			questionVersionId: 2,
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/b2ca4d98-a3ab-4b7b-9416-a56d809a7926/version/2',
@@ -719,7 +719,7 @@ const currentRoundQuestionListDataMock = {
 		{
 			id: 148187,
 			publishedQuestionId: 19590,
-			publishedQuestionAuthoringKey: '877e5b4c-fc7d-44bf-9b7c-3f9c58187dfe',
+			uid: '877e5b4c-fc7d-44bf-9b7c-3f9c58187dfe',
 			questionVersionId: 2,
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/877e5b4c-fc7d-44bf-9b7c-3f9c58187dfe/version/2',
@@ -800,7 +800,7 @@ const currentRoundQuestionListDataMock = {
 		{
 			id: 148188,
 			publishedQuestionId: 19593,
-			publishedQuestionAuthoringKey: 'e661dbf5-2881-4995-b11f-30617976cf14',
+			uid: 'e661dbf5-2881-4995-b11f-30617976cf14',
 			questionVersionId: 2,
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/e661dbf5-2881-4995-b11f-30617976cf14/version/2',
@@ -881,7 +881,7 @@ const currentRoundQuestionListDataMock = {
 		{
 			id: 148189,
 			publishedQuestionId: 19594,
-			publishedQuestionAuthoringKey: '34b4f5b3-8cac-467e-97c6-8d7a7bc42087',
+			uid: '34b4f5b3-8cac-467e-97c6-8d7a7bc42087',
 			questionVersionId: 2,
 			publishedQuestionUri:
 				'http://localapi.amplifire.me:8080/v2/curricula/questions/34b4f5b3-8cac-467e-97c6-8d7a7bc42087/version/2',

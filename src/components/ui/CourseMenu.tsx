@@ -46,7 +46,7 @@ const CourseMenu = ({
 						);
 					}}
 					defaultChecked={true}
-					defaultValue={selectedCourseKey}>
+					defaultValue={selectedCourseKey ?? ''}>
 					{courseList?.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
 							<Text isTruncated maxW="300px">

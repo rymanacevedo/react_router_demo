@@ -30,9 +30,9 @@ import {
 	Confidence,
 	Correctness,
 	CurrentRoundAnswerOverLayData,
-	CurrentRoundQuestionListData,
 	ModuleData,
 	QuestionInFocus,
+	RoundData,
 	SelectedAnswer,
 } from '../AssignmentView/AssignmentTypes';
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
@@ -146,7 +146,7 @@ const AssignmentReviewView = () => {
 	const [revealAnswer, setRevealAnswer] = useState(false);
 
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
-		useState<CurrentRoundQuestionListData>();
+		useState<RoundData>();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
@@ -278,7 +278,7 @@ const AssignmentReviewView = () => {
 	const fetchModuleQuestionsData = async (firstRender?: boolean) => {
 		try {
 			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
-			let moduleQuestionsResponse = {} as ModuleData;
+			let moduleQuestionsResponse: ModuleData;
 			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
 				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
 			} else {
@@ -310,13 +310,13 @@ const AssignmentReviewView = () => {
 						),
 					);
 				}
-
-				const foundQuestionInFocus = findQuestionInFocus(
+				let foundQuestionInFocus: QuestionInFocus = findQuestionInFocus(
 					moduleQuestionsResponse,
 					currentRoundQuestionsResponse,
 					true,
 					viewCorrect,
-				)[questionIndex];
+					questionIndex,
+				);
 				setQuestionSecondsHistory(foundQuestionInFocus?.quizSeconds);
 
 				setSelectedAnswers(findRoundAnswersData(foundQuestionInFocus));
@@ -326,20 +326,14 @@ const AssignmentReviewView = () => {
 						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus, true),
 					};
 				});
-				setQuestionData(moduleQuestionsResponse as ModuleData);
+				setQuestionData(moduleQuestionsResponse);
 				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
 				setQuestionInFocus(foundQuestionInFocus);
 
 				if (
 					message.TWO_FAST_REVIEWS_IN_LU.filter((item) => {
 						return (
-							item.questionId ===
-							findQuestionInFocus(
-								moduleQuestionsResponse,
-								currentRoundQuestionsResponse,
-								true,
-								viewCorrect,
-							)[questionIndex]?.publishedQuestionId
+							item.questionId === foundQuestionInFocus?.publishedQuestionId
 						);
 					})[0]?.fastReviewsOnQuestion >= 1
 				) {
