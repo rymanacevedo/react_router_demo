@@ -19,7 +19,7 @@ import {
 	useDisclosure,
 	VStack,
 } from '@chakra-ui/react';
-import RichContentComponent from './RichContentComponent';
+import ReviewContentRender from './Review/ReviewContentRender';
 import {
 	ChevronDownIcon,
 	ChevronRightIcon,
@@ -33,10 +33,12 @@ const WhatYouNeedToKnowComponent = ({
 	questionInFocus,
 	onClick,
 	isModal,
+	isInReviewView,
 }: {
 	questionInFocus: QuestionInFocus;
 	onClick?: () => void;
 	isModal?: boolean;
+	isInReviewView?: boolean;
 }) => {
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
@@ -62,7 +64,7 @@ const WhatYouNeedToKnowComponent = ({
 			maxW="1496">
 			<Heading as="h3">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
-				<RichContentComponent content={questionInFocus?.explanationRc} />
+				<ReviewContentRender content={questionInFocus?.explanationRc} />
 			</Stack>
 			{questionInFocus?.moreInformationRc?.length && (
 				<>
@@ -101,7 +103,7 @@ const WhatYouNeedToKnowComponent = ({
 										</AccordionButton>
 									</Heading>
 									<AccordionPanel padding={'0px'}>
-										<RichContentComponent
+										<ReviewContentRender
 											content={questionInFocus?.moreInformationRc}
 										/>
 									</AccordionPanel>
@@ -113,9 +115,9 @@ const WhatYouNeedToKnowComponent = ({
 				</>
 			)}
 
-			<Divider />
+			{!isInReviewView && <Divider />}
 			<Collapse in={!isOpen} animateOpacity>
-				<VStack marginTop={'16px'}>
+				<VStack marginTop={'16px'} display={isInReviewView ? 'none' : 'flex'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
 						<Text float="left" fontSize="14px">
 							{i18n('wasThisExplanationHelpful')}

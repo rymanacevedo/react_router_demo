@@ -2,7 +2,6 @@ import { authenticatedFetch } from './utils';
 import { User } from './user';
 import {
 	AnswerData,
-	AnswerHistory,
 	AssignmentData,
 	ModuleData,
 	RoundData,
@@ -109,10 +108,10 @@ export const getAnswerHistory = async (
 	user: User,
 	subAccount: string,
 	assignmentKey: string | undefined,
-): Promise<{ data: AnswerHistory; response: Response }> => {
+): Promise<{ data: any; response: Response }> => {
 	const url = `/v2/assignments/${assignmentKey}/answer-history?subaccount=${subAccount}`;
 
-	return authenticatedFetch<AnswerHistory>(url, user.sessionKey);
+	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
 export const putCurrentRound = async (

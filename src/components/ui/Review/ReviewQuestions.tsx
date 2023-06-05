@@ -19,7 +19,11 @@ import {
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
-import { truncateText, getIcons } from '../../../utils/logic';
+import {
+	truncateText,
+	getIcons,
+	transformQuestion,
+} from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
@@ -132,26 +136,6 @@ const ReviewQuestions = ({
 			setIndex([]);
 		}
 	}, [expandAll, reviewQuestions.length, setIndex]);
-
-	const transformQuestion = (
-		question: LearningUnitQuestion,
-		answerHistoryArray: Item[] | null,
-	): TransformedQuestion => {
-		const uuid = question.uid;
-		const target = answerHistoryArray?.find((item) =>
-			item.publishedQuestionUri.includes(uuid),
-		);
-		if (target) {
-			return {
-				...question,
-				answerHistory: target.answerHistory,
-			};
-		}
-		return {
-			...question,
-			answerHistory: [],
-		};
-	};
 
 	const handleViewQuestion = (
 		questionId: number,

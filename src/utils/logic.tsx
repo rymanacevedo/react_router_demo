@@ -8,8 +8,10 @@ import {
 	AnswerHistory,
 	Confidence,
 	Correctness,
+	Item,
 	LearningUnitQuestion,
 	QuizMessage,
+	TransformedQuestion,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
@@ -238,4 +240,24 @@ export const convertSecondsToTime = (timerSeconds: number): string => {
 	return `${hours.toString().padStart(2, '0')}:${minutes
 		.toString()
 		.padStart(2, '0')}:${convertedSeconds.toString().padStart(2, '0')}`;
+};
+
+export const transformQuestion = (
+	question: LearningUnitQuestion,
+	answerHistoryArray: Item[] | null,
+): TransformedQuestion => {
+	const uuid = question.uid;
+	const target = answerHistoryArray?.find((item) =>
+		item.publishedQuestionUri.includes(uuid),
+	);
+	if (target) {
+		return {
+			...question,
+			answerHistory: target.answerHistory,
+		};
+	}
+	return {
+		...question,
+		answerHistory: [],
+	};
 };

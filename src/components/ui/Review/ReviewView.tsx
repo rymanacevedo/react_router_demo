@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Box, Container, HStack, Stack, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Container,
+	HStack,
+	Stack,
+	VStack,
+	Text,
+} from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
+	Item,
 	ModuleData,
 	QuestionInFocus,
 	SelectedAnswer,
@@ -12,13 +21,19 @@ import {
 } from '../../pages/AssignmentView/AssignmentTypes';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import { LoaderFunction, useParams } from 'react-router-dom';
+import { json, LoaderFunction, useLoaderData } from 'react-router-dom';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
+import { useTranslation } from 'react-i18next';
+import { transformQuestion } from '../../../utils/logic';
+import { getAnswerHistory } from '../../../services/learning';
+import { requireUser } from '../../../utils/user';
+import { badRequest } from '../../../services/utils';
+import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
 const initState = {
 	self: null,
@@ -44,15 +59,39 @@ const initState = {
 	avatarMessage: null,
 	answerList: [],
 };
-export const reviewViewLoader: LoaderFunction = async () => {
-	return null;
+
+export const reviewViewLoader: LoaderFunction = async ({ params }) => {
+	const { assignmentKey } = params;
+	const user = requireUser();
+	let subaccount = '';
+	user.roles.forEach((role) => {
+		if (role.name === 'Learner') {
+			subaccount = role.accountKey;
+		}
+	});
+	if (assignmentKey) {
+		const response = await getAnswerHistory(user, subaccount, assignmentKey);
+		const { data } = response;
+		return json({ data: data.items, assignmentKey: assignmentKey });
+	}
+
+	return badRequest({
+		fields: {},
+		errors: {
+			fieldErrors: {
+				assignmentKey: ['Bad assignment key'],
+			},
+		},
+	});
 };
 
 const ReviewView = () => {
+	const { data, assignmentKey } = useLoaderData() as any;
+	const { t: i18n } = useTranslation();
 	const location = useLocation();
 	const { transformedQuestion, questionIndex, reviewQuestions } =
 		location.state;
-	const { assignmentKey } = useParams();
+	const navigate = useNavigate();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { moduleLearningUnitsData } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
@@ -60,6 +99,10 @@ const ReviewView = () => {
 	const { fetchModuleQuestions } = useModuleContentService();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [clearSelection, setClearSelection] = useState(false);
+	const [displayedQuestion, setDisplayedQuestion] =
+		useState<TransformedQuestion>(reviewQuestions[questionIndex]);
+	const [currentQuestionIndex, setCurrentQuestionIndex] =
+		useState<number>(questionIndex);
 	const [questionInFocus] = useState<QuestionInFocus>({
 		answerList: [],
 		answered: false,
@@ -120,6 +163,7 @@ const ReviewView = () => {
 		uid: '',
 		versionId: 0,
 	});
+	const [answerHistory] = useState<Item[] | null>(data);
 
 	const renameAnswerAttribute = (object: TransformedQuestion) => {
 		if ('answers' in object) {
@@ -163,11 +207,48 @@ const ReviewView = () => {
 		}
 		const correctAnswers = getCorrectAnswers(transformedQuestion);
 		setSelectedAnswers(correctAnswers);
-	}, [assignmentKey]);
+	}, [assignmentKey, transformedQuestion]);
 
 	const expandProgressMenu = () => {
 		handleMenuOpen();
 		setIsToastOpen(false);
+	};
+
+	const handleClickNext = () => {
+		const nextQuestionIndex = currentQuestionIndex + 1;
+		if (nextQuestionIndex < reviewQuestions.length) {
+			const nextQuestion = reviewQuestions[nextQuestionIndex];
+			const nextQuestionId = nextQuestion.id;
+			setDisplayedQuestion(nextQuestion);
+			setCurrentQuestionIndex(nextQuestionIndex);
+			navigate(`/learning/review/${assignmentKey}/${nextQuestionId}`, {
+				state: {
+					questionIndex: nextQuestionIndex,
+					transformedQuestion: transformQuestion(nextQuestion, answerHistory),
+					reviewQuestions,
+				},
+			});
+		}
+	};
+
+	const handleClickBack = () => {
+		const previousQuestionIndex = currentQuestionIndex - 1;
+		if (previousQuestionIndex >= 0) {
+			const previousQuestion = reviewQuestions[previousQuestionIndex];
+			const previousQuestionId = previousQuestion.id;
+			setDisplayedQuestion(previousQuestion);
+			setCurrentQuestionIndex(previousQuestionIndex);
+			navigate(`/learning/review/${assignmentKey}/${previousQuestionId}`, {
+				state: {
+					questionIndex: previousQuestionIndex,
+					transformedQuestion: transformQuestion(
+						previousQuestion,
+						answerHistory,
+					),
+					reviewQuestions,
+				},
+			});
+		}
 	};
 
 	return (
@@ -212,9 +293,9 @@ const ReviewView = () => {
 							w={{ base: '100%', md: '50%' }}>
 							<Question
 								review={true}
-								questionIndex={questionIndex + 1}
+								questionIndex={currentQuestionIndex + 1}
 								numberOfQInReview={reviewQuestions.length}
-								questionInFocus={transformedQuestion}
+								questionInFocus={displayedQuestion}
 							/>
 						</Box>
 						<Box
@@ -249,6 +330,7 @@ const ReviewView = () => {
 					/>
 				</HStack>
 				<VStack
+					marginLeft={'13px'}
 					p="12px"
 					rounded="md"
 					shadow="md"
@@ -256,12 +338,49 @@ const ReviewView = () => {
 					justifyContent={'center'}
 					w="100%">
 					<WhatYouNeedToKnowComponent
+						isInReviewView={true}
 						questionInFocus={
 							renameAnswerAttribute(
 								transformedQuestion,
 							) as unknown as QuestionInFocus
 						}
 					/>
+					<Box
+						height={'101px'}
+						style={{ marginTop: '24px' }}
+						width="1496px"
+						backgroundColor="white"
+						boxShadow="md"
+						borderRadius={24}
+						px="72px"
+						py="30px"
+						display="flex"
+						justifyContent="space-between">
+						<Button
+							leftIcon={<ArrowLeftIcon />}
+							height={'48px'}
+							width={'110px'}
+							onClick={handleClickBack}
+							isDisabled={currentQuestionIndex === 0}>
+							{i18n('previousBtn')}
+						</Button>
+						<Text
+							fontWeight={600}
+							fontSize={16}
+							color={'#7E8A9B'}
+							marginTop={'10px'}>
+							{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
+							{reviewQuestions.length}
+						</Text>
+						<Button
+							rightIcon={<ArrowRightIcon />}
+							height={'48px'}
+							width={'110px'}
+							onClick={handleClickNext}
+							isDisabled={currentQuestionIndex + 1 === reviewQuestions.length}>
+							{i18n('nextBtn')}
+						</Button>
+					</Box>
 				</VStack>
 			</Container>
 		</>
