@@ -11,7 +11,6 @@ import {
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
-	ApiRes,
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	Item,
@@ -22,7 +21,7 @@ import {
 } from '../../pages/AssignmentView/AssignmentTypes';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import { LoaderFunction, useParams } from 'react-router-dom';
+import { json, LoaderFunction, useLoaderData } from 'react-router-dom';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
@@ -31,7 +30,9 @@ import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleCh
 import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
 import { useTranslation } from 'react-i18next';
 import { transformQuestion } from '../../../utils/logic';
-import useAnswerHistoryService from '../../../services/useAnswerHistoryService';
+import { getAnswerHistory } from '../../../services/learning';
+import { requireUser } from '../../../utils/user';
+import { badRequest } from '../../../services/utils';
 
 const initState = {
 	self: null,
@@ -57,17 +58,39 @@ const initState = {
 	avatarMessage: null,
 	answerList: [],
 };
-export const reviewViewLoader: LoaderFunction = async () => {
-	return null;
+
+export const reviewViewLoader: LoaderFunction = async ({ params }) => {
+	const { assignmentKey } = params;
+	const user = requireUser();
+	let subaccount = '';
+	user.roles.forEach((role) => {
+		if (role.name === 'Learner') {
+			subaccount = role.accountKey;
+		}
+	});
+	if (assignmentKey) {
+		const response = await getAnswerHistory(user, subaccount, assignmentKey);
+		const { data } = response;
+		return json({ data: data.items, assignmentKey: assignmentKey });
+	}
+
+	return badRequest({
+		fields: {},
+		errors: {
+			fieldErrors: {
+				assignmentKey: ['Bad assignment key'],
+			},
+		},
+	});
 };
 
 const ReviewView = () => {
+	const { data, assignmentKey } = useLoaderData() as any;
 	const { t: i18n } = useTranslation();
 	const location = useLocation();
 	const { transformedQuestion, questionIndex, reviewQuestions } =
 		location.state;
 	const navigate = useNavigate();
-	const { assignmentKey } = useParams();
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { moduleLearningUnitsData } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
@@ -139,15 +162,14 @@ const ReviewView = () => {
 		uid: '',
 		versionId: 0,
 	});
-	const { getAnswerHistory } = useAnswerHistoryService();
-	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
+	const [answerHistory] = useState<Item[] | null>(data);
 
-	const fetchAnswerHistory = async () => {
-		let response: ApiRes = await getAnswerHistory(assignmentKey);
-		if (response) {
-			setAnswerHistory(response.items);
-		}
-	};
+	// const fetchAnswerHistory = async () => {
+	// 	let response: ApiRes = await getAnswerHistory(assignmentKey);
+	// 	if (response) {
+	// 		setAnswerHistory(response.items);
+	// 	}
+	// };
 
 	const renameAnswerAttribute = (object: TransformedQuestion) => {
 		if ('answers' in object) {
@@ -188,7 +210,6 @@ const ReviewView = () => {
 	useEffect(() => {
 		if (assignmentKey) {
 			fetchModuleQuestionsData();
-			fetchAnswerHistory();
 		}
 		const correctAnswers = getCorrectAnswers(transformedQuestion);
 		setSelectedAnswers(correctAnswers);
