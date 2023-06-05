@@ -136,12 +136,21 @@ export const putCurrentRound = async (
 	);
 };
 
-export const putFeedback = async (
+export const postFeedback = async (
 	user: User,
 	fields: QuestionFeedbackFields,
 	subAccount: string,
 ): Promise<any> => {
 	const url = `${API}/v2/curricula/questions/feedback?subaccount=${subAccount}`;
-	const body = {};
-	return authenticatedFetch<any>(url, user.sessionKey, 'PUT', body);
+	const body = {
+		id: fields.id,
+		courseKey: fields.courseKey,
+		assignmentKey: fields.assignmentKey,
+		questionUid: fields.questionUid,
+		questionVersionId: fields.questionVersionId,
+		feedback: fields.feedback,
+		feedbackType: fields.feedbackType,
+		discipline: fields.discipline,
+	};
+	return authenticatedFetch(url, user.sessionKey, 'POST', body);
 };

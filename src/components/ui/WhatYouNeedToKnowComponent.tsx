@@ -180,22 +180,24 @@ const WhatYouNeedToKnowComponent = ({
 								value={radioValue}>
 								<HStack spacing={40}>
 									<VStack alignItems={'left'}>
-										<Radio value="disagree">
+										<Radio value="I disagree with the answer">
 											{i18n('IDisagreeWithTheAnswer')}
 										</Radio>
-										<Radio value="qImprove">
+										<Radio value="This question could be improved">
 											{i18n('thisQuestionCouldBeImproved')}
 										</Radio>
 									</VStack>
 									<VStack alignItems={'left'}>
-										<Radio value="idk">{i18n('iStillDontUnderstand')}</Radio>
-										<Radio value="other">{i18n('other')}</Radio>
+										<Radio value="I still don't understand">
+											{i18n('iStillDontUnderstand')}
+										</Radio>
+										<Radio value="Other">{i18n('other')}</Radio>
 									</VStack>
 								</HStack>
 							</RadioGroup>
 						</FormControl>
 						<FormControl
-							isRequired={radioValue === 'other'}
+							isRequired={radioValue === 'Other'}
 							isInvalid={Boolean(data?.errors?.fieldErrors.feedback)}>
 							<Textarea
 								id="feedback"
@@ -245,6 +247,15 @@ const WhatYouNeedToKnowComponent = ({
 								id="assignmentKey"
 								name="assignmentKey"
 								value={assignmentKey}
+							/>
+						</FormControl>
+						{/*TODO: we need to add a story for Healthcare discipline*/}
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="discipline"
+								name="discipline"
+								value="Standard"
 							/>
 						</FormControl>
 
