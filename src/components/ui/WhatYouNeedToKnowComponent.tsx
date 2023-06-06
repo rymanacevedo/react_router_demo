@@ -140,7 +140,6 @@ const WhatYouNeedToKnowComponent = ({
 							height="12px"
 							variant="ghost"
 							w={'130px'}
-							marginTop="-60px"
 							rightIcon={<Pencil1Icon style={{ color: '#257CB5' }} />}
 							onClick={onToggle}>
 							<Text fontSize={'14px'} color={'ampSecondary.500'}>
