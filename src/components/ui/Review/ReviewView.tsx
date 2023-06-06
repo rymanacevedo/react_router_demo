@@ -5,27 +5,32 @@ import {
 	Container,
 	HStack,
 	Stack,
-	VStack,
 	Text,
+	VStack,
 } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
 	CurrentRoundAnswerOverLayData,
-	CurrentRoundQuestionListData,
 	Item,
 	ModuleData,
 	QuestionInFocus,
+	RoundData,
 	SelectedAnswer,
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import TestProgressBarMenu from '../TestProgressBarMenu';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
-import { json, LoaderFunction, useLoaderData } from 'react-router-dom';
+import {
+	json,
+	LoaderFunction,
+	useLoaderData,
+	useLocation,
+	useNavigate,
+} from 'react-router-dom';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
-import { useLocation, useNavigate } from 'react-router-dom';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';
 import { useTranslation } from 'react-i18next';
@@ -93,7 +98,7 @@ const ReviewView = () => {
 		location.state;
 	const navigate = useNavigate();
 	const { handleMenuOpen } = useProgressMenuContext();
-	const { moduleLearningUnitsData } = useQuizContext();
+	const { moduleLearningUnitsData, selectedCourseKey } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt] = useState<string>('');
 	const { fetchModuleQuestions } = useModuleContentService();
@@ -131,8 +136,7 @@ const ReviewView = () => {
 		reviewSeconds: 0,
 	});
 
-	const [currentRoundQuestionListData] =
-		useState<CurrentRoundQuestionListData>();
+	const [currentRoundQuestionListData] = useState<RoundData>();
 
 	const [currentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
@@ -339,6 +343,8 @@ const ReviewView = () => {
 					w="100%">
 					<WhatYouNeedToKnowComponent
 						isInReviewView={true}
+						courseKey={selectedCourseKey}
+						assignmentKey={assignmentKey}
 						questionInFocus={
 							renameAnswerAttribute(
 								transformedQuestion,
