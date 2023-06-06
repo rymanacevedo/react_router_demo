@@ -38,8 +38,9 @@ export default function TimedAssessment() {
 							backgroundColor="#D5D7D8"
 							boxShadow="md"
 							borderRadius={24}
-							px="72px"
-							py="44px"
+							maxWidth={480}
+							px="24px"
+							py="24px"
 							w={{ base: '100%', md: '50%' }}>
 							<Heading mb="16px" as="h2" fontSize="xl">
 								{i18n('practiceTestNavigation')}
