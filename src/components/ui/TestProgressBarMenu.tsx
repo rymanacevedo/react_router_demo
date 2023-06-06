@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	Box,
 	Button,
+	Flex,
 	Heading,
 	HStack,
 	Progress,
 	Text,
 	useMediaQuery,
 	VStack,
-	Flex,
 } from '@chakra-ui/react';
 import AmpMicroChip from '../../css/AmpMicroChip';
 import { useTranslation } from 'react-i18next';

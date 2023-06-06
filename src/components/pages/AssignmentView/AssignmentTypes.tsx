@@ -54,7 +54,7 @@ export type QuestionInFocus = {
 	reviewSeconds: number;
 	introductionRc: string | null;
 	explanationRc: string | null;
-	moreInformationRc?: string;
+	moreInformationRc: string | null;
 	publishedQuestionId: number | string;
 	answerList: {
 		answerRc: string;
