@@ -11,6 +11,7 @@ import {
 	FormControl,
 	Heading,
 	HStack,
+	Input,
 	Radio,
 	RadioGroup,
 	Stack,
@@ -26,16 +27,24 @@ import {
 	Pencil1Icon,
 } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import { useFetcher } from 'react-router-dom';
+import Overlay from './Overlay';
+import { ActionData } from '../login/LoginForm';
+import { QuestionFeedbackFields } from '../../routes/QuestionFeedback';
 
 const WhatYouNeedToKnowComponent = ({
 	questionInFocus,
+	courseKey,
+	assignmentKey,
 	onClick,
 	isModal,
 	isInReviewView,
 }: {
 	questionInFocus: QuestionInFocus;
+	courseKey: string | null;
+	assignmentKey: string;
 	onClick?: () => void;
 	isModal?: boolean;
 	isInReviewView?: boolean;
@@ -43,12 +52,16 @@ const WhatYouNeedToKnowComponent = ({
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
 	const [radioValue, setRadioValue] = useState('');
-	const [textAreaValue, setTextAreaValue] = useState('');
 	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+	const fetcher = useFetcher();
+	const data = fetcher.data as ActionData<QuestionFeedbackFields>;
+	const ref = useRef<HTMLFormElement>(null);
 
-	const submitHandler = async (e: React.FormEvent) => {
-		e.preventDefault();
-	};
+	useEffect(() => {
+		if (fetcher.state === 'idle' && fetcher.data?.response?.ok && ref.current) {
+			ref.current.reset();
+		}
+	}, [fetcher]);
 
 	return (
 		<Box
@@ -62,7 +75,7 @@ const WhatYouNeedToKnowComponent = ({
 			borderRadius={24}
 			padding={'34px 120px'}
 			maxW="1496">
-			<Heading as="h3">{i18n('whatYouNeedToKnow')}</Heading>
+			<Heading as="h2">{i18n('whatYouNeedToKnow')}</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
 				<ReviewContentRender content={questionInFocus?.explanationRc} />
 			</Stack>
@@ -158,65 +171,129 @@ const WhatYouNeedToKnowComponent = ({
 			</Collapse>
 			<Collapse in={isOpen} animateOpacity>
 				<Box
-					as="form"
-					onSubmit={submitHandler}
+					position="relative"
 					color="black"
 					bg="ampNeutral.50"
 					borderRadius={'12px'}
 					boxSizing="border-box"
 					p="24px"
 					marginTop={'16px'}>
-					<Heading fontWeight={'600'} fontSize={'21px'}>
+					<Heading as="h3" size="md">
 						{i18n('leaveFeedbackText')}
 					</Heading>
-					<FormControl isRequired={true}>
-						<RadioGroup
-							marginTop={'16px'}
-							onChange={setRadioValue}
-							value={radioValue}>
-							<HStack spacing={40}>
-								<VStack alignItems={'left'}>
-									<Radio value="disagree">
-										{i18n('IDisagreeWithTheAnswer')}
-									</Radio>
-									<Radio value="qImprove">
-										{i18n('thisQuestionCouldBeImproved')}
-									</Radio>
-								</VStack>
-								<VStack alignItems={'left'}>
-									<Radio value="idk">{i18n('iStillDontUnderstand')}</Radio>
-									<Radio value="other">{i18n('other')}</Radio>
-								</VStack>
-							</HStack>
-						</RadioGroup>
-					</FormControl>
-					<FormControl isRequired={radioValue === 'other'}>
-						<Textarea
-							maxLength={500}
-							bg="ampWhite"
-							marginTop="16px"
-							minHeight="150px"
-							value={textAreaValue}
-							placeholder={i18n('placeHolderText')}
-							onChange={(e) => {
-								setTextAreaValue(e.target.value);
-							}}
-						/>
-					</FormControl>
+					{fetcher.state === 'idle' && data ? (
+						data?.response?.ok ? (
+							<Overlay
+								isOpen={fetcher.data?.response?.ok}
+								text={i18n('thankYouForYourFeedback')}
+							/>
+						) : data?.errors ? (
+							<Text>{fetcher.data?.errors}</Text>
+						) : null
+					) : null}
+					<fetcher.Form ref={ref} method="POST" action="/feedback">
+						<FormControl isRequired>
+							<RadioGroup
+								id="feedbackType"
+								name="feedbackType"
+								marginTop={'16px'}
+								onChange={setRadioValue}
+								value={radioValue}>
+								<HStack spacing={40}>
+									<VStack alignItems={'left'}>
+										<Radio value="I disagree with the answer">
+											{i18n('IDisagreeWithTheAnswer')}
+										</Radio>
+										<Radio value="This question could be improved">
+											{i18n('thisQuestionCouldBeImproved')}
+										</Radio>
+									</VStack>
+									<VStack alignItems={'left'}>
+										<Radio value="I still don't understand">
+											{i18n('iStillDontUnderstand')}
+										</Radio>
+										<Radio value="Other">{i18n('other')}</Radio>
+									</VStack>
+								</HStack>
+							</RadioGroup>
+						</FormControl>
+						<FormControl
+							isRequired={radioValue === 'Other'}
+							isInvalid={Boolean(fetcher.data?.errors?.fieldErrors.feedback)}>
+							<Textarea
+								id="feedback"
+								name="feedback"
+								maxLength={500}
+								bg="ampWhite"
+								marginTop="16px"
+								minHeight="150px"
+								placeholder={'Type your comments here (500 character limit).'}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="id"
+								name="id"
+								value={questionInFocus.publishedQuestionId}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="questionVersionId"
+								name="questionVersionId"
+								value={questionInFocus.questionVersionId}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="questionUid"
+								name="questionUid"
+								value={questionInFocus.publishedQuestionAuthoringKey}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="courseKey"
+								name="courseKey"
+								value={courseKey ?? ''}
+							/>
+						</FormControl>
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="assignmentKey"
+								name="assignmentKey"
+								value={assignmentKey}
+							/>
+						</FormControl>
+						{/*TODO: we need to add a story for Healthcare discipline*/}
+						<FormControl hidden={true}>
+							<Input
+								readOnly={true}
+								id="discipline"
+								name="discipline"
+								value="Standard"
+							/>
+						</FormControl>
 
-					<ButtonGroup width="100%" marginTop={'16px'}>
-						<Button variant="ampSolid" type="submit">
-							<Text>{i18n('submitBtnText')}</Text>
-						</Button>
-						<Button
-							variant="ampOutline"
-							onClick={() => {
-								onToggle();
-								setRadioValue('');
-							}}>
-							<Text>{i18n('cancelBtnText')}</Text>
-						</Button>
-					</ButtonGroup>
+						<ButtonGroup width="100%" marginTop={'16px'}>
+							<Button type="submit" variant="ampSolid">
+								<Text>{i18n('submitBtnText')}</Text>
+							</Button>
+							<Button
+								variant="ampOutline"
+								onClick={() => {
+									onToggle();
+									setRadioValue('');
+								}}>
+								<Text>{i18n('cancelBtnText')}</Text>
+							</Button>
+						</ButtonGroup>
+					</fetcher.Form>
 				</Box>
 			</Collapse>
 		</Box>

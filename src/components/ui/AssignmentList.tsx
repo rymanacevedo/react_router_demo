@@ -44,7 +44,7 @@ type AssignmentListDataType = {
 	};
 };
 type SelectedCourseKeyType = {
-	selectedCourseKey: string;
+	selectedCourseKey: string | null;
 };
 
 const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {

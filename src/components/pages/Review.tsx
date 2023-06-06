@@ -1,13 +1,13 @@
 import {
 	Box,
-	Container,
-	Stack,
-	Heading,
-	Text,
 	Button,
+	Container,
+	Heading,
 	HStack,
-	VStack,
 	Spacer,
+	Stack,
+	Text,
+	VStack,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +23,9 @@ import ReviewQuestions from '../ui/Review/ReviewQuestions';
 import {
 	ApiRes,
 	Item,
+	LearningUnit,
 	LearningUnitQuestion,
 	ModuleData,
-	ModuleDataLearningUnit,
 } from './AssignmentView/AssignmentTypes';
 import { useQuizContext } from '../../hooks/useQuizContext';
 
@@ -95,7 +95,7 @@ const Review = () => {
 				populateQuestions(obj[prop]);
 			}
 			if (Array.isArray(obj[prop]) && prop === 'learningUnits') {
-				obj[prop].forEach((unit: ModuleDataLearningUnit) => {
+				obj[prop].forEach((unit: LearningUnit) => {
 					unit.questions.forEach((question) => {
 						questions.push(question);
 					});

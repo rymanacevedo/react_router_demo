@@ -28,7 +28,9 @@ import { QuizProvider } from './hooks/useQuizContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
 import LearningView from './components/pages/LearningView';
-import AssignmentReviewView from './components/pages/AssignmentReviewView/AssignmentReviewView';
+import AssignmentReviewView, {
+	assignmentReviewLoader,
+} from './components/pages/AssignmentReviewView/AssignmentReviewView';
 import ModuleIntroView from './components/pages/ModuleIntroView';
 import Review from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
@@ -41,6 +43,7 @@ import TimedAssessment, {
 	timedAssessmentLoader,
 } from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
+import { questionFeedbackAction } from './routes/QuestionFeedback';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -56,6 +59,7 @@ const routesJSX = (
 			loader={keepAliveLoader}
 			action={keepAliveAction}
 		/>
+		<Route path="/feedback" action={questionFeedbackAction} />
 		<Route path="/authenticate" element={<Authenticate />} />
 		<Route
 			shouldRevalidate={() => false}
@@ -125,6 +129,7 @@ const routesJSX = (
 			<Route path="learning" element={<LearningView />} />
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
+				loader={assignmentReviewLoader}
 				element={<AssignmentReviewView />}
 			/>
 			<Route

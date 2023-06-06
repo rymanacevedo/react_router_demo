@@ -62,6 +62,7 @@ export const AnswerListDataSchema = z.object({
 	versionId: z.number(),
 	answerRc: z.string(),
 	optionRc: z.string(),
+	isCorrect: z.boolean(),
 });
 export const QuestionSchema = z.object({
 	self: z.string(),
@@ -72,7 +73,7 @@ export const QuestionSchema = z.object({
 	introductionRc: z.any(),
 	explanationRc: z.any(),
 	name: z.string(),
-	hasModalIntroduction: z.boolean(),
+	hasModuleIntroduction: z.boolean(),
 	answers: z.array(AnswerListDataSchema),
 	questionType: z.string(),
 	learningUnitId: z.number(),

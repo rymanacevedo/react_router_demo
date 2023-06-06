@@ -38,19 +38,27 @@ const fetchCallbackGet = async <T extends unknown>(
 export const fetchDataPost = async <T extends unknown>(
 	url: string,
 	body: any,
+	sessionKey?: string,
 ): Promise<{ data: T; response: Response }> => {
+	const headers: HeadersInit = {
+		'Content-Type': 'application/json',
+	};
+
+	if (sessionKey) {
+		headers.Authorization = `Basic ${window.btoa(
+			`${sessionKey}:someotherstring`,
+		)}`;
+	}
+
 	const response = await fetch(url, {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
+		headers,
 		body: JSON.stringify(body),
 	});
 
 	const data = await response.json();
 	return { data, response };
 };
-
 export const fetchDataPut = async <T extends unknown>(
 	url: string,
 	body: any,
@@ -82,6 +90,12 @@ export const authenticatedFetch = async <T extends unknown>(
 			return fetchDataPut<T>(newUrl, body, sessionKey);
 		}
 		return fetchDataPut<T>(`${API}${url}`, body, sessionKey);
+	} else if (method === 'POST') {
+		if (isAbsoluteUrl(url)) {
+			const newUrl = replaceOrigin(url, API);
+			return fetchDataPost<T>(newUrl, body, sessionKey);
+		}
+		return fetchDataPost<T>(`${API}${url}`, body);
 	} else if (method === 'GET') {
 		// default to GET method
 		if (isAbsoluteUrl(url)) {
