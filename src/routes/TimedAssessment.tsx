@@ -41,7 +41,7 @@ export default function TimedAssessment() {
 							px="72px"
 							py="44px"
 							w={{ base: '100%', md: '50%' }}>
-							<Heading as="h2" fontSize="xl">
+							<Heading mb="16px" as="h2" fontSize="xl">
 								{i18n('practiceTestNavigation')}
 							</Heading>
 							<Divider marginTop="4px" marginBottom="4px" />
