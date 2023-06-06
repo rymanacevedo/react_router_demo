@@ -15,23 +15,25 @@ const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 
 		if (!containerNode) return;
 
-		containerNode.innerHTML = content;
+		if (content) {
+			containerNode.innerHTML = content;
 
-		const imgElements = containerNode.getElementsByTagName('img');
-		for (let i = 0; i < imgElements.length; i++) {
-			const imgElement = imgElements[i];
-			imgElement.style.height = '50%';
-			imgElement.style.width = '50%';
-			let src = imgElement.getAttribute('src');
+			const imgElements = containerNode.getElementsByTagName('img');
+			for (let i = 0; i < imgElements.length; i++) {
+				const imgElement = imgElements[i];
+				imgElement.style.height = '50%';
+				imgElement.style.width = '50%';
+				let src = imgElement.getAttribute('src');
 
-			// For rendering in local
-			if (src && isLocal && src.includes('amp_resource')) {
-				src = `${API}/amp/${src}`;
-				imgElement.setAttribute('src', src);
-			} else if (src && src.includes('amp_resource')) {
-				// For rendering in lower environments
-				src = `${window.location.origin}/amp/${src}`;
-				imgElement.setAttribute('src', src);
+				// For rendering in local
+				if (src && isLocal && src.includes('amp_resource')) {
+					src = `${API}/amp/${src}`;
+					imgElement.setAttribute('src', src);
+				} else if (src && src.includes('amp_resource')) {
+					// For rendering in lower environments
+					src = `${window.location.origin}/amp/${src}`;
+					imgElement.setAttribute('src', src);
+				}
 			}
 		}
 	}, [content]);
