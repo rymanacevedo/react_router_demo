@@ -21,6 +21,7 @@ export type MultipleCorrectProps = {
 	clearSelectionState: (
 		value: ((prevState: boolean) => boolean) | boolean,
 	) => void;
+	clearSelectionFunction: () => void;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
 	onClick: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
@@ -35,6 +36,7 @@ const MultipleCorrect = ({
 	updateSelectedAnswersState,
 	clearSelection,
 	clearSelectionState,
+	clearSelectionFunction,
 	currentRoundAnswerOverLayData,
 	onClick,
 	setIDKResponse,
@@ -72,6 +74,10 @@ const MultipleCorrect = ({
 			setTotalAnswerConfidence('Sure');
 			setSubmitted(true);
 		}
+	};
+
+	const handleClearSelection = () => {
+		return clearSelectionFunction();
 	};
 
 	useEffect(() => {
@@ -145,6 +151,13 @@ const MultipleCorrect = ({
 					w="150px"
 					isDisabled={Boolean(!selectedAnswers.length)}>
 					<Text>{i18n('iAmSure')}</Text>
+				</Button>
+				<Button
+					onClick={handleClearSelection}
+					variant="link"
+					w="150px"
+					isDisabled={Boolean(!selectedAnswers.length)}>
+					<Text>{i18n('clearSelectionPlural')}</Text>
 				</Button>
 			</HStack>
 		</Box>
