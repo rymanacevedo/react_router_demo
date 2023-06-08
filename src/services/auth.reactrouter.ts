@@ -320,3 +320,21 @@ export const getForgotUsernameData = async (fields: ForgotUsernameFields) => {
 	};
 	return fetchDataPost<any>(url, forgotUserBody);
 };
+
+export const getSignupData = async (
+	userAltKey: string,
+	accountUid: string,
+	username: string,
+	password: string,
+	captchaResp: string,
+) => {
+	const url = `${API}/v2/users/${userAltKey}/initial-credentials`;
+	const signupBody = {
+		accountUid,
+		username,
+		password,
+		captchaResp,
+	};
+
+	return fetchDataPost<any>(url, signupBody);
+};

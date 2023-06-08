@@ -12,9 +12,13 @@ const useSignupDataService = () => {
 		userAltKey,
 		username,
 		password,
-		captchaResp = null,
+		captchaResp,
 	) => {
 		try {
+			if (!captchaResp) {
+				captchaResp = null;
+			}
+
 			setLoading(true);
 
 			const signupBody = {

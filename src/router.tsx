@@ -20,7 +20,7 @@ import ForgotPassword, {
 	forgotPasswordAction,
 } from './components/login/ForgotPassword';
 import ForgotUsername, { forgotUsernameAction } from './routes/ForgotUsername';
-import SignUp from './components/login/SignUp';
+import SignUp, { signupAction, signupLoader } from './components/login/SignUp';
 import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
@@ -88,7 +88,12 @@ const routesJSX = (
 				element={<ForgotUsername />}
 			/>
 			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
-			<Route path="signup" element={<SignUp />} />
+			<Route
+				path="signup"
+				action={signupAction}
+				loader={signupLoader}
+				element={<SignUp />}
+			/>
 			<Route action={registerAction} path="register" element={<Register />} />
 			<Route path="success" loader={successLoader} element={<Success />} />
 		</Route>
