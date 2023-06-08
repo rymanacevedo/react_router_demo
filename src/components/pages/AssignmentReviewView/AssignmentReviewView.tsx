@@ -624,7 +624,6 @@ const AssignmentReviewView = () => {
 				return '';
 			}
 		}
-		// Return undefined when conditions are not met
 		return 'none';
 	};
 
