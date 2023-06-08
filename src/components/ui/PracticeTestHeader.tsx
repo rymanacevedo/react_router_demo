@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, Heading } from '@chakra-ui/react';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
 
@@ -19,9 +19,10 @@ const PraticeTestHeader = () => {
 				base: 'column',
 				md: 'row',
 			}}>
-			<Text color="ampSecondaryText" fontSize="lg">
+			<Heading as="h1" color="ampSecondaryText" fontSize="lg">
+				{/* //TO-DO: get module name from parent once it is available. Also, how do we translate module names and other client generated strings? */}
 				{i18n('practiceTest')}: The Science of Learning
-			</Text>
+			</Heading>
 			<Flex direction="column" align={{ base: 'flex-start', md: 'flex-end' }}>
 				<Text fontSize="xs" color={'ampPrimary.600'}>
 					{i18n('timeLeft')}
