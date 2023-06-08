@@ -624,8 +624,7 @@ const AssignmentReviewView = () => {
 				return '';
 			}
 		}
-		// Return undefined when conditions are not met
-		return undefined;
+		return 'none';
 	};
 
 	const reviewButtonsConditionRender = () => {
