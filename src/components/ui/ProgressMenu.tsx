@@ -9,7 +9,6 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import ProgressMessageComponent from './ProgressMessageComponent';
-import { LapTimerIcon } from '@radix-ui/react-icons';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
 import {
@@ -143,16 +142,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 					<Text fontSize={'12px'} color={'ampWhite'}>
 						{i18n('sessionTimer')}
 					</Text>
-					<HStack>
-						<LapTimerIcon
-							style={{
-								color: 'white',
-								height: '19px',
-								width: '19px',
-							}}
-						/>
-						<CountUpTimer seconds={seconds} />
-					</HStack>
+					<CountUpTimer seconds={seconds} color={'ampWhite'} boxSize={5} />
 				</Box>
 			</VStack>
 		</SlideFade>
