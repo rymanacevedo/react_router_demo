@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Fade, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Divider, Fade, HStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -126,38 +126,35 @@ const MultipleCorrect = ({
 				</Fade>
 			)}
 			<Divider marginTop="43px" />
-			<HStack
-				justifyContent={'space-between'}
-				display={'flex'}
-				marginTop={'12px'}>
+			<HStack marginTop={3} spacing={6} w="100%">
 				<Button
 					onClick={() => handleSubmission('IDK')}
 					variant={'ampOutline'}
-					w="150px"
-					isDisabled={Boolean(selectedAnswers.length)}>
-					<Text>{i18n('iDontKnow')}</Text>
+					isDisabled={Boolean(selectedAnswers.length)}
+					w="140px">
+					{i18n('iDontKnow')}
 				</Button>
 				<Button
 					onClick={() => handleSubmission('UNSURE')}
 					variant={'ampSolid'}
-					w="150px"
 					bg="ampSecondary.500"
-					isDisabled={Boolean(!selectedAnswers.length)}>
-					<Text>{i18n('iAmUnsure')}</Text>
+					isDisabled={Boolean(!selectedAnswers.length)}
+					w="132px">
+					{i18n('iAmUnsure')}
 				</Button>
 				<Button
 					onClick={() => handleSubmission('SURE')}
 					variant={'ampSolid'}
-					w="150px"
-					isDisabled={Boolean(!selectedAnswers.length)}>
-					<Text>{i18n('iAmSure')}</Text>
+					isDisabled={Boolean(!selectedAnswers.length)}
+					w="114px">
+					{i18n('iAmSure')}
 				</Button>
 				<Button
 					onClick={handleClearSelection}
 					variant="link"
-					w="150px"
-					isDisabled={Boolean(!selectedAnswers.length)}>
-					<Text>{i18n('clearSelectionPlural')}</Text>
+					isDisabled={Boolean(!selectedAnswers.length)}
+					w="114px">
+					{i18n('clearSelectionPlural')}
 				</Button>
 			</HStack>
 		</Box>
