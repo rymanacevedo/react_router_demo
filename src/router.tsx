@@ -87,7 +87,7 @@ const routesJSX = (
 				path="forgot-username"
 				element={<ForgotUsername />}
 			/>
-			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
+			<Route path="signup/:abbrevName/:userAltKey" loader={} />
 			<Route
 				path="signup"
 				action={signupAction}

@@ -71,7 +71,6 @@ export const signupLoader: LoaderFunction = async () => {
 	// const cookieHeader = request.headers.get('Cookie');
 	// const hasUserVisitedPage = await hasUserVisited.parse(cookieHeader);
 	// TODO: deal with session_key in cookies
-
 	// return json(hasUserVisitedPage);
 	return null;
 };
