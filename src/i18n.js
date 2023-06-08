@@ -268,6 +268,7 @@ const resources = {
 			//////////////////////////////////////////////
 			practiceTestNavigation: 'Practice test navigation',
 			finishPracticeTest: 'Finish practice test',
+			practiceTest: 'Practice Test',
 			//////////////////////////////////////////////
 			//   ReviewView.tsx
 			//////////////////////////////////////////////

@@ -20,7 +20,7 @@ const PraticeTestHeader = () => {
 				md: 'row',
 			}}>
 			<Text color="ampSecondaryText" fontSize="lg">
-				Practice Test: The Science of Learning
+				{i18n('practiceTest')}: The Science of Learning
 			</Text>
 			<Flex direction="column" align={{ base: 'flex-start', md: 'flex-end' }}>
 				<Text fontSize="xs" color={'ampPrimary.600'}>
