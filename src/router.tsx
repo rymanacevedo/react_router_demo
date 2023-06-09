@@ -44,6 +44,8 @@ import TimedAssessment, {
 } from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
+// import { preSignUpLoader } from './routes/SignUpLoader';
+import Test from './components/login/Test';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -77,6 +79,7 @@ const routesJSX = (
 				path="mfa"
 				element={<MultiFactor />}
 			/>
+			<Route path="test" element={<Test />} />
 			<Route
 				path="forgot-password"
 				element={<ForgotPassword />}
@@ -87,7 +90,12 @@ const routesJSX = (
 				path="forgot-username"
 				element={<ForgotUsername />}
 			/>
-			<Route path="signup/:abbrevName/:userAltKey" loader={} />
+			{/* <Route
+				path="signup/:abbrevName/:userAltKey"
+				loader={preSignUpLoader}
+				action={signupAction}
+				element={<SignUp />}
+			/> */}
 			<Route
 				path="signup"
 				action={signupAction}

@@ -6,8 +6,10 @@ import {
 	LoaderFunction,
 	useNavigate,
 	useOutletContext,
-	useParams,
+	// useParams,
 	redirect,
+	useLoaderData,
+	json,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -35,6 +37,7 @@ import { AuthLayoutContext } from './AuthLayout';
 import { z } from 'zod';
 import { badRequest } from '../../services/utils';
 import { getSignupData } from '../../services/auth.reactrouter';
+// import { AccountInformation } from '../../routes/SignUpLoader';
 
 export const SignupFieldsSchema = z
 	.object({
@@ -68,11 +71,13 @@ export const SignupFieldsSchema = z
 type SignupFields = z.infer<typeof SignupFieldsSchema>;
 
 export const signupLoader: LoaderFunction = async () => {
+	const abbrevName = localStorage.getItem('abbrevName');
+	const userAltKey = localStorage.getItem('userAltKey');
 	// const cookieHeader = request.headers.get('Cookie');
 	// const hasUserVisitedPage = await hasUserVisited.parse(cookieHeader);
 	// TODO: deal with session_key in cookies
 	// return json(hasUserVisitedPage);
-	return null;
+	return json({ abbrevName: abbrevName, userAltKey: userAltKey });
 };
 
 export const signupAction: ActionFunction = async ({
@@ -152,19 +157,21 @@ export const signupAction: ActionFunction = async ({
 	}
 	// session.flash('successMessageToShow', 'signUpSuccess');
 	// TODO: deal with success
-	return redirect('/success');
+	return redirect('/success?sucessMessageToShow=signUpSuccess');
 };
 
 function SignUp(): JSX.Element {
-	const context = useOutletContext<AuthLayoutContext>();
-	const params = useParams<{ userAltKey: string }>();
+	// const params = useParams<{ userAltKey: string }>();
 	const nav = useNavigate();
 	const { t: i18n } = useTranslation();
+	const { userAltKey, abbrevName } = useLoaderData() as any;
+	const context = useOutletContext<AuthLayoutContext>();
+	console.log(context);
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [confirmPassword, setConfirmPassword] = useState<string>('');
 	const [success, setSuccess] = useState<boolean>(false);
-	const [userAltKey, setUserAltKey] = useState<string>('');
+	// const [userAltKey, setUserAltKey] = useState<string>('');
 	const [captchaRes, setCaptchaRes] = useState<string | null>(null);
 	const [showForm, setShowForm] = useState<boolean>(true);
 	const [verified, setVerified] = useState<boolean>(false);
@@ -248,7 +255,7 @@ function SignUp(): JSX.Element {
 	};
 
 	useEffect(() => {
-		setUserAltKey(params.userAltKey ?? '');
+		// setUserAltKey(params.userAltKey ?? '');
 		nav('/signup', { replace: true });
 	}, []);
 
@@ -403,7 +410,7 @@ function SignUp(): JSX.Element {
 								as={ReactRouterLink}
 								to={{
 									pathname: '/login',
-									search: `?abbrevName=${context.abbrevNameState}`,
+									search: `?abbrevName=${abbrevName}`,
 								}}
 								color="ampSecondary.500"
 								textDecoration="underline">

@@ -8,8 +8,11 @@ export const AccountInformationSchema = z.object({
 });
 
 export type AccountInformation = z.infer<typeof AccountInformationSchema>;
-export const loader: LoaderFunction = async ({ params }) => {
-	const { abbrevName, userAltKey } = params as AccountInformation;
 
-	return redirect(`/signup?abbrevName=${abbrevName}`, {});
+export const preSignUpLoader: LoaderFunction = async ({ params }) => {
+	const { userAltKey, abbrevName } = params as AccountInformation;
+	localStorage.setItem('abbrevName', abbrevName);
+	localStorage.setItem('userAltKey', userAltKey);
+
+	return redirect('/signup');
 };
