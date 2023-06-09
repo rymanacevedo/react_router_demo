@@ -20,6 +20,7 @@ const PraticeTestHeader = () => {
 				base: 'column',
 				md: 'row',
 			}}>
+			{/* //TO-DO: investigate header sizing  */}
 			<Heading as="h1" color="ampSecondaryText" fontSize="lg">
 				{/* //TO-DO: get module name from parent once it is available. Also, how do we translate module names and other client generated strings? */}
 				{i18n('practiceTest')}: The Science of Learning
