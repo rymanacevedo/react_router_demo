@@ -182,6 +182,7 @@ const resources = {
 			//   LearningView.tsx
 			//////////////////////////////////////////////
 			clearSelection: 'Clear selection',
+			clearSelectionPlural: 'Clear selections',
 			nextQ: 'Next Question',
 			completeMod: "Congratulations, you've completed this module!",
 			selectAllthatApply: 'Select all that apply',
