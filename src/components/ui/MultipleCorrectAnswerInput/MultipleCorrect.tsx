@@ -127,6 +127,7 @@ const MultipleCorrect = ({
 			)}
 			<Divider marginTop="43px" />
 			<HStack marginTop={3} spacing={6} w="100%">
+				{/* //TO-DO: investigate buttons shifting when specific widths removed */}
 				<Button
 					onClick={() => handleSubmission('IDK')}
 					variant={'ampOutline'}
