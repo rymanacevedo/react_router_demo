@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard from '../components/ui/PracticeTestCard';
+import PracticeTestHeader from '../components/ui/PracticeTestHeader';
 
 export const timedAssessmentLoader: LoaderFunction = async () => {
 	return null;
@@ -26,7 +27,7 @@ export default function TimedAssessment() {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<h1>Timed Assessment</h1>
+				<PracticeTestHeader />
 				<HStack justify="center" align="space-between">
 					<Stack
 						w="100%"
