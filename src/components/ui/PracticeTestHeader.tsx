@@ -10,9 +10,10 @@ const PraticeTestHeader = () => {
 			borderBottom={'1px'}
 			borderBottomColor="ampPrimary.200"
 			width="100%"
-			height={20}
+			height={{ base: 28, md: 20 }}
 			bg={'transparent'}
 			px={6}
+			py={2}
 			justify="space-between"
 			align={{ base: 'flex-start', md: 'center' }}
 			direction={{
