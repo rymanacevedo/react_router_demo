@@ -695,7 +695,8 @@ const AssignmentReviewView = () => {
 					padding="0"
 					maxWidth={'100vw'}
 					overflowY={'hidden'}
-					overflowX={'hidden'}>
+					overflowX={'hidden'}
+					bgColor="ampNeutral.200">
 					<FireProgressToast
 						textPrompt={textPrompt}
 						expandProgressMenu={expandProgressMenu}
