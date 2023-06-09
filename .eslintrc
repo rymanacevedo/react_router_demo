@@ -5,8 +5,12 @@
 		"project": "./tsconfig.json"
 	},
 	"ignorePatterns": ["src/i18n.js"],
-	"plugins": ["import", "prettier"],
+	"plugins": ["import", "prettier", "unused-imports"],
 	"rules": {
+		"unused-imports/no-unused-imports": "error",
+		"unused-imports/no-unused-vars": "warn",
+		"import/no-unresolved": "off",
+		"import/named": "off",
 		"semi": ["error", "always"],
 		"quotes": [
 			"error",
@@ -15,7 +19,8 @@
 				"avoidEscape": true
 			}
 		],
-		"no-unused-vars": "error",
+		"no-unused-vars": "off",
+		"import/no-unused-modules": "error",
 		"no-console": "warn",
 		"react/jsx-filename-extension": [
 			1,
