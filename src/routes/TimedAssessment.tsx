@@ -11,13 +11,60 @@ import {
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard from '../components/ui/PracticeTestCard';
 import PracticeTestHeader from '../components/ui/PracticeTestHeader';
+import { requireUser } from '../utils/user';
+import {
+	getCurrentRoundTimedAssessment,
+	getFullModuleWithQuestions,
+} from '../services/learning';
+import { getSubAccount } from '../services/utils';
+import { useLoaderData } from 'react-router-dom';
+import {
+	ModuleData,
+	QuestionInFocus,
+	RoundData,
+} from '../components/pages/AssignmentView/AssignmentTypes';
+import { AssignmentData } from '../lib/validator';
+import RichContentComponent from '../components/ui/RichContentComponent';
+import { useEffect, useState } from 'react';
+import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 
-export const timedAssessmentLoader: LoaderFunction = async () => {
-	return null;
+export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
+	const user = requireUser();
+	const assignmentUid = params.assignmentUid!;
+	const account = getSubAccount(user);
+	const { assignmentData, moduleData, moduleInfoAndQuestions } =
+		await getFullModuleWithQuestions(user, account, assignmentUid);
+	const { data: roundData } = await getCurrentRoundTimedAssessment(
+		user,
+		account,
+		assignmentUid,
+	);
+	return { assignmentData, moduleData, moduleInfoAndQuestions, roundData };
 };
 
 export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
+	const [questionInFocus, setQuestionInFocus] =
+		useState<QuestionInFocus | null>(null);
+	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
+		assignmentData: AssignmentData;
+		moduleData: ModuleData;
+		moduleInfoAndQuestions: ModuleData;
+		roundData: RoundData;
+	};
+
+	const handleNavigation = (question: QuestionInFocus) => {
+		setQuestionInFocus(question);
+	};
+
+	useEffect(() => {
+		if (!questionInFocus) {
+			setQuestionInFocus(
+				findQuestionInFocus(moduleInfoAndQuestions, roundData, false, false),
+			);
+		}
+	}, [questionInFocus]);
+
 	return (
 		<main id="timed-assessment">
 			<Container
@@ -43,18 +90,28 @@ export default function TimedAssessment() {
 							px="24px"
 							py="24px"
 							w={{ base: '100%', md: '50%' }}>
+							{/*TODO: spacing from style guide*/}
 							<Heading mb="16px" as="h2" fontSize="xl">
 								{i18n('practiceTestNavigation')}
 							</Heading>
 							<Divider marginTop="4px" marginBottom="4px" />
-							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((questionNumber) => (
-								<PracticeTestCard
-									size="sm"
-									variant="multiPartCard"
-									values={['unselected', 'selected']}
-									text={questionNumber.toString()}
-								/>
-							))}
+							{roundData.questionList.map((question, number) => {
+								return (
+									<PracticeTestCard
+										key={question.publishedQuestionAuthoringKey}
+										size="sm"
+										variant="multiPartCard"
+										values={
+											question.publishedQuestionAuthoringKey ===
+											questionInFocus?.publishedQuestionAuthoringKey
+												? ['selected', 'unselected']
+												: ['unselected']
+										}
+										text={(number + 1).toString()}
+										onClick={() => handleNavigation(question)}
+									/>
+								);
+							})}
 
 							<Button
 								display="block"
@@ -67,20 +124,29 @@ export default function TimedAssessment() {
 
 						{/*QuestionArea*/}
 						<Box
-							backgroundColor="white"
+							backgroundColor="ampWhite"
 							boxShadow="md"
 							borderRadius={24}
 							px="72px"
 							py="44px"
-							w={{ base: '100%', md: '50%' }}></Box>
+							w={{ base: '100%', md: '50%' }}>
+							<Heading as="h2">{i18n('question')}</Heading>
+							<RichContentComponent
+								content={
+									questionInFocus ? questionInFocus.introductionRc : null
+								}
+							/>
+						</Box>
 						{/*<AnswerArea*/}
 						<Box
-							backgroundColor="white"
+							backgroundColor="ampWhite"
 							boxShadow="md"
 							borderRadius={24}
 							px="72px"
 							py="44px"
-							w={{ base: '100%', md: '50%' }}></Box>
+							w={{ base: '100%', md: '50%' }}>
+							<Heading as="h2">{i18n('answer')}</Heading>
+						</Box>
 					</Stack>
 				</HStack>
 			</Container>

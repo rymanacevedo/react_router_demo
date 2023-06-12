@@ -153,7 +153,11 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 
 	const handleAssignmentClick = (assignment: Assignment) => () => {
 		if (assignment.assignmentType === 'TimedAssessment') {
-			navigate(`timedAssessment/${assignment.assignmentUid}`);
+			if (assignment.status === 'COMPLETED') {
+				setRefreshIsOpen(assignment.assignmentKey);
+			} else {
+				navigate(`timedAssessment/${assignment.assignmentUid}`);
+			}
 		} else if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {
 				setRefreshIsOpen('');
