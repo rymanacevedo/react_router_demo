@@ -1,39 +1,42 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import {
 	ActionFunction,
 	ActionFunctionArgs,
-	Link as ReactRouterLink,
-	LoaderFunction,
-	// useParams,
 	redirect,
+	useActionData,
+	Form,
+	useOutletContext,
+	LoaderFunction,
 	useLoaderData,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import {
-	Alert,
-	AlertIcon,
 	Button,
-	Center,
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
 	Heading,
 	Input,
-	Link,
 	UnorderedList,
 	ListItem,
 	Text,
 	VStack,
-	RequiredIndicator,
 } from '@chakra-ui/react';
 
 import ReCAPTCHA from 'react-google-recaptcha';
 import { z } from 'zod';
 import { badRequest } from '../../services/utils';
 import { getSignupData } from '../../services/auth.reactrouter';
-import { BootstrapData } from '../../App';
-// import { AccountInformation } from '../../routes/SignUpLoader';
+import { AuthLayoutContext } from './AuthLayout';
+import AlertMessage from '../ui/AlertMessage';
+
+type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
+	formErrors: U[];
+	fieldErrors: {
+		[P in keyof z.infer<T>]?: U[];
+	};
+};
 
 export const SignupFieldsSchema = z
 	.object({
@@ -47,7 +50,6 @@ export const SignupFieldsSchema = z
 		}),
 	})
 	.superRefine(({ confirmPassword, password }, ctx) => {
-		// setErrorMessage(i18n('passwordsDoNotMatch'));
 		if (confirmPassword !== password) {
 			ctx.addIssue({
 				code: 'custom',
@@ -65,13 +67,11 @@ export const SignupFieldsSchema = z
 	});
 
 type SignupFields = z.infer<typeof SignupFieldsSchema>;
+type SignupFieldsErrors = InferSafeParseErrors<typeof SignupFieldsSchema>;
 
-export const signupLoader: LoaderFunction = async () => {
-	// const cookieHeader = request.headers.get('Cookie');
-	// const hasUserVisitedPage = await hasUserVisited.parse(cookieHeader);
-	// TODO: deal with session_key in cookies
-	// return json(hasUserVisitedPage);
-	// return json({ abbrevName: abbrevName, userAltKey: userAltKey });
+export type ActionData<T> = {
+	fields: T;
+	errors?: T extends SignupFields ? SignupFieldsErrors : any;
 };
 
 export const signupAction: ActionFunction = async ({
@@ -79,7 +79,6 @@ export const signupAction: ActionFunction = async ({
 }: ActionFunctionArgs) => {
 	const clonedData = request.clone();
 	const formData = await clonedData.formData();
-	// const session = await getSession(request.headers.get('Cookie'));
 	const fields = Object.fromEntries(formData.entries()) as SignupFields;
 	const result = SignupFieldsSchema.safeParse({
 		username: fields.username,
@@ -108,7 +107,6 @@ export const signupAction: ActionFunction = async ({
 	const items = data.items;
 
 	if (data.errorMessage && data.errorMessage === 'username is not available') {
-		//TODO: setErrorMessage(i18n('usernameUnavailable'));
 		return badRequest({
 			fields,
 			errors: {
@@ -149,278 +147,139 @@ export const signupAction: ActionFunction = async ({
 			},
 		});
 	}
-	// session.flash('successMessageToShow', 'signUpSuccess');
-	// TODO: deal with success
-	return redirect('/success?sucessMessageToShow=signUpSuccess');
+	localStorage.removeItem('abbrevName');
+	localStorage.removeItem('userAltKey');
+	return redirect('/success?successMessageToShow=signUp');
 };
 
-function SignUp(): JSX.Element {
-	const abbrevName = localStorage.getItem('abbrevName');
+export const signupLoader: LoaderFunction = async () => {
 	const userAltKey = localStorage.getItem('userAltKey');
-	// const params = useParams<{ userAltKey: string }>();
-	// const nav = useNavigate();
+	if (userAltKey) {
+		return { userAltKey };
+	}
+
+	throw new Error('userAltKey not found');
+};
+
+function SignUp() {
 	const { t: i18n } = useTranslation();
-	// const { userAltKey, abbrevName } = useLoaderData() as any;
-	console.log(userAltKey);
-	console.log(abbrevName);
-	// const context = useL<AuthLayoutContext>();
-	const context = useLoaderData() as BootstrapData | any;
-	const [username, setUsername] = useState<string>('');
-	const [password, setPassword] = useState<string>('');
-	const [confirmPassword, setConfirmPassword] = useState<string>('');
-	const [success, setSuccess] = useState<boolean>(false);
-	// const [userAltKey, setUserAltKey] = useState<string>('');
-	const [captchaRes, setCaptchaRes] = useState<string | null>(null);
-	const [showForm, setShowForm] = useState<boolean>(true);
-	const [verified, setVerified] = useState<boolean>(false);
-	const [errorMessage, setErrorMessage] = useState<string>('');
-	const [formError, setFormError] = useState<{
-		username: boolean;
-		password: boolean;
-		confirmPassword: boolean;
-	}>({
-		username: false,
-		password: false,
-		confirmPassword: false,
-	});
+	const context = useOutletContext<AuthLayoutContext>();
+	const actionData = useActionData() as ActionData<SignupFields>;
+	const { userAltKey } = useLoaderData() as any;
+
 	const recaptchaRef = useRef<ReCAPTCHA | null>(null);
-
-	// const { postSignupData } = useSignupDataService();
-
-	const handleUsernameChange = (
-		e: React.ChangeEvent<HTMLInputElement>,
-	): void => {
-		setUsername(e.target.value);
-	};
-
-	const handleUsernameValidation = (): void => {
-		if (!username) {
-			setFormError((prevValue) => ({ ...prevValue, username: true }));
-		} else {
-			setFormError((prevValue) => ({ ...prevValue, username: false }));
-		}
-	};
-
-	const handlePasswordChange = (
-		e: React.ChangeEvent<HTMLInputElement>,
-	): void => {
-		setPassword(e.target.value);
-	};
-
-	const handlePasswordValidation = (): void => {
-		if (
-			!password ||
-			!/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/.test(password)
-		) {
-			setFormError((prevValue) => ({ ...prevValue, password: true }));
-		} else {
-			setFormError((prevValue) => ({ ...prevValue, password: false }));
-		}
-	};
-
-	const handleConfirmPassword = (
-		e: React.ChangeEvent<HTMLInputElement>,
-	): void => {
-		setConfirmPassword(e.target.value);
-	};
-
-	const handleConfirmPasswordValidation = (): void => {
-		if (!confirmPassword) {
-			setFormError((prevValue) => ({
-				...prevValue,
-				confirmPassword: true,
-			}));
-		}
-
-		if (confirmPassword !== password) {
-			setErrorMessage(i18n('passwordsDoNotMatch'));
-			setFormError((prevValue) => ({
-				...prevValue,
-				confirmPassword: true,
-			}));
-		} else if (confirmPassword && confirmPassword === password) {
-			setFormError((prevValue) => ({
-				...prevValue,
-				confirmPassword: false,
-			}));
-			setErrorMessage('');
-		}
-	};
-
-	const handleSuccessChange = (): void => {
-		setSuccess((prevValue) => !prevValue);
-		setShowForm(false);
-	};
-
-	// useEffect(() => {
-	// 	// setUserAltKey(params.userAltKey ?? '');
-	// 	// nav('/signup', { replace: true });
-	// }, []);
-
-	const onChange = (value: string | null): void => {
-		if (value) {
-			setCaptchaRes(value);
-			setVerified(true);
-		}
-	};
-
-	const submitHandler = async (
-		e: React.FormEvent<HTMLFormElement>,
-	): Promise<void> => {
-		e.preventDefault();
-		setErrorMessage('');
-
-		if (!verified) {
-			setErrorMessage(i18n('pleaseCompleteRecaptcha'));
-		}
-
-		if (verified && password === confirmPassword) {
-			recaptchaRef.current?.reset();
-			setVerified(false);
-			const signUpRes = await getSignupData(
-				userAltKey,
-				context.accountUid,
-				username,
-				password,
-				captchaRes,
-			);
-
-			if (
-				//@ts-ignore
-				signUpRes?.response?.data?.errorMessage === 'username is not available'
-			) {
-				setErrorMessage(i18n('usernameUnavailable'));
-			}
-
-			if (!signUpRes) {
-				handleSuccessChange();
-			}
-		}
-	};
 
 	return (
 		<>
-			{showForm && (
-				<VStack spacing="5" w={{ base: '100%', md: '358px' }}>
-					<form>
-						<VStack
-							spacing="5"
-							w={{ base: '100%', md: '358px' }}
-							as="form"
-							method="post"
-							noValidate>
-							<Heading style={{ alignContent: 'center' }} fontSize="28px">
-								<p>{i18n('signUpText')}</p>
-							</Heading>
+			<VStack spacing="5" w={{ base: '100%', md: '358px' }}>
+				<Form method="post">
+					<Heading style={{ alignContent: 'center' }} fontSize="28px">
+						<p>{i18n('signUpText')}</p>
+					</Heading>
 
-							<FormControl isRequired isInvalid={formError.username}>
-								<FormLabel
-									marginBottom={1}
-									requiredIndicator={<RequiredIndicator />}>
-									{i18n('username')}
-								</FormLabel>
-								<Input
-									id="username"
-									autoFocus
-									placeholder="name@email.com"
-									name="username"
-									value={username}
-									onChange={handleUsernameChange}
-									onBlur={handleUsernameValidation}
-									maxLength={100}
-								/>
-								<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
-							</FormControl>
+					<FormControl
+						isRequired
+						isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}>
+						<FormLabel marginBottom={1}>{i18n('username')}</FormLabel>
+						<Input
+							id="username"
+							autoFocus
+							placeholder="name@email.com"
+							name="username"
+							maxLength={100}
+						/>
+						<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
+					</FormControl>
 
-							<FormControl isRequired isInvalid={formError.password}>
-								<FormLabel
-									marginBottom={1}
-									requiredIndicator={<RequiredIndicator />}>
-									{i18n('password')}
-								</FormLabel>
-								<Input
-									id="newPassword"
-									type="password"
-									placeholder={i18n('password')}
-									name="password"
-									value={password}
-									onChange={handlePasswordChange}
-									onBlur={handlePasswordValidation}
-								/>
-								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-							</FormControl>
+					<FormControl
+						isRequired
+						isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}>
+						<FormLabel marginBottom={1}>{i18n('password')}</FormLabel>
+						<Input
+							id="newPassword"
+							type="password"
+							placeholder={i18n('password')}
+							name="password"
+						/>
+						<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+					</FormControl>
 
-							<FormControl isRequired isInvalid={formError.confirmPassword}>
-								<FormLabel
-									marginBottom={1}
-									requiredIndicator={<RequiredIndicator />}>
-									{i18n('reenterPasswordFormLabel')}
-								</FormLabel>
-								<Input
-									id="newPassword2"
-									type="password"
-									placeholder={i18n('reenterPasswordFormLabel')}
-									name="confirmPassword"
-									value={confirmPassword}
-									onChange={handleConfirmPassword}
-									onBlur={handleConfirmPasswordValidation}
-								/>
-								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-							</FormControl>
+					<FormControl
+						isRequired
+						isInvalid={Boolean(
+							actionData?.errors?.fieldErrors.confirmPassword,
+						)}>
+						<FormLabel marginBottom={1}>
+							{i18n('reenterPasswordFormLabel')}
+						</FormLabel>
+						<Input
+							id="newPassword2"
+							type="password"
+							placeholder={i18n('reenterPasswordFormLabel')}
+							name="confirmPassword"
+						/>
+						<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+					</FormControl>
 
-							{context.recaptchaSiteKey && (
-								<ReCAPTCHA
-									sitekey={context.recaptchaSiteKey}
-									onChange={onChange}
-									ref={recaptchaRef}
-								/>
-							)}
-							{/* @ts-ignore */}
-							<Button w="full" onClick={submitHandler} name="Login">
-								{i18n('continueBtnText')}
-							</Button>
+					{context.recaptcha && (
+						<ReCAPTCHA sitekey={context.recaptcha} ref={recaptchaRef} />
+					)}
 
-							{errorMessage && (
-								<Alert status="error" bg="ampError.50">
-									<AlertIcon />
-									<Text align="center" color="ampError.700">
-										{i18n(errorMessage)}
-									</Text>
-								</Alert>
-							)}
+					{/*hidden form control*/}
+					<FormControl hidden={true}>
+						<Input
+							readOnly={true}
+							id="userAltKey"
+							name="userAltKey"
+							value={userAltKey}
+						/>
+					</FormControl>
 
-							<Text>{i18n('passwordRuleText')}</Text>
-							<UnorderedList>
-								<ListItem>{i18n('upperCaseRule')}</ListItem>
-								<ListItem>{i18n('lowerCaseRule')}</ListItem>
-								<ListItem>{i18n('digitRule')}</ListItem>
-								<ListItem>{i18n('specialCharacterRule')}</ListItem>
-							</UnorderedList>
-						</VStack>
-					</form>
-				</VStack>
-			)}
-			{success && (
-				<Center height="100%">
-					<VStack>
-						<Text>{i18n('userCreated')}</Text>
-						<Text>
-							{i18n('please')}{' '}
-							<Link
-								as={ReactRouterLink}
-								to={{
-									pathname: '/login',
-									search: `?abbrevName=${abbrevName}`,
-								}}
-								color="ampSecondary.500"
-								textDecoration="underline">
-								{i18n('clickHere')}
-							</Link>{' '}
-							{i18n('toLogIn')}
-						</Text>
-					</VStack>
-				</Center>
-			)}
+					{/*hidden form control*/}
+					<FormControl hidden={true}>
+						<Input
+							readOnly={true}
+							id="accountUid"
+							name="accountUid"
+							value={context.accountUid}
+						/>
+					</FormControl>
+
+					<Button w="full" type="submit" name="Login">
+						{i18n('continueBtnText')}
+					</Button>
+
+					<Text>{i18n('passwordRuleText')}</Text>
+					<UnorderedList>
+						<ListItem>{i18n('upperCaseRule')}</ListItem>
+						<ListItem>{i18n('lowerCaseRule')}</ListItem>
+						<ListItem>{i18n('digitRule')}</ListItem>
+						<ListItem>{i18n('specialCharacterRule')}</ListItem>
+					</UnorderedList>
+				</Form>
+				{(actionData?.errors?.formErrors &&
+					actionData.errors.formErrors.length > 0 && (
+						<AlertMessage text={actionData.errors.formErrors[0]} />
+					)) ||
+					(actionData?.errors?.fieldErrors &&
+						actionData.errors.fieldErrors.userAltKey && (
+							<AlertMessage
+								text={actionData.errors.fieldErrors.userAltKey[0]}
+							/>
+						)) ||
+					(actionData?.errors?.fieldErrors &&
+						actionData.errors.fieldErrors.accountUid && (
+							<AlertMessage
+								text={actionData.errors.fieldErrors.accountUid[0]}
+							/>
+						)) ||
+					(actionData?.errors?.fieldErrors &&
+						actionData.errors.fieldErrors['g-recaptcha-response'] && (
+							<AlertMessage
+								text={actionData.errors.fieldErrors['g-recaptcha-response'][0]}
+							/>
+						))}
+			</VStack>
 		</>
 	);
 }

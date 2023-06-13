@@ -13,6 +13,5 @@ export const preSignUpLoader: LoaderFunction = async ({ params }) => {
 	const { userAltKey, abbrevName } = params as AccountInformation;
 	localStorage.setItem('abbrevName', abbrevName);
 	localStorage.setItem('userAltKey', userAltKey);
-
-	return redirect(`/signup?abbrevName=${abbrevName}`);
+	return redirect('/signup');
 };

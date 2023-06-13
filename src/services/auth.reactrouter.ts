@@ -107,9 +107,12 @@ export async function bootstrap(request: Request) {
 	try {
 		const url = new URL(request.url);
 		const abbrevName = url.searchParams.get('abbrevName');
-		if (abbrevName) {
+		if (abbrevName || localStorage.getItem('abbrevName')) {
+			const localAbbrevName = localStorage.getItem('abbrevName');
 			const response = await fetch(
-				`${API}/v2/bootstrap/account-info?name=${abbrevName}`,
+				`${API}/v2/bootstrap/account-info?name=${
+					abbrevName || localAbbrevName
+				}`,
 			);
 			return await response.json();
 		}
