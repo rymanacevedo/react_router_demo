@@ -22,7 +22,6 @@ import {
 	ModuleData,
 	QuestionInFocus,
 	RoundData,
-	SelectedAnswer,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import { AssignmentData } from '../lib/validator';
 import { useEffect, useState } from 'react';
@@ -48,7 +47,7 @@ export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
-	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
+	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
 	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
 		assignmentData: AssignmentData;
 		moduleData: ModuleData;
@@ -154,19 +153,10 @@ export default function TimedAssessment() {
 							<Heading as="h2">{i18n('answer')}</Heading>
 							<AnswerSelection
 								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswer}
-								setSelectedAnswers={setSelectedAnswer}
-								roundData={roundData}
+								// selectedAnswers={selectedAnswer}
+								// setSelectedAnswers={setSelectedAnswer}
+								// roundData={roundData}
 							/>
-							{/*<AnswerArea*/}
-							{/*	isOpen={false}*/}
-							{/*	onClose={() => {}}*/}
-							{/*	questionInFocus={questionInFocus}*/}
-							{/*	selectedAnswers={selectedAnswer}*/}
-							{/*	selectedAnswersState={setSelectedAnswer}*/}
-							{/*	showFeedback={showFeedback}*/}
-							{/*	initialFocusRef={initRef}*/}
-							{/*/>*/}
 						</Box>
 					</Stack>
 				</HStack>
