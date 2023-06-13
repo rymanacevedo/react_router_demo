@@ -109,7 +109,6 @@ export default function ForgotPassword() {
 	const navigate = useNavigate();
 	const actionData = useActionData() as ActionData<ForgotPasswordFields>;
 	const context = useOutletContext<AuthLayoutContext>();
-	console.log(context);
 	const { t: i18n } = useTranslation();
 	const recaptchaRef = useRef<ReCAPTCHAType | null>(null);
 
