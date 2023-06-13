@@ -205,13 +205,6 @@ export default function LoginForm() {
 					textDecoration="underline">
 					{i18n('forgotPassword')}
 				</Link>
-				<Link
-					as={ReactRouterLink}
-					to="/test"
-					color="ampSecondary.500"
-					textDecoration="underline">
-					Test
-				</Link>
 			</HStack>
 		</>
 	);
