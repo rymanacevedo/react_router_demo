@@ -89,11 +89,12 @@ export const findQuestionInFocus = (
 				);
 			}
 		})[questionIndex];
+	} else if (questionIndex) {
+		return questionList[questionIndex];
 	} else {
-		const firstUnansweredQuestion = questionList.find((question) => {
-			return !question.answered;
-		});
-
+		const firstUnansweredQuestion = questionList.find(
+			(question) => !question.answered,
+		);
 		return firstUnansweredQuestion || questionList[0];
 	}
 };

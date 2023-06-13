@@ -24,9 +24,9 @@ import {
 	RoundData,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import { AssignmentData } from '../lib/validator';
-import RichContentComponent from '../components/ui/RichContentComponent';
 import { useEffect, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
+import Question from '../components/ui/Question';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -54,7 +54,15 @@ export default function TimedAssessment() {
 	};
 
 	const handleNavigation = (question: QuestionInFocus) => {
-		setQuestionInFocus(question);
+		setQuestionInFocus(
+			findQuestionInFocus(
+				moduleInfoAndQuestions,
+				roundData,
+				false,
+				false,
+				question.displayOrder - 1,
+			),
+		);
 	};
 
 	useEffect(() => {
@@ -95,7 +103,7 @@ export default function TimedAssessment() {
 								{i18n('practiceTestNavigation')}
 							</Heading>
 							<Divider marginTop="4px" marginBottom="4px" />
-							{roundData.questionList.map((question, number) => {
+							{roundData.questionList.map((question) => {
 								return (
 									<PracticeTestCard
 										key={question.publishedQuestionAuthoringKey}
@@ -107,7 +115,7 @@ export default function TimedAssessment() {
 												? ['selected', 'unselected']
 												: ['unselected']
 										}
-										text={(number + 1).toString()}
+										text={question.displayOrder.toString()}
 										onClick={() => handleNavigation(question)}
 									/>
 								);
@@ -130,12 +138,7 @@ export default function TimedAssessment() {
 							px="72px"
 							py="44px"
 							w={{ base: '100%', md: '50%' }}>
-							<Heading as="h2">{i18n('question')}</Heading>
-							<RichContentComponent
-								content={
-									questionInFocus ? questionInFocus.introductionRc : null
-								}
-							/>
+							<Question questionInFocus={questionInFocus} />
 						</Box>
 						{/*<AnswerArea*/}
 						<Box
