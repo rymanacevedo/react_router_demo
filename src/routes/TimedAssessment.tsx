@@ -9,7 +9,9 @@ import {
 	Stack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import PracticeTestCard from '../components/ui/PracticeTestCard';
+import PracticeTestCard, {
+	CardValues,
+} from '../components/ui/PracticeTestCard';
 import PracticeTestHeader from '../components/ui/PracticeTestHeader';
 import { requireUser } from '../utils/user';
 import {
@@ -106,17 +108,24 @@ export default function TimedAssessment() {
 							</Heading>
 							<Divider marginTop="4px" marginBottom="4px" />
 							{roundData.questionList.map((question) => {
+								const values: CardValues = ['unselected'];
+								if (
+									question.publishedQuestionAuthoringKey ===
+									questionInFocus?.publishedQuestionAuthoringKey
+								) {
+									values.push('selected');
+								}
+
+								if (question.answered) {
+									values.push('answered');
+								}
+
 								return (
 									<PracticeTestCard
 										key={question.publishedQuestionAuthoringKey}
 										size="sm"
 										variant="multiPartCard"
-										values={
-											question.publishedQuestionAuthoringKey ===
-											questionInFocus?.publishedQuestionAuthoringKey
-												? ['selected', 'unselected']
-												: ['unselected']
-										}
+										values={values}
 										text={question.displayOrder.toString()}
 										onClick={() => handleNavigation(question)}
 									/>
