@@ -322,11 +322,11 @@ export const getForgotUsernameData = async (fields: ForgotUsernameFields) => {
 };
 
 export const getSignupData = async (
-	userAltKey: string,
+	userAltKey: string | null,
 	accountUid: string,
 	username: string,
 	password: string,
-	captchaResp: string,
+	captchaResp: string | null,
 ) => {
 	const url = `${API}/v2/users/${userAltKey}/initial-credentials`;
 	const signupBody = {

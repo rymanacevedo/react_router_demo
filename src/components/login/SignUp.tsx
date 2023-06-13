@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
 	ActionFunction,
 	ActionFunctionArgs,
 	Link as ReactRouterLink,
 	LoaderFunction,
-	useNavigate,
-	useOutletContext,
 	// useParams,
 	redirect,
 	useLoaderData,
-	json,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -32,11 +29,10 @@ import {
 } from '@chakra-ui/react';
 
 import ReCAPTCHA from 'react-google-recaptcha';
-import useSignupDataService from '../../services/useSignupDataService';
-import { AuthLayoutContext } from './AuthLayout';
 import { z } from 'zod';
 import { badRequest } from '../../services/utils';
 import { getSignupData } from '../../services/auth.reactrouter';
+import { BootstrapData } from '../../App';
 // import { AccountInformation } from '../../routes/SignUpLoader';
 
 export const SignupFieldsSchema = z
@@ -71,13 +67,11 @@ export const SignupFieldsSchema = z
 type SignupFields = z.infer<typeof SignupFieldsSchema>;
 
 export const signupLoader: LoaderFunction = async () => {
-	const abbrevName = localStorage.getItem('abbrevName');
-	const userAltKey = localStorage.getItem('userAltKey');
 	// const cookieHeader = request.headers.get('Cookie');
 	// const hasUserVisitedPage = await hasUserVisited.parse(cookieHeader);
 	// TODO: deal with session_key in cookies
 	// return json(hasUserVisitedPage);
-	return json({ abbrevName: abbrevName, userAltKey: userAltKey });
+	// return json({ abbrevName: abbrevName, userAltKey: userAltKey });
 };
 
 export const signupAction: ActionFunction = async ({
@@ -161,12 +155,16 @@ export const signupAction: ActionFunction = async ({
 };
 
 function SignUp(): JSX.Element {
+	const abbrevName = localStorage.getItem('abbrevName');
+	const userAltKey = localStorage.getItem('userAltKey');
 	// const params = useParams<{ userAltKey: string }>();
-	const nav = useNavigate();
+	// const nav = useNavigate();
 	const { t: i18n } = useTranslation();
-	const { userAltKey, abbrevName } = useLoaderData() as any;
-	const context = useOutletContext<AuthLayoutContext>();
-	console.log(context);
+	// const { userAltKey, abbrevName } = useLoaderData() as any;
+	console.log(userAltKey);
+	console.log(abbrevName);
+	// const context = useL<AuthLayoutContext>();
+	const context = useLoaderData() as BootstrapData | any;
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -187,7 +185,7 @@ function SignUp(): JSX.Element {
 	});
 	const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
-	const { postSignupData } = useSignupDataService();
+	// const { postSignupData } = useSignupDataService();
 
 	const handleUsernameChange = (
 		e: React.ChangeEvent<HTMLInputElement>,
@@ -254,10 +252,10 @@ function SignUp(): JSX.Element {
 		setShowForm(false);
 	};
 
-	useEffect(() => {
-		// setUserAltKey(params.userAltKey ?? '');
-		nav('/signup', { replace: true });
-	}, []);
+	// useEffect(() => {
+	// 	// setUserAltKey(params.userAltKey ?? '');
+	// 	// nav('/signup', { replace: true });
+	// }, []);
 
 	const onChange = (value: string | null): void => {
 		if (value) {
@@ -279,16 +277,16 @@ function SignUp(): JSX.Element {
 		if (verified && password === confirmPassword) {
 			recaptchaRef.current?.reset();
 			setVerified(false);
-
-			const signUpRes = await postSignupData(
-				context.accountUid,
+			const signUpRes = await getSignupData(
 				userAltKey,
+				context.accountUid,
 				username,
 				password,
 				captchaRes,
 			);
 
 			if (
+				//@ts-ignore
 				signUpRes?.response?.data?.errorMessage === 'username is not available'
 			) {
 				setErrorMessage(i18n('usernameUnavailable'));
@@ -303,102 +301,104 @@ function SignUp(): JSX.Element {
 	return (
 		<>
 			{showForm && (
-				<form onSubmit={submitHandler}>
-					<VStack
-						spacing="5"
-						w={{ base: '100%', md: '358px' }}
-						as="form"
-						method="post"
-						noValidate>
-						<Heading style={{ alignContent: 'center' }} fontSize="28px">
-							<p>{i18n('signUpText')}</p>
-						</Heading>
+				<VStack spacing="5" w={{ base: '100%', md: '358px' }}>
+					<form>
+						<VStack
+							spacing="5"
+							w={{ base: '100%', md: '358px' }}
+							as="form"
+							method="post"
+							noValidate>
+							<Heading style={{ alignContent: 'center' }} fontSize="28px">
+								<p>{i18n('signUpText')}</p>
+							</Heading>
 
-						<FormControl isRequired isInvalid={formError.username}>
-							<FormLabel
-								marginBottom={1}
-								requiredIndicator={<RequiredIndicator />}>
-								{i18n('username')}
-							</FormLabel>
-							<Input
-								id="username"
-								autoFocus
-								placeholder="name@email.com"
-								name="username"
-								value={username}
-								onChange={handleUsernameChange}
-								onBlur={handleUsernameValidation}
-								maxLength={100}
-							/>
-							<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
-						</FormControl>
+							<FormControl isRequired isInvalid={formError.username}>
+								<FormLabel
+									marginBottom={1}
+									requiredIndicator={<RequiredIndicator />}>
+									{i18n('username')}
+								</FormLabel>
+								<Input
+									id="username"
+									autoFocus
+									placeholder="name@email.com"
+									name="username"
+									value={username}
+									onChange={handleUsernameChange}
+									onBlur={handleUsernameValidation}
+									maxLength={100}
+								/>
+								<FormErrorMessage>{i18n('enterUsername')}</FormErrorMessage>
+							</FormControl>
 
-						<FormControl isRequired isInvalid={formError.password}>
-							<FormLabel
-								marginBottom={1}
-								requiredIndicator={<RequiredIndicator />}>
-								{i18n('password')}
-							</FormLabel>
-							<Input
-								id="newPassword"
-								type="password"
-								placeholder={i18n('password')}
-								name="password"
-								value={password}
-								onChange={handlePasswordChange}
-								onBlur={handlePasswordValidation}
-							/>
-							<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-						</FormControl>
+							<FormControl isRequired isInvalid={formError.password}>
+								<FormLabel
+									marginBottom={1}
+									requiredIndicator={<RequiredIndicator />}>
+									{i18n('password')}
+								</FormLabel>
+								<Input
+									id="newPassword"
+									type="password"
+									placeholder={i18n('password')}
+									name="password"
+									value={password}
+									onChange={handlePasswordChange}
+									onBlur={handlePasswordValidation}
+								/>
+								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+							</FormControl>
 
-						<FormControl isRequired isInvalid={formError.confirmPassword}>
-							<FormLabel
-								marginBottom={1}
-								requiredIndicator={<RequiredIndicator />}>
-								{i18n('reenterPasswordFormLabel')}
-							</FormLabel>
-							<Input
-								id="newPassword2"
-								type="password"
-								placeholder={i18n('reenterPasswordFormLabel')}
-								name="confirmPassword"
-								value={confirmPassword}
-								onChange={handleConfirmPassword}
-								onBlur={handleConfirmPasswordValidation}
-							/>
-							<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
-						</FormControl>
+							<FormControl isRequired isInvalid={formError.confirmPassword}>
+								<FormLabel
+									marginBottom={1}
+									requiredIndicator={<RequiredIndicator />}>
+									{i18n('reenterPasswordFormLabel')}
+								</FormLabel>
+								<Input
+									id="newPassword2"
+									type="password"
+									placeholder={i18n('reenterPasswordFormLabel')}
+									name="confirmPassword"
+									value={confirmPassword}
+									onChange={handleConfirmPassword}
+									onBlur={handleConfirmPasswordValidation}
+								/>
+								<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
+							</FormControl>
 
-						{context.recaptcha && (
-							<ReCAPTCHA
-								sitekey={context.recaptcha}
-								onChange={onChange}
-								ref={recaptchaRef}
-							/>
-						)}
+							{context.recaptchaSiteKey && (
+								<ReCAPTCHA
+									sitekey={context.recaptchaSiteKey}
+									onChange={onChange}
+									ref={recaptchaRef}
+								/>
+							)}
+							{/* @ts-ignore */}
+							<Button w="full" onClick={submitHandler} name="Login">
+								{i18n('continueBtnText')}
+							</Button>
 
-						<Button w="full" type="submit" name="Login">
-							{i18n('continueBtnText')}
-						</Button>
+							{errorMessage && (
+								<Alert status="error" bg="ampError.50">
+									<AlertIcon />
+									<Text align="center" color="ampError.700">
+										{i18n(errorMessage)}
+									</Text>
+								</Alert>
+							)}
 
-						{errorMessage && (
-							<Alert status="error" bg="ampError.50">
-								<AlertIcon />
-								<Text align="center" color="ampError.700">
-									{i18n(errorMessage)}
-								</Text>
-							</Alert>
-						)}
-
-						<Text>{i18n('passwordRuleText')}</Text>
-						<UnorderedList>
-							<ListItem>{i18n('upperCaseRule')}</ListItem>
-							<ListItem>{i18n('lowerCaseRule')}</ListItem>
-							<ListItem>{i18n('digitRule')}</ListItem>
-							<ListItem>{i18n('specialCharacterRule')}</ListItem>
-						</UnorderedList>
-					</VStack>
-				</form>
+							<Text>{i18n('passwordRuleText')}</Text>
+							<UnorderedList>
+								<ListItem>{i18n('upperCaseRule')}</ListItem>
+								<ListItem>{i18n('lowerCaseRule')}</ListItem>
+								<ListItem>{i18n('digitRule')}</ListItem>
+								<ListItem>{i18n('specialCharacterRule')}</ListItem>
+							</UnorderedList>
+						</VStack>
+					</form>
+				</VStack>
 			)}
 			{success && (
 				<Center height="100%">

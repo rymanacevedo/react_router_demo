@@ -20,7 +20,7 @@ import ForgotPassword, {
 	forgotPasswordAction,
 } from './components/login/ForgotPassword';
 import ForgotUsername, { forgotUsernameAction } from './routes/ForgotUsername';
-import SignUp, { signupAction, signupLoader } from './components/login/SignUp';
+import SignUp, { signupAction } from './components/login/SignUp';
 import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
@@ -44,8 +44,7 @@ import TimedAssessment, {
 } from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
-// import { preSignUpLoader } from './routes/SignUpLoader';
-import Test from './components/login/Test';
+import { preSignUpLoader } from './routes/SignUpLoader';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -79,7 +78,6 @@ const routesJSX = (
 				path="mfa"
 				element={<MultiFactor />}
 			/>
-			<Route path="test" element={<Test />} />
 			<Route
 				path="forgot-password"
 				element={<ForgotPassword />}
@@ -90,16 +88,11 @@ const routesJSX = (
 				path="forgot-username"
 				element={<ForgotUsername />}
 			/>
-			{/* <Route
-				path="signup/:abbrevName/:userAltKey"
-				loader={preSignUpLoader}
-				action={signupAction}
-				element={<SignUp />}
-			/> */}
+			<Route path="signup/:abbrevName/:userAltKey" loader={preSignUpLoader} />
 			<Route
 				path="signup"
 				action={signupAction}
-				loader={signupLoader}
+				loader={authLayoutLoader}
 				element={<SignUp />}
 			/>
 			<Route action={registerAction} path="register" element={<Register />} />
