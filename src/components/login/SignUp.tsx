@@ -8,6 +8,7 @@ import {
 	useOutletContext,
 	LoaderFunction,
 	useLoaderData,
+	json,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -22,6 +23,7 @@ import {
 	ListItem,
 	Text,
 	VStack,
+	Flex,
 } from '@chakra-ui/react';
 
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -30,6 +32,7 @@ import { badRequest } from '../../services/utils';
 import { getSignupData } from '../../services/auth.reactrouter';
 import { AuthLayoutContext } from './AuthLayout';
 import AlertMessage from '../ui/AlertMessage';
+import { AccountInformation } from '../../routes/SignUpLoader';
 
 type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
 	formErrors: U[];
@@ -155,7 +158,7 @@ export const signupAction: ActionFunction = async ({
 export const signupLoader: LoaderFunction = async () => {
 	const userAltKey = localStorage.getItem('userAltKey');
 	if (userAltKey) {
-		return { userAltKey };
+		return json(userAltKey);
 	}
 
 	throw new Error('userAltKey not found');
@@ -165,22 +168,31 @@ function SignUp() {
 	const { t: i18n } = useTranslation();
 	const context = useOutletContext<AuthLayoutContext>();
 	const actionData = useActionData() as ActionData<SignupFields>;
-	const { userAltKey } = useLoaderData() as any;
-
+	const userAltKey = useLoaderData() as AccountInformation;
 	const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
 	return (
 		<>
-			<VStack spacing="5" w={{ base: '100%', md: '358px' }}>
+			<VStack
+				spacing="20px"
+				w={{ base: '100%', md: '358px' }}
+				alignItems="center"
+				justifyContent="center">
 				<Form method="post">
-					<Heading style={{ alignContent: 'center' }} fontSize="28px">
+					<Heading
+						alignContent="center"
+						size="lg"
+						mb={'20px'}
+						fontSize={25}
+						whiteSpace="nowrap">
 						<p>{i18n('signUpText')}</p>
 					</Heading>
 
 					<FormControl
 						isRequired
-						isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}>
-						<FormLabel marginBottom={1}>{i18n('username')}</FormLabel>
+						isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}
+						mb={4}>
+						<FormLabel mb={4}>{i18n('username')}</FormLabel>
 						<Input
 							id="username"
 							autoFocus
@@ -193,8 +205,9 @@ function SignUp() {
 
 					<FormControl
 						isRequired
-						isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}>
-						<FormLabel marginBottom={1}>{i18n('password')}</FormLabel>
+						isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}
+						mb={4}>
+						<FormLabel mb={4}>{i18n('password')}</FormLabel>
 						<Input
 							id="newPassword"
 							type="password"
@@ -206,12 +219,9 @@ function SignUp() {
 
 					<FormControl
 						isRequired
-						isInvalid={Boolean(
-							actionData?.errors?.fieldErrors.confirmPassword,
-						)}>
-						<FormLabel marginBottom={1}>
-							{i18n('reenterPasswordFormLabel')}
-						</FormLabel>
+						isInvalid={Boolean(actionData?.errors?.fieldErrors.confirmPassword)}
+						mb="20px">
+						<FormLabel mb={4}>{i18n('reenterPasswordFormLabel')}</FormLabel>
 						<Input
 							id="newPassword2"
 							type="password"
@@ -221,21 +231,23 @@ function SignUp() {
 						<FormErrorMessage>{i18n('enterPassword')}</FormErrorMessage>
 					</FormControl>
 
-					{context.recaptcha && (
-						<ReCAPTCHA sitekey={context.recaptcha} ref={recaptchaRef} />
-					)}
+					<Flex direction="column" alignItems="center" w="100%">
+						{context.recaptcha && (
+							<ReCAPTCHA sitekey={context.recaptcha} ref={recaptchaRef} />
+						)}
+					</Flex>
 
-					{/*hidden form control*/}
+					{/* hidden form control */}
 					<FormControl hidden={true}>
 						<Input
 							readOnly={true}
 							id="userAltKey"
 							name="userAltKey"
-							value={userAltKey}
+							value={userAltKey as unknown as string}
 						/>
 					</FormControl>
 
-					{/*hidden form control*/}
+					{/* hidden form control */}
 					<FormControl hidden={true}>
 						<Input
 							readOnly={true}
@@ -245,11 +257,11 @@ function SignUp() {
 						/>
 					</FormControl>
 
-					<Button w="full" type="submit" name="Login">
+					<Button w="full" type="submit" name="Login" mt="20px">
 						{i18n('continueBtnText')}
 					</Button>
 
-					<Text>{i18n('passwordRuleText')}</Text>
+					<Text mt={'20px'}>{i18n('passwordRuleText')}</Text>
 					<UnorderedList>
 						<ListItem>{i18n('upperCaseRule')}</ListItem>
 						<ListItem>{i18n('lowerCaseRule')}</ListItem>
