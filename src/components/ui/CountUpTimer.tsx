@@ -1,17 +1,21 @@
-import { Box, Text } from '@chakra-ui/react';
+import { HStack, Icon, Text } from '@chakra-ui/react';
+import { LapTimerIcon } from '@radix-ui/react-icons';
 import { convertSecondsToTime } from '../../utils/logic';
 
 type CountUpTimerProps = {
 	seconds: number;
+	color: string;
+	boxSize: number;
 };
 
-const CountUpTimer = ({ seconds }: CountUpTimerProps) => {
+const CountUpTimer = ({ seconds, color, boxSize }: CountUpTimerProps) => {
 	return (
-		<Box>
-			<Text fontSize="21px" fontWeight="600" color="ampWhite">
+		<HStack>
+			<Icon as={LapTimerIcon} color={color} boxSize={boxSize} />
+			<Text fontSize="lg" fontWeight="600" color={color}>
 				{convertSecondsToTime(seconds)}
 			</Text>
-		</Box>
+		</HStack>
 	);
 };
 

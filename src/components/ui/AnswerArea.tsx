@@ -111,6 +111,7 @@ export default function AnswerArea({
 							updateSelectedAnswersState={selectedAnswersState}
 							clearSelection={clearSelection}
 							clearSelectionState={clearSelectionState}
+							clearSelectionFunction={clearSelectionFunction}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 							onClick={onClick}
 							setIDKResponse={setIDKResponse}
