@@ -86,7 +86,7 @@ export default function TimedAssessment() {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<PracticeTestHeader />
+				<PracticeTestHeader text={moduleInfoAndQuestions.name} />
 				<HStack justify="center" align="space-between">
 					<Stack
 						w="100%"
@@ -99,6 +99,7 @@ export default function TimedAssessment() {
 							boxShadow="md"
 							borderRadius={24}
 							maxWidth={480}
+							maxHeight={274}
 							px="24px"
 							py="24px"
 							w={{ base: '100%', md: '50%' }}>
