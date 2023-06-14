@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import { useQuizContext } from '../../hooks/useQuizContext';
 
 type Props = {
 	courseList: { key: string; name: string }[];
@@ -22,12 +23,13 @@ const CourseMenu = ({
 	courseUpdaterToggle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
-
+	const { setSelectedCourseKey } = useQuizContext();
 	if (courseList.length <= 1) {
 		return null;
 	}
 
 	const handleCourseChange = (value: any) => {
+		setSelectedCourseKey(value);
 		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
 	};
 
