@@ -4,14 +4,13 @@ import AssignmentList from '../ui/AssignmentList';
 import CourseMenu from '../ui/CourseMenu';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../utils/user';
-import { Role } from '../../services/roles';
 import {
 	getAssignments,
 	getCourseList,
 	getCurriculaCourseList,
 } from '../../services/learning';
 import { json, useFetcher, useLoaderData } from 'react-router-dom';
-import { serverError } from '../../services/utils';
+import { getSubAccount, serverError } from '../../services/utils';
 
 export type Course = {
 	key: string;
@@ -23,14 +22,7 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 	const url = new URL(request.url);
 	const selectedCourseKey = url.searchParams.get('selectedCourseKey');
 	let courseRole = '';
-	let subAccount = '';
-	user.roles.forEach((role: Role) => {
-		courseRole = role.name;
-		if (role.name === 'Learner') {
-			subAccount = role.accountKey;
-		}
-	});
-
+	const subAccount = getSubAccount(user);
 	if (selectedCourseKey) {
 		// fetcher runs this route again, so we don't need to fetch the data again
 		const {
