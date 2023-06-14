@@ -70,7 +70,7 @@ export const forgotUsernameAction: ActionFunction = async ({
 
 	const { data } = await getForgotUsernameData(fields);
 
-	if (data) {
+	if (Object.keys(data).length > 0) {
 		if (data.items) {
 			const items = data.items;
 
@@ -108,9 +108,9 @@ export const forgotUsernameAction: ActionFunction = async ({
 				});
 			}
 		}
+	} else {
+		return redirect('/success?successMessageToShow=forgotUsername');
 	}
-
-	return redirect('/success?successMessageToShow=forgotUsername');
 };
 
 export default function ForgotUsername() {
