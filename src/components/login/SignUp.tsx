@@ -107,52 +107,58 @@ export const signupAction: ActionFunction = async ({
 		fields['g-recaptcha-response'],
 	);
 
-	const items = data.items;
+	if (Object.keys(data).length > 0) {
+		const items = data.items;
 
-	if (data.errorMessage && data.errorMessage === 'username is not available') {
-		return badRequest({
-			fields,
-			errors: {
-				formErrors: ['username is not available'],
-				fieldErrors: {
-					username: ['username is not available'],
+		if (
+			data.errorMessage &&
+			data.errorMessage === 'username is not available'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['username is not available'],
+					fieldErrors: {
+						username: ['username is not available'],
+					},
 				},
-			},
-		});
-	}
+			});
+		}
 
-	if (
-		items[0].message &&
-		items[0].message === 'Alternate Key must be 9 characters in length'
-	) {
-		return badRequest({
-			fields,
-			errors: {
-				formErrors: ['Alternate Key must be 9 characters in length'],
-				fieldErrors: {
-					userAltKey: ['Alternate Key must be 9 characters in length'],
+		if (
+			items[0].message &&
+			items[0].message === 'Alternate Key must be 9 characters in length'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['Alternate Key must be 9 characters in length'],
+					fieldErrors: {
+						userAltKey: ['Alternate Key must be 9 characters in length'],
+					},
 				},
-			},
-		});
-	}
+			});
+		}
 
-	if (
-		items[0].message &&
-		items[0].message === 'Alternate Key has illegal characters'
-	) {
-		return badRequest({
-			fields,
-			errors: {
-				formErrors: ['Alternate key has illegal characters'],
-				fieldErrors: {
-					accountUid: ['Alternate key has illegal characters'],
+		if (
+			items[0].message &&
+			items[0].message === 'Alternate Key has illegal characters'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['Alternate key has illegal characters'],
+					fieldErrors: {
+						accountUid: ['Alternate key has illegal characters'],
+					},
 				},
-			},
-		});
+			});
+		}
+	} else {
+		localStorage.removeItem('abbrevName');
+		localStorage.removeItem('userAltKey');
+		return redirect('/success?successMessageToShow=signUp');
 	}
-	localStorage.removeItem('abbrevName');
-	localStorage.removeItem('userAltKey');
-	return redirect('/success?successMessageToShow=signUp');
 };
 
 export const signupLoader: LoaderFunction = async () => {

@@ -56,9 +56,16 @@ export const fetchDataPost = async <T extends unknown>(
 		body: JSON.stringify(body),
 	});
 
-	const data = await response.json();
+	let data: T;
+	try {
+		data = await response.json();
+	} catch (error) {
+		data = {} as T;
+	}
+
 	return { data, response };
 };
+
 export const fetchDataPut = async <T extends unknown>(
 	url: string,
 	body: any,
