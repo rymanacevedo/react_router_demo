@@ -1,4 +1,4 @@
-import { Key, useEffect, useState } from 'react';
+import { Key, useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
@@ -19,8 +19,6 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
-import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 
 type Assignment = {
@@ -43,45 +41,15 @@ type AssignmentListDataType = {
 		];
 	};
 };
-type SelectedCourseKeyType = {
-	selectedCourseKey: string | null;
+type Props = {
+	assignments: AssignmentListDataType;
 };
 
-const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
+const AssignmentList = ({ assignments }: Props) => {
 	const { t: i18n } = useTranslation();
-	const { getCurriculaCourseList } = useCourseCurriculaListService();
-	const { getAssignments } = useAssignmentByUserAssociations();
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const { startRefresher } = useModuleContentService();
-	const [assignmentListData, setAssignmentsListData] =
-		useState<AssignmentListDataType>({
-			displayCurriculum: {
-				children: [
-					{
-						assignments: [],
-						name: '',
-						curriculum: { name: '', assignments: [] },
-					},
-				],
-			},
-		});
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const curicCourseList = await getCurriculaCourseList(selectedCourseKey);
-			if (curicCourseList.items.length) {
-				const assignments = await getAssignments(curicCourseList.items[0].key);
-				if (assignments?.displayCurriculum) {
-					setAssignmentsListData(assignments);
-				}
-			}
-		};
-		if (selectedCourseKey) {
-			fetchData();
-		}
-	}, [selectedCourseKey]);
-
 	const getAssignmentText = (assignment: Assignment) => {
 		if (
 			assignment?.assignmentType === 'Assessment' &&
@@ -203,91 +171,95 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
 	};
 
-	const assignmentList = assignmentListData?.displayCurriculum.children.map(
-		(curriculum, index) => {
-			const assignment: Assignment =
-				curriculum.assignments[curriculum.assignments.length - 1];
-			return (
-				<Popover
-					key={index}
-					returnFocusOnClose={false}
-					isOpen={refreshIsOpen === assignment?.assignmentKey}
-					placement="bottom"
-					closeOnBlur={false}>
-					<PopoverTrigger>
-						<PopoverAnchor>
-							<ListItem
-								height={'44px'}
-								padding={'4px'}
-								w="100%"
-								key={curriculum.name}
-								onClick={handleAssignmentClick(assignment)}>
-								<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
-									<Text
-										_hover={{
-											textDecoration: 'underline',
-											color: 'ampPrimary.300 ',
-											cursor: 'pointer',
-										}}
-										fontSize={'21px'}
-										fontWeight={'bold'}>
-										{curriculum.name}
-									</Text>
-									{getAssignmentText(assignment)}
-								</HStack>
-								{index !==
-									assignmentListData?.displayCurriculum.children.length - 1 && (
-									<Divider
-										borderWidth="1px"
-										borderStyle="solid"
-										borderRadius="10"
-										borderColor="#AFB3B4"
-									/>
-								)}
-							</ListItem>
-						</PopoverAnchor>
-					</PopoverTrigger>
-					<PopoverContent marginRight={'200px'}>
-						<Box position="fixed" top="0px" left="20px">
-							{' '}
-							<PopoverArrow position="fixed" top="0" left="0" />
-						</Box>{' '}
-						<ButtonGroup size="lg" w="100%">
-							<VStack>
-								{curriculum?.assignments[0]?.assignmentType !==
-									'Assessment' && (
-									<>
-										<Button
-											w="320px"
-											variant="ghost"
-											onClick={handleRefresherClick(curriculum.assignments[0])}>
-											{i18n('refresher')}
-										</Button>
-										<Button
-											w="320px"
-											variant="ghost"
-											onClick={handleReviewClick(curriculum.assignments[0])}>
-											{i18n('review')}
-										</Button>
-										<Button
-											w="320px"
-											variant="ghost"
-											onClick={handleSmartRefresherClick(
-												curriculum.assignments[0],
-											)}>
-											{i18n('smartRefresher')}
-										</Button>
-									</>
-								)}
-							</VStack>
-						</ButtonGroup>
-					</PopoverContent>
-				</Popover>
-			);
-		},
-	);
+	const assignmentList = !assignments
+		? null
+		: assignments.displayCurriculum.children.map((curriculum, index) => {
+				const assignment: Assignment =
+					curriculum.assignments[curriculum.assignments.length - 1];
+				return (
+					<Popover
+						key={index}
+						returnFocusOnClose={false}
+						isOpen={refreshIsOpen === assignment.assignmentKey}
+						placement="bottom"
+						closeOnBlur={false}>
+						<PopoverTrigger>
+							<PopoverAnchor>
+								<ListItem
+									height={'44px'}
+									padding={'4px'}
+									w="100%"
+									key={curriculum.name}
+									onClick={handleAssignmentClick(assignment)}>
+									<HStack
+										justifyContent={'space-between'}
+										paddingBottom={'10px'}>
+										<Text
+											_hover={{
+												textDecoration: 'underline',
+												color: 'ampPrimary.300',
+												cursor: 'pointer',
+											}}
+											fontSize={'21px'}
+											fontWeight={'bold'}>
+											{curriculum.name}
+										</Text>
+										{getAssignmentText(assignment)}
+									</HStack>
+									{index !==
+										assignments.displayCurriculum.children.length - 1 && (
+										<Divider
+											borderWidth="1px"
+											borderStyle="solid"
+											borderRadius="10"
+											borderColor="#AFB3B4"
+										/>
+									)}
+								</ListItem>
+							</PopoverAnchor>
+						</PopoverTrigger>
+						<PopoverContent marginRight={'200px'}>
+							<Box position="fixed" top="0px" left="20px">
+								{' '}
+								<PopoverArrow position="fixed" top="0" left="0" />
+							</Box>{' '}
+							<ButtonGroup size="lg" w="100%">
+								<VStack>
+									{curriculum.assignments[0].assignmentType !==
+										'Assessment' && (
+										<>
+											<Button
+												w="320px"
+												variant="ghost"
+												onClick={handleRefresherClick(
+													curriculum.assignments[0],
+												)}>
+												{i18n('refresher')}
+											</Button>
+											<Button
+												w="320px"
+												variant="ghost"
+												onClick={handleReviewClick(curriculum.assignments[0])}>
+												{i18n('review')}
+											</Button>
+											<Button
+												w="320px"
+												variant="ghost"
+												onClick={handleSmartRefresherClick(
+													curriculum.assignments[0],
+												)}>
+												{i18n('smartRefresher')}
+											</Button>
+										</>
+									)}
+								</VStack>
+							</ButtonGroup>
+						</PopoverContent>
+					</Popover>
+				);
+		  });
 
-	return !selectedCourseKey ? (
+	return !assignments ? (
 		<Alert maxWidth={'650px'} status="warning">
 			<AlertIcon />
 			{i18n('noCoursesAssigned')}

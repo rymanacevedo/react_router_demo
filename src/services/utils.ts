@@ -111,3 +111,6 @@ export const badRequest = <T extends unknown>(data: T) =>
 	json(data, { status: 400 });
 export const unauthorized = <T extends unknown>(data: T) =>
 	json(data, { status: 401 });
+
+export const serverError = <T extends unknown>(data: T) =>
+	json(data, { status: 500 });

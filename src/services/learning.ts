@@ -42,7 +42,10 @@ export const getAssignments = async (
 	courseCurricKey: string,
 	user: User,
 	subAccount: string,
-): Promise<{ data: AssignmentData; response: Response }> => {
+): Promise<{
+	data: AssignmentData;
+	response: Response;
+}> => {
 	const url = `/v2/user-associations?courseCurricKey=${courseCurricKey}&userKey=${user.userKey}&hideUnassigned=false&isWebapp=true&subaccount=${subAccount}`;
 	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
 };

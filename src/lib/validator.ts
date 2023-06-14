@@ -53,6 +53,7 @@ export const AssignmentDataSchema = z.object({
 	registrationUri: z.string(),
 	userUri: z.string(),
 	classroomUri: z.string(),
+	items: z.array(z.any()).optional(),
 });
 export const AnswerListDataSchema = z.object({
 	self: z.string(),

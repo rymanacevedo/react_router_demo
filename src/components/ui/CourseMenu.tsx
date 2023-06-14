@@ -13,21 +13,23 @@ import { useTranslation } from 'react-i18next';
 type Props = {
 	courseList: { key: string; name: string }[];
 	selectedCourseKey: string | null;
-	setSelectedCourseKey: (key: string) => void;
-	setCourseTitle: (title: string) => void;
+	courseUpdaterToggle: any;
 };
 
 const CourseMenu = ({
 	courseList,
 	selectedCourseKey,
-	setSelectedCourseKey,
-	setCourseTitle,
+	courseUpdaterToggle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
 
-	if (courseList?.length <= 1) {
+	if (courseList.length <= 1) {
 		return null;
 	}
+
+	const handleCourseChange = (value: any) => {
+		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
+	};
 
 	return (
 		<Menu isLazy>
@@ -39,15 +41,10 @@ const CourseMenu = ({
 			</MenuButton>
 			<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
 				<MenuOptionGroup
-					onChange={(value) => {
-						setSelectedCourseKey(value as string);
-						setCourseTitle(
-							courseList.find((course) => course.key === value)?.name as string,
-						);
-					}}
+					onChange={handleCourseChange}
 					defaultChecked={true}
 					defaultValue={selectedCourseKey ?? ''}>
-					{courseList?.map((course) => (
+					{courseList.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
 							<Text isTruncated maxW="300px">
 								{course.name}

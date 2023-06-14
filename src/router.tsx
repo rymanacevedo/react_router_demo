@@ -27,7 +27,7 @@ import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
-import LearningView from './components/pages/LearningView';
+import LearningView, { learningLoader } from './components/pages/LearningView';
 import AssignmentReviewView, {
 	assignmentReviewLoader,
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';
@@ -126,7 +126,11 @@ const routesJSX = (
 					/>
 				}
 			/>
-			<Route path="learning" element={<LearningView />} />
+			<Route
+				loader={learningLoader}
+				path="learning"
+				element={<LearningView />}
+			/>
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				loader={assignmentReviewLoader}
