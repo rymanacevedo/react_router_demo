@@ -21,8 +21,7 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 	const user = requireUser();
 	const url = new URL(request.url);
 	const selectedCourseKey = url.searchParams.get('selectedCourseKey');
-	let courseRole = '';
-	const subAccount = getSubAccount(user);
+	const { courseRole, subAccount } = getSubAccount(user);
 	if (selectedCourseKey) {
 		// fetcher runs this route again, so we don't need to fetch the data again
 		const {

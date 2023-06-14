@@ -34,12 +34,12 @@ import AnswerSelection from '../components/ui/AnswerSelection';
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const assignmentUid = params.assignmentUid!;
-	const account = getSubAccount(user);
+	const { subAccount } = getSubAccount(user);
 	const { assignmentData, moduleData, moduleInfoAndQuestions } =
-		await getFullModuleWithQuestions(user, account, assignmentUid);
+		await getFullModuleWithQuestions(user, subAccount, assignmentUid);
 	const { data: roundData } = await getCurrentRoundTimedAssessment(
 		user,
-		account,
+		subAccount,
 		assignmentUid,
 	);
 	return { assignmentData, moduleData, moduleInfoAndQuestions, roundData };
