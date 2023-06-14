@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { API } from '../../../lib/environment';
 
 type ReviewContentRenderPropsType = {
-	content: string | null;
+	content: string | null | undefined;
 };
 
 const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {

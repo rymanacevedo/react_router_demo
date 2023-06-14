@@ -123,7 +123,11 @@ export default function ForgotUsername() {
 				</FormControl>
 
 				{context.recaptcha && (
-					<ReCAPTCHA sitekey={context.recaptcha} ref={recaptchaRef} />
+					<ReCAPTCHA
+						style={{ margin: '24px' }}
+						sitekey={context.recaptcha}
+						ref={recaptchaRef}
+					/>
 				)}
 				{/*hidden form control*/}
 				<FormControl hidden={true}>

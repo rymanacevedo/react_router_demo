@@ -5,8 +5,8 @@ import {
 	Text,
 } from '@chakra-ui/react';
 
-type CardValue = 'unselected' | 'flagged' | 'selected' | 'answered';
-type CardValues = CardValue[];
+export type CardValue = 'unselected' | 'flagged' | 'selected' | 'answered';
+export type CardValues = CardValue[];
 interface Options extends ChakraCardProps {
 	size: 'sm' | 'md';
 	variant: 'multiPartCard';

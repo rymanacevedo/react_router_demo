@@ -50,7 +50,7 @@ export const getAssignments = async (
 	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
 };
 
-const getAssignmentContent = async (
+export const getAssignmentContent = async (
 	user: User,
 	subAccount: string,
 	assignmentKey: string | undefined,
@@ -73,6 +73,8 @@ export const getModuleContent = async (
 		subAccount,
 		assignmentKey,
 	);
+
+	// TODO: this needs to be optimzed because it's making a second call to the same endpoint
 	const { data: moduleData } = await authenticatedFetch<ModuleData>(
 		assignmentData.moduleUri,
 		user.sessionKey,
@@ -99,6 +101,15 @@ export const getFullModuleWithQuestions = async (
 	return { assignmentData, moduleData, moduleInfoAndQuestions };
 };
 
+export const getCurrentRoundTimedAssessment = async (
+	user: User,
+	subAccount: string,
+	assignmentKey: string | undefined,
+): Promise<{ data: RoundData; response: Response }> => {
+	const url = `/v2/timed-assessments/${assignmentKey}/current-round?extraTime=0&subaccount=${subAccount}`;
+
+	return authenticatedFetch<RoundData>(url, user.sessionKey);
+};
 export const getCurrentRound = async (
 	user: User,
 	subAccount: string,
