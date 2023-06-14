@@ -188,7 +188,7 @@ function SignUp() {
 					<Heading
 						alignContent="center"
 						size="lg"
-						mb={'20px'}
+						mb={'24px'}
 						fontSize={25}
 						whiteSpace="nowrap">
 						<p>{i18n('signUpText')}</p>
@@ -197,8 +197,8 @@ function SignUp() {
 					<FormControl
 						isRequired
 						isInvalid={Boolean(actionData?.errors?.fieldErrors.username)}
-						mb={4}>
-						<FormLabel mb={4}>{i18n('username')}</FormLabel>
+						mb={'4px'}>
+						<FormLabel mb={'4px'}>{i18n('username')}</FormLabel>
 						<Input
 							id="username"
 							autoFocus
@@ -212,8 +212,8 @@ function SignUp() {
 					<FormControl
 						isRequired
 						isInvalid={Boolean(actionData?.errors?.fieldErrors.password)}
-						mb={4}>
-						<FormLabel mb={4}>{i18n('password')}</FormLabel>
+						mb={'4px'}>
+						<FormLabel mb={'4px'}>{i18n('password')}</FormLabel>
 						<Input
 							id="newPassword"
 							type="password"
@@ -227,7 +227,7 @@ function SignUp() {
 						isRequired
 						isInvalid={Boolean(actionData?.errors?.fieldErrors.confirmPassword)}
 						mb="20px">
-						<FormLabel mb={4}>{i18n('reenterPasswordFormLabel')}</FormLabel>
+						<FormLabel mb={'4px'}>{i18n('reenterPasswordFormLabel')}</FormLabel>
 						<Input
 							id="newPassword2"
 							type="password"
@@ -267,7 +267,7 @@ function SignUp() {
 						{i18n('continueBtnText')}
 					</Button>
 
-					<Text mt={'20px'}>{i18n('passwordRuleText')}</Text>
+					<Text mt={'24px'}>{i18n('passwordRuleText')}</Text>
 					<UnorderedList>
 						<ListItem>{i18n('upperCaseRule')}</ListItem>
 						<ListItem>{i18n('lowerCaseRule')}</ListItem>
