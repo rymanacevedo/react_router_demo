@@ -134,7 +134,8 @@ export default function AnswerArea({
 							flexDirection="column"
 							justifyContent="space-between"
 							borderRadius={24}
-							p={'72px'}>
+							px="72px"
+							py="44px">
 							{!showFeedback ? (
 								<Fade in={!showFeedback}>
 									<Text>Under construction</Text>
