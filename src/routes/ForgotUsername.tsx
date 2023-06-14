@@ -124,7 +124,7 @@ export default function ForgotUsername() {
 
 				{context.recaptcha && (
 					<ReCAPTCHA
-						style={{ margin: '20px' }}
+						style={{ margin: '24px' }}
 						sitekey={context.recaptcha}
 						ref={recaptchaRef}
 					/>
