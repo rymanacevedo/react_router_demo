@@ -28,6 +28,7 @@ const baseStyle = definePartsStyle({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: '1px',
+		cursor: 'pointer',
 	},
 });
 

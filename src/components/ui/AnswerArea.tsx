@@ -30,7 +30,7 @@ import unsure from '../../assets/unsure.gif';
 type Props = {
 	isOpen: boolean;
 	onClose: () => void;
-	questionInFocus: QuestionInFocus;
+	questionInFocus: QuestionInFocus | null;
 	selectedAnswers: SelectedAnswer[];
 	selectedAnswersState: (
 		value:

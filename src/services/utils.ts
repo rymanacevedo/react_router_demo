@@ -1,5 +1,6 @@
 import { json } from 'react-router-dom';
 import { API } from '../lib/environment';
+import { User } from './user';
 
 const isAbsoluteUrl = (url: string): boolean => {
 	try {
@@ -8,6 +9,18 @@ const isAbsoluteUrl = (url: string): boolean => {
 	} catch (error) {
 		return false;
 	}
+};
+
+export const getSubAccount = (user: User) => {
+	let subaccount = '';
+	for (let i = 0; i < user.roles.length; i++) {
+		if (user.roles[i].name === 'Learner') {
+			subaccount = user.roles[i].accountKey;
+			break;
+		}
+	}
+
+	return subaccount;
 };
 const replaceOrigin = (url: string, newOrigin: string) => {
 	const parsedURL = new URL(url);
