@@ -2,6 +2,7 @@ import { Box, Heading } from '@chakra-ui/react';
 import AnswerFeedback from './MultiSelectAnswerFeedback';
 import { useEffect, useState } from 'react';
 import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
+import { useTranslation } from 'react-i18next';
 
 export interface Answer {
 	answerId: number | string;
@@ -26,6 +27,7 @@ const MultiSelectFeedback = ({
 	inReview?: boolean;
 	revealAnswer?: boolean;
 }) => {
+	const { t: i18n } = useTranslation();
 	const [wasCorrectAnswerChosen, setWasCorrectAnswerChosen] = useState(false);
 	useEffect(() => {
 		if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
@@ -42,7 +44,7 @@ const MultiSelectFeedback = ({
 	}, [currentRoundAnswerOverLayData, revealAnswer]);
 	return (
 		<Box>
-			<Heading as="h3">Answer</Heading>
+			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
 			<Box
 				marginTop="34px"
 				display="flex"

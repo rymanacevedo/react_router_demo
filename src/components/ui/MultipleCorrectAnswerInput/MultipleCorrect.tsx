@@ -126,38 +126,55 @@ const MultipleCorrect = ({
 				</Fade>
 			)}
 			<Divider marginTop="43px" />
-			<HStack marginTop={3} spacing={6} w="100%">
-				{/* //TO-DO: investigate buttons shifting when specific widths removed */}
-				<Button
-					onClick={() => handleSubmission('IDK')}
-					variant={'ampOutline'}
-					isDisabled={Boolean(selectedAnswers.length)}
-					w="140px">
-					{i18n('iDontKnow')}
-				</Button>
-				<Button
-					onClick={() => handleSubmission('UNSURE')}
-					variant={'ampSolid'}
-					bg="ampSecondary.500"
-					isDisabled={Boolean(!selectedAnswers.length)}
-					w="132px">
-					{i18n('iAmUnsure')}
-				</Button>
-				<Button
-					onClick={() => handleSubmission('SURE')}
-					variant={'ampSolid'}
-					isDisabled={Boolean(!selectedAnswers.length)}
-					w="114px">
-					{i18n('iAmSure')}
-				</Button>
-				<Button
-					onClick={handleClearSelection}
-					variant="link"
-					isDisabled={Boolean(!selectedAnswers.length)}
-					w="114px">
-					{i18n('clearSelectionPlural')}
-				</Button>
-			</HStack>
+			{!showOverlay ? (
+				<HStack marginTop={3} spacing={6} w="100%">
+					{/* //TO-DO: investigate buttons shifting when specific widths removed */}
+					<Button
+						onClick={() => handleSubmission('IDK')}
+						variant={'ampOutline'}
+						isDisabled={Boolean(selectedAnswers.length)}
+						w="140px">
+						{i18n('iDontKnow')}
+					</Button>
+					<Button
+						onClick={() => handleSubmission('UNSURE')}
+						variant={'ampSolid'}
+						bg="ampSecondary.500"
+						isDisabled={Boolean(!selectedAnswers.length)}
+						w="132px">
+						{i18n('iAmUnsure')}
+					</Button>
+					<Button
+						onClick={() => handleSubmission('SURE')}
+						variant={'ampSolid'}
+						isDisabled={Boolean(!selectedAnswers.length)}
+						w="114px">
+						{i18n('iAmSure')}
+					</Button>
+					<Button
+						onClick={handleClearSelection}
+						variant="link"
+						isDisabled={Boolean(!selectedAnswers.length)}
+						w="114px">
+						{i18n('clearSelectionPlural')}
+					</Button>
+				</HStack>
+			) : (
+				<HStack
+					marginTop={3}
+					spacing={6}
+					w="100%"
+					style={{ justifyContent: 'flex-end', marginTop: '48px' }}>
+					<Button
+						onClick={onClick}
+						variant={'ampSolid'}
+						isDisabled={Boolean(!selectedAnswers.length)}
+						w="114px"
+						h="48px">
+						{i18n('capitalContinue')}
+					</Button>
+				</HStack>
+			)}
 		</Box>
 	);
 };
