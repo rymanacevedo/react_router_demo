@@ -3,7 +3,7 @@ import { API } from '../lib/environment';
 import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
-import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
+import { authenticatedFetch, fetchDataPost, unauthorized } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
 import { BootstrapData, BootstrapDataSchema } from '../App';
 import { ForgotUsernameFields } from '../routes/ForgotUsername';
@@ -325,11 +325,11 @@ export const getForgotUsernameData = async (fields: ForgotUsernameFields) => {
 };
 
 export const getSignupData = async (
-	userAltKey: string | null,
+	userAltKey: string,
 	accountUid: string,
 	username: string,
 	password: string,
-	captchaResp: string | null,
+	captchaResp: string,
 ) => {
 	const url = `${API}/v2/users/${userAltKey}/initial-credentials`;
 	const signupBody = {

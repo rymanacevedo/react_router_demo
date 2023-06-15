@@ -2,28 +2,28 @@ import { useRef } from 'react';
 import {
 	ActionFunction,
 	ActionFunctionArgs,
+	Form,
+	json,
+	LoaderFunction,
 	redirect,
 	useActionData,
-	Form,
-	useOutletContext,
-	LoaderFunction,
 	useLoaderData,
-	json,
+	useOutletContext,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import {
 	Button,
+	Flex,
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
 	Heading,
 	Input,
-	UnorderedList,
 	ListItem,
 	Text,
+	UnorderedList,
 	VStack,
-	Flex,
 } from '@chakra-ui/react';
 
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -99,7 +99,7 @@ export const signupAction: ActionFunction = async ({
 		});
 	}
 
-	const { response, data } = await getSignupData(
+	const { response, data, response } = await getSignupData(
 		fields.userAltKey,
 		fields.accountUid,
 		fields.username,
@@ -107,58 +107,57 @@ export const signupAction: ActionFunction = async ({
 		fields['g-recaptcha-response'],
 	);
 
-	if (response.ok) {
-		if (data) {
-			if (data.items) {
-				const items = data.items;
-				if (
-					data.errorMessage &&
-					data.errorMessage === 'username is not available'
-				) {
-					return badRequest({
-						fields,
-						errors: {
-							formErrors: ['username is not available'],
-							fieldErrors: {
-								username: ['username is not available'],
-							},
-						},
-					});
-				}
-				if (
-					items[0].message &&
-					items[0].message === 'Alternate Key must be 9 characters in length'
-				) {
-					return badRequest({
-						fields,
-						errors: {
-							formErrors: ['Alternate Key must be 9 characters in length'],
-							fieldErrors: {
-								userAltKey: ['Alternate Key must be 9 characters in length'],
-							},
-						},
-					});
-				}
-				if (
-					items[0].message &&
-					items[0].message === 'Alternate Key has illegal characters'
-				) {
-					return badRequest({
-						fields,
-						errors: {
-							formErrors: ['Alternate key has illegal characters'],
-							fieldErrors: {
-								accountUid: ['Alternate key has illegal characters'],
-							},
-						},
-					});
-				}
-			}
-			localStorage.removeItem('abbrevName');
-			localStorage.removeItem('userAltKey');
-			return redirect('/success?successMessageToShow=signUp');
+	if (!response.ok) {
+		const items = data.items;
+
+		if (
+			data.errorMessage &&
+			data.errorMessage === 'username is not available'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['username is not available'],
+					fieldErrors: {
+						username: ['username is not available'],
+					},
+				},
+			});
+		}
+
+		if (
+			items[0].message &&
+			items[0].message === 'Alternate Key must be 9 characters in length'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['Alternate Key must be 9 characters in length'],
+					fieldErrors: {
+						userAltKey: ['Alternate Key must be 9 characters in length'],
+					},
+				},
+			});
+		}
+
+		if (
+			items[0].message &&
+			items[0].message === 'Alternate Key has illegal characters'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['Alternate key has illegal characters'],
+					fieldErrors: {
+						accountUid: ['Alternate key has illegal characters'],
+					},
+				},
+			});
 		}
 	}
+	localStorage.removeItem('abbrevName');
+	localStorage.removeItem('userAltKey');
+	return redirect('/success?successMessageToShow=signUp');
 };
 
 export const signupLoader: LoaderFunction = async () => {
