@@ -28,11 +28,11 @@ import {
 
 import ReCAPTCHA from 'react-google-recaptcha';
 import { z } from 'zod';
-import { badRequest } from '../../services/utils';
-import { getSignupData } from '../../services/auth.reactrouter';
-import { AuthLayoutContext } from './AuthLayout';
-import AlertMessage from '../ui/AlertMessage';
-import { AccountInformation } from '../../routes/SignUpLoader';
+import { badRequest } from '../services/utils';
+import { getSignupData } from '../services/auth.reactrouter';
+import { AuthLayoutContext } from '../components/login/AuthLayout';
+import AlertMessage from '../components/ui/AlertMessage';
+import { AccountInformation } from './SignUpLoader';
 
 type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
 	formErrors: U[];
@@ -154,11 +154,10 @@ export const signupAction: ActionFunction = async ({
 				},
 			});
 		}
-	} else {
-		localStorage.removeItem('abbrevName');
-		localStorage.removeItem('userAltKey');
-		return redirect('/success?successMessageToShow=signUp');
 	}
+	localStorage.removeItem('abbrevName');
+	localStorage.removeItem('userAltKey');
+	return redirect('/success?successMessageToShow=signUp');
 };
 
 export const signupLoader: LoaderFunction = async () => {

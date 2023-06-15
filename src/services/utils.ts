@@ -57,10 +57,15 @@ export const fetchDataPost = async <T extends unknown>(
 	});
 
 	let data: T;
-	try {
-		data = await response.json();
-	} catch (error) {
-		data = {} as T;
+	if (response.ok) {
+		const contentType = response.headers.get('content-type');
+		if (contentType && contentType.includes('application/json')) {
+			data = await response.json();
+		} else {
+			data = {} as T;
+		}
+	} else {
+		throw new Error('Request failed');
 	}
 
 	return { data, response };

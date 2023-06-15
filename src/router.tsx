@@ -20,7 +20,7 @@ import ForgotPassword, {
 	forgotPasswordAction,
 } from './components/login/ForgotPassword';
 import ForgotUsername, { forgotUsernameAction } from './routes/ForgotUsername';
-import SignUp, { signupAction, signupLoader } from './components/login/SignUp';
+import SignUp, { signupAction, signupLoader } from './routes/SignUp';
 import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
