@@ -154,6 +154,21 @@ export const signupAction: ActionFunction = async ({
 				},
 			});
 		}
+
+		if (
+			items[0].message &&
+			items[0].message === 'user name or password already exists for user'
+		) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['user name or password already exists for user'],
+					fieldErrors: {
+						username: ['user name or password already exists for user'],
+					},
+				},
+			});
+		}
 	}
 	localStorage.removeItem('abbrevName');
 	localStorage.removeItem('userAltKey');
