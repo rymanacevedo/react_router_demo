@@ -99,7 +99,7 @@ export const signupAction: ActionFunction = async ({
 		});
 	}
 
-	const { response, data, response } = await getSignupData(
+	const { data, response } = await getSignupData(
 		fields.userAltKey,
 		fields.accountUid,
 		fields.username,
