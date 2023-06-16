@@ -161,7 +161,7 @@ const AssignmentList = () => {
 			if (assignment.status === 'COMPLETED') {
 				setRefreshIsOpen(assignment.assignmentKey);
 			} else {
-				navigate(`timedAssessment/${assignment.assignmentUid}`);
+				navigate(`/timedAssessment/${assignment.assignmentUid}`);
 			}
 		} else if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {
@@ -173,7 +173,7 @@ const AssignmentList = () => {
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
 		) {
-			navigate(`moduleIntro/${assignment.assignmentKey}`, {
+			navigate(`/learning/moduleIntro/${assignment.assignmentKey}`, {
 				state: {
 					numberOfLearningUnits: assignment.numLearningUnits,
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
@@ -183,13 +183,13 @@ const AssignmentList = () => {
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'IN_PROGRESS'
 		) {
-			navigate(`assignment/${assignment.assignmentKey}`, {
+			navigate(`/learning/assignment/${assignment.assignmentKey}`, {
 				state: {
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
 			});
 		} else {
-			navigate(`assignment/${assignment.assignmentKey}`, {
+			navigate(`/learning/assignment/${assignment.assignmentKey}`, {
 				state: {
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
@@ -198,18 +198,18 @@ const AssignmentList = () => {
 	};
 	const handleRefresherClick = (assignment: Assignment) => async () => {
 		const refresher = await startRefresher(assignment.assignmentKey, false);
-		navigate(`moduleIntro/${refresher.assignmentKey}`);
+		navigate(`/learning/moduleIntro/${refresher.assignmentKey}`);
 	};
 
 	const handleReviewClick = (assignment: Assignment) => {
 		return () => {
-			navigate(`review/${assignment.assignmentKey}`);
+			navigate(`/learning/review/${assignment.assignmentKey}`);
 		};
 	};
 
 	const handleSmartRefresherClick = (assignment: Assignment) => async () => {
 		const smartRefresher = await startRefresher(assignment.assignmentKey, true);
-		navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
+		navigate(`/learning/moduleIntro/${smartRefresher.assignmentKey}`);
 	};
 
 	const assignmentList = !assignments

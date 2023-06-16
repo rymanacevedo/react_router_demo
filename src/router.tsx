@@ -129,10 +129,7 @@ const routesJSX = (
 					/>
 				}
 			/>
-			<Route
-				loader={learningLoader}
-				path="/learning"
-				element={<LearningView />}>
+			<Route loader={learningLoader} path="learning" element={<LearningView />}>
 				<Route
 					path=":selectedCourseKey"
 					loader={assignmentListLoader}

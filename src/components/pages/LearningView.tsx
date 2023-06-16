@@ -97,6 +97,7 @@ const LearningView = () => {
 			if (course) {
 				setTitle(course.name);
 				setSelectedCourseKey(course.key);
+				navigate(`/learning/${course.key}`);
 			}
 		}
 	}, [fetcher.data]);
