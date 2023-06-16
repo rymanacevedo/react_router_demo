@@ -63,7 +63,6 @@ const AssignmentList = () => {
 	const assignments = useLoaderData() as RootData;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const fetcher = useFetcher();
-
 	const navigate = useNavigate();
 	const getAssignmentText = (assignment: AssignmentData) => {
 		if (
@@ -175,8 +174,6 @@ const AssignmentList = () => {
 		}
 	};
 	const handleRefresherClick = (assignment: AssignmentData) => async () => {
-		// const refresher = await startRefresher(assignment.assignmentKey, false);
-		// navigate(`/learning/moduleIntro/${refresher.assignmentKey}`);
 		fetcher.submit(
 			{ isFocused: 'false' },
 			{
