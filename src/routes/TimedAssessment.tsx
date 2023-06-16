@@ -30,7 +30,7 @@ import { useEffect, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
-import { BookmarkIcon } from '@radix-ui/react-icons';
+import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -189,7 +189,15 @@ export default function TimedAssessment() {
 								justifyContent="space-between">
 								<Heading as="h2">{i18n('answer')}</Heading>
 								<Button
-									leftIcon={<BookmarkIcon />}
+									leftIcon={
+										flaggedQuestions.has(
+											questionInFocus?.publishedQuestionAuthoringKey,
+										) ? (
+											<BookmarkFilledIcon />
+										) : (
+											<BookmarkIcon />
+										)
+									}
 									variant="ghost"
 									onClick={handleFlagForReview}>
 									Flag for review
