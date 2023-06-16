@@ -18,8 +18,7 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { json, useLoaderData, useNavigate } from 'react-router-dom';
-import useModuleContentService from '../../services/coursesServices/useModuleContentService';
+import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 import { LoaderFunction } from 'react-router';
 import {
 	getAssignments,
@@ -55,6 +54,7 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 			},
 		});
 	}
+
 	return json(assignments);
 };
 
@@ -62,7 +62,8 @@ const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
 	const assignments = useLoaderData() as RootData;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
-	const { startRefresher } = useModuleContentService();
+	const fetcher = useFetcher();
+
 	const navigate = useNavigate();
 	const getAssignmentText = (assignment: AssignmentData) => {
 		if (
@@ -174,8 +175,15 @@ const AssignmentList = () => {
 		}
 	};
 	const handleRefresherClick = (assignment: AssignmentData) => async () => {
-		const refresher = await startRefresher(assignment.assignmentKey, false);
-		navigate(`/learning/moduleIntro/${refresher.assignmentKey}`);
+		// const refresher = await startRefresher(assignment.assignmentKey, false);
+		// navigate(`/learning/moduleIntro/${refresher.assignmentKey}`);
+		fetcher.submit(
+			{ isFocused: 'false' },
+			{
+				method: 'POST',
+				action: `/api/refresher?assignmentKey=${assignment.assignmentKey}`,
+			},
+		);
 	};
 
 	const handleReviewClick = (assignment: AssignmentData) => {
@@ -186,11 +194,13 @@ const AssignmentList = () => {
 
 	const handleSmartRefresherClick =
 		(assignment: AssignmentData) => async () => {
-			const smartRefresher = await startRefresher(
-				assignment.assignmentKey,
-				true,
+			fetcher.submit(
+				{ isFocused: 'true' },
+				{
+					method: 'POST',
+					action: `/api/refresher?assignmentKey=${assignment.assignmentKey}`,
+				},
 			);
-			navigate(`/learning/moduleIntro/${smartRefresher.assignmentKey}`);
 		};
 
 	const assignmentList = !assignments
