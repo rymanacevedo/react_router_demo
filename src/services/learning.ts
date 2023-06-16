@@ -4,6 +4,7 @@ import {
 	AnswerData,
 	AssignmentData,
 	ModuleData,
+	RootData,
 	RoundData,
 } from '../lib/validator';
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
@@ -43,11 +44,11 @@ export const getAssignments = async (
 	user: User,
 	subAccount: string,
 ): Promise<{
-	data: AssignmentData;
+	data: RootData;
 	response: Response;
 }> => {
 	const url = `/v2/user-associations?courseCurricKey=${courseCurricKey}&userKey=${user.userKey}&hideUnassigned=false&isWebapp=true&subaccount=${subAccount}`;
-	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
+	return authenticatedFetch<RootData>(url, user.sessionKey);
 };
 
 export const getAssignmentContent = async (

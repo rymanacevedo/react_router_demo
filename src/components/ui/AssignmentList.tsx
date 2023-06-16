@@ -1,4 +1,4 @@
-import { Key, useState } from 'react';
+import { useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
@@ -27,30 +27,7 @@ import {
 } from '../../services/learning';
 import { requireUser } from '../../utils/user';
 import { getSubAccount, serverError } from '../../services/utils';
-
-type Assignment = {
-	assignmentType: string;
-	assignmentUid: string;
-	status: string;
-	estimatedTimeToComplete: number;
-	assignmentKey: string;
-	numLearningUnits: number;
-};
-
-export type AssignmentListDataType = {
-	displayCurriculum: {
-		children: [
-			{
-				assignments: any[];
-				name: Key | null | undefined;
-				curriculum: { name: string; assignments: any[] };
-			},
-		];
-	};
-};
-type Props = {
-	assignments: AssignmentListDataType;
-};
+import { AssignmentData, RootData } from '../../lib/validator';
 
 export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 	const selectedCourseKey = params.selectedCourseKey!;
@@ -78,16 +55,16 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 			},
 		});
 	}
-	return json({ assignments });
+	return json(assignments);
 };
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
-	const { assignments } = useLoaderData() as Props;
+	const assignments = useLoaderData() as RootData;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const { startRefresher } = useModuleContentService();
 	const navigate = useNavigate();
-	const getAssignmentText = (assignment: Assignment) => {
+	const getAssignmentText = (assignment: AssignmentData) => {
 		if (
 			assignment?.assignmentType === 'Assessment' &&
 			assignment?.status === 'COMPLETED'
@@ -156,7 +133,7 @@ const AssignmentList = () => {
 		}
 	};
 
-	const handleAssignmentClick = (assignment: Assignment) => () => {
+	const handleAssignmentClick = (assignment: AssignmentData) => () => {
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
 				setRefreshIsOpen(assignment.assignmentKey);
@@ -196,26 +173,30 @@ const AssignmentList = () => {
 			});
 		}
 	};
-	const handleRefresherClick = (assignment: Assignment) => async () => {
+	const handleRefresherClick = (assignment: AssignmentData) => async () => {
 		const refresher = await startRefresher(assignment.assignmentKey, false);
 		navigate(`/learning/moduleIntro/${refresher.assignmentKey}`);
 	};
 
-	const handleReviewClick = (assignment: Assignment) => {
+	const handleReviewClick = (assignment: AssignmentData) => {
 		return () => {
 			navigate(`/learning/review/${assignment.assignmentKey}`);
 		};
 	};
 
-	const handleSmartRefresherClick = (assignment: Assignment) => async () => {
-		const smartRefresher = await startRefresher(assignment.assignmentKey, true);
-		navigate(`/learning/moduleIntro/${smartRefresher.assignmentKey}`);
-	};
+	const handleSmartRefresherClick =
+		(assignment: AssignmentData) => async () => {
+			const smartRefresher = await startRefresher(
+				assignment.assignmentKey,
+				true,
+			);
+			navigate(`/learning/moduleIntro/${smartRefresher.assignmentKey}`);
+		};
 
 	const assignmentList = !assignments
 		? null
 		: assignments.displayCurriculum.children.map((curriculum, index) => {
-				const assignment: Assignment =
+				const assignment: AssignmentData =
 					curriculum.assignments[curriculum.assignments.length - 1];
 				return (
 					<Popover
