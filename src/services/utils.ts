@@ -116,7 +116,7 @@ export const authenticatedFetch = async <T extends unknown>(
 			const newUrl = replaceOrigin(url, API);
 			return fetchDataPost<T>(newUrl, body, sessionKey);
 		}
-		return fetchDataPost<T>(`${API}${url}`, body);
+		return fetchDataPost<T>(`${API}${url}`, body, sessionKey);
 	} else if (method === 'GET') {
 		// default to GET method
 		if (isAbsoluteUrl(url)) {

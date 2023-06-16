@@ -48,6 +48,7 @@ import { preSignUpLoader } from './routes/SignUpLoader';
 import AssignmentList, {
 	assignmentListLoader,
 } from './components/ui/AssignmentList';
+import { refresherAction } from './routes/Refresher';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -63,6 +64,7 @@ const routesJSX = (
 			loader={keepAliveLoader}
 			action={keepAliveAction}
 		/>
+		<Route path="/api/refresher" action={refresherAction} />
 		<Route path="/feedback" action={questionFeedbackAction} />
 		<Route path="/authenticate" element={<Authenticate />} />
 		<Route
