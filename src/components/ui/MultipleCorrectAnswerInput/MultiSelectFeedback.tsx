@@ -56,8 +56,10 @@ const MultiSelectFeedback = ({
 					{questionInFocus?.answerList
 						?.slice(0, 10)
 						.map((answer: { answerRc: string; id: string | number }) => {
+							// console.log(questionInFocus.questionType);
 							return (
 								<AnswerFeedback
+									questionInFocus={questionInFocus}
 									key={answer.id}
 									questionText={answer.answerRc}
 									questionAnswerId={answer.id}

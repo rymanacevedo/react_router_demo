@@ -1,7 +1,8 @@
+/* eslint-disable unused-imports/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
-import MultiChoiceOverLayIcon from './MultiSelectOverLayIcon';
 import {
 	CurrentRoundAnswerOverLayData,
 	SelectedAnswer,
@@ -12,8 +13,10 @@ import {
 	MinusCircledIcon,
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
+import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
 
 const MultiChoiceAnswerFeedback = ({
+	questionInFocus,
 	questionText,
 	questionAnswerId,
 	selectedAnswers,
@@ -23,6 +26,7 @@ const MultiChoiceAnswerFeedback = ({
 	inReview,
 	revealAnswer,
 }: {
+	questionInFocus?: QuestionInFocus;
 	questionText: string;
 	questionAnswerId: number | string;
 	selectedAnswers?: any[];
@@ -37,9 +41,11 @@ const MultiChoiceAnswerFeedback = ({
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [variant, setVariant] = useState('');
 	const [correctStatus, setCorrectStatus] = useState('');
+	const [multiSelectVariant, setMultiSelectVariant] = useState('');
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 	const choseIDK = IDK && selectedAnswers?.length === 0;
+	// console.log(questionInFocus);
 
 	function checkSelectedAnswers(
 		selectedAnswersArg: SelectedAnswer[],
@@ -67,6 +73,7 @@ const MultiChoiceAnswerFeedback = ({
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkErrorOutline');
+				setMultiSelectVariant('multiSelectUnsureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100 && !wasCorrectAnswerChosen) {
 				setStatus('checked');
@@ -82,10 +89,11 @@ const MultiChoiceAnswerFeedback = ({
 		} else if (choseIDK) {
 			setIsEnabled(true);
 			// eslint-disable-next-line
-			setText('I don\'t know yet');
+			setText("I don't know yet");
 			setVariant('ampNeutralFilled');
 			setStatus('checked');
 		} else {
+			setMultiSelectVariant('multiSelect');
 			setIsEnabled(false);
 			setText('');
 			setStatus('unchecked');
@@ -153,81 +161,106 @@ const MultiChoiceAnswerFeedback = ({
 		}
 	};
 
-	const revealAnswerDisplayCondition = revealAnswer && text === '';
+	const revealAnswerDisplayCondition =
+		(revealAnswer && text === '') ||
+		questionInFocus?.questionType === 'MultipleCorrect';
+
+	if (questionInFocus?.questionType == undefined) {
+		console.log('undefined found: ', questionInFocus);
+	}
+
+	console.log(questionInFocus?.questionType);
 
 	return (
-		<Checkbox
-			style={{
-				display: 'flex',
-				marginBottom: '0.5rem',
-			}}
-			className={inReview ? '' : 'label-hover-effect'}
-			variant={'multiChoiceAnswer'}
-			colorScheme={'transparent'}
-			value={questionAnswerId}
-			size={'4rem'}
-			icon={
-				<MultiChoiceOverLayIcon
-					variant={variant}
-					isIndeterminate={isIndeterminate}
-					isChecked={isChecked}
-				/>
-			}
-			isChecked={isChecked}
-			isIndeterminate={isIndeterminate}>
-			<SlideFade in={isEnabled}>
-				{choseIDK ? (
-					<Flex>
-						<Text>You answered &nbsp;</Text>
-						<Badge variant={variant}>
-							<span
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-								}}>
-								{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
-							</span>
-						</Badge>
-					</Flex>
-				) : (
-					<Flex>
-						<span hidden={revealAnswerDisplayCondition}>
-							You were{' '}
-							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-								{text}
-							</Badge>{' '}
-							and&nbsp;
-						</span>
-						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-							<span
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-								}}>
-								{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
-							</span>
-						</Badge>
-					</Flex>
-				)}
-			</SlideFade>
-			<RichContentComponent
+		<>
+			<Checkbox
 				style={{
-					color: currentRoundAnswerOverLayData?.correctAnswerIds
-						? '#6D758D'
-						: 'inherit',
-					position: 'relative',
-					top: 5,
-					bottom: 0,
-					left: 0,
-					right: 0,
-					transform: `${
-						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
-					}`,
-					transition: 'transform 0.3s ease-in-out',
+					display: 'flex',
+					marginBottom: '25px',
+					cursor: 'pointer',
 				}}
-				content={questionText}
-			/>
-		</Checkbox>
+				className={inReview ? '' : 'label-hover-effect'}
+				variant={multiSelectVariant}
+				colorScheme={'transparent'}
+				value={questionAnswerId}
+				size={'4rem'}
+				// icon={
+				// 	<MultiChoiceOverLayIcon
+				// 		variant={variant}
+				// 		isIndeterminate={isIndeterminate}
+				// 		isChecked={isChecked}
+				// 	/>
+				// }
+				borderColor={'#1e1f20'}
+				isChecked={isChecked}>
+				<SlideFade in={isEnabled}>
+					{choseIDK ? (
+						<Flex>
+							<Text>You answered &nbsp;</Text>
+							<Badge variant={variant}>
+								<span
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+									}}>
+									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
+								</span>
+							</Badge>
+						</Flex>
+					) : (
+						<Flex>
+							<span hidden={revealAnswerDisplayCondition}>
+								You were{' '}
+								<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
+									{text}
+								</Badge>{' '}
+								and&nbsp;
+							</span>
+							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
+								<span
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+									}}>
+									{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
+								</span>
+							</Badge>
+						</Flex>
+					)}
+				</SlideFade>
+				<RichContentComponent
+					style={{
+						color: currentRoundAnswerOverLayData?.correctAnswerIds
+							? '#6D758D'
+							: 'inherit',
+						position: 'relative',
+						top: 5,
+						bottom: 0,
+						left: 0,
+						right: 0,
+						transform: `${
+							isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+						}`,
+						transition: 'transform 0.3s ease-in-out',
+					}}
+					content={questionText}
+				/>
+			</Checkbox>
+			<Flex>
+				<span>
+					You were <Badge variant={variant}>{text}</Badge> and&nbsp;
+				</span>
+				<Badge variant={variant}>
+					<span
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+						}}>
+						{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
+					</span>
+				</Badge>
+			</Flex>
+		</>
 	);
 };
 

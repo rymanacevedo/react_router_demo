@@ -7,7 +7,7 @@ import {
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiSelect from './MultiSelect';
-import MultipleChoiceOverLay from './MultiSelectFeedback';
+import MultiSelectFeedback from './MultiSelectFeedback';
 
 export type MultipleCorrectProps = {
 	questionInFocus: QuestionInFocus;
@@ -115,7 +115,7 @@ const MultipleCorrect = ({
 			) : (
 				<Fade in={showOverlay}>
 					{' '}
-					<MultipleChoiceOverLay
+					<MultiSelectFeedback
 						questionInFocus={questionInFocus}
 						selectedAnswers={selectedAnswers}
 						setSelectedAnswers={updateSelectedAnswersState}
