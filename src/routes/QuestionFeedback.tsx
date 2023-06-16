@@ -1,6 +1,6 @@
 import { ActionFunction } from 'react-router';
 import { z } from 'zod';
-import { badRequest } from '../services/utils';
+import { badRequest, getSubAccount } from '../services/utils';
 import { postFeedback } from '../services/learning';
 import { requireUser } from '../utils/user';
 
@@ -31,13 +31,7 @@ export const questionFeedbackAction: ActionFunction = async ({ request }) => {
 	const cloneData = request.clone();
 	const user = requireUser();
 	// TODO: how do we handle undefined subaccount
-	let subaccount = '';
-	for (let i = 0; i < user.roles.length; i++) {
-		if (user.roles[i].name === 'Learner') {
-			subaccount = user.roles[i].accountKey;
-			break;
-		}
-	}
+	const { subAccount } = getSubAccount(user);
 
 	const formData = await cloneData.formData();
 	const fields = Object.fromEntries(
@@ -62,7 +56,7 @@ export const questionFeedbackAction: ActionFunction = async ({ request }) => {
 	const { data, response } = await postFeedback(
 		user,
 		modifiedFields,
-		subaccount,
+		subAccount,
 	);
 
 	return { data, response };

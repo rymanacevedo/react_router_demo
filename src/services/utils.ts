@@ -12,15 +12,17 @@ const isAbsoluteUrl = (url: string): boolean => {
 };
 
 export const getSubAccount = (user: User) => {
-	let subaccount = '';
+	let subAccount = '';
+	let courseRole = '';
 	for (let i = 0; i < user.roles.length; i++) {
 		if (user.roles[i].name === 'Learner') {
-			subaccount = user.roles[i].accountKey;
+			courseRole = user.roles[i].name;
+			subAccount = user.roles[i].accountKey;
 			break;
 		}
 	}
 
-	return subaccount;
+	return { subAccount, courseRole };
 };
 const replaceOrigin = (url: string, newOrigin: string) => {
 	const parsedURL = new URL(url);
@@ -130,3 +132,6 @@ export const badRequest = <T extends unknown>(data: T) =>
 	json(data, { status: 400 });
 export const unauthorized = <T extends unknown>(data: T) =>
 	json(data, { status: 401 });
+
+export const serverError = <T extends unknown>(data: T) =>
+	json(data, { status: 500 });

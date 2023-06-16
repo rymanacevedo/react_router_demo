@@ -27,7 +27,7 @@ import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
-import LearningView from './components/pages/LearningView';
+import LearningView, { learningLoader } from './components/pages/LearningView';
 import AssignmentReviewView, {
 	assignmentReviewLoader,
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';
@@ -45,6 +45,9 @@ import TimedAssessment, {
 import Success, { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
 import { preSignUpLoader } from './routes/SignUpLoader';
+import AssignmentList, {
+	assignmentListLoader,
+} from './components/ui/AssignmentList';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -132,7 +135,13 @@ const routesJSX = (
 					/>
 				}
 			/>
-			<Route path="learning" element={<LearningView />} />
+			<Route loader={learningLoader} path="learning" element={<LearningView />}>
+				<Route
+					path=":selectedCourseKey"
+					loader={assignmentListLoader}
+					element={<AssignmentList />}
+				/>
+			</Route>
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				loader={assignmentReviewLoader}

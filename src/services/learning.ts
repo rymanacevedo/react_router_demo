@@ -4,6 +4,7 @@ import {
 	AnswerData,
 	AssignmentData,
 	ModuleData,
+	RootData,
 	RoundData,
 } from '../lib/validator';
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
@@ -42,9 +43,12 @@ export const getAssignments = async (
 	courseCurricKey: string,
 	user: User,
 	subAccount: string,
-): Promise<{ data: AssignmentData; response: Response }> => {
+): Promise<{
+	data: RootData;
+	response: Response;
+}> => {
 	const url = `/v2/user-associations?courseCurricKey=${courseCurricKey}&userKey=${user.userKey}&hideUnassigned=false&isWebapp=true&subaccount=${subAccount}`;
-	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
+	return authenticatedFetch<RootData>(url, user.sessionKey);
 };
 
 export const getAssignmentContent = async (
@@ -55,6 +59,19 @@ export const getAssignmentContent = async (
 	const url = `/v2/assignments/${assignmentKey}?includeTimePerLU=true&subaccount=${subAccount}`;
 
 	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
+};
+
+export const getSmartRefresher = async (
+	user: User,
+	subAccount: string,
+	assignmentKey: string,
+	isFocused: boolean,
+): Promise<{ data: any; response: Response }> => {
+	const url = `/v2/assignments/${assignmentKey}/refreshers?subaccount=${subAccount}${
+		isFocused ? '&isFocused=true' : ''
+	}`;
+
+	return authenticatedFetch(url, user.sessionKey, 'POST', {});
 };
 
 export const getModuleContent = async (

@@ -9,25 +9,27 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
+import { Course } from '../pages/LearningView';
 
 type Props = {
-	courseList: { key: string; name: string }[];
+	courses: Course[];
 	selectedCourseKey: string | null;
-	setSelectedCourseKey: (key: string) => void;
-	setCourseTitle: (title: string) => void;
+	courseUpdaterToggle: any;
 };
 
 const CourseMenu = ({
-	courseList,
+	courses,
 	selectedCourseKey,
-	setSelectedCourseKey,
-	setCourseTitle,
+	courseUpdaterToggle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
-
-	if (courseList?.length <= 1) {
+	if (courses.length === 0) {
 		return null;
 	}
+
+	const handleCourseChange = (value: any) => {
+		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
+	};
 
 	return (
 		<Menu isLazy>
@@ -39,15 +41,10 @@ const CourseMenu = ({
 			</MenuButton>
 			<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
 				<MenuOptionGroup
-					onChange={(value) => {
-						setSelectedCourseKey(value as string);
-						setCourseTitle(
-							courseList.find((course) => course.key === value)?.name as string,
-						);
-					}}
+					onChange={handleCourseChange}
 					defaultChecked={true}
 					defaultValue={selectedCourseKey ?? ''}>
-					{courseList?.map((course) => (
+					{courses.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
 							<Text isTruncated maxW="300px">
 								{course.name}

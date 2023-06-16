@@ -37,7 +37,7 @@ import { useTranslation } from 'react-i18next';
 import { transformQuestion } from '../../../utils/logic';
 import { getAnswerHistory } from '../../../services/learning';
 import { requireUser } from '../../../utils/user';
-import { badRequest } from '../../../services/utils';
+import { badRequest, getSubAccount } from '../../../services/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
 const initState = {
@@ -68,14 +68,9 @@ const initState = {
 export const reviewViewLoader: LoaderFunction = async ({ params }) => {
 	const { assignmentKey } = params;
 	const user = requireUser();
-	let subaccount = '';
-	user.roles.forEach((role) => {
-		if (role.name === 'Learner') {
-			subaccount = role.accountKey;
-		}
-	});
+	const { subAccount } = getSubAccount(user);
 	if (assignmentKey) {
-		const response = await getAnswerHistory(user, subaccount, assignmentKey);
+		const response = await getAnswerHistory(user, subAccount, assignmentKey);
 		const { data } = response;
 		return json({ data: data.items, assignmentKey: assignmentKey });
 	}
