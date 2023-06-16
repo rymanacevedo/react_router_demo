@@ -8,7 +8,7 @@ import {
 	RoundData,
 } from '../lib/validator';
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
-import { API } from '../lib/environment';
+import { VITE_BACKEND_API } from '../lib/environment';
 
 export const getCourseList = async (
 	user: any,
@@ -168,7 +168,7 @@ export const postFeedback = async (
 	fields: QuestionFeedbackFields,
 	subAccount: string,
 ): Promise<any> => {
-	const url = `${API}/v2/curricula/questions/feedback?subaccount=${subAccount}`;
+	const url = `${VITE_BACKEND_API}/v2/curricula/questions/feedback?subaccount=${subAccount}`;
 	const body = {
 		id: fields.id,
 		courseKey: fields.courseKey,
