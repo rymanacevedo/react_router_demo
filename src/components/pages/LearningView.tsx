@@ -135,11 +135,7 @@ const LearningView = () => {
 					courseUpdaterToggle={fetcher}
 				/>
 			</HStack>
-			<Outlet
-				context={{
-					selectedCourseKey: selectedCourseKey,
-				}}
-			/>
+			<Outlet />
 		</Container>
 	);
 };
