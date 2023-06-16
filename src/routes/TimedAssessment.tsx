@@ -134,7 +134,7 @@ export default function TimedAssessment() {
 									values.push('selected');
 								}
 
-								if (question.answered) {
+								if (question.confidence !== 'NA') {
 									values.push('answered');
 								}
 
