@@ -1,6 +1,6 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import {
@@ -14,6 +14,7 @@ import {
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
 import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
+import { FeedbackContext } from '../../../hooks/useFeedbackContext';
 
 const MultiChoiceAnswerFeedback = ({
 	questionInFocus,
@@ -45,7 +46,9 @@ const MultiChoiceAnswerFeedback = ({
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 	const choseIDK = IDK && selectedAnswers?.length === 0;
-	// console.log(questionInFocus);
+
+	const { updateFeedback: updateFeedbackContext, updateCorrectStatus } =
+		useContext(FeedbackContext);
 
 	function checkSelectedAnswers(
 		selectedAnswersArg: SelectedAnswer[],
@@ -68,22 +71,26 @@ const MultiChoiceAnswerFeedback = ({
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampWarningOutline');
+				updateFeedbackContext('ampWarningOutline', 'unsure');
 				setIsEnabled(true);
 			} else if (match.confidence === 50 && !wasCorrectAnswerChosen) {
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkErrorOutline');
+				updateFeedbackContext('ampDarkErrorOutline', 'unsure');
 				setMultiSelectVariant('multiSelectUnsureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100 && !wasCorrectAnswerChosen) {
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkError');
+				updateFeedbackContext('ampDarkError', 'sure');
 				setIsEnabled(true);
 			} else if (match.confidence === 100) {
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkSuccess');
+				updateFeedbackContext('ampDarkSuccess', 'sure');
 				setIsEnabled(true);
 			}
 		} else if (choseIDK) {
@@ -107,13 +114,17 @@ const MultiChoiceAnswerFeedback = ({
 	useEffect(() => {
 		if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
 			if (selectedAnswers?.length === 1 && wasCorrectAnswerChosen) {
+				updateCorrectStatus('correct');
 				setCorrectStatus('correct');
 			} else if (selectedAnswers?.length === 1 && !wasCorrectAnswerChosen) {
 				setCorrectStatus('incorrect');
+				updateCorrectStatus('incorrect');
 			} else if (selectedAnswers?.length > 1 && wasCorrectAnswerChosen) {
 				setCorrectStatus('partially correct');
+				updateCorrectStatus('partially correct');
 			} else if (selectedAnswers?.length > 1 && !wasCorrectAnswerChosen) {
 				setCorrectStatus('incorrect');
+				updateCorrectStatus('incorrect');
 			}
 		}
 	}, [currentRoundAnswerOverLayData, wasCorrectAnswerChosen]);
@@ -164,12 +175,6 @@ const MultiChoiceAnswerFeedback = ({
 	const revealAnswerDisplayCondition =
 		(revealAnswer && text === '') ||
 		questionInFocus?.questionType === 'MultipleCorrect';
-
-	if (questionInFocus?.questionType == undefined) {
-		console.log('undefined found: ', questionInFocus);
-	}
-
-	console.log(questionInFocus?.questionType);
 
 	return (
 		<>
@@ -246,20 +251,6 @@ const MultiChoiceAnswerFeedback = ({
 					content={questionText}
 				/>
 			</Checkbox>
-			<Flex>
-				<span>
-					You were <Badge variant={variant}>{text}</Badge> and&nbsp;
-				</span>
-				<Badge variant={variant}>
-					<span
-						style={{
-							display: 'flex',
-							alignItems: 'center',
-						}}>
-						{badgeIcon()} <Text paddingLeft={'5px'}>{correctStatus}</Text>
-					</span>
-				</Badge>
-			</Flex>
 		</>
 	);
 };

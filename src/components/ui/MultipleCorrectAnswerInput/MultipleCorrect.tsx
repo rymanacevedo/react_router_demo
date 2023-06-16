@@ -1,6 +1,19 @@
-import { Box, Button, Divider, Fade, HStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+/* eslint-disable unused-imports/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+	Badge,
+	Box,
+	Button,
+	Divider,
+	Fade,
+	Flex,
+	HStack,
+	Text,
+} from '@chakra-ui/react';
+import { Cross1Icon } from '@radix-ui/react-icons';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FeedbackContext } from '../../../hooks/useFeedbackContext';
 import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
@@ -48,7 +61,11 @@ const MultipleCorrect = ({
 
 	const [submitted, setSubmitted] = useState(false);
 
+	const { feedbackVariant, feedbackText, feedbackStatus } =
+		useContext(FeedbackContext);
+
 	const handleSubmission = (confidence: string) => {
+		console.log('this ran');
 		if (confidence === 'IDK') {
 			setTotalAnswerConfidence('NotSure');
 			setSubmitted(true);
@@ -85,7 +102,7 @@ const MultipleCorrect = ({
 			onClick();
 		}
 	}, [submitted]);
-
+	console.log(feedbackVariant);
 	return (
 		<Box
 			style={{
@@ -113,17 +130,37 @@ const MultipleCorrect = ({
 					/>
 				</Fade>
 			) : (
-				<Fade in={showOverlay}>
-					{' '}
-					<MultiSelectFeedback
-						questionInFocus={questionInFocus}
-						selectedAnswers={selectedAnswers}
-						setSelectedAnswers={updateSelectedAnswersState}
-						clearSelection={clearSelection}
-						setClearSelection={clearSelectionState}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-					/>
-				</Fade>
+				<>
+					<Fade in={showOverlay}>
+						{' '}
+						<MultiSelectFeedback
+							questionInFocus={questionInFocus}
+							selectedAnswers={selectedAnswers}
+							setSelectedAnswers={updateSelectedAnswersState}
+							clearSelection={clearSelection}
+							setClearSelection={clearSelectionState}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						/>
+					</Fade>
+					{showOverlay && (
+						<Flex>
+							<span>
+								You were <Badge variant={feedbackVariant}>{feedbackText}</Badge>{' '}
+								and&nbsp;
+							</span>
+							<Badge variant={feedbackVariant}>
+								<span
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+									}}>
+									{<Cross1Icon />}{' '}
+									<Text paddingLeft={'5px'}>{feedbackStatus}</Text>
+								</span>
+							</Badge>
+						</Flex>
+					)}
+				</>
 			)}
 			<Divider marginTop="43px" />
 			{!showOverlay ? (

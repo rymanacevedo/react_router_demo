@@ -25,6 +25,7 @@ import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
+import { FeedbackProvider } from './hooks/useFeedbackContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
 import LearningView from './components/pages/LearningView';
@@ -99,9 +100,11 @@ const routesJSX = (
 				<AuthProvider>
 					<DialogProvider>
 						<ProgressMenuContextProvider>
-							<QuizProvider>
-								<ProtectedRoute />
-							</QuizProvider>
+							<FeedbackProvider>
+								<QuizProvider>
+									<ProtectedRoute />
+								</QuizProvider>
+							</FeedbackProvider>
 						</ProgressMenuContextProvider>
 					</DialogProvider>
 				</AuthProvider>
