@@ -138,7 +138,7 @@ const AssignmentList = () => {
 			if (assignment.status === 'COMPLETED') {
 				setRefreshIsOpen(assignment.assignmentKey);
 			} else {
-				navigate(`/timedAssessment/${assignment.assignmentUid}`);
+				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
 			}
 		} else if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {

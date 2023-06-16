@@ -208,12 +208,14 @@ export type ModuleData = {
 };
 
 export enum Confidence {
+	NA = 'NA',
 	NotSure = 'NotSure',
 	OneAnswerPartSure = 'OneAnswerPartSure',
 	Sure = 'Sure',
 }
 
 export enum Correctness {
+	NoAnswer = 'NoAnswer',
 	Incorrect = 'Incorrect',
 	NoAnswerSelected = 'NoAnswerSelected',
 	Correct = 'Correct',

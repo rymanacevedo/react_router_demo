@@ -21,6 +21,7 @@ import {
 import { getSubAccount } from '../services/utils';
 import { useLoaderData } from 'react-router-dom';
 import {
+	Confidence,
 	ModuleData,
 	QuestionInFocus,
 	RoundData,
@@ -134,7 +135,7 @@ export default function TimedAssessment() {
 									values.push('selected');
 								}
 
-								if (question.confidence !== 'NA') {
+								if (question.confidence !== Confidence.NA) {
 									values.push('answered');
 								}
 
