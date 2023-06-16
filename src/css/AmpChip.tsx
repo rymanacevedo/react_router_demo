@@ -1,4 +1,4 @@
-import { Tag } from '@chakra-ui/react';
+import { Tag, Icon, Center } from '@chakra-ui/react';
 import {
 	CheckIcon,
 	Cross1Icon,
@@ -21,57 +21,32 @@ interface InterfaceAmpChip {
 function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 	const getIcon = () => {
 		switch (variant) {
-			case 'ampDarkSuccessOutline': {
-				return (
-					<CheckIcon
-						height={size === 'lg' ? '40px' : '20px'}
-						width={size === 'lg' ? '25px' : '12px'}
-					/>
-				);
-				break;
-			}
+			case 'ampDarkSuccessOutline':
 			case 'ampDarkSuccess': {
 				return (
-					<CheckIcon
-						height={size === 'lg' ? '40px' : '20px'}
-						width={size === 'lg' ? '25px' : '12px'}
-					/>
+					<Icon as={CheckIcon} boxSize={size === 'lg' ? '25px' : '12px'} />
 				);
 				break;
 			}
 			case 'ampNeutralFilled': {
 				return (
-					<QuestionMarkIcon
-						height={size === 'lg' ? '40px' : '20px'}
-						width={size === 'lg' ? '25px' : '12px'}
+					<Icon
+						as={QuestionMarkIcon}
+						boxSize={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
 				break;
 			}
 			case 'ampWarningOutline': {
 				return (
-					<MinusIcon
-						height={size === 'lg' ? '40px' : '20px'}
-						width={size === 'lg' ? '25px' : '12px'}
-					/>
+					<Icon as={MinusIcon} boxSize={size === 'lg' ? '25px' : '12px'} />
 				);
 				break;
 			}
-			case 'ampDarkErrorOutline': {
-				return (
-					<Cross1Icon
-						height={size === 'lg' ? '40px' : '20px'}
-						width={size === 'lg' ? '25px' : '12px'}
-					/>
-				);
-				break;
-			}
+			case 'ampDarkErrorOutline':
 			case 'ampDarkError': {
 				return (
-					<Cross1Icon
-						height={size === 'lg' ? '40px' : '20px'}
-						width={size === 'lg' ? '25px' : '12px'}
-					/>
+					<Icon as={Cross1Icon} boxSize={size === 'lg' ? '24px' : '13px'} />
 				);
 				break;
 			}
@@ -79,6 +54,12 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 	};
 	return (
 		<Tag
+			borderRadius="full"
+			height={size === 'lg' ? '48px' : '24px'}
+			width={size === 'lg' ? '48px' : '24px'}
+			size={size}
+			variant={variant}
+			padding={0}
 			border={
 				Boolean(
 					variant === 'ampDarkSuccessOutline' ||
@@ -89,13 +70,8 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 						? '2px'
 						: '1px'
 					: '0px'
-			}
-			size={size}
-			height={size === 'lg' ? '48px' : '20px'}
-			width={size === 'lg' ? '48px' : '12px'}
-			borderRadius="30"
-			variant={variant}>
-			{getIcon()}
+			}>
+			<Center width={size === 'lg' ? '48px' : '24px'}>{getIcon()}</Center>
 		</Tag>
 	);
 }

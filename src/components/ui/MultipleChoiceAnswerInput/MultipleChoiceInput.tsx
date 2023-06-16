@@ -165,23 +165,10 @@ const MultipleChoiceInput = ({
 			disabled={isDisabled}
 			isIndeterminate={isIndeterminate}
 			onChange={(e) => checkStatus(e)}>
-			<SlideFade in={isEnabled}>
+			<SlideFade in={isEnabled} unmountOnExit>
 				<Badge variant={variant}>{text}</Badge>
 			</SlideFade>
-			<RichContentComponent
-				style={{
-					position: 'relative',
-					top: 5,
-					bottom: 0,
-					left: 0,
-					right: 0,
-					transform: `${
-						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
-					}`,
-					transition: 'transform 0.3s ease-in-out',
-				}}
-				content={questionText}
-			/>
+			<RichContentComponent content={questionText} />
 		</Checkbox>
 	);
 };
