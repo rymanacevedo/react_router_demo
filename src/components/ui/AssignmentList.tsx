@@ -136,7 +136,7 @@ const AssignmentList = () => {
 	const handleAssignmentClick = (assignment: AssignmentData) => () => {
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
-				setRefreshIsOpen(assignment.assignmentKey);
+				// TODO: implement popup for review/retake
 			} else {
 				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
 			}
