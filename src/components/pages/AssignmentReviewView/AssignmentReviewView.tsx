@@ -15,7 +15,6 @@ import {
 	Stack,
 	Text,
 	useDisclosure,
-	useMediaQuery,
 	VStack,
 } from '@chakra-ui/react';
 import TestProgressBarMenu from '../../ui/TestProgressBarMenu';
@@ -90,7 +89,6 @@ const AssignmentReviewView = () => {
 		updateModuleLearningUnitsData,
 	} = useQuizContext();
 	const { t: i18n } = useTranslation();
-	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
 	const [showExplanation, setShowExplanation] = useState(false);
@@ -695,7 +693,8 @@ const AssignmentReviewView = () => {
 					padding="0"
 					maxWidth={'100vw'}
 					overflowY={'hidden'}
-					overflowX={'hidden'}>
+					overflowX={'hidden'}
+					bgColor="ampNeutral.200">
 					<FireProgressToast
 						textPrompt={textPrompt}
 						expandProgressMenu={expandProgressMenu}
@@ -713,14 +712,19 @@ const AssignmentReviewView = () => {
 					<ExplanationTitle
 						answer={`${questionInFocus?.confidence}${questionInFocus?.correctness}`}
 					/>
-					<HStack justify="center" align="space-between">
+					<HStack
+						justify="center"
+						align="space-between"
+						bgColor="ampNeutral.200">
 						<Stack
-							maxW="1496"
+							maxW="1496px"
 							w="100%"
-							p="12px"
-							pr="0px"
+							p={3}
+							pr={0}
 							alignItems="stretch"
-							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+							direction={['column', 'column', 'row', 'row', 'row', 'row']}
+							spacing={6}
+							mr={6}>
 							<Box
 								backgroundColor="white"
 								boxShadow="md"
@@ -736,8 +740,7 @@ const AssignmentReviewView = () => {
 								/>
 							</Box>
 							<Box
-								style={{ marginTop: isSmallerThan1000 ? '10px' : '0px' }}
-								backgroundColor="white"
+								backgroundColor="ampWhite"
 								boxShadow="md"
 								display="flex"
 								flexDirection="column"
@@ -796,80 +799,88 @@ const AssignmentReviewView = () => {
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>
 					</HStack>
-					<Collapse in={showExplanation} animateOpacity>
-						<VStack
-							p="12px"
-							rounded="md"
-							shadow="md"
-							display={'flex'}
-							justifyContent={'center'}
-							w="100%">
-							{showExplanation && !tryAgain && (
-								<WhatYouNeedToKnowComponent
-									assignmentKey={assignmentKey}
-									courseKey={selectedCourseKey}
-									questionInFocus={questionInFocus}
-								/>
-							)}
+					<HStack justify="center" align="space-between">
+						<Stack
+							maxW="1496px"
+							w="100%"
+							p={3}
+							pr="0px"
+							mr={6}
+							alignItems="stretch">
 							<Box
-								style={{
-									backgroundColor: 'white',
-									marginTop: '24px',
-									marginBottom: '24px',
-								}}
-								boxShadow="xl"
-								w="100%"
-								maxW="1496px"
-								overflow="hidden"
-								borderRadius={24}
-								p={8}>
-								<HStack padding={'0px 150px'} justifyContent={'space-between'}>
-									<Button
-										leftIcon={<ArrowLeftIcon />}
-										variant={'ampOutline'}
-										onClick={decrementQuestion}
-										isDisabled={questionIndex === 0}>
-										{i18n('prevQ')}
-									</Button>
-									<VStack>
-										<Text marginBottom={'-10px'}>
-											{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
-											{numberOfQInReview}
-										</Text>
-										{Boolean(Number(numberOfQInReview) === questionIndex + 1) &&
-											numberOfQInReview &&
-											numberOfQInReview <
-												currentRoundQuestionListData?.questionList?.length &&
-											!viewCorrect && (
+								as={Collapse}
+								width="100%"
+								in={showExplanation}
+								animateOpacity>
+								<VStack rounded="md" spacing={6} maxW="1496px" w="100%" pb={3}>
+									{showExplanation && !tryAgain && (
+										<WhatYouNeedToKnowComponent
+											assignmentKey={assignmentKey}
+											courseKey={selectedCourseKey}
+											questionInFocus={questionInFocus}
+										/>
+									)}
+									<Box
+										bgColor="ampWhite"
+										overflow="hidden"
+										borderRadius={24}
+										p={8}
+										w="100%"
+										boxShadow="md">
+										<HStack
+											padding={'0px 150px'}
+											justifyContent={'space-between'}>
+											<Button
+												leftIcon={<ArrowLeftIcon />}
+												variant={'ampOutline'}
+												onClick={decrementQuestion}
+												isDisabled={questionIndex === 0}>
+												{i18n('prevQ')}
+											</Button>
+											<VStack>
+												<Text marginBottom={'-10px'}>
+													{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
+													{numberOfQInReview}
+												</Text>
+												{Boolean(
+													Number(numberOfQInReview) === questionIndex + 1,
+												) &&
+													numberOfQInReview &&
+													numberOfQInReview <
+														currentRoundQuestionListData?.questionList
+															?.length &&
+													!viewCorrect && (
+														<Button
+															onClick={handleReviewCorrect}
+															variant={'ghost'}
+															color={'ampPrimary'}>
+															<Text color="ampSecondary.500">
+																{i18n('reviewCorrectAns')}
+															</Text>
+														</Button>
+													)}
+											</VStack>
+											{Number(numberOfQInReview) === questionIndex + 1 ? (
 												<Button
-													onClick={handleReviewCorrect}
-													variant={'ghost'}
-													color={'ampPrimary'}>
-													<Text color="ampSecondary.500">
-														{i18n('reviewCorrectAns')}
-													</Text>
+													rightIcon={<ArrowRightIcon />}
+													variant={'ampSolid'}
+													onClick={handleProgress}>
+													{i18n('keepGoing')}
+												</Button>
+											) : (
+												<Button
+													rightIcon={<ArrowRightIcon />}
+													variant={'ampSolid'}
+													onClick={handleNextQuestionInReview}>
+													{i18n('nextQ')}
 												</Button>
 											)}
-									</VStack>
-									{Number(numberOfQInReview) === questionIndex + 1 ? (
-										<Button
-											rightIcon={<ArrowRightIcon />}
-											variant={'ampSolid'}
-											onClick={handleProgress}>
-											{i18n('keepGoing')}
-										</Button>
-									) : (
-										<Button
-											rightIcon={<ArrowRightIcon />}
-											variant={'ampSolid'}
-											onClick={handleNextQuestionInReview}>
-											{i18n('nextQ')}
-										</Button>
-									)}
-								</HStack>
+										</HStack>
+									</Box>
+								</VStack>
 							</Box>
-						</VStack>
-					</Collapse>
+						</Stack>
+					</HStack>
 				</Container>
 			) : (
 				<LoadingAssignmentView />

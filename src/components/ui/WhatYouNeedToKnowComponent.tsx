@@ -65,10 +65,8 @@ const WhatYouNeedToKnowComponent = ({
 
 	return (
 		<Box
-			style={{
-				backgroundColor: 'white',
-			}}
-			boxShadow={isSafari ? 'none' : 'xl'}
+			bgColor="ampWhite"
+			boxShadow={isSafari ? 'none' : 'md'}
 			w="100%"
 			minH="40vh"
 			overflow="hidden"

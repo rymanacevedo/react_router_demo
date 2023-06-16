@@ -392,7 +392,7 @@ const TestProgressBarMenu = ({
 				colorScheme="gray"
 				zIndex={'1'}
 				width="100%"
-				bg="ampNeutral.50"
+				bg={!inReview ? 'ampNeutral.50' : 'ampNeutral.200'}
 			/>
 		</Box>
 	);
