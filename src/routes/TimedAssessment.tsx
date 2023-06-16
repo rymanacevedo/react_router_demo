@@ -199,6 +199,7 @@ export default function TimedAssessment() {
 											<BookmarkIcon />
 										)
 									}
+									colorScheme="ampSecondary"
 									variant="ghost"
 									onClick={handleFlagForReview}>
 									Flag for review
