@@ -30,7 +30,7 @@ import unsure from '../../assets/unsure.gif';
 type Props = {
 	isOpen: boolean;
 	onClose: () => void;
-	questionInFocus: QuestionInFocus;
+	questionInFocus: QuestionInFocus | null;
 	selectedAnswers: SelectedAnswer[];
 	selectedAnswersState: (
 		value:
@@ -111,6 +111,7 @@ export default function AnswerArea({
 							updateSelectedAnswersState={selectedAnswersState}
 							clearSelection={clearSelection}
 							clearSelectionState={clearSelectionState}
+							clearSelectionFunction={clearSelectionFunction}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 							onClick={onClick}
 							setIDKResponse={setIDKResponse}
@@ -133,7 +134,8 @@ export default function AnswerArea({
 							flexDirection="column"
 							justifyContent="space-between"
 							borderRadius={24}
-							p={'72px'}>
+							px="72px"
+							py="44px">
 							{!showFeedback ? (
 								<Fade in={!showFeedback}>
 									<Text>Under construction</Text>

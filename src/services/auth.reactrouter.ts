@@ -3,7 +3,7 @@ import { API } from '../lib/environment';
 import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
-import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
+import { authenticatedFetch, fetchDataPost, unauthorized } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
 import { BootstrapData, BootstrapDataSchema } from '../App';
 import { ForgotUsernameFields } from '../routes/ForgotUsername';
@@ -107,9 +107,12 @@ export async function bootstrap(request: Request) {
 	try {
 		const url = new URL(request.url);
 		const abbrevName = url.searchParams.get('abbrevName');
-		if (abbrevName) {
+		const localAbbrevName = localStorage.getItem('abbrevName');
+		if (abbrevName || localAbbrevName) {
 			const response = await fetch(
-				`${API}/v2/bootstrap/account-info?name=${abbrevName}`,
+				`${API}/v2/bootstrap/account-info?name=${
+					abbrevName || localAbbrevName
+				}`,
 			);
 			return await response.json();
 		}
@@ -319,4 +322,22 @@ export const getForgotUsernameData = async (fields: ForgotUsernameFields) => {
 		captchaResp: fields['g-recaptcha-response'],
 	};
 	return fetchDataPost<any>(url, forgotUserBody);
+};
+
+export const getSignupData = async (
+	userAltKey: string,
+	accountUid: string,
+	username: string,
+	password: string,
+	captchaResp: string,
+) => {
+	const url = `${API}/v2/users/${userAltKey}/initial-credentials`;
+	const signupBody = {
+		accountUid,
+		username,
+		password,
+		captchaResp,
+	};
+
+	return fetchDataPost<any>(url, signupBody);
 };

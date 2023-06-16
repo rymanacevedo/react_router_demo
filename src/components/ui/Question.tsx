@@ -1,6 +1,10 @@
 import { Heading, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './Review/ReviewContentRender';
+import {
+	QuestionInFocus,
+	TransformedQuestion,
+} from '../pages/AssignmentView/AssignmentTypes';
 
 const Question = ({
 	questionInFocus,
@@ -10,9 +14,7 @@ const Question = ({
 }: {
 	review?: boolean;
 	numberOfQInReview?: number;
-	questionInFocus:
-		| { questionRc: any; name?: string; introductionRc?: any }
-		| undefined;
+	questionInFocus: TransformedQuestion | QuestionInFocus | null;
 	questionIndex?: number;
 }) => {
 	const { t: i18n } = useTranslation();
@@ -24,7 +26,7 @@ const Question = ({
 					{i18n('ReviewQ')} {questionIndex} {i18n('of')} {numberOfQInReview}{' '}
 				</Heading>
 			) : (
-				<Heading as="h3">Question</Heading>
+				<Heading as="h2">{i18n('question')}</Heading>
 			)}
 			{questionInFocus?.introductionRc ? (
 				<Stack spacing="20px" marginTop="34px">
