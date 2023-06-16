@@ -20,7 +20,7 @@ import ForgotPassword, {
 	forgotPasswordAction,
 } from './components/login/ForgotPassword';
 import ForgotUsername, { forgotUsernameAction } from './routes/ForgotUsername';
-import SignUp from './components/login/SignUp';
+import SignUp, { signupAction, signupLoader } from './routes/SignUp';
 import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
@@ -44,6 +44,7 @@ import TimedAssessment, {
 } from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
+import { preSignUpLoader } from './routes/SignUpLoader';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -87,8 +88,13 @@ const routesJSX = (
 				path="forgot-username"
 				element={<ForgotUsername />}
 			/>
-			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
-			<Route path="signup" element={<SignUp />} />
+			<Route path="signup/:abbrevName/:userAltKey" loader={preSignUpLoader} />
+			<Route
+				path="signup"
+				action={signupAction}
+				loader={signupLoader}
+				element={<SignUp />}
+			/>
 			<Route action={registerAction} path="register" element={<Register />} />
 			<Route path="success" loader={successLoader} element={<Success />} />
 		</Route>
