@@ -30,6 +30,7 @@ import { useEffect, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
+import { BookmarkIcon } from '@radix-ui/react-icons';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -50,11 +51,27 @@ export default function TimedAssessment() {
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
 	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
+	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
+
 	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
 		assignmentData: AssignmentData;
 		moduleData: ModuleData;
 		moduleInfoAndQuestions: ModuleData;
 		roundData: RoundData;
+	};
+
+	const handleFlagForReview = () => {
+		if (questionInFocus) {
+			setFlaggedQuestions((prevState) => {
+				const newSet = new Set(prevState);
+				if (newSet.has(questionInFocus.publishedQuestionAuthoringKey)) {
+					newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
+				} else {
+					newSet.add(questionInFocus.publishedQuestionAuthoringKey);
+				}
+				return newSet;
+			});
+		}
 	};
 
 	const handleNavigation = (question: QuestionInFocus) => {
@@ -121,6 +138,12 @@ export default function TimedAssessment() {
 									values.push('answered');
 								}
 
+								if (
+									flaggedQuestions.has(question.publishedQuestionAuthoringKey)
+								) {
+									values.push('flagged');
+								}
+
 								return (
 									<PracticeTestCard
 										key={question.publishedQuestionAuthoringKey}
@@ -160,7 +183,18 @@ export default function TimedAssessment() {
 							px="72px"
 							py="44px"
 							w={{ base: '100%', md: '50%' }}>
-							<Heading as="h2">{i18n('answer')}</Heading>
+							<Stack
+								direction="row"
+								alignItems="center"
+								justifyContent="space-between">
+								<Heading as="h2">{i18n('answer')}</Heading>
+								<Button
+									leftIcon={<BookmarkIcon />}
+									variant="ghost"
+									onClick={handleFlagForReview}>
+									Flag for review
+								</Button>
+							</Stack>
 							<AnswerSelection
 								questionInFocus={questionInFocus}
 								// selectedAnswers={selectedAnswer}
