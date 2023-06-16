@@ -3,6 +3,7 @@ import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
 
 import { useDialogContext } from '../components/DialogProvider';
+import { VITE_BACKEND_API } from '../lib/environment';
 
 const useAnswerHistoryService = () => {
 	const [error, setError] = useState('');
@@ -21,7 +22,7 @@ const useAnswerHistoryService = () => {
 		try {
 			setLoading(true);
 			const answerHistoryResponse = await axios({
-				url: `/v2/assignments/${assignmentKey}/answer-history?subaccount=${subaccount}`,
+				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}/answer-history?subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,

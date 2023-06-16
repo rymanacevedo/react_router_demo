@@ -1,5 +1,5 @@
 import { json } from 'react-router-dom';
-import { API } from '../lib/environment';
+import { VITE_BACKEND_API } from '../lib/environment';
 import { User } from './user';
 
 const isAbsoluteUrl = (url: string): boolean => {
@@ -107,23 +107,23 @@ export const authenticatedFetch = async <T extends unknown>(
 	// if PUT method, use fetchDataPut
 	if (method === 'PUT') {
 		if (isAbsoluteUrl(url)) {
-			const newUrl = replaceOrigin(url, API);
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchDataPut<T>(newUrl, body, sessionKey);
 		}
-		return fetchDataPut<T>(`${API}${url}`, body, sessionKey);
+		return fetchDataPut<T>(`${VITE_BACKEND_API}${url}`, body, sessionKey);
 	} else if (method === 'POST') {
 		if (isAbsoluteUrl(url)) {
-			const newUrl = replaceOrigin(url, API);
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchDataPost<T>(newUrl, body, sessionKey);
 		}
-		return fetchDataPost<T>(`${API}${url}`, body, sessionKey);
+		return fetchDataPost<T>(`${VITE_BACKEND_API}${url}`, body, sessionKey);
 	} else if (method === 'GET') {
 		// default to GET method
 		if (isAbsoluteUrl(url)) {
-			const newUrl = replaceOrigin(url, API);
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchCallbackGet<T>(newUrl, sessionKey);
 		}
-		return fetchCallbackGet<T>(`${API}${url}`, sessionKey);
+		return fetchCallbackGet<T>(`${VITE_BACKEND_API}${url}`, sessionKey);
 	}
 
 	throw new Error('Invalid method, not supported');

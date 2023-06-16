@@ -3,6 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
 import { useDialogContext } from '../../components/DialogProvider';
+import { VITE_BACKEND_API } from '../../lib/environment';
 
 const useCurrentRoundService = () => {
 	const [error, setError] = useState('');
@@ -21,7 +22,7 @@ const useCurrentRoundService = () => {
 		try {
 			setLoading(true);
 			const response = await axios({
-				url: `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&subaccount=${subaccount}`,
+				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}/current-round?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,
@@ -46,7 +47,7 @@ const useCurrentRoundService = () => {
 		try {
 			setLoading(true);
 			const response = await axios({
-				url: `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&skipreview=true&subaccount=${subaccount}`,
+				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}/current-round?isWebApp=true&skipreview=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,
@@ -72,7 +73,7 @@ const useCurrentRoundService = () => {
 		try {
 			setLoading(true);
 			const response = await axios({
-				url: `/v2/rounds/${roundId}/questions/${roundQuestionId}/response?isWebApp=true&subaccount=${subaccount}`,
+				url: `${VITE_BACKEND_API}/v2/rounds/${roundId}/questions/${roundQuestionId}/response?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,

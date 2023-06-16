@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { API } from '../../../lib/environment';
+import { VITE_BACKEND_API } from '../../../lib/environment';
 
 type ReviewContentRenderPropsType = {
 	content: string | null | undefined;
@@ -27,7 +27,7 @@ const ReviewContentRender = ({ content }: ReviewContentRenderPropsType) => {
 
 				// For rendering in local
 				if (src && isLocal && src.includes('amp_resource')) {
-					src = `${API}/amp/${src}`;
+					src = `${VITE_BACKEND_API}/amp/${src}`;
 					imgElement.setAttribute('src', src);
 				} else if (src && src.includes('amp_resource')) {
 					// For rendering in lower environments
