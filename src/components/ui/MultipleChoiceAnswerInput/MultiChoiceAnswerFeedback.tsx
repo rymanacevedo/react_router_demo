@@ -178,7 +178,7 @@ const MultiChoiceAnswerFeedback = ({
 			}
 			isChecked={isChecked}
 			isIndeterminate={isIndeterminate}>
-			<SlideFade in={isEnabled}>
+			<SlideFade in={isEnabled} unmountOnExit>
 				{choseIDK ? (
 					<Flex>
 						<Text>You answered &nbsp;</Text>
@@ -193,15 +193,11 @@ const MultiChoiceAnswerFeedback = ({
 						</Badge>
 					</Flex>
 				) : (
-					<Flex>
-						<span hidden={revealAnswerDisplayCondition}>
-							You were{' '}
-							<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
-								{text}
-							</Badge>{' '}
-							and&nbsp;
+					<Flex hidden={revealAnswerDisplayCondition}>
+						<span>
+							You were <Badge variant={variant}>{text}</Badge> and&nbsp;
 						</span>
-						<Badge hidden={revealAnswerDisplayCondition} variant={variant}>
+						<Badge variant={variant}>
 							<span
 								style={{
 									display: 'flex',
@@ -218,17 +214,6 @@ const MultiChoiceAnswerFeedback = ({
 					color: currentRoundAnswerOverLayData?.correctAnswerIds
 						? '#6D758D'
 						: 'inherit',
-					position: 'relative',
-					top: 5,
-					bottom: 0,
-					left: 0,
-					right: 0,
-					transform: `${
-						isEnabled || isInReviewView
-							? 'translateY(0px)'
-							: 'translateY(-16.7812px)'
-					}`,
-					transition: 'transform 0.3s ease-in-out',
 				}}
 				content={questionText}
 			/>
