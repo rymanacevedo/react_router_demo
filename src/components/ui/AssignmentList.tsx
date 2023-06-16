@@ -21,7 +21,10 @@ import { useTranslation } from 'react-i18next';
 import { json, useLoaderData, useNavigate } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 import { LoaderFunction } from 'react-router';
-import { getAssignments } from '../../services/learning';
+import {
+	getAssignments,
+	getCurriculaCourseList,
+} from '../../services/learning';
 import { requireUser } from '../../utils/user';
 import { getSubAccount, serverError } from '../../services/utils';
 
@@ -50,11 +53,16 @@ type Props = {
 };
 
 export const assignmentListLoader: LoaderFunction = async ({ params }) => {
-	const curriculumKey = params.curriculumKey!;
+	const selectedCourseKey = params.selectedCourseKey!;
 	const user = requireUser();
 	const { subAccount } = getSubAccount(user);
+	const { data: list } = await getCurriculaCourseList(
+		user,
+		selectedCourseKey,
+		subAccount,
+	);
 	const { data: assignments } = await getAssignments(
-		curriculumKey,
+		list.items[0].key,
 		user,
 		subAccount,
 	);

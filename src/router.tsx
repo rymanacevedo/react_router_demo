@@ -134,7 +134,7 @@ const routesJSX = (
 				path="/learning"
 				element={<LearningView />}>
 				<Route
-					path=":curriculumKey"
+					path=":selectedCourseKey"
 					loader={assignmentListLoader}
 					element={<AssignmentList />}
 				/>

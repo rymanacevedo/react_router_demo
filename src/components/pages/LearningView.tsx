@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import CourseMenu from '../ui/CourseMenu';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../utils/user';
-import { getCourseList, getCurriculaCourseList } from '../../services/learning';
+import { getCourseList } from '../../services/learning';
 import {
 	json,
 	Outlet,
@@ -27,19 +27,13 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 	const { courseRole, subAccount } = getSubAccount(user);
 	if (selectedCourseKey) {
 		// fetcher runs this route again, so we don't need to fetch the data again
+		// TODO: optimize so getCourseList isn't called multiple times
 		const {
 			data: { items: courseList },
 		} = await getCourseList(user, courseRole, subAccount);
 
-		const { data: list } = await getCurriculaCourseList(
-			user,
-			selectedCourseKey,
-			subAccount,
-		);
-
 		return json({
 			courseList,
-			curriculumKey: list.items[0].key,
 			selectedCourseKey,
 			subAccount,
 			courseRole,
@@ -53,23 +47,14 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 	if (courseList.length === 0) {
 		return json({
 			courseList,
-			curriculumKey: null,
-			assignments: null,
-			selectedCourseKey: '',
+			selectedCourseKey: null,
 			subAccount,
 			courseRole,
 		});
 	}
 
-	const { data: list } = await getCurriculaCourseList(
-		user,
-		courseList[0].key,
-		subAccount,
-	);
-
 	return json({
 		courseList,
-		curriculumKey: list.items[0].key,
 		selectedCourseKey: courseList[0].key,
 		subAccount,
 		courseRole,
@@ -91,7 +76,7 @@ const LearningView = () => {
 			setCourses(data.courseList);
 			setTitle(data.courseList[0].name);
 			setSelectedCourseKey(data.selectedCourseKey);
-			navigate(`/learning/${data.curriculumKey}`);
+			navigate(`/learning/${data.selectedCourseKey}`);
 		}
 
 		if (data.courseList && selectedCourseKey) {
@@ -101,7 +86,7 @@ const LearningView = () => {
 			);
 			if (course) {
 				setTitle(course.name);
-				navigate(`/learning/${data.curriculumKey}`);
+				navigate(`/learning/${selectedCourseKey}`);
 			}
 		}
 	}, []);
