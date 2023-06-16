@@ -71,42 +71,40 @@ export const forgotUsernameAction: ActionFunction = async ({
 	const { data, response } = await getForgotUsernameData(fields);
 
 	if (!response.ok) {
-		if (data.items) {
-			const items = data.items;
+		const items = data.items;
 
-			if (items && items[0].message === 'email address not found') {
-				return badRequest({
-					fields,
-					errors: {
-						formErrors: ['email address not found'],
-						fieldsErrors: {
-							email: ['email address not found'],
-						},
+		if (items && items[0].message === 'email address not found') {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['email address not found'],
+					fieldsErrors: {
+						email: ['email address not found'],
 					},
-				});
-			}
+				},
+			});
+		}
 
-			if (items && items[0].message === 'invalid email address') {
-				return badRequest({
-					fields,
-					errors: {
-						formErrors: ['invalid email address'],
-						fieldsErrors: {
-							email: ['invalid email address'],
-						},
+		if (items && items[0].message === 'invalid email address') {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['invalid email address'],
+					fieldsErrors: {
+						email: ['invalid email address'],
 					},
-				});
-			}
+				},
+			});
+		}
 
-			if (items && items[0].message) {
-				return badRequest({
-					fields,
-					errors: {
-						formErrors: ['Uh oh, something went wrong'],
-						fieldErrors: {},
-					},
-				});
-			}
+		if (items && items[0].message) {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['Uh oh, something went wrong'],
+					fieldErrors: {},
+				},
+			});
 		}
 	}
 
