@@ -1,16 +1,19 @@
 import { Container, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import AssignmentList from '../ui/AssignmentList';
 import CourseMenu from '../ui/CourseMenu';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../utils/user';
+import { getCourseList, getCurriculaCourseList } from '../../services/learning';
 import {
-	getAssignments,
-	getCourseList,
-	getCurriculaCourseList,
-} from '../../services/learning';
-import { json, useFetcher, useLoaderData } from 'react-router-dom';
-import { getSubAccount, serverError } from '../../services/utils';
+	json,
+	Outlet,
+	useFetcher,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
+import { getSubAccount } from '../../services/utils';
+import { useEffect, useState } from 'react';
+import { useQuizContext } from '../../hooks/useQuizContext';
 
 export type Course = {
 	key: string;
@@ -33,27 +36,10 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 			selectedCourseKey,
 			subAccount,
 		);
-		const { data: assignments } = await getAssignments(
-			list.items[0].key,
-			user,
-			subAccount,
-		);
-
-		if (assignments.items) {
-			// eslint-disable-next-line @typescript-eslint/no-throw-literal
-			throw serverError({
-				fields: {},
-				errors: {
-					fieldErrors: {
-						selectedCourseKey: [assignments.items[0].message],
-					},
-				},
-			});
-		}
 
 		return json({
 			courseList,
-			assignments,
+			curriculumKey: list.items[0].key,
 			selectedCourseKey,
 			subAccount,
 			courseRole,
@@ -67,6 +53,7 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 	if (courseList.length === 0) {
 		return json({
 			courseList,
+			curriculumKey: null,
 			assignments: null,
 			selectedCourseKey: '',
 			subAccount,
@@ -79,15 +66,10 @@ export const learningLoader: LoaderFunction = async ({ request }) => {
 		courseList[0].key,
 		subAccount,
 	);
-	const { data: assignments } = await getAssignments(
-		list.items[0].key,
-		user,
-		subAccount,
-	);
 
 	return json({
 		courseList,
-		assignments,
+		curriculumKey: list.items[0].key,
 		selectedCourseKey: courseList[0].key,
 		subAccount,
 		courseRole,
@@ -98,7 +80,41 @@ const LearningView = () => {
 	const loaderData = useLoaderData() as any;
 	const fetcher = useFetcher();
 	const data = fetcher.data || loaderData;
+	const navigate = useNavigate();
+	const { selectedCourseKey, setSelectedCourseKey } = useQuizContext();
+	const [title, setTitle] = useState<string>('');
+	const [courses, setCourses] = useState<Course[]>([]);
 	const { t: i18n } = useTranslation();
+
+	useEffect(() => {
+		if (data && !selectedCourseKey) {
+			setCourses(data.courseList);
+			setTitle(data.courseList[0].name);
+			setSelectedCourseKey(data.selectedCourseKey);
+			navigate(`/learning/${data.curriculumKey}`);
+		}
+
+		if (data.courseList && selectedCourseKey) {
+			setCourses(data.courseList);
+			const course = data.courseList.find(
+				(c: Course) => c.key === selectedCourseKey,
+			);
+			if (course) {
+				setTitle(course.name);
+				navigate(`/learning/${data.curriculumKey}`);
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		if (fetcher.data && courses) {
+			const course = courses.find((c) => c.key === data.selectedCourseKey);
+			if (course) {
+				setTitle(course.name);
+				setSelectedCourseKey(course.key);
+			}
+		}
+	}, [fetcher.data]);
 
 	return (
 		<Container
@@ -116,11 +132,7 @@ const LearningView = () => {
 				'0px 100px 80px rgba(0, 0, 0, 0.04), 0px 6.6501px 5.32008px rgba(0, 0, 0, 0.0161557), 0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0112458)'
 			}>
 			<Heading as="h1" marginBottom="24px" margin="12px">
-				{
-					data.courseList.find(
-						(course: Course) => course.key === data.selectedCourseKey,
-					).name
-				}
+				{title}
 			</Heading>
 			<HStack
 				justifyContent={'space-between'}
@@ -131,15 +143,17 @@ const LearningView = () => {
 				<Heading as="h2" size="lg">
 					{i18n('yourAssignments')}
 				</Heading>
-				{data.courseList.length > 0 && (
-					<CourseMenu
-						courseList={data.courseList}
-						selectedCourseKey={data.selectedCourseKey}
-						courseUpdaterToggle={fetcher}
-					/>
-				)}
+				<CourseMenu
+					courses={courses}
+					selectedCourseKey={selectedCourseKey}
+					courseUpdaterToggle={fetcher}
+				/>
 			</HStack>
-			<AssignmentList assignments={data.assignments} />
+			<Outlet
+				context={{
+					selectedCourseKey: selectedCourseKey,
+				}}
+			/>
 		</Container>
 	);
 };

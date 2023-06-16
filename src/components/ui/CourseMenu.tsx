@@ -9,27 +9,25 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import { useQuizContext } from '../../hooks/useQuizContext';
+import { Course } from '../pages/LearningView';
 
 type Props = {
-	courseList: { key: string; name: string }[];
+	courses: Course[];
 	selectedCourseKey: string | null;
 	courseUpdaterToggle: any;
 };
 
 const CourseMenu = ({
-	courseList,
+	courses,
 	selectedCourseKey,
 	courseUpdaterToggle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
-	const { setSelectedCourseKey } = useQuizContext();
-	if (courseList.length <= 1) {
+	if (courses.length === 0) {
 		return null;
 	}
 
 	const handleCourseChange = (value: any) => {
-		setSelectedCourseKey(value);
 		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
 	};
 
@@ -46,7 +44,7 @@ const CourseMenu = ({
 					onChange={handleCourseChange}
 					defaultChecked={true}
 					defaultValue={selectedCourseKey ?? ''}>
-					{courseList.map((course) => (
+					{courses.map((course) => (
 						<MenuItemOption key={course.key} value={course.key}>
 							<Text isTruncated maxW="300px">
 								{course.name}

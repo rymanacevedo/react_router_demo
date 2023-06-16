@@ -44,6 +44,9 @@ import TimedAssessment, {
 } from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
+import AssignmentList, {
+	assignmentListLoader,
+} from './components/ui/AssignmentList';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -128,9 +131,14 @@ const routesJSX = (
 			/>
 			<Route
 				loader={learningLoader}
-				path="learning"
-				element={<LearningView />}
-			/>
+				path="/learning"
+				element={<LearningView />}>
+				<Route
+					path=":curriculumKey"
+					loader={assignmentListLoader}
+					element={<AssignmentList />}
+				/>
+			</Route>
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				loader={assignmentReviewLoader}

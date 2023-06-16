@@ -18,8 +18,12 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { json, useLoaderData, useNavigate } from 'react-router-dom';
 import useModuleContentService from '../../services/coursesServices/useModuleContentService';
+import { LoaderFunction } from 'react-router';
+import { getAssignments } from '../../services/learning';
+import { requireUser } from '../../utils/user';
+import { getSubAccount, serverError } from '../../services/utils';
 
 type Assignment = {
 	assignmentType: string;
@@ -30,7 +34,7 @@ type Assignment = {
 	numLearningUnits: number;
 };
 
-type AssignmentListDataType = {
+export type AssignmentListDataType = {
 	displayCurriculum: {
 		children: [
 			{
@@ -45,8 +49,33 @@ type Props = {
 	assignments: AssignmentListDataType;
 };
 
-const AssignmentList = ({ assignments }: Props) => {
+export const assignmentListLoader: LoaderFunction = async ({ params }) => {
+	const curriculumKey = params.curriculumKey!;
+	const user = requireUser();
+	const { subAccount } = getSubAccount(user);
+	const { data: assignments } = await getAssignments(
+		curriculumKey,
+		user,
+		subAccount,
+	);
+
+	if (assignments.items) {
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		throw serverError({
+			fields: {},
+			errors: {
+				fieldErrors: {
+					curriculumKey: [assignments.items[0].message],
+				},
+			},
+		});
+	}
+	return json({ assignments });
+};
+
+const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
+	const { assignments } = useLoaderData() as Props;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const { startRefresher } = useModuleContentService();
 	const navigate = useNavigate();

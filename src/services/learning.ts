@@ -60,6 +60,19 @@ export const getAssignmentContent = async (
 	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
 };
 
+export const getSmartRefresher = async (
+	user: User,
+	subAccount: string,
+	assignmentKey: string,
+	isFocused: boolean,
+): Promise<{ data: any; response: Response }> => {
+	const url = `/v2/assignments/${assignmentKey}/refreshers?subaccount=${subAccount}${
+		isFocused ? '&isFocused=true' : ''
+	}`;
+
+	return authenticatedFetch(url, user.sessionKey, 'POST', {});
+};
+
 export const getModuleContent = async (
 	user: User,
 	subAccount: string,
