@@ -251,7 +251,7 @@ const MultiChoiceAnswerFeedback = ({
 								? '#6D758D'
 								: 'inherit',
 							position: 'relative',
-							top: 5,
+							top: choseIDK ? 0 : 15,
 							bottom: 0,
 							left: 0,
 							right: 0,
