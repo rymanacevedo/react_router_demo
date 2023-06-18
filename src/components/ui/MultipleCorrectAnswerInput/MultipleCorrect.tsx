@@ -203,7 +203,7 @@ const MultipleCorrect = ({
 					<Button
 						onClick={onClick}
 						variant={'ampSolid'}
-						isDisabled={Boolean(!selectedAnswers.length)}
+						isDisabled={!idkChosen && Boolean(!selectedAnswers.length)}
 						w="114px"
 						h="48px">
 						{i18n('capitalContinue')}

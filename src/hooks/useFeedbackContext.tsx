@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 
 type FeedbackContextValue = {
 	feedbackStatus: string;
@@ -36,13 +36,22 @@ export const FeedbackProvider: React.FC<FeedbackProviderProps> = ({
 		setFeedbackStatus(status);
 	};
 
-	const contextValue = {
-		feedbackVariant,
-		feedbackText,
-		feedbackStatus,
-		updateFeedback,
-		updateCorrectStatus,
-	};
+	const contextValue = useMemo(
+		() => ({
+			feedbackVariant,
+			feedbackText,
+			feedbackStatus,
+			updateFeedback,
+			updateCorrectStatus,
+		}),
+		[
+			feedbackVariant,
+			feedbackText,
+			feedbackStatus,
+			updateFeedback,
+			updateCorrectStatus,
+		],
+	);
 
 	return (
 		<FeedbackContext.Provider value={contextValue}>

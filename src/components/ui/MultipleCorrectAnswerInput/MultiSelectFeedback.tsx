@@ -52,7 +52,6 @@ const MultiSelectFeedback = ({
 			setWasPartialCorrectAnswerChosen(partialCorrectAnswerChosen);
 		}
 	}, [currentRoundAnswerOverLayData, revealAnswer]);
-
 	return (
 		<Box>
 			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
@@ -82,16 +81,18 @@ const MultiSelectFeedback = ({
 								/>
 							);
 						})}
-					<AnswerFeedback
-						questionText={''}
-						questionAnswerId={''}
-						selectedAnswers={selectedAnswers}
-						IDK={true}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-						wasCorrectAnswerChosen={wasCorrectAnswerChosen}
-						inReview={inReview}
-						revealAnswer={revealAnswer}
-					/>
+					{selectedAnswers.length === 0 && (
+						<AnswerFeedback
+							questionText={''}
+							questionAnswerId={''}
+							selectedAnswers={selectedAnswers}
+							IDK={true}
+							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+							wasCorrectAnswerChosen={wasCorrectAnswerChosen}
+							inReview={inReview}
+							revealAnswer={revealAnswer}
+						/>
+					)}
 				</>
 			</Box>
 		</Box>

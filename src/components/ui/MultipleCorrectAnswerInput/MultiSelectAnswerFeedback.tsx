@@ -211,36 +211,21 @@ const MultiChoiceAnswerFeedback = ({
 
 	return (
 		<>
-			<Checkbox
-				style={{
-					display: 'flex',
-					marginBottom: '25px',
-					cursor: 'pointer',
-				}}
-				className={inReview ? '' : 'label-hover-effect'}
-				variant={multiSelectVariant}
-				colorScheme={'transparent'}
-				value={questionAnswerId}
-				size={'4rem'}
-				borderColor={'#1e1f20'}
-				isChecked={isChecked}>
-				<SlideFade in={isEnabled}>
-					{choseIDK ? (
-						<Flex>
-							<Text fontWeight={600} fontSize={20}>
-								You answered &nbsp;
-							</Text>
-							<Badge variant={variant}>
-								<span
-									style={{
-										display: 'flex',
-										alignItems: 'center',
-									}}>
-									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
-								</span>
-							</Badge>
-						</Flex>
-					) : (
+			{!choseIDK ? (
+				<Checkbox
+					style={{
+						display: 'flex',
+						marginBottom: '25px',
+						cursor: 'pointer',
+					}}
+					className={inReview ? '' : 'label-hover-effect'}
+					variant={multiSelectVariant}
+					colorScheme={'transparent'}
+					value={questionAnswerId}
+					size={'4rem'}
+					borderColor={'#1e1f20'}
+					isChecked={isChecked}>
+					<SlideFade in={isEnabled}>
 						<Flex>
 							<span hidden={revealAnswerDisplayCondition}>
 								You were{' '}
@@ -259,26 +244,62 @@ const MultiChoiceAnswerFeedback = ({
 								</span>
 							</Badge>
 						</Flex>
-					)}
-				</SlideFade>
-				<RichContentComponent
-					style={{
-						color: currentRoundAnswerOverLayData?.correctAnswerIds
-							? '#6D758D'
-							: 'inherit',
-						position: 'relative',
-						top: 5,
-						bottom: 0,
-						left: 0,
-						right: 0,
-						transform: `${
-							isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
-						}`,
-						transition: 'transform 0.3s ease-in-out',
-					}}
-					content={questionText}
-				/>
-			</Checkbox>
+					</SlideFade>
+					<RichContentComponent
+						style={{
+							color: currentRoundAnswerOverLayData?.correctAnswerIds
+								? '#6D758D'
+								: 'inherit',
+							position: 'relative',
+							top: 5,
+							bottom: 0,
+							left: 0,
+							right: 0,
+							transform: `${
+								isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+							}`,
+							transition: 'transform 0.3s ease-in-out',
+						}}
+						content={questionText}
+					/>
+				</Checkbox>
+			) : (
+				<>
+					<SlideFade in={isEnabled}>
+						<Flex>
+							<Text fontWeight={600} fontSize={20}>
+								You answered &nbsp;
+							</Text>
+							<Badge variant={variant}>
+								<span
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+									}}>
+									{badgeIcon()} <Text paddingLeft={'5px'}>{text}</Text>
+								</span>
+							</Badge>
+						</Flex>
+					</SlideFade>
+					<RichContentComponent
+						style={{
+							color: currentRoundAnswerOverLayData?.correctAnswerIds
+								? '#6D758D'
+								: 'inherit',
+							position: 'relative',
+							top: 5,
+							bottom: 0,
+							left: 0,
+							right: 0,
+							transform: `${
+								isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+							}`,
+							transition: 'transform 0.3s ease-in-out',
+						}}
+						content={questionText}
+					/>
+				</>
+			)}
 		</>
 	);
 };
