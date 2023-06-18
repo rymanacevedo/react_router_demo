@@ -65,7 +65,6 @@ const MultipleCorrect = ({
 		useContext(FeedbackContext);
 
 	const handleSubmission = (confidence: string) => {
-		console.log('this ran');
 		if (confidence === 'IDK') {
 			setTotalAnswerConfidence('NotSure');
 			setSubmitted(true);

@@ -42,14 +42,10 @@ const MultiSelectFeedback = ({
 				selectedAnswerIds.includes(id),
 			);
 			setWasCorrectAnswerChosen(
-				Boolean(
-					selectedAnswers.find(
-						(answer: any) =>
-							answer.answerId ===
-							currentRoundAnswerOverLayData?.correctAnswerIds[0],
-					),
-				),
+				allCorrectAnswersChosen &&
+					correctAnswerIds.length === selectedAnswerIds.length,
 			);
+
 			const partialCorrectAnswerChosen =
 				correctAnswerIds.some((id: any) => selectedAnswerIds.includes(id)) &&
 				!allCorrectAnswersChosen;
