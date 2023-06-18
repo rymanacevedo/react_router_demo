@@ -59,16 +59,23 @@ const MultiChoiceAnswerFeedback = ({
 		const match = selectedAnswersArg.find(
 			(answer) => Number(answer.answerId) === Number(questionAnswerIdArg),
 		);
-		console.log(selectedAnswers?.length);
 		if (match) {
 			if (
 				match.confidence === 50 &&
 				wasCorrectAnswerChosen &&
-				selectedAnswers?.length === 1 &&
-				!wasPartialCorrectAnswerChosen
+				selectedAnswers?.length === 1
 			) {
-				// if one answer is it and it was chosen
-				console.log(1);
+				setStatus('checked');
+				setText('unsure');
+				setVariant('ampDarkSuccessOutline');
+				updateFeedbackContext('ampDarkSuccessOutline', 'unsure');
+				setMultiSelectVariant('multiSelectUnsureCorrect');
+				setIsEnabled(true);
+			} else if (
+				match.confidence === 50 &&
+				wasCorrectAnswerChosen &&
+				(selectedAnswers?.length ?? 0) > 1
+			) {
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkSuccessOutline');
@@ -76,15 +83,13 @@ const MultiChoiceAnswerFeedback = ({
 				setMultiSelectVariant('multiSelectUnsureCorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 50 && wasCorrectAnswerChosen) {
-				console.log(2);
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampWarningOutline');
 				updateFeedbackContext('ampWarningOutline', 'unsure');
-				setMultiSelectVariant('multiSelectPartialCorrect');
+				setMultiSelectVariant('multiSelectUnsureCorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 50 && !wasCorrectAnswerChosen) {
-				console.log(3);
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkErrorOutline');
@@ -92,15 +97,13 @@ const MultiChoiceAnswerFeedback = ({
 				setMultiSelectVariant('multiSelectUnsureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100 && !wasCorrectAnswerChosen) {
-				console.log(4);
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkError');
 				updateFeedbackContext('ampDarkError', 'sure');
 				setMultiSelectVariant('multiSelectSureIncorrect');
 				setIsEnabled(true);
-			} else if (match.confidence === 100) {
-				console.log(5);
+			} else if (match.confidence === 100 && wasCorrectAnswerChosen) {
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkSuccess');
@@ -223,13 +226,6 @@ const MultiChoiceAnswerFeedback = ({
 				colorScheme={'transparent'}
 				value={questionAnswerId}
 				size={'4rem'}
-				// icon={
-				// 	<MultiChoiceOverLayIcon
-				// 		variant={variant}
-				// 		isIndeterminate={isIndeterminate}
-				// 		isChecked={isChecked}
-				// 	/>
-				// }
 				borderColor={'#1e1f20'}
 				isChecked={isChecked}>
 				<SlideFade in={isEnabled}>

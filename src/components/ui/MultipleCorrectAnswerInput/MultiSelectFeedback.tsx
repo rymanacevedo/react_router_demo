@@ -38,19 +38,24 @@ const MultiSelectFeedback = ({
 			const selectedAnswerIds = selectedAnswers.map(
 				(answer) => answer.answerId,
 			);
-
 			const allCorrectAnswersChosen = correctAnswerIds.every((id: any) =>
 				selectedAnswerIds.includes(id),
 			);
-
+			setWasCorrectAnswerChosen(
+				Boolean(
+					selectedAnswers.find(
+						(answer: any) =>
+							answer.answerId ===
+							currentRoundAnswerOverLayData?.correctAnswerIds[0],
+					),
+				),
+			);
 			const partialCorrectAnswerChosen =
 				correctAnswerIds.some((id: any) => selectedAnswerIds.includes(id)) &&
 				!allCorrectAnswersChosen;
-
-			setWasCorrectAnswerChosen(allCorrectAnswersChosen);
 			setWasPartialCorrectAnswerChosen(partialCorrectAnswerChosen);
 		}
-	}, [currentRoundAnswerOverLayData, selectedAnswers]);
+	}, [currentRoundAnswerOverLayData, revealAnswer]);
 
 	return (
 		<Box>
