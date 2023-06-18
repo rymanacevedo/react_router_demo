@@ -1,5 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	Badge,
 	Box,
@@ -104,10 +102,6 @@ const MultipleCorrect = ({
 		}
 	}, [submitted]);
 	const idkChosen = feedbackText === 'NA' && feedbackVariant === 'NA';
-	console.log('feedbackVariant: ', feedbackVariant);
-	console.log('feedbackStatus: ', feedbackStatus);
-	console.log('feedbackText: ', feedbackText);
-	console.log(selectedAnswers);
 	return (
 		<Box
 			style={{
@@ -170,7 +164,6 @@ const MultipleCorrect = ({
 			<Divider marginTop="43px" />
 			{!showOverlay ? (
 				<HStack marginTop={3} spacing={6} w="100%">
-					{/* //TO-DO: investigate buttons shifting when specific widths removed */}
 					<Button
 						onClick={() => handleSubmission('IDK')}
 						variant={'ampOutline'}

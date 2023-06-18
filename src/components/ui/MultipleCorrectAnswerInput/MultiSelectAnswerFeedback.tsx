@@ -1,5 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
@@ -45,7 +43,6 @@ const MultiChoiceAnswerFeedback = ({
 	const [variant, setVariant] = useState('');
 	const [correctStatus, setCorrectStatus] = useState('');
 	const [multiSelectVariant, setMultiSelectVariant] = useState('');
-	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 	const choseIDK = IDK && selectedAnswers?.length === 0;
 
@@ -113,7 +110,6 @@ const MultiChoiceAnswerFeedback = ({
 			}
 		} else if (choseIDK) {
 			setIsEnabled(true);
-			// eslint-disable-next-line
 			setText("I don't know yet");
 			setVariant('ampNeutralFilled');
 			setStatus('checked');

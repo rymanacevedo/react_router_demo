@@ -8,7 +8,6 @@ type FeedbackContextValue = {
 	updateCorrectStatus: (status: string) => void;
 };
 
-// Create a new context
 export const FeedbackContext = createContext<FeedbackContextValue>({
 	feedbackStatus: '',
 	feedbackVariant: '',
@@ -21,16 +20,13 @@ type FeedbackProviderProps = {
 	children: React.ReactNode;
 };
 
-// Create a provider component for the context
 export const FeedbackProvider: React.FC<FeedbackProviderProps> = ({
 	children,
 }) => {
-	// Define state variables to store feedbackVariant and text
 	const [feedbackVariant, setFeedbackVariant] = useState<string>('');
 	const [feedbackText, setFeedbackText] = useState<string>('');
 	const [feedbackStatus, setFeedbackStatus] = useState<string>('');
 
-	// Function to update the feedbackVariant and text values
 	const updateFeedback = (newfeedbackVariant: string, newText: string) => {
 		setFeedbackVariant(newfeedbackVariant);
 		setFeedbackText(newText);
@@ -40,7 +36,6 @@ export const FeedbackProvider: React.FC<FeedbackProviderProps> = ({
 		setFeedbackStatus(status);
 	};
 
-	// Value object to be provided by the context
 	const contextValue = {
 		feedbackVariant,
 		feedbackText,

@@ -84,7 +84,6 @@ const MultiSelectFeedback = ({
 						})}
 					<AnswerFeedback
 						questionText={''}
-						/* eslint-enable */
 						questionAnswerId={''}
 						selectedAnswers={selectedAnswers}
 						IDK={true}
