@@ -29,19 +29,29 @@ const MultiSelectFeedback = ({
 }) => {
 	const { t: i18n } = useTranslation();
 	const [wasCorrectAnswerChosen, setWasCorrectAnswerChosen] = useState(false);
+	const [wasPartialCorrectAnswerChosen, setWasPartialCorrectAnswerChosen] =
+		useState(false);
+
 	useEffect(() => {
 		if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
-			setWasCorrectAnswerChosen(
-				Boolean(
-					selectedAnswers.find(
-						(answer: any) =>
-							answer.answerId ===
-							currentRoundAnswerOverLayData?.correctAnswerIds[0],
-					),
-				),
+			const correctAnswerIds = currentRoundAnswerOverLayData?.correctAnswerIds;
+			const selectedAnswerIds = selectedAnswers.map(
+				(answer) => answer.answerId,
 			);
+
+			const allCorrectAnswersChosen = correctAnswerIds.every((id: any) =>
+				selectedAnswerIds.includes(id),
+			);
+
+			const partialCorrectAnswerChosen =
+				correctAnswerIds.some((id: any) => selectedAnswerIds.includes(id)) &&
+				!allCorrectAnswersChosen;
+
+			setWasCorrectAnswerChosen(allCorrectAnswersChosen);
+			setWasPartialCorrectAnswerChosen(partialCorrectAnswerChosen);
 		}
-	}, [currentRoundAnswerOverLayData, revealAnswer]);
+	}, [currentRoundAnswerOverLayData, selectedAnswers]);
+
 	return (
 		<Box>
 			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
@@ -65,14 +75,14 @@ const MultiSelectFeedback = ({
 									selectedAnswers={selectedAnswers}
 									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 									wasCorrectAnswerChosen={wasCorrectAnswerChosen}
+									wasPartialCorrectAnswerChosen={wasPartialCorrectAnswerChosen}
 									inReview={inReview}
 									revealAnswer={revealAnswer}
 								/>
 							);
 						})}
 					<AnswerFeedback
-						/* eslint-disable */
-						questionText={"I don't know yet"}
+						questionText={''}
 						/* eslint-enable */
 						questionAnswerId={''}
 						selectedAnswers={selectedAnswers}

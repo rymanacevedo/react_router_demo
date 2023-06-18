@@ -32,7 +32,6 @@ export const FeedbackProvider: React.FC<FeedbackProviderProps> = ({
 
 	// Function to update the feedbackVariant and text values
 	const updateFeedback = (newfeedbackVariant: string, newText: string) => {
-		console.log('variant setting');
 		setFeedbackVariant(newfeedbackVariant);
 		setFeedbackText(newText);
 	};

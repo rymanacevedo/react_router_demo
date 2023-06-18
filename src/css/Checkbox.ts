@@ -74,6 +74,110 @@ const Checkbox = defineStyleConfig({
 				fontWeight: 'bold',
 			},
 		},
+		multiSelectUnsureCorrect: {
+			control: {
+				_focus: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+				},
+				_hover: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					outline: '2px solid transparent',
+					outlineOffset: '2px',
+				},
+				borderColor: 'ampSuccess.500',
+				border: '1.5px solid',
+				width: '2.75rem',
+				height: '2.75rem',
+				borderRadius: '12px',
+				backgroundColor: 'ampSuccess.50',
+			},
+			icon: {
+				fontSize: '15px',
+				color: 'ampSuccess.500',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				fontWeight: 'bold',
+			},
+		},
+		multiSelectSureIncorrect: {
+			control: {
+				_focus: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+				},
+				_hover: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					outline: '2px solid transparent',
+					outlineOffset: '2px',
+				},
+				borderColor: '#912E21',
+				border: '1.5px solid',
+				width: '2.75rem',
+				height: '2.75rem',
+				borderRadius: '12px',
+				backgroundColor: '#912E21',
+			},
+			icon: {
+				fontSize: '15px',
+				color: 'white',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				fontWeight: 'bold',
+			},
+		},
+		multiSelectSureCorrect: {
+			control: {
+				_focus: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+				},
+				_hover: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					outline: '2px solid transparent',
+					outlineOffset: '2px',
+				},
+				borderColor: 'ampSuccess.500',
+				border: '1.5px solid',
+				width: '2.75rem',
+				height: '2.75rem',
+				borderRadius: '12px',
+				backgroundColor: 'ampSuccess.500',
+			},
+			icon: {
+				fontSize: '15px',
+				color: 'white',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				fontWeight: 'bold',
+			},
+		},
+		multiSelectPartialCorrect: {
+			control: {
+				_focus: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+				},
+				_hover: {
+					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					outline: '2px solid transparent',
+					outlineOffset: '2px',
+				},
+				borderColor: 'ampWarning.800',
+				border: '1.5px solid',
+				width: '2.75rem',
+				height: '2.75rem',
+				borderRadius: '12px',
+				backgroundColor: 'ampWarning.100',
+			},
+			icon: {
+				fontSize: '15px',
+				color: 'ampWarning.800',
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				fontWeight: 'bold',
+			},
+		},
 	},
 });
 

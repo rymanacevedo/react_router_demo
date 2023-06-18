@@ -94,15 +94,21 @@ const MultipleCorrect = ({
 	};
 
 	const handleClearSelection = () => {
+		setSubmitted(false);
 		return clearSelectionFunction();
 	};
 
 	useEffect(() => {
 		if (submitted) {
+			setSubmitted(false);
 			onClick();
 		}
 	}, [submitted]);
-	console.log(feedbackVariant);
+	const idkChosen = feedbackText === 'NA' && feedbackVariant === 'NA';
+	console.log('feedbackVariant: ', feedbackVariant);
+	console.log('feedbackStatus: ', feedbackStatus);
+	console.log('feedbackText: ', feedbackText);
+	console.log(selectedAnswers);
 	return (
 		<Box
 			style={{
@@ -143,7 +149,7 @@ const MultipleCorrect = ({
 						/>
 					</Fade>
 					{showOverlay && (
-						<Flex>
+						<Flex hidden={idkChosen}>
 							<span>
 								You were <Badge variant={feedbackVariant}>{feedbackText}</Badge>{' '}
 								and&nbsp;

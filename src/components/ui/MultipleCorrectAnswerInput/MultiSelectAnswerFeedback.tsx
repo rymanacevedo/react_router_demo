@@ -24,6 +24,7 @@ const MultiChoiceAnswerFeedback = ({
 	IDK,
 	currentRoundAnswerOverLayData,
 	wasCorrectAnswerChosen,
+	wasPartialCorrectAnswerChosen,
 	inReview,
 	revealAnswer,
 }: {
@@ -34,6 +35,7 @@ const MultiChoiceAnswerFeedback = ({
 	IDK?: boolean;
 	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
 	wasCorrectAnswerChosen?: boolean;
+	wasPartialCorrectAnswerChosen?: boolean;
 	inReview?: boolean;
 	revealAnswer?: boolean;
 }) => {
@@ -57,23 +59,32 @@ const MultiChoiceAnswerFeedback = ({
 		const match = selectedAnswersArg.find(
 			(answer) => Number(answer.answerId) === Number(questionAnswerIdArg),
 		);
+		console.log(selectedAnswers?.length);
 		if (match) {
 			if (
 				match.confidence === 50 &&
 				wasCorrectAnswerChosen &&
-				selectedAnswers?.length === 1
+				selectedAnswers?.length === 1 &&
+				!wasPartialCorrectAnswerChosen
 			) {
+				// if one answer is it and it was chosen
+				console.log(1);
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkSuccessOutline');
+				updateFeedbackContext('ampDarkSuccessOutline', 'unsure');
+				setMultiSelectVariant('multiSelectUnsureCorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 50 && wasCorrectAnswerChosen) {
+				console.log(2);
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampWarningOutline');
 				updateFeedbackContext('ampWarningOutline', 'unsure');
+				setMultiSelectVariant('multiSelectPartialCorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 50 && !wasCorrectAnswerChosen) {
+				console.log(3);
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkErrorOutline');
@@ -81,15 +92,19 @@ const MultiChoiceAnswerFeedback = ({
 				setMultiSelectVariant('multiSelectUnsureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100 && !wasCorrectAnswerChosen) {
+				console.log(4);
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkError');
 				updateFeedbackContext('ampDarkError', 'sure');
+				setMultiSelectVariant('multiSelectSureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100) {
+				console.log(5);
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkSuccess');
+				setMultiSelectVariant('multiSelectSureCorrect');
 				updateFeedbackContext('ampDarkSuccess', 'sure');
 				setIsEnabled(true);
 			}
@@ -99,6 +114,7 @@ const MultiChoiceAnswerFeedback = ({
 			setText("I don't know yet");
 			setVariant('ampNeutralFilled');
 			setStatus('checked');
+			updateFeedbackContext('NA', 'NA');
 		} else {
 			setMultiSelectVariant('multiSelect');
 			setIsEnabled(false);
@@ -113,7 +129,25 @@ const MultiChoiceAnswerFeedback = ({
 	}, [selectedAnswers, wasCorrectAnswerChosen]);
 	useEffect(() => {
 		if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
-			if (selectedAnswers?.length === 1 && wasCorrectAnswerChosen) {
+			if (
+				selectedAnswers?.length === 1 &&
+				wasCorrectAnswerChosen &&
+				!wasPartialCorrectAnswerChosen
+			) {
+				updateCorrectStatus('correct');
+				setCorrectStatus('correct');
+			} else if (
+				selectedAnswers?.length > 1 &&
+				wasCorrectAnswerChosen &&
+				wasPartialCorrectAnswerChosen
+			) {
+				updateCorrectStatus('partially correct');
+				setCorrectStatus('partially correct');
+			} else if (
+				selectedAnswers?.length > 1 &&
+				wasCorrectAnswerChosen &&
+				!wasPartialCorrectAnswerChosen
+			) {
 				updateCorrectStatus('correct');
 				setCorrectStatus('correct');
 			} else if (selectedAnswers?.length === 1 && !wasCorrectAnswerChosen) {
@@ -201,7 +235,9 @@ const MultiChoiceAnswerFeedback = ({
 				<SlideFade in={isEnabled}>
 					{choseIDK ? (
 						<Flex>
-							<Text>You answered &nbsp;</Text>
+							<Text fontWeight={600} fontSize={20}>
+								You answered &nbsp;
+							</Text>
 							<Badge variant={variant}>
 								<span
 									style={{
