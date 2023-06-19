@@ -88,11 +88,19 @@ export const getModuleContent = async (
 		assignmentKey,
 	);
 
+	if (assignmentData.items) {
+		throw new Error(assignmentData.items[0].message);
+	}
+
 	// TODO: this needs to be optimzed because it's making a second call to the same endpoint
 	const { data: moduleData } = await authenticatedFetch<ModuleData>(
 		assignmentData.moduleUri,
 		user.sessionKey,
 	);
+
+	if (moduleData.items) {
+		throw new Error(moduleData.items[0].message);
+	}
 
 	return { assignmentData, moduleData };
 };

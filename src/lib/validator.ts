@@ -202,6 +202,7 @@ export const ModuleDataSchema = z.object({
 	isRecommendedModulesEnabled: z.boolean(),
 	isCustomMessagesEnabled: z.boolean(),
 	publishedVersionId: z.any(),
+	items: z.array(z.any()).optional(),
 });
 export const AnswerHistorySchema = z.object({
 	roundNumber: z.number(),
