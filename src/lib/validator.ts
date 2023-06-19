@@ -71,7 +71,9 @@ export const AssignmentDataSchema = z.object({
 	items: z.array(z.any()).optional(),
 });
 
-const ChildSchema = z.object({
+// there is an issue with recursive-types in typescript
+// https://zod.dev/?id=recursive-types
+const BaseChildSchema = z.object({
 	curricKey: z.string(),
 	curricUid: z.string(),
 	name: z.string(),
@@ -93,8 +95,16 @@ const ChildSchema = z.object({
 	moduleStatus: z.string(),
 	defaultAllottedTime: z.number(),
 	isSingleAssignment: z.boolean(),
-	assignments: z.array(AssignmentDataSchema),
+	assignments: z.array(AssignmentDataSchema).optional(),
 	learnerProgress: z.number(),
+});
+
+export type Curriculum = z.infer<typeof BaseChildSchema> & {
+	children: Curriculum[];
+};
+
+const ChildSchema: z.ZodSchema<Curriculum> = BaseChildSchema.extend({
+	children: z.lazy(() => ChildSchema.array()),
 });
 
 const DisplayCurriculumSchema = z.object({
@@ -192,6 +202,7 @@ export const ModuleDataSchema = z.object({
 	isRecommendedModulesEnabled: z.boolean(),
 	isCustomMessagesEnabled: z.boolean(),
 	publishedVersionId: z.any(),
+	items: z.array(z.any()).optional(),
 });
 export const AnswerHistorySchema = z.object({
 	roundNumber: z.number(),

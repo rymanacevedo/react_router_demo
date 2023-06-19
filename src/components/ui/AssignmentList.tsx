@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
@@ -26,7 +26,7 @@ import {
 } from '../../services/learning';
 import { requireUser } from '../../utils/user';
 import { getSubAccount, serverError } from '../../services/utils';
-import { AssignmentData, RootData } from '../../lib/validator';
+import { AssignmentData, Curriculum, RootData } from '../../lib/validator';
 
 export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 	const selectedCourseKey = params.selectedCourseKey!;
@@ -200,93 +200,110 @@ const AssignmentList = () => {
 			);
 		};
 
+	const Assignment = (
+		index: number,
+		assignment: AssignmentData | null,
+		curriculum: Curriculum,
+	) => {
+		if (!assignment) return null;
+		return (
+			<Popover
+				key={index}
+				returnFocusOnClose={false}
+				isOpen={refreshIsOpen === assignment.assignmentKey}
+				placement="bottom"
+				closeOnBlur={false}>
+				<PopoverTrigger>
+					<PopoverAnchor>
+						<ListItem
+							height={'44px'}
+							padding={'4px'}
+							w="100%"
+							key={curriculum.name}
+							onClick={handleAssignmentClick(assignment)}>
+							<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+								<Text
+									_hover={{
+										textDecoration: 'underline',
+										color: 'ampPrimary.300',
+										cursor: 'pointer',
+									}}
+									fontSize={'21px'}
+									fontWeight={'bold'}>
+									{curriculum.name}
+								</Text>
+								{getAssignmentText(assignment)}
+							</HStack>
+							{index !== assignments.displayCurriculum.children.length - 1 && (
+								<Divider
+									borderWidth="1px"
+									borderStyle="solid"
+									borderRadius="10"
+									borderColor="#AFB3B4"
+								/>
+							)}
+						</ListItem>
+					</PopoverAnchor>
+				</PopoverTrigger>
+				<PopoverContent marginRight={'200px'}>
+					<Box position="fixed" top="0px" left="20px">
+						{' '}
+						<PopoverArrow position="fixed" top="0" left="0" />
+					</Box>{' '}
+					<ButtonGroup size="lg" w="100%">
+						<VStack>
+							{assignment.assignmentType !== 'Assessment' && (
+								<>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={handleRefresherClick(assignment)}>
+										{i18n('refresher')}
+									</Button>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={handleReviewClick(assignment)}>
+										{i18n('review')}
+									</Button>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={handleSmartRefresherClick(assignment)}>
+										{i18n('smartRefresher')}
+									</Button>
+								</>
+							)}
+						</VStack>
+					</ButtonGroup>
+				</PopoverContent>
+			</Popover>
+		);
+	};
+
+	const mapAssignmentsRecursively = (
+		curriculumChildren: Curriculum[],
+		index: number,
+	): ReactNode[] => {
+		return curriculumChildren.map((curriculum, i) => {
+			if (curriculum.children && curriculum.children.length > 0) {
+				// Recursive call to go deeper into the structure
+				return mapAssignmentsRecursively(curriculum.children, index + i);
+			} else {
+				// Base case: no more children, return the Assignment component
+				if (curriculum.assignments && curriculum.assignments.length > 0) {
+					const currentAssignment = curriculum.assignments[0];
+					// TODO: shadow questions?
+					return Assignment(index + i, currentAssignment, curriculum);
+				}
+				return null;
+			}
+		});
+	};
+
 	const assignmentList = !assignments
 		? null
-		: assignments.displayCurriculum.children.map((curriculum, index) => {
-				const assignment: AssignmentData =
-					curriculum.assignments[curriculum.assignments.length - 1];
-				return (
-					<Popover
-						key={index}
-						returnFocusOnClose={false}
-						isOpen={refreshIsOpen === assignment.assignmentKey}
-						placement="bottom"
-						closeOnBlur={false}>
-						<PopoverTrigger>
-							<PopoverAnchor>
-								<ListItem
-									height={'44px'}
-									padding={'4px'}
-									w="100%"
-									key={curriculum.name}
-									onClick={handleAssignmentClick(assignment)}>
-									<HStack
-										justifyContent={'space-between'}
-										paddingBottom={'10px'}>
-										<Text
-											_hover={{
-												textDecoration: 'underline',
-												color: 'ampPrimary.300',
-												cursor: 'pointer',
-											}}
-											fontSize={'21px'}
-											fontWeight={'bold'}>
-											{curriculum.name}
-										</Text>
-										{getAssignmentText(assignment)}
-									</HStack>
-									{index !==
-										assignments.displayCurriculum.children.length - 1 && (
-										<Divider
-											borderWidth="1px"
-											borderStyle="solid"
-											borderRadius="10"
-											borderColor="#AFB3B4"
-										/>
-									)}
-								</ListItem>
-							</PopoverAnchor>
-						</PopoverTrigger>
-						<PopoverContent marginRight={'200px'}>
-							<Box position="fixed" top="0px" left="20px">
-								{' '}
-								<PopoverArrow position="fixed" top="0" left="0" />
-							</Box>{' '}
-							<ButtonGroup size="lg" w="100%">
-								<VStack>
-									{curriculum.assignments[0].assignmentType !==
-										'Assessment' && (
-										<>
-											<Button
-												w="320px"
-												variant="ghost"
-												onClick={handleRefresherClick(
-													curriculum.assignments[0],
-												)}>
-												{i18n('refresher')}
-											</Button>
-											<Button
-												w="320px"
-												variant="ghost"
-												onClick={handleReviewClick(curriculum.assignments[0])}>
-												{i18n('review')}
-											</Button>
-											<Button
-												w="320px"
-												variant="ghost"
-												onClick={handleSmartRefresherClick(
-													curriculum.assignments[0],
-												)}>
-												{i18n('smartRefresher')}
-											</Button>
-										</>
-									)}
-								</VStack>
-							</ButtonGroup>
-						</PopoverContent>
-					</Popover>
-				);
-		  });
+		: mapAssignmentsRecursively(assignments.displayCurriculum.children, 0);
 
 	return !assignments ? (
 		<Alert maxWidth={'650px'} status="warning">
