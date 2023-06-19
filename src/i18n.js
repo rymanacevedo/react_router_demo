@@ -21,7 +21,7 @@ const resources = {
 			//////////////////////////////////////
 			welcomeMsg: 'Welcome to Amplifire',
 			username: 'Username',
-			password: 'password',
+			password: 'Password',
 			confirmPassword: 'confirm password',
 			typicallyEmail: 'typically your email address',
 			caseSensitive: 'case sensitive',
@@ -43,8 +43,8 @@ const resources = {
 			enterEmailAddress: 'Please enter a valid email address.',
 			signUpText: 'Enter a username and password to log in:',
 			enrollCompleteFormText: 'To enroll, please complete the form below',
-			reenterPasswordFormLabel: 're-enter new password',
-			continueBtnText: 'continue',
+			reenterPasswordFormLabel: 'Confirm password',
+			continueBtnText: 'Continue',
 			passwordRuleText:
 				'your password must be at least 5 characters long, and contain at least three of the following:',
 			upperCaseRule: 'Uppercase letter (A-Z)',

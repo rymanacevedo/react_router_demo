@@ -1,5 +1,5 @@
 import { json } from 'react-router-dom';
-import { API } from '../lib/environment';
+import { VITE_BACKEND_API } from '../lib/environment';
 import { User } from './user';
 
 const isAbsoluteUrl = (url: string): boolean => {
@@ -12,15 +12,17 @@ const isAbsoluteUrl = (url: string): boolean => {
 };
 
 export const getSubAccount = (user: User) => {
-	let subaccount = '';
+	let subAccount = '';
+	let courseRole = '';
 	for (let i = 0; i < user.roles.length; i++) {
 		if (user.roles[i].name === 'Learner') {
-			subaccount = user.roles[i].accountKey;
+			courseRole = user.roles[i].name;
+			subAccount = user.roles[i].accountKey;
 			break;
 		}
 	}
 
-	return subaccount;
+	return { subAccount, courseRole };
 };
 const replaceOrigin = (url: string, newOrigin: string) => {
 	const parsedURL = new URL(url);
@@ -69,9 +71,15 @@ export const fetchDataPost = async <T extends unknown>(
 		body: JSON.stringify(body),
 	});
 
-	const data = await response.json();
+	let data = {} as T;
+	const contentType = response.headers.get('content-type');
+	if (contentType && contentType.includes('application/json')) {
+		data = await response.json();
+	}
+
 	return { data, response };
 };
+
 export const fetchDataPut = async <T extends unknown>(
 	url: string,
 	body: any,
@@ -99,23 +107,23 @@ export const authenticatedFetch = async <T extends unknown>(
 	// if PUT method, use fetchDataPut
 	if (method === 'PUT') {
 		if (isAbsoluteUrl(url)) {
-			const newUrl = replaceOrigin(url, API);
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchDataPut<T>(newUrl, body, sessionKey);
 		}
-		return fetchDataPut<T>(`${API}${url}`, body, sessionKey);
+		return fetchDataPut<T>(`${VITE_BACKEND_API}${url}`, body, sessionKey);
 	} else if (method === 'POST') {
 		if (isAbsoluteUrl(url)) {
-			const newUrl = replaceOrigin(url, API);
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchDataPost<T>(newUrl, body, sessionKey);
 		}
-		return fetchDataPost<T>(`${API}${url}`, body);
+		return fetchDataPost<T>(`${VITE_BACKEND_API}${url}`, body, sessionKey);
 	} else if (method === 'GET') {
 		// default to GET method
 		if (isAbsoluteUrl(url)) {
-			const newUrl = replaceOrigin(url, API);
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchCallbackGet<T>(newUrl, sessionKey);
 		}
-		return fetchCallbackGet<T>(`${API}${url}`, sessionKey);
+		return fetchCallbackGet<T>(`${VITE_BACKEND_API}${url}`, sessionKey);
 	}
 
 	throw new Error('Invalid method, not supported');
@@ -124,3 +132,6 @@ export const badRequest = <T extends unknown>(data: T) =>
 	json(data, { status: 400 });
 export const unauthorized = <T extends unknown>(data: T) =>
 	json(data, { status: 401 });
+
+export const serverError = <T extends unknown>(data: T) =>
+	json(data, { status: 500 });

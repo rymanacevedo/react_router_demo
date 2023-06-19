@@ -34,26 +34,111 @@ export const RegisterSchema = z
 	});
 export const AssignmentDataSchema = z.object({
 	self: z.string(),
-	assignmentKey: z.string(),
 	assignmentUid: z.string(),
+	status: z.string(),
+	assignmentType: z.string(),
+	completionAlgorithmType: z.string(),
+	learningUnitsCorrect2x: z.number(),
+	learningUnitsUnseen: z.number(),
+	learningUnitsMisinformed: z.number(),
+	learningUnitsUninformed: z.number(),
+	learningUnitsNotSure: z.number(),
+	learningUnitsInformed: z.number(),
+	learningUnitsCorrect1x: z.number(),
+	numCompletedLearningUnits: z.number(),
+	estimatedTimeToComplete: z.number(),
+	numLearningUnits: z.number(),
+	startedTimestamp: z.string(),
+	createdTimestamp: z.string(),
+	effectiveTimestamp: z.string().nullable(),
+	completedTimestamp: z.string().nullable(),
+	expiresTimestamp: z.string().nullable(),
+	canceledTimestamp: z.string().nullable(),
+	canCreateFocusedRefresher: z.boolean(),
+	learningUnitsProficient: z.number(),
+	learningUnitsMastered: z.number(),
+	assignmentKey: z.string(),
 	registrationKey: z.string(),
 	moduleKey: z.string(),
 	moduleUid: z.string(),
 	moduleVersionId: z.number(),
-	assignmentType: z.string(),
-	effectiveTimestamp: z.any(),
-	expiresTimestamp: z.any(),
-	canceledTimestamp: z.any(),
-	startedTimestamp: z.string(),
-	completedTimestamp: z.union([z.string(), z.null()]),
-	createdTimestamp: z.string(),
 	assignmentStatus: z.string(),
 	timePerLU: z.number(),
 	moduleUri: z.string(),
 	registrationUri: z.string(),
 	userUri: z.string(),
 	classroomUri: z.string(),
+	items: z.array(z.any()).optional(),
 });
+
+// there is an issue with recursive-types in typescript
+// https://zod.dev/?id=recursive-types
+const BaseChildSchema = z.object({
+	curricKey: z.string(),
+	curricUid: z.string(),
+	name: z.string(),
+	version: z.number(),
+	kind: z.string(),
+	descriptionRc: z.string().nullable(),
+	locale: z.string(),
+	estimatedTimeToComplete: z.number(),
+	estimatedTimeToCompleteRequired: z.number(),
+	learningUnitCount: z.number(),
+	totalLearningUnits: z.number(),
+	totalCompletedLearningUnits: z.number(),
+	totalRequiredLearningUnits: z.number(),
+	totalCompletedRequiredLearningUnits: z.number(),
+	totalCompletedAssignments: z.number(),
+	totalEstimatedAssignments: z.number(),
+	totalNotEstimatedAssignments: z.number(),
+	totalOtherAssignments: z.number(),
+	moduleStatus: z.string(),
+	defaultAllottedTime: z.number(),
+	isSingleAssignment: z.boolean(),
+	assignments: z.array(AssignmentDataSchema).optional(),
+	learnerProgress: z.number(),
+});
+
+export type Curriculum = z.infer<typeof BaseChildSchema> & {
+	children: Curriculum[];
+};
+
+const ChildSchema: z.ZodSchema<Curriculum> = BaseChildSchema.extend({
+	children: z.lazy(() => ChildSchema.array()),
+});
+
+const DisplayCurriculumSchema = z.object({
+	curricKey: z.string(),
+	curricUid: z.string(),
+	name: z.string(),
+	version: z.number(),
+	kind: z.string(),
+	descriptionRc: z.string().nullable(),
+	locale: z.string(),
+	estimatedTimeToComplete: z.number(),
+	estimatedTimeToCompleteRequired: z.number(),
+	totalLearningUnits: z.number(),
+	totalCompletedLearningUnits: z.number(),
+	totalRequiredLearningUnits: z.number(),
+	totalCompletedRequiredLearningUnits: z.number(),
+	totalCompletedAssignments: z.number(),
+	totalEstimatedAssignments: z.number(),
+	totalNotEstimatedAssignments: z.number(),
+	totalOtherAssignments: z.number(),
+	showModuleStatus: z.boolean(),
+	defaultAllottedTime: z.number(),
+	isSingleAssignment: z.boolean(),
+	children: z.array(ChildSchema),
+	learnerProgress: z.number(),
+});
+
+const RootSchema = z.object({
+	displayCurriculum: DisplayCurriculumSchema,
+	assignmentStatistics: z.any().nullable(),
+	reviewHeaderResource: z.any().nullable(),
+	items: z.array(z.any()).optional(),
+});
+
 export const AnswerListDataSchema = z.object({
 	self: z.string(),
 	id: z.union([z.string(), z.number()]),
@@ -117,6 +202,7 @@ export const ModuleDataSchema = z.object({
 	isRecommendedModulesEnabled: z.boolean(),
 	isCustomMessagesEnabled: z.boolean(),
 	publishedVersionId: z.any(),
+	items: z.array(z.any()).optional(),
 });
 export const AnswerHistorySchema = z.object({
 	roundNumber: z.number(),
@@ -207,3 +293,4 @@ export type QuestionInFocus = z.infer<typeof QuestionInFocusSchema>;
 export type QuestionInFocusAnswer = z.infer<typeof QuestionInFocusAnswerSchema>;
 export type RoundData = z.infer<typeof RoundDataSchema>;
 export type ModuleData = z.infer<typeof ModuleDataSchema>;
+export type RootData = z.infer<typeof RootSchema>;

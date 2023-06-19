@@ -1,9 +1,9 @@
-import { API } from '../lib/environment';
+import { VITE_BACKEND_API } from '../lib/environment';
 
 import { z } from 'zod';
 import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
-import { authenticatedFetch, unauthorized, fetchDataPost } from './utils';
+import { authenticatedFetch, fetchDataPost, unauthorized } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
 import { BootstrapData, BootstrapDataSchema } from '../App';
 import { ForgotUsernameFields } from '../routes/ForgotUsername';
@@ -107,9 +107,12 @@ export async function bootstrap(request: Request) {
 	try {
 		const url = new URL(request.url);
 		const abbrevName = url.searchParams.get('abbrevName');
-		if (abbrevName) {
+		const localAbbrevName = localStorage.getItem('abbrevName');
+		if (abbrevName || localAbbrevName) {
 			const response = await fetch(
-				`${API}/v2/bootstrap/account-info?name=${abbrevName}`,
+				`${VITE_BACKEND_API}/v2/bootstrap/account-info?name=${
+					abbrevName || localAbbrevName
+				}`,
 			);
 			return await response.json();
 		}
@@ -142,8 +145,8 @@ export const getLoginInfo = async (fields: any, cookie: any = null) => {
 
 	const url =
 		fields.remember !== undefined
-			? `${API}/v2/authenticate?remember=${fields.remember}`
-			: `${API}/v2/authenticate`;
+			? `${VITE_BACKEND_API}/v2/authenticate?remember=${fields.remember}`
+			: `${VITE_BACKEND_API}/v2/authenticate`;
 
 	let response = await fetch(url, {
 		method: 'POST',
@@ -210,7 +213,7 @@ export const getLoginInfo = async (fields: any, cookie: any = null) => {
 	if (initialUserData.sessionKey && response.status === 200) {
 		const { userKey, accountKey } = initialUserData.userContexts[0];
 		const { sessionKey } = initialUserData;
-		response = await fetch(`${API}/v2/users/${userKey}`, {
+		response = await fetch(`${VITE_BACKEND_API}/v2/users/${userKey}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
@@ -219,7 +222,7 @@ export const getLoginInfo = async (fields: any, cookie: any = null) => {
 		});
 		const completeUserData: CompleteUserData = await response.json();
 
-		response = await fetch(`${API}/v2/users/${userKey}/roles`, {
+		response = await fetch(`${VITE_BACKEND_API}/v2/users/${userKey}/roles`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
@@ -230,7 +233,7 @@ export const getLoginInfo = async (fields: any, cookie: any = null) => {
 		const userRoles = await response.json();
 		const roles: Role[] = userRoles.items;
 
-		response = await fetch(`${API}/v2/accounts/${accountKey}`, {
+		response = await fetch(`${VITE_BACKEND_API}/v2/accounts/${accountKey}`, {
 			method: 'GET',
 			headers: {
 				Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
@@ -262,7 +265,7 @@ export const getLoginInfo = async (fields: any, cookie: any = null) => {
 };
 
 export const getSession = async (sessionKey: string) => {
-	const url = `${API}/v2/session/keep-alive`;
+	const url = `${VITE_BACKEND_API}/v2/session/keep-alive`;
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
@@ -273,12 +276,12 @@ export const getSession = async (sessionKey: string) => {
 };
 
 export const getSessionExpiration = async (sessionKey: string) => {
-	const url = `${API}/v2/session/expiration`;
+	const url = `${VITE_BACKEND_API}/v2/session/expiration`;
 	return authenticatedFetch<any>(url, sessionKey);
 };
 
 export const logoutSession = async (sessionKey: string) => {
-	const url = `${API}/v2/session/logout`;
+	const url = `${VITE_BACKEND_API}/v2/session/logout`;
 	try {
 		const response = await fetch(url, {
 			method: 'DELETE',
@@ -298,7 +301,7 @@ export const isUserInfo = (info: any): info is UserInfo => {
 };
 
 export const getForgotPasswordData = async (fields: ForgotPasswordFields) => {
-	const url = `${API}/v2/bootstrap/forgot-password`;
+	const url = `${VITE_BACKEND_API}/v2/bootstrap/forgot-password`;
 	const forgotPasswordBody = {
 		username: fields.username,
 		accountUid: fields.accountUid,
@@ -312,11 +315,29 @@ export const isBootStrapData = (data: any): data is BootstrapData => {
 };
 
 export const getForgotUsernameData = async (fields: ForgotUsernameFields) => {
-	const url = `${API}/v2/bootstrap/forgot-username`;
+	const url = `${VITE_BACKEND_API}/v2/bootstrap/forgot-username`;
 	const forgotUserBody = {
 		emailAddress: fields.email,
 		accountUid: fields.accountUid,
 		captchaResp: fields['g-recaptcha-response'],
 	};
 	return fetchDataPost<any>(url, forgotUserBody);
+};
+
+export const getSignupData = async (
+	userAltKey: string,
+	accountUid: string,
+	username: string,
+	password: string,
+	captchaResp: string,
+) => {
+	const url = `${VITE_BACKEND_API}/v2/users/${userAltKey}/initial-credentials`;
+	const signupBody = {
+		accountUid,
+		username,
+		password,
+		captchaResp,
+	};
+
+	return fetchDataPost<any>(url, signupBody);
 };

@@ -3,6 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import axios from 'axios';
 
 import { useDialogContext } from '../../components/DialogProvider';
+import { VITE_BACKEND_API } from '../../lib/environment';
 
 const useModuleContentService = () => {
 	const [error, setError] = useState('');
@@ -22,7 +23,7 @@ const useModuleContentService = () => {
 			setLoading(true);
 			const assignmentsResponse = await axios({
 				method: 'GET',
-				url: `/v2/assignments/${assignmentKey}?includeTimePerLU=true&subaccount=${subaccount}`,
+				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}?includeTimePerLU=true&subaccount=${subaccount}`,
 				headers: {
 					Authorization: `Basic ${window.base64.encode(
 						`${user.sessionKey}:someotherstring`,
@@ -46,7 +47,7 @@ const useModuleContentService = () => {
 		try {
 			setLoading(true);
 
-			const url = `/v2/assignments/${assignmentKey}/refreshers?subaccount=${subaccount}${
+			const url = `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}/refreshers?subaccount=${subaccount}${
 				isFocused ? '&isFocused=true' : ''
 			}`;
 

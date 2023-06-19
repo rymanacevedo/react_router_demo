@@ -1,4 +1,4 @@
-import { Key, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
@@ -18,71 +18,53 @@ import {
 	VStack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import useCourseCurriculaListService from '../../services/coursesServices/useCourseCurriculaListService';
-import useAssignmentByUserAssociations from '../../services/useAssignmentByUserAssociations';
-import useModuleContentService from '../../services/coursesServices/useModuleContentService';
+import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
+import { LoaderFunction } from 'react-router';
+import {
+	getAssignments,
+	getCurriculaCourseList,
+} from '../../services/learning';
+import { requireUser } from '../../utils/user';
+import { getSubAccount, serverError } from '../../services/utils';
+import { AssignmentData, Curriculum, RootData } from '../../lib/validator';
 
-type Assignment = {
-	assignmentType: string;
-	assignmentUid: string;
-	status: string;
-	estimatedTimeToComplete: number;
-	assignmentKey: string;
-	numLearningUnits: number;
-};
+export const assignmentListLoader: LoaderFunction = async ({ params }) => {
+	const selectedCourseKey = params.selectedCourseKey!;
+	const user = requireUser();
+	const { subAccount } = getSubAccount(user);
+	const { data: list } = await getCurriculaCourseList(
+		user,
+		selectedCourseKey,
+		subAccount,
+	);
+	const { data: assignments } = await getAssignments(
+		list.items[0].key,
+		user,
+		subAccount,
+	);
 
-type AssignmentListDataType = {
-	displayCurriculum: {
-		children: [
-			{
-				assignments: any[];
-				name: Key | null | undefined;
-				curriculum: { name: string; assignments: any[] };
-			},
-		];
-	};
-};
-type SelectedCourseKeyType = {
-	selectedCourseKey: string | null;
-};
-
-const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
-	const { t: i18n } = useTranslation();
-	const { getCurriculaCourseList } = useCourseCurriculaListService();
-	const { getAssignments } = useAssignmentByUserAssociations();
-	const [refreshIsOpen, setRefreshIsOpen] = useState('');
-	const { startRefresher } = useModuleContentService();
-	const [assignmentListData, setAssignmentsListData] =
-		useState<AssignmentListDataType>({
-			displayCurriculum: {
-				children: [
-					{
-						assignments: [],
-						name: '',
-						curriculum: { name: '', assignments: [] },
-					},
-				],
+	if (assignments.items) {
+		// eslint-disable-next-line @typescript-eslint/no-throw-literal
+		throw serverError({
+			fields: {},
+			errors: {
+				fieldErrors: {
+					curriculumKey: [assignments.items[0].message],
+				},
 			},
 		});
+	}
+
+	return json(assignments);
+};
+
+const AssignmentList = () => {
+	const { t: i18n } = useTranslation();
+	const assignments = useLoaderData() as RootData;
+	const [refreshIsOpen, setRefreshIsOpen] = useState('');
+	const fetcher = useFetcher();
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		const fetchData = async () => {
-			const curicCourseList = await getCurriculaCourseList(selectedCourseKey);
-			if (curicCourseList.items.length) {
-				const assignments = await getAssignments(curicCourseList.items[0].key);
-				if (assignments?.displayCurriculum) {
-					setAssignmentsListData(assignments);
-				}
-			}
-		};
-		if (selectedCourseKey) {
-			fetchData();
-		}
-	}, [selectedCourseKey]);
-
-	const getAssignmentText = (assignment: Assignment) => {
+	const getAssignmentText = (assignment: AssignmentData) => {
 		if (
 			assignment?.assignmentType === 'Assessment' &&
 			assignment?.status === 'COMPLETED'
@@ -151,12 +133,12 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 		}
 	};
 
-	const handleAssignmentClick = (assignment: Assignment) => () => {
+	const handleAssignmentClick = (assignment: AssignmentData) => () => {
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
-				setRefreshIsOpen(assignment.assignmentKey);
+				// TODO: implement popup for review/retake
 			} else {
-				navigate(`timedAssessment/${assignment.assignmentUid}`);
+				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
 			}
 		} else if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {
@@ -168,7 +150,7 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'NOT_STARTED'
 		) {
-			navigate(`moduleIntro/${assignment.assignmentKey}`, {
+			navigate(`/learning/moduleIntro/${assignment.assignmentKey}`, {
 				state: {
 					numberOfLearningUnits: assignment.numLearningUnits,
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
@@ -178,120 +160,152 @@ const AssignmentList = ({ selectedCourseKey }: SelectedCourseKeyType) => {
 			assignment.assignmentType !== 'TimedAssessment' &&
 			assignment.status === 'IN_PROGRESS'
 		) {
-			navigate(`assignment/${assignment.assignmentKey}`, {
+			navigate(`/learning/assignment/${assignment.assignmentKey}`, {
 				state: {
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
 			});
 		} else {
-			navigate(`assignment/${assignment.assignmentKey}`, {
+			navigate(`/learning/assignment/${assignment.assignmentKey}`, {
 				state: {
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
 			});
 		}
 	};
-	const handleRefresherClick = (assignment: Assignment) => async () => {
-		const refresher = await startRefresher(assignment.assignmentKey, false);
-		navigate(`moduleIntro/${refresher.assignmentKey}`);
+	const handleRefresherClick = (assignment: AssignmentData) => async () => {
+		fetcher.submit(
+			{ isFocused: 'false' },
+			{
+				method: 'POST',
+				action: `/api/refresher?assignmentKey=${assignment.assignmentKey}`,
+			},
+		);
 	};
 
-	const handleReviewClick = (assignment: Assignment) => {
+	const handleReviewClick = (assignment: AssignmentData) => {
 		return () => {
-			navigate(`review/${assignment.assignmentKey}`);
+			navigate(`/learning/review/${assignment.assignmentKey}`);
 		};
 	};
 
-	const handleSmartRefresherClick = (assignment: Assignment) => async () => {
-		const smartRefresher = await startRefresher(assignment.assignmentKey, true);
-		navigate(`moduleIntro/${smartRefresher.assignmentKey}`);
+	const handleSmartRefresherClick =
+		(assignment: AssignmentData) => async () => {
+			fetcher.submit(
+				{ isFocused: 'true' },
+				{
+					method: 'POST',
+					action: `/api/refresher?assignmentKey=${assignment.assignmentKey}`,
+				},
+			);
+		};
+
+	const Assignment = (
+		index: number,
+		assignment: AssignmentData | null,
+		curriculum: Curriculum,
+	) => {
+		if (!assignment) return null;
+		return (
+			<Popover
+				key={index}
+				returnFocusOnClose={false}
+				isOpen={refreshIsOpen === assignment.assignmentKey}
+				placement="bottom"
+				closeOnBlur={false}>
+				<PopoverTrigger>
+					<PopoverAnchor>
+						<ListItem
+							height={'44px'}
+							padding={'4px'}
+							w="100%"
+							key={curriculum.name}
+							onClick={handleAssignmentClick(assignment)}>
+							<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+								<Text
+									_hover={{
+										textDecoration: 'underline',
+										color: 'ampPrimary.300',
+										cursor: 'pointer',
+									}}
+									fontSize={'21px'}
+									fontWeight={'bold'}>
+									{curriculum.name}
+								</Text>
+								{getAssignmentText(assignment)}
+							</HStack>
+							{index !== assignments.displayCurriculum.children.length - 1 && (
+								<Divider
+									borderWidth="1px"
+									borderStyle="solid"
+									borderRadius="10"
+									borderColor="#AFB3B4"
+								/>
+							)}
+						</ListItem>
+					</PopoverAnchor>
+				</PopoverTrigger>
+				<PopoverContent marginRight={'200px'}>
+					<Box position="fixed" top="0px" left="20px">
+						{' '}
+						<PopoverArrow position="fixed" top="0" left="0" />
+					</Box>{' '}
+					<ButtonGroup size="lg" w="100%">
+						<VStack>
+							{assignment.assignmentType !== 'Assessment' && (
+								<>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={handleRefresherClick(assignment)}>
+										{i18n('refresher')}
+									</Button>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={handleReviewClick(assignment)}>
+										{i18n('review')}
+									</Button>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={handleSmartRefresherClick(assignment)}>
+										{i18n('smartRefresher')}
+									</Button>
+								</>
+							)}
+						</VStack>
+					</ButtonGroup>
+				</PopoverContent>
+			</Popover>
+		);
 	};
 
-	const assignmentList = assignmentListData?.displayCurriculum.children.map(
-		(curriculum, index) => {
-			const assignment: Assignment =
-				curriculum.assignments[curriculum.assignments.length - 1];
-			return (
-				<Popover
-					key={index}
-					returnFocusOnClose={false}
-					isOpen={refreshIsOpen === assignment?.assignmentKey}
-					placement="bottom"
-					closeOnBlur={false}>
-					<PopoverTrigger>
-						<PopoverAnchor>
-							<ListItem
-								height={'44px'}
-								padding={'4px'}
-								w="100%"
-								key={curriculum.name}
-								onClick={handleAssignmentClick(assignment)}>
-								<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
-									<Text
-										_hover={{
-											textDecoration: 'underline',
-											color: 'ampPrimary.300 ',
-											cursor: 'pointer',
-										}}
-										fontSize={'21px'}
-										fontWeight={'bold'}>
-										{curriculum.name}
-									</Text>
-									{getAssignmentText(assignment)}
-								</HStack>
-								{index !==
-									assignmentListData?.displayCurriculum.children.length - 1 && (
-									<Divider
-										borderWidth="1px"
-										borderStyle="solid"
-										borderRadius="10"
-										borderColor="#AFB3B4"
-									/>
-								)}
-							</ListItem>
-						</PopoverAnchor>
-					</PopoverTrigger>
-					<PopoverContent marginRight={'200px'}>
-						<Box position="fixed" top="0px" left="20px">
-							{' '}
-							<PopoverArrow position="fixed" top="0" left="0" />
-						</Box>{' '}
-						<ButtonGroup size="lg" w="100%">
-							<VStack>
-								{curriculum?.assignments[0]?.assignmentType !==
-									'Assessment' && (
-									<>
-										<Button
-											w="320px"
-											variant="ghost"
-											onClick={handleRefresherClick(curriculum.assignments[0])}>
-											{i18n('refresher')}
-										</Button>
-										<Button
-											w="320px"
-											variant="ghost"
-											onClick={handleReviewClick(curriculum.assignments[0])}>
-											{i18n('review')}
-										</Button>
-										<Button
-											w="320px"
-											variant="ghost"
-											onClick={handleSmartRefresherClick(
-												curriculum.assignments[0],
-											)}>
-											{i18n('smartRefresher')}
-										</Button>
-									</>
-								)}
-							</VStack>
-						</ButtonGroup>
-					</PopoverContent>
-				</Popover>
-			);
-		},
-	);
+	const mapAssignmentsRecursively = (
+		curriculumChildren: Curriculum[],
+		index: number,
+	): ReactNode[] => {
+		return curriculumChildren.map((curriculum, i) => {
+			if (curriculum.children && curriculum.children.length > 0) {
+				// Recursive call to go deeper into the structure
+				return mapAssignmentsRecursively(curriculum.children, index + i);
+			} else {
+				// Base case: no more children, return the Assignment component
+				if (curriculum.assignments && curriculum.assignments.length > 0) {
+					const currentAssignment = curriculum.assignments[0];
+					// TODO: shadow questions?
+					return Assignment(index + i, currentAssignment, curriculum);
+				}
+				return null;
+			}
+		});
+	};
 
-	return !selectedCourseKey ? (
+	const assignmentList = !assignments
+		? null
+		: mapAssignmentsRecursively(assignments.displayCurriculum.children, 0);
+
+	return !assignments ? (
 		<Alert maxWidth={'650px'} status="warning">
 			<AlertIcon />
 			{i18n('noCoursesAssigned')}

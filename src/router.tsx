@@ -20,7 +20,7 @@ import ForgotPassword, {
 	forgotPasswordAction,
 } from './components/login/ForgotPassword';
 import ForgotUsername, { forgotUsernameAction } from './routes/ForgotUsername';
-import SignUp from './components/login/SignUp';
+import SignUp, { signupAction, signupLoader } from './routes/SignUp';
 import Register, { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
@@ -28,7 +28,7 @@ import { QuizProvider } from './hooks/useQuizContext';
 import { FeedbackProvider } from './hooks/useFeedbackContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
-import LearningView from './components/pages/LearningView';
+import LearningView, { learningLoader } from './components/pages/LearningView';
 import AssignmentReviewView, {
 	assignmentReviewLoader,
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';
@@ -45,6 +45,11 @@ import TimedAssessment, {
 } from './routes/TimedAssessment';
 import Success, { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
+import { preSignUpLoader } from './routes/SignUpLoader';
+import AssignmentList, {
+	assignmentListLoader,
+} from './components/ui/AssignmentList';
+import { refresherAction } from './routes/Refresher';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -60,6 +65,7 @@ const routesJSX = (
 			loader={keepAliveLoader}
 			action={keepAliveAction}
 		/>
+		<Route path="/api/refresher" action={refresherAction} />
 		<Route path="/feedback" action={questionFeedbackAction} />
 		<Route path="/authenticate" element={<Authenticate />} />
 		<Route
@@ -88,8 +94,13 @@ const routesJSX = (
 				path="forgot-username"
 				element={<ForgotUsername />}
 			/>
-			<Route path="signup/:abbrevName/:userAltKey" element={<SignUp />} />
-			<Route path="signup" element={<SignUp />} />
+			<Route path="signup/:abbrevName/:userAltKey" loader={preSignUpLoader} />
+			<Route
+				path="signup"
+				action={signupAction}
+				loader={signupLoader}
+				element={<SignUp />}
+			/>
 			<Route action={registerAction} path="register" element={<Register />} />
 			<Route path="success" loader={successLoader} element={<Success />} />
 		</Route>
@@ -129,7 +140,13 @@ const routesJSX = (
 					/>
 				}
 			/>
-			<Route path="learning" element={<LearningView />} />
+			<Route loader={learningLoader} path="learning" element={<LearningView />}>
+				<Route
+					path=":selectedCourseKey"
+					loader={assignmentListLoader}
+					element={<AssignmentList />}
+				/>
+			</Route>
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				loader={assignmentReviewLoader}

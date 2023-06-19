@@ -1,57 +1,106 @@
 import { Container, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import AssignmentList from '../ui/AssignmentList';
-import useCourseListService from '../../services/coursesServices/useCourseListService';
-import { useEffect, useState } from 'react';
 import CourseMenu from '../ui/CourseMenu';
+import { LoaderFunction } from 'react-router';
+import { requireUser } from '../../utils/user';
+import { getCourseList } from '../../services/learning';
+import {
+	json,
+	Outlet,
+	useFetcher,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
+import { getSubAccount } from '../../services/utils';
+import { useEffect, useState } from 'react';
 import { useQuizContext } from '../../hooks/useQuizContext';
 
-export type CourseListType = [
-	{
-		key: string;
-		name: string;
-	},
-];
+export type Course = {
+	key: string;
+	name: string;
+};
+
+export const learningLoader: LoaderFunction = async ({ request }) => {
+	const user = requireUser();
+	const url = new URL(request.url);
+	const selectedCourseKey = url.searchParams.get('selectedCourseKey');
+	const { courseRole, subAccount } = getSubAccount(user);
+	if (selectedCourseKey) {
+		// fetcher runs this route again, so we don't need to fetch the data again
+		// TODO: optimize so getCourseList isn't called multiple times
+		const {
+			data: { items: courseList },
+		} = await getCourseList(user, courseRole, subAccount);
+
+		return json({
+			courseList,
+			selectedCourseKey,
+			subAccount,
+			courseRole,
+		});
+	}
+
+	const {
+		data: { items: courseList },
+	} = await getCourseList(user, courseRole, subAccount);
+
+	if (courseList.length === 0) {
+		return json({
+			courseList,
+			selectedCourseKey: null,
+			subAccount,
+			courseRole,
+		});
+	}
+
+	return json({
+		courseList,
+		selectedCourseKey: courseList[0].key,
+		subAccount,
+		courseRole,
+	});
+};
 
 const LearningView = () => {
-	const { t: i18n } = useTranslation();
-	const { fetchCourseList } = useCourseListService();
-	const [courseList, setCourseList] = useState<CourseListType>([
-		{
-			key: '',
-			name: '',
-		},
-	]);
+	const loaderData = useLoaderData() as any;
+	const fetcher = useFetcher();
+	const data = fetcher.data || loaderData;
+	const navigate = useNavigate();
 	const { selectedCourseKey, setSelectedCourseKey } = useQuizContext();
-	const [courseTitle, setCourseTitle] = useState<string>('');
+	const [title, setTitle] = useState<string>('');
+	const [courses, setCourses] = useState<Course[]>([]);
+	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
-		const fetchCourseListData = async () => {
-			let courseListResponse = await fetchCourseList();
+		if (data && !selectedCourseKey) {
+			setCourses(data.courseList);
+			setTitle(data.courseList[0].name);
+			setSelectedCourseKey(data.selectedCourseKey);
+			navigate(`/learning/${data.selectedCourseKey}`);
+		}
 
-			setCourseList(courseListResponse?.items);
-
-			if (!selectedCourseKey) {
-				setCourseTitle(courseListResponse?.items[0]?.name);
-				setSelectedCourseKey(courseListResponse?.items[0]?.key);
+		if (data.courseList && selectedCourseKey) {
+			setCourses(data.courseList);
+			const course = data.courseList.find(
+				(c: Course) => c.key === selectedCourseKey,
+			);
+			if (course) {
+				setTitle(course.name);
+				navigate(`/learning/${selectedCourseKey}`);
 			}
-		};
-
-		fetchCourseListData();
+		}
 	}, []);
 
 	useEffect(() => {
-		if (courseList) {
-			const currCourse = courseList?.find((course) => {
-				return course.key === selectedCourseKey;
-			});
-
-			if (currCourse) {
-				setCourseTitle(currCourse.name);
-				setSelectedCourseKey(currCourse.key);
+		if (fetcher.data && courses) {
+			const course = courses.find((c) => c.key === data.selectedCourseKey);
+			if (course) {
+				setTitle(course.name);
+				setSelectedCourseKey(course.key);
+				navigate(`/learning/${course.key}`);
 			}
 		}
-	}, [courseList]);
+	}, [fetcher.data]);
 
 	return (
 		<Container
@@ -69,7 +118,7 @@ const LearningView = () => {
 				'0px 100px 80px rgba(0, 0, 0, 0.04), 0px 6.6501px 5.32008px rgba(0, 0, 0, 0.0161557), 0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0112458)'
 			}>
 			<Heading as="h1" marginBottom="24px" margin="12px">
-				{courseTitle}
+				{title}
 			</Heading>
 			<HStack
 				justifyContent={'space-between'}
@@ -80,16 +129,13 @@ const LearningView = () => {
 				<Heading as="h2" size="lg">
 					{i18n('yourAssignments')}
 				</Heading>
-				{courseList?.length > 0 && (
-					<CourseMenu
-						courseList={courseList}
-						selectedCourseKey={selectedCourseKey}
-						setSelectedCourseKey={setSelectedCourseKey}
-						setCourseTitle={setCourseTitle}
-					/>
-				)}
+				<CourseMenu
+					courses={courses}
+					selectedCourseKey={selectedCourseKey}
+					courseUpdaterToggle={fetcher}
+				/>
 			</HStack>
-			<AssignmentList selectedCourseKey={selectedCourseKey} />
+			<Outlet />
 		</Container>
 	);
 };

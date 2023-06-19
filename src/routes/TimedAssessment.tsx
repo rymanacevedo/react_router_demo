@@ -21,6 +21,7 @@ import {
 import { getSubAccount } from '../services/utils';
 import { useLoaderData } from 'react-router-dom';
 import {
+	Confidence,
 	ModuleData,
 	QuestionInFocus,
 	RoundData,
@@ -30,16 +31,17 @@ import { useEffect, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
+import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const assignmentUid = params.assignmentUid!;
-	const account = getSubAccount(user);
+	const { subAccount } = getSubAccount(user);
 	const { assignmentData, moduleData, moduleInfoAndQuestions } =
-		await getFullModuleWithQuestions(user, account, assignmentUid);
+		await getFullModuleWithQuestions(user, subAccount, assignmentUid);
 	const { data: roundData } = await getCurrentRoundTimedAssessment(
 		user,
-		account,
+		subAccount,
 		assignmentUid,
 	);
 	return { assignmentData, moduleData, moduleInfoAndQuestions, roundData };
@@ -50,11 +52,27 @@ export default function TimedAssessment() {
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
 	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
+	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
+
 	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
 		assignmentData: AssignmentData;
 		moduleData: ModuleData;
 		moduleInfoAndQuestions: ModuleData;
 		roundData: RoundData;
+	};
+
+	const handleFlagForReview = () => {
+		if (questionInFocus) {
+			setFlaggedQuestions((prevState) => {
+				const newSet = new Set(prevState);
+				if (newSet.has(questionInFocus.publishedQuestionAuthoringKey)) {
+					newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
+				} else {
+					newSet.add(questionInFocus.publishedQuestionAuthoringKey);
+				}
+				return newSet;
+			});
+		}
 	};
 
 	const handleNavigation = (question: QuestionInFocus) => {
@@ -117,8 +135,14 @@ export default function TimedAssessment() {
 									values.push('selected');
 								}
 
-								if (question.answered) {
+								if (question.confidence !== Confidence.NA) {
 									values.push('answered');
+								}
+
+								if (
+									flaggedQuestions.has(question.publishedQuestionAuthoringKey)
+								) {
+									values.push('flagged');
 								}
 
 								return (
@@ -160,7 +184,27 @@ export default function TimedAssessment() {
 							px="72px"
 							py="44px"
 							w={{ base: '100%', md: '50%' }}>
-							<Heading as="h2">{i18n('answer')}</Heading>
+							<Stack
+								direction="row"
+								alignItems="center"
+								justifyContent="space-between">
+								<Heading as="h2">{i18n('answer')}</Heading>
+								<Button
+									leftIcon={
+										flaggedQuestions.has(
+											questionInFocus?.publishedQuestionAuthoringKey,
+										) ? (
+											<BookmarkFilledIcon />
+										) : (
+											<BookmarkIcon />
+										)
+									}
+									colorScheme="ampSecondary"
+									variant="ghost"
+									onClick={handleFlagForReview}>
+									Flag for review
+								</Button>
+							</Stack>
 							<AnswerSelection
 								questionInFocus={questionInFocus}
 								// selectedAnswers={selectedAnswer}
