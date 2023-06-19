@@ -275,7 +275,6 @@ const resources = {
 			//////////////////////////////////////////////
 			previousBtn: 'Previous',
 			timeLeft: 'Time left',
-			capitalContinue: 'Continue'
 		},
 	},
 	fr: {
