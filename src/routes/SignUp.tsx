@@ -110,6 +110,18 @@ export const signupAction: ActionFunction = async ({
 	if (!response.ok) {
 		const items = data.items;
 
+		if (items[0].message && items[0].message === 'user not found') {
+			return badRequest({
+				fields,
+				errors: {
+					formErrors: ['user not found'],
+					fieldErrors: {
+						userAltKey: ['user not found'],
+					},
+				},
+			});
+		}
+
 		if (
 			data.errorMessage &&
 			data.errorMessage === 'username is not available'
