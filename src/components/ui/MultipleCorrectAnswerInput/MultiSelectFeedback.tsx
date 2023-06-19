@@ -38,7 +38,7 @@ const MultiSelectFeedback = ({
 			const selectedAnswerIds = selectedAnswers.map(
 				(answer) => answer.answerId,
 			);
-			const allCorrectAnswersChosen = correctAnswerIds.every((id: any) =>
+			const allCorrectAnswersChosen = correctAnswerIds.every((id: number) =>
 				selectedAnswerIds.includes(id),
 			);
 			setWasCorrectAnswerChosen(
@@ -47,7 +47,7 @@ const MultiSelectFeedback = ({
 			);
 
 			const partialCorrectAnswerChosen =
-				correctAnswerIds.some((id: any) => selectedAnswerIds.includes(id)) &&
+				correctAnswerIds.some((id: number) => selectedAnswerIds.includes(id)) &&
 				!allCorrectAnswersChosen;
 			setWasPartialCorrectAnswerChosen(partialCorrectAnswerChosen);
 		}

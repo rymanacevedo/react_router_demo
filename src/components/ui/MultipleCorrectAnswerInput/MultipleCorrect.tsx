@@ -195,6 +195,7 @@ const MultipleCorrect = ({
 					</Button>
 				</HStack>
 			) : (
+				// TO-DO: investigate buttons shifting when specific widths removed
 				<HStack
 					marginTop={3}
 					spacing={6}

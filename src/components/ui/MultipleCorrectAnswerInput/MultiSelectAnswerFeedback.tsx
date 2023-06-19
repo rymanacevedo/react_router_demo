@@ -251,7 +251,7 @@ const MultiChoiceAnswerFeedback = ({
 								? '#6D758D'
 								: 'inherit',
 							position: 'relative',
-							top: choseIDK ? 0 : 15,
+							top: 5,
 							bottom: 0,
 							left: 0,
 							right: 0,
@@ -286,15 +286,6 @@ const MultiChoiceAnswerFeedback = ({
 							color: currentRoundAnswerOverLayData?.correctAnswerIds
 								? '#6D758D'
 								: 'inherit',
-							position: 'relative',
-							top: 5,
-							bottom: 0,
-							left: 0,
-							right: 0,
-							transform: `${
-								isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
-							}`,
-							transition: 'transform 0.3s ease-in-out',
 						}}
 						content={questionText}
 					/>
