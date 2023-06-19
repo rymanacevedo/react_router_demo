@@ -1,12 +1,13 @@
 import { cardAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers, defineStyle } from '@chakra-ui/react';
-import flag from '../assets/flag.png';
 
 const { definePartsStyle, defineMultiStyleConfig } =
 	createMultiStyleConfigHelpers(cardAnatomy.keys);
 
+const flag = new URL('../assets/flag.png', import.meta.url);
+
 const flagStyle = {
-	backgroundImage: `url(${flag})`,
+	backgroundImage: `url(${flag.href})`,
 	backgroundRepeat: 'no-repeat',
 	backgroundPosition: 'right top',
 	backgroundSize: '12px 12px',
