@@ -1,5 +1,7 @@
 import { defineStyleConfig } from '@chakra-ui/react';
 
+const boxShadowAttribute = '0 0 0 4px rgba(37, 124, 181, 0.50)';
+
 const Checkbox = defineStyleConfig({
 	baseStyle: {
 		control: {
@@ -18,7 +20,7 @@ const Checkbox = defineStyleConfig({
 			control: {
 				_focus: {
 					borderRadius: '50%',
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {},
 			},
@@ -32,10 +34,10 @@ const Checkbox = defineStyleConfig({
 		multiSelect: {
 			control: {
 				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 					outline: '2px solid transparent',
 					outlineOffset: '2px',
 				},
@@ -51,10 +53,10 @@ const Checkbox = defineStyleConfig({
 		multiSelectUnsureIncorrect: {
 			control: {
 				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 					outline: '2px solid transparent',
 					outlineOffset: '2px',
 				},
@@ -77,10 +79,10 @@ const Checkbox = defineStyleConfig({
 		multiSelectUnsureCorrect: {
 			control: {
 				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 					outline: '2px solid transparent',
 					outlineOffset: '2px',
 				},
@@ -103,10 +105,10 @@ const Checkbox = defineStyleConfig({
 		multiSelectSureIncorrect: {
 			control: {
 				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 					outline: '2px solid transparent',
 					outlineOffset: '2px',
 				},
@@ -129,10 +131,10 @@ const Checkbox = defineStyleConfig({
 		multiSelectSureCorrect: {
 			control: {
 				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 					outline: '2px solid transparent',
 					outlineOffset: '2px',
 				},
@@ -155,10 +157,10 @@ const Checkbox = defineStyleConfig({
 		multiSelectPartialCorrect: {
 			control: {
 				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 				},
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
+					boxShadow: boxShadowAttribute,
 					outline: '2px solid transparent',
 					outlineOffset: '2px',
 				},
