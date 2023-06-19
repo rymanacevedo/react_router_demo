@@ -20,9 +20,7 @@ type FeedbackProviderProps = {
 	children: React.ReactNode;
 };
 
-export const FeedbackProvider: React.FC<FeedbackProviderProps> = ({
-	children,
-}) => {
+export const FeedbackProvider = ({ children }: FeedbackProviderProps) => {
 	const [feedbackVariant, setFeedbackVariant] = useState<string>('');
 	const [feedbackText, setFeedbackText] = useState<string>('');
 	const [feedbackStatus, setFeedbackStatus] = useState<string>('');

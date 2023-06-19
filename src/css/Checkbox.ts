@@ -1,184 +1,166 @@
-import { defineStyleConfig } from '@chakra-ui/react';
+import { checkboxAnatomy } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers, defineStyle } from '@chakra-ui/react';
 
-const Checkbox = defineStyleConfig({
-	baseStyle: {
+const { definePartsStyle, defineMultiStyleConfig } =
+	createMultiStyleConfigHelpers(checkboxAnatomy.keys);
+
+const boxShadowAttribute = '0 0 0 4px rgba(37, 124, 181, 0.50)';
+
+const baseMultiSelect = definePartsStyle({
+	control: {
+		_focus: {
+			boxShadow: boxShadowAttribute,
+		},
+		_hover: {
+			boxShadow: boxShadowAttribute,
+			outline: '2px solid transparent',
+			outlineOffset: '2px',
+		},
+		// borderColor: 'ampSuccess.500',
+		border: '1.5px solid',
+		width: '2.75rem',
+		height: '2.75rem',
+		borderRadius: '12px',
+		// backgroundColor: 'ampSuccess.50',
+	},
+	icon: {
+		fontSize: '15px',
+		// color: 'ampSuccess.500',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontWeight: 'bold',
+	},
+});
+
+const baseStyle = definePartsStyle({
+	control: {
+		_focus: {
+			boxShadow: 'none',
+			outline: 'none',
+		},
+		_focusVisible: {
+			outline: 'none',
+		},
+		border: 'unset',
+	},
+});
+
+const multiChoiceAnswer = defineStyle(() => {
+	return {
 		control: {
 			_focus: {
-				boxShadow: 'none',
-				outline: 'none',
+				borderRadius: '50%',
+				boxShadow: boxShadowAttribute,
 			},
-			_focusVisible: {
-				outline: 'none',
-			},
-			border: 'unset',
+			_hover: {},
 		},
-	},
-	variants: {
-		multiChoiceAnswer: {
-			control: {
-				_focus: {
-					borderRadius: '50%',
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {},
-			},
+	};
+});
+
+const formCheckbox = defineStyle(() => {
+	return {
+		control: {
+			border: '2px solid',
+			borderRadius: 'sm',
 		},
-		formCheckbox: {
-			control: {
-				border: '2px solid',
-				borderRadius: 'sm',
-			},
+	};
+});
+
+const multiSelect = defineStyle(() => {
+	return {
+		...baseMultiSelect,
+	};
+});
+
+const multiSelectUnsureIncorrect = defineStyle(() => {
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			borderColor: 'ampError.700',
+			backgroundColor: 'ampError.50',
 		},
-		multiSelect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
-				},
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-			},
-			icon: {
-				fontSize: '15px',
-			},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampError.700',
 		},
-		multiSelectUnsureIncorrect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
-				},
-				borderColor: '#912E21',
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-				backgroundColor: '#F8D7D3',
-			},
-			icon: {
-				fontSize: '15px',
-				color: '#912E21',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				fontWeight: 'bold',
-			},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectUnsureCorrect = defineStyle(() => {
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			borderColor: 'ampSuccess.500',
+			backgroundColor: 'ampSuccess.50',
 		},
-		multiSelectUnsureCorrect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
-				},
-				borderColor: 'ampSuccess.500',
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-				backgroundColor: 'ampSuccess.50',
-			},
-			icon: {
-				fontSize: '15px',
-				color: 'ampSuccess.500',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				fontWeight: 'bold',
-			},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampSuccess.500',
 		},
-		multiSelectSureIncorrect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
-				},
-				borderColor: '#912E21',
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-				backgroundColor: '#912E21',
-			},
-			icon: {
-				fontSize: '15px',
-				color: 'white',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				fontWeight: 'bold',
-			},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectSureIncorrect = defineStyle(() => {
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			borderColor: 'ampError.700',
+			backgroundColor: 'ampError.50',
 		},
-		multiSelectSureCorrect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
-				},
-				borderColor: 'ampSuccess.500',
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-				backgroundColor: 'ampSuccess.500',
-			},
-			icon: {
-				fontSize: '15px',
-				color: 'white',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				fontWeight: 'bold',
-			},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampError.700',
 		},
-		multiSelectPartialCorrect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
-				},
-				borderColor: 'ampWarning.800',
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-				backgroundColor: 'ampWarning.100',
-			},
-			icon: {
-				fontSize: '15px',
-				color: 'ampWarning.800',
-				display: 'flex',
-				justifyContent: 'center',
-				alignItems: 'center',
-				fontWeight: 'bold',
-			},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectSureCorrect = defineStyle(() => {
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			borderColor: 'ampSuccess.500',
+			backgroundColor: 'ampSuccess.500',
 		},
-	},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampWhite',
+		},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectPartialCorrect = defineStyle(() => {
+	return {
+		...baseMultiSelect,
+	};
+});
+
+const variants = {
+	multiSelectUnsureIncorrect,
+	multiChoiceAnswer,
+	formCheckbox,
+	multiSelect,
+	multiSelectUnsureCorrect,
+	multiSelectSureIncorrect,
+	multiSelectSureCorrect,
+	multiSelectPartialCorrect,
+};
+
+const Checkbox = defineMultiStyleConfig({
+	baseStyle,
+	variants,
 });
 
 export { Checkbox };

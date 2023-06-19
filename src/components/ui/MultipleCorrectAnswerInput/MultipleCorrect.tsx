@@ -208,7 +208,7 @@ const MultipleCorrect = ({
 						isDisabled={!idkChosen && Boolean(!selectedAnswers.length)}
 						w="114px"
 						h="48px">
-						{i18n('capitalContinue')}
+						<Text textTransform={'capitalize'}>{i18n('continueBtnText')}</Text>
 					</Button>
 				</HStack>
 			)}
