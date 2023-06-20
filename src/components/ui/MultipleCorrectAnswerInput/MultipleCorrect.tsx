@@ -205,11 +205,10 @@ const MultipleCorrect = ({
 					style={{ justifyContent: 'flex-end', marginTop: '48px' }}>
 					<Button
 						onClick={onClick}
-						variant={'ampSolid'}
 						isDisabled={!idkChosen && Boolean(!selectedAnswers.length)}
 						w="114px"
 						h="48px">
-						<Text textTransform={'capitalize'}>{i18n('continueBtnText')}</Text>
+						{i18n('continueBtnText')}
 					</Button>
 				</HStack>
 			)}
