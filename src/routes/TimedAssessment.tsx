@@ -202,7 +202,11 @@ export default function TimedAssessment() {
 									colorScheme="ampSecondary"
 									variant="ghost"
 									onClick={handleFlagForReview}>
-									Flag for review
+									{flaggedQuestions.has(
+										questionInFocus?.publishedQuestionAuthoringKey,
+									)
+										? i18n('flaggedForReview')
+										: i18n('flagForReview')}
 								</Button>
 							</Stack>
 							<AnswerSelection

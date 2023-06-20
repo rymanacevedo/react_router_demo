@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import {initReactI18next} from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // the translations
@@ -270,6 +270,8 @@ const resources = {
 			practiceTestNavigation: 'Practice test navigation',
 			finishPracticeTest: 'Finish practice test',
 			practiceTest: 'Practice Test',
+         flagForReview: 'Flag for review',
+         flaggedForReview: 'Flagged for review',
 			//////////////////////////////////////////////
 			//   ReviewView.tsx
 			//////////////////////////////////////////////
