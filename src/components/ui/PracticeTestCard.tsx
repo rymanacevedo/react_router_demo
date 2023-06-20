@@ -4,6 +4,7 @@ import {
 	CardProps as ChakraCardProps,
 	Text,
 } from '@chakra-ui/react';
+import Triangle from './Triangle';
 
 export type CardValue = 'unselected' | 'flagged' | 'selected' | 'answered';
 export type CardValues = CardValue[];
@@ -20,6 +21,9 @@ export default function PracticeTestCard({
 	size,
 	...values
 }: Options) {
+	const { values: cardValues } = values;
+	const isFlagged = cardValues.includes('flagged');
+	const isSelected = cardValues.includes('selected');
 	return (
 		<ChakraCard
 			marginRight={'4px'}
@@ -30,7 +34,9 @@ export default function PracticeTestCard({
 			key={variant}
 			variant={variant}
 			size={size}
+			position={'relative'}
 			{...values}>
+			{isFlagged && <Triangle isSelected={isSelected} />}
 			<CardBody>
 				<Text>{text}</Text>
 			</CardBody>
