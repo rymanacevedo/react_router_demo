@@ -63,7 +63,7 @@ const userAccountSchema = z.object({
 	uid: z.string(),
 	parent: z.string(),
 	name: z.string(),
-	description: z.string(),
+	description: z.string().nullable(),
 	subdomain: z.string(),
 	demo: z.boolean(),
 	dateFormat: z.string(),
