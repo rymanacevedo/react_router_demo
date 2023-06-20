@@ -7,7 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const flag = new URL('../assets/flag.png', import.meta.url);
 
 const flagStyle = {
-	backgroundImage: `url(${flag.href})`,
+	backgroundImage: `url('${flag.href}')`,
 	backgroundRepeat: 'no-repeat',
 	backgroundPosition: 'right top',
 	backgroundSize: '12px 12px',
