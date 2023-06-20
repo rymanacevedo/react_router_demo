@@ -106,6 +106,7 @@ const MultipleCorrect = ({
 		<Box
 			style={{
 				marginTop: smallerThan1000 ? '10px' : '0px',
+				maxWidth: '700px',
 			}}
 			alignItems="stretch"
 			flex={1}
