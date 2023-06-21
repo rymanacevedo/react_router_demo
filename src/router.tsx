@@ -49,6 +49,9 @@ import AssignmentList, {
 	assignmentListLoader,
 } from './components/ui/AssignmentList';
 import { refresherAction } from './routes/Refresher';
+import AuthoringView, {
+	authoringLoader,
+} from './components/pages/AuthoringView';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -119,13 +122,8 @@ const routesJSX = (
 			}>
 			<Route
 				path="authoring"
-				element={
-					<Page
-						id={'author-dash-main'}
-						header={'Authoring'}
-						content={'under construction'}
-					/>
-				}
+				element={<AuthoringView />}
+				loader={authoringLoader}
 			/>
 			<Route
 				path="admin"

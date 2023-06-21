@@ -71,9 +71,33 @@ const multiPartCard = defineStyle((props) => {
 	};
 });
 
+const authoringCard = defineStyle({
+	container: {
+		padding: 5,
+		border: '1px solid',
+		color: 'ampNeutral.200',
+		borderRadius: 'xl',
+		cursor: 'initial',
+	},
+	header: {
+		padding: 0,
+		color: 'ampPrimaryText',
+	},
+	body: {
+		padding: 0,
+		color: 'ampPrimaryText',
+	},
+	footer: {
+		padding: 0,
+		color: 'ampPrimaryText',
+	},
+});
+
 const variants = {
 	multiPartCard,
+	authoringCard,
 };
+
 const Card = defineMultiStyleConfig({
 	baseStyle,
 	sizes,

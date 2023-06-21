@@ -40,3 +40,16 @@ export function safeRedirect(
 
 	return to;
 }
+
+export function formatDate(date: Date | string | number) {
+	const dateString = new Date(date);
+	const month = dateString.toLocaleString('default', { month: 'long' });
+	const day = dateString.getDate();
+	const year = dateString.getFullYear();
+
+	return {
+		month,
+		day,
+		year,
+	};
+}
