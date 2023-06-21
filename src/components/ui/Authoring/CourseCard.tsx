@@ -28,7 +28,34 @@ interface CourseCardProps {
 	modifiedUserFullName: string;
 	createdTime: number;
 	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
+	listView: boolean;
 }
+
+const CourseCardMenu = () => {
+	return (
+		<Menu>
+			<MenuButton
+				as={IconButton}
+				icon={<DotsVerticalIcon />}
+				border="none"
+				variant="ghost"
+				display="flex"
+				zIndex={2}
+				right="0px"
+				size="xs"
+				paddingTop={1}
+				paddingBottom={1}>
+				{' '}
+			</MenuButton>
+			<MenuList>
+				<MenuItem>Duplicate</MenuItem>
+				<MenuItem>Delete</MenuItem>
+				<MenuItem>Move</MenuItem>
+				<MenuItem>Add to Folder</MenuItem>
+			</MenuList>
+		</Menu>
+	);
+};
 
 const CourseCard = ({
 	status,
@@ -37,6 +64,7 @@ const CourseCard = ({
 	modifiedUserFullName,
 	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
+	listView,
 }: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
@@ -64,9 +92,21 @@ const CourseCard = ({
 	};
 
 	return (
-		<Card variant="authoringCard" direction="column" role="group" height="100%">
-			<CardHeader width="100%" marginBottom={4}>
-				<Flex width="100%" direction="column" gap={4} position="relative">
+		<Card
+			variant="authoringCard"
+			direction={listView ? 'row' : 'column'}
+			justifyContent="space-between"
+			role="group"
+			height="100%">
+			<CardHeader
+				width="100%"
+				marginBottom={listView ? 0 : 4}
+				maxWidth={listView ? 500 : 'auto'}>
+				<Flex
+					width="100%"
+					direction={listView ? 'row' : 'column'}
+					gap={4}
+					position="relative">
 					<Flex
 						alignItems="center"
 						justifyContent="space-between"
@@ -76,47 +116,37 @@ const CourseCard = ({
 							textTransform="capitalize">
 							{status}
 						</Badge>
-						<Menu>
-							<MenuButton
-								as={IconButton}
-								icon={<DotsVerticalIcon />}
-								border="none"
-								variant="ghost"
-								display="flex"
-								zIndex={2}
-								right="0px"
-								position="absolute"
-								size="xs"
-								paddingTop={1}
-								paddingBottom={1}>
-								{' '}
-							</MenuButton>
-							<MenuList>
-								<MenuItem>Duplicate</MenuItem>
-								<MenuItem>Delete</MenuItem>
-								<MenuItem>Move</MenuItem>
-								<MenuItem>Add to Folder</MenuItem>
-							</MenuList>
-						</Menu>
+						{!listView && <CourseCardMenu />}
 					</Flex>
-					<Heading fontSize="xl" as="h2">
+					<Heading
+						fontSize={listView ? 'lg' : 'xl'}
+						as="h2"
+						noOfLines={listView ? 1 : 2}>
 						{name}
 					</Heading>
 				</Flex>
 			</CardHeader>
-			<CardBody width="100%">
+			<CardBody width={listView ? 'auto' : '100%'}>
 				<Flex
-					justifyContent="space-between"
+					justifyContent={'space-between'}
 					height="100%"
 					alignItems="flex-end">
-					<Flex height="100%" alignItems="flex-end" justifyContent="flex-start">
+					<Flex
+						height="100%"
+						alignItems="flex-start"
+						flexDirection="column"
+						justifyContent="flex-end">
 						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
 							Last Edited {month} {day}, {year}
-							<br />
+						</Text>
+						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
 							by {modifiedUserFullName}
 						</Text>
 					</Flex>
-					<Flex alignContent="flex-end" position="relative">
+					<Flex
+						alignContent="flex-end"
+						position="relative"
+						gap={listView ? 2 : 0}>
 						<Badge
 							variant={alertBadgeVariant[courseAlert].variant}
 							display="flex"
@@ -136,6 +166,7 @@ const CourseCard = ({
 								{alertBadgeVariant[courseAlert].label}
 							</Text>
 						</Badge>
+						{listView && <CourseCardMenu />}
 					</Flex>
 				</Flex>
 			</CardBody>
