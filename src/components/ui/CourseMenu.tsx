@@ -10,6 +10,7 @@ import {
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { Course } from '../pages/LearningView';
+import CourseProgress from './CourseProgress';
 
 type Props = {
 	courses: Course[];
@@ -32,28 +33,31 @@ const CourseMenu = ({
 	};
 
 	return (
-		<Menu isLazy>
-			<MenuButton
-				leftIcon={<ChevronDownIcon />}
-				as={Button}
-				variant="ampOutline">
-				<Text>{i18n('changeCourse')}</Text>
-			</MenuButton>
-			<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
-				<MenuOptionGroup
-					onChange={handleCourseChange}
-					defaultChecked={true}
-					defaultValue={selectedCourseKey ?? ''}>
-					{courses.map((course) => (
-						<MenuItemOption key={course.key} value={course.key}>
-							<Text isTruncated maxW="300px">
-								{course.name}
-							</Text>
-						</MenuItemOption>
-					))}
-				</MenuOptionGroup>
-			</MenuList>
-		</Menu>
+		<>
+			<Menu isLazy>
+				<MenuButton
+					leftIcon={<ChevronDownIcon />}
+					as={Button}
+					variant="ampOutline">
+					<Text>{i18n('changeCourse')}</Text>
+				</MenuButton>
+				<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
+					<MenuOptionGroup
+						onChange={handleCourseChange}
+						defaultChecked={true}
+						defaultValue={selectedCourseKey ?? ''}>
+						{courses.map((course) => (
+							<MenuItemOption key={course.key} value={course.key}>
+								<Text isTruncated maxW="300px">
+									{course.name}
+								</Text>
+							</MenuItemOption>
+						))}
+					</MenuOptionGroup>
+				</MenuList>
+			</Menu>
+			<CourseProgress />
+		</>
 	);
 };
 

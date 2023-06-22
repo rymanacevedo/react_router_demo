@@ -14,6 +14,7 @@ import {
 import { getSubAccount } from '../../services/utils';
 import { useEffect, useState } from 'react';
 import { useQuizContext } from '../../hooks/useQuizContext';
+import CourseProgress from '../ui/CourseProgress';
 
 export type Course = {
 	key: string;
@@ -134,6 +135,7 @@ const LearningView = () => {
 					selectedCourseKey={selectedCourseKey}
 					courseUpdaterToggle={fetcher}
 				/>
+				<CourseProgress />
 			</HStack>
 			<Outlet />
 		</Container>
