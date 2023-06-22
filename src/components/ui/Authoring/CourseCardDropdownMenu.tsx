@@ -19,9 +19,13 @@ import { Form } from 'react-router-dom';
 
 interface CourseCardDropdownMenuProps {
 	courseId: string;
+	isPublished: boolean;
 }
 
-const CourseCardDropdownMenu = ({ courseId }: CourseCardDropdownMenuProps) => {
+const CourseCardDropdownMenu = ({
+	courseId,
+	isPublished,
+}: CourseCardDropdownMenuProps) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -52,7 +56,7 @@ const CourseCardDropdownMenu = ({ courseId }: CourseCardDropdownMenuProps) => {
 						Copy and share questions
 					</MenuItem>
 				</Form>
-				<MenuItem onClick={onOpen}>Delete</MenuItem>
+				{!isPublished && <MenuItem onClick={onOpen}>Delete</MenuItem>}
 				<MenuItem>Move</MenuItem>
 				<MenuItem>Add to Folder</MenuItem>
 			</MenuList>

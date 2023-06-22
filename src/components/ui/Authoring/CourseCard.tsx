@@ -51,6 +51,8 @@ const CourseCard = ({
 
 	const { month, day, year } = formatDate(modifiedTime);
 
+	const isPublished = status === 'Published';
+
 	const alertBadgeVariant = {
 		unpublished_edits: {
 			variant: 'ampWarning',
@@ -95,7 +97,10 @@ const CourseCard = ({
 							{status}
 						</Badge>
 						{!listView && (
-							<CourseCardDropdownMenu courseId={courseContentUid} />
+							<CourseCardDropdownMenu
+								courseId={courseContentUid}
+								isPublished={isPublished}
+							/>
 						)}
 					</Flex>
 					<Heading
@@ -158,7 +163,12 @@ const CourseCard = ({
 								{alertBadgeVariant[courseAlert].label}
 							</Text>
 						</Badge>
-						{listView && <CourseCardDropdownMenu courseId={courseContentUid} />}
+						{listView && (
+							<CourseCardDropdownMenu
+								courseId={courseContentUid}
+								isPublished={isPublished}
+							/>
+						)}
 					</Flex>
 				</Flex>
 			</CardBody>
