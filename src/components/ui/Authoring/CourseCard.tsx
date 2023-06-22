@@ -4,23 +4,18 @@ import {
 	CardBody,
 	Flex,
 	Badge,
-	IconButton,
 	Text,
 	Heading,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
 	useTheme,
 } from '@chakra-ui/react';
 import {
-	DotsVerticalIcon,
 	ExclamationTriangleIcon,
 	Pencil2Icon,
 	BellIcon,
 	DotFilledIcon,
 } from '@radix-ui/react-icons';
 import { formatDate } from '../../../lib/utils';
+import CourseCardDropdownMenu from './CourseCardDropdownMenu';
 
 interface CourseCardProps {
 	status: 'Draft' | 'Published';
@@ -34,32 +29,6 @@ interface CourseCardProps {
 	moduleCount?: number;
 	questionCount?: number;
 }
-
-const CourseCardMenu = () => {
-	return (
-		<Menu>
-			<MenuButton
-				as={IconButton}
-				icon={<DotsVerticalIcon />}
-				border="none"
-				variant="ghost"
-				display="flex"
-				zIndex={2}
-				right="0px"
-				size="xs"
-				paddingTop={1}
-				paddingBottom={1}>
-				{' '}
-			</MenuButton>
-			<MenuList>
-				<MenuItem>Duplicate</MenuItem>
-				<MenuItem>Delete</MenuItem>
-				<MenuItem>Move</MenuItem>
-				<MenuItem>Add to Folder</MenuItem>
-			</MenuList>
-		</Menu>
-	);
-};
 
 const CourseCard = ({
 	status,
@@ -124,7 +93,7 @@ const CourseCard = ({
 							textTransform="capitalize">
 							{status}
 						</Badge>
-						{!listView && <CourseCardMenu />}
+						{!listView && <CourseCardDropdownMenu />}
 					</Flex>
 					<Heading
 						fontSize={listView ? 'lg' : 'xl'}
@@ -186,7 +155,7 @@ const CourseCard = ({
 								{alertBadgeVariant[courseAlert].label}
 							</Text>
 						</Badge>
-						{listView && <CourseCardMenu />}
+						{listView && <CourseCardDropdownMenu />}
 					</Flex>
 				</Flex>
 			</CardBody>
