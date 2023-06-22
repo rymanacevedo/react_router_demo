@@ -1,8 +1,9 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import {
 	CurrentRoundAnswerOverLayData,
+	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import {
@@ -11,8 +12,7 @@ import {
 	MinusCircledIcon,
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
-import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
-import { FeedbackContext } from '../../../hooks/useFeedbackContext';
+import { useFeedback } from '../../../hooks/useFeedbackContext';
 
 const MultiChoiceAnswerFeedback = ({
 	questionInFocus,
@@ -44,10 +44,11 @@ const MultiChoiceAnswerFeedback = ({
 	const [correctStatus, setCorrectStatus] = useState('');
 	const [multiSelectVariant, setMultiSelectVariant] = useState('');
 	const isChecked = status === 'checked';
+	// correction asnwer
 	const choseIDK = IDK && selectedAnswers?.length === 0;
 
-	const { updateFeedback: updateFeedbackContext, updateCorrectStatus } =
-		useContext(FeedbackContext);
+	const { setFeedbackVariant, setFeedbackText, setFeedbackStatus } =
+		useFeedback();
 
 	function checkSelectedAnswers(
 		selectedAnswersArg: SelectedAnswer[],
@@ -58,6 +59,7 @@ const MultiChoiceAnswerFeedback = ({
 		);
 		if (match) {
 			if (
+				// unsure and correct
 				match.confidence === 50 &&
 				wasCorrectAnswerChosen &&
 				selectedAnswers?.length === 1
@@ -65,10 +67,12 @@ const MultiChoiceAnswerFeedback = ({
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkSuccessOutline');
-				updateFeedbackContext('ampDarkSuccessOutline', 'unsure');
+				setFeedbackVariant('ampDarkSuccessOutline');
+				setFeedbackText('unsure');
 				setMultiSelectVariant('multiSelectUnsureCorrect');
 				setIsEnabled(true);
 			} else if (
+				//  unsure and correct and there are more than one selected answers
 				match.confidence === 50 &&
 				wasCorrectAnswerChosen &&
 				(selectedAnswers?.length ?? 0) > 1
@@ -76,28 +80,26 @@ const MultiChoiceAnswerFeedback = ({
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkSuccessOutline');
-				updateFeedbackContext('ampDarkSuccessOutline', 'unsure');
+				setFeedbackVariant('ampDarkSuccessOutline');
+				setFeedbackText('unsure');
 				setMultiSelectVariant('multiSelectUnsureCorrect');
 				setIsEnabled(true);
-			} else if (match.confidence === 50 && wasCorrectAnswerChosen) {
-				setStatus('checked');
-				setText('unsure');
-				setVariant('ampWarningOutline');
-				updateFeedbackContext('ampWarningOutline', 'unsure');
-				setMultiSelectVariant('multiSelectUnsureCorrect');
-				setIsEnabled(true);
-			} else if (match.confidence === 50 && !wasCorrectAnswerChosen) {
+			}
+			// unsure and incorrect
+			else if (match.confidence === 50 && !wasCorrectAnswerChosen) {
 				setStatus('checked');
 				setText('unsure');
 				setVariant('ampDarkErrorOutline');
-				updateFeedbackContext('ampDarkErrorOutline', 'unsure');
+				setFeedbackVariant('ampDarkErrorOutline');
+				setFeedbackText('unsure');
 				setMultiSelectVariant('multiSelectUnsureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100 && !wasCorrectAnswerChosen) {
 				setStatus('checked');
 				setText('sure');
 				setVariant('ampDarkError');
-				updateFeedbackContext('ampDarkError', 'sure');
+				setFeedbackVariant('ampDarkError');
+				setFeedbackText('sure');
 				setMultiSelectVariant('multiSelectSureIncorrect');
 				setIsEnabled(true);
 			} else if (match.confidence === 100 && wasCorrectAnswerChosen) {
@@ -105,7 +107,8 @@ const MultiChoiceAnswerFeedback = ({
 				setText('sure');
 				setVariant('ampDarkSuccess');
 				setMultiSelectVariant('multiSelectSureCorrect');
-				updateFeedbackContext('ampDarkSuccess', 'sure');
+				setFeedbackVariant('ampDarkSuccess');
+				setFeedbackText('sure');
 				setIsEnabled(true);
 			}
 		} else if (choseIDK) {
@@ -113,7 +116,8 @@ const MultiChoiceAnswerFeedback = ({
 			setText("I don't know yet");
 			setVariant('ampNeutralFilled');
 			setStatus('checked');
-			updateFeedbackContext('NA', 'NA');
+			setFeedbackVariant('NA');
+			setFeedbackText('NA');
 		} else {
 			setMultiSelectVariant('multiSelect');
 			setIsEnabled(false);
@@ -133,31 +137,31 @@ const MultiChoiceAnswerFeedback = ({
 				wasCorrectAnswerChosen &&
 				!wasPartialCorrectAnswerChosen
 			) {
-				updateCorrectStatus('correct');
+				setStatus('correct');
 				setCorrectStatus('correct');
 			} else if (
 				selectedAnswers?.length > 1 &&
 				wasCorrectAnswerChosen &&
 				wasPartialCorrectAnswerChosen
 			) {
-				updateCorrectStatus('partially correct');
+				setFeedbackStatus('partially correct');
 				setCorrectStatus('partially correct');
 			} else if (
 				selectedAnswers?.length > 1 &&
 				wasCorrectAnswerChosen &&
 				!wasPartialCorrectAnswerChosen
 			) {
-				updateCorrectStatus('correct');
+				setFeedbackStatus('correct');
 				setCorrectStatus('correct');
 			} else if (selectedAnswers?.length === 1 && !wasCorrectAnswerChosen) {
 				setCorrectStatus('incorrect');
-				updateCorrectStatus('incorrect');
+				setFeedbackStatus('incorrect');
 			} else if (selectedAnswers?.length > 1 && wasCorrectAnswerChosen) {
 				setCorrectStatus('partially correct');
-				updateCorrectStatus('partially correct');
+				setFeedbackStatus('partially correct');
 			} else if (selectedAnswers?.length > 1 && !wasCorrectAnswerChosen) {
 				setCorrectStatus('incorrect');
-				updateCorrectStatus('incorrect');
+				setFeedbackStatus('incorrect');
 			}
 		}
 	}, [currentRoundAnswerOverLayData, wasCorrectAnswerChosen]);

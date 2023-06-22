@@ -47,6 +47,27 @@ export type AnswerData = {
 	unseenCount: number;
 };
 
+export type QuestionInFocusAnswer = {
+	answerRc: string;
+	displayOrder: number;
+	id: number;
+	isCorrect: boolean;
+	optionRc: string | null;
+	publishedAnswerId: number | string;
+	publishedAnswerUri: string;
+	publishedOptionId: number | null;
+	publishedOptionUri: string | null;
+	publishedQuestionUri: string;
+	questionId: number;
+	questionVersionId: number;
+	selected: boolean;
+	selectedOptionId: number | null;
+	selectedOptionUri: string | null;
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
 export type QuestionInFocus = {
 	id: string | number;
 	questionRc: string;
@@ -56,26 +77,7 @@ export type QuestionInFocus = {
 	explanationRc: string | null;
 	moreInformationRc: string | null;
 	publishedQuestionId: number | string;
-	answerList: {
-		answerRc: string;
-		displayOrder: number;
-		id: number;
-		isCorrect: boolean;
-		optionRc: string | null;
-		publishedAnswerId: number | string;
-		publishedAnswerUri: string;
-		publishedOptionId: number | null;
-		publishedOptionUri: string | null;
-		publishedQuestionUri: string;
-		questionId: number;
-		questionVersionId: number;
-		selected: boolean;
-		selectedOptionId: number | null;
-		selectedOptionUri: string | null;
-		self: string;
-		uid: string;
-		versionId: number;
-	}[];
+	answerList: QuestionInFocusAnswer[];
 	answered: boolean;
 	confidence: Confidence | null;
 	correctness: Correctness | null;

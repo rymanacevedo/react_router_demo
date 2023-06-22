@@ -5,13 +5,14 @@ import {
 	Divider,
 	Fade,
 	Flex,
+	Heading,
 	HStack,
 	Text,
 } from '@chakra-ui/react';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FeedbackContext } from '../../../hooks/useFeedbackContext';
+import { useFeedback } from '../../../hooks/useFeedbackContext';
 import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
@@ -28,10 +29,6 @@ export type MultipleCorrectProps = {
 			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
 			| SelectedAnswer[],
 	) => void;
-	clearSelection: boolean;
-	clearSelectionState: (
-		value: ((prevState: boolean) => boolean) | boolean,
-	) => void;
 	clearSelectionFunction: () => void;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
 	onClick: () => void;
@@ -45,8 +42,6 @@ const MultipleCorrect = ({
 	questionInFocus,
 	selectedAnswers,
 	updateSelectedAnswersState,
-	clearSelection,
-	clearSelectionState,
 	clearSelectionFunction,
 	currentRoundAnswerOverLayData,
 	onClick,
@@ -59,8 +54,7 @@ const MultipleCorrect = ({
 
 	const [submitted, setSubmitted] = useState(false);
 
-	const { feedbackVariant, feedbackText, feedbackStatus } =
-		useContext(FeedbackContext);
+	const { feedbackVariant, feedbackText, feedbackStatus } = useFeedback();
 
 	const handleSubmission = (confidence: string) => {
 		if (confidence === 'IDK') {
@@ -118,6 +112,7 @@ const MultipleCorrect = ({
 			borderRadius={24}
 			px="72px"
 			py="44px">
+			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
 			{!showOverlay ? (
 				//Matching
 				//MultipleChoice
@@ -137,9 +132,6 @@ const MultipleCorrect = ({
 						<MultiSelectFeedback
 							questionInFocus={questionInFocus}
 							selectedAnswers={selectedAnswers}
-							setSelectedAnswers={updateSelectedAnswersState}
-							clearSelection={clearSelection}
-							setClearSelection={clearSelectionState}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>
 					</Fade>

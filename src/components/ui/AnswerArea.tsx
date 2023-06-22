@@ -109,8 +109,6 @@ export default function AnswerArea({
 							questionInFocus={questionInFocus}
 							selectedAnswers={selectedAnswers}
 							updateSelectedAnswersState={selectedAnswersState}
-							clearSelection={clearSelection}
-							clearSelectionState={clearSelectionState}
 							clearSelectionFunction={clearSelectionFunction}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 							onClick={onClick}
@@ -169,11 +167,7 @@ export default function AnswerArea({
 										{i18n(showFeedback ? 'continueBtnText' : 'submitBtnText')}
 									</Text>
 								</Button>
-								<Button
-									_hover={{ backgroundColor: 'white' }}
-									height="12px"
-									variant="ghost"
-									onClick={clearSelectionFunction}>
+								<Button variant="ghost" onClick={clearSelectionFunction}>
 									{!showFeedback && (
 										<Text fontSize={'14px'} color={'ampSecondary.500'}>
 											{i18n('clearSelection')}

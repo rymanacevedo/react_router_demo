@@ -74,11 +74,20 @@ const multiSelect = defineStyle(() => {
 });
 
 const multiSelectUnsureIncorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampError.700',
+		backgroundColor: 'ampError.50',
+	};
 	const styles = {
 		control: {
 			...baseMultiSelect.control,
-			borderColor: 'ampError.700',
-			backgroundColor: 'ampError.50',
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
 		},
 		icon: {
 			...baseMultiSelect.icon,
@@ -91,11 +100,20 @@ const multiSelectUnsureIncorrect = defineStyle(() => {
 });
 
 const multiSelectUnsureCorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampSuccess.500',
+		backgroundColor: 'ampSuccess.50',
+	};
 	const styles = {
 		control: {
 			...baseMultiSelect.control,
-			borderColor: 'ampSuccess.500',
-			backgroundColor: 'ampSuccess.50',
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
 		},
 		icon: {
 			...baseMultiSelect.icon,
@@ -108,15 +126,24 @@ const multiSelectUnsureCorrect = defineStyle(() => {
 });
 
 const multiSelectSureIncorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampError.50',
+		backgroundColor: 'ampError.700',
+	};
 	const styles = {
 		control: {
 			...baseMultiSelect.control,
-			borderColor: 'ampError.700',
-			backgroundColor: 'ampError.50',
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
 		},
 		icon: {
 			...baseMultiSelect.icon,
-			color: 'ampError.700',
+			color: 'ampWhite',
 		},
 	};
 	return {
@@ -125,11 +152,20 @@ const multiSelectSureIncorrect = defineStyle(() => {
 });
 
 const multiSelectSureCorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampSuccess.500',
+		backgroundColor: 'ampSuccess.500',
+	};
 	const styles = {
 		control: {
 			...baseMultiSelect.control,
-			borderColor: 'ampSuccess.500',
-			backgroundColor: 'ampSuccess.500',
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
 		},
 		icon: {
 			...baseMultiSelect.icon,

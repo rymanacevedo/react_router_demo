@@ -1,53 +1,48 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 type FeedbackContextValue = {
 	feedbackStatus: string;
 	feedbackVariant: string;
 	feedbackText: string;
-	updateFeedback: (newfeedbackVariant: string, newText: string) => void;
-	updateCorrectStatus: (status: string) => void;
+	setFeedbackVariant: (value: string) => void;
+	setFeedbackText: (value: string) => void;
+	setFeedbackStatus: (value: string) => void;
 };
 
-export const FeedbackContext = createContext<FeedbackContextValue>({
+const FeedbackContext = createContext<FeedbackContextValue>({
 	feedbackStatus: '',
 	feedbackVariant: '',
 	feedbackText: '',
-	updateFeedback: () => {},
-	updateCorrectStatus: () => {},
+	setFeedbackVariant: () => {},
+	setFeedbackText: () => {},
+	setFeedbackStatus: () => {},
 });
 
-type FeedbackProviderProps = {
-	children: React.ReactNode;
+type Props = {
+	children: ReactNode;
 };
 
-export const FeedbackProvider = ({ children }: FeedbackProviderProps) => {
+export const FeedbackProvider = ({ children }: Props) => {
 	const [feedbackVariant, setFeedbackVariant] = useState<string>('');
 	const [feedbackText, setFeedbackText] = useState<string>('');
 	const [feedbackStatus, setFeedbackStatus] = useState<string>('');
-
-	const updateFeedback = (newfeedbackVariant: string, newText: string) => {
-		setFeedbackVariant(newfeedbackVariant);
-		setFeedbackText(newText);
-	};
-
-	const updateCorrectStatus = (status: string) => {
-		setFeedbackStatus(status);
-	};
 
 	const contextValue = useMemo(
 		() => ({
 			feedbackVariant,
 			feedbackText,
 			feedbackStatus,
-			updateFeedback,
-			updateCorrectStatus,
+			setFeedbackVariant,
+			setFeedbackText,
+			setFeedbackStatus,
 		}),
 		[
 			feedbackVariant,
 			feedbackText,
 			feedbackStatus,
-			updateFeedback,
-			updateCorrectStatus,
+			setFeedbackVariant,
+			setFeedbackText,
+			setFeedbackStatus,
 		],
 	);
 
@@ -56,4 +51,8 @@ export const FeedbackProvider = ({ children }: FeedbackProviderProps) => {
 			{children}
 		</FeedbackContext.Provider>
 	);
+};
+
+export const useFeedback = () => {
+	return useContext(FeedbackContext);
 };
