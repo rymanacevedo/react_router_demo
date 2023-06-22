@@ -22,3 +22,12 @@ export const deleteCourse = async (
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE');
 };
+
+export const copyNewCourse = async (
+	user: User,
+	courseContentUid: string,
+): Promise<any> => {
+	const url = `/v2/authoring-course-content/${courseContentUid}/copy?cloneQuestions=false`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST');
+};

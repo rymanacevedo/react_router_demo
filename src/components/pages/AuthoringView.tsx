@@ -17,16 +17,23 @@ import { getSubAccount } from '../../services/utils';
 import { json, useLoaderData } from 'react-router-dom';
 import CourseCard from '../ui/Authoring/CourseCard';
 import CourseFilter from '../ui/Authoring/CourseFilters';
-import { deleteCourse } from '../../services/authoring';
+import { deleteCourse, copyNewCourse } from '../../services/authoring';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
 	let formData = await request.formData();
 	let intent = formData.get('intent');
+	const courseId = formData.get('courseId');
 
 	if (intent === 'delete') {
-		const courseId = formData.get('courseId');
 		const { response } = await deleteCourse(user, courseId);
+		if (response.status === 200) {
+			return json({ ok: true });
+		} else {
+			throw response;
+		}
+	} else if (intent === 'copyNew') {
+		const { response } = await copyNewCourse(user, courseId);
 		if (response.status === 200) {
 			return json({ ok: true });
 		} else {
