@@ -52,7 +52,6 @@ const WhatYouNeedToKnowComponent = ({
 	const { isOpen, onToggle } = useDisclosure();
 	const { t: i18n } = useTranslation();
 	const [radioValue, setRadioValue] = useState('');
-	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 	const fetcher = useFetcher();
 	const data = fetcher.data as ActionData<QuestionFeedbackFields>;
 	const ref = useRef<HTMLFormElement>(null);
@@ -66,7 +65,7 @@ const WhatYouNeedToKnowComponent = ({
 	return (
 		<Box
 			bgColor="ampWhite"
-			boxShadow={isSafari ? 'none' : 'md'}
+			boxShadow="md"
 			w="100%"
 			minH="40vh"
 			overflow="hidden"
