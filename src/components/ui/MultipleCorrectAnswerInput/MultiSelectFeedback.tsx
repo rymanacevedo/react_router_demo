@@ -3,43 +3,31 @@ import { Box } from '@chakra-ui/react';
 import {
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
-	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import AnswerFeedback from '../RefactorAnswerFeedback/AnswerFeedback';
+import AnswerFeedback, {
+	Correctness,
+} from '../RefactorAnswerFeedback/AnswerFeedback';
+import AnswerFeedbackBadge, {
+	BadgeVariantValues,
+} from '../RefactorAnswerFeedback/AnswerFeedbackBadge';
+import { useState } from 'react';
 
 const MultiSelectFeedback = ({
 	questionInFocus,
-	selectedAnswers,
-	currentRoundAnswerOverLayData,
+	roundFeedbackData,
 }: // inReview,
 // revealAnswer,
 {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: SelectedAnswer[];
-	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
+	roundFeedbackData: CurrentRoundAnswerOverLayData;
 	// inReview?: boolean;
 	// revealAnswer?: boolean;
 }) => {
-	// useEffect(() => {
-	// 	if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
-	// 		const correctAnswerIds = currentRoundAnswerOverLayData?.correctAnswerIds;
-	// 		const selectedAnswerIds = selectedAnswers.map(
-	// 			(answer) => answer.answerId,
-	// 		);
-	// 		const allCorrectAnswersChosen = correctAnswerIds.every((id: number) =>
-	// 			selectedAnswerIds.includes(id),
-	// 		);
-	// 		setWasCorrectAnswerChosen(
-	// 			allCorrectAnswersChosen &&
-	// 				correctAnswerIds.length === selectedAnswerIds.length,
-	// 		);
-	//
-	// 		const partialCorrectAnswerChosen =
-	// 			correctAnswerIds.some((id: number) => selectedAnswerIds.includes(id)) &&
-	// 			!allCorrectAnswersChosen;
-	// 		setWasPartialCorrectAnswerChosen(partialCorrectAnswerChosen);
-	// 	}
-	// }, [currentRoundAnswerOverLayData, revealAnswer]);
+	const [variant, setVariant] = useState<BadgeVariantValues | undefined>(
+		undefined,
+	);
+	const [confidence, setConfidence] = useState('');
+	const [correctness, setCorrectness] = useState<Correctness | null>(null);
 	return (
 		<Box
 			marginTop="34px"
@@ -51,12 +39,19 @@ const MultiSelectFeedback = ({
 			{questionInFocus.answerList.map((answer) => {
 				return (
 					<AnswerFeedback
-						selectedAnswers={selectedAnswers}
-						roundFeedbackData={currentRoundAnswerOverLayData}
+						roundFeedbackData={roundFeedbackData}
 						answer={answer}
+						setBadge={setVariant}
+						setConfidence={setConfidence}
+						setCorrectness={setCorrectness}
 					/>
 				);
 			})}
+			<AnswerFeedbackBadge
+				confidence={confidence}
+				variant={variant}
+				correctness={correctness}
+			/>
 		</Box>
 	);
 };

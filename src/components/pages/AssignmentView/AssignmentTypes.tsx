@@ -1,5 +1,3 @@
-import { Answer } from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceAnswers';
-
 export type SelectedAnswer = {
 	answerId: number | string;
 	confidence?: number;
@@ -24,7 +22,7 @@ export type AnswerHistory = {
 
 export type AnswerData = {
 	answerDate: string;
-	answerList: Answer[];
+	answerList: SelectedAnswer[];
 	avatarMessage: any;
 	completionAlgorithmType: any;
 	completionPercentage: number;
@@ -212,6 +210,7 @@ export type ModuleData = {
 export enum Confidence {
 	NA = 'NA',
 	NotSure = 'NotSure',
+	PartSure = 'PartSure',
 	OneAnswerPartSure = 'OneAnswerPartSure',
 	Sure = 'Sure',
 }

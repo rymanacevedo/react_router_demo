@@ -1,17 +1,18 @@
 import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import { BadgeVariantValues } from '../components/ui/RefactorAnswerFeedback/AnswerFeedbackBadge';
 
 type FeedbackContextValue = {
+	feedbackVariant: BadgeVariantValues | undefined;
 	feedbackStatus: string;
-	feedbackVariant: string;
 	feedbackText: string;
-	setFeedbackVariant: (value: string) => void;
+	setFeedbackVariant: (value: BadgeVariantValues) => void;
 	setFeedbackText: (value: string) => void;
 	setFeedbackStatus: (value: string) => void;
 };
 
 const FeedbackContext = createContext<FeedbackContextValue>({
+	feedbackVariant: undefined,
 	feedbackStatus: '',
-	feedbackVariant: '',
 	feedbackText: '',
 	setFeedbackVariant: () => {},
 	setFeedbackText: () => {},
@@ -23,7 +24,9 @@ type Props = {
 };
 
 export const FeedbackProvider = ({ children }: Props) => {
-	const [feedbackVariant, setFeedbackVariant] = useState<string>('');
+	const [feedbackVariant, setFeedbackVariant] = useState<
+		BadgeVariantValues | undefined
+	>(undefined);
 	const [feedbackText, setFeedbackText] = useState<string>('');
 	const [feedbackStatus, setFeedbackStatus] = useState<string>('');
 
