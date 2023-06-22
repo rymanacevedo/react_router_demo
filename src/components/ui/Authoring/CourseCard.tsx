@@ -11,12 +11,14 @@ import {
 	MenuButton,
 	MenuList,
 	MenuItem,
+	useTheme,
 } from '@chakra-ui/react';
 import {
 	DotsVerticalIcon,
 	ExclamationTriangleIcon,
 	Pencil2Icon,
 	BellIcon,
+	DotFilledIcon,
 } from '@radix-ui/react-icons';
 import { formatDate } from '../../../lib/utils';
 
@@ -29,6 +31,8 @@ interface CourseCardProps {
 	createdTime: number;
 	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
 	listView: boolean;
+	moduleCount?: number;
+	questionCount?: number;
 }
 
 const CourseCardMenu = () => {
@@ -62,14 +66,18 @@ const CourseCard = ({
 	name,
 	modifiedTime,
 	modifiedUserFullName,
+	listView,
 	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
-	listView,
+	questionCount = 0,
+	moduleCount = 0,
 }: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
 		Published: 'ampDarkSuccess',
 	};
+
+	const { colors } = useTheme();
 
 	const { month, day, year } = formatDate(modifiedTime);
 
@@ -137,6 +145,17 @@ const CourseCard = ({
 						flexDirection={listView ? 'row' : 'column'}
 						justifyContent="flex-end"
 						gap={listView ? 1 : 0}>
+						<Flex
+							marginBottom={listView ? 0 : 2}
+							marginRight={listView ? 5 : 0}>
+							<Text fontWeight="normal" fontSize="sm">
+								{moduleCount} Modules
+							</Text>
+							<DotFilledIcon color={colors.ampNeutral[300]} />
+							<Text fontWeight="normal" fontSize="sm">
+								{questionCount} Questions
+							</Text>
+						</Flex>
 						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
 							Last Edited {month} {day}, {year}
 						</Text>
