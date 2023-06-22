@@ -189,3 +189,16 @@ export const postFeedback = async (
 	};
 	return authenticatedFetch(url, user.sessionKey, 'POST', body);
 };
+
+export const getCourseStats = async (
+	user: User,
+	courseKey: string,
+	learnerUid: string,
+	subAccount: string,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = `${VITE_BACKEND_API}/v2/courses/${courseKey}/stats/${learnerUid}?subaccount=${subAccount}`;
+	return authenticatedFetch<any>(url, user.sessionKey);
+};

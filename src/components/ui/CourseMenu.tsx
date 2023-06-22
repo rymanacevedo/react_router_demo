@@ -8,7 +8,12 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
+import { Cookies } from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
+import { getCourseStats } from '../../services/learning';
+import { getSubAccount } from '../../services/utils';
+import { requireUser } from '../../utils/user';
 import { Course } from '../pages/LearningView';
 import CourseProgress from './CourseProgress';
 
@@ -23,12 +28,31 @@ const CourseMenu = ({
 	selectedCourseKey,
 	courseUpdaterToggle,
 }: Props) => {
+	const [courseStats, setCourseStats] = useState<any>(null);
 	const { t: i18n } = useTranslation();
+	const user = requireUser();
+
+	const { subAccount } = getSubAccount(user);
 	if (courses.length === 0) {
 		return null;
 	}
 
-	const handleCourseChange = (value: any) => {
+	const handleCourseChange = async (value: any) => {
+		const learnerUid = Cookies.get('learnerUid');
+		try {
+			const response = await getCourseStats(
+				user,
+				//selectedCourseKey,
+				'3751161c-d189-4875-aa91-315a54de595a',
+				learnerUid,
+				subAccount,
+			);
+			const { data } = response;
+			setCourseStats(data);
+		} catch (error) {
+			console.error(error);
+		}
+
 		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
 	};
 
@@ -56,7 +80,7 @@ const CourseMenu = ({
 					</MenuOptionGroup>
 				</MenuList>
 			</Menu>
-			<CourseProgress />
+			{courseStats && <CourseProgress courseStats={courseStats} />}
 		</>
 	);
 };

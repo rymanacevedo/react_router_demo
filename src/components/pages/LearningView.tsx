@@ -14,7 +14,6 @@ import {
 import { getSubAccount } from '../../services/utils';
 import { useEffect, useState } from 'react';
 import { useQuizContext } from '../../hooks/useQuizContext';
-import CourseProgress from '../ui/CourseProgress';
 
 export type Course = {
 	key: string;
@@ -75,6 +74,7 @@ const LearningView = () => {
 	useEffect(() => {
 		if (data && !selectedCourseKey) {
 			setCourses(data.courseList);
+			console.log(data.courseList);
 			setTitle(data.courseList[0].name);
 			setSelectedCourseKey(data.selectedCourseKey);
 			navigate(`/learning/${data.selectedCourseKey}`);
@@ -135,7 +135,6 @@ const LearningView = () => {
 					selectedCourseKey={selectedCourseKey}
 					courseUpdaterToggle={fetcher}
 				/>
-				<CourseProgress />
 			</HStack>
 			<Outlet />
 		</Container>

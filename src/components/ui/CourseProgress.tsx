@@ -1,6 +1,13 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 
-const CourseProgress = () => {
+type CourseProgressProps = {
+	courseStats: any; //TODO: add a type for this
+};
+
+const CourseProgress = ({ courseStats }: CourseProgressProps) => {
+	console.log(courseStats);
+	// TODO: add translations
+	// clean up the <Text> attributes
 	return (
 		<>
 			<Box w={435} bg="#F5F5F5" borderRadius="12px" p={4}>
