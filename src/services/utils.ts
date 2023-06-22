@@ -98,6 +98,22 @@ export const fetchDataPut = async <T extends unknown>(
 	return { data, response };
 };
 
+export const fetchDelete = async <T extends unknown>(
+	url: string,
+	sessionKey: string,
+): Promise<{ data: T; response: Response }> => {
+	const response = await fetch(url, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
+		},
+	});
+	const data = new Object() as T;
+
+	return { data, response };
+};
+
 export const authenticatedFetch = async <T extends unknown>(
 	url: string,
 	sessionKey: string,
@@ -124,6 +140,12 @@ export const authenticatedFetch = async <T extends unknown>(
 			return fetchCallbackGet<T>(newUrl, sessionKey);
 		}
 		return fetchCallbackGet<T>(`${VITE_BACKEND_API}${url}`, sessionKey);
+	} else if (method === 'DELETE') {
+		if (isAbsoluteUrl(url)) {
+			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
+			return fetchCallbackGet(newUrl, sessionKey);
+		}
+		return fetchDelete<T>(`${VITE_BACKEND_API}${url}`, sessionKey);
 	}
 
 	throw new Error('Invalid method, not supported');
