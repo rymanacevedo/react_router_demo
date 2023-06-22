@@ -134,8 +134,9 @@ const CourseCard = ({
 					<Flex
 						height="100%"
 						alignItems="flex-start"
-						flexDirection="column"
-						justifyContent="flex-end">
+						flexDirection={listView ? 'row' : 'column'}
+						justifyContent="flex-end"
+						gap={listView ? 1 : 0}>
 						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
 							Last Edited {month} {day}, {year}
 						</Text>
