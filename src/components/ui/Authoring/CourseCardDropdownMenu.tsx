@@ -46,6 +46,12 @@ const CourseCardDropdownMenu = ({ courseId }: CourseCardDropdownMenuProps) => {
 						Copy and create new
 					</MenuItem>
 				</Form>
+				<Form method="post">
+					<input name="courseId" defaultValue={courseId} hidden />
+					<MenuItem type="submit" name="intent" value="copyShare">
+						Copy and share questions
+					</MenuItem>
+				</Form>
 				<MenuItem onClick={onOpen}>Delete</MenuItem>
 				<MenuItem>Move</MenuItem>
 				<MenuItem>Add to Folder</MenuItem>

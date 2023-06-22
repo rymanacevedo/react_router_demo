@@ -17,7 +17,7 @@ import { getSubAccount } from '../../services/utils';
 import { json, useLoaderData } from 'react-router-dom';
 import CourseCard from '../ui/Authoring/CourseCard';
 import CourseFilter from '../ui/Authoring/CourseFilters';
-import { deleteCourse, copyNewCourse } from '../../services/authoring';
+import { deleteCourse, copyCourse } from '../../services/authoring';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -32,8 +32,9 @@ export const authoringActions: ActionFunction = async ({ request }) => {
 		} else {
 			throw response;
 		}
-	} else if (intent === 'copyNew') {
-		const { response } = await copyNewCourse(user, courseId);
+	} else if (intent === 'copyNew' || intent === 'copyShare') {
+		const share = intent === 'copyShare' ? true : false;
+		const { response } = await copyCourse(user, courseId, share);
 		if (response.status === 200) {
 			return json({ ok: true });
 		} else {
