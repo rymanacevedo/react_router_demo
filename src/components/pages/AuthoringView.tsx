@@ -64,7 +64,7 @@ const AuthoringView = () => {
 				<CourseFilter listView={listView} handleListView={handleListFilter} />
 				<Grid
 					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
-					gap={6}>
+					gap={listView ? 2 : 6}>
 					{courseList.map((course: any) => (
 						<GridItem
 							colSpan={1}
