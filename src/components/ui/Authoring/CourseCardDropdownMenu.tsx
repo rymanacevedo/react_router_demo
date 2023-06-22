@@ -1,13 +1,29 @@
 import {
+	Button,
+	Text,
 	IconButton,
 	MenuButton,
 	Menu,
 	MenuList,
 	MenuItem,
+	useDisclosure,
+	Modal,
+	ModalOverlay,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
 } from '@chakra-ui/react';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { Form } from 'react-router-dom';
 
-const CourseCardDropdownMenu = () => {
+interface CourseCardDropdownMenuProps {
+	courseId: string;
+}
+
+const CourseCardDropdownMenu = ({ courseId }: CourseCardDropdownMenuProps) => {
+	const { isOpen, onOpen, onClose } = useDisclosure();
+
 	return (
 		<Menu>
 			<MenuButton
@@ -25,10 +41,33 @@ const CourseCardDropdownMenu = () => {
 			</MenuButton>
 			<MenuList>
 				<MenuItem>Duplicate</MenuItem>
-				<MenuItem>Delete</MenuItem>
+				<MenuItem onClick={onOpen}>Delete</MenuItem>
 				<MenuItem>Move</MenuItem>
 				<MenuItem>Add to Folder</MenuItem>
 			</MenuList>
+			<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+				<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
+				<ModalContent>
+					<ModalHeader>
+						<Text as="h3">Are you sure you’d like to delete this course?</Text>
+					</ModalHeader>
+					<ModalBody>
+						This will permanently delete the course and all its contents from
+						your account.
+					</ModalBody>
+					<ModalFooter justifyContent="flex-start" gap={2}>
+						<Form method="delete">
+							<input name="courseId" defaultValue={courseId} hidden />
+							<Button type="submit" name="intent" value="delete">
+								Delete
+							</Button>
+						</Form>
+						<Button variant="ampOutline" onClick={onClose}>
+							Cancel
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</Menu>
 	);
 };

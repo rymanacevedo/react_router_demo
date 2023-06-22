@@ -35,6 +35,7 @@ const CourseCard = ({
 	name,
 	modifiedTime,
 	modifiedUserFullName,
+	courseContentUid,
 	listView,
 	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
@@ -93,7 +94,9 @@ const CourseCard = ({
 							textTransform="capitalize">
 							{status}
 						</Badge>
-						{!listView && <CourseCardDropdownMenu />}
+						{!listView && (
+							<CourseCardDropdownMenu courseId={courseContentUid} />
+						)}
 					</Flex>
 					<Heading
 						fontSize={listView ? 'lg' : 'xl'}
@@ -155,7 +158,7 @@ const CourseCard = ({
 								{alertBadgeVariant[courseAlert].label}
 							</Text>
 						</Badge>
-						{listView && <CourseCardDropdownMenu />}
+						{listView && <CourseCardDropdownMenu courseId={courseContentUid} />}
 					</Flex>
 				</Flex>
 			</CardBody>
