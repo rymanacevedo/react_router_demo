@@ -51,6 +51,7 @@ import AssignmentList, {
 import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
+	authoringActions,
 } from './components/pages/AuthoringView';
 
 const routesJSX = (
@@ -124,6 +125,7 @@ const routesJSX = (
 				path="authoring"
 				element={<AuthoringView />}
 				loader={authoringLoader}
+				action={authoringActions}
 			/>
 			<Route
 				path="admin"
