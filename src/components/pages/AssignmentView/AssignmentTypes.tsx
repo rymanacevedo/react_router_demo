@@ -3,6 +3,7 @@ export type SelectedAnswer = {
 	confidence?: number;
 	selectedOptionId: number;
 	self: any;
+	answerConfidence?: string;
 };
 
 export type ApiRes = {

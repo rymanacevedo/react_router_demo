@@ -5,6 +5,7 @@ import {
 	QuestionInFocus,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerFeedback, {
+	Confidence,
 	Correctness,
 } from '../RefactorAnswerFeedback/AnswerFeedback';
 import AnswerFeedbackBadge, {
@@ -26,7 +27,7 @@ const MultiSelectFeedback = ({
 	const [variant, setVariant] = useState<BadgeVariantValues | undefined>(
 		undefined,
 	);
-	const [confidence, setConfidence] = useState('');
+	const [confidence, setConfidence] = useState<Confidence | null>(null);
 	const [correctness, setCorrectness] = useState<Correctness | null>(null);
 	return (
 		<Box

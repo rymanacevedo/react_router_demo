@@ -88,7 +88,11 @@ const MultipleCorrect = ({
 				</Fade>
 			)}
 			<Divider marginTop="43px" />
-			<HStack marginTop={3} spacing={6} w="100%">
+			<HStack
+				marginTop={3}
+				spacing={6}
+				w="100%"
+				justifyContent={showFeedback ? 'flex-end' : undefined}>
 				{!showFeedback ? (
 					<>
 						<Button

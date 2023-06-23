@@ -5,7 +5,7 @@ import {
 	MinusCircledIcon,
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
-import { Correctness } from './AnswerFeedback';
+import { Confidence, Correctness } from './AnswerFeedback';
 
 export type BadgeVariantValues =
 	| 'ampDarkSuccessOutline'
@@ -13,13 +13,11 @@ export type BadgeVariantValues =
 	| 'ampDarkSuccess'
 	| 'ampWarningOutline'
 	| 'ampDarkErrorOutline'
-	| 'ampDarkError'
-	//     TODO: handle IDK
-	| 'NA';
+	| 'ampDarkError';
 
 type Props = {
 	variant: BadgeVariantValues | undefined;
-	confidence: string;
+	confidence: Confidence | null;
 	correctness: Correctness | null;
 };
 export default function AnswerFeedbackBadge({
@@ -51,15 +49,20 @@ export default function AnswerFeedbackBadge({
 	};
 
 	return (
-		// TODO: handle IDK
 		<Flex>
-			You were
-			<Badge ml={2} variant={variant}>
-				{confidence}
-			</Badge>
-			<Flex display="inline-flex" mr={2} ml={2}>
-				and
-			</Flex>
+			{confidence === 'idk' ? (
+				<Text mr={2}>You answered</Text>
+			) : (
+				<>
+					<Text>You were</Text>
+					<Badge ml={2} variant={variant}>
+						{confidence}
+					</Badge>
+					<Flex display="inline-flex" mr={2} ml={2}>
+						and
+					</Flex>
+				</>
+			)}
 			<Badge variant={variant}>
 				<Flex align="center">
 					{badgeIcon(variant)} <Text paddingLeft={'5px'}>{correctness}</Text>

@@ -8,12 +8,13 @@ import RichContentComponent from '../RichContentComponent';
 import { useEffect, useState } from 'react';
 import { BadgeVariantValues } from './AnswerFeedbackBadge';
 
-export type Correctness = 'incorrect' | 'correct';
+export type Correctness = 'incorrect' | 'correct' | "I don't know yet";
+export type Confidence = 'idk' | 'sure' | 'unsure';
 type Props = {
 	roundFeedbackData: CurrentRoundAnswerOverLayData;
 	answer: QuestionInFocusAnswer;
 	setBadge: (badge: BadgeVariantValues | undefined) => void;
-	setConfidence: (status: string) => void;
+	setConfidence: (status: Confidence | null) => void;
 	setCorrectness: (correctness: Correctness | null) => void;
 };
 
@@ -31,80 +32,88 @@ export default function AnswerFeedback({
 		const correctAnswerIds = roundData.correctAnswerIds;
 		if (!correctAnswerIds)
 			throw Error('No correct answer ids, are you in review?');
+
+		if (roundData.answerList.length === 1) {
+			return correctAnswerIds.some((id: number) =>
+				roundData.answerList.map((a) => a.answerId).includes(id),
+			);
+		}
+
 		return correctAnswerIds.every((id: number) =>
 			roundData.answerList.map((a) => a.answerId).includes(id),
 		);
 	}
 	// TODO: optimize this so it's not being called on every render
 	const checkSelectedAnswer = (selectedAnswer: SelectedAnswer | null) => {
-		if (!selectedAnswer)
-			return {
-				checkbox: 'multiSelect',
-				badge: undefined,
-				status: '',
-				correctness: null,
-			};
-		const isCorrect = isEveryAnswerCorrect(roundFeedbackData);
 		let badgeVariant: BadgeVariantValues | undefined = undefined;
-		let statusText = '';
+		let confidence: Confidence | null = null;
 		let correctnessText: Correctness | null = null;
+		if (!selectedAnswer) {
+			confidence = 'idk';
+			correctnessText = "I don't know yet";
+			badgeVariant = 'ampNeutralFilled';
+			return {
+				status: confidence,
+				checkbox: 'multiSelect',
+				badge: badgeVariant,
+				correctness: correctnessText,
+			};
+		}
+		const isCorrect = isEveryAnswerCorrect(roundFeedbackData);
 		if (isCorrect && selectedAnswer.confidence === 100) {
 			badgeVariant = 'ampDarkSuccess';
-			statusText = 'sure';
+			confidence = 'sure';
 			correctnessText = 'correct';
 			return {
-				status: statusText,
+				status: confidence,
 				checkbox: 'multiSelectSureCorrect',
 				badge: badgeVariant,
 				correctness: correctnessText,
 			};
 		} else if (isCorrect && selectedAnswer.confidence === 50) {
 			badgeVariant = 'ampDarkSuccessOutline';
-			statusText = 'unsure';
+			confidence = 'unsure';
 			correctnessText = 'correct';
 			return {
-				status: statusText,
+				status: confidence,
 				checkbox: 'multiSelectUnsureCorrect',
 				badge: badgeVariant,
 				correctness: correctnessText,
 			};
 		} else if (!isCorrect && selectedAnswer.confidence === 100) {
 			badgeVariant = 'ampDarkError';
-			statusText = 'sure';
+			confidence = 'sure';
 			correctnessText = 'incorrect';
 			return {
-				status: statusText,
+				status: confidence,
 				checkbox: 'multiSelectSureIncorrect',
 				badge: badgeVariant,
 				correctness: correctnessText,
 			};
 		} else if (!isCorrect && selectedAnswer.confidence === 50) {
 			badgeVariant = 'ampDarkErrorOutline';
-			statusText = 'unsure';
+			confidence = 'unsure';
 			correctnessText = 'incorrect';
 			return {
-				status: statusText,
+				status: confidence,
 				checkbox: 'multiSelectUnsureIncorrect',
 				badge: badgeVariant,
 				correctness: correctnessText,
 			};
-		} else {
-			console.log('idk');
-			return {
-				status: statusText,
-				checkbox: 'multiSelect',
-				badge: badgeVariant,
-				correctness: correctnessText,
-			};
 		}
+		return {
+			status: confidence,
+			checkbox: 'multiSelect',
+			badge: badgeVariant,
+			correctness: correctnessText,
+		};
 	};
 
 	useEffect(() => {
 		const m = roundFeedbackData.answerList.find((selectedAnswer) => {
 			return Number(selectedAnswer.answerId) === answer.id;
 		});
-		if (!m) return;
-
+		if (!m) return setMatch(null);
 		setMatch(m);
 	}, [roundFeedbackData, answer]);
 
@@ -126,7 +135,7 @@ export default function AnswerFeedback({
 			marginBottom={25}
 			variant={checkbox}
 			value={answer.id}
-			isChecked={match !== null}>
+			isChecked={match !== null && match.answerId === answer.id}>
 			<RichContentComponent
 				style={{
 					color: roundFeedbackData.correctAnswerIds ? '#6D758D' : 'inherit',
