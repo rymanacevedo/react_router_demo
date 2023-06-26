@@ -1,6 +1,5 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { Cookies } from 'react-cookie-consent';
 import { useTranslation } from 'react-i18next';
 import { getCourseStats } from '../../services/learning';
 import { formatTime } from '../../utils/logic';
@@ -20,12 +19,11 @@ const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 	useEffect(() => {
 		const fetchCourseStats = async () => {
 			if (selectedCourseKey) {
-				const learnerKey = Cookies.get('learnerKey');
 				try {
 					const response = await getCourseStats(
 						user,
 						selectedCourseKey,
-						learnerKey,
+						user.userKey,
 					);
 
 					const { data } = response;
