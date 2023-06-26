@@ -1,8 +1,15 @@
 import { Flex, Heading, Text } from '@chakra-ui/react';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
+import { RoundData } from '../pages/AssignmentView/AssignmentTypes';
 
-const PracticeTestHeader = ({ text }: { text: string }) => {
+const PracticeTestHeader = ({
+	text,
+	roundData,
+}: {
+	text: string;
+	roundData: RoundData;
+}) => {
 	const { t: i18n } = useTranslation();
 
 	return (
@@ -25,12 +32,14 @@ const PracticeTestHeader = ({ text }: { text: string }) => {
 				{/* //TO-DO: get module name from parent once it is available. Also, how do we translate module names and other client generated strings? */}
 				{i18n('practiceTest')}: {text}
 			</Heading>
-			<Flex direction="column" align={{ base: 'flex-start', md: 'flex-end' }}>
-				<Text fontSize="xs" color={'ampPrimary.600'}>
-					{i18n('timeLeft')}
-				</Text>
-				<CountUpTimer seconds={10000} color={'ampPrimary.600'} boxSize={6} />
-			</Flex>
+			{roundData.timeRemaining && (
+				<Flex direction="column" align={{ base: 'flex-start', md: 'flex-end' }}>
+					<Text fontSize="xs" color={'ampPrimary.600'}>
+						{i18n('timeLeft')}
+					</Text>
+					<CountUpTimer seconds={10000} color={'ampPrimary.600'} boxSize={6} />
+				</Flex>
+			)}
 		</Flex>
 	);
 };

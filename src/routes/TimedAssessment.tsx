@@ -104,7 +104,10 @@ export default function TimedAssessment() {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<PracticeTestHeader text={moduleInfoAndQuestions.name} />
+				<PracticeTestHeader
+					text={moduleInfoAndQuestions.name}
+					roundData={roundData}
+				/>
 				<HStack justify="center" align="space-between">
 					<Stack
 						w="100%"
