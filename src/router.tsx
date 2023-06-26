@@ -54,6 +54,7 @@ import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
 } from './components/pages/AuthoringView';
+import CourseProgress from './components/ui/CourseProgress';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -139,9 +140,14 @@ const routesJSX = (
 			/>
 			<Route loader={learningLoader} path="learning" element={<LearningView />}>
 				<Route
-					path=":selectedCourseKey"
 					loader={assignmentListLoader}
-					element={<AssignmentList />}
+					path=":selectedCourseKey"
+					element={
+						<>
+							<AssignmentList />
+							<CourseProgress />
+						</>
+					}
 				/>
 			</Route>
 			<Route

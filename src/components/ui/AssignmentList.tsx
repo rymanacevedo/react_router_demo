@@ -22,6 +22,7 @@ import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 import { LoaderFunction } from 'react-router';
 import {
 	getAssignments,
+	getCourseStats,
 	getCurriculaCourseList,
 } from '../../services/learning';
 import { requireUser } from '../../utils/user';
@@ -43,6 +44,12 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		subAccount,
 	);
 
+	const { data: courseStats } = await getCourseStats(
+		user,
+		selectedCourseKey,
+		user.userKey,
+	);
+
 	if (assignments.items) {
 		// eslint-disable-next-line @typescript-eslint/no-throw-literal
 		throw serverError({
@@ -55,12 +62,12 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		});
 	}
 
-	return json(assignments);
+	return json({ assignments, courseStats });
 };
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
-	const assignments = useLoaderData() as RootData;
+	const { assignments } = useLoaderData() as RootData | any;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const fetcher = useFetcher();
 	const navigate = useNavigate();
@@ -234,7 +241,7 @@ const AssignmentList = () => {
 								</Text>
 								{getAssignmentText(assignment)}
 							</HStack>
-							{index !== assignments.displayCurriculum.children.length - 1 && (
+							{index !== assignments?.displayCurriculum.children.length - 1 && (
 								<Divider
 									borderWidth="1px"
 									borderStyle="solid"
