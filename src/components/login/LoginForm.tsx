@@ -87,7 +87,6 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 	}
 	const info = await getLoginInfo(fields, cookie);
 	Cookies.set('learnerKey', info?.completeUserDataSchema.key);
-
 	if (isUserInfo(info)) {
 		// 	set the user object in the session
 		let user: User | null;
