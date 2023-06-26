@@ -198,8 +198,8 @@ export default function AssignmentComponent({
 				handleMessage('FIVE_CONSEC_SC', true);
 				handleMessage('SIX_DK_IN_ROUND', true);
 				handleMessage('FULL_ROUND_OF_SC', true);
-				setIsSureAndCorrectAllRound(false);
 				handleMessage('FIVE_FAST_ANSWERS', true);
+				setIsSureAndCorrectAllRound(false);
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
@@ -211,7 +211,8 @@ export default function AssignmentComponent({
 				} else if (
 					currentRoundQuestionsResponse.questionList.every(
 						(question: QuestionInFocus) =>
-							question.correctness === Correctness.Correct,
+							question.correctness === Correctness.Correct &&
+							question.confidence === Confidence.Sure,
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
