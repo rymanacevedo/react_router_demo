@@ -276,3 +276,11 @@ export const formatTime = (minutes: number) => {
 
 	return `${hours}hr ${remainingMinutes}m`;
 };
+
+export const roundNumber = (number: number): string => {
+	if (Number.isInteger(number)) {
+		return String(number);
+	} else {
+		return number.toFixed(1);
+	}
+};

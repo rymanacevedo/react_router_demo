@@ -2,7 +2,7 @@ import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getCourseStats } from '../../services/learning';
-import { formatTime } from '../../utils/logic';
+import { formatTime, roundNumber } from '../../utils/logic';
 import { requireUser } from '../../utils/user';
 import { CourseStatsType } from '../pages/LearningView/LearningViewTypes';
 
@@ -123,7 +123,7 @@ const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 						</Text>
 						<Text fontSize="16px">{courseStats.learnerNumRefreshers}</Text>
 						<Text marginLeft="60px" fontSize="16px">
-							{courseStats.averageNumRefreshers}
+							{roundNumber(courseStats.averageNumRefreshers)}
 						</Text>
 					</Flex>
 				</Box>
