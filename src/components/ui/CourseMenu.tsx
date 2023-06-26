@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import { Course } from '../pages/LearningView/LearningView';
+import { Course } from '../../routes/LearningView';
 
 type Props = {
 	courses: Course[];
@@ -28,7 +28,7 @@ const CourseMenu = ({
 		return null;
 	}
 
-	const handleCourseChange = async (value: any) => {
+	const handleCourseChange = (value: any) => {
 		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
 	};
 

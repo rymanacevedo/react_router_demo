@@ -49,7 +49,7 @@ const CourseProgress = () => {
 								</Th>
 							</Tr>
 						</Thead>
-						<Divider width={'325%'} position="sticky" marginTop={'8px'} />
+						<Divider width={'225%'} position="sticky" marginTop={'8px'} />
 						<Tbody>
 							<VisuallyHidden>learning stats</VisuallyHidden>
 							<Tr>

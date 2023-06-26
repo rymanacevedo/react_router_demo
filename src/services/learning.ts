@@ -9,7 +9,7 @@ import {
 } from '../lib/validator';
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
 import { VITE_BACKEND_API } from '../lib/environment';
-import { CourseStatsType } from '../components/pages/LearningView/LearningViewTypes';
+import { CourseStatsType } from '../routes/LearningView';
 
 export const getCourseList = async (
 	user: any,
