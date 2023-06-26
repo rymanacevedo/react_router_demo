@@ -5,19 +5,17 @@ import { useTranslation } from 'react-i18next';
 import { getCourseStats } from '../../services/learning';
 import { formatTime } from '../../utils/logic';
 import { requireUser } from '../../utils/user';
+import { CourseStatsType } from '../pages/LearningView/LearningViewTypes';
 
 type CourseProgressProps = {
-	courseStats?: any; //TODO: add a type for this
 	selectedCourseKey: string | null;
 };
 
 const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 	const { t: i18n } = useTranslation();
-	const [courseStats, setCourseStats] = useState<any>(null);
-	console.log(selectedCourseKey);
+	const [courseStats, setCourseStats] = useState<CourseStatsType | null>(null);
+
 	const user = requireUser();
-	// TODO: add translations
-	// clean up the <Text> attributes
 
 	useEffect(() => {
 		const fetchCourseStats = async () => {
@@ -29,7 +27,7 @@ const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 						selectedCourseKey,
 						learnerKey,
 					);
-					console.log(response);
+
 					const { data } = response;
 					setCourseStats(data);
 				} catch (error) {
@@ -40,35 +38,33 @@ const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 
 		fetchCourseStats();
 	}, [selectedCourseKey]);
-	console.log(courseStats);
+
 	return (
 		<>
 			{courseStats && (
 				<Box
 					w={435}
 					h="fit-content"
-					bg="#F5F5F5"
+					bg="ampNeutral.50"
 					borderRadius="12px"
 					p={4}
 					marginLeft="36px"
 					marginTop="10px">
-					<Text fontSize="21px" fontWeight={600} margin={'8px'}>
+					<Text
+						fontSize="21px"
+						fontWeight={600}
+						margin={'8px'}
+						marginBottom="0px">
 						{i18n('courseProgress')}
 					</Text>
 					<Box
-						fontSize="16px"
+						fontSize="12px"
 						fontWeight={600}
 						display="flex"
 						flexDirection="row"
-						alignItems="center"
-						marginTop="16px">
+						alignItems="center">
 						<Text marginLeft={'auto'}>{i18n('you')}</Text>
-						<Text
-							color="var(--text-dark-secondary, #283C58)"
-							textAlign="right"
-							width="80px"
-							marginRight="8px"
-							flexShrink={0}>
+						<Text textAlign="right" width="80px" marginRight="8px">
 							{i18n('peers')}
 						</Text>
 					</Box>

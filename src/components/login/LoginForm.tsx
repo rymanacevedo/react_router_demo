@@ -86,8 +86,7 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 	const info = await getLoginInfo(fields, cookie);
-	console.log(info);
-	//@ts-ignore
+
 	Cookies.set('learnerKey', info?.completeUserDataSchema.key);
 
 	if (isUserInfo(info)) {

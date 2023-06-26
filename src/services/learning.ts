@@ -9,6 +9,7 @@ import {
 } from '../lib/validator';
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
 import { VITE_BACKEND_API } from '../lib/environment';
+import { CourseStatsType } from '../components/pages/LearningView/LearningViewTypes';
 
 export const getCourseList = async (
 	user: any,
@@ -195,7 +196,7 @@ export const getCourseStats = async (
 	courseKey: string,
 	learnerUid: string,
 ): Promise<{
-	data: any;
+	data: CourseStatsType;
 	response: Response;
 }> => {
 	const url = `${VITE_BACKEND_API}/v2/courses/${courseKey}/stats/${learnerUid}`;

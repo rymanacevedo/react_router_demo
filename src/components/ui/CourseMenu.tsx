@@ -1,5 +1,3 @@
-/* eslint-disable unused-imports/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
 	Button,
 	Flex,
@@ -12,8 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import { requireUser } from '../../utils/user';
-import { Course } from '../pages/LearningView';
+import { Course } from '../pages/LearningView/LearningView';
 
 type Props = {
 	courses: Course[];
@@ -27,7 +24,6 @@ const CourseMenu = ({
 	courseUpdaterToggle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
-	const user = requireUser();
 
 	if (courses.length === 0) {
 		return null;

@@ -27,7 +27,9 @@ import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
-import LearningView, { learningLoader } from './components/pages/LearningView';
+import LearningView, {
+	learningLoader,
+} from './components/pages/LearningView/LearningView';
 import AssignmentReviewView, {
 	assignmentReviewLoader,
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';

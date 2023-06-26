@@ -1,9 +1,9 @@
 import { Container, Flex, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import CourseMenu from '../ui/CourseMenu';
+import CourseMenu from '../../ui/CourseMenu';
 import { LoaderFunction } from 'react-router';
-import { requireUser } from '../../utils/user';
-import { getCourseList } from '../../services/learning';
+import { requireUser } from '../../../utils/user';
+import { getCourseList } from '../../../services/learning';
 import {
 	json,
 	Outlet,
@@ -11,10 +11,10 @@ import {
 	useLoaderData,
 	useNavigate,
 } from 'react-router-dom';
-import { getSubAccount } from '../../services/utils';
+import { getSubAccount } from '../../../services/utils';
 import { useEffect, useState } from 'react';
-import { useQuizContext } from '../../hooks/useQuizContext';
-import CourseProgress from '../ui/CourseProgress';
+import { useQuizContext } from '../../../hooks/useQuizContext';
+import CourseProgress from '../../ui/CourseProgress';
 
 export type Course = {
 	key: string;
@@ -75,7 +75,6 @@ const LearningView = () => {
 	useEffect(() => {
 		if (data && !selectedCourseKey) {
 			setCourses(data.courseList);
-			console.log(data.courseList);
 			setTitle(data.courseList[0].name);
 			setSelectedCourseKey(data.selectedCourseKey);
 			navigate(`/learning/${data.selectedCourseKey}`);
@@ -122,7 +121,6 @@ const LearningView = () => {
 			<Heading as="h1" marginBottom="24px" margin="12px">
 				{title}
 			</Heading>
-
 			<HStack
 				justifyContent={'space-between'}
 				margin="12px"
