@@ -91,7 +91,9 @@ const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 						<Text fontSize="16px">
 							{formatTime(courseStats.learnerTimeSpent)}
 						</Text>
-						<Text marginLeft="20px" fontSize="16px">
+						<Text
+							marginLeft={courseStats.learnerTimeSpent > 61 ? '15px' : '45px'}
+							fontSize="16px">
 							{formatTime(courseStats.averageTimeSpent)}
 						</Text>
 					</Flex>
