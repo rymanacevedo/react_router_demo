@@ -33,10 +33,11 @@ export default function AnswerFeedback({
 		if (!correctAnswerIds)
 			throw Error('No correct answer ids, are you in review?');
 
+		if (roundData.correctAnswerIds.length !== roundData.answerList.length) {
+			return false;
+		}
+
 		if (roundData.correctAnswerIds.length === 1) {
-			if (roundData.answerList.length !== 1) {
-				return false;
-			}
 			return roundData.correctAnswerIds[0] === roundData.answerList[0].answerId;
 		}
 
