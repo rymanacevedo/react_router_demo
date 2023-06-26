@@ -1,7 +1,7 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react';
 
 type CourseProgressProps = {
-	courseStats: any; //TODO: add a type for this
+	courseStats?: any; //TODO: add a type for this
 };
 
 const CourseProgress = ({ courseStats }: CourseProgressProps) => {

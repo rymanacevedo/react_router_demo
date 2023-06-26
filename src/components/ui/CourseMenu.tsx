@@ -1,5 +1,7 @@
 import {
+	Box,
 	Button,
+	Flex,
 	Menu,
 	MenuButton,
 	MenuItemOption,
@@ -56,6 +58,21 @@ const CourseMenu = ({
 		courseUpdaterToggle.load(`/learning?selectedCourseKey=${value}`);
 	};
 
+	const SideBySideBoxes = () => {
+		return (
+			<Flex>
+				<Box
+					w="50%"
+					h="200px"
+					color="red.200"
+					boxShadow={'sm'}
+					borderColor={'pink'}
+				/>
+				<Box w="50%" h="200px" color="blue.200" />
+			</Flex>
+		);
+	};
+
 	return (
 		<>
 			<Menu isLazy>
@@ -80,6 +97,7 @@ const CourseMenu = ({
 					</MenuOptionGroup>
 				</MenuList>
 			</Menu>
+			<SideBySideBoxes />
 			{courseStats && <CourseProgress courseStats={courseStats} />}
 		</>
 	);
