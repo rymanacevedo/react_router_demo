@@ -176,10 +176,6 @@ export const ampTheme = extendTheme({
 			800: '#124641',
 			900: '#123330',
 		},
-		customColorScheme: {
-			borderColor: '#468446',
-			backgroundColor: '#468446',
-		},
 	},
 	textStyles: {
 		h1: {
