@@ -49,6 +49,7 @@ const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
 					marginLeft="36px"
 					marginTop="10px">
 					<Text
+						aria-label="learning stats"
 						fontSize="21px"
 						fontWeight={600}
 						margin={'8px'}
