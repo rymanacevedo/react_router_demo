@@ -47,7 +47,7 @@ const MultiSelect = ({
 			flexDirection={'column'}
 			minHeight={350}
 			h="100%">
-			{questionInFocus?.answerList?.map((answer) => {
+			{questionInFocus.answerList.map((answer) => {
 				return (
 					<MultiSelectInput
 						key={answer.id}

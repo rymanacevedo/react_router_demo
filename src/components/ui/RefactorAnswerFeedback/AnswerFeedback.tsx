@@ -33,10 +33,11 @@ export default function AnswerFeedback({
 		if (!correctAnswerIds)
 			throw Error('No correct answer ids, are you in review?');
 
-		if (roundData.answerList.length === 1) {
-			return correctAnswerIds.some((id: number) =>
-				roundData.answerList.map((a) => a.answerId).includes(id),
-			);
+		if (roundData.correctAnswerIds.length === 1) {
+			if (roundData.answerList.length !== 1) {
+				return false;
+			}
+			return roundData.correctAnswerIds[0] === roundData.answerList[0].answerId;
 		}
 
 		return correctAnswerIds.every((id: number) =>
@@ -133,6 +134,7 @@ export default function AnswerFeedback({
 	return (
 		<Checkbox
 			marginBottom={25}
+			borderColor={'#1e1f20'}
 			variant={checkbox}
 			value={answer.id}
 			isChecked={match !== null && match.answerId === answer.id}>
