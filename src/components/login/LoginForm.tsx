@@ -86,8 +86,9 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 		});
 	}
 	const info = await getLoginInfo(fields, cookie);
+	console.log(info);
 	//@ts-ignore
-	Cookies.set('learnerUid', info?.completeUserDataSchema.uid);
+	Cookies.set('learnerKey', info?.completeUserDataSchema.key);
 
 	if (isUserInfo(info)) {
 		// 	set the user object in the session

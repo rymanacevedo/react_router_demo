@@ -1,97 +1,137 @@
 import { Box, Divider, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { Cookies } from 'react-cookie-consent';
+import { useTranslation } from 'react-i18next';
+import { getCourseStats } from '../../services/learning';
+import { formatTime } from '../../utils/logic';
+import { requireUser } from '../../utils/user';
 
 type CourseProgressProps = {
 	courseStats?: any; //TODO: add a type for this
+	selectedCourseKey: string | null;
 };
 
-const CourseProgress = ({ courseStats }: CourseProgressProps) => {
-	console.log(courseStats);
+const CourseProgress = ({ selectedCourseKey }: CourseProgressProps) => {
+	const { t: i18n } = useTranslation();
+	const [courseStats, setCourseStats] = useState<any>(null);
+	console.log(selectedCourseKey);
+	const user = requireUser();
 	// TODO: add translations
 	// clean up the <Text> attributes
+
+	useEffect(() => {
+		const fetchCourseStats = async () => {
+			if (selectedCourseKey) {
+				const learnerKey = Cookies.get('learnerKey');
+				try {
+					const response = await getCourseStats(
+						user,
+						selectedCourseKey,
+						learnerKey,
+					);
+					console.log(response);
+					const { data } = response;
+					setCourseStats(data);
+				} catch (error) {
+					console.error(error);
+				}
+			}
+		};
+
+		fetchCourseStats();
+	}, [selectedCourseKey]);
+	console.log(courseStats);
 	return (
 		<>
-			<Box w={435} bg="#F5F5F5" borderRadius="12px" p={4}>
-				<Text
-					margin={'8px'}
-					fontSize="21px"
-					fontWeight={600}
-					lineHeight="133%"
-					letterSpacing="-0.105px">
-					Course Progress
-				</Text>
+			{courseStats && (
 				<Box
-					fontSize="12px"
-					fontWeight={600}
-					lineHeight="130%"
-					display="flex"
-					flexDirection="row"
-					alignItems="center"
-					marginTop="16px">
-					<Text marginLeft={'auto'}>You</Text>
-					<Text
-						color="var(--text-dark-secondary, #283C58)"
-						textAlign="right"
-						width="80px"
-						marginRight="8px"
-						flexShrink={0}>
-						Peers
+					w={435}
+					h="fit-content"
+					bg="#F5F5F5"
+					borderRadius="12px"
+					p={4}
+					marginLeft="36px"
+					marginTop="10px">
+					<Text fontSize="21px" fontWeight={600} margin={'8px'}>
+						{i18n('courseProgress')}
 					</Text>
-				</Box>
-				<Divider marginTop="8px" />
-				<Flex alignItems="center" marginTop="8px">
-					<Text margin={'8px'} flex="1" fontSize="16px" lineHeight="125%">
-						Progress
-					</Text>
-					<Text>44%</Text>
-					<Text marginLeft="40px">44%</Text>
-				</Flex>
-				<Flex alignItems="center" marginTop="8px">
-					<Text
-						margin={'8px'}
-						flex="2"
-						display="flex"
-						width="219px"
-						flexDirection="column"
+					<Box
 						fontSize="16px"
-						lineHeight="125%"
-						marginTop="8px">
-						Time spent
-					</Text>
-					<Text>1hr47m</Text>
-					<Text marginLeft="40px">48m</Text>
-				</Flex>
+						fontWeight={600}
+						display="flex"
+						flexDirection="row"
+						alignItems="center"
+						marginTop="16px">
+						<Text marginLeft={'auto'}>{i18n('you')}</Text>
+						<Text
+							color="var(--text-dark-secondary, #283C58)"
+							textAlign="right"
+							width="80px"
+							marginRight="8px"
+							flexShrink={0}>
+							{i18n('peers')}
+						</Text>
+					</Box>
+					<Divider marginTop="8px" />
+					<Flex alignItems="center" marginTop="8px">
+						<Text flex="1" fontSize="16px" marginLeft="4px">
+							{i18n('progress')}
+						</Text>
+						<Text fontSize="16px">{courseStats.learnerProgress}%</Text>
+						<Text marginLeft="40px" fontSize="16px">
+							{courseStats.averageProgress}%
+						</Text>
+					</Flex>
+					<Flex alignItems="center" marginTop="8px">
+						<Text
+							marginLeft="4px"
+							flex="2"
+							display="flex"
+							width="219px"
+							flexDirection="column"
+							fontSize="16px">
+							{i18n('timeSpent')}
+						</Text>
+						<Text fontSize="16px">
+							{formatTime(courseStats.learnerTimeSpent)}
+						</Text>
+						<Text marginLeft="20px" fontSize="16px">
+							{formatTime(courseStats.averageTimeSpent)}
+						</Text>
+					</Flex>
 
-				<Flex alignItems="center" marginTop="8px">
-					<Text
-						margin={'8px'}
-						flex="2"
-						display="flex"
-						width="219px"
-						flexDirection="column"
-						fontSize="16px"
-						lineHeight="125%"
-						marginTop="8px">
-						Starting Knowledge
-					</Text>
-					<Text>48%</Text>
-					<Text marginLeft="40px">52%</Text>
-				</Flex>
-				<Flex alignItems="center" marginTop="8px">
-					<Text
-						margin={'8px'}
-						flex="2"
-						display="flex"
-						width="219px"
-						flexDirection="column"
-						fontSize="16px"
-						lineHeight="125%"
-						marginTop="8px">
-						Refreshers Taken
-					</Text>
-					<Text marginRight="10px">2</Text>
-					<Text marginLeft="40px">2.4</Text>
-				</Flex>
-			</Box>
+					<Flex alignItems="center" marginTop="8px">
+						<Text
+							marginLeft="4px"
+							flex="2"
+							display="flex"
+							width="219px"
+							flexDirection="column"
+							fontSize="16px">
+							{i18n('startingKnowledge')}
+						</Text>
+						<Text fontSize="16px">{courseStats.learnerStartingKnowledge}%</Text>
+						<Text marginLeft="40px" fontSize="16px">
+							{courseStats.averageStartingKnowledge}%
+						</Text>
+					</Flex>
+					<Flex alignItems="center" marginTop="8px">
+						<Text
+							marginLeft="4px"
+							flex="2"
+							display="flex"
+							width="219px"
+							flexDirection="column"
+							fontSize="16px">
+							{i18n('refreshersTaken')}
+						</Text>
+						<Text fontSize="16px">{courseStats.learnerNumRefreshers}</Text>
+						<Text marginLeft="60px" fontSize="16px">
+							{courseStats.averageNumRefreshers}
+						</Text>
+					</Flex>
+				</Box>
+			)}
 		</>
 	);
 };

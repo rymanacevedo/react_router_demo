@@ -277,6 +277,16 @@ const resources = {
 			//////////////////////////////////////////////
 			previousBtn: 'Previous',
 			timeLeft: 'Time left',
+			//////////////////////////////////////////////
+			//   CourseProgress.tsx
+			//////////////////////////////////////////////
+			courseProgress: 'Course Progress',
+			progress: 'Progress',
+			timeSpent: 'Time spent',
+			startingKnowledge: 'Starting Knowledge',
+			refreshersTaken: 'Refreshers Taken',
+			peers: 'Peers',
+			you: 'You'
 		},
 	},
 	fr: {
