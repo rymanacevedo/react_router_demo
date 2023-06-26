@@ -1,54 +1,202 @@
-import { defineStyleConfig } from '@chakra-ui/react';
+import { checkboxAnatomy } from '@chakra-ui/anatomy';
+import { createMultiStyleConfigHelpers, defineStyle } from '@chakra-ui/react';
 
-const Checkbox = defineStyleConfig({
-	baseStyle: {
+const { definePartsStyle, defineMultiStyleConfig } =
+	createMultiStyleConfigHelpers(checkboxAnatomy.keys);
+
+const boxShadowAttribute = '0 0 0 4px rgba(37, 124, 181, 0.50)';
+
+const baseMultiSelect = definePartsStyle({
+	control: {
+		_focus: {
+			boxShadow: boxShadowAttribute,
+		},
+		_hover: {
+			boxShadow: boxShadowAttribute,
+			outline: '2px solid transparent',
+			outlineOffset: '2px',
+		},
+		// borderColor: 'ampSuccess.500',
+		border: '1.5px solid',
+		width: '2.75rem',
+		height: '2.75rem',
+		borderRadius: '12px',
+		// backgroundColor: 'ampSuccess.50',
+	},
+	icon: {
+		fontSize: '15px',
+		// color: 'ampSuccess.500',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		fontWeight: 'bold',
+	},
+});
+
+const baseStyle = definePartsStyle({
+	control: {
+		_focus: {
+			boxShadow: 'none',
+			outline: 'none',
+		},
+		_focusVisible: {
+			outline: 'none',
+		},
+		border: 'unset',
+	},
+});
+
+const multiChoiceAnswer = defineStyle(() => {
+	return {
 		control: {
 			_focus: {
-				boxShadow: 'none',
-				outline: 'none',
+				borderRadius: '50%',
+				boxShadow: boxShadowAttribute,
 			},
-			_focusVisible: {
-				outline: 'none',
-			},
-			border: 'unset',
+			_hover: {},
 		},
-	},
-	variants: {
-		multiChoiceAnswer: {
-			control: {
-				_focus: {
-					borderRadius: '50%',
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
-				_hover: {},
-			},
+	};
+});
+
+const formCheckbox = defineStyle(() => {
+	return {
+		control: {
+			border: '2px solid',
+			borderRadius: 'sm',
 		},
-		formCheckbox: {
-			control: {
-				border: '2px solid',
-				borderRadius: 'sm',
-			},
-		},
-		multiSelect: {
-			control: {
-				_focus: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-				},
+	};
+});
+
+const multiSelect = defineStyle(() => {
+	return {
+		...baseMultiSelect,
+	};
+});
+
+const multiSelectUnsureIncorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampError.700',
+		backgroundColor: 'ampError.50',
+	};
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			...base,
+			_checked: {
+				...base,
 				_hover: {
-					boxShadow: '0 0 0 4px rgba(37, 124, 181, 0.50)',
-					outline: '2px solid transparent',
-					outlineOffset: '2px',
+					...base,
 				},
-				border: '1.5px solid',
-				width: '2.75rem',
-				height: '2.75rem',
-				borderRadius: '12px',
-			},
-			icon: {
-				fontSize: '15px',
 			},
 		},
-	},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampError.700',
+		},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectUnsureCorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampSuccess.500',
+		backgroundColor: 'ampSuccess.50',
+	};
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
+		},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampSuccess.500',
+		},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectSureIncorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampError.50',
+		backgroundColor: 'ampError.700',
+	};
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
+		},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampWhite',
+		},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectSureCorrect = defineStyle(() => {
+	const base = {
+		borderColor: 'ampSuccess.500',
+		backgroundColor: 'ampSuccess.500',
+	};
+	const styles = {
+		control: {
+			...baseMultiSelect.control,
+			...base,
+			_checked: {
+				...base,
+				_hover: {
+					...base,
+				},
+			},
+		},
+		icon: {
+			...baseMultiSelect.icon,
+			color: 'ampWhite',
+		},
+	};
+	return {
+		...styles,
+	};
+});
+
+const multiSelectPartialCorrect = defineStyle(() => {
+	return {
+		...baseMultiSelect,
+	};
+});
+
+const variants = {
+	multiSelectUnsureIncorrect,
+	multiChoiceAnswer,
+	formCheckbox,
+	multiSelect,
+	multiSelectUnsureCorrect,
+	multiSelectSureIncorrect,
+	multiSelectSureCorrect,
+	multiSelectPartialCorrect,
+};
+
+const Checkbox = defineMultiStyleConfig({
+	baseStyle,
+	variants,
 });
 
 export { Checkbox };

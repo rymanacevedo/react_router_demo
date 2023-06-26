@@ -1,86 +1,54 @@
-import { Box, Heading } from '@chakra-ui/react';
-import AnswerFeedback from './MultiSelectAnswerFeedback';
-import { useEffect, useState } from 'react';
-import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
+import { Box } from '@chakra-ui/react';
 
-export interface Answer {
-	answerId: number | string;
-	confidence: number;
-	selectedOptionId: number;
-	self: string;
-}
+import {
+	CurrentRoundAnswerOverLayData,
+	QuestionInFocus,
+} from '../../pages/AssignmentView/AssignmentTypes';
+import AnswerFeedback, {
+	Confidence,
+	Correctness,
+} from '../RefactorAnswerFeedback/AnswerFeedback';
+import AnswerFeedbackBadge, {
+	BadgeVariantValues,
+} from '../RefactorAnswerFeedback/AnswerFeedbackBadge';
+import { useState } from 'react';
 
 const MultiSelectFeedback = ({
 	questionInFocus,
-	selectedAnswers,
-	currentRoundAnswerOverLayData,
-	inReview,
-	revealAnswer,
+	roundFeedbackData,
 }: {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: any[];
-	setSelectedAnswers: any;
-	clearSelection: any;
-	setClearSelection: any;
-	currentRoundAnswerOverLayData?: any;
-	inReview?: boolean;
-	revealAnswer?: boolean;
+	roundFeedbackData: CurrentRoundAnswerOverLayData;
 }) => {
-	const [wasCorrectAnswerChosen, setWasCorrectAnswerChosen] = useState(false);
-	useEffect(() => {
-		if (currentRoundAnswerOverLayData?.correctAnswerIds && selectedAnswers) {
-			setWasCorrectAnswerChosen(
-				Boolean(
-					selectedAnswers.find(
-						(answer: any) =>
-							answer.answerId ===
-							currentRoundAnswerOverLayData?.correctAnswerIds[0],
-					),
-				),
-			);
-		}
-	}, [currentRoundAnswerOverLayData, revealAnswer]);
+	const [variant, setVariant] = useState<BadgeVariantValues | undefined>(
+		undefined,
+	);
+	const [confidence, setConfidence] = useState<Confidence | null>(null);
+	const [correctness, setCorrectness] = useState<Correctness | null>(null);
 	return (
-		<Box>
-			<Heading as="h3">Answer</Heading>
-			<Box
-				marginTop="34px"
-				display="flex"
-				flexDirection={'column'}
-				justifyContent="space-between"
-				minHeight={350}
-				h="100%">
-				<>
-					{questionInFocus?.answerList
-						?.slice(0, 10)
-						.map((answer: { answerRc: string; id: string | number }) => {
-							return (
-								<AnswerFeedback
-									key={answer.id}
-									questionText={answer.answerRc}
-									questionAnswerId={answer.id}
-									selectedAnswers={selectedAnswers}
-									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-									wasCorrectAnswerChosen={wasCorrectAnswerChosen}
-									inReview={inReview}
-									revealAnswer={revealAnswer}
-								/>
-							);
-						})}
+		<Box
+			marginTop="34px"
+			display="flex"
+			flexDirection={'column'}
+			justifyContent="space-between"
+			minHeight={350}
+			h="100%">
+			{questionInFocus.answerList.map((answer) => {
+				return (
 					<AnswerFeedback
-						/* eslint-disable */
-						questionText={"I don't know yet"}
-						/* eslint-enable */
-						questionAnswerId={''}
-						selectedAnswers={selectedAnswers}
-						IDK={true}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-						wasCorrectAnswerChosen={wasCorrectAnswerChosen}
-						inReview={inReview}
-						revealAnswer={revealAnswer}
+						roundFeedbackData={roundFeedbackData}
+						answer={answer}
+						setBadge={setVariant}
+						setConfidence={setConfidence}
+						setCorrectness={setCorrectness}
 					/>
-				</>
-			</Box>
+				);
+			})}
+			<AnswerFeedbackBadge
+				confidence={confidence}
+				variant={variant}
+				correctness={correctness}
+			/>
 		</Box>
 	);
 };
