@@ -156,6 +156,9 @@ const variantFunc = (
 		CurrentPartSureCorrect: 'ampDarkSuccessOutlineDot',
 		CurrentOneAnswerPartSureCorrect: 'ampDarkSuccessOutlineDot',
 		CurrentSureCorrect: 'ampDarkSuccessDot',
+		CurrentPartSureIncorrect: 'ampDarkErrorOutline',
+		CurrentNANoAnswerSelected: 'ampNeutralFilled',
+		NANoAnswerSelected: 'ampNeutralFilled',
 	};
 	let arrayToMap = inReview ? wrongAnswers : questionList;
 	let classNamesArray = arrayToMap?.map((question: any) => {
