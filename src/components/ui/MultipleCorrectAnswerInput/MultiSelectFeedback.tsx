@@ -16,13 +16,9 @@ import { useState } from 'react';
 const MultiSelectFeedback = ({
 	questionInFocus,
 	roundFeedbackData,
-}: // inReview,
-// revealAnswer,
-{
+}: {
 	questionInFocus: QuestionInFocus;
 	roundFeedbackData: CurrentRoundAnswerOverLayData;
-	// inReview?: boolean;
-	// revealAnswer?: boolean;
 }) => {
 	const [variant, setVariant] = useState<BadgeVariantValues | undefined>(
 		undefined,
