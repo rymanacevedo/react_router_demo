@@ -24,7 +24,6 @@ const CourseMenu = ({
 	courseUpdaterToggle,
 }: Props) => {
 	const { t: i18n } = useTranslation();
-
 	if (courses.length === 0) {
 		return null;
 	}
