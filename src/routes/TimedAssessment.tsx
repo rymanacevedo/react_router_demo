@@ -289,7 +289,6 @@ export default function TimedAssessment() {
 						<RedIcon />
 						<Box>
 							<ModalHeader fontSize="lg">
-								{' '}
 								{i18n('youHaveRunOutOfTime')}
 							</ModalHeader>
 							<ModalBody>
