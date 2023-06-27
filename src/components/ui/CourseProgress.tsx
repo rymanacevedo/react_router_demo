@@ -31,14 +31,15 @@ const CourseProgress = () => {
 				marginLeft="36px"
 				marginTop="10px">
 				<Heading size={'lg'} marginLeft={'8px'} marginTop={'8px'}>
-					<VisuallyHidden as="caption">learning stats</VisuallyHidden>
 					{i18n('courseProgress')}
 				</Heading>
 
 				<Table variant="unstyled" size="sm">
 					<Thead>
 						<Tr>
-							<Th width="30%"> </Th>
+							<Th width="30%">
+								<VisuallyHidden as="caption">learning stats</VisuallyHidden>
+							</Th>
 							<Th width="225%" textAlign="right" textTransform="capitalize">
 								{i18n('you')}
 							</Th>
@@ -47,7 +48,12 @@ const CourseProgress = () => {
 							</Th>
 						</Tr>
 					</Thead>
-					<Divider width="225%" position="sticky" marginTop="8px" />
+					<Divider
+						width="220%"
+						position="sticky"
+						marginTop="8px"
+						marginLeft="12px"
+					/>
 					<Tbody>
 						<Tr>
 							<Td fontSize="md">{i18n('progress')}</Td>
