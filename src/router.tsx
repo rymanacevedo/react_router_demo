@@ -52,6 +52,7 @@ import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
 } from './components/pages/AuthoringView';
+import TimedAssessmentResults from './routes/TimedAssessmentResults';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -176,6 +177,11 @@ const routesJSX = (
 				loader={timedAssessmentLoader}
 				path="learning/timedAssessment/:assignmentUid"
 				element={<TimedAssessment />}
+			/>
+
+			<Route
+				path="learning/timedAssessment/:assignmentUid/results"
+				element={<TimedAssessmentResults />}
 			/>
 
 			<Route

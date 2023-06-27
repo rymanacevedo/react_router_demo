@@ -28,7 +28,7 @@ import {
 	getFullModuleWithQuestions,
 } from '../services/learning';
 import { getSubAccount } from '../services/utils';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import {
 	Confidence,
 	ModuleData,
@@ -55,18 +55,27 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 		subAccount,
 		assignmentUid,
 	);
-	return { assignmentData, moduleData, moduleInfoAndQuestions, roundData };
+	return {
+		assignmentData,
+		moduleData,
+		moduleInfoAndQuestions,
+		roundData,
+		assignmentUid,
+	};
 };
 
 export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
-		assignmentData: AssignmentData;
-		moduleData: ModuleData;
-		moduleInfoAndQuestions: ModuleData;
-		roundData: RoundData;
-	};
+	const { moduleInfoAndQuestions, roundData, assignmentUid } =
+		useLoaderData() as {
+			assignmentData: AssignmentData;
+			moduleData: ModuleData;
+			moduleInfoAndQuestions: ModuleData;
+			roundData: RoundData;
+			assignmentUid: string;
+		};
+	const navigate = useNavigate();
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
 	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
@@ -129,6 +138,10 @@ export default function TimedAssessment() {
 				question.displayOrder - 1,
 			),
 		);
+	};
+
+	const handleResultsNavigation = () => {
+		navigate('results');
 	};
 
 	useEffect(() => {
@@ -271,6 +284,7 @@ export default function TimedAssessment() {
 				closeOnOverlayClick={false}
 				isOpen={isOpen}
 				onClose={onClose}
+				onEsc={handleResultsNavigation}
 				isCentered>
 				<ModalOverlay />
 				<ModalContent p={6}>
@@ -284,7 +298,9 @@ export default function TimedAssessment() {
 						</Box>
 					</Flex>
 					<ModalFooter mr="auto" ml="auto">
-						<Button>Continue to results</Button>
+						<Button onClick={handleResultsNavigation}>
+							Continue to results
+						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
