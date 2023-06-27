@@ -1,4 +1,5 @@
 import {
+	Confidence,
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
 	SelectedAnswer,
@@ -32,7 +33,7 @@ type Props = {
 	onClose: () => void;
 	questionInFocus: QuestionInFocus | null;
 	selectedAnswers: SelectedAnswer[];
-	selectedAnswersState: (
+	setSelectedAnswers: (
 		value:
 			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
 			| SelectedAnswer[],
@@ -42,14 +43,14 @@ type Props = {
 		value: ((prevState: boolean) => boolean) | boolean,
 	) => void;
 	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
-	onClick: () => void;
+	continueBtnFunc: () => void;
 	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
 	IDKResponse: boolean;
 	smallerThan1000: boolean;
 	showFeedback: boolean;
-	setTotalAnswerConfidence: (value: string) => void;
 	initialFocusRef: MutableRefObject<null>;
+	submitMultiSelectAnswer: (s: SelectedAnswer[], c: Confidence) => void;
 };
 
 export default function AnswerArea({
@@ -57,18 +58,18 @@ export default function AnswerArea({
 	onClose,
 	questionInFocus,
 	selectedAnswers,
-	selectedAnswersState,
+	setSelectedAnswers,
 	clearSelection,
 	clearSelectionState,
 	currentRoundAnswerOverLayData,
-	onClick,
+	continueBtnFunc,
 	clearSelectionFunction,
 	setIDKResponse,
 	IDKResponse,
 	smallerThan1000,
 	showFeedback,
-	setTotalAnswerConfidence,
 	initialFocusRef,
+	submitMultiSelectAnswer,
 }: Props) {
 	const { t: i18n } = useTranslation();
 
@@ -91,11 +92,11 @@ export default function AnswerArea({
 						<MultipleChoice
 							questionInFocus={questionInFocus}
 							selectedAnswers={selectedAnswers}
-							selectedAnswersState={selectedAnswersState}
+							selectedAnswersState={setSelectedAnswers}
 							clearSelection={clearSelection}
 							clearSelectionState={clearSelectionState}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-							onClick={onClick}
+							onClick={continueBtnFunc}
 							clearSelectionFunction={clearSelectionFunction}
 							setIDKResponse={setIDKResponse}
 							IDKResponse={IDKResponse}
@@ -104,20 +105,18 @@ export default function AnswerArea({
 						/>
 					)}
 					{questionInFocus?.questionType === 'MultipleCorrect' && (
-						//     The backend use MultipleCorrect as the term for MultiSelect
+						// The backend use MultipleCorrect as the term for MultiSelect
 						<MultipleCorrect
 							questionInFocus={questionInFocus}
 							selectedAnswers={selectedAnswers}
-							updateSelectedAnswersState={selectedAnswersState}
-							clearSelection={clearSelection}
-							clearSelectionState={clearSelectionState}
+							setSelectedAnswers={setSelectedAnswers}
 							clearSelectionFunction={clearSelectionFunction}
-							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-							onClick={onClick}
+							roundFeedbackData={currentRoundAnswerOverLayData}
+							continueBtnFunc={continueBtnFunc}
 							setIDKResponse={setIDKResponse}
 							smallerThan1000={smallerThan1000}
-							showOverlay={showFeedback}
-							setTotalAnswerConfidence={setTotalAnswerConfidence}
+							showFeedback={showFeedback}
+							submitMultiSelectAnswer={submitMultiSelectAnswer}
 						/>
 					)}
 					{questionInFocus?.questionType === 'Matching' && (
@@ -146,7 +145,7 @@ export default function AnswerArea({
 									<MultipleChoiceOverLay
 										questionInFocus={questionInFocus}
 										selectedAnswers={selectedAnswers}
-										setSelectedAnswers={selectedAnswersState}
+										setSelectedAnswers={setSelectedAnswers}
 										clearSelection={clearSelection}
 										setClearSelection={clearSelectionState}
 										currentRoundAnswerOverLayData={
@@ -161,7 +160,7 @@ export default function AnswerArea({
 								display={'flex'}
 								marginTop={'12px'}>
 								<Button
-									onClick={onClick}
+									onClick={continueBtnFunc}
 									variant={'ampSolid'}
 									w="150px"
 									isDisabled={!IDKResponse && !selectedAnswers.length}>
@@ -169,11 +168,7 @@ export default function AnswerArea({
 										{i18n(showFeedback ? 'continueBtnText' : 'submitBtnText')}
 									</Text>
 								</Button>
-								<Button
-									_hover={{ backgroundColor: 'white' }}
-									height="12px"
-									variant="ghost"
-									onClick={clearSelectionFunction}>
+								<Button variant="ghost" onClick={clearSelectionFunction}>
 									{!showFeedback && (
 										<Text fontSize={'14px'} color={'ampSecondary.500'}>
 											{i18n('clearSelection')}

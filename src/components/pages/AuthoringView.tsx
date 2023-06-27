@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
 	Box,
 	Container,
@@ -9,11 +10,13 @@ import {
 } from '@chakra-ui/react';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { LoaderFunction } from 'react-router';
+import { Cookies } from 'react-cookie-consent';
 import { requireUser } from '../../utils/user';
 import { getCourseList } from '../../services/authoring';
 import { getSubAccount } from '../../services/utils';
 import { json, useLoaderData } from 'react-router-dom';
 import CourseCard from '../ui/Authoring/CourseCard';
+import CourseFilter from '../ui/Authoring/CourseFilters';
 
 export const authoringLoader: LoaderFunction = async () => {
 	const user = requireUser();
@@ -33,8 +36,18 @@ export const authoringLoader: LoaderFunction = async () => {
 
 const AuthoringView = () => {
 	const { courseList } = useLoaderData() as any;
+	const [listView, setListView] = useState<boolean>(
+		Boolean(Cookies.get('authoring_list_view')),
+	);
 
-	console.log(courseList);
+	const handleListFilter = () => {
+		setListView(!listView);
+		if (listView) {
+			Cookies.remove('authoring_list_view');
+		} else {
+			Cookies.set('authoring_list_view', 'true');
+		}
+	};
 
 	return (
 		<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingTop={6}>
@@ -48,14 +61,17 @@ const AuthoringView = () => {
 					<Heading>Courses</Heading>
 					<Button leftIcon={<PlusIcon />}>New Course</Button>
 				</Flex>
-				<Grid templateColumns="repeat(3, minmax(0, 1fr))" gap={6}>
+				<CourseFilter listView={listView} handleListView={handleListFilter} />
+				<Grid
+					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
+					gap={listView ? 2 : 6}>
 					{courseList.map((course: any) => (
 						<GridItem
 							colSpan={1}
 							w="100%"
 							color="inherit"
 							key={course.courseContentUid}>
-							<CourseCard {...course} />
+							<CourseCard {...course} listView={listView} />
 						</GridItem>
 					))}
 				</Grid>

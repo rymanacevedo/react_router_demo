@@ -1,95 +1,63 @@
-import { Box, Button, Divider, Fade, HStack } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Box, Button, Divider, Fade, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
+	Confidence,
 	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiSelect from './MultiSelect';
-import MultipleChoiceOverLay from './MultiSelectFeedback';
+import MultiSelectFeedback from './MultiSelectFeedback';
 
-export type MultipleCorrectProps = {
+type Props = {
 	questionInFocus: QuestionInFocus;
 	selectedAnswers: SelectedAnswer[];
-	updateSelectedAnswersState: (
+	setSelectedAnswers: (
 		value:
 			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
 			| SelectedAnswer[],
 	) => void;
-	clearSelection: boolean;
-	clearSelectionState: (
-		value: ((prevState: boolean) => boolean) | boolean,
-	) => void;
 	clearSelectionFunction: () => void;
-	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
-	onClick: () => void;
+	roundFeedbackData: CurrentRoundAnswerOverLayData;
+	continueBtnFunc: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
 	smallerThan1000: boolean;
-	showOverlay: boolean;
-	setTotalAnswerConfidence: (value: string) => void;
+	showFeedback: boolean;
+	submitMultiSelectAnswer: (s: SelectedAnswer[], c: Confidence) => void;
 };
 
 const MultipleCorrect = ({
 	questionInFocus,
 	selectedAnswers,
-	updateSelectedAnswersState,
-	clearSelection,
-	clearSelectionState,
+	setSelectedAnswers,
 	clearSelectionFunction,
-	currentRoundAnswerOverLayData,
-	onClick,
+	roundFeedbackData,
+	continueBtnFunc,
 	setIDKResponse,
 	smallerThan1000,
-	showOverlay,
-	setTotalAnswerConfidence,
-}: MultipleCorrectProps) => {
+	showFeedback,
+	submitMultiSelectAnswer,
+}: Props) => {
 	const { t: i18n } = useTranslation();
-
-	const [submitted, setSubmitted] = useState(false);
-
-	const handleSubmission = (confidence: string) => {
-		if (confidence === 'IDK') {
-			setTotalAnswerConfidence('NotSure');
-			setSubmitted(true);
-		} else if (confidence === 'UNSURE') {
-			const selectedAnswersWithConfidence = selectedAnswers.map((answer) => {
+	const handleSubmission = (confidence: Confidence) => {
+		if (confidence === Confidence.NA) {
+			submitMultiSelectAnswer(selectedAnswers, confidence);
+		} else {
+			const s: SelectedAnswer[] = selectedAnswers.map((answer) => {
 				return {
 					...answer,
-					confidence: 50,
+					confidence: confidence === Confidence.PartSure ? 50 : 100,
 				};
 			});
-			updateSelectedAnswersState(selectedAnswersWithConfidence);
-			setTotalAnswerConfidence('PartSure');
-			setSubmitted(true);
-		} else if (confidence === 'SURE') {
-			const selectedAnswersWithConfidence = selectedAnswers.map((answer) => {
-				return {
-					...answer,
-					confidence: 100,
-				};
-			});
-
-			updateSelectedAnswersState(selectedAnswersWithConfidence);
-			setTotalAnswerConfidence('Sure');
-			setSubmitted(true);
+			submitMultiSelectAnswer(s, confidence);
 		}
 	};
-
-	const handleClearSelection = () => {
-		return clearSelectionFunction();
-	};
-
-	useEffect(() => {
-		if (submitted) {
-			onClick();
-		}
-	}, [submitted]);
 
 	return (
 		<Box
 			style={{
 				marginTop: smallerThan1000 ? '10px' : '0px',
+				maxWidth: '700px',
 			}}
 			alignItems="stretch"
 			flex={1}
@@ -101,63 +69,59 @@ const MultipleCorrect = ({
 			borderRadius={24}
 			px="72px"
 			py="44px">
-			{!showOverlay ? (
-				//Matching
-				//MultipleChoice
-				//MultipleCorrect
-				<Fade in={!showOverlay}>
+			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
+			{!showFeedback ? (
+				<Fade in={!showFeedback}>
 					<MultiSelect
 						questionInFocus={questionInFocus}
 						selectedAnswers={selectedAnswers}
-						setSelectedAnswers={updateSelectedAnswersState}
+						setSelectedAnswers={setSelectedAnswers}
 						setIDKResponse={setIDKResponse}
 					/>
 				</Fade>
 			) : (
-				<Fade in={showOverlay}>
-					{' '}
-					<MultipleChoiceOverLay
+				<Fade in={showFeedback}>
+					<MultiSelectFeedback
 						questionInFocus={questionInFocus}
-						selectedAnswers={selectedAnswers}
-						setSelectedAnswers={updateSelectedAnswersState}
-						clearSelection={clearSelection}
-						setClearSelection={clearSelectionState}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						roundFeedbackData={roundFeedbackData}
 					/>
 				</Fade>
 			)}
 			<Divider marginTop="43px" />
-			<HStack marginTop={3} spacing={6} w="100%">
-				{/* //TO-DO: investigate buttons shifting when specific widths removed */}
-				<Button
-					onClick={() => handleSubmission('IDK')}
-					variant={'ampOutline'}
-					isDisabled={Boolean(selectedAnswers.length)}
-					w="140px">
-					{i18n('iDontKnow')}
-				</Button>
-				<Button
-					onClick={() => handleSubmission('UNSURE')}
-					variant={'ampSolid'}
-					bg="ampSecondary.500"
-					isDisabled={Boolean(!selectedAnswers.length)}
-					w="132px">
-					{i18n('iAmUnsure')}
-				</Button>
-				<Button
-					onClick={() => handleSubmission('SURE')}
-					variant={'ampSolid'}
-					isDisabled={Boolean(!selectedAnswers.length)}
-					w="114px">
-					{i18n('iAmSure')}
-				</Button>
-				<Button
-					onClick={handleClearSelection}
-					variant="link"
-					isDisabled={Boolean(!selectedAnswers.length)}
-					w="114px">
-					{i18n('clearSelectionPlural')}
-				</Button>
+			<HStack
+				marginTop={3}
+				spacing={6}
+				w="100%"
+				justifyContent={showFeedback ? 'flex-end' : undefined}>
+				{!showFeedback ? (
+					<>
+						<Button
+							onClick={() => handleSubmission(Confidence.NA)}
+							variant={'ampOutline'}
+							isDisabled={Boolean(selectedAnswers.length)}>
+							{i18n('iDontKnow')}
+						</Button>
+						<Button
+							onClick={() => handleSubmission(Confidence.PartSure)}
+							bg="ampSecondary.500"
+							isDisabled={Boolean(!selectedAnswers.length)}>
+							{i18n('iAmUnsure')}
+						</Button>
+						<Button
+							onClick={() => handleSubmission(Confidence.Sure)}
+							isDisabled={Boolean(!selectedAnswers.length)}>
+							{i18n('iAmSure')}
+						</Button>
+						<Button
+							onClick={clearSelectionFunction}
+							variant="ghost"
+							isDisabled={Boolean(!selectedAnswers.length)}>
+							{i18n('clearSelectionPlural')}
+						</Button>
+					</>
+				) : (
+					<Button onClick={continueBtnFunc}>{i18n('continueBtnText')}</Button>
+				)}
 			</HStack>
 		</Box>
 	);

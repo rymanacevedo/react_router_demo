@@ -226,7 +226,7 @@ const StaticAssignmentView = ({
 												currentRoundAnswerOverLayData
 											}
 											selectedAnswers={selectedAnswers}
-											selectedAnswersState={setSelectedAnswers}
+											setSelectedAnswers={setSelectedAnswers}
 											ref={answerRef.current}
 											tabIndex="0"
 										/>

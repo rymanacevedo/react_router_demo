@@ -1,10 +1,9 @@
-import { Answer } from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceAnswers';
-
 export type SelectedAnswer = {
 	answerId: number | string;
 	confidence?: number;
 	selectedOptionId: number;
 	self: any;
+	answerConfidence?: string;
 };
 
 export type ApiRes = {
@@ -24,7 +23,7 @@ export type AnswerHistory = {
 
 export type AnswerData = {
 	answerDate: string;
-	answerList: Answer[];
+	answerList: SelectedAnswer[];
 	avatarMessage: any;
 	completionAlgorithmType: any;
 	completionPercentage: number;
@@ -47,6 +46,27 @@ export type AnswerData = {
 	unseenCount: number;
 };
 
+export type QuestionInFocusAnswer = {
+	answerRc: string;
+	displayOrder: number;
+	id: number;
+	isCorrect: boolean;
+	optionRc: string | null;
+	publishedAnswerId: number | string;
+	publishedAnswerUri: string;
+	publishedOptionId: number | null;
+	publishedOptionUri: string | null;
+	publishedQuestionUri: string;
+	questionId: number;
+	questionVersionId: number;
+	selected: boolean;
+	selectedOptionId: number | null;
+	selectedOptionUri: string | null;
+	self: string;
+	uid: string;
+	versionId: number;
+};
+
 export type QuestionInFocus = {
 	id: string | number;
 	questionRc: string;
@@ -56,26 +76,7 @@ export type QuestionInFocus = {
 	explanationRc: string | null;
 	moreInformationRc: string | null;
 	publishedQuestionId: number | string;
-	answerList: {
-		answerRc: string;
-		displayOrder: number;
-		id: number;
-		isCorrect: boolean;
-		optionRc: string | null;
-		publishedAnswerId: number | string;
-		publishedAnswerUri: string;
-		publishedOptionId: number | null;
-		publishedOptionUri: string | null;
-		publishedQuestionUri: string;
-		questionId: number;
-		questionVersionId: number;
-		selected: boolean;
-		selectedOptionId: number | null;
-		selectedOptionUri: string | null;
-		self: string;
-		uid: string;
-		versionId: number;
-	}[];
+	answerList: QuestionInFocusAnswer[];
 	answered: boolean;
 	confidence: Confidence | null;
 	correctness: Correctness | null;
@@ -210,6 +211,7 @@ export type ModuleData = {
 export enum Confidence {
 	NA = 'NA',
 	NotSure = 'NotSure',
+	PartSure = 'PartSure',
 	OneAnswerPartSure = 'OneAnswerPartSure',
 	Sure = 'Sure',
 }

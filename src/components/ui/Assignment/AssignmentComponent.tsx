@@ -78,8 +78,6 @@ export default function AssignmentComponent({
 		useState<boolean>(true);
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt, setTextPrompt] = useState<string>('');
-	const [totalAnswerConfidence, setTotalAnswerConfidence] =
-		useState<string>('');
 	const [answerData, setAnswerData] = useState<AnswerData>({
 		answerDate: '',
 		answerList: [],
@@ -143,7 +141,7 @@ export default function AssignmentComponent({
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
 		useState<CurrentRoundAnswerOverLayData>(initState);
-	const [showOverlay, setShowOverlay] = useState(false);
+	const [showFeedback, setShowFeedback] = useState(false);
 	const [questionData, setQuestionData] = useState<ModuleData>({
 		accountUri: '',
 		children: null,
@@ -200,8 +198,8 @@ export default function AssignmentComponent({
 				handleMessage('FIVE_CONSEC_SC', true);
 				handleMessage('SIX_DK_IN_ROUND', true);
 				handleMessage('FULL_ROUND_OF_SC', true);
-				setIsSureAndCorrectAllRound(false);
 				handleMessage('FIVE_FAST_ANSWERS', true);
+				setIsSureAndCorrectAllRound(false);
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {
@@ -213,7 +211,8 @@ export default function AssignmentComponent({
 				} else if (
 					currentRoundQuestionsResponse.questionList.every(
 						(question: QuestionInFocus) =>
-							question.correctness === Correctness.Correct,
+							question.correctness === Correctness.Correct &&
+							question.confidence === Confidence.Sure,
 					)
 				) {
 					revSkipRes = await getCurrentRoundSkipReview(assignmentKey);
@@ -261,7 +260,7 @@ export default function AssignmentComponent({
 	const getNextTask = () => {
 		setIsToastOpen(false);
 		clearSelectionButtonFunc();
-		setShowOverlay(false);
+		setShowFeedback(false);
 		fetchModuleQuestionsData().then(() => {
 			setCurrentRoundAnswerOverLayData(initState);
 			startTimer();
@@ -274,19 +273,30 @@ export default function AssignmentComponent({
 	}, []);
 
 	const submitAnswer = () => {
-		setAnswerData((answerDataArg: any) => {
+		setAnswerData((answerDataArg: AnswerData) => {
 			return {
 				...answerDataArg,
 				answerDate: findDateData(),
 				questionSeconds: questionSecondsRef.current,
 				answerList: [...selectedAnswers],
-				confidence: totalAnswerConfidence,
+			};
+		});
+	};
+
+	const submitMultiSelectAnswer = (s: SelectedAnswer[], c: Confidence) => {
+		setAnswerData((answerDataArg: AnswerData) => {
+			return {
+				...answerDataArg,
+				answerDate: findDateData(),
+				questionSeconds: questionSecondsRef.current,
+				answerList: [...s],
+				confidence: c,
 			};
 		});
 	};
 
 	const continueBtnFunc = () => {
-		if (showOverlay) {
+		if (showFeedback) {
 			if (
 				currentRoundQuestionListData?.totalQuestionCount ===
 				currentRoundQuestionListData?.masteredQuestionCount
@@ -355,7 +365,7 @@ export default function AssignmentComponent({
 				}
 
 				setCurrentRoundAnswerOverLayData(feedbackData);
-				setShowOverlay(true);
+				setShowFeedback(true);
 				questionSecondsRef.current = 0;
 				stopTimer();
 
@@ -556,18 +566,18 @@ export default function AssignmentComponent({
 								onClose={onClose}
 								smallerThan1000={isSmallerThan1000}
 								initialFocusRef={initRef}
-								showFeedback={showOverlay}
+								showFeedback={showFeedback}
 								questionInFocus={questionInFocus}
 								selectedAnswers={selectedAnswers}
-								selectedAnswersState={setSelectedAnswers}
+								setSelectedAnswers={setSelectedAnswers}
 								clearSelection={clearSelection}
 								clearSelectionState={setClearSelection}
 								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								onClick={continueBtnFunc}
+								continueBtnFunc={continueBtnFunc}
 								clearSelectionFunction={clearSelectionButtonFunc}
 								IDKResponse={IDKResponse}
 								setIDKResponse={setIDKResponse}
-								setTotalAnswerConfidence={setTotalAnswerConfidence}
+								submitMultiSelectAnswer={submitMultiSelectAnswer}
 							/>
 						</Stack>
 						<ProgressMenu
