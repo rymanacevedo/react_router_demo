@@ -4,9 +4,18 @@ import {
 	Button,
 	Container,
 	Divider,
+	Flex,
 	Heading,
 	HStack,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Stack,
+	Text,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard, {
@@ -33,6 +42,7 @@ import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 import useInterval from '../hooks/useInterval';
+import RedIcon from '../components/ui/Icons/RedIcon';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -50,6 +60,7 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 
 export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
 		assignmentData: AssignmentData;
 		moduleData: ModuleData;
@@ -90,6 +101,7 @@ export default function TimedAssessment() {
 	useEffect(() => {
 		if (seconds === 0) {
 			startTimer(false);
+			onOpen();
 		}
 	}, [seconds]);
 
@@ -254,6 +266,28 @@ export default function TimedAssessment() {
 					</Stack>
 				</HStack>
 			</Container>
+			<Modal
+				size="lg"
+				closeOnOverlayClick={false}
+				isOpen={isOpen}
+				onClose={onClose}
+				isCentered>
+				<ModalOverlay />
+				<ModalContent p={6}>
+					<Flex alignItems="center" justify="center">
+						<RedIcon />
+						<Box>
+							<ModalHeader fontSize="lg">You have run out of time!</ModalHeader>
+							<ModalBody>
+								<Text>Your practice text is complete</Text>
+							</ModalBody>
+						</Box>
+					</Flex>
+					<ModalFooter mr="auto" ml="auto">
+						<Button>Continue to results</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</main>
 	);
 }

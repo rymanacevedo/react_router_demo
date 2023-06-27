@@ -1,6 +1,4 @@
-import React from 'react';
-
-const GreenIcon = (): React.ReactElement<any, any> => {
+const GreenIcon = () => {
 	return (
 		<svg
 			width="48"
