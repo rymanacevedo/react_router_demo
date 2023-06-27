@@ -12,12 +12,13 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData } from 'react-router';
+import { CourseStatsData } from '../../lib/validator';
 import { formatTime, roundNumber } from '../../utils/logic';
 
 const CourseProgress = () => {
 	const { t: i18n } = useTranslation();
 
-	const { courseStats } = useLoaderData() as any;
+	const { courseStats } = useLoaderData() as CourseStatsData;
 
 	return (
 		<>

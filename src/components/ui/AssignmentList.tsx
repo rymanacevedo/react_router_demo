@@ -27,7 +27,11 @@ import {
 } from '../../services/learning';
 import { requireUser } from '../../utils/user';
 import { getSubAccount, serverError } from '../../services/utils';
-import { AssignmentData, Curriculum, RootData } from '../../lib/validator';
+import {
+	AssignmentData,
+	CourseAssignmentData,
+	Curriculum,
+} from '../../lib/validator';
 
 export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 	const selectedCourseKey = params.selectedCourseKey!;
@@ -67,7 +71,7 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
-	const { assignments } = useLoaderData() as RootData | any;
+	const { assignments } = useLoaderData() as CourseAssignmentData;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const fetcher = useFetcher();
 	const navigate = useNavigate();
