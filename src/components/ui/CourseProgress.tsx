@@ -1,10 +1,10 @@
 import {
 	Box,
 	Divider,
+	Heading,
 	Table,
 	Tbody,
 	Td,
-	Text,
 	Th,
 	Thead,
 	Tr,
@@ -30,9 +30,11 @@ const CourseProgress = () => {
 				p={4}
 				marginLeft="36px"
 				marginTop="10px">
-				<Text fontSize="xl" fontWeight={600} marginLeft="8px" marginTop="8px">
+				<Heading size={'lg'} marginLeft={'8px'} marginTop={'8px'}>
+					<VisuallyHidden as="caption">learning stats</VisuallyHidden>
 					{i18n('courseProgress')}
-				</Text>
+				</Heading>
+
 				<Table variant="unstyled" size="sm">
 					<Thead>
 						<Tr>
@@ -47,7 +49,6 @@ const CourseProgress = () => {
 					</Thead>
 					<Divider width="225%" position="sticky" marginTop="8px" />
 					<Tbody>
-						<VisuallyHidden>learning stats</VisuallyHidden>
 						<Tr>
 							<Td fontSize="md">{i18n('progress')}</Td>
 							<Td textAlign="right" fontSize="md">
