@@ -1,6 +1,4 @@
-import React from 'react';
-
-const RedIcon: React.FC = () => {
+const RedIcon = () => {
 	return (
 		<svg
 			width="72"

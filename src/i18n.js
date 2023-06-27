@@ -272,6 +272,9 @@ const resources = {
 			practiceTest: 'Practice Test',
          flagForReview: 'Flag for review',
          flaggedForReview: 'Flagged for review',
+         continueToResults: 'Continue to results',
+         yourPracticeTestIsComplete: 'Your practice test is complete',
+         youHaveRunOutOfTime: 'You have run out of time!',
 			//////////////////////////////////////////////
 			//   ReviewView.tsx
 			//////////////////////////////////////////////

@@ -4,9 +4,18 @@ import {
 	Button,
 	Container,
 	Divider,
+	Flex,
 	Heading,
 	HStack,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Stack,
+	Text,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard, {
@@ -19,7 +28,7 @@ import {
 	getFullModuleWithQuestions,
 } from '../services/learning';
 import { getSubAccount } from '../services/utils';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import {
 	Confidence,
 	ModuleData,
@@ -32,6 +41,8 @@ import { findQuestionInFocus } from '../components/pages/AssignmentView/findQues
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
+import useInterval from '../hooks/useInterval';
+import RedIcon from '../components/ui/Icons/RedIcon';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -44,22 +55,61 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 		subAccount,
 		assignmentUid,
 	);
-	return { assignmentData, moduleData, moduleInfoAndQuestions, roundData };
+	return {
+		assignmentData,
+		moduleData,
+		moduleInfoAndQuestions,
+		roundData,
+	};
 };
 
 export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
-	const [questionInFocus, setQuestionInFocus] =
-		useState<QuestionInFocus | null>(null);
-	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
-	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
-
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
 		assignmentData: AssignmentData;
 		moduleData: ModuleData;
 		moduleInfoAndQuestions: ModuleData;
 		roundData: RoundData;
 	};
+	const navigate = useNavigate();
+	const [questionInFocus, setQuestionInFocus] =
+		useState<QuestionInFocus | null>(null);
+	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
+	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
+
+	const [seconds, setSeconds] = useState<number | null>(
+		roundData.timeRemaining,
+	);
+
+	const timerFunc = () => {
+		setSeconds((prevSeconds) => {
+			if (prevSeconds === null) {
+				return null;
+			}
+			if (prevSeconds === 0) {
+				return prevSeconds;
+			}
+
+			return prevSeconds - 1;
+		});
+	};
+
+	const startTimer = useInterval(timerFunc, 1000);
+
+	useEffect(() => {
+		startTimer(true);
+		return () => {
+			startTimer(false); // Stop the timer when the component unmounts
+		};
+	}, []);
+
+	useEffect(() => {
+		if (seconds === 0) {
+			startTimer(false);
+			onOpen();
+		}
+	}, [seconds]);
 
 	const handleFlagForReview = () => {
 		if (questionInFocus) {
@@ -87,6 +137,10 @@ export default function TimedAssessment() {
 		);
 	};
 
+	const handleResultsNavigation = () => {
+		navigate('results');
+	};
+
 	useEffect(() => {
 		if (!questionInFocus) {
 			setQuestionInFocus(
@@ -104,7 +158,10 @@ export default function TimedAssessment() {
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
-				<PracticeTestHeader text={moduleInfoAndQuestions.name} />
+				<PracticeTestHeader
+					text={moduleInfoAndQuestions.name}
+					timeRemaining={seconds}
+				/>
 				<HStack justify="center" align="space-between">
 					<Stack
 						w="100%"
@@ -219,6 +276,33 @@ export default function TimedAssessment() {
 					</Stack>
 				</HStack>
 			</Container>
+			<Modal
+				size="lg"
+				closeOnOverlayClick={false}
+				isOpen={isOpen}
+				onClose={onClose}
+				onEsc={handleResultsNavigation}
+				isCentered>
+				<ModalOverlay />
+				<ModalContent p={6}>
+					<Flex alignItems="center" justify="center">
+						<RedIcon />
+						<Box>
+							<ModalHeader fontSize="lg">
+								{i18n('youHaveRunOutOfTime')}
+							</ModalHeader>
+							<ModalBody>
+								<Text> {i18n('yourPracticeTestIsComplete')}</Text>
+							</ModalBody>
+						</Box>
+					</Flex>
+					<ModalFooter mr="auto" ml="auto">
+						<Button onClick={handleResultsNavigation}>
+							{i18n('continueToResults')}
+						</Button>
+					</ModalFooter>
+				</ModalContent>
+			</Modal>
 		</main>
 	);
 }
