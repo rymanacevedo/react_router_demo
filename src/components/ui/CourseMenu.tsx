@@ -41,7 +41,7 @@ const CourseMenu = ({
 						leftIcon={<ChevronDownIcon />}
 						as={Button}
 						variant="ampOutline">
-						<Text>{i18n('changeCourse')}</Text>
+						{i18n('changeCourse')}
 					</MenuButton>
 					<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
 						<MenuOptionGroup
