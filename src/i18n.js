@@ -286,7 +286,9 @@ const resources = {
 			startingKnowledge: 'Starting Knowledge',
 			refreshersTaken: 'Refreshers Taken',
 			peers: 'Peers',
-			you: 'You'
+			you: 'You',
+			learnerStatsTable: 'learning stats table',
+			learningStats: 'learning stats'
 		},
 	},
 	fr: {

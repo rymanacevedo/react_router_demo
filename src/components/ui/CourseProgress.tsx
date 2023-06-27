@@ -3,6 +3,7 @@ import {
 	Divider,
 	Heading,
 	Table,
+	TableCaption,
 	Tbody,
 	Td,
 	Th,
@@ -35,10 +36,13 @@ const CourseProgress = () => {
 				</Heading>
 
 				<Table variant="unstyled" size="sm">
+					<VisuallyHidden>
+						<TableCaption>{i18n('learningStatsTable')}</TableCaption>
+					</VisuallyHidden>
 					<Thead>
 						<Tr>
 							<Th width="30%">
-								<VisuallyHidden as="caption">learning stats</VisuallyHidden>
+								<VisuallyHidden>{i18n('learningStats')}</VisuallyHidden>
 							</Th>
 							<Th width="225%" textAlign="right" textTransform="capitalize">
 								{i18n('you')}
