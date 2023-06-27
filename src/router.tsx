@@ -53,6 +53,7 @@ import AuthoringView, {
 	authoringLoader,
 } from './components/pages/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
+import { Flex } from '@chakra-ui/react';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -141,10 +142,10 @@ const routesJSX = (
 					loader={assignmentListLoader}
 					path=":selectedCourseKey"
 					element={
-						<>
+						<Flex>
 							<AssignmentList />
 							<CourseProgress />
-						</>
+						</Flex>
 					}
 				/>
 			</Route>

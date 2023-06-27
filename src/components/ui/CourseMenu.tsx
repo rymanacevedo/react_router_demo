@@ -33,33 +33,31 @@ const CourseMenu = ({
 	};
 
 	return (
-		<>
-			<Flex alignItems="center">
-				<Menu isLazy>
-					<MenuButton
-						style={{ left: '480px' }}
-						leftIcon={<ChevronDownIcon />}
-						as={Button}
-						variant="ampOutline">
-						{i18n('changeCourse')}
-					</MenuButton>
-					<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
-						<MenuOptionGroup
-							onChange={handleCourseChange}
-							defaultChecked={true}
-							defaultValue={selectedCourseKey ?? ''}>
-							{courses.map((course) => (
-								<MenuItemOption key={course.key} value={course.key}>
-									<Text isTruncated maxW="300px">
-										{course.name}
-									</Text>
-								</MenuItemOption>
-							))}
-						</MenuOptionGroup>
-					</MenuList>
-				</Menu>
-			</Flex>
-		</>
+		<Flex alignItems="center">
+			<Menu isLazy>
+				<MenuButton
+					style={{ left: '480px' }}
+					leftIcon={<ChevronDownIcon />}
+					as={Button}
+					variant="ampOutline">
+					{i18n('changeCourse')}
+				</MenuButton>
+				<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
+					<MenuOptionGroup
+						onChange={handleCourseChange}
+						defaultChecked={true}
+						defaultValue={selectedCourseKey ?? ''}>
+						{courses.map((course) => (
+							<MenuItemOption key={course.key} value={course.key}>
+								<Text isTruncated maxW="300px">
+									{course.name}
+								</Text>
+							</MenuItemOption>
+						))}
+					</MenuOptionGroup>
+				</MenuList>
+			</Menu>
+		</Flex>
 	);
 };
 

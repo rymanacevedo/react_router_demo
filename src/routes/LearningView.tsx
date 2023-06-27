@@ -1,4 +1,4 @@
-import { Container, Flex, Heading, HStack } from '@chakra-ui/react';
+import { Container, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import CourseMenu from '../components/ui/CourseMenu';
 import { LoaderFunction } from 'react-router';
@@ -146,9 +146,7 @@ const LearningView = () => {
 					courseUpdaterToggle={fetcher}
 				/>
 			</HStack>
-			<Flex>
-				<Outlet />
-			</Flex>
+			<Outlet />
 		</Container>
 	);
 };
