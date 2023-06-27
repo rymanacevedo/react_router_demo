@@ -145,7 +145,7 @@ export const getCurrentRound = async (
 export const getAnswerHistory = async (
 	user: User,
 	subAccount: string,
-	assignmentKey: string | undefined,
+	assignmentKey: string,
 ): Promise<{ data: any; response: Response }> => {
 	const url = `/v2/assignments/${assignmentKey}/answer-history?subaccount=${subAccount}`;
 
