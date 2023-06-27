@@ -60,21 +60,18 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 		moduleData,
 		moduleInfoAndQuestions,
 		roundData,
-		assignmentUid,
 	};
 };
 
 export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { moduleInfoAndQuestions, roundData, assignmentUid } =
-		useLoaderData() as {
-			assignmentData: AssignmentData;
-			moduleData: ModuleData;
-			moduleInfoAndQuestions: ModuleData;
-			roundData: RoundData;
-			assignmentUid: string;
-		};
+	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
+		assignmentData: AssignmentData;
+		moduleData: ModuleData;
+		moduleInfoAndQuestions: ModuleData;
+		roundData: RoundData;
+	};
 	const navigate = useNavigate();
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
@@ -291,15 +288,18 @@ export default function TimedAssessment() {
 					<Flex alignItems="center" justify="center">
 						<RedIcon />
 						<Box>
-							<ModalHeader fontSize="lg">You have run out of time!</ModalHeader>
+							<ModalHeader fontSize="lg">
+								{' '}
+								{i18n('youHaveRunOutOfTime')}
+							</ModalHeader>
 							<ModalBody>
-								<Text>Your practice text is complete</Text>
+								<Text> {i18n('yourPracticeTestIsComplete')}</Text>
 							</ModalBody>
 						</Box>
 					</Flex>
 					<ModalFooter mr="auto" ml="auto">
 						<Button onClick={handleResultsNavigation}>
-							Continue to results
+							{i18n('continueToResults')}
 						</Button>
 					</ModalFooter>
 				</ModalContent>
