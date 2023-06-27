@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { ampTheme } from './css/theme';
@@ -10,8 +10,10 @@ import { router } from './router';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-	<ChakraProvider theme={ampTheme}>
-		<Fonts />
-		<RouterProvider router={router} />
-	</ChakraProvider>,
+	<StrictMode>
+		<ChakraProvider theme={ampTheme}>
+			<Fonts />
+			<RouterProvider router={router} />
+		</ChakraProvider>
+	</StrictMode>,
 );

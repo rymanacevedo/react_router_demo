@@ -104,7 +104,8 @@ export type RoundData = {
 	misinformedCount: any;
 	roundNumber: number;
 	roundPhase: string;
-	unseenCount: any;
+	unseenCount: number;
+	timeRemaining: number | null;
 	id: number | string;
 	questionList: QuestionInFocus[];
 	seenCount: number | any;
