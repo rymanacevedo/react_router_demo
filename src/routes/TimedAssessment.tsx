@@ -32,6 +32,7 @@ import { findQuestionInFocus } from '../components/pages/AssignmentView/findQues
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
+import useInterval from '../hooks/useInterval';
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -49,17 +50,48 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 
 export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
-	const [questionInFocus, setQuestionInFocus] =
-		useState<QuestionInFocus | null>(null);
-	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
-	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
-
 	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
 		assignmentData: AssignmentData;
 		moduleData: ModuleData;
 		moduleInfoAndQuestions: ModuleData;
 		roundData: RoundData;
 	};
+	const [questionInFocus, setQuestionInFocus] =
+		useState<QuestionInFocus | null>(null);
+	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
+	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
+
+	const [seconds, setSeconds] = useState<number | null>(
+		roundData.timeRemaining,
+	);
+
+	const timerFunc = () => {
+		setSeconds((prevSeconds) => {
+			if (prevSeconds === null) {
+				return null;
+			}
+			if (prevSeconds === 0) {
+				return prevSeconds;
+			}
+
+			return prevSeconds - 1;
+		});
+	};
+
+	const startTimer = useInterval(timerFunc, 1000);
+
+	useEffect(() => {
+		startTimer(true);
+		return () => {
+			startTimer(false); // Stop the timer when the component unmounts
+		};
+	}, []);
+
+	useEffect(() => {
+		if (seconds === 0) {
+			startTimer(false);
+		}
+	}, [seconds]);
 
 	const handleFlagForReview = () => {
 		if (questionInFocus) {
@@ -106,7 +138,7 @@ export default function TimedAssessment() {
 				overflowX={'hidden'}>
 				<PracticeTestHeader
 					text={moduleInfoAndQuestions.name}
-					roundData={roundData}
+					timeRemaining={seconds}
 				/>
 				<HStack justify="center" align="space-between">
 					<Stack
