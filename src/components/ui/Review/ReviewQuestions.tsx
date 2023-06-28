@@ -208,7 +208,7 @@ const ReviewQuestions = ({
 
 									<Heading
 										as="h3"
-										size="lg"
+										size="md"
 										color="ampSuccess.500"
 										mt={4}
 										mb={4}>
