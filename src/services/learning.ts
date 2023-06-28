@@ -110,14 +110,23 @@ export const getFullModuleWithQuestions = async (
 	user: User,
 	subAccount: string,
 	assignmentKey: string | undefined,
+	answerKey?: boolean,
+	deep: boolean = true,
 ) => {
 	const { assignmentData, moduleData } = await getModuleContent(
 		user,
 		subAccount,
 		assignmentKey,
 	);
+
+	let url = `${moduleData.self}?deep=${String(deep)}&subaccount=${subAccount}`;
+
+	if (answerKey) {
+		url += `&answerKey=${String(answerKey)}`;
+	}
+
 	const { data: moduleInfoAndQuestions } = await authenticatedFetch<ModuleData>(
-		`${moduleData.self}?deep=true&subaccount=${subAccount}`,
+		url,
 		user.sessionKey,
 	);
 
@@ -146,7 +155,7 @@ export const getCurrentRound = async (
 export const getAnswerHistory = async (
 	user: User,
 	subAccount: string,
-	assignmentKey: string | undefined,
+	assignmentKey: string,
 ): Promise<{ data: any; response: Response }> => {
 	const url = `/v2/assignments/${assignmentKey}/answer-history?subaccount=${subAccount}`;
 

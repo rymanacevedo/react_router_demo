@@ -1,75 +1,60 @@
-import {
-	Box,
-	Button,
-	Container,
-	Heading,
-	HStack,
-	Spacer,
-	Stack,
-	Text,
-	VStack,
-} from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Heading, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import useModuleContentService from '../../services/coursesServices/useModuleContentService';
-import useAnswerHistoryService from '../../services/useAnswerHistoryService';
+import { json, useLoaderData, useNavigate } from 'react-router-dom';
 import {
 	createReviewQuestionsArray,
 	sortReviewQuestions,
 } from '../../utils/logic';
-import LoadingReview from '../ui/loading/LoadingReview';
 import ReviewQuestions from '../ui/Review/ReviewQuestions';
 import {
-	ApiRes,
 	Item,
 	LearningUnit,
 	LearningUnitQuestion,
 	ModuleData,
 } from './AssignmentView/AssignmentTypes';
 import { useQuizContext } from '../../hooks/useQuizContext';
+import { LoaderFunction } from 'react-router';
+import { requireUser } from '../../utils/user';
+import { getSubAccount } from '../../services/utils';
+import {
+	getAnswerHistory,
+	getFullModuleWithQuestions,
+} from '../../services/learning';
+
+export const reviewLoader: LoaderFunction = async ({ params }) => {
+	const assignmentKey = params.assignmentKey!;
+	const user = requireUser();
+	const { subAccount } = getSubAccount(user);
+	const { data } = await getAnswerHistory(user, subAccount, assignmentKey);
+
+	const { moduleInfoAndQuestions } = await getFullModuleWithQuestions(
+		user,
+		subAccount,
+		assignmentKey,
+		true,
+	);
+
+	return json({ data: data.items, assignmentKey, moduleInfoAndQuestions });
+};
 
 const Review = () => {
+	const { assignmentKey, data, moduleInfoAndQuestions } = useLoaderData() as {
+		assignmentKey: string;
+		data: Item[];
+		moduleInfoAndQuestions: ModuleData;
+	};
 	const { message } = useQuizContext();
-	const { getAnswerHistory } = useAnswerHistoryService();
-	const [answerHistory, setAnswerHistory] = useState<Item[] | null>(null);
-	const [questionData, setQuestionData] = useState<ModuleData>({
-		accountUri: '',
-		children: null,
-		customizations: [],
-		descriptionRc: null,
-		id: 0,
-		introductionRc: null,
-		isAllowTimeIncrease: false,
-		isCustomMessagesEnabled: false,
-		isRecommendedModulesEnabled: false,
-		key: '',
-		kind: '',
-		learningUnits: [],
-		locale: '',
-		name: '',
-		outroButtonText: null,
-		outroLink: null,
-		outroRc: null,
-		ownerAccountUid: '',
-		publishedVersionId: null,
-		self: '',
-		timeAllotted: null,
-		timedAssessment: false,
-		uid: '',
-		versionId: 0,
-	});
+
 	const [reviewQuestions, setReviewQuestions] = useState<
 		LearningUnitQuestion[]
 	>([]);
+
 	const { t: i18n } = useTranslation();
-	const { assignmentKey } = useParams();
-	const { fetchModuleQuestions } = useModuleContentService();
 	const navigate = useNavigate();
 	const [expandAll, setExpandAll] = useState(false);
 	const [index, setIndex] = useState<number[]>([]);
 	const allExpandedIndices = createReviewQuestionsArray(reviewQuestions.length);
-	const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 	const handleExpandAll = () => {
 		if (index.length === allExpandedIndices.length) {
@@ -106,22 +91,8 @@ const Review = () => {
 	};
 
 	useEffect(() => {
-		const fetchAnswerHistory = async () => {
-			let response: ApiRes = await getAnswerHistory(assignmentKey);
-			if (response) {
-				setAnswerHistory(response.items);
-			}
-		};
-		const fetchData = async () => {
-			let response = await fetchModuleQuestions(assignmentKey);
-			if (response) {
-				populateQuestions(response);
-				setQuestionData(response);
-			}
-		};
-		if (assignmentKey) {
-			fetchData();
-			fetchAnswerHistory();
+		if (moduleInfoAndQuestions) {
+			populateQuestions(moduleInfoAndQuestions);
 		}
 	}, [assignmentKey]);
 
@@ -129,8 +100,8 @@ const Review = () => {
 		navigate(`/learning/moduleIntro/${assignmentKey}`, {
 			state: {
 				review: true,
-				numberOfLearningUnits: questionData.learningUnits.length,
-				estimatedTimeToComplete: questionData.timeAllotted,
+				numberOfLearningUnits: moduleInfoAndQuestions.learningUnits.length,
+				estimatedTimeToComplete: moduleInfoAndQuestions.timeAllotted,
 			},
 		});
 	};
@@ -143,103 +114,67 @@ const Review = () => {
 	}, [index, allExpandedIndices]);
 
 	return (
-		<Container
-			style={{ maxWidth: '1464px' }}
-			id={'review'}
-			margin="0"
-			padding="0"
-			maxWidth={'100vw'}
-			overflowY={'auto'}
-			overflowX={'hidden'}
-			mx="auto">
-			<Stack
-				w="100%"
-				p="12px"
-				direction={['column', 'column', 'row', 'row', 'row', 'row']}
-				justifyContent={'center'}
-				alignItems={'center'}>
-				{questionData.learningUnits.length ? (
-					<Box
-						backgroundColor="white"
-						margin="6px"
-						boxShadow={isSafari ? 'none' : '2xl'}
-						w="100%"
-						overflow="hidden"
-						borderRadius={24}
-						p={'72px'}
-						display="flex"
-						flexDirection="column">
-						<Heading as="h1">{questionData.name}</Heading>
-						<Text
-							id="questionsBox"
-							marginTop={34}
-							marginLeft={3}
-							marginBottom={'12px'}
-							fontSize={28}
-							color={'#7E8A9B'}
-							position="relative">
-							{questionData.learningUnits.length} {i18n('questions')}
-							<HStack width="100%" justifyContent="flex-end">
-								<Spacer />
-								<Text
-									id="expandAllBox"
-									onClick={handleExpandAll}
-									color={'#257CB5'}
-									fontWeight={600}
-									fontSize={'16px'}
-									position="absolute"
-									right="385px"
-									top="50%"
-									variant="link"
-									_hover={{
-										cursor: 'pointer',
-									}}
-									transform="translateY(-50%)">
+		<Box as="main" id="review">
+			<Container maxWidth={1464} mr="auto" ml="auto">
+				<Flex
+					backgroundColor="ampWhite"
+					boxShadow="md"
+					borderRadius={24}
+					wrap="wrap"
+					p={18}>
+					<Box width="895px">
+						<Flex direction="column" basis="100%" flex={1}>
+							<Heading as="h1" mb={3}>
+								{moduleInfoAndQuestions.name}
+							</Heading>
+							<Flex align="center" justify="space-between">
+								<Text fontSize="lg" color="ampNeutral.600">
+									{moduleInfoAndQuestions.learningUnits.length}{' '}
+									{moduleInfoAndQuestions.learningUnits.length > 1
+										? i18n('questions')
+										: i18n('question')}
+								</Text>
+								<Button
+									variant="ghost"
+									colorScheme="ampSecondary"
+									onClick={handleExpandAll}>
 									{index.length === allExpandedIndices.length
 										? i18n('collapseAll')
 										: i18n('expandAll')}
-								</Text>
-							</HStack>
-						</Text>
-						<HStack justifyContent={'space-between'} alignItems={'flex-start'}>
-							<VStack>
-								<ReviewQuestions
-									expandAll={expandAll}
-									reviewQuestions={sortReviewQuestions(
-										reviewQuestions,
-										message,
-									)}
-									answerHistory={answerHistory}
-									onExpandAllChange={handleExpandAllChange}
-									index={index}
-									setIndex={setIndex}
-								/>
-							</VStack>
-							{questionData.introductionRc && (
-								<Box
-									style={{ marginTop: '10px' }}
-									id={'moduleBox'}
-									bg="ampNeutral.100"
-									minWidth={'400px'}
-									minHeight={'263px'}
-									borderRadius={12}
-									p="12px">
-									<h3>{i18n('moduleResourses')}</h3>
-									<Button
-										variant={'ampOutline'}
-										marginTop={'12px'}
-										onClick={handleViewModuleIntro}>
-										{i18n('viewModuleIntro')}
-									</Button>
-								</Box>
-							)}
-						</HStack>
+								</Button>
+							</Flex>
+
+							<ReviewQuestions
+								expandAll={expandAll}
+								reviewQuestions={sortReviewQuestions(reviewQuestions, message)}
+								answerHistory={data}
+								onExpandAllChange={handleExpandAllChange}
+								index={index}
+								setIndex={setIndex}
+							/>
+						</Flex>
 					</Box>
-				) : (
-					<LoadingReview />
-				)}
-			</Stack>
-		</Container>
+					<Flex direction="column" basis="100%" flex={1}>
+						{moduleInfoAndQuestions.introductionRc && (
+							<Box
+								bg="ampNeutral.100"
+								minWidth={'400px'}
+								minHeight={'263px'}
+								borderRadius={12}
+								p={3}>
+								<h3>{i18n('moduleResources')}</h3>
+								<Button
+									variant={'outline'}
+									marginTop={3}
+									onClick={handleViewModuleIntro}>
+									{i18n('viewModuleIntro')}
+								</Button>
+							</Box>
+						)}
+					</Flex>
+				</Flex>
+			</Container>
+		</Box>
 	);
 };
 

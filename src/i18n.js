@@ -255,7 +255,7 @@ const resources = {
 			viewModuleIntro: 'View module introduction',
 			letsBegin: "Let's begin",
 			returnToReview: 'Return to review',
-			moduleResourses: 'Module resources',
+			moduleResources: 'Module resources',
 			expandAll: 'Expand all',
 			collapseAll: 'Collapse all',
 			//////////////////////////////////////////////

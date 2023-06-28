@@ -1,16 +1,15 @@
 import {
-	Box,
-	AccordionItem,
 	Accordion,
 	AccordionButton,
-	AccordionPanel,
-	Text,
 	AccordionIcon,
-	Stack,
-	VStack,
-	HStack,
+	AccordionItem,
+	AccordionPanel,
+	Box,
 	Button,
+	Divider,
 	Flex,
+	Heading,
+	Stack,
 } from '@chakra-ui/react';
 import {
 	AnswerHistory,
@@ -20,14 +19,13 @@ import {
 } from '../../pages/AssignmentView/AssignmentTypes';
 import RichContentComponent from '../RichContentComponent';
 import {
-	truncateText,
 	getIcons,
 	transformQuestion,
+	truncateText,
 } from '../../../utils/logic';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './ReviewContentRender';
 import { useEffect } from 'react';
-import { Divider } from '@chakra-ui/react';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -152,128 +150,98 @@ const ReviewQuestions = ({
 	};
 
 	return (
-		<VStack alignItems="flex-start" width="100%">
-			<HStack width="100%" justifyContent="space-between" alignItems="center">
-				<Accordion
-					allowMultiple
-					index={index}
-					onChange={setIndex}
-					marginRight={'7px'}>
-					{reviewQuestions.map((reviewQuestion, questionIndex) => {
-						const transformedQuestion = transformQuestion(
-							reviewQuestion,
-							answerHistory,
-						);
-						const modifiedText = transformedQuestion.questionRc.includes('<img')
-							? i18n('clickHereForImage')
-							: transformedQuestion.questionRc;
-						return (
-							<AccordionItem
-								style={{
-									width: '895px',
-									border: '1px solid #CCCCCC',
-									borderRadius: '10px',
-									margin: '10px',
-								}}>
-								{({ isExpanded }) => (
-									<>
-										<h2>
-											<AccordionButton
-												style={{
-													height: '76px',
-													display: 'flex',
-													justifyContent: 'space-between',
-												}}>
-												<Box
-													as="span"
-													flex="1"
-													textAlign="left"
-													fontWeight={'bold'}>
-													{isExpanded ? (
-														`${transformedQuestion.answerHistory.length} ${i18n(
-															'attempts',
-														)}`
-													) : (
-														<RichContentComponent
-															content={truncateText(modifiedText)}
-															style={{ fontSize: '16px', fontWeight: 600 }}
-														/>
-													)}
-												</Box>
-												<Box id="insideRender">
-													<Icons
-														isInReviewView={false}
-														addMargins={true}
-														answerHistory={transformedQuestion.answerHistory}
-														isExpanded={isExpanded}
-													/>
-												</Box>
+		<Accordion allowMultiple index={index} onChange={setIndex}>
+			{reviewQuestions.map((reviewQuestion, questionIndex) => {
+				const transformedQuestion = transformQuestion(
+					reviewQuestion,
+					answerHistory,
+				);
+				const modifiedText = transformedQuestion.questionRc.includes('<img')
+					? i18n('clickHereForImage')
+					: transformedQuestion.questionRc;
+				return (
+					<AccordionItem
+						style={{
+							border: '1px solid #CCCCCC',
+							borderRadius: '10px',
+							margin: '10px',
+						}}>
+						{({ isExpanded }) => (
+							<>
+								<AccordionButton
+									height={76}
+									display="flex"
+									justifyContent="space-between">
+									<Box as="span" flex="1" textAlign="left" fontWeight={'bold'}>
+										{isExpanded ? (
+											`${transformedQuestion.answerHistory.length} ${i18n(
+												'attempts',
+											)}`
+										) : (
+											<RichContentComponent
+												content={truncateText(modifiedText)}
+												style={{ fontWeight: 600 }}
+											/>
+										)}
+									</Box>
+									<Box id="insideRender">
+										<Icons
+											isInReviewView={false}
+											addMargins={true}
+											answerHistory={transformedQuestion.answerHistory}
+											isExpanded={isExpanded}
+										/>
+									</Box>
 
-												<AccordionIcon />
-											</AccordionButton>
-										</h2>
-										<AccordionPanel pb={4}>
-											{modifiedText === i18n('clickHereForImage') ? (
-												<Stack spacing="20px" marginTop="34px">
-													<ReviewContentRender
-														content={transformedQuestion.questionRc}
-													/>
-												</Stack>
-											) : (
-												<RichContentComponent
-													content={modifiedText}
-													style={{ fontSize: '21px', fontWeight: 400 }}
-												/>
-											)}
+									<AccordionIcon />
+								</AccordionButton>
+								<AccordionPanel pb={4}>
+									{modifiedText === i18n('clickHereForImage') ? (
+										<Stack spacing={5} marginTop={8}>
+											<ReviewContentRender
+												content={transformedQuestion.questionRc}
+											/>
+										</Stack>
+									) : (
+										<RichContentComponent content={modifiedText} />
+									)}
 
-											<Text
-												color={'#468446'}
-												fontWeight={600}
-												fontSize={'21px'}
-												marginTop={'24px'}
-												marginBottom={'24px'}>
-												{i18n('correctAnswers')}
-											</Text>
-											{transformedQuestion.answers
-												.filter((answer) => answer.isCorrect)
-												.map((answer) => {
-													return (
-														<>
-															<ReviewContentRender content={answer.answerRc} />
-														</>
-													);
-												})}
-											<Divider />
-											<Button
-												onClick={() => {
-													handleViewQuestion(
-														transformedQuestion.id,
-														transformedQuestion,
-														questionIndex,
-													);
-												}}
-												height="40px"
-												width="200px"
-												borderRadius="6px"
-												bg="#FFFFFF"
-												color="#2D5172"
-												borderColor="#839EB6"
-												borderWidth="1px"
-												rightIcon={<ArrowRightIcon />}
-												mt="24px"
-												ml="8px"
-												mb="8px">
-												{i18n('viewTheQuestion')}
-											</Button>
-										</AccordionPanel>
-									</>
-								)}
-							</AccordionItem>
-						);
-					})}
-				</Accordion>
-			</HStack>
-		</VStack>
+									<Heading
+										as="h3"
+										size="md"
+										color="ampSuccess.500"
+										mt={4}
+										mb={4}>
+										{i18n('correctAnswers')}
+									</Heading>
+									{transformedQuestion.answers
+										.filter((answer) => answer.isCorrect)
+										.map((answer) => {
+											return <ReviewContentRender content={answer.answerRc} />;
+										})}
+									<Divider />
+									<Button
+										variant="outline"
+										onClick={() => {
+											handleViewQuestion(
+												transformedQuestion.id,
+												transformedQuestion,
+												questionIndex,
+											);
+										}}
+										rightIcon={<ArrowRightIcon />}
+										mt={6}
+										ml={2}
+										mb={2}>
+										{i18n('viewTheQuestion')}
+									</Button>
+								</AccordionPanel>
+							</>
+						)}
+					</AccordionItem>
+				);
+			})}
+		</Accordion>
 	);
 };
 

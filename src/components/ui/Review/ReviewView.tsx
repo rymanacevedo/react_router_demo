@@ -11,16 +11,12 @@ import {
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 import {
-	CurrentRoundAnswerOverLayData,
 	Item,
-	ModuleData,
 	QuestionInFocus,
-	RoundData,
 	SelectedAnswer,
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import TestProgressBarMenu from '../TestProgressBarMenu';
-import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import {
 	json,
 	LoaderFunction,
@@ -40,151 +36,56 @@ import { requireUser } from '../../../utils/user';
 import { badRequest, getSubAccount } from '../../../services/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
-const initState = {
-	self: null,
-	totalQuestionCount: 0,
-	masteredQuestionCount: 0,
-	unseenCount: 0,
-	misinformedCount: 0,
-	uninformedCount: 0,
-	notSureCount: 0,
-	informedCount: 0,
-	onceCorrectCount: 0,
-	twiceCorrectCount: 0,
-	completionPercentage: 0,
-	completionAlgorithmType: '',
-	questionsMastered: 0,
-	questionSeconds: 0,
-	reviewSeconds: 0,
-	answerDate: '',
-	correctness: null,
-	confidence: null,
-	correctAnswerIds: [],
-	moduleComplete: false,
-	avatarMessage: null,
-	answerList: [],
-};
-
 export const reviewViewLoader: LoaderFunction = async ({ params }) => {
-	const { assignmentKey } = params;
+	const assignmentKey = params.assignmentKey!;
 	const user = requireUser();
 	const { subAccount } = getSubAccount(user);
-	if (assignmentKey) {
-		const response = await getAnswerHistory(user, subAccount, assignmentKey);
-		const { data } = response;
-		return json({ data: data.items, assignmentKey: assignmentKey });
+
+	const { data } = await getAnswerHistory(user, subAccount, assignmentKey);
+	const items = data.items;
+	if (!items.answerHistory) {
+		return badRequest({
+			fields: {},
+			errors: {
+				fieldErrors: {
+					assignmentKey: ['Bad assignment key'],
+				},
+			},
+		});
 	}
 
-	return badRequest({
-		fields: {},
-		errors: {
-			fieldErrors: {
-				assignmentKey: ['Bad assignment key'],
-			},
-		},
+	return json({
+		data: data.items,
+		assignmentKey,
 	});
 };
 
 const ReviewView = () => {
-	const { data, assignmentKey } = useLoaderData() as any;
+	const { data, assignmentKey } = useLoaderData() as {
+		data: Item[];
+		assignmentKey: string;
+	};
 	const { t: i18n } = useTranslation();
 	const location = useLocation();
 	const { transformedQuestion, questionIndex, reviewQuestions } =
 		location.state;
 	const navigate = useNavigate();
 	const { handleMenuOpen } = useProgressMenuContext();
-	const { moduleLearningUnitsData, selectedCourseKey } = useQuizContext();
+	const { selectedCourseKey } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt] = useState<string>('');
-	const { fetchModuleQuestions } = useModuleContentService();
 	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
 	const [clearSelection, setClearSelection] = useState(false);
 	const [displayedQuestion, setDisplayedQuestion] =
 		useState<TransformedQuestion>(reviewQuestions[questionIndex]);
 	const [currentQuestionIndex, setCurrentQuestionIndex] =
 		useState<number>(questionIndex);
-	const [questionInFocus] = useState<QuestionInFocus>({
-		answerList: [],
-		answered: false,
-		confidence: null,
-		correctness: null,
-		difficultyScore: 0,
-		displayOrder: 0,
-		explanationRc: '',
-		flagged: false,
-		hasModuleIntroduction: undefined,
-		hideQuestionIntroImages: false,
-		id: 0,
-		interactiveState: null,
-		introductionRc: '',
-		moreInformationRc: '',
-		name: '',
-		pointsWorth: 0,
-		publishedLearningUnitUri: '',
-		publishedQuestionAuthoringKey: '',
-		publishedQuestionId: 0,
-		publishedQuestionUri: '',
-		questionRc: '',
-		questionType: '',
-		questionVersionId: 0,
-		quizSeconds: 0,
-		reviewSeconds: 0,
-	});
-
-	const [currentRoundQuestionListData] = useState<RoundData>();
-
-	const [currentRoundAnswerOverLayData] =
-		useState<CurrentRoundAnswerOverLayData>(initState);
-
-	const [questionData, setQuestionData] = useState<ModuleData>({
-		accountUri: '',
-		children: null,
-		customizations: [],
-		descriptionRc: null,
-		id: 0,
-		introductionRc: null,
-		isAllowTimeIncrease: false,
-		isCustomMessagesEnabled: false,
-		isRecommendedModulesEnabled: false,
-		key: '',
-		kind: '',
-		learningUnits: [],
-		locale: '',
-		name: '',
-		outroButtonText: null,
-		outroLink: '',
-		outroRc: null,
-		ownerAccountUid: '',
-		publishedVersionId: null,
-		self: '',
-		timeAllotted: null,
-		timedAssessment: false,
-		uid: '',
-		versionId: 0,
-	});
-	const [answerHistory] = useState<Item[] | null>(data);
-
+	const [answerHistory] = useState<Item[]>(data);
 	const renameAnswerAttribute = (object: TransformedQuestion) => {
 		if ('answers' in object) {
 			object.answerList = object.answers;
 		}
 		return object;
-	};
-
-	const fetchModuleQuestionsData = async () => {
-		try {
-			let moduleQuestionsResponse = {} as ModuleData;
-			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
-				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
-			} else {
-				let res = await fetchModuleQuestions(assignmentKey);
-				moduleQuestionsResponse = res;
-				setQuestionData(moduleQuestionsResponse);
-			}
-			setQuestionData(moduleQuestionsResponse);
-		} catch (error) {
-			console.error(error);
-		}
 	};
 
 	const getCorrectAnswers = (question: TransformedQuestion) => {
@@ -201,9 +102,6 @@ const ReviewView = () => {
 	};
 
 	useEffect(() => {
-		if (assignmentKey) {
-			fetchModuleQuestionsData();
-		}
 		const correctAnswers = getCorrectAnswers(transformedQuestion);
 		setSelectedAnswers(correctAnswers);
 	}, [assignmentKey, transformedQuestion]);
@@ -251,140 +149,134 @@ const ReviewView = () => {
 	};
 
 	return (
-		<>
-			<Container
-				id={'learning-assignment'}
-				margin="0"
-				padding="0"
-				maxWidth={'100vw'}
-				overflowY={'hidden'}
-				overflowX={'hidden'}>
-				<FireProgressToast
-					textPrompt={textPrompt}
-					expandProgressMenu={expandProgressMenu}
-					isToastOpen={isToastOpen}
-				/>
-				<TestProgressBarMenu
-					isInReviewView={true}
-					answerHistory={transformedQuestion.answerHistory}
-					showType={true}
-					questionData={questionData}
-					currentRoundQuestionListData={currentRoundQuestionListData}
-					currentQuestion={questionInFocus}
-					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-				/>
-				<HStack justify="center" align="space-between" marginTop="4px">
-					<Stack
-						maxW="1496"
-						w="100%"
-						p="12px"
-						pr="0px"
-						alignItems="stretch"
-						direction={['column', 'column', 'row', 'row', 'row', 'row']}
-						spacing={19}>
-						<Box
-							id="questionBox"
-							backgroundColor="white"
-							boxShadow="md"
-							borderRadius={24}
-							px="72px"
-							py="44px"
-							w={{ base: '100%', md: '50%' }}>
-							<Question
-								review={true}
-								questionIndex={currentQuestionIndex + 1}
-								numberOfQInReview={reviewQuestions.length}
-								questionInFocus={displayedQuestion}
-							/>
-						</Box>
-						<Box
-							id="answerBox"
-							backgroundColor="white"
-							boxShadow="md"
-							borderRadius={24}
-							px="72px"
-							py="44px"
-							w={{ base: '100%', md: '50%' }}>
-							<MultipleChoiceOverLay
-								isInReviewView={true}
-								questionInFocus={
-									renameAnswerAttribute(
-										transformedQuestion,
-									) as unknown as QuestionInFocus
-								}
-								selectedAnswers={selectedAnswers}
-								setSelectedAnswers={setSelectedAnswers}
-								clearSelection={clearSelection}
-								setClearSelection={setClearSelection}
-								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								inReview={true}
-								revealAnswer={false}
-							/>
-						</Box>
-					</Stack>
-					<ProgressMenu
-						textPrompt={textPrompt}
-						currentRoundQuestionListData={currentRoundQuestionListData}
-						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-					/>
-				</HStack>
-				<VStack
-					marginLeft={'13px'}
+		<Container
+			id={'learning-assignment'}
+			margin="0"
+			padding="0"
+			maxWidth={'100vw'}
+			overflowY={'hidden'}
+			overflowX={'hidden'}>
+			<FireProgressToast
+				textPrompt={textPrompt}
+				expandProgressMenu={expandProgressMenu}
+				isToastOpen={isToastOpen}
+			/>
+			<TestProgressBarMenu
+				isInReviewView={true}
+				answerHistory={transformedQuestion.answerHistory}
+				showType={true}
+				questionData={undefined}
+				currentRoundQuestionListData={undefined}
+				currentQuestion={undefined}
+				currentRoundAnswerOverLayData={undefined}
+			/>
+			<HStack justify="center" align="space-between" marginTop="4px">
+				<Stack
+					maxW="1496"
+					w="100%"
 					p="12px"
-					rounded="md"
-					shadow="md"
-					display={'flex'}
-					justifyContent={'center'}
-					w="100%">
-					<WhatYouNeedToKnowComponent
-						isInReviewView={true}
-						courseKey={selectedCourseKey}
-						assignmentKey={assignmentKey}
-						questionInFocus={
-							renameAnswerAttribute(
-								transformedQuestion,
-							) as unknown as QuestionInFocus
-						}
-					/>
+					pr="0px"
+					alignItems="stretch"
+					direction={['column', 'column', 'row', 'row', 'row', 'row']}
+					spacing={19}>
 					<Box
-						height={'101px'}
-						style={{ marginTop: '24px' }}
-						width="1496px"
+						id="questionBox"
 						backgroundColor="white"
 						boxShadow="md"
 						borderRadius={24}
 						px="72px"
-						py="30px"
-						display="flex"
-						justifyContent="space-between">
-						<Button
-							leftIcon={<ArrowLeftIcon />}
-							height={'48px'}
-							width={'110px'}
-							onClick={handleClickBack}
-							isDisabled={currentQuestionIndex === 0}>
-							{i18n('previousBtn')}
-						</Button>
-						<Text
-							fontWeight={600}
-							fontSize={16}
-							color={'#7E8A9B'}
-							marginTop={'10px'}>
-							{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
-							{reviewQuestions.length}
-						</Text>
-						<Button
-							rightIcon={<ArrowRightIcon />}
-							height={'48px'}
-							width={'110px'}
-							onClick={handleClickNext}
-							isDisabled={currentQuestionIndex + 1 === reviewQuestions.length}>
-							{i18n('nextBtn')}
-						</Button>
+						py="44px"
+						w={{ base: '100%', md: '50%' }}>
+						<Question
+							review={true}
+							questionIndex={currentQuestionIndex + 1}
+							numberOfQInReview={reviewQuestions.length}
+							questionInFocus={displayedQuestion}
+						/>
 					</Box>
-				</VStack>
-			</Container>
-		</>
+					<Box
+						id="answerBox"
+						backgroundColor="white"
+						boxShadow="md"
+						borderRadius={24}
+						px="72px"
+						py="44px"
+						w={{ base: '100%', md: '50%' }}>
+						<MultipleChoiceOverLay
+							isInReviewView={true}
+							questionInFocus={
+								renameAnswerAttribute(
+									transformedQuestion,
+								) as unknown as QuestionInFocus
+							}
+							selectedAnswers={selectedAnswers}
+							setSelectedAnswers={setSelectedAnswers}
+							clearSelection={clearSelection}
+							setClearSelection={setClearSelection}
+							currentRoundAnswerOverLayData={undefined}
+							inReview={true}
+							revealAnswer={false}
+						/>
+					</Box>
+				</Stack>
+				<ProgressMenu
+					textPrompt={textPrompt}
+					currentRoundQuestionListData={undefined}
+					currentRoundAnswerOverLayData={undefined}
+				/>
+			</HStack>
+			<VStack
+				marginLeft={'13px'}
+				p="12px"
+				rounded="md"
+				shadow="md"
+				display={'flex'}
+				justifyContent={'center'}
+				w="100%">
+				<WhatYouNeedToKnowComponent
+					isInReviewView={true}
+					courseKey={selectedCourseKey}
+					assignmentKey={assignmentKey}
+					questionInFocus={
+						renameAnswerAttribute(
+							transformedQuestion,
+						) as unknown as QuestionInFocus
+					}
+				/>
+				<Box
+					height={'101px'}
+					style={{ marginTop: '24px' }}
+					width="1496px"
+					backgroundColor="white"
+					boxShadow="md"
+					borderRadius={24}
+					px="72px"
+					py="30px"
+					display="flex"
+					justifyContent="space-between">
+					<Button
+						leftIcon={<ArrowLeftIcon />}
+						onClick={handleClickBack}
+						isDisabled={currentQuestionIndex === 0}>
+						{i18n('previousBtn')}
+					</Button>
+					<Text
+						fontWeight={600}
+						fontSize={16}
+						color={'#7E8A9B'}
+						marginTop={'10px'}>
+						{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
+						{reviewQuestions.length}
+					</Text>
+					<Button
+						rightIcon={<ArrowRightIcon />}
+						onClick={handleClickNext}
+						isDisabled={currentQuestionIndex + 1 === reviewQuestions.length}>
+						{i18n('nextBtn')}
+					</Button>
+				</Box>
+			</VStack>
+		</Container>
 	);
 };
 
