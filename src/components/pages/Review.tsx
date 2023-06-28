@@ -113,7 +113,7 @@ const Review = () => {
 	}, [index, allExpandedIndices]);
 
 	return (
-		<main id="review">
+		<Box as="main" id="review">
 			<Container maxWidth={1464} mr="auto" ml="auto">
 				<Flex
 					backgroundColor="ampWhite"
@@ -173,7 +173,7 @@ const Review = () => {
 					</Flex>
 				</Flex>
 			</Container>
-		</main>
+		</Box>
 	);
 };
 
