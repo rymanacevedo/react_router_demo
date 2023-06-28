@@ -50,7 +50,7 @@ export type QuestionInFocusAnswer = {
 	answerRc: string;
 	displayOrder: number;
 	id: number;
-	isCorrect: boolean;
+	isCorrect?: boolean;
 	optionRc: string | null;
 	publishedAnswerId: number | string;
 	publishedAnswerUri: string;
@@ -145,7 +145,7 @@ export type CurrentRoundAnswerOverLayData = {
 type LearningUnitQuestionAnswer = {
 	answerRc: string;
 	id: number;
-	isCorrect: boolean;
+	isCorrect?: boolean;
 	optionRc: string | null;
 	self: string;
 	uid: string;
