@@ -126,7 +126,10 @@ export async function bootstrap(request: Request) {
 }
 
 // TODO: validate fields with zod
-export const getLoginInfo = async (fields: any, cookie: any = null) => {
+export const getLoginInfo = async (
+	fields: any,
+	cookie: any = null,
+): Promise<any> => {
 	let initialRequestDefaultHeaders: any = {
 		'amp-username': fields.username,
 		'amp-password': fields.password,

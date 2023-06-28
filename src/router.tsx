@@ -27,7 +27,7 @@ import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
-import LearningView, { learningLoader } from './components/pages/LearningView';
+import LearningView, { learningLoader } from './routes/LearningView';
 import AssignmentReviewView, {
 	assignmentReviewLoader,
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';
@@ -52,6 +52,8 @@ import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
 } from './components/pages/AuthoringView';
+import CourseProgress from './components/ui/CourseProgress';
+import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';
 
 const routesJSX = (
@@ -138,9 +140,14 @@ const routesJSX = (
 			/>
 			<Route loader={learningLoader} path="learning" element={<LearningView />}>
 				<Route
-					path=":selectedCourseKey"
 					loader={assignmentListLoader}
-					element={<AssignmentList />}
+					path=":selectedCourseKey"
+					element={
+						<Flex>
+							<AssignmentList />
+							<CourseProgress />
+						</Flex>
+					}
 				/>
 			</Route>
 			<Route

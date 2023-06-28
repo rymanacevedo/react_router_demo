@@ -9,6 +9,7 @@ import {
 } from '../lib/validator';
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
 import { VITE_BACKEND_API } from '../lib/environment';
+import { CourseStatsType } from '../routes/LearningView';
 
 export const getCourseList = async (
 	user: any,
@@ -188,4 +189,16 @@ export const postFeedback = async (
 		discipline: fields.discipline,
 	};
 	return authenticatedFetch(url, user.sessionKey, 'POST', body);
+};
+
+export const getCourseStats = async (
+	user: User,
+	courseKey: string,
+	learnerUid: string,
+): Promise<{
+	data: CourseStatsType;
+	response: Response;
+}> => {
+	const url = `${VITE_BACKEND_API}/v2/courses/${courseKey}/stats/${learnerUid}`;
+	return authenticatedFetch<any>(url, user.sessionKey);
 };

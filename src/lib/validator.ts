@@ -139,6 +139,10 @@ const RootSchema = z.object({
 	items: z.array(z.any()).optional(),
 });
 
+const AssignmentSchema = z.object({
+	assignments: RootSchema,
+});
+
 export const AnswerListDataSchema = z.object({
 	self: z.string(),
 	id: z.union([z.string(), z.number()]),
@@ -282,6 +286,22 @@ export const LearningRoundPutSchema = z.object({
 	questionId: z.string(),
 	answerData: AnswerDataSchema,
 });
+
+const RootCourseStatsSchema = z.object({
+	averageProgress: z.number(),
+	averageTimeSpent: z.number(),
+	averageNumRefreshers: z.number(),
+	averageStartingKnowledge: z.number(),
+	learnerProgress: z.number(),
+	learnerTimeSpent: z.number(),
+	learnerNumRefreshers: z.number(),
+	learnerStartingKnowledge: z.number(),
+});
+
+export const CourseStatsSchema = z.object({
+	courseStats: RootCourseStatsSchema,
+});
+
 export type Answer = z.infer<typeof AnswerSchema>;
 export type AnswerHistory = z.infer<typeof AnswerHistorySchema>;
 export type AnswerList = z.infer<typeof AnswerListDataSchema>;
@@ -294,3 +314,5 @@ export type QuestionInFocusAnswer = z.infer<typeof QuestionInFocusAnswerSchema>;
 export type RoundData = z.infer<typeof RoundDataSchema>;
 export type ModuleData = z.infer<typeof ModuleDataSchema>;
 export type RootData = z.infer<typeof RootSchema>;
+export type CourseAssignmentData = z.infer<typeof AssignmentSchema>;
+export type CourseStatsData = z.infer<typeof CourseStatsSchema>;
