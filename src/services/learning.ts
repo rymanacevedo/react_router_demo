@@ -110,14 +110,23 @@ export const getFullModuleWithQuestions = async (
 	user: User,
 	subAccount: string,
 	assignmentKey: string | undefined,
+	answerKey?: boolean,
+	deep: boolean = true,
 ) => {
 	const { assignmentData, moduleData } = await getModuleContent(
 		user,
 		subAccount,
 		assignmentKey,
 	);
+
+	let url = `${moduleData.self}?deep=${String(deep)}&subaccount=${subAccount}`;
+
+	if (answerKey) {
+		url += `&answerKey=${String(answerKey)}`;
+	}
+
 	const { data: moduleInfoAndQuestions } = await authenticatedFetch<ModuleData>(
-		`${moduleData.self}?deep=true&subaccount=${subAccount}`,
+		url,
 		user.sessionKey,
 	);
 

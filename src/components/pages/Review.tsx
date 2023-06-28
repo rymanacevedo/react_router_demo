@@ -32,6 +32,7 @@ export const reviewLoader: LoaderFunction = async ({ params }) => {
 		user,
 		subAccount,
 		assignmentKey,
+		true,
 	);
 
 	return json({ data: data.items, assignmentKey, moduleInfoAndQuestions });
@@ -164,7 +165,7 @@ const Review = () => {
 								<h3>{i18n('moduleResources')}</h3>
 								<Button
 									variant={'outline'}
-									marginTop={'12px'}
+									marginTop={3}
 									onClick={handleViewModuleIntro}>
 									{i18n('viewModuleIntro')}
 								</Button>
