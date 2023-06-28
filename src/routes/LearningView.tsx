@@ -1,9 +1,9 @@
 import { Container, Heading, HStack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import CourseMenu from '../ui/CourseMenu';
+import CourseMenu from '../components/ui/CourseMenu';
 import { LoaderFunction } from 'react-router';
-import { requireUser } from '../../utils/user';
-import { getCourseList } from '../../services/learning';
+import { requireUser } from '../utils/user';
+import { getCourseList } from '../services/learning';
 import {
 	json,
 	Outlet,
@@ -11,13 +11,24 @@ import {
 	useLoaderData,
 	useNavigate,
 } from 'react-router-dom';
-import { getSubAccount } from '../../services/utils';
+import { getSubAccount } from '../services/utils';
 import { useEffect, useState } from 'react';
-import { useQuizContext } from '../../hooks/useQuizContext';
+import { useQuizContext } from '../hooks/useQuizContext';
 
 export type Course = {
 	key: string;
 	name: string;
+};
+
+export type CourseStatsType = {
+	averageProgress: number;
+	averageTimeSpent: number;
+	averageNumRefreshers: number;
+	averageStartingKnowledge: number;
+	learnerProgress: number;
+	learnerTimeSpent: number;
+	learnerNumRefreshers: number;
+	learnerStartingKnowledge: number;
 };
 
 export const learningLoader: LoaderFunction = async ({ request }) => {
