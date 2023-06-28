@@ -32,7 +32,7 @@ import AssignmentReviewView, {
 	assignmentReviewLoader,
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';
 import ModuleIntroView from './components/pages/ModuleIntroView';
-import Review from './components/pages/Review';
+import Review, { reviewLoader } from './components/pages/Review';
 import AssignmentView from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
@@ -157,7 +157,11 @@ const routesJSX = (
 				path="learning/moduleIntro/:assignmentKey"
 				element={<ModuleIntroView />}
 			/>
-			<Route path="learning/review/:assignmentKey" element={<Review />} />
+			<Route
+				loader={reviewLoader}
+				path="learning/review/:assignmentKey"
+				element={<Review />}
+			/>
 			<Route
 				path="learning/assignment/:assignmentKey"
 				element={<AssignmentView />}

@@ -33,7 +33,7 @@ import { useTranslation } from 'react-i18next';
 import { transformQuestion } from '../../../utils/logic';
 import { getAnswerHistory } from '../../../services/learning';
 import { requireUser } from '../../../utils/user';
-import { getSubAccount } from '../../../services/utils';
+import { badRequest, getSubAccount } from '../../../services/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 
 export const reviewViewLoader: LoaderFunction = async ({ params }) => {
@@ -42,14 +42,17 @@ export const reviewViewLoader: LoaderFunction = async ({ params }) => {
 	const { subAccount } = getSubAccount(user);
 
 	const { data } = await getAnswerHistory(user, subAccount, assignmentKey);
-	// return badRequest({
-	// 	fields: {},
-	// 	errors: {
-	// 		fieldErrors: {
-	// 			assignmentKey: ['Bad assignment key'],
-	// 		},
-	// 	},
-	// });
+	const items = data.items;
+	if (!items.answerHistory) {
+		return badRequest({
+			fields: {},
+			errors: {
+				fieldErrors: {
+					assignmentKey: ['Bad assignment key'],
+				},
+			},
+		});
+	}
 
 	return json({
 		data: data.items,
