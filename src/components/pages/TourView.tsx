@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import {
+	Button,
+	Center,
+	HStack,
+	Image,
 	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
 	ModalBody,
 	ModalCloseButton,
-	useDisclosure,
-	Button,
-	Image,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Text,
-	HStack,
-	Center,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 
@@ -38,8 +38,8 @@ function Step1Modal({
 	const { t: i18n } = useTranslation();
 
 	const handleClose = () => {
-		nav(-1);
 		onClose();
+		nav(-1);
 	};
 
 	return (

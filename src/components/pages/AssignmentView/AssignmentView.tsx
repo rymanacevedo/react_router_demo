@@ -12,7 +12,6 @@ const AssignmentView = () => {
 	const initRef = useRef(null);
 	const { assignmentKey } = useParams();
 	const navigate = useNavigate();
-
 	const onClose = () => {
 		setIsInstructionalOverlayOpen(false);
 		Cookies.set('instructional_overlay', window.btoa('instructional_overlay'), {
@@ -21,7 +20,7 @@ const AssignmentView = () => {
 	};
 
 	useEffect(() => {
-		if (hasNotSeenTour) {
+		if (!window.location.href.includes('tour') && hasNotSeenTour) {
 			navigate('tour');
 		}
 	}, []);
