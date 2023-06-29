@@ -134,7 +134,7 @@ export default function AnswerFeedback({
 
 	return (
 		<Checkbox
-			marginBottom={25}
+			marginBottom={10}
 			borderColor={'#1e1f20'}
 			variant={checkbox}
 			value={answer.id}

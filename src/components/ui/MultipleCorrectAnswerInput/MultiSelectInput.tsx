@@ -37,7 +37,7 @@ const MultiSelectInput = ({
 	};
 	return (
 		<Checkbox
-			marginBottom={25}
+			marginBottom={10}
 			borderColor={'#1e1f20'}
 			variant={'multiSelect'}
 			value={questionAnswerId}

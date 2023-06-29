@@ -1,4 +1,11 @@
-import { Box, Button, Divider, Fade, Heading, HStack } from '@chakra-ui/react';
+import {
+	Button,
+	Divider,
+	Flex,
+	Heading,
+	HStack,
+	SlideFade,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
 	Confidence,
@@ -54,50 +61,37 @@ const MultipleCorrect = ({
 	};
 
 	return (
-		<Box
-			style={{
-				marginTop: smallerThan1000 ? '10px' : '0px',
-				maxWidth: '700px',
-			}}
-			alignItems="stretch"
-			flex={1}
-			backgroundColor="white"
+		<Flex
+			marginTop={smallerThan1000 ? 2 : 0}
+			maxWidth="700px"
+			backgroundColor="ampWhite"
 			boxShadow="md"
-			display="flex"
 			flexDirection="column"
-			justifyContent="space-between"
 			borderRadius={24}
-			px="72px"
-			py="44px">
+			px={18}
+			py={11}>
 			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
 			{!showFeedback ? (
-				<Fade in={!showFeedback}>
-					<MultiSelect
-						questionInFocus={questionInFocus}
-						selectedAnswers={selectedAnswers}
-						setSelectedAnswers={setSelectedAnswers}
-						setIDKResponse={setIDKResponse}
-					/>
-				</Fade>
+				<MultiSelect
+					questionInFocus={questionInFocus}
+					selectedAnswers={selectedAnswers}
+					setSelectedAnswers={setSelectedAnswers}
+					setIDKResponse={setIDKResponse}
+				/>
 			) : (
-				<Fade in={showFeedback}>
-					<MultiSelectFeedback
-						questionInFocus={questionInFocus}
-						roundFeedbackData={roundFeedbackData}
-					/>
-				</Fade>
+				<MultiSelectFeedback
+					questionInFocus={questionInFocus}
+					roundFeedbackData={roundFeedbackData}
+				/>
 			)}
-			<Divider marginTop="43px" />
-			<HStack
-				marginTop={3}
-				spacing={6}
-				w="100%"
-				justifyContent={showFeedback ? 'flex-end' : undefined}>
-				{!showFeedback ? (
-					<>
+			<Divider marginTop={11} />
+			{!showFeedback ? (
+				<SlideFade in={!showFeedback} unmountOnExit={true}>
+					<HStack marginTop={3} wrap="wrap">
 						<Button
+							size="md"
 							onClick={() => handleSubmission(Confidence.NA)}
-							variant={'ampOutline'}
+							variant="outline"
 							isDisabled={Boolean(selectedAnswers.length)}>
 							{i18n('iDontKnow')}
 						</Button>
@@ -114,16 +108,21 @@ const MultipleCorrect = ({
 						</Button>
 						<Button
 							onClick={clearSelectionFunction}
+							colorScheme="ampSecondary"
 							variant="ghost"
 							isDisabled={Boolean(!selectedAnswers.length)}>
 							{i18n('clearSelectionPlural')}
 						</Button>
-					</>
-				) : (
-					<Button onClick={continueBtnFunc}>{i18n('continueBtnText')}</Button>
-				)}
-			</HStack>
-		</Box>
+					</HStack>
+				</SlideFade>
+			) : (
+				<SlideFade in={showFeedback} unmountOnExit={true}>
+					<HStack marginTop={3} wrap="wrap">
+						<Button onClick={continueBtnFunc}>{i18n('continueBtnText')}</Button>
+					</HStack>
+				</SlideFade>
+			)}
+		</Flex>
 	);
 };
 
