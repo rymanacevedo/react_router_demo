@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 
 import {
 	CurrentRoundAnswerOverLayData,
@@ -26,30 +26,26 @@ const MultiSelectFeedback = ({
 	const [confidence, setConfidence] = useState<Confidence | null>(null);
 	const [correctness, setCorrectness] = useState<Correctness | null>(null);
 	return (
-		<Box
-			marginTop="34px"
-			display="flex"
-			flexDirection={'column'}
-			justifyContent="space-between"
-			minHeight={350}
-			h="100%">
-			{questionInFocus.answerList.map((answer) => {
-				return (
-					<AnswerFeedback
-						roundFeedbackData={roundFeedbackData}
-						answer={answer}
-						setBadge={setVariant}
-						setConfidence={setConfidence}
-						setCorrectness={setCorrectness}
-					/>
-				);
-			})}
+		<>
+			<Flex marginTop={8} direction="column">
+				{questionInFocus.answerList.map((answer) => {
+					return (
+						<AnswerFeedback
+							roundFeedbackData={roundFeedbackData}
+							answer={answer}
+							setBadge={setVariant}
+							setConfidence={setConfidence}
+							setCorrectness={setCorrectness}
+						/>
+					);
+				})}
+			</Flex>
 			<AnswerFeedbackBadge
 				confidence={confidence}
 				variant={variant}
 				correctness={correctness}
 			/>
-		</Box>
+		</>
 	);
 };
 
