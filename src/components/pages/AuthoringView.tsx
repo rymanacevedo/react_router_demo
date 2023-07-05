@@ -23,7 +23,7 @@ export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
 	let formData = await request.formData();
 	let intent = formData.get('intent');
-	const courseId = formData.get('courseId');
+	const courseId = formData.get('courseId')?.toString() ?? '';
 
 	if (intent === 'delete') {
 		const { response } = await deleteCourse(user, courseId);
