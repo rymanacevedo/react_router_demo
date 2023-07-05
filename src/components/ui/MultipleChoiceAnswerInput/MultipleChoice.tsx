@@ -99,15 +99,11 @@ export const MultipleChoice = ({
 					<Text>{i18n(showOverlay ? 'continueBtnText' : 'submitBtnText')}</Text>
 				</Button>
 				<Button
-					_hover={{ backgroundColor: 'white' }}
-					height="12px"
+					isDisabled={!IDKResponse && !selectedAnswers.length}
 					variant="ghost"
+					colorScheme={'ampSecondary'}
 					onClick={clearSelectionFunction}>
-					{!showOverlay && (
-						<Text fontSize={'14px'} color={'ampSecondary.500'}>
-							{i18n('clearSelection')}
-						</Text>
-					)}
+					{!showOverlay && i18n('clearSelection')}
 				</Button>
 			</HStack>
 		</Box>
