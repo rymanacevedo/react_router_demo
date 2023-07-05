@@ -20,7 +20,7 @@ import CourseCardDropdownMenu from './CourseCardDropdownMenu';
 interface CourseCardProps {
 	status: 'Draft' | 'Published';
 	name: string;
-	courseContentUid: string;
+	uid: string;
 	modifiedTime: number;
 	modifiedUserFullName: string;
 	createdTime: number;
@@ -35,7 +35,7 @@ const CourseCard = ({
 	name,
 	modifiedTime,
 	modifiedUserFullName,
-	courseContentUid,
+	uid,
 	listView,
 	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
@@ -97,10 +97,7 @@ const CourseCard = ({
 							{status}
 						</Badge>
 						{!listView && (
-							<CourseCardDropdownMenu
-								courseId={courseContentUid}
-								isPublished={isPublished}
-							/>
+							<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
 						)}
 					</Flex>
 					<Heading
@@ -164,10 +161,7 @@ const CourseCard = ({
 							</Text>
 						</Badge>
 						{listView && (
-							<CourseCardDropdownMenu
-								courseId={courseContentUid}
-								isPublished={isPublished}
-							/>
+							<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
 						)}
 					</Flex>
 				</Flex>

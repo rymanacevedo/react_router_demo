@@ -18,12 +18,12 @@ import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { Form } from 'react-router-dom';
 
 interface CourseCardDropdownMenuProps {
-	courseId: string;
+	uid: string;
 	isPublished: boolean;
 }
 
 const CourseCardDropdownMenu = ({
-	courseId,
+	uid,
 	isPublished,
 }: CourseCardDropdownMenuProps) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,13 +45,13 @@ const CourseCardDropdownMenu = ({
 			</MenuButton>
 			<MenuList>
 				<Form method="post">
-					<input name="courseId" defaultValue={courseId} hidden />
+					<input name="courseId" defaultValue={uid} hidden />
 					<MenuItem type="submit" name="intent" value="copyNew">
 						Copy and create new
 					</MenuItem>
 				</Form>
 				<Form method="post">
-					<input name="courseId" defaultValue={courseId} hidden />
+					<input name="courseId" defaultValue={uid} hidden />
 					<MenuItem type="submit" name="intent" value="copyShare">
 						Copy and share questions
 					</MenuItem>
@@ -72,7 +72,7 @@ const CourseCardDropdownMenu = ({
 					</ModalBody>
 					<ModalFooter justifyContent="flex-start" gap={2}>
 						<Form method="delete">
-							<input name="courseId" defaultValue={courseId} hidden />
+							<input name="courseId" defaultValue={uid} hidden />
 							<Button type="submit" name="intent" value="delete">
 								Delete
 							</Button>

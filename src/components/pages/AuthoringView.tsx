@@ -91,11 +91,7 @@ const AuthoringView = () => {
 					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
 					gap={listView ? 2 : 6}>
 					{courseList.map((course: any) => (
-						<GridItem
-							colSpan={1}
-							w="100%"
-							color="inherit"
-							key={course.courseContentUid}>
+						<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
 							<CourseCard {...course} listView={listView} />
 						</GridItem>
 					))}
