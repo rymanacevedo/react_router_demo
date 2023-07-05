@@ -173,7 +173,7 @@ export default function AnswerArea({
 									variant="ghost"
 									colorScheme={'ampSecondary'}
 									onClick={clearSelectionFunction}>
-									{!showFeedback && <Text>{i18n('clearSelection')}</Text>}
+									{!showFeedback && i18n('clearSelection')}
 								</Button>
 							</HStack>
 						</Box>
