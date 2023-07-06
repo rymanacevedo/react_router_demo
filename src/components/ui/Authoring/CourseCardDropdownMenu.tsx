@@ -73,7 +73,11 @@ const CourseCardDropdownMenu = ({
 					<ModalFooter justifyContent="flex-start" gap={2}>
 						<Form method="delete">
 							<input name="courseId" defaultValue={uid} hidden />
-							<Button type="submit" name="intent" value="delete">
+							<Button
+								type="submit"
+								name="intent"
+								value="delete"
+								onClick={onClose}>
 								Delete
 							</Button>
 						</Form>
