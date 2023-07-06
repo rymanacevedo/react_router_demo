@@ -4,28 +4,23 @@ import {
 	CardBody,
 	Flex,
 	Badge,
-	IconButton,
 	Text,
 	Heading,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
 	useTheme,
 } from '@chakra-ui/react';
 import {
-	DotsVerticalIcon,
 	ExclamationTriangleIcon,
 	Pencil2Icon,
 	BellIcon,
 	DotFilledIcon,
 } from '@radix-ui/react-icons';
 import { formatDate } from '../../../lib/utils';
+import CourseCardDropdownMenu from './CourseCardDropdownMenu';
 
 interface CourseCardProps {
 	status: 'Draft' | 'Published';
 	name: string;
-	courseContentUid: string;
+	uid: string;
 	modifiedTime: number;
 	modifiedUserFullName: string;
 	createdTime: number;
@@ -35,37 +30,12 @@ interface CourseCardProps {
 	questionCount?: number;
 }
 
-const CourseCardMenu = () => {
-	return (
-		<Menu>
-			<MenuButton
-				as={IconButton}
-				icon={<DotsVerticalIcon />}
-				border="none"
-				variant="ghost"
-				display="flex"
-				zIndex={2}
-				right="0px"
-				size="xs"
-				paddingTop={1}
-				paddingBottom={1}>
-				{' '}
-			</MenuButton>
-			<MenuList>
-				<MenuItem>Duplicate</MenuItem>
-				<MenuItem>Delete</MenuItem>
-				<MenuItem>Move</MenuItem>
-				<MenuItem>Add to Folder</MenuItem>
-			</MenuList>
-		</Menu>
-	);
-};
-
 const CourseCard = ({
 	status,
 	name,
 	modifiedTime,
 	modifiedUserFullName,
+	uid,
 	listView,
 	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
@@ -80,6 +50,8 @@ const CourseCard = ({
 	const { colors } = useTheme();
 
 	const { month, day, year } = formatDate(modifiedTime);
+
+	const isPublished = status === 'Published';
 
 	const alertBadgeVariant = {
 		unpublished_edits: {
@@ -124,7 +96,9 @@ const CourseCard = ({
 							textTransform="capitalize">
 							{status}
 						</Badge>
-						{!listView && <CourseCardMenu />}
+						{!listView && (
+							<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
+						)}
 					</Flex>
 					<Heading
 						fontSize={listView ? 'lg' : 'xl'}
@@ -186,7 +160,9 @@ const CourseCard = ({
 								{alertBadgeVariant[courseAlert].label}
 							</Text>
 						</Badge>
-						{listView && <CourseCardMenu />}
+						{listView && (
+							<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
+						)}
 					</Flex>
 				</Flex>
 			</CardBody>

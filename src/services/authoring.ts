@@ -1,4 +1,5 @@
 import { authenticatedFetch } from './utils';
+import { User } from './user';
 
 export const getCourseList = async (
 	user: any,
@@ -11,4 +12,23 @@ export const getCourseList = async (
 	const url = '/v2/authoring-course-content';
 
 	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const deleteCourse = async (
+	user: User,
+	courseContentUid: string,
+): Promise<any> => {
+	const url = `/v2/authoring-course-content/${courseContentUid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE');
+};
+
+export const copyCourse = async (
+	user: User,
+	courseContentUid: string,
+	cloneQuestions: boolean,
+): Promise<any> => {
+	const url = `/v2/authoring-course-content/${courseContentUid}/copy?cloneQuestions=${cloneQuestions}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST');
 };
