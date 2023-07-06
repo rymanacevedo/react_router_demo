@@ -52,7 +52,7 @@ import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
 	authoringActions,
-} from './components/pages/AuthoringView';
+} from './components/pages/Authoring/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
 import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';

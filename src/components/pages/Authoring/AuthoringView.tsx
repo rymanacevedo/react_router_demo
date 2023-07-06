@@ -12,14 +12,14 @@ import {
 import { PlusIcon } from '@radix-ui/react-icons';
 import { ActionFunction, LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
-import { requireUser } from '../../utils/user';
-import { getCourseList } from '../../services/authoring';
-import { getSubAccount } from '../../services/utils';
+import { requireUser } from '../../../utils/user';
+import { getCourseList } from '../../../services/authoring';
+import { getSubAccount } from '../../../services/utils';
 import { json, useLoaderData, useActionData } from 'react-router-dom';
-import CourseCard from '../ui/Authoring/CourseCard';
-import CourseFilter from '../ui/Authoring/CourseFilters';
-import PageNavigatorFooter from '../ui/Authoring/PageNavigatorFooter';
-import { deleteCourse, copyCourse } from '../../services/authoring';
+import CourseCard from '../../ui/Authoring/CourseCard';
+import CourseFilter from '../../ui/Authoring/CourseFilters';
+import { deleteCourse, copyCourse } from '../../../services/authoring';
+import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -93,7 +93,8 @@ export const authoringLoader: LoaderFunction = async ({ params }) => {
 
 const AuthoringView = () => {
 	const actionData = useActionData() as any;
-	const { courseList, coursesTotalCount, currentPage, pagesTotalCount } = useLoaderData() as any;
+	const { courseList, coursesTotalCount, currentPage, pagesTotalCount } =
+		useLoaderData() as any;
 	const toast = useToast();
 	const [listView, setListView] = useState<boolean>(
 		Boolean(Cookies.get('authoring_list_view')),
