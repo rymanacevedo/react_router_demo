@@ -118,7 +118,7 @@ const AuthoringView = () => {
 	}, [actionData]);
 
 	return (
-		<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingTop={6}>
+		<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingY={6}>
 			<Container
 				maxW={1440}
 				bg="ampWhite"
@@ -132,7 +132,8 @@ const AuthoringView = () => {
 				<CourseFilter listView={listView} handleListView={handleListFilter} />
 				<Grid
 					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
-					gap={listView ? 2 : 6}>
+					gap={listView ? 2 : 6}
+					mb={6}>
 					{courseList.map((course: any) => (
 						<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
 							<CourseCard {...course} listView={listView} />
