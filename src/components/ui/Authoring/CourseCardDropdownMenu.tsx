@@ -43,7 +43,7 @@ const CourseCardDropdownMenu = ({
 				paddingBottom={1}>
 				{' '}
 			</MenuButton>
-			<MenuList>
+			<MenuList zIndex={3}>
 				<Form method="post">
 					<input name="courseId" defaultValue={uid} hidden />
 					<MenuItem type="submit" name="intent" value="copyNew">
