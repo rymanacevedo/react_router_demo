@@ -18,6 +18,7 @@ import { getSubAccount } from '../../services/utils';
 import { json, useLoaderData, useActionData } from 'react-router-dom';
 import CourseCard from '../ui/Authoring/CourseCard';
 import CourseFilter from '../ui/Authoring/CourseFilters';
+import PageNavigatorFooter from '../ui/Authoring/PageNavigatorFooter';
 import { deleteCourse, copyCourse } from '../../services/authoring';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
@@ -66,16 +67,24 @@ export const authoringActions: ActionFunction = async ({ request }) => {
 	}
 };
 
-export const authoringLoader: LoaderFunction = async () => {
+export const authoringLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const { courseRole, subAccount } = getSubAccount(user);
 
+	const coursesPerPage = 24;
+	const currentPage = params['page'] ? +params['page'] : 1;
+
 	const {
-		data: { items: courseList },
-	} = await getCourseList(user);
+		data: { items: courseList, totalCount: coursesTotalCount },
+	} = await getCourseList(user, currentPage, coursesPerPage);
 
 	return json({
 		courseList,
+		coursesTotalCount,
+		currentPage,
+		pagesTotalCount: Math.floor(
+			(coursesTotalCount + coursesPerPage - 1) / coursesPerPage,
+		),
 		selectedCourseKey: null,
 		subAccount,
 		courseRole,
@@ -84,7 +93,7 @@ export const authoringLoader: LoaderFunction = async () => {
 
 const AuthoringView = () => {
 	const actionData = useActionData() as any;
-	const { courseList } = useLoaderData() as any;
+	const { courseList, coursesTotalCount, currentPage, pagesTotalCount } = useLoaderData() as any;
 	const toast = useToast();
 	const [listView, setListView] = useState<boolean>(
 		Boolean(Cookies.get('authoring_list_view')),
@@ -140,6 +149,13 @@ const AuthoringView = () => {
 						</GridItem>
 					))}
 				</Grid>
+				<PageNavigatorFooter
+					currentPage={currentPage}
+					pagesTotalCount={pagesTotalCount}
+					itemsCurrentCount={courseList.length}
+					itemsTotalCount={coursesTotalCount}
+					href="/main/authoring"
+				/>
 			</Container>
 		</Box>
 	);

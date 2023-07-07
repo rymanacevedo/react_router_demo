@@ -131,6 +131,11 @@ const routesJSX = (
 				action={authoringActions}
 			/>
 			<Route
+				path="authoring/:page"
+				element={<AuthoringView />}
+				loader={authoringLoader}
+			/>
+			<Route
 				path="admin"
 				element={
 					<Page
