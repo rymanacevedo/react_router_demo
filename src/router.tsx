@@ -58,6 +58,7 @@ import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';
 import FolderView, {
 	folderLoader,
+	folderActions,
 } from './components/pages/Authoring/FoldersView';
 
 const routesJSX = (
@@ -142,6 +143,7 @@ const routesJSX = (
 				path="authoring/folders"
 				element={<FolderView />}
 				loader={folderLoader}
+				action={folderActions}
 			/>
 			<Route
 				path="admin"

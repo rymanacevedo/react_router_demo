@@ -48,3 +48,17 @@ export const getFolderList = async (
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
+
+export const createFolder = async (
+	user: User,
+	body: {
+		name: string;
+		description: string;
+	},
+): Promise<{
+	response: Response;
+}> => {
+	const url = '/v2/authoring-folders';
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};

@@ -1,21 +1,48 @@
-import {
-	Box,
-	Container,
-	Heading,
-	Flex,
-	Button,
-	Grid,
-	GridItem,
-} from '@chakra-ui/react';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { LoaderFunction } from 'react-router';
-import { json, useLoaderData } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Box, Container, Grid, GridItem, useToast } from '@chakra-ui/react';
+import { LoaderFunction, ActionFunction } from 'react-router';
+import { json, useLoaderData, useActionData } from 'react-router-dom';
 import FolderCard from '../../ui/Authoring/FolderCard';
 import { requireUser } from '../../../utils/user';
 import { getFolderList } from '../../../services/authoring';
 import { getSubAccount } from '../../../services/utils';
+import { createFolder } from '../../../services/authoring';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import FolderFilters from '../../ui/Authoring/FolderFilters';
+
+export const folderActions: ActionFunction = async ({ request }) => {
+	const user = requireUser();
+	let formData = await request.formData();
+	let intent = formData.get('intent');
+
+	if (intent === 'createFolder') {
+		const name = formData.get('name')?.toString() ?? '';
+		const description = formData.get('description')?.toString() ?? '';
+
+		const { response } = await createFolder(user, {
+			name,
+			description,
+		});
+
+		const { status, statusText } = response;
+
+		if (response.status === 201) {
+			return json({
+				ok: true,
+				status,
+				statusText,
+				toastMessage: 'Folder Created',
+			});
+		} else {
+			return json({
+				ok: false,
+				status,
+				statusText,
+				toastMessage: 'Folder Creation Failure',
+			});
+		}
+	}
+};
 
 export const folderLoader: LoaderFunction = async () => {
 	const user = requireUser();
@@ -42,6 +69,26 @@ export interface Folder {
 
 const FolderView = () => {
 	const { folderList } = useLoaderData() as any;
+	const actionData = useActionData() as any;
+	const toast = useToast();
+
+	useEffect(() => {
+		if (actionData) {
+			if (actionData.status === 201) {
+				toast({
+					title: actionData.toastMessage,
+					status: 'success',
+					duration: 4000,
+				});
+			} else {
+				toast({
+					title: actionData.toastMessage,
+					status: 'error',
+					duration: 4000,
+				});
+			}
+		}
+	}, [actionData]);
 
 	return (
 		<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingY={6}>
@@ -51,7 +98,6 @@ const FolderView = () => {
 				borderRadius="xl"
 				paddingY={16}
 				paddingX={24}>
-					<Button leftIcon={<PlusIcon />}>New Course</Button>
 				<AuthoringHeader filterComponent={<FolderFilters />} />
 				<Grid
 					templateColumns="repeat(3, minmax(0, 1fr))"
