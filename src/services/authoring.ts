@@ -69,3 +69,12 @@ export const createFolder = async (
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
 };
+
+export const deleteFolder = async (
+	user: User,
+	folderUid: string,
+): Promise<any> => {
+	const url = `/v2/authoring-folders/${folderUid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE');
+};
