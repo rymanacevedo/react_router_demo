@@ -3,13 +3,16 @@ import { User } from './user';
 
 export const getCourseList = async (
 	user: any,
+	page: number, // 1 based
+	pageSize: number,
 ): Promise<{
 	data: {
 		items: any[];
+		totalCount: 0;
 	};
 	response: Response;
 }> => {
-	const url = '/v2/authoring-course-content';
+	const url = `/v2/authoring-course-content?offset=${(page - 1) * pageSize}&limit=${pageSize}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
