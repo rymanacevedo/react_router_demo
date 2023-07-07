@@ -7,6 +7,14 @@ const Link = defineStyleConfig({
 			textDecoration: 'none',
 		},
 	},
+	variants: {
+		navLink: {
+			fontWeight: 'normal',
+			_hover: {
+				borderBottom: '2px solid',
+			},
+		},
+	},
 });
 
 export { Link };

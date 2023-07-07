@@ -52,10 +52,14 @@ import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
 	authoringActions,
-} from './components/pages/AuthoringView';
+} from './components/pages/Authoring/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
 import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';
+import FolderView, {
+	folderLoader,
+	folderActions,
+} from './components/pages/Authoring/FoldersView';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -134,6 +138,12 @@ const routesJSX = (
 				path="authoring/:page"
 				element={<AuthoringView />}
 				loader={authoringLoader}
+			/>
+			<Route
+				path="authoring/folders"
+				element={<FolderView />}
+				loader={folderLoader}
+				action={folderActions}
 			/>
 			<Route
 				path="admin"
