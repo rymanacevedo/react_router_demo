@@ -149,7 +149,7 @@ const AuthoringView = () => {
 					pagesTotalCount={pagesTotalCount}
 					itemsCurrentCount={courseList.length}
 					itemsTotalCount={coursesTotalCount}
-					href="/main/authoring"
+					href="/authoring"
 				/>
 			</Container>
 		</Box>
