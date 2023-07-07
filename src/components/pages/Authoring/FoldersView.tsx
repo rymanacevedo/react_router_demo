@@ -14,6 +14,8 @@ import FolderCard from '../../ui/Authoring/FolderCard';
 import { requireUser } from '../../../utils/user';
 import { getFolderList } from '../../../services/authoring';
 import { getSubAccount } from '../../../services/utils';
+import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
+import FolderFilters from '../../ui/Authoring/FolderFilters';
 
 export const folderLoader: LoaderFunction = async () => {
 	const user = requireUser();
@@ -49,10 +51,8 @@ const FolderView = () => {
 				borderRadius="xl"
 				paddingY={16}
 				paddingX={24}>
-				<Flex justifyContent="space-between" marginBottom={10}>
-					<Heading>Courses</Heading>
 					<Button leftIcon={<PlusIcon />}>New Course</Button>
-				</Flex>
+				<AuthoringHeader filterComponent={<FolderFilters />} />
 				<Grid
 					templateColumns="repeat(3, minmax(0, 1fr))"
 					gap="calc(1.5rem + 1rem)"

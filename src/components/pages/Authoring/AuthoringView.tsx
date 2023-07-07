@@ -1,15 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-	Box,
-	Container,
-	Heading,
-	Flex,
-	Button,
-	Grid,
-	GridItem,
-	useToast,
-} from '@chakra-ui/react';
-import { PlusIcon } from '@radix-ui/react-icons';
+import { Box, Container, Grid, GridItem, useToast } from '@chakra-ui/react';
 import { ActionFunction, LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
 import { requireUser } from '../../../utils/user';
@@ -18,6 +8,7 @@ import { getSubAccount } from '../../../services/utils';
 import { json, useLoaderData, useActionData } from 'react-router-dom';
 import CourseCard from '../../ui/Authoring/CourseCard';
 import CourseFilter from '../../ui/Authoring/CourseFilters';
+import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import { deleteCourse, copyCourse } from '../../../services/authoring';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 
@@ -135,11 +126,14 @@ const AuthoringView = () => {
 				borderRadius="xl"
 				paddingY={16}
 				paddingX={24}>
-				<Flex justifyContent="space-between" marginBottom={10}>
-					<Heading>Courses</Heading>
-					<Button leftIcon={<PlusIcon />}>New Course</Button>
-				</Flex>
-				<CourseFilter listView={listView} handleListView={handleListFilter} />
+				<AuthoringHeader
+					filterComponent={
+						<CourseFilter
+							listView={listView}
+							handleListView={handleListFilter}
+						/>
+					}
+				/>
 				<Grid
 					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
 					gap={listView ? 2 : 6}

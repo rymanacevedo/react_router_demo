@@ -1,5 +1,6 @@
-import { Box, Flex, IconButton } from '@chakra-ui/react';
+import { Flex, IconButton, Link, Text } from '@chakra-ui/react';
 import { IdCardIcon, ListBulletIcon } from '@radix-ui/react-icons';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface CourseFilterProps {
 	handleListView: () => void;
@@ -9,8 +10,15 @@ interface CourseFilterProps {
 const CourseFilter = ({ handleListView, listView }: CourseFilterProps) => {
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
-			<Box>All</Box>
-			<Flex>
+			<Flex alignItems="flex-start" gap={6}>
+				<Text borderBottom="2px solid" fontWeight="normal">
+					All
+				</Text>
+				<Link as={RouterLink} variant="navLink" to="/authoring/folders">
+					Folders
+				</Link>
+			</Flex>
+			<Flex alignItems="center" gap={6}>
 				<Flex
 					border="1px solid"
 					borderColor="ampNeutral.200"
