@@ -35,3 +35,16 @@ export const copyCourse = async (
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST');
 };
+
+export const getFolderList = async (
+	user: User,
+): Promise<{
+	data: {
+		items: any[];
+	};
+	response: Response;
+}> => {
+	const url = '/v2/authoring-folders';
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
