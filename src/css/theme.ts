@@ -7,6 +7,7 @@ import { Link } from './Link';
 import { Divider } from './Divider';
 import Heading from './Heading';
 import { Card } from './Card';
+import Radio from './Radio';
 
 export const ampTheme = extendTheme({
 	styles: {
@@ -212,6 +213,7 @@ export const ampTheme = extendTheme({
 		Link,
 		Divider,
 		Heading,
+		Radio,
 		Progress: {
 			baseStyle: {
 				filledTrack: {
