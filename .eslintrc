@@ -16,8 +16,7 @@
 			"error",
 			"single",
 			{
-				"avoidEscape": true,
-				"allowTemplateLiterals": true
+				"avoidEscape": true
 			}
 		],
 		"no-unused-vars": "off",
