@@ -171,7 +171,7 @@ export default function AnswerArea({
 								<Button
 									isDisabled={!IDKResponse && !selectedAnswers.length}
 									variant="ghost"
-									colorScheme={'ampSecondary'}
+									colorScheme={"ampSecondary"}
 									onClick={clearSelectionFunction}>
 									{!showFeedback && i18n('clearSelection')}
 								</Button>

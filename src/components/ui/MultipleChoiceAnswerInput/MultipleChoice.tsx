@@ -101,7 +101,7 @@ export const MultipleChoice = ({
 				<Button
 					isDisabled={!IDKResponse && !selectedAnswers.length}
 					variant="ghost"
-					colorScheme={'ampSecondary'}
+					colorScheme={"ampSecondary"}
 					onClick={clearSelectionFunction}>
 					{!showOverlay && i18n('clearSelection')}
 				</Button>
