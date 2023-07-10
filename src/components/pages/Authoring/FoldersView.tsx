@@ -9,6 +9,7 @@ import { getSubAccount } from '../../../services/utils';
 import { createFolder } from '../../../services/authoring';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import FolderFilters from '../../ui/Authoring/FolderFilters';
+import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 
 export const folderActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -44,16 +45,24 @@ export const folderActions: ActionFunction = async ({ request }) => {
 	}
 };
 
-export const folderLoader: LoaderFunction = async () => {
+export const folderLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const { courseRole, subAccount } = getSubAccount(user);
 
+	const foldersPerPage = 3;
+	const currentPage = params['page'] ? +params['page'] : 1;
+
 	const {
-		data: { items: folderList },
-	} = await getFolderList(user);
+		data: { items: folderList, totalCount: foldersTotalCount },
+	} = await getFolderList(user, currentPage, foldersPerPage);
 
 	return json({
 		folderList,
+		foldersTotalCount,
+		currentPage,
+		pagesTotalCount: Math.floor(
+			(foldersTotalCount + foldersPerPage - 1) / foldersPerPage,
+		),
 		selectedCourseKey: null,
 		subAccount,
 		courseRole,
@@ -68,7 +77,8 @@ export interface Folder {
 }
 
 const FolderView = () => {
-	const { folderList } = useLoaderData() as any;
+	const { folderList, foldersTotalCount, currentPage, pagesTotalCount } =
+		useLoaderData() as any;
 	const actionData = useActionData() as any;
 	const toast = useToast();
 
@@ -113,6 +123,13 @@ const FolderView = () => {
 						</GridItem>
 					))}
 				</Grid>
+				<PageNavigatorFooter
+					currentPage={currentPage}
+					pagesTotalCount={pagesTotalCount}
+					itemsCurrentCount={folderList.length}
+					itemsTotalCount={foldersTotalCount}
+					href="/authoring/folders"
+				/>
 			</Container>
 		</Box>
 	);
