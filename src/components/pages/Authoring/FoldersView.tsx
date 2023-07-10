@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box, Container, Grid, GridItem, useToast } from '@chakra-ui/react';
+import { Grid, GridItem, useToast } from '@chakra-ui/react';
 import { LoaderFunction, ActionFunction } from 'react-router';
 import { json, useLoaderData, useActionData } from 'react-router-dom';
 import FolderCard from '../../ui/Authoring/FolderCard';
@@ -10,6 +10,7 @@ import { createFolder } from '../../../services/authoring';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import FolderFilters from '../../ui/Authoring/FolderFilters';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
+import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 
 export const folderActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -101,37 +102,30 @@ const FolderView = () => {
 	}, [actionData]);
 
 	return (
-		<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingY={6}>
-			<Container
-				maxW={1440}
-				bg="ampWhite"
-				borderRadius="xl"
-				paddingY={16}
-				paddingX={24}>
-				<AuthoringHeader filterComponent={<FolderFilters />} />
-				<Grid
-					templateColumns="repeat(3, minmax(0, 1fr))"
-					gap="calc(1.5rem + 1rem)"
-					mb={6}>
-					{folderList.map((folder: Folder) => (
-						<GridItem colSpan={1} w="100%" color="inherit" key={folder.uid}>
-							<FolderCard
-								name={folder.name}
-								description={folder.description}
-								usageCount={folder.usageCount}
-							/>
-						</GridItem>
-					))}
-				</Grid>
-				<PageNavigatorFooter
-					currentPage={currentPage}
-					pagesTotalCount={pagesTotalCount}
-					itemsCurrentCount={folderList.length}
-					itemsTotalCount={foldersTotalCount}
-					href="/authoring/folders"
-				/>
-			</Container>
-		</Box>
+		<AuthoringLayout>
+			<AuthoringHeader filterComponent={<FolderFilters />} />
+			<Grid
+				templateColumns="repeat(3, minmax(0, 1fr))"
+				gap="calc(1.5rem + 1rem)"
+				mb={6}>
+				{folderList.map((folder: Folder) => (
+					<GridItem colSpan={1} w="100%" color="inherit" key={folder.uid}>
+						<FolderCard
+							name={folder.name}
+							description={folder.description}
+							usageCount={folder.usageCount}
+						/>
+					</GridItem>
+				))}
+			</Grid>
+			<PageNavigatorFooter
+				currentPage={currentPage}
+				pagesTotalCount={pagesTotalCount}
+				itemsCurrentCount={folderList.length}
+				itemsTotalCount={foldersTotalCount}
+				href="/authoring/folders"
+			/>
+		</AuthoringLayout>
 	);
 };
 

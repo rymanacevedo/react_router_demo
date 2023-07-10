@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Container, Grid, GridItem, useToast } from '@chakra-ui/react';
+import { Grid, GridItem, useToast } from '@chakra-ui/react';
 import { ActionFunction, LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
 import { requireUser } from '../../../utils/user';
@@ -11,6 +11,7 @@ import CourseFilter from '../../ui/Authoring/CourseFilters';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import { deleteCourse, copyCourse } from '../../../services/authoring';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
+import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -119,40 +120,30 @@ const AuthoringView = () => {
 	}, [actionData]);
 
 	return (
-		<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingY={6}>
-			<Container
-				maxW={1440}
-				bg="ampWhite"
-				borderRadius="xl"
-				paddingY={16}
-				paddingX={24}>
-				<AuthoringHeader
-					filterComponent={
-						<CourseFilter
-							listView={listView}
-							handleListView={handleListFilter}
-						/>
-					}
-				/>
-				<Grid
-					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
-					gap={listView ? 2 : 6}
-					mb={6}>
-					{courseList.map((course: any) => (
-						<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
-							<CourseCard {...course} listView={listView} />
-						</GridItem>
-					))}
-				</Grid>
-				<PageNavigatorFooter
-					currentPage={currentPage}
-					pagesTotalCount={pagesTotalCount}
-					itemsCurrentCount={courseList.length}
-					itemsTotalCount={coursesTotalCount}
-					href="/authoring"
-				/>
-			</Container>
-		</Box>
+		<AuthoringLayout>
+			<AuthoringHeader
+				filterComponent={
+					<CourseFilter listView={listView} handleListView={handleListFilter} />
+				}
+			/>
+			<Grid
+				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
+				gap={listView ? 2 : 6}
+				mb={6}>
+				{courseList.map((course: any) => (
+					<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
+						<CourseCard {...course} listView={listView} />
+					</GridItem>
+				))}
+			</Grid>
+			<PageNavigatorFooter
+				currentPage={currentPage}
+				pagesTotalCount={pagesTotalCount}
+				itemsCurrentCount={courseList.length}
+				itemsTotalCount={coursesTotalCount}
+				href="/authoring"
+			/>
+		</AuthoringLayout>
 	);
 };
 
