@@ -133,7 +133,7 @@ const WhatYouNeedToKnowComponent = ({
 							{i18n('wasThisExplanationHelpful')}
 						</Text>
 						<Button
-							colorScheme={'ampSecondary'}
+							colorScheme="ampSecondary"
 							variant="ghost"
 							rightIcon={<Pencil1Icon style={{ color: 'ampSecondary.500' }} />}
 							onClick={onToggle}>
