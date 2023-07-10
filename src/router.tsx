@@ -146,6 +146,12 @@ const routesJSX = (
 				action={folderActions}
 			/>
 			<Route
+				path="authoring/folders/:page"
+				element={<FolderView />}
+				loader={folderLoader}
+				action={folderActions}
+			/>
+			<Route
 				path="admin"
 				element={
 					<Page

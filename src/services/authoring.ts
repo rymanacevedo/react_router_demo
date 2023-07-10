@@ -12,7 +12,9 @@ export const getCourseList = async (
 	};
 	response: Response;
 }> => {
-	const url = `/v2/authoring-course-content?offset=${(page - 1) * pageSize}&limit=${pageSize}`;
+	const url = `/v2/authoring-course-content?offset=${
+		(page - 1) * pageSize
+	}&limit=${pageSize}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
@@ -38,13 +40,18 @@ export const copyCourse = async (
 
 export const getFolderList = async (
 	user: User,
+	page: number, // 1 based
+	pageSize: number,
 ): Promise<{
 	data: {
 		items: any[];
+		totalCount: 0;
 	};
 	response: Response;
 }> => {
-	const url = '/v2/authoring-folders';
+	const url = `/v2/authoring-folders?sort=name+asc&includeUsage=true&paginate=true&offset=${
+		(page - 1) * pageSize
+	}&limit=${pageSize}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
