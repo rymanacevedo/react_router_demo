@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import {
 	Button,
 	Center,
@@ -36,21 +36,15 @@ function Step1Modal({
 }: Step1ModalProps) {
 	const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 	const { t: i18n } = useTranslation();
-	const { assignmentKey } = useParams();
 
 	const handleClose = () => {
-		const path = window.location.pathname;
-		if (path === '/main/tour') {
-			nav(-1);
-		} else {
-			nav(`/learning/assignment/${assignmentKey}`);
-		}
 		onClose();
+		nav(-1);
 	};
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+			<Modal isOpen={isOpen} onClose={handleClose} size={'xl'}>
 				<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
 				<ModalContent
 					display={tourStep === 1 ? 'block' : 'none'}
