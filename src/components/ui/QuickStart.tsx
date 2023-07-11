@@ -10,7 +10,7 @@ const QuickStart = () => {
 		<Flex justify="flex-end" ml="auto" minW="150">
 			<Link
 				as={ReactRouterLink}
-				to="/tour"
+				to="tour"
 				textDecoration="none"
 				color="ampWhite"
 				h="80px"
