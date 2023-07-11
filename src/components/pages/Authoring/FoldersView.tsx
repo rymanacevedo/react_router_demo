@@ -6,7 +6,7 @@ import FolderCard from '../../ui/Authoring/FolderCard';
 import { requireUser } from '../../../utils/user';
 import { getFolderList } from '../../../services/authoring';
 import { getSubAccount } from '../../../services/utils';
-import { createFolder } from '../../../services/authoring';
+import { createFolder, deleteFolder } from '../../../services/authoring';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import FolderFilters from '../../ui/Authoring/FolderFilters';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
@@ -41,6 +41,32 @@ export const folderActions: ActionFunction = async ({ request }) => {
 				status,
 				statusText,
 				toastMessage: 'Folder Creation Failure',
+			});
+		}
+	} else if (intent === 'deleteFolder') {
+		const folderUid = formData.get('folderUid')?.toString();
+		if (folderUid) {
+			const { response } = await deleteFolder(user, folderUid);
+			const { status, statusText } = response;
+			if (response.status === 200) {
+				return json({
+					ok: true,
+					status,
+					statusText,
+					toastMessage: 'Folder Deleted',
+				});
+			} else {
+				return json({
+					ok: false,
+					status,
+					statusText,
+					toastMessage: 'Folder Delete Failure',
+				});
+			}
+		} else {
+			return json({
+				ok: false,
+				toastMessage: 'Folder Delete Failure',
 			});
 		}
 	}
@@ -85,7 +111,7 @@ const FolderView = () => {
 
 	useEffect(() => {
 		if (actionData) {
-			if (actionData.status === 201) {
+			if (actionData.status === 200 || actionData.status === 201) {
 				toast({
 					title: actionData.toastMessage,
 					status: 'success',
@@ -114,6 +140,7 @@ const FolderView = () => {
 							name={folder.name}
 							description={folder.description}
 							usageCount={folder.usageCount}
+							uid={folder.uid}
 						/>
 					</GridItem>
 				))}

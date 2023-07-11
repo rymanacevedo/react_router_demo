@@ -16,9 +16,15 @@ interface FolderCardProps {
 	name: string;
 	description?: string;
 	usageCount: number;
+	uid: string;
 }
 
-const FolderCard = ({ name, description, usageCount }: FolderCardProps) => {
+const FolderCard = ({
+	name,
+	description,
+	usageCount,
+	uid,
+}: FolderCardProps) => {
 	return (
 		<Box position="relative" height="100%">
 			<Box
@@ -58,7 +64,7 @@ const FolderCard = ({ name, description, usageCount }: FolderCardProps) => {
 						<Heading fontSize="xl" as="h2" noOfLines={2}>
 							{name}
 						</Heading>
-						<FolderCardDropdownMenu />
+						<FolderCardDropdownMenu uid={uid} />
 					</Flex>
 				</CardHeader>
 				<CardBody alignItems="flex-start" width="100%" mb={8}>
