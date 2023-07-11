@@ -39,18 +39,18 @@ function Step1Modal({
 	const { assignmentKey } = useParams();
 
 	const handleClose = () => {
-		onClose();
 		const path = window.location.pathname;
 		if (path === '/main/tour') {
 			nav(-1);
 		} else {
 			nav(`/learning/assignment/${assignmentKey}`);
 		}
+		onClose();
 	};
 
 	return (
 		<>
-			<Modal isOpen={isOpen} onClose={handleClose} size={'xl'}>
+			<Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
 				<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
 				<ModalContent
 					display={tourStep === 1 ? 'block' : 'none'}
