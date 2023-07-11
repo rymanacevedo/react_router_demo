@@ -40,7 +40,12 @@ function Step1Modal({
 
 	const handleClose = () => {
 		onClose();
-		nav(`/learning/assignment/${assignmentKey}`);
+		const path = window.location.pathname;
+		if (path === '/main/tour') {
+			nav(-1);
+		} else {
+			nav(`/learning/assignment/${assignmentKey}`);
+		}
 	};
 
 	return (
