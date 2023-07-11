@@ -344,10 +344,11 @@ const AssignmentList = () => {
 			<List
 				spacing={3}
 				bg="ampWhite"
-				borderRadius={'12px'}
-				padding={'16px'}
-				margin="12px"
-				border={'1px'}
+				borderRadius="xl"
+				padding={4}
+				margin={3}
+				mt={6}
+				borderWidth="1px"
 				borderColor={'ampNeutral.300'}
 				width="100%"
 				minHeight="340px"
@@ -369,21 +370,21 @@ const AssignmentList = () => {
 		<Tabs w="50%" variant="unstyled">
 			<TabList>
 				<Tab px={0} mr={6} ml={6}>
-					All Modules
+					{i18n('allModules')}
 				</Tab>
 				<Tab px={0} mr={6}>
-					Not Started
+					{i18n('notStarted')}
 				</Tab>
 				<Tab px={0} mr={6}>
-					In Progress
+					{i18n('inProgress')}
 				</Tab>
 				<Tab px={0} mr={6}>
-					Completed
+					{i18n('completed')}
 				</Tab>
 			</TabList>
 
 			<TabIndicator
-				mt="-1.5px"
+				mt={-1}
 				height={0.5}
 				bg="ampPrimaryText"
 				borderRadius="1px"
@@ -391,16 +392,16 @@ const AssignmentList = () => {
 			/>
 
 			<TabPanels>
-				<TabPanel>
+				<TabPanel p={0}>
 					<ListContainer unfilteredAssignmentList={assignmentList} />
 				</TabPanel>
-				<TabPanel>
+				<TabPanel p={0}>
 					<ListContainer filterStatus="NOT_STARTED" />
 				</TabPanel>
-				<TabPanel>
+				<TabPanel p={0}>
 					<ListContainer filterStatus="IN_PROGRESS" />
 				</TabPanel>
-				<TabPanel>
+				<TabPanel p={0}>
 					<ListContainer filterStatus="COMPLETED" />
 				</TabPanel>
 			</TabPanels>
