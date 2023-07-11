@@ -12,9 +12,8 @@ export const getCourseList = async (
 	};
 	response: Response;
 }> => {
-	const url = `/v2/authoring-course-content?offset=${
-		(page - 1) * pageSize
-	}&limit=${pageSize}`;
+	const offset = (page - 1) * pageSize;
+	const url = `/v2/authoring-course-content?offset=${offset}&limit=${pageSize}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };

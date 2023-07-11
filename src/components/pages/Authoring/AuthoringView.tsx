@@ -64,7 +64,7 @@ export const authoringLoader: LoaderFunction = async ({ params }) => {
 	const { courseRole, subAccount } = getSubAccount(user);
 
 	const coursesPerPage = 24;
-	const currentPage = params['page'] ? +params['page'] : 1;
+	const currentPage = params.page ? +params.page : 1;
 
 	const {
 		data: { items: courseList, totalCount: coursesTotalCount },

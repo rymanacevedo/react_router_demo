@@ -77,7 +77,7 @@ export const folderLoader: LoaderFunction = async ({ params }) => {
 	const { courseRole, subAccount } = getSubAccount(user);
 
 	const foldersPerPage = 3;
-	const currentPage = params['page'] ? +params['page'] : 1;
+	const currentPage = params.page ? +params.page : 1;
 
 	const {
 		data: { items: folderList, totalCount: foldersTotalCount },
