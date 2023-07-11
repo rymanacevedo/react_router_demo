@@ -137,6 +137,7 @@ export default function AnswerFeedback({
 			marginBottom={10}
 			borderColor={'#1e1f20'}
 			variant={checkbox}
+			size="xxl"
 			value={answer.id}
 			isChecked={match !== null && match.answerId === answer.id}>
 			<RichContentComponent

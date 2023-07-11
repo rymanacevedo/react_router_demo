@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/react';
+import { Box, Heading, Stack } from '@chakra-ui/react';
 import {
 	QuestionInFocus,
 	SelectedAnswer,
@@ -63,40 +63,33 @@ const MultipleChoiceAnswers = ({
 	return (
 		<Box>
 			<Heading as="h3">{i18n('answer')}</Heading>
-			<Box
-				marginTop="34px"
-				display="flex"
-				flexDirection={'column'}
-				minHeight={350}
-				h="100%">
-				<>
-					{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
-						return (
-							<MultipleChoiceInput
-								key={answer.id}
-								questionText={answer.answerRc}
-								questionAnswerId={answer.id}
-								addAnswer={addAnswer}
-								selectedAnswers={selectedAnswers}
-								IDK={false}
-								setIDKResponse={setIDKResponse}
-							/>
-						);
-					})}
-					<MultipleChoiceInput
-						questionText={"I don't know yet"}
-						questionAnswerId={''}
-						addAnswer={() => {
-							setSelectedAnswers([]);
-						}}
-						selectedAnswers={selectedAnswers}
-						IDK={true}
-						clearSelection={clearSelection}
-						setClearSelection={setClearSelection}
-						setIDKResponse={setIDKResponse}
-					/>
-				</>
-			</Box>
+			<Stack minHeight={350} h="100%" marginTop={8}>
+				{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
+					return (
+						<MultipleChoiceInput
+							key={answer.id}
+							questionText={answer.answerRc}
+							questionAnswerId={answer.id}
+							addAnswer={addAnswer}
+							selectedAnswers={selectedAnswers}
+							IDK={false}
+							setIDKResponse={setIDKResponse}
+						/>
+					);
+				})}
+				<MultipleChoiceInput
+					questionText={"I don't know yet"}
+					questionAnswerId={''}
+					addAnswer={() => {
+						setSelectedAnswers([]);
+					}}
+					selectedAnswers={selectedAnswers}
+					IDK={true}
+					clearSelection={clearSelection}
+					setClearSelection={setClearSelection}
+					setIDKResponse={setIDKResponse}
+				/>
+			</Stack>
 		</Box>
 	);
 };

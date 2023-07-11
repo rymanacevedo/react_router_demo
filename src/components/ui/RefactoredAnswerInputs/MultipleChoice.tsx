@@ -1,18 +1,33 @@
-import { RadioGroup, Stack } from '@chakra-ui/react';
+import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react';
 import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
-import RadioInput from './RadioInput';
+import RichContentComponent from '../RichContentComponent';
+import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
 
 type Props = {
 	questionInFocus: QuestionInFocus;
+	// setSelectedAnswer: (value: number | null) => void;
 };
-export default function MultipleChoice({ questionInFocus }: Props) {
+export default function MultipleChoice({
+	questionInFocus,
+}: // setSelectedAnswer,
+Props) {
 	return (
-		<RadioGroup>
-			<Stack marginTop={8}>
-				{questionInFocus.answerList.map((answer, index) => {
-					return <RadioInput value={index} answerRc={answer.answerRc} />;
+		<CheckboxGroup>
+			<Stack minHeight={350} h="100%" marginTop={8}>
+				{questionInFocus.answerList.map((answer) => {
+					return (
+						<Checkbox
+							size="xxl"
+							className="label-hover-effect"
+							icon={<CustomIcon isIndeterminate={false} isChecked={true} />}
+							variant="multiChoiceAnswer"
+							colorScheme="transparent"
+							value={answer.id.toString()}>
+							<RichContentComponent content={answer.answerRc} />
+						</Checkbox>
+					);
 				})}
 			</Stack>
-		</RadioGroup>
+		</CheckboxGroup>
 	);
 }

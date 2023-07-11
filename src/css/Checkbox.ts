@@ -5,6 +5,15 @@ const { definePartsStyle, defineMultiStyleConfig } =
 	createMultiStyleConfigHelpers(checkboxAnatomy.keys);
 
 const boxShadowAttribute = '0 0 0 4px rgba(37, 124, 181, 0.50)';
+const xl = defineStyle({
+	w: '6',
+	h: '6',
+});
+
+const xxl = defineStyle({
+	w: '12',
+	h: '12',
+});
 
 const baseMultiSelect = definePartsStyle({
 	control: {
@@ -18,8 +27,6 @@ const baseMultiSelect = definePartsStyle({
 		},
 		// borderColor: 'ampSuccess.500',
 		border: '1.5px solid',
-		width: '2.75rem',
-		height: '2.75rem',
 		borderRadius: '12px',
 		// backgroundColor: 'ampSuccess.50',
 	},
@@ -32,7 +39,10 @@ const baseMultiSelect = definePartsStyle({
 		fontWeight: 'bold',
 	},
 });
-
+const sizes = {
+	xl: definePartsStyle({ control: xl }),
+	xxl: definePartsStyle({ control: xxl }),
+};
 const baseStyle = definePartsStyle({
 	control: {
 		_focus: {
@@ -49,11 +59,10 @@ const baseStyle = definePartsStyle({
 const multiChoiceAnswer = defineStyle(() => {
 	return {
 		control: {
-			_focus: {
-				borderRadius: '50%',
-				boxShadow: boxShadowAttribute,
-			},
-			_hover: {},
+			...baseMultiSelect.control,
+			borderRadius: '50%',
+			_hover: undefined,
+			border: undefined,
 		},
 	};
 });
@@ -196,6 +205,7 @@ const variants = {
 
 const Checkbox = defineMultiStyleConfig({
 	baseStyle,
+	sizes,
 	variants,
 });
 

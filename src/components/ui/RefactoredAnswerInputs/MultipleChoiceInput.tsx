@@ -133,10 +133,10 @@ const AnswerInput = ({ answerRc }: { answerRc: string }) => {
 	};
 	return (
 		<Checkbox
-			className={'label-hover-effect'}
-			variant={'multiChoiceAnswer'}
-			colorScheme={'transparent'}
-			size={'4rem'}
+			className="label-hover-effect"
+			variant="multiChoiceAnswer"
+			colorScheme="transparent"
+			size="xxl"
 			icon={
 				<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
 			}

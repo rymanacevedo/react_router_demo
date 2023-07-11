@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import {
 	QuestionInFocus,
 	SelectedAnswer,
@@ -40,7 +40,7 @@ const MultiSelect = ({
 	};
 
 	return (
-		<Flex marginTop={8} direction="column">
+		<Stack minHeight={350} h="100%" marginTop={8}>
 			{questionInFocus.answerList.map((answer) => {
 				return (
 					<MultiSelectInput
@@ -52,7 +52,7 @@ const MultiSelect = ({
 					/>
 				);
 			})}
-		</Flex>
+		</Stack>
 	);
 };
 
