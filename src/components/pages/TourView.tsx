@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import {
 	Button,
 	Center,
@@ -36,10 +36,11 @@ function Step1Modal({
 }: Step1ModalProps) {
 	const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
 	const { t: i18n } = useTranslation();
+	const { assignmentKey } = useParams();
 
 	const handleClose = () => {
 		onClose();
-		nav(-1);
+		nav(`/learning/assignment/${assignmentKey}`);
 	};
 
 	return (
