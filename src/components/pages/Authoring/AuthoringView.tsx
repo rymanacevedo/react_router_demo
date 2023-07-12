@@ -59,16 +59,17 @@ export const authoringActions: ActionFunction = async ({ request }) => {
 	}
 };
 
-export const authoringLoader: LoaderFunction = async ({ params }) => {
+export const authoringLoader: LoaderFunction = async ({ params, request }) => {
 	const user = requireUser();
 	const { courseRole, subAccount } = getSubAccount(user);
 
 	const coursesPerPage = 24;
 	const currentPage = params.page ? +params.page : 1;
+	const sortOrder = new URL(request.url).searchParams.get('sort') || 'a';
 
 	const {
 		data: { items: courseList, totalCount: coursesTotalCount },
-	} = await getCourseList(user, currentPage, coursesPerPage);
+	} = await getCourseList(user, currentPage, coursesPerPage, sortOrder);
 
 	return json({
 		courseList,
@@ -80,13 +81,19 @@ export const authoringLoader: LoaderFunction = async ({ params }) => {
 		selectedCourseKey: null,
 		subAccount,
 		courseRole,
+		sortOrder,
 	});
 };
 
 const AuthoringView = () => {
 	const actionData = useActionData() as any;
-	const { courseList, coursesTotalCount, currentPage, pagesTotalCount } =
-		useLoaderData() as any;
+	const {
+		courseList,
+		coursesTotalCount,
+		currentPage,
+		pagesTotalCount,
+		sortOrder,
+	} = useLoaderData() as any;
 	const toast = useToast();
 	const [listView, setListView] = useState<boolean>(
 		Boolean(Cookies.get('authoring_list_view')),
@@ -123,7 +130,11 @@ const AuthoringView = () => {
 		<AuthoringLayout>
 			<AuthoringHeader
 				filterComponent={
-					<CourseFilter listView={listView} handleListView={handleListFilter} />
+					<CourseFilter
+						listView={listView}
+						handleListView={handleListFilter}
+						sortOrder={sortOrder}
+					/>
 				}
 			/>
 			<Grid

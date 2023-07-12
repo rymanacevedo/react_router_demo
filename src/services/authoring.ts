@@ -5,6 +5,7 @@ export const getCourseList = async (
 	user: any,
 	page: number, // 1 based
 	pageSize: number,
+	sortOrder: string,
 ): Promise<{
 	data: {
 		items: any[];
@@ -12,8 +13,14 @@ export const getCourseList = async (
 	};
 	response: Response;
 }> => {
+	const sort =
+		sortOrder === 'm'
+			? 'modifiedTime+asc'
+			: sortOrder === 'c'
+			? 'createdTime+asc'
+			: 'name+asc';
 	const offset = (page - 1) * pageSize;
-	const url = `/v2/authoring-course-content?offset=${offset}&limit=${pageSize}`;
+	const url = `/v2/authoring-course-content?sort=${sort}&offset=${offset}&limit=${pageSize}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
