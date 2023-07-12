@@ -77,3 +77,19 @@ export const deleteFolder = async (
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE');
 };
+
+export const addCoursesToFolder = async (
+	user: User,
+	folderUid: string,
+	body: {
+		items: {
+			uid: string;
+		}[];
+	},
+): Promise<{
+	response: Response;
+}> => {
+	const url = `/v2/authoring-folders/${folderUid}/course-content`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
