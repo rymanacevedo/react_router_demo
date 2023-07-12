@@ -3,7 +3,8 @@ import AmpChip from '../../css/AmpChip';
 
 const ExplanationTitle = ({ answer }: any) => {
 	//usage: <ExplanationTitle answer={'SureCorrect'} />
-
+	//PartSureCorrect occured when choosing both correct options but unsure
+	console.log(answer);
 	type ExplanationAnswerType = {
 		[key: string]: string;
 	};
@@ -17,6 +18,7 @@ const ExplanationTitle = ({ answer }: any) => {
 		OneAnswerPartSureIncorrect: 'You didn’t know this one, let’s dig in.',
 		OneAnswerPartSureCorrect: 'You knew this one! You just weren’t sure.',
 		PartSureIncorrect: 'You didn’t know this one, let’s dig in.',
+		NANoAnswerSelected: 'You didn’t know this one, let’s take a look.',
 	};
 
 	const iconLookup: { [key: string]: any } = {
@@ -29,6 +31,7 @@ const ExplanationTitle = ({ answer }: any) => {
 		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
 		PartSureIncorrect: 'ampDarkErrorOutline',
+		NANoAnswerSelected: 'ampNeutralFilled',
 	};
 
 	const variant: string = iconLookup[answer as keyof ExplanationAnswerType];
