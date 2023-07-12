@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // the translations
@@ -270,11 +270,11 @@ const resources = {
 			practiceTestNavigation: 'Practice test navigation',
 			finishPracticeTest: 'Finish practice test',
 			practiceTest: 'Practice Test',
-         flagForReview: 'Flag for review',
-         flaggedForReview: 'Flagged for review',
-         continueToResults: 'Continue to results',
-         yourPracticeTestIsComplete: 'Your practice test is complete',
-         youHaveRunOutOfTime: 'You have run out of time!',
+			flagForReview: 'Flag for review',
+			flaggedForReview: 'Flagged for review',
+			continueToResults: 'Continue to results',
+			yourPracticeTestIsComplete: 'Your practice test is complete',
+			youHaveRunOutOfTime: 'You have run out of time!',
 			//////////////////////////////////////////////
 			//   ReviewView.tsx
 			//////////////////////////////////////////////
@@ -291,7 +291,11 @@ const resources = {
 			peers: 'Peers',
 			you: 'You',
 			learnerStatsTable: 'learning stats table',
-			learningStats: 'learning stats'
+			learningStats: 'learning stats',
+			allModules: 'All Modules',
+			notStarted: 'Not Started',
+			inProgress: 'In Progress',
+			completed: 'Completed',
 		},
 	},
 	fr: {

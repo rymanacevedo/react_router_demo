@@ -30,7 +30,7 @@ const CourseProgress = () => {
 				borderRadius="12px"
 				p={4}
 				marginLeft="36px"
-				marginTop="10px">
+				marginTop={16}>
 				<Heading size={'lg'} marginLeft={'8px'} marginTop={'8px'}>
 					{i18n('courseProgress')}
 				</Heading>

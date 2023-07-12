@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { Children, isValidElement, ReactNode, useState } from 'react';
 import {
 	Alert,
 	AlertIcon,
@@ -16,6 +16,12 @@ import {
 	PopoverTrigger,
 	Text,
 	VStack,
+	Tabs,
+	TabIndicator,
+	TabList,
+	TabPanels,
+	Tab,
+	TabPanel,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
@@ -223,7 +229,8 @@ const AssignmentList = () => {
 				returnFocusOnClose={false}
 				isOpen={refreshIsOpen === assignment.assignmentKey}
 				placement="bottom"
-				closeOnBlur={false}>
+				closeOnBlur={false}
+				data-status={assignment.status}>
 				<PopoverTrigger>
 					<PopoverAnchor>
 						<ListItem
@@ -316,28 +323,89 @@ const AssignmentList = () => {
 		? null
 		: mapAssignmentsRecursively(assignments.displayCurriculum.children, 0);
 
+	const filterByStatus = (status: string) => {
+		return Children.toArray(assignmentList).filter((child) => {
+			if (isValidElement(child)) {
+				return child.props['data-status'] === status;
+			} else {
+				return null;
+			}
+		});
+	};
+
+	const ListContainer = ({
+		unfilteredAssignmentList,
+		filterStatus,
+	}: {
+		unfilteredAssignmentList?: ReactNode[] | null;
+		filterStatus?: string;
+	}) => {
+		return (
+			<List
+				spacing={3}
+				bg="ampWhite"
+				borderRadius="xl"
+				padding={4}
+				margin={3}
+				mt={6}
+				borderWidth="1px"
+				borderColor={'ampNeutral.300'}
+				width="100%"
+				minHeight="340px"
+				maxWidth={'800px'}
+				boxShadow={
+					'0px 2px 34px rgba(0, 0, 0, 0.04), 0px 4px 6px rgba(39, 42, 44, 0.02), 0px 6.65px 5.32px rgba(39, 42, 44, 0.0162)'
+				}>
+				{filterStatus ? filterByStatus(filterStatus) : unfilteredAssignmentList}
+			</List>
+		);
+	};
+
 	return !assignments ? (
 		<Alert maxWidth={'650px'} status="warning">
 			<AlertIcon />
 			{i18n('noCoursesAssigned')}
 		</Alert>
 	) : (
-		<List
-			spacing={3}
-			bg="ampWhite"
-			borderRadius={'12px'}
-			padding={'16px'}
-			margin="12px"
-			border={'1px'}
-			borderColor={'ampNeutral.300'}
-			width="100%"
-			minHeight="340px"
-			maxWidth={'800px'}
-			boxShadow={
-				'0px 2px 34px rgba(0, 0, 0, 0.04), 0px 4px 6px rgba(39, 42, 44, 0.02), 0px 6.65px 5.32px rgba(39, 42, 44, 0.0162)'
-			}>
-			{assignmentList}
-		</List>
+		<Tabs w="50%" variant="unstyled">
+			<TabList>
+				<Tab px={0} mr={6} ml={6}>
+					{i18n('allModules')}
+				</Tab>
+				<Tab px={0} mr={6}>
+					{i18n('notStarted')}
+				</Tab>
+				<Tab px={0} mr={6}>
+					{i18n('inProgress')}
+				</Tab>
+				<Tab px={0} mr={6}>
+					{i18n('completed')}
+				</Tab>
+			</TabList>
+
+			<TabIndicator
+				mt={-1}
+				height={0.5}
+				bg="ampPrimaryText"
+				borderRadius="1px"
+				maxW="83px"
+			/>
+
+			<TabPanels>
+				<TabPanel p={0}>
+					<ListContainer unfilteredAssignmentList={assignmentList} />
+				</TabPanel>
+				<TabPanel p={0}>
+					<ListContainer filterStatus="NOT_STARTED" />
+				</TabPanel>
+				<TabPanel p={0}>
+					<ListContainer filterStatus="IN_PROGRESS" />
+				</TabPanel>
+				<TabPanel p={0}>
+					<ListContainer filterStatus="COMPLETED" />
+				</TabPanel>
+			</TabPanels>
+		</Tabs>
 	);
 };
 
