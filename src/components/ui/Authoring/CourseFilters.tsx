@@ -1,13 +1,19 @@
 import { Flex, IconButton, Link, Text } from '@chakra-ui/react';
 import { IdCardIcon, ListBulletIcon } from '@radix-ui/react-icons';
 import { Link as RouterLink } from 'react-router-dom';
+import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
 
 interface CourseFilterProps {
 	handleListView: () => void;
 	listView: boolean;
+	sortOrder: string;
 }
 
-const CourseFilter = ({ handleListView, listView }: CourseFilterProps) => {
+const CourseFilter = ({
+	handleListView,
+	listView,
+	sortOrder,
+}: CourseFilterProps) => {
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
 			<Flex alignItems="flex-start" gap={6}>
@@ -18,24 +24,27 @@ const CourseFilter = ({ handleListView, listView }: CourseFilterProps) => {
 					Folders
 				</Link>
 			</Flex>
-			<Flex alignItems="center" gap={6}>
-				<Flex
-					border="1px solid"
-					borderColor="ampNeutral.200"
-					padding={2}
-					borderRadius="xl">
-					<IconButton
-						aria-label="Course Card View"
-						variant={listView ? 'ghost' : 'ampSolid'}
-						icon={<IdCardIcon />}
-						onClick={handleListView}
-					/>
-					<IconButton
-						aria-label="Course List View"
-						variant={listView ? 'ampSolid' : 'ghost'}
-						onClick={handleListView}
-						icon={<ListBulletIcon />}
-					/>
+			<Flex gap={3}>
+				<CoursesSortDropdownMenu currentSortOrder={sortOrder} />
+				<Flex alignItems="center" gap={6}>
+					<Flex
+						border="1px solid"
+						borderColor="ampNeutral.200"
+						padding={2}
+						borderRadius="xl">
+						<IconButton
+							aria-label="Course Card View"
+							variant={listView ? 'ghost' : 'ampSolid'}
+							icon={<IdCardIcon />}
+							onClick={handleListView}
+						/>
+						<IconButton
+							aria-label="Course List View"
+							variant={listView ? 'ampSolid' : 'ghost'}
+							onClick={handleListView}
+							icon={<ListBulletIcon />}
+						/>
+					</Flex>
 				</Flex>
 			</Flex>
 		</Flex>
