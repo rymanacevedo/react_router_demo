@@ -1,8 +1,4 @@
-interface IAnswerInputProps {
-	isIndeterminate: boolean;
-	isChecked: boolean;
-	[key: string]: any;
-}
+import { memo } from 'react';
 
 const CustomCircleIcon = ({
 	id,
@@ -19,7 +15,6 @@ const CustomCircleIcon = ({
 	strokeWidth: number;
 	fill?: string;
 	viewBox?: string;
-	[key: string]: any;
 }) => {
 	const { boxSize, fillOpacity, isIndeterminate, isChecked, ...rest } = props;
 	return (
@@ -59,7 +54,7 @@ const CustomCircleIcon = ({
 	);
 };
 
-const CustomIcon = ({ isIndeterminate, isChecked }: IAnswerInputProps) => {
+const CustomIcon = ({ isIndeterminate, isChecked }: any) => {
 	const color = '#257CB5';
 	const size = '3rem';
 	// this is what draws the circle
@@ -99,4 +94,4 @@ const CustomIcon = ({ isIndeterminate, isChecked }: IAnswerInputProps) => {
 	);
 };
 
-export default CustomIcon;
+export default memo(CustomIcon);

@@ -5,8 +5,10 @@ import {
 	Container,
 	Divider,
 	Flex,
+	FormControl,
 	Heading,
 	HStack,
+	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -28,7 +30,7 @@ import {
 	getFullModuleWithQuestions,
 } from '../services/learning';
 import { getSubAccount } from '../services/utils';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 import {
 	Confidence,
 	ModuleData,
@@ -36,13 +38,35 @@ import {
 	RoundData,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import { AssignmentData } from '../lib/validator';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 import useInterval from '../hooks/useInterval';
 import RedIcon from '../components/ui/Icons/RedIcon';
+import AmpBox from '../components/standard/container/AmpBox';
+import { z } from 'zod';
+
+export const TimedAssessmentFieldsSchema = z.object({
+	answerUpdated: z.boolean(),
+	questionType: z.string(),
+	flagged: z.boolean(),
+	confidence: z.string(),
+	answers: z
+		.array(
+			z.object({
+				answerId: z.number(),
+			}),
+		)
+		.optional(),
+	secondsSpent: z.number(),
+	questionId: z.number(),
+	timedAssessmentKey: z.string(),
+	answerChoice: z.number().optional(),
+});
+
+export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -56,6 +80,7 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 		assignmentUid,
 	);
 	return {
+		assignmentUid,
 		assignmentData,
 		moduleData,
 		moduleInfoAndQuestions,
@@ -64,23 +89,30 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 };
 
 export default function TimedAssessment() {
+	const fetcher = useFetcher();
 	const { t: i18n } = useTranslation();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { moduleInfoAndQuestions, roundData } = useLoaderData() as {
-		assignmentData: AssignmentData;
-		moduleData: ModuleData;
-		moduleInfoAndQuestions: ModuleData;
-		roundData: RoundData;
-	};
+	const { assignmentUid, moduleInfoAndQuestions, roundData } =
+		useLoaderData() as {
+			assignmentUid: string;
+			assignmentData: AssignmentData;
+			moduleData: ModuleData;
+			moduleInfoAndQuestions: ModuleData;
+			roundData: RoundData;
+		};
 	const navigate = useNavigate();
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
 	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
 	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
-
+	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
 	const [seconds, setSeconds] = useState<number | null>(
 		roundData.timeRemaining,
 	);
+
+	const [secondsSpent, setSecondsSpent] = useState<number>(0);
+
+	const ref = useRef<HTMLFormElement>(null);
 
 	const timerFunc = () => {
 		setSeconds((prevSeconds) => {
@@ -97,10 +129,20 @@ export default function TimedAssessment() {
 
 	const startTimer = useInterval(timerFunc, 1000);
 
+	const secondsSpentFunc = () => {
+		setSecondsSpent((prevSecondsSpent) => {
+			return prevSecondsSpent + 1;
+		});
+	};
+
+	const startSecondsSpent = useInterval(secondsSpentFunc, 1000);
+
 	useEffect(() => {
 		startTimer(true);
+		startSecondsSpent(true);
 		return () => {
 			startTimer(false); // Stop the timer when the component unmounts
+			startSecondsSpent(false);
 		};
 	}, []);
 
@@ -149,15 +191,15 @@ export default function TimedAssessment() {
 		}
 	}, [questionInFocus]);
 
+	useEffect(() => {
+		if (fetcher.data) {
+			setSecondsSpent(0);
+		}
+	}, [fetcher.data]);
+
 	return (
-		<main id="timed-assessment">
-			<Container
-				id="learning-assignment"
-				margin="0"
-				padding="0"
-				maxWidth={'100vw'}
-				overflowY={'hidden'}
-				overflowX={'hidden'}>
+		<Box as="main" id="timed-assessment">
+			<Container margin={0} padding={0} maxWidth={'100vw'}>
 				<PracticeTestHeader
 					text={moduleInfoAndQuestions.name}
 					timeRemaining={seconds}
@@ -165,24 +207,24 @@ export default function TimedAssessment() {
 				<HStack justify="center" align="space-between">
 					<Stack
 						w="100%"
-						p="12px"
-						pr="0px"
+						p={3}
+						pr={0}
 						alignItems="stretch"
 						direction={['column', 'column', 'row', 'row', 'row', 'row']}>
 						<Box
-							backgroundColor="#D5D7D8"
+							backgroundColor="ampNeutral.200"
 							boxShadow="md"
 							borderRadius={24}
 							maxWidth={480}
 							maxHeight={274}
-							px="24px"
-							py="24px"
+							px={6}
+							py={6}
 							w={{ base: '100%', md: '50%' }}>
 							{/*TODO: spacing from style guide*/}
-							<Heading mb="16px" as="h2" fontSize="xl">
+							<Heading mb={4} as="h2" fontSize="xl">
 								{i18n('practiceTestNavigation')}
 							</Heading>
-							<Divider marginTop="4px" marginBottom="4px" />
+							<Divider marginTop={1} marginBottom={1} />
 							{roundData.questionList.map((question) => {
 								const values: CardValues = ['unselected'];
 								if (
@@ -213,34 +255,17 @@ export default function TimedAssessment() {
 									/>
 								);
 							})}
-
-							<Button
-								display="block"
-								marginRight="auto"
-								marginLeft="auto"
-								variant="ampSolid">
+							<Button display="block" mr="auto" ml="auto">
 								{i18n('finishPracticeTest')}
 							</Button>
 						</Box>
 
 						{/*QuestionArea*/}
-						<Box
-							backgroundColor="ampWhite"
-							boxShadow="md"
-							borderRadius={24}
-							px="72px"
-							py="44px"
-							w={{ base: '100%', md: '50%' }}>
+						<AmpBox>
 							<Question questionInFocus={questionInFocus} />
-						</Box>
+						</AmpBox>
 						{/*<AnswerArea*/}
-						<Box
-							backgroundColor="ampWhite"
-							boxShadow="md"
-							borderRadius={24}
-							px="72px"
-							py="44px"
-							w={{ base: '100%', md: '50%' }}>
+						<AmpBox>
 							<Stack
 								direction="row"
 								alignItems="center"
@@ -266,13 +291,86 @@ export default function TimedAssessment() {
 										: i18n('flagForReview')}
 								</Button>
 							</Stack>
-							<AnswerSelection
-								questionInFocus={questionInFocus}
-								// selectedAnswers={selectedAnswer}
-								// setSelectedAnswers={setSelectedAnswer}
-								// roundData={roundData}
-							/>
-						</Box>
+							<fetcher.Form
+								ref={ref}
+								method="POST"
+								action="/api/timedAssessment">
+								<AnswerSelection
+									questionInFocus={questionInFocus}
+									setSelectedAnswer={setSelectedAnswer}
+									selectedAnswer={selectedAnswer}
+									// roundData={roundData}
+								/>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="timedAssessmentKey"
+										name="timedAssessmentKey"
+										value={assignmentUid}
+									/>
+								</FormControl>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="answerUpdated"
+										name="answerUpdated"
+										value="true"
+									/>
+								</FormControl>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="flagged"
+										name="flagged"
+										value={flaggedQuestions
+											.has(questionInFocus?.publishedQuestionAuthoringKey)
+											.toString()}
+									/>
+								</FormControl>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="questionType"
+										name="questionType"
+										value="MultipleChoice"
+									/>
+								</FormControl>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="questionId"
+										name="questionId"
+										value={questionInFocus?.id}
+									/>
+								</FormControl>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="confidence"
+										name="confidence"
+										value={selectedAnswer ? Confidence.Sure : Confidence.NA}
+									/>
+								</FormControl>
+								<FormControl hidden={true}>
+									<Input
+										readOnly={true}
+										id="secondsSpent"
+										name="secondsSpent"
+										value={secondsSpent}
+									/>
+								</FormControl>
+								<Divider marginTop={11} />
+								<HStack marginTop={3} justify="space-between">
+									<Button type="submit">{i18n('submitBtnText')}</Button>
+									<Button
+										isDisabled={!selectedAnswer}
+										colorScheme="ampSecondary"
+										variant="ghost">
+										{i18n('clearSelectionPlural')}
+									</Button>
+								</HStack>
+							</fetcher.Form>
+						</AmpBox>
 					</Stack>
 				</HStack>
 			</Container>
@@ -303,6 +401,6 @@ export default function TimedAssessment() {
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
-		</main>
+		</Box>
 	);
 }

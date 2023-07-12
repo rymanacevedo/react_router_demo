@@ -4,27 +4,23 @@ import MultipleChoice from './RefactoredAnswerInputs/MultipleChoice';
 
 type Props = {
 	questionInFocus: QuestionInFocus | null;
+	selectedAnswer: number | null;
 	setSelectedAnswer: (value: number | null) => void;
-	// selectedAnswers: SelectedAnswer[];
-	// setSelectedAnswers: (
-	// 	value:
-	// 		| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
-	// 		| SelectedAnswer[],
-	// ) => void;
 	// roundData: RoundData;
 };
 
 export default function AnswerSelection({
 	questionInFocus,
+	selectedAnswer,
 	setSelectedAnswer,
-}: // selectedAnswers,
-// roundData,
+}: // roundData,
 Props) {
 	return (
 		<Box>
 			{questionInFocus?.questionType === 'MultipleChoice' && (
 				<MultipleChoice
 					questionInFocus={questionInFocus}
+					selectedAnswer={selectedAnswer}
 					setSelectedAnswer={setSelectedAnswer}
 				/>
 			)}

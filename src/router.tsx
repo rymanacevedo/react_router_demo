@@ -55,6 +55,7 @@ import AuthoringView, {
 import CourseProgress from './components/ui/CourseProgress';
 import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';
+import { timedAssessmentAction } from './routes/api/TimedAssessment';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -71,6 +72,7 @@ const routesJSX = (
 			action={keepAliveAction}
 		/>
 		<Route path="/api/refresher" action={refresherAction} />
+		<Route path="/api/timedAssessment" action={timedAssessmentAction} />
 		<Route path="/feedback" action={questionFeedbackAction} />
 		<Route path="/authenticate" element={<Authenticate />} />
 		<Route
