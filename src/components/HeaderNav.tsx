@@ -27,6 +27,7 @@ const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
 	const fetcher = useFetcher();
 	const inAssignment = location.pathname.indexOf('assignment');
 	const inReview = location.pathname.indexOf('review');
+	const inPracticeTest = location.pathname.indexOf('timedAssessment');
 	const [isLargerThan992] = useMediaQuery('(min-width: 992px)');
 
 	const handleLogout = () => {
@@ -100,7 +101,8 @@ const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
 							width="275"
 							height="90"
 						/>
-						{(inAssignment > -1 || inReview > -1) && isLargerThan992 ? (
+						{(inAssignment > -1 || inReview > -1 || inPracticeTest > -1) &&
+						isLargerThan992 ? (
 							<CourseHome />
 						) : null}
 						<QuickStart />
