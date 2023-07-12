@@ -12,6 +12,7 @@ import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import { deleteCourse, copyCourse } from '../../../services/authoring';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
+import CourseFolderModal from '../../ui/Authoring/CourseFolderModal';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -143,6 +144,7 @@ const AuthoringView = () => {
 				itemsTotalCount={coursesTotalCount}
 				href="/authoring"
 			/>
+			<CourseFolderModal />
 		</AuthoringLayout>
 	);
 };

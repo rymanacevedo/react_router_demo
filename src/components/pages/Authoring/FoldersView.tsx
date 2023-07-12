@@ -76,7 +76,7 @@ export const folderLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const { courseRole, subAccount } = getSubAccount(user);
 
-	const foldersPerPage = 3;
+	const foldersPerPage = 24;
 	const currentPage = params.page ? +params.page : 1;
 
 	const {

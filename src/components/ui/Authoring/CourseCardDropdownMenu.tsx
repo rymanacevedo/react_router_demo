@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { Form } from 'react-router-dom';
+import { useFolderDispatch } from '../../providers/AuthoringFolderProvider';
 
 interface CourseCardDropdownMenuProps {
 	uid: string;
@@ -27,6 +28,18 @@ const CourseCardDropdownMenu = ({
 	isPublished,
 }: CourseCardDropdownMenuProps) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const folderDispatch = useFolderDispatch();
+
+	const handleAddToFolder = () => {
+		folderDispatch({
+			type: 'ADD_SELECTED_COURSES',
+			payload: [{ uid }],
+		});
+		folderDispatch({
+			type: 'SHOW_FOLDER_SELECTION_MODAL',
+			payload: true,
+		});
+	};
 
 	return (
 		<Menu>
@@ -58,7 +71,7 @@ const CourseCardDropdownMenu = ({
 				</Form>
 				{!isPublished && <MenuItem onClick={onOpen}>Delete</MenuItem>}
 				<MenuItem>Move</MenuItem>
-				<MenuItem>Add to Folder</MenuItem>
+				<MenuItem onClick={handleAddToFolder}>Add to Folder</MenuItem>
 			</MenuList>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
 				<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
