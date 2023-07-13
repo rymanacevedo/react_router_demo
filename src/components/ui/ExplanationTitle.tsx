@@ -2,9 +2,6 @@ import { HStack, Heading, Center, Box } from '@chakra-ui/react';
 import AmpChip from '../../css/AmpChip';
 
 const ExplanationTitle = ({ answer }: any) => {
-	//usage: <ExplanationTitle answer={'SureCorrect'} />
-	//PartSureCorrect occured when choosing both correct options but unsure
-	console.log(answer);
 	type ExplanationAnswerType = {
 		[key: string]: string;
 	};
