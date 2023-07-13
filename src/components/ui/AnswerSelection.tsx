@@ -6,6 +6,8 @@ type Props = {
 	questionInFocus: QuestionInFocus | null;
 	selectedAnswer: number | null;
 	setSelectedAnswer: (value: number | null) => void;
+	setAnswerUpdated: (value: boolean) => void;
+
 	// roundData: RoundData;
 };
 
@@ -13,6 +15,7 @@ export default function AnswerSelection({
 	questionInFocus,
 	selectedAnswer,
 	setSelectedAnswer,
+	setAnswerUpdated,
 }: // roundData,
 Props) {
 	return (
@@ -22,6 +25,7 @@ Props) {
 					questionInFocus={questionInFocus}
 					selectedAnswer={selectedAnswer}
 					setSelectedAnswer={setSelectedAnswer}
+					setAnswerUpdated={setAnswerUpdated}
 				/>
 			)}
 		</Box>

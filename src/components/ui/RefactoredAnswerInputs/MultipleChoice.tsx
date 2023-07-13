@@ -6,11 +6,13 @@ type Props = {
 	questionInFocus: QuestionInFocus;
 	selectedAnswer: number | null;
 	setSelectedAnswer: (value: number | null) => void;
+	setAnswerUpdated: (value: boolean) => void;
 };
 export default function MultipleChoice({
 	questionInFocus,
 	selectedAnswer,
 	setSelectedAnswer,
+	setAnswerUpdated,
 }: Props) {
 	return (
 		<Stack minHeight={350} h="100%" marginTop={8}>
@@ -21,6 +23,7 @@ export default function MultipleChoice({
 						answer={answer}
 						selectedAnswer={selectedAnswer}
 						setSelectedAnswer={setSelectedAnswer}
+						setAnswerUpdated={setAnswerUpdated}
 					/>
 				);
 			})}

@@ -106,6 +106,7 @@ export default function TimedAssessment() {
 	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
 	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
 	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+	const [answerUpdated, setAnswerUpdated] = useState(false);
 	const [seconds, setSeconds] = useState<number | null>(
 		roundData.timeRemaining,
 	);
@@ -194,6 +195,7 @@ export default function TimedAssessment() {
 	useEffect(() => {
 		if (fetcher.data) {
 			setSecondsSpent(0);
+			setAnswerUpdated(false);
 		}
 	}, [fetcher.data]);
 
@@ -299,6 +301,7 @@ export default function TimedAssessment() {
 									questionInFocus={questionInFocus}
 									setSelectedAnswer={setSelectedAnswer}
 									selectedAnswer={selectedAnswer}
+									setAnswerUpdated={setAnswerUpdated}
 									// roundData={roundData}
 								/>
 								<FormControl hidden={true}>
@@ -314,7 +317,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="answerUpdated"
 										name="answerUpdated"
-										value="true"
+										value={answerUpdated.toString()}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
