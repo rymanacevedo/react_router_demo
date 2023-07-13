@@ -153,12 +153,46 @@ export default function TimedAssessment() {
 
 	const startSecondsSpent = useInterval(secondsSpentFunc, 1000);
 
+	const handleMouseLeave = async (event: any) => {
+		if (
+			event.clientY <= 0 ||
+			event.clientX <= 0 ||
+			event.clientX >= window.innerWidth ||
+			event.clientY >= window.innerHeight
+		) {
+			const user = requireUser();
+			const currentRef = ref.current as HTMLFormElement;
+			if (currentRef) {
+				const form = new FormData(currentRef);
+				form.append('user', JSON.stringify(user));
+				fetcher.submit(form, {
+					method: 'POST',
+					action: '/api/timedAssessment',
+				});
+			}
+		}
+	};
+
 	useEffect(() => {
+		const f = fetcher;
+		const user = requireUser();
+		const currentRef = ref.current as HTMLFormElement;
 		startTimer(true);
 		startSecondsSpent(true);
+		window.addEventListener('mouseout', handleMouseLeave);
 		return () => {
+			window.removeEventListener('mouseout', handleMouseLeave);
 			startTimer(false); // Stop the timer when the component unmounts
 			startSecondsSpent(false);
+
+			if (!ref.current && f) {
+				const form = new FormData(currentRef);
+				form.append('user', JSON.stringify(user));
+				f.submit(form, {
+					method: 'POST',
+					action: '/api/timedAssessment',
+				});
+			}
 		};
 	}, []);
 
@@ -185,7 +219,7 @@ export default function TimedAssessment() {
 
 	const handleNavigation = (question: QuestionInFocus) => {
 		// handle if the user selects the same navigation item
-		if (!(question.id === questionInFocus.id)) {
+		if (!(question.id === questionInFocus!.id)) {
 			const currentRef = ref.current as HTMLFormElement;
 			const form = new FormData(currentRef);
 			fetcher.submit(form, {
@@ -229,22 +263,6 @@ export default function TimedAssessment() {
 			setAnswerUpdated(false);
 		}
 	}, [fetcher.data]);
-
-	useEffect(() => {
-		const f = fetcher;
-		const user = requireUser();
-		const currentRef = ref.current as HTMLFormElement;
-		return () => {
-			if (!ref.current && f) {
-				const form = new FormData(currentRef);
-				form.append('user', JSON.stringify(user));
-				f.submit(form, {
-					method: 'POST',
-					action: '/api/timedAssessment',
-				});
-			}
-		};
-	}, []);
 
 	return (
 		<Box as="main" id="timed-assessment">
