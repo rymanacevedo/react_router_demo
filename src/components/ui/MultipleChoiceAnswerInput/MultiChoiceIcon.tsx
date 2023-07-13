@@ -1,8 +1,9 @@
-interface IAnswerInputProps {
+import React, { memo } from 'react';
+
+type CustomIconProps = {
 	isIndeterminate: boolean;
 	isChecked: boolean;
-	[key: string]: any;
-}
+};
 
 const CustomCircleIcon = ({
 	id,
@@ -58,8 +59,7 @@ const CustomCircleIcon = ({
 		</svg>
 	);
 };
-
-const CustomIcon = ({ isIndeterminate, isChecked }: IAnswerInputProps) => {
+const CustomIcon = ({ isIndeterminate, isChecked }: CustomIconProps) => {
 	const color = '#257CB5';
 	const size = '3rem';
 	// this is what draws the circle
@@ -99,4 +99,4 @@ const CustomIcon = ({ isIndeterminate, isChecked }: IAnswerInputProps) => {
 	);
 };
 
-export default CustomIcon;
+export default memo(CustomIcon);

@@ -52,16 +52,17 @@ import AssignmentList, {
 } from './components/ui/AssignmentList';
 import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
-	authoringLoader,
 	authoringActions,
+	authoringLoader,
 } from './components/pages/Authoring/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
 import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';
 import FolderView, {
-	folderLoader,
 	folderActions,
+	folderLoader,
 } from './components/pages/Authoring/FoldersView';
+import { timedAssessmentAction } from './routes/api/TimedAssessmentAction';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -78,6 +79,7 @@ const routesJSX = (
 			action={keepAliveAction}
 		/>
 		<Route path="/api/refresher" action={refresherAction} />
+		<Route path="/api/timedAssessment" action={timedAssessmentAction} />
 		<Route path="/feedback" action={questionFeedbackAction} />
 		<Route path="/authenticate" element={<Authenticate />} />
 		<Route

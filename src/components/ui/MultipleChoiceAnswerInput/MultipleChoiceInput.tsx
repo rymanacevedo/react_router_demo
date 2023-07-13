@@ -148,16 +148,11 @@ const MultipleChoiceInput = ({
 	};
 	return (
 		<Checkbox
-			style={{
-				display: 'flex',
-				marginBottom: '25px',
-				cursor: 'pointer',
-			}}
-			className={'label-hover-effect'}
-			variant={'multiChoiceAnswer'}
-			colorScheme={'transparent'}
+			className="label-hover-effect"
+			variant="multiChoiceAnswer"
+			colorScheme="transparent"
 			value={questionAnswerId}
-			size={'4rem'}
+			size="xxl"
 			icon={
 				<CustomIcon isIndeterminate={isIndeterminate} isChecked={isChecked} />
 			}

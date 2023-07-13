@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 
 import {
 	CurrentRoundAnswerOverLayData,
@@ -27,7 +27,7 @@ const MultiSelectFeedback = ({
 	const [correctness, setCorrectness] = useState<Correctness | null>(null);
 	return (
 		<>
-			<Flex marginTop={8} direction="column">
+			<Stack minHeight={350} h="100%" marginTop={8}>
 				{questionInFocus.answerList.map((answer) => {
 					return (
 						<AnswerFeedback
@@ -39,7 +39,7 @@ const MultiSelectFeedback = ({
 						/>
 					);
 				})}
-			</Flex>
+			</Stack>
 			<AnswerFeedbackBadge
 				confidence={confidence}
 				variant={variant}

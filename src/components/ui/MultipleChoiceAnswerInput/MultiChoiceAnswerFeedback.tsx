@@ -160,15 +160,11 @@ const MultiChoiceAnswerFeedback = ({
 
 	return (
 		<Checkbox
-			style={{
-				display: 'flex',
-				marginBottom: '25px',
-			}}
 			className={inReview ? '' : 'label-hover-effect'}
-			variant={'multiChoiceAnswer'}
-			colorScheme={'transparent'}
+			variant="multiChoiceAnswer"
+			colorScheme="transparent"
 			value={questionAnswerId}
-			size={'4rem'}
+			size="xxl"
 			icon={
 				<MultiChoiceOverLayIcon
 					variant={variant}

@@ -156,17 +156,11 @@ const Review = () => {
 					</Box>
 					<Flex direction="column" basis="100%" flex={1}>
 						{moduleInfoAndQuestions.introductionRc && (
-							<Box
-								bg="ampNeutral.100"
-								minWidth={'400px'}
-								minHeight={'263px'}
-								borderRadius={12}
-								p={3}>
-								<h3>{i18n('moduleResources')}</h3>
-								<Button
-									variant={'outline'}
-									marginTop={3}
-									onClick={handleViewModuleIntro}>
+							<Box h="fit-content" bg="ampNeutral.50" p={4} borderRadius={3}>
+								<Heading as="h3" size="lg" mb={3}>
+									{i18n('moduleResources')}
+								</Heading>
+								<Button variant="ampOutline" onClick={handleViewModuleIntro}>
 									{i18n('viewModuleIntro')}
 								</Button>
 							</Box>

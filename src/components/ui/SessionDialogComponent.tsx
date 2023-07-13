@@ -24,7 +24,7 @@ const SessionDialogComponent = ({ isOpen, expiration, fetcher }: Props) => {
 
 	const handleStayLoggedIn = () => {
 		fetcher.submit(null, {
-			method: 'post',
+			method: 'POST',
 			action: `/keep-alive?checkExpiration=${expiration}`,
 		});
 	};
@@ -50,7 +50,7 @@ const SessionDialogComponent = ({ isOpen, expiration, fetcher }: Props) => {
 
 					<AlertDialogFooter justifyContent="flex-start">
 						<HStack>
-							<fetcher.Form method="post">
+							<fetcher.Form>
 								<Button ref={cancelRef} onClick={handleStayLoggedIn}>
 									{i18n('staySignedInButton')}
 								</Button>

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -24,11 +24,21 @@ const DataServiceExceptionComponent = ({
 }: Props) => {
 	const { t: i18n } = useTranslation();
 	const cancelRef = useRef<HTMLButtonElement>(null);
-
+	const ref = useRef<HTMLFormElement>(null);
 	const handleCloseAlert = () => {
 		setShowAlert(false);
 		fetcher.load('/logout');
 	};
+
+	useEffect(() => {
+		const currentRef = ref.current;
+		return () => {
+			if (currentRef) {
+				currentRef.reset();
+			}
+		};
+	}, []);
+
 	return (
 		<>
 			<AlertDialog
@@ -45,7 +55,7 @@ const DataServiceExceptionComponent = ({
 						</AlertDialogHeader>
 						<AlertDialogBody>{i18n('appErrorText')}</AlertDialogBody>
 						<AlertDialogFooter>
-							<fetcher.Form method="post">
+							<fetcher.Form method="POST" ref={ref}>
 								<Button onClick={handleCloseAlert} ref={cancelRef}>
 									{i18n('appErrorRestartButtonText')}
 								</Button>
