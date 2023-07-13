@@ -10,6 +10,10 @@ import {
 import { QuestionFeedbackFields } from '../routes/QuestionFeedback';
 import { VITE_BACKEND_API } from '../lib/environment';
 import { CourseStatsType } from '../routes/LearningView';
+import {
+	TimedAssessmentFields,
+	TimedAssessmentFieldsSchema,
+} from '../routes/TimedAssessment';
 
 export const getCourseList = async (
 	user: any,
@@ -210,4 +214,24 @@ export const getCourseStats = async (
 }> => {
 	const url = `${VITE_BACKEND_API}/v2/courses/${courseKey}/stats/${learnerUid}`;
 	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const postTimedAssessmentAnswer = async (
+	fields: TimedAssessmentFields,
+	user: User,
+	timedAssessmentKey: string,
+	questionId: number,
+	subAccount: string,
+): Promise<{ data: any; response: Response }> => {
+	const url = `${VITE_BACKEND_API}/v2/timed-assessments/${timedAssessmentKey}/questions/${questionId}?subaccount=${subAccount}`;
+	const parsedFields = TimedAssessmentFieldsSchema.parse(fields);
+	const body = {
+		answerUpdated: parsedFields.answerUpdated,
+		answers: parsedFields.answers,
+		confidence: parsedFields.confidence,
+		flagged: parsedFields.flagged,
+		questionType: parsedFields.questionType,
+		secondsSpent: parsedFields.secondsSpent,
+	};
+	return authenticatedFetch(url, user.sessionKey, 'POST', body);
 };

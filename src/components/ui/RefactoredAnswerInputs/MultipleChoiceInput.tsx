@@ -101,6 +101,8 @@ function MultipleChoiceInput({
 	};
 	return (
 		<Checkbox
+			name="answerChoice"
+			value={answer.id}
 			className="label-hover-effect"
 			variant="multiChoiceAnswer"
 			colorScheme="transparent"

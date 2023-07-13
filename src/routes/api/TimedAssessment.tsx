@@ -18,7 +18,7 @@ export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 	) as unknown as TimedAssessmentFields;
 	let answers = [];
 
-	if (Boolean(fields.answerUpdated)) {
+	if (fields.answerUpdated.toString() === 'true' && fields.answerChoice) {
 		answers.push({
 			answerId: Number(fields.answerChoice),
 		});
@@ -26,14 +26,14 @@ export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 
 	const modifiedFields = {
 		...fields,
-		...(answers.length > 0 ? answers : undefined),
+		answerChoice: fields.answerChoice ? Number(fields.answerChoice) : undefined,
+		answers: answers.length > 0 ? answers : [],
 		questionId: Number(fields.questionId),
 		secondsSpent: Number(fields.secondsSpent),
 		answerUpdated: fields.answerUpdated.toString() === 'true',
 		flagged: fields.flagged.toString() === 'true',
 	};
 
-	console.log('fields', modifiedFields);
 	const result = TimedAssessmentFieldsSchema.safeParse(modifiedFields);
 	if (!result.success) {
 		return badRequest({
@@ -42,10 +42,10 @@ export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 		});
 	}
 	const { data, response } = await postTimedAssessmentAnswer(
-		fields,
+		modifiedFields,
 		user,
-		'',
-		'',
+		modifiedFields.timedAssessmentKey,
+		modifiedFields.questionId,
 		subAccount,
 	);
 
