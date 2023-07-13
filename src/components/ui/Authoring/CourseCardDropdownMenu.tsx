@@ -113,7 +113,6 @@ const CourseCardDropdownMenu = ({
 					Copy and share questions
 				</MenuItem>
 				{!isPublished && <MenuItem onClick={onOpen}>Delete</MenuItem>}
-				<MenuItem>Move</MenuItem>
 				<MenuItem onClick={handleAddToFolder}>Add to Folder</MenuItem>
 			</MenuList>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
