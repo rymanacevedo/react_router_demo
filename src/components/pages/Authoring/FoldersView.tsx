@@ -100,7 +100,7 @@ export interface Folder {
 	name: string;
 	description?: string;
 	uid: string;
-	usageCount: number;
+	courseContentCount: number;
 }
 
 const FolderView = () => {
@@ -139,7 +139,7 @@ const FolderView = () => {
 						<FolderCard
 							name={folder.name}
 							description={folder.description}
-							usageCount={folder.usageCount}
+							usageCount={folder.courseContentCount}
 							uid={folder.uid}
 						/>
 					</GridItem>
