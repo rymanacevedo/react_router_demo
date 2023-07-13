@@ -168,12 +168,12 @@ export default function AnswerArea({
 										{i18n(showFeedback ? 'continueBtnText' : 'submitBtnText')}
 									</Text>
 								</Button>
-								<Button variant="ghost" onClick={clearSelectionFunction}>
-									{!showFeedback && (
-										<Text fontSize={'14px'} color={'ampSecondary.500'}>
-											{i18n('clearSelection')}
-										</Text>
-									)}
+								<Button
+									isDisabled={!IDKResponse && !selectedAnswers.length}
+									variant="ghost"
+									colorScheme="ampSecondary"
+									onClick={clearSelectionFunction}>
+									{!showFeedback && i18n('clearSelection')}
 								</Button>
 							</HStack>
 						</Box>

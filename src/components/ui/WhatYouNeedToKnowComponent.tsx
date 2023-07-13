@@ -133,15 +133,11 @@ const WhatYouNeedToKnowComponent = ({
 							{i18n('wasThisExplanationHelpful')}
 						</Text>
 						<Button
-							_hover={{ backgroundColor: 'white' }}
-							height="12px"
+							colorScheme="ampSecondary"
 							variant="ghost"
-							w={'130px'}
-							rightIcon={<Pencil1Icon style={{ color: '#257CB5' }} />}
+							rightIcon={<Pencil1Icon style={{ color: 'ampSecondary.500' }} />}
 							onClick={onToggle}>
-							<Text fontSize={'14px'} color={'ampSecondary.500'}>
-								{i18n('leaveFeedback')}
-							</Text>
+							{i18n('leaveFeedback')}
 						</Button>
 					</HStack>
 					<ButtonGroup

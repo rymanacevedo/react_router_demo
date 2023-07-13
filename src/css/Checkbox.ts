@@ -192,6 +192,39 @@ const multiSelectPartialCorrect = defineStyle(() => {
 	};
 });
 
+const multiSelectAuthoringBox = definePartsStyle({
+	container: {
+		border: '1px solid',
+		borderColor: 'ampNeutral.200',
+		borderRadius: 'xl',
+		padding: 4,
+		_checked: {
+			borderColor: 'ampSecondary.300',
+		},
+		_hover: {
+			borderColor: 'ampSecondary.300',
+			'.chakra-checkbox__control': {
+				borderColor: 'ampSecondary.600',
+			},
+		},
+	},
+	label: {
+		color: 'ampPrimaryText',
+		fontWeight: 'normal',
+		marginLeft: 4,
+	},
+	control: {
+		border: '1px solid',
+		borderColor: 'ampSecondaryText',
+		height: '1.25rem',
+		width: '1.25rem',
+		_checked: {
+			backgroundColor: 'ampSecondary.500',
+			borderColor: 'ampSecondary.600',
+		},
+	},
+});
+
 const variants = {
 	multiSelectUnsureIncorrect,
 	multiChoiceAnswer,
@@ -201,6 +234,9 @@ const variants = {
 	multiSelectSureIncorrect,
 	multiSelectSureCorrect,
 	multiSelectPartialCorrect,
+	multiSelectAuthoringBox: {
+		...multiSelectAuthoringBox,
+	},
 };
 
 const Checkbox = defineMultiStyleConfig({

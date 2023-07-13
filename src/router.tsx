@@ -33,7 +33,9 @@ import AssignmentReviewView, {
 } from './components/pages/AssignmentReviewView/AssignmentReviewView';
 import ModuleIntroView from './components/pages/ModuleIntroView';
 import Review, { reviewLoader } from './components/pages/Review';
-import AssignmentView from './components/pages/AssignmentView/AssignmentView';
+import AssignmentView, {
+	assignmentViewLoader,
+} from './components/pages/AssignmentView/AssignmentView';
 import TourView from './components/pages/TourView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
 import ReviewView, {
@@ -51,10 +53,15 @@ import AssignmentList, {
 import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
 	authoringLoader,
-} from './components/pages/AuthoringView';
+	authoringActions,
+} from './components/pages/Authoring/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
 import { Flex } from '@chakra-ui/react';
 import TimedAssessmentResults from './routes/TimedAssessmentResults';
+import FolderView, {
+	folderLoader,
+	folderActions,
+} from './components/pages/Authoring/FoldersView';
 import { timedAssessmentAction } from './routes/api/TimedAssessment';
 
 const routesJSX = (
@@ -129,6 +136,24 @@ const routesJSX = (
 				path="authoring"
 				element={<AuthoringView />}
 				loader={authoringLoader}
+				action={authoringActions}
+			/>
+			<Route
+				path="authoring/:page"
+				element={<AuthoringView />}
+				loader={authoringLoader}
+			/>
+			<Route
+				path="authoring/folders"
+				element={<FolderView />}
+				loader={folderLoader}
+				action={folderActions}
+			/>
+			<Route
+				path="authoring/folders/:page"
+				element={<FolderView />}
+				loader={folderLoader}
+				action={folderActions}
 			/>
 			<Route
 				path="admin"
@@ -172,6 +197,7 @@ const routesJSX = (
 				element={<Review />}
 			/>
 			<Route
+				loader={assignmentViewLoader}
 				path="learning/assignment/:assignmentKey"
 				element={<AssignmentView />}
 			/>
