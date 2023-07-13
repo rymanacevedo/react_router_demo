@@ -373,7 +373,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="timedAssessmentKey"
 										name="timedAssessmentKey"
-										value={assignmentUid}
+										defaultValue={assignmentUid}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -381,7 +381,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="answerUpdated"
 										name="answerUpdated"
-										value={answerUpdated.toString()}
+										defaultValue={answerUpdated.toString()}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -399,7 +399,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="questionType"
 										name="questionType"
-										value={questionInFocus?.questionType}
+										defaultValue={questionInFocus?.questionType}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -407,7 +407,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="questionId"
 										name="questionId"
-										value={questionInFocus?.id}
+										defaultValue={questionInFocus?.id}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -423,7 +423,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="secondsSpent"
 										name="secondsSpent"
-										value={secondsSpent}
+										defaultValue={secondsSpent}
 									/>
 								</FormControl>
 								<Divider marginTop={11} />

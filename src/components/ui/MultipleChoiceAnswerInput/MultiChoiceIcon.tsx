@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 const CustomCircleIcon = ({
 	id,
@@ -15,6 +15,7 @@ const CustomCircleIcon = ({
 	strokeWidth: number;
 	fill?: string;
 	viewBox?: string;
+	[key: string]: any;
 }) => {
 	const { boxSize, fillOpacity, isIndeterminate, isChecked, ...rest } = props;
 	return (
