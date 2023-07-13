@@ -184,21 +184,31 @@ export default function TimedAssessment() {
 	};
 
 	const handleNavigation = (question: QuestionInFocus) => {
-		setQuestionInFocus(
-			findQuestionInFocus(
-				moduleInfoAndQuestions,
-				roundData,
-				false,
-				false,
-				question.displayOrder - 1,
-			),
-		);
+		// handle if the user selects the same navigation item
+		if (!(question.id === questionInFocus.id)) {
+			const currentRef = ref.current as HTMLFormElement;
+			const form = new FormData(currentRef);
+			fetcher.submit(form, {
+				method: 'POST',
+				action: '/api/timedAssessment',
+			});
 
-		question.answerList.forEach((answer) => {
-			if (answer.selected) {
-				setSelectedAnswer(answer.id);
-			}
-		});
+			setQuestionInFocus(
+				findQuestionInFocus(
+					moduleInfoAndQuestions,
+					roundData,
+					false,
+					false,
+					question.displayOrder - 1,
+				),
+			);
+
+			question.answerList.forEach((answer) => {
+				if (answer.selected) {
+					setSelectedAnswer(answer.id);
+				}
+			});
+		}
 	};
 
 	const handleResultsNavigation = () => {
