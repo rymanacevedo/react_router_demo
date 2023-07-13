@@ -2,8 +2,6 @@ import { HStack, Heading, Center, Box } from '@chakra-ui/react';
 import AmpChip from '../../css/AmpChip';
 
 const ExplanationTitle = ({ answer }: any) => {
-	//usage: <ExplanationTitle answer={'SureCorrect'} />
-
 	type ExplanationAnswerType = {
 		[key: string]: string;
 	};
@@ -17,6 +15,8 @@ const ExplanationTitle = ({ answer }: any) => {
 		OneAnswerPartSureIncorrect: 'You didn’t know this one, let’s dig in.',
 		OneAnswerPartSureCorrect: 'You knew this one! You just weren’t sure.',
 		PartSureIncorrect: 'You didn’t know this one, let’s dig in.',
+		NANoAnswerSelected: 'You didn’t know this one, let’s take a look.',
+		PartSureCorrect: 'You knew this one! You just weren’t sure.',
 	};
 
 	const iconLookup: { [key: string]: any } = {
@@ -29,6 +29,8 @@ const ExplanationTitle = ({ answer }: any) => {
 		OneAnswerPartSureIncorrect: 'ampDarkErrorOutline',
 		OneAnswerPartSureCorrect: 'ampDarkSuccessOutline',
 		PartSureIncorrect: 'ampDarkErrorOutline',
+		NANoAnswerSelected: 'ampNeutralFilled',
+		PartSureCorrect: 'ampDarkSuccessOutline',
 	};
 
 	const variant: string = iconLookup[answer as keyof ExplanationAnswerType];
