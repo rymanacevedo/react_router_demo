@@ -381,7 +381,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="answerUpdated"
 										name="answerUpdated"
-										defaultValue={answerUpdated.toString()}
+										value={answerUpdated.toString()}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -423,7 +423,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="secondsSpent"
 										name="secondsSpent"
-										defaultValue={secondsSpent}
+										value={secondsSpent}
 									/>
 								</FormControl>
 								<Divider marginTop={11} />
