@@ -111,7 +111,9 @@ export default function MultipleChoiceInput({
 			variant="multiChoiceAnswer"
 			colorScheme="transparent"
 			size="xxl"
-			icon={<CustomIcon />}
+			icon={
+				<CustomIcon isChecked={isChecked} isIndeterminate={isIndeterminate} />
+			}
 			isChecked={isChecked}
 			isIndeterminate={isIndeterminate}
 			onChange={() => checkStatus(answer)}>
