@@ -14,30 +14,8 @@ export const AuthenticationDataSchema = z.object({
 	tabs: TabsSchema,
 	redirectTo: z.string(),
 });
-export const BootstrapDataSchema = z.object({
-	accountInfo: z.object({
-		key: z.string(),
-		abbrevName: z.string(),
-		uid: z.string(),
-		name: z.string().optional(),
-		parentUid: z.string().optional(),
-		demo: z.boolean().optional(),
-		modifiedTime: z.number().optional(),
-		allowSelfRegistration: z.boolean(),
-	}),
-	recaptchaSiteKey: z.string(),
-	items: z
-		.array(
-			z.object({
-				messageCode: z.string(),
-				message: z.string(),
-			}),
-		)
-		.optional(),
-});
 
 export type AuthenticationData = z.infer<typeof AuthenticationDataSchema>;
-export type BootstrapData = z.infer<typeof BootstrapDataSchema>;
 export const appLoader = () => {
 	const user = getUser();
 	let data: AuthenticationData | null = null;
