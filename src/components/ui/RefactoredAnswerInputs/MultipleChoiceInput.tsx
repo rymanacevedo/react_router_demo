@@ -4,7 +4,7 @@ import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
 import { QuestionInFocusAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 
-function MultipleChoiceInput({
+export default function MultipleChoiceInput({
 	answer,
 	selectedAnswer,
 	setSelectedAnswer,
@@ -16,7 +16,9 @@ function MultipleChoiceInput({
 	setAnswerUpdated: (value: boolean) => void;
 }) {
 	const [firstRender, setFirstRender] = useState(() => true);
-	const [status, setStatus] = useState('unchecked');
+	const [status, setStatus] = useState(
+		selectedAnswer ? 'checked' : 'unchecked',
+	);
 	const [text, setText] = useState('');
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [variant, setVariant] = useState('');
@@ -45,13 +47,13 @@ function MultipleChoiceInput({
 
 	useEffect(() => {
 		if (!firstRender) {
-			checkSelectedAnswers(selectedAnswer);
 			setAnswerUpdated(true);
 		}
 
 		if (firstRender) {
 			setFirstRender(false);
 		}
+		checkSelectedAnswers(selectedAnswer);
 	}, [selectedAnswer]);
 
 	const checkStatus = (a: QuestionInFocusAnswer) => {
@@ -131,5 +133,3 @@ function MultipleChoiceInput({
 		</Checkbox>
 	);
 }
-
-export default MultipleChoiceInput;

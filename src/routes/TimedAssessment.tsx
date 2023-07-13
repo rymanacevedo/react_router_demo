@@ -100,12 +100,25 @@ export default function TimedAssessment() {
 			moduleInfoAndQuestions: ModuleData;
 			roundData: RoundData;
 		};
+	const flaggedQuestionIds = roundData.questionList
+		.filter((question) => question.flagged)
+		.map((question) => question.publishedQuestionAuthoringKey);
+	const selectedAnswerIds = roundData.questionList.flatMap((question) =>
+		question.answerList
+			.filter((answer) => answer.selected)
+			.map((answer) => answer.id),
+	);
+
 	const navigate = useNavigate();
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(null);
 	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
-	const [flaggedQuestions, setFlaggedQuestions] = useState(new Set());
-	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+	const [flaggedQuestions, setFlaggedQuestions] = useState(
+		flaggedQuestionIds.length > 0 ? new Set(flaggedQuestionIds) : new Set(),
+	);
+	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(
+		selectedAnswerIds.length > 0 ? selectedAnswerIds[0] : null,
+	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 	const [seconds, setSeconds] = useState<number | null>(
 		roundData.timeRemaining,
@@ -222,7 +235,6 @@ export default function TimedAssessment() {
 							px={6}
 							py={6}
 							w={{ base: '100%', md: '50%' }}>
-							{/*TODO: spacing from style guide*/}
 							<Heading mb={4} as="h2" fontSize="xl">
 								{i18n('practiceTestNavigation')}
 							</Heading>
