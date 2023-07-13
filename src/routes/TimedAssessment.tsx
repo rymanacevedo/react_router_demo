@@ -191,6 +191,12 @@ export default function TimedAssessment() {
 				question.displayOrder - 1,
 			),
 		);
+
+		question.answerList.forEach((answer) => {
+			if (answer.selected) {
+				setSelectedAnswer(answer.id);
+			}
+		});
 	};
 
 	const handleResultsNavigation = () => {
@@ -342,6 +348,7 @@ export default function TimedAssessment() {
 											.toString()}
 									/>
 								</FormControl>
+								{/*TODO: update question types if not MultipleChoice*/}
 								<FormControl hidden={true}>
 									<Input
 										readOnly={true}
@@ -379,6 +386,7 @@ export default function TimedAssessment() {
 									<Button type="submit">{i18n('submitBtnText')}</Button>
 									<Button
 										isDisabled={!selectedAnswer}
+										onClick={() => setSelectedAnswer(null)}
 										colorScheme="ampSecondary"
 										variant="ghost">
 										{i18n('clearSelectionPlural')}

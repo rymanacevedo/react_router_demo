@@ -16,20 +16,19 @@ export default function MultipleChoiceInput({
 	setAnswerUpdated: (value: boolean) => void;
 }) {
 	const [firstRender, setFirstRender] = useState(() => true);
-	const [status, setStatus] = useState(
-		selectedAnswer ? 'checked' : 'unchecked',
-	);
+	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [variant, setVariant] = useState('');
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 
-	const checkSelectedAnswers = (a: number | null) => {
+	const renderSelectedAnswer = (a: number | null) => {
 		if (a === answer.id) {
 			setIsEnabled(true);
 			setText('I am sure');
 			setVariant('ampPrimary');
+			setStatus('checked');
 
 			//     TODO: check if 50% confidence is selected
 			//     if (answer.confidence === 50) {
@@ -46,6 +45,7 @@ export default function MultipleChoiceInput({
 	};
 
 	useEffect(() => {
+		// strict mode makes me do this :(
 		if (!firstRender) {
 			setAnswerUpdated(true);
 		}
@@ -53,7 +53,7 @@ export default function MultipleChoiceInput({
 		if (firstRender) {
 			setFirstRender(false);
 		}
-		checkSelectedAnswers(selectedAnswer);
+		renderSelectedAnswer(selectedAnswer);
 	}, [selectedAnswer]);
 
 	const checkStatus = (a: QuestionInFocusAnswer) => {

@@ -16,8 +16,7 @@ export default function AnswerSelection({
 	selectedAnswer,
 	setSelectedAnswer,
 	setAnswerUpdated,
-}: // roundData,
-Props) {
+}: Props) {
 	return (
 		<Box>
 			{questionInFocus?.questionType === 'MultipleChoice' && (
