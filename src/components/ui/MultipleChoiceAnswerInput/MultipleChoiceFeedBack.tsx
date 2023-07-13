@@ -69,9 +69,7 @@ const MultipleChoiceFeedBack = ({
 					);
 				})}
 				<AnswerFeedback
-					/* eslint-disable */
-						questionText={"I don't know yet"}
-						/* eslint-enable */
+					questionText={"I don't know yet"}
 					questionAnswerId={''}
 					selectedAnswers={selectedAnswers}
 					IDK={true}

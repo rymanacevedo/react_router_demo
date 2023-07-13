@@ -4,17 +4,19 @@ import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
 import { QuestionInFocusAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 
+type MultipleChoiceInputProps = {
+	answer: QuestionInFocusAnswer;
+	selectedAnswer: number | null;
+	setSelectedAnswer: (value: number | null) => void;
+	setAnswerUpdated: (value: boolean) => void;
+};
+
 export default function MultipleChoiceInput({
 	answer,
 	selectedAnswer,
 	setSelectedAnswer,
 	setAnswerUpdated,
-}: {
-	answer: QuestionInFocusAnswer;
-	selectedAnswer: number | null;
-	setSelectedAnswer: (value: number | null) => void;
-	setAnswerUpdated: (value: boolean) => void;
-}) {
+}: MultipleChoiceInputProps) {
 	const [firstRender, setFirstRender] = useState(() => true);
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');

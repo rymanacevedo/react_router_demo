@@ -1,5 +1,10 @@
 import React, { memo } from 'react';
 
+type CustomIconProps = {
+	isIndeterminate: boolean;
+	isChecked: boolean;
+};
+
 const CustomCircleIcon = ({
 	id,
 	color = 'currentColor',
@@ -54,8 +59,7 @@ const CustomCircleIcon = ({
 		</svg>
 	);
 };
-
-const CustomIcon = ({ isIndeterminate, isChecked }: any) => {
+const CustomIcon = ({ isIndeterminate, isChecked }: CustomIconProps) => {
 	const color = '#257CB5';
 	const size = '3rem';
 	// this is what draws the circle
