@@ -9,7 +9,6 @@ import { requireUser } from '../../utils/user';
 import { User } from '../../services/user';
 
 export const timedAssessmentAction: ActionFunction = async ({ request }) => {
-	// {"secondsSpent":1350.909,"answerUpdated":false,"questionType":"MultipleChoice","flagged":false,"confidence":"NA"}
 	const cloneData = request.clone();
 	const formData = await cloneData.formData();
 	let user = formData.get('user');
