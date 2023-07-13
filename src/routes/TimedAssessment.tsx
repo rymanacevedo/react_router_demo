@@ -394,13 +394,12 @@ export default function TimedAssessment() {
 											.toString()}
 									/>
 								</FormControl>
-								{/*TODO: update question types if not MultipleChoice*/}
 								<FormControl hidden={true}>
 									<Input
 										readOnly={true}
 										id="questionType"
 										name="questionType"
-										value="MultipleChoice"
+										value={questionInFocus?.questionType}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
