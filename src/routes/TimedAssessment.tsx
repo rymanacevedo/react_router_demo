@@ -47,6 +47,7 @@ import useInterval from '../hooks/useInterval';
 import RedIcon from '../components/ui/Icons/RedIcon';
 import AmpBox from '../components/standard/container/AmpBox';
 import { z } from 'zod';
+import { UserSchema } from '../services/user';
 
 export const TimedAssessmentFieldsSchema = z.object({
 	answerUpdated: z.boolean(),
@@ -64,6 +65,7 @@ export const TimedAssessmentFieldsSchema = z.object({
 	questionId: z.number(),
 	timedAssessmentKey: z.string(),
 	answerChoice: z.number().optional(),
+	user: UserSchema.optional(),
 });
 
 export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
@@ -217,6 +219,22 @@ export default function TimedAssessment() {
 			setAnswerUpdated(false);
 		}
 	}, [fetcher.data]);
+
+	useEffect(() => {
+		const f = fetcher;
+		const user = requireUser();
+		const currentRef = ref.current as HTMLFormElement;
+		return () => {
+			if (!ref.current && f) {
+				const form = new FormData(currentRef);
+				form.append('user', JSON.stringify(user));
+				f.submit(form, {
+					method: 'POST',
+					action: '/api/timedAssessment',
+				});
+			}
+		};
+	}, []);
 
 	return (
 		<Box as="main" id="timed-assessment">

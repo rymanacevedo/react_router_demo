@@ -6,13 +6,21 @@ import {
 import { badRequest, getSubAccount } from '../../services/utils';
 import { postTimedAssessmentAnswer } from '../../services/learning';
 import { requireUser } from '../../utils/user';
+import { User } from '../../services/user';
 
 export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 	// {"secondsSpent":1350.909,"answerUpdated":false,"questionType":"MultipleChoice","flagged":false,"confidence":"NA"}
 	const cloneData = request.clone();
 	const formData = await cloneData.formData();
-	const user = requireUser();
-	const { subAccount } = getSubAccount(user);
+	let user = formData.get('user');
+	let parsedUser: User | null = null;
+	if (user !== null) {
+		parsedUser = JSON.parse(user as string) as User;
+	}
+	if (!parsedUser) {
+		parsedUser = requireUser();
+	}
+	const { subAccount } = getSubAccount(parsedUser);
 	const fields = Object.fromEntries(
 		formData.entries(),
 	) as unknown as TimedAssessmentFields;
@@ -22,6 +30,11 @@ export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 		answers.push({
 			answerId: Number(fields.answerChoice),
 		});
+	}
+
+	// remove user from fields
+	if (fields.user) {
+		delete fields.user;
 	}
 
 	const modifiedFields = {
@@ -43,7 +56,7 @@ export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 	}
 	const { data, response } = await postTimedAssessmentAnswer(
 		modifiedFields,
-		user,
+		parsedUser,
 		modifiedFields.timedAssessmentKey,
 		modifiedFields.questionId,
 		subAccount,
