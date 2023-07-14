@@ -46,6 +46,9 @@ const fetchCallbackGet = async <T extends unknown>(
 		},
 	});
 
+	if (response.status === 401) {
+		return { data: {} as T, response };
+	}
 	const data = await response.json();
 	return { data, response };
 };

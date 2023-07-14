@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import {
 	json,
 	Outlet,
+	redirect,
 	useFetcher,
 	useLoaderData,
 	useLocation,
@@ -21,7 +22,11 @@ export const protectedRouteLoader = async () => {
 	const user = requireUser();
 	const {
 		data: { value: expiration },
+		response,
 	} = await getSessionExpiration(user.sessionKey);
+	if (response.status === 401) {
+		return redirect('/logout');
+	}
 	return json({ user, expiration });
 };
 const ProtectedRoute = () => {
