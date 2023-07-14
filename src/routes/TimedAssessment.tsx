@@ -300,7 +300,7 @@ export default function TimedAssessment() {
 									values.push('selected');
 								}
 
-								if (question.confidence !== Confidence.NA) {
+								if (selectedAnswer) {
 									values.push('answered');
 								}
 
