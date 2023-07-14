@@ -1,13 +1,15 @@
 import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 import { Box } from '@chakra-ui/react';
 import MultipleChoice from './RefactoredAnswerInputs/MultipleChoice';
+import { SelectedAnswer } from './RefactoredAnswerInputs/MultipleChoiceInput';
 
 type Props = {
 	questionInFocus: QuestionInFocus | null;
-	selectedAnswer: number | null;
-	setSelectedAnswer: (value: number | null) => void;
+	selectedAnswer: SelectedAnswer;
+	setSelectedAnswer: (value: SelectedAnswer) => void;
 	setAnswerUpdated: (value: boolean) => void;
-
+	hasConfidenceEnabled: boolean;
+	handleAnsweredQuestions: (action?: string) => void;
 	// roundData: RoundData;
 };
 
@@ -16,6 +18,8 @@ export default function AnswerSelection({
 	selectedAnswer,
 	setSelectedAnswer,
 	setAnswerUpdated,
+	hasConfidenceEnabled,
+	handleAnsweredQuestions,
 }: Props) {
 	return (
 		<Box>
@@ -25,6 +29,8 @@ export default function AnswerSelection({
 					selectedAnswer={selectedAnswer}
 					setSelectedAnswer={setSelectedAnswer}
 					setAnswerUpdated={setAnswerUpdated}
+					hasConfidenceEnabled={hasConfidenceEnabled}
+					handleAnsweredQuestions={handleAnsweredQuestions}
 				/>
 			)}
 		</Box>

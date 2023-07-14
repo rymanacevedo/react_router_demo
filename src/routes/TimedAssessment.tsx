@@ -30,7 +30,12 @@ import {
 	getFullModuleWithQuestions,
 } from '../services/learning';
 import { getSubAccount } from '../services/utils';
-import { useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
+import {
+	FetcherWithComponents,
+	useFetcher,
+	useLoaderData,
+	useNavigate,
+} from 'react-router-dom';
 import {
 	Confidence,
 	ModuleData,
@@ -38,7 +43,7 @@ import {
 	RoundData,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import { AssignmentData } from '../lib/validator';
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
@@ -48,6 +53,7 @@ import RedIcon from '../components/ui/Icons/RedIcon';
 import AmpBox from '../components/standard/container/AmpBox';
 import { z } from 'zod';
 import { UserSchema } from '../services/user';
+import { SelectedAnswer } from '../components/ui/RefactoredAnswerInputs/MultipleChoiceInput';
 
 export const TimedAssessmentFieldsSchema = z.object({
 	answerUpdated: z.boolean(),
@@ -72,6 +78,7 @@ export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
 
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
+	const hasConfidenceEnabled = user.config.showTimedAssessmentConfidence;
 	const assignmentUid = params.assignmentUid!;
 	const { subAccount } = getSubAccount(user);
 	const { assignmentData, moduleData, moduleInfoAndQuestions } =
@@ -87,6 +94,7 @@ export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 		moduleData,
 		moduleInfoAndQuestions,
 		roundData,
+		hasConfidenceEnabled,
 	};
 };
 
@@ -94,32 +102,57 @@ export default function TimedAssessment() {
 	const fetcher = useFetcher();
 	const { t: i18n } = useTranslation();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const { assignmentUid, moduleInfoAndQuestions, roundData } =
-		useLoaderData() as {
-			assignmentUid: string;
-			assignmentData: AssignmentData;
-			moduleData: ModuleData;
-			moduleInfoAndQuestions: ModuleData;
-			roundData: RoundData;
-		};
+	const {
+		assignmentUid,
+		moduleInfoAndQuestions,
+		roundData,
+		hasConfidenceEnabled,
+	} = useLoaderData() as {
+		assignmentUid: string;
+		assignmentData: AssignmentData;
+		moduleData: ModuleData;
+		moduleInfoAndQuestions: ModuleData;
+		roundData: RoundData;
+		hasConfidenceEnabled: boolean;
+	};
 	const flaggedQuestionIds = roundData.questionList
 		.filter((question) => question.flagged)
 		.map((question) => question.publishedQuestionAuthoringKey);
-	const selectedAnswerIds = roundData.questionList.flatMap((question) =>
-		question.answerList
-			.filter((answer) => answer.selected)
-			.map((answer) => answer.id),
+	const answeredQuestionIds = roundData.questionList
+		.filter((question) => question.answerList.some((answer) => answer.selected))
+		.map((question) => question.publishedQuestionAuthoringKey);
+
+	const initialQuestionInFocus = findQuestionInFocus(
+		moduleInfoAndQuestions,
+		roundData,
+		false,
+		false,
+		0,
+	);
+
+	const initialSelectedAnswer = initialQuestionInFocus.answerList.find(
+		(answer) => answer.selected,
 	);
 
 	const navigate = useNavigate();
-	const [questionInFocus, setQuestionInFocus] =
-		useState<QuestionInFocus | null>(null);
-	// const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer[]>([]);
+	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>(
+		initialQuestionInFocus,
+	);
+
 	const [flaggedQuestions, setFlaggedQuestions] = useState(
 		flaggedQuestionIds.length > 0 ? new Set(flaggedQuestionIds) : new Set(),
 	);
-	const [selectedAnswer, setSelectedAnswer] = useState<number | null>(
-		selectedAnswerIds.length > 0 ? selectedAnswerIds[0] : null,
+	const [answeredQuestions, setAnsweredQuestions] = useState(
+		answeredQuestionIds.length > 0 ? new Set(answeredQuestionIds) : new Set(),
+	);
+
+	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer>(
+		initialSelectedAnswer
+			? {
+					id: initialSelectedAnswer.id,
+					confidence: initialQuestionInFocus.confidence as Confidence,
+			  }
+			: { id: null, confidence: Confidence.NA },
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 	const [seconds, setSeconds] = useState<number | null>(
@@ -153,6 +186,42 @@ export default function TimedAssessment() {
 
 	const startSecondsSpent = useInterval(secondsSpentFunc, 1000);
 
+	const handleSubmit = (
+		event: any,
+		f: FetcherWithComponents<any>,
+		r: RefObject<HTMLFormElement>,
+	) => {
+		if (event) {
+			event.preventDefault();
+		}
+
+		if (!answerUpdated) {
+			return;
+		}
+		// BUG: formData doesn't pick up indeterminate values so, we have to force it here
+		const user = requireUser();
+		const currentRef = r.current!;
+		let answerChoices: HTMLInputElement[] = [];
+		for (const item of currentRef) {
+			const input = item as HTMLInputElement;
+			if (input.name === 'answerChoice') {
+				answerChoices.push(input);
+			}
+		}
+		const choice = answerChoices.find(
+			(answerChoice) => answerChoice.indeterminate,
+		);
+		const form = new FormData(currentRef);
+		form.append('user', JSON.stringify(user));
+		if (choice) {
+			form.append('answerChoice', choice.value);
+		}
+		f.submit(form, {
+			method: 'POST',
+			action: '/api/timedAssessment',
+		});
+	};
+
 	const handleMouseLeave = async (event: any) => {
 		if (
 			event.clientY <= 0 ||
@@ -162,9 +231,23 @@ export default function TimedAssessment() {
 		) {
 			const user = requireUser();
 			const currentRef = ref.current as HTMLFormElement;
+
 			if (currentRef) {
+				let answerChoices: HTMLInputElement[] = [];
+				for (const item of currentRef) {
+					const input = item as HTMLInputElement;
+					if (input.name === 'answerChoice') {
+						answerChoices.push(input);
+					}
+				}
+				const choice = answerChoices.find(
+					(answerChoice) => answerChoice.indeterminate,
+				);
 				const form = new FormData(currentRef);
 				form.append('user', JSON.stringify(user));
+				if (choice) {
+					form.append('answerChoice', choice.value);
+				}
 				fetcher.submit(form, {
 					method: 'POST',
 					action: '/api/timedAssessment',
@@ -186,8 +269,21 @@ export default function TimedAssessment() {
 			startSecondsSpent(false);
 
 			if (!ref.current && f) {
+				let answerChoices: HTMLInputElement[] = [];
+				for (const item of currentRef) {
+					const input = item as HTMLInputElement;
+					if (input.name === 'answerChoice') {
+						answerChoices.push(input);
+					}
+				}
+				const choice = answerChoices.find(
+					(answerChoice) => answerChoice.indeterminate,
+				);
 				const form = new FormData(currentRef);
 				form.append('user', JSON.stringify(user));
+				if (choice) {
+					form.append('answerChoice', choice.value);
+				}
 				f.submit(form, {
 					method: 'POST',
 					action: '/api/timedAssessment',
@@ -204,24 +300,50 @@ export default function TimedAssessment() {
 	}, [seconds]);
 
 	const handleFlagForReview = () => {
-		if (questionInFocus) {
-			setFlaggedQuestions((prevState) => {
-				const newSet = new Set(prevState);
-				if (newSet.has(questionInFocus.publishedQuestionAuthoringKey)) {
-					newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
-				} else {
-					newSet.add(questionInFocus.publishedQuestionAuthoringKey);
-				}
-				return newSet;
-			});
-		}
+		setFlaggedQuestions((prevState) => {
+			const newSet = new Set(prevState);
+			if (newSet.has(questionInFocus.publishedQuestionAuthoringKey)) {
+				newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
+			} else {
+				newSet.add(questionInFocus.publishedQuestionAuthoringKey);
+			}
+			return newSet;
+		});
+	};
+
+	const handleAnsweredQuestions = (action?: string) => {
+		setAnsweredQuestions((prevState) => {
+			const newSet = new Set(prevState);
+			if (
+				newSet.has(questionInFocus.publishedQuestionAuthoringKey) &&
+				action === 'delete'
+			) {
+				newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
+			} else {
+				newSet.add(questionInFocus.publishedQuestionAuthoringKey);
+			}
+			return newSet;
+		});
 	};
 
 	const handleNavigation = (question: QuestionInFocus) => {
 		// handle if the user selects the same navigation item
 		if (!(question.id === questionInFocus!.id)) {
 			const currentRef = ref.current as HTMLFormElement;
+			let answerChoices: HTMLInputElement[] = [];
+			for (const item of currentRef) {
+				const input = item as HTMLInputElement;
+				if (input.name === 'answerChoice') {
+					answerChoices.push(input);
+				}
+			}
+			const choice = answerChoices.find(
+				(answerChoice) => answerChoice.indeterminate,
+			);
 			const form = new FormData(currentRef);
+			if (choice) {
+				form.append('answerChoice', choice.value);
+			}
 			fetcher.submit(form, {
 				method: 'POST',
 				action: '/api/timedAssessment',
@@ -239,7 +361,11 @@ export default function TimedAssessment() {
 
 			question.answerList.forEach((answer) => {
 				if (answer.selected) {
-					setSelectedAnswer(answer.id);
+					let c = Confidence.NA;
+					if (question.confidence) {
+						c = question.confidence;
+					}
+					setSelectedAnswer({ id: answer.id, confidence: c });
 				}
 			});
 		}
@@ -300,7 +426,9 @@ export default function TimedAssessment() {
 									values.push('selected');
 								}
 
-								if (selectedAnswer) {
+								if (
+									answeredQuestions.has(question.publishedQuestionAuthoringKey)
+								) {
 									values.push('answered');
 								}
 
@@ -340,7 +468,7 @@ export default function TimedAssessment() {
 								<Button
 									leftIcon={
 										flaggedQuestions.has(
-											questionInFocus?.publishedQuestionAuthoringKey,
+											questionInFocus.publishedQuestionAuthoringKey,
 										) ? (
 											<BookmarkFilledIcon />
 										) : (
@@ -351,7 +479,7 @@ export default function TimedAssessment() {
 									variant="ghost"
 									onClick={handleFlagForReview}>
 									{flaggedQuestions.has(
-										questionInFocus?.publishedQuestionAuthoringKey,
+										questionInFocus.publishedQuestionAuthoringKey,
 									)
 										? i18n('flaggedForReview')
 										: i18n('flagForReview')}
@@ -359,13 +487,14 @@ export default function TimedAssessment() {
 							</Stack>
 							<fetcher.Form
 								ref={ref}
-								method="POST"
-								action="/api/timedAssessment">
+								onSubmit={(e) => handleSubmit(e, fetcher, ref)}>
 								<AnswerSelection
 									questionInFocus={questionInFocus}
 									setSelectedAnswer={setSelectedAnswer}
 									selectedAnswer={selectedAnswer}
 									setAnswerUpdated={setAnswerUpdated}
+									hasConfidenceEnabled={hasConfidenceEnabled}
+									handleAnsweredQuestions={handleAnsweredQuestions}
 									// roundData={roundData}
 								/>
 								<FormControl hidden={true}>
@@ -390,7 +519,7 @@ export default function TimedAssessment() {
 										id="flagged"
 										name="flagged"
 										value={flaggedQuestions
-											.has(questionInFocus?.publishedQuestionAuthoringKey)
+											.has(questionInFocus.publishedQuestionAuthoringKey)
 											.toString()}
 									/>
 								</FormControl>
@@ -399,7 +528,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="questionType"
 										name="questionType"
-										defaultValue={questionInFocus?.questionType}
+										value={questionInFocus.questionType}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -407,7 +536,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="questionId"
 										name="questionId"
-										defaultValue={questionInFocus?.id}
+										value={questionInFocus.id}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -415,7 +544,7 @@ export default function TimedAssessment() {
 										readOnly={true}
 										id="confidence"
 										name="confidence"
-										value={selectedAnswer ? Confidence.Sure : Confidence.NA}
+										value={selectedAnswer.confidence.toString()}
 									/>
 								</FormControl>
 								<FormControl hidden={true}>
@@ -431,7 +560,15 @@ export default function TimedAssessment() {
 									<Button type="submit">{i18n('submitBtnText')}</Button>
 									<Button
 										isDisabled={!selectedAnswer}
-										onClick={() => setSelectedAnswer(null)}
+										onClick={() => {
+											setSelectedAnswer(() => {
+												return {
+													id: null,
+													confidence: Confidence.NA,
+												};
+											});
+											handleAnsweredQuestions('delete');
+										}}
 										colorScheme="ampSecondary"
 										variant="ghost">
 										{i18n('clearSelectionPlural')}
