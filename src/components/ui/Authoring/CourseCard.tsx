@@ -16,18 +16,11 @@ import {
 } from '@radix-ui/react-icons';
 import { formatDate } from '../../../lib/utils';
 import CourseCardDropdownMenu from './CourseCardDropdownMenu';
+import { Course } from '../../../store/slices/authoring/coursesSlice';
 
-interface CourseCardProps {
-	status: 'Draft' | 'Published';
-	name: string;
-	uid: string;
-	modifiedTime: number;
-	modifiedUserFullName: string;
-	createdTime: number;
-	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
+interface CourseCardProps extends Course {
 	listView: boolean;
-	moduleCount?: number;
-	questionCount?: number;
+	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
 }
 
 const CourseCard = ({
@@ -37,10 +30,9 @@ const CourseCard = ({
 	modifiedUserFullName,
 	uid,
 	listView,
-	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
-	questionCount = 0,
-	moduleCount = 0,
+	learningUnitCount,
+	moduleCount,
 }: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
@@ -127,7 +119,7 @@ const CourseCard = ({
 							</Text>
 							<DotFilledIcon color={colors.ampNeutral[300]} />
 							<Text fontWeight="normal" fontSize="sm">
-								{questionCount} Questions
+								{learningUnitCount} Questions
 							</Text>
 						</Flex>
 						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
