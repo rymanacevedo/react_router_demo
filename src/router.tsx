@@ -52,7 +52,6 @@ import AssignmentList, {
 } from './components/ui/AssignmentList';
 import { refresherAction } from './routes/Refresher';
 import AuthoringView, {
-	authoringActions,
 	authoringLoader,
 } from './components/pages/Authoring/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
@@ -136,7 +135,6 @@ const routesJSX = (
 				path="authoring"
 				element={<AuthoringView />}
 				loader={authoringLoader}
-				action={authoringActions}
 			/>
 			<Route
 				path="authoring/:page"
