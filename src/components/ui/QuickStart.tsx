@@ -13,7 +13,7 @@ const QuickStart = () => {
 				to="tour"
 				textDecoration="none"
 				color="ampWhite"
-				h="80px"
+				h="70px"
 				py="25px">
 				<VStack spacing={0} align="flex-start">
 					<Text color="ampError.200" fontSize="xs">
