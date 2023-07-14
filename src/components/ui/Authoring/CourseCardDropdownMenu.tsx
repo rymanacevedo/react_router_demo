@@ -16,7 +16,6 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
-import { useFolderDispatch } from '../../providers/AuthoringFolderProvider';
 import { AppDispatch } from '../../../store/store';
 import { useRevalidator } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +24,10 @@ import {
 	deleteCourse,
 	selectCourseActionStatus,
 } from '../../../store/slices/authoring/coursesSlice';
+import {
+	setShowFolderSelectionModal,
+	setSelectedCourses,
+} from '../../../store/slices/authoring/foldersSlice';
 
 interface CourseCardDropdownMenuProps {
 	uid: string;
@@ -39,20 +42,13 @@ const CourseCardDropdownMenu = ({
 	const { copyCourseStatus, deleteCourseStatus } = useSelector(
 		selectCourseActionStatus,
 	);
-	const folderDispatch = useFolderDispatch();
 	const dispatch = useDispatch<AppDispatch>();
 	const revalidator = useRevalidator();
 	const toast = useToast();
 
 	const handleAddToFolder = () => {
-		folderDispatch({
-			type: 'ADD_SELECTED_COURSES',
-			payload: [{ uid }],
-		});
-		folderDispatch({
-			type: 'SHOW_FOLDER_SELECTION_MODAL',
-			payload: true,
-		});
+		dispatch(setSelectedCourses([{ uid }]));
+		dispatch(setShowFolderSelectionModal(true));
 	};
 
 	const handleCourseDelete = async () => {

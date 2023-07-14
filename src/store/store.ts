@@ -1,8 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import courses from './slices/authoring/coursesSlice';
+import folders from './slices/authoring/foldersSlice';
 
 const authoringReducer = combineReducers({
 	courses,
+	folders,
 });
 
 export const store = configureStore({
