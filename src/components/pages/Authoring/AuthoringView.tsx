@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Grid, GridItem, useToast } from '@chakra-ui/react';
 import { ActionFunction, LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
+import { Course } from '../../../store/slices/authoring/coursesSlice';
 import { requireUser } from '../../../utils/user';
-import { getCourseList } from '../../../services/authoring';
-import { getSubAccount } from '../../../services/utils';
 import { json, useLoaderData, useActionData } from 'react-router-dom';
 import CourseCard from '../../ui/Authoring/CourseCard';
 import CourseFilter from '../../ui/Authoring/CourseFilters';
@@ -13,6 +13,11 @@ import { deleteCourse, copyCourse } from '../../../services/authoring';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 import CourseFolderModal from '../../ui/Authoring/CourseFolderModal';
+import {
+	fetchCourses,
+	selectCourseList,
+} from '../../../store/slices/authoring/coursesSlice';
+import { store } from '../../../store/store';
 
 export const authoringActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -61,40 +66,24 @@ export const authoringActions: ActionFunction = async ({ request }) => {
 };
 
 export const authoringLoader: LoaderFunction = async ({ params, request }) => {
-	const user = requireUser();
-	const { courseRole, subAccount } = getSubAccount(user);
-
-	const coursesPerPage = 24;
 	const currentPage = params.page ? +params.page : 1;
 	const sortOrder = new URL(request.url).searchParams.get('sort') || 'a';
 
-	const {
-		data: { items: courseList, totalCount: coursesTotalCount },
-	} = await getCourseList(user, currentPage, coursesPerPage, sortOrder);
+	await store.dispatch(fetchCourses({ currentPage, sortOrder }));
 
 	return json({
-		courseList,
-		coursesTotalCount,
-		currentPage,
-		pagesTotalCount: Math.floor(
-			(coursesTotalCount + coursesPerPage - 1) / coursesPerPage,
-		),
-		selectedCourseKey: null,
-		subAccount,
-		courseRole,
 		sortOrder,
+		currentPage,
 	});
 };
 
 const AuthoringView = () => {
 	const actionData = useActionData() as any;
-	const {
-		courseList,
-		coursesTotalCount,
-		currentPage,
-		pagesTotalCount,
-		sortOrder,
-	} = useLoaderData() as any;
+	const courseList = useSelector(selectCourseList);
+	const { sortOrder, currentPage } = useLoaderData() as {
+		sortOrder: string;
+		currentPage: number;
+	};
 	const toast = useToast();
 	const [listView, setListView] = useState<boolean>(
 		Boolean(Cookies.get('authoring_list_view')),
@@ -142,7 +131,7 @@ const AuthoringView = () => {
 				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
 				gap={listView ? 2 : 6}
 				mb={6}>
-				{courseList.map((course: any) => (
+				{courseList.items.map((course: Course) => (
 					<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
 						<CourseCard {...course} listView={listView} />
 					</GridItem>
@@ -150,9 +139,9 @@ const AuthoringView = () => {
 			</Grid>
 			<PageNavigatorFooter
 				currentPage={currentPage}
-				pagesTotalCount={pagesTotalCount}
-				itemsCurrentCount={courseList.length}
-				itemsTotalCount={coursesTotalCount}
+				pagesTotalCount={courseList.pagesTotalCount}
+				itemsCurrentCount={courseList.items.length}
+				itemsTotalCount={courseList.totalCount}
 				href="/authoring"
 			/>
 			<CourseFolderModal />

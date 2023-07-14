@@ -7,13 +7,17 @@ import './i18n';
 import Fonts from './components/ui/Fonts';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from '../src/store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<StrictMode>
-		<ChakraProvider theme={ampTheme}>
-			<Fonts />
-			<RouterProvider router={router} />
-		</ChakraProvider>
+		<ReduxProvider store={store}>
+			<ChakraProvider theme={ampTheme}>
+				<Fonts />
+				<RouterProvider router={router} />
+			</ChakraProvider>
+		</ReduxProvider>
 	</StrictMode>,
 );
