@@ -43,7 +43,7 @@ import {
 	RoundData,
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import { AssignmentData } from '../lib/validator';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { ReactElement, RefObject, useEffect, useRef, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import Question from '../components/ui/Question';
 import AnswerSelection from '../components/ui/AnswerSelection';
@@ -186,6 +186,35 @@ export default function TimedAssessment() {
 
 	const startSecondsSpent = useInterval(secondsSpentFunc, 1000);
 
+	const prepareAndSubmitFormData = ({
+		currentRef,
+		submitter,
+	}: {
+		currentRef: RefObject<HTMLFormElement>;
+		submitter: FetcherWithComponents<any>;
+	}) => {
+		const user = requireUser();
+		let answerChoices: HTMLInputElement[] = [];
+		for (const item of currentRef.current!) {
+			const input = item as HTMLInputElement;
+			if (input.name === 'answerChoice') {
+				answerChoices.push(input);
+			}
+		}
+		const choice = answerChoices.find(
+			(answerChoice) => answerChoice.indeterminate,
+		);
+		const form = new FormData(currentRef.current!);
+		form.append('user', JSON.stringify(user));
+		if (choice) {
+			form.append('answerChoice', choice.value);
+		}
+		submitter.submit(form, {
+			method: 'POST',
+			action: '/api/timedAssessment',
+		});
+	};
+
 	const handleSubmit = (
 		event: any,
 		f: FetcherWithComponents<any>,
@@ -198,61 +227,18 @@ export default function TimedAssessment() {
 		if (!answerUpdated) {
 			return;
 		}
-		// BUG: formData doesn't pick up indeterminate values so, we have to force it here
-		const user = requireUser();
-		const currentRef = r.current!;
-		let answerChoices: HTMLInputElement[] = [];
-		for (const item of currentRef) {
-			const input = item as HTMLInputElement;
-			if (input.name === 'answerChoice') {
-				answerChoices.push(input);
-			}
-		}
-		const choice = answerChoices.find(
-			(answerChoice) => answerChoice.indeterminate,
-		);
-		const form = new FormData(currentRef);
-		form.append('user', JSON.stringify(user));
-		if (choice) {
-			form.append('answerChoice', choice.value);
-		}
-		f.submit(form, {
-			method: 'POST',
-			action: '/api/timedAssessment',
-		});
+		prepareAndSubmitFormData({ currentRef: r, submitter: f });
 	};
 
-	const handleMouseLeave = async (event: any) => {
+	const handleMouseLeave = async (event: MouseEvent) => {
 		if (
 			event.clientY <= 0 ||
 			event.clientX <= 0 ||
 			event.clientX >= window.innerWidth ||
 			event.clientY >= window.innerHeight
 		) {
-			const user = requireUser();
-			const currentRef = ref.current as HTMLFormElement;
-
-			if (currentRef) {
-				let answerChoices: HTMLInputElement[] = [];
-				for (const item of currentRef) {
-					const input = item as HTMLInputElement;
-					if (input.name === 'answerChoice') {
-						answerChoices.push(input);
-					}
-				}
-				const choice = answerChoices.find(
-					(answerChoice) => answerChoice.indeterminate,
-				);
-				const form = new FormData(currentRef);
-				form.append('user', JSON.stringify(user));
-				if (choice) {
-					form.append('answerChoice', choice.value);
-				}
-				fetcher.submit(form, {
-					method: 'POST',
-					action: '/api/timedAssessment',
-				});
-			}
+			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put anserUpdated in the if statement
+			prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
 		}
 	};
 
@@ -363,7 +349,7 @@ export default function TimedAssessment() {
 
 			setSelectedAnswer(
 				a
-					? { id: a.id, confidence: question.confidence }
+					? { id: a.id, confidence: question.confidence! }
 					: { id: null, confidence: Confidence.NA },
 			);
 		}
@@ -379,6 +365,89 @@ export default function TimedAssessment() {
 			setAnswerUpdated(false);
 		}
 	}, [fetcher.data]);
+
+	function QuestionsCard(): ReactElement[] {
+		return roundData.questionList.map((question) => {
+			const values: CardValues = ['unselected'];
+			if (
+				question.publishedQuestionAuthoringKey ===
+				questionInFocus.publishedQuestionAuthoringKey
+			) {
+				values.push('selected');
+			}
+			if (answeredQuestions.has(question.publishedQuestionAuthoringKey)) {
+				values.push('answered');
+			}
+			if (flaggedQuestions.has(question.publishedQuestionAuthoringKey)) {
+				values.push('flagged');
+			}
+
+			return (
+				<PracticeTestCard
+					key={question.publishedQuestionAuthoringKey}
+					size="sm"
+					variant="multiPartCard"
+					values={values}
+					text={question.displayOrder.toString()}
+					onClick={() => handleNavigation(question)}
+				/>
+			);
+		});
+	}
+
+	function QuestionCardsComponent() {
+		const elements = QuestionsCard();
+		return <>{elements}</>;
+	}
+
+	function HiddenFormInputs(): ReactElement[] {
+		const inputs = [
+			{
+				id: 'timedAssessmentKey',
+				name: 'timedAssessmentKey',
+				value: assignmentUid,
+			},
+			{
+				id: 'answerUpdated',
+				name: 'answerUpdated',
+				value: answerUpdated.toString(),
+			},
+			{
+				id: 'flagged',
+				name: 'flagged',
+				value: flaggedQuestions
+					.has(questionInFocus.publishedQuestionAuthoringKey)
+					.toString(),
+			},
+			{
+				id: 'questionType',
+				name: 'questionType',
+				value: questionInFocus.questionType,
+			},
+			{ id: 'questionId', name: 'questionId', value: questionInFocus.id },
+			{
+				id: 'confidence',
+				name: 'confidence',
+				value: selectedAnswer.confidence.toString(),
+			},
+			{ id: 'secondsSpent', name: 'secondsSpent', value: secondsSpent },
+		];
+
+		return inputs.map((input) => (
+			<FormControl hidden={true} key={input.id}>
+				<Input
+					readOnly={true}
+					id={input.id}
+					name={input.name}
+					value={input.value}
+				/>
+			</FormControl>
+		));
+	}
+	function HiddenFormInputsComponent() {
+		const elements = HiddenFormInputs();
+		return <>{elements}</>;
+	}
 
 	return (
 		<Box as="main" id="timed-assessment">
@@ -407,38 +476,7 @@ export default function TimedAssessment() {
 								{i18n('practiceTestNavigation')}
 							</Heading>
 							<Divider marginTop={1} marginBottom={1} />
-							{roundData.questionList.map((question) => {
-								const values: CardValues = ['unselected'];
-								if (
-									question.publishedQuestionAuthoringKey ===
-									questionInFocus?.publishedQuestionAuthoringKey
-								) {
-									values.push('selected');
-								}
-
-								if (
-									answeredQuestions.has(question.publishedQuestionAuthoringKey)
-								) {
-									values.push('answered');
-								}
-
-								if (
-									flaggedQuestions.has(question.publishedQuestionAuthoringKey)
-								) {
-									values.push('flagged');
-								}
-
-								return (
-									<PracticeTestCard
-										key={question.publishedQuestionAuthoringKey}
-										size="sm"
-										variant="multiPartCard"
-										values={values}
-										text={question.displayOrder.toString()}
-										onClick={() => handleNavigation(question)}
-									/>
-								);
-							})}
+							<QuestionCardsComponent />
 							<Button display="block" mr="auto" ml="auto">
 								{i18n('finishPracticeTest')}
 							</Button>
@@ -487,64 +525,7 @@ export default function TimedAssessment() {
 									handleAnsweredQuestions={handleAnsweredQuestions}
 									// roundData={roundData}
 								/>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="timedAssessmentKey"
-										name="timedAssessmentKey"
-										defaultValue={assignmentUid}
-									/>
-								</FormControl>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="answerUpdated"
-										name="answerUpdated"
-										value={answerUpdated.toString()}
-									/>
-								</FormControl>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="flagged"
-										name="flagged"
-										value={flaggedQuestions
-											.has(questionInFocus.publishedQuestionAuthoringKey)
-											.toString()}
-									/>
-								</FormControl>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="questionType"
-										name="questionType"
-										value={questionInFocus.questionType}
-									/>
-								</FormControl>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="questionId"
-										name="questionId"
-										value={questionInFocus.id}
-									/>
-								</FormControl>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="confidence"
-										name="confidence"
-										value={selectedAnswer.confidence.toString()}
-									/>
-								</FormControl>
-								<FormControl hidden={true}>
-									<Input
-										readOnly={true}
-										id="secondsSpent"
-										name="secondsSpent"
-										value={secondsSpent}
-									/>
-								</FormControl>
+								<HiddenFormInputsComponent />
 								<Divider marginTop={11} />
 								<HStack marginTop={3} justify="space-between">
 									<Button type="submit">{i18n('submitBtnText')}</Button>
