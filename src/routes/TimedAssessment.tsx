@@ -359,29 +359,19 @@ export default function TimedAssessment() {
 				),
 			);
 
-			question.answerList.forEach((answer) => {
-				if (answer.selected) {
-					let c = Confidence.NA;
-					if (question.confidence) {
-						c = question.confidence;
-					}
-					setSelectedAnswer({ id: answer.id, confidence: c });
-				}
-			});
+			const a = question.answerList.find((answer) => answer.selected);
+
+			setSelectedAnswer(
+				a
+					? { id: a.id, confidence: question.confidence }
+					: { id: null, confidence: Confidence.NA },
+			);
 		}
 	};
 
 	const handleResultsNavigation = () => {
 		navigate('results');
 	};
-
-	useEffect(() => {
-		if (!questionInFocus) {
-			setQuestionInFocus(
-				findQuestionInFocus(moduleInfoAndQuestions, roundData, false, false),
-			);
-		}
-	}, [questionInFocus]);
 
 	useEffect(() => {
 		if (fetcher.data) {
@@ -559,7 +549,7 @@ export default function TimedAssessment() {
 								<HStack marginTop={3} justify="space-between">
 									<Button type="submit">{i18n('submitBtnText')}</Button>
 									<Button
-										isDisabled={!selectedAnswer}
+										isDisabled={!selectedAnswer.id}
 										onClick={() => {
 											setSelectedAnswer(() => {
 												return {
