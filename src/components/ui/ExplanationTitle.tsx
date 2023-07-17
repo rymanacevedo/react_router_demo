@@ -41,7 +41,9 @@ const ExplanationTitle = ({ answer }: any) => {
 			<Center>
 				<HStack>
 					<AmpChip variant={variant} size="lg" />
-					<Heading as="h2">{text}</Heading>
+					<Heading as="h2" fontSize="xl">
+						{text}
+					</Heading>
 				</HStack>
 			</Center>
 		</Box>

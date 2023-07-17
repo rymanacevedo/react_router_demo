@@ -15,7 +15,7 @@ export const ampTheme = extendTheme({
 				bg: '#ADBECF',
 			},
 			'h1, h2, h3, h4, h5, h6': {
-				fontWeight: '600',
+				fontWeight: '500',
 			},
 			a: {
 				color: '#015B87',
@@ -44,7 +44,7 @@ export const ampTheme = extendTheme({
 		sm: '.75rem',
 		md: '1rem',
 		lg: '1.312rem',
-		xl: '1.75rem',
+		xl: '2rem',
 		'2xl': '2.375rem',
 		'3xl': '3.188rem',
 		// small screens

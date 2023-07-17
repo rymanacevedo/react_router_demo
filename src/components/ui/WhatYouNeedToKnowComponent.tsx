@@ -72,7 +72,9 @@ const WhatYouNeedToKnowComponent = ({
 			borderRadius={24}
 			padding={'34px 120px'}
 			maxW="1496">
-			<Heading as="h2">{i18n('whatYouNeedToKnow')}</Heading>
+			<Heading as="h2" fontSize="xl">
+				{i18n('whatYouNeedToKnow')}
+			</Heading>
 			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
 				<ReviewContentRender content={questionInFocus?.explanationRc} />
 			</Stack>
@@ -82,7 +84,7 @@ const WhatYouNeedToKnowComponent = ({
 						<AccordionItem style={{ borderStyle: 'none' }}>
 							{({ isExpanded }) => (
 								<>
-									<Heading as="h2">
+									<Heading as="h2" fontSize="xl">
 										<AccordionButton padding={'0'}>
 											{isExpanded ? (
 												<ChevronDownIcon

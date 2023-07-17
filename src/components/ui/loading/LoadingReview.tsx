@@ -31,7 +31,7 @@ const LoadingReview = () => {
 					w="100%"
 					overflow="hidden"
 					borderRadius={24}
-					p={'72px'}>
+					p={12}>
 					<Skeleton height="20px" width={'235px'} />
 					<SkeletonText
 						mt="4"

@@ -102,9 +102,9 @@ const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
 	}
 
 	return (
-		<Text fontSize={'20px'} fontWeight={'600'}>
+		<Heading as="h3" fontSize={'18px'} fontWeight={'500'}>
 			{`Round ${roundNumber}: ${phase}`}
-		</Text>
+		</Heading>
 	);
 };
 
@@ -328,7 +328,7 @@ const TestProgressBarMenu = ({
 				zIndex="2"
 				position={'absolute'}
 				width="100%"
-				height={'80px'}
+				height={'70px'}
 				bg={'transparent'}
 				justifyContent={isSmallerThan1000 ? '' : 'space-between'}
 				paddingLeft="24px"
@@ -391,7 +391,7 @@ const TestProgressBarMenu = ({
 			</HStack>
 			<Progress
 				value={progressPercent}
-				height={'80px'}
+				height={'70px'}
 				colorScheme="gray"
 				zIndex={'1'}
 				width="100%"

@@ -137,7 +137,7 @@ const LearningView = () => {
 				marginBottom="24px"
 				width="100%"
 				maxWidth={'800px'}>
-				<Heading as="h2" size="lg">
+				<Heading as="h2" fontSize="xl">
 					{i18n('yourAssignments')}
 				</Heading>
 				<CourseMenu

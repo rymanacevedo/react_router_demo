@@ -13,7 +13,7 @@ export default function CustomMenuButton({ largerThan992, user }: Props) {
 			_hover={{}}
 			color={'ampWhite'}
 			padding="25px"
-			height="75px"
+			height="60px"
 			id="header-composite-profile-button"
 			rightIcon={<ChevronDownIcon />}>
 			{' '}

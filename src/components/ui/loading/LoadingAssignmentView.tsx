@@ -41,7 +41,7 @@ export default function LoadingAssignmentView() {
 					maxWidth={726}
 					overflow="hidden"
 					borderRadius={24}
-					p={'72px'}>
+					p={12}>
 					<Skeleton height="20px" width={'235px'} />
 					<SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="5" />
 				</Box>
@@ -56,7 +56,7 @@ export default function LoadingAssignmentView() {
 					maxWidth={726}
 					overflow="hidden"
 					borderRadius={24}
-					p={'72px'}>
+					p={12}>
 					<Skeleton height="20px" width={'235px'} />
 					<HStack marginTop={5}>
 						<SkeletonCircle marginRight={4} size="10" />
