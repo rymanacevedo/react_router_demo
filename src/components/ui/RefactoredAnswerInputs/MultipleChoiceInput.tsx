@@ -52,6 +52,9 @@ export default function MultipleChoiceInput({
 				setVariant('ampPrimary');
 				setStatus('checked');
 			}
+			if (a.confidence === Confidence.NotSure) {
+				setStatus('checked');
+			}
 		} else {
 			setIsEnabled(false);
 			setText('');
@@ -74,22 +77,38 @@ export default function MultipleChoiceInput({
 
 	const checkStatus = (a: QuestionInFocusAnswer) => {
 		if (hasConfidenceEnabled) {
-			switch (status) {
-				case 'unchecked':
-					setStatus('indeterminate');
-					setSelectedAnswer({ id: a.id, confidence: Confidence.PartSure });
-					handleAnsweredQuestions();
-					break;
-				case 'indeterminate':
-					setStatus('checked');
-					setSelectedAnswer({ id: a.id, confidence: Confidence.Sure });
-					handleAnsweredQuestions();
-					break;
-				case 'checked':
-					setStatus('unchecked');
-					setSelectedAnswer({ id: null, confidence: Confidence.NA });
-					handleAnsweredQuestions('delete');
-					break;
+			// IDK
+			if (a.id === 1) {
+				switch (status) {
+					case 'unchecked':
+						setStatus('checked');
+						setSelectedAnswer({ id: a.id, confidence: Confidence.NotSure });
+						handleAnsweredQuestions();
+						break;
+					case 'checked':
+						setStatus('unchecked');
+						setSelectedAnswer({ id: null, confidence: Confidence.NA });
+						handleAnsweredQuestions('delete');
+						break;
+				}
+			} else {
+				switch (status) {
+					case 'unchecked':
+						setStatus('indeterminate');
+						setSelectedAnswer({ id: a.id, confidence: Confidence.PartSure });
+						handleAnsweredQuestions();
+						break;
+					case 'indeterminate':
+						setStatus('checked');
+						setSelectedAnswer({ id: a.id, confidence: Confidence.Sure });
+						handleAnsweredQuestions();
+						break;
+					case 'checked':
+						setStatus('unchecked');
+						setSelectedAnswer({ id: null, confidence: Confidence.NA });
+						handleAnsweredQuestions('delete');
+						break;
+				}
 			}
 		} else {
 			switch (status) {
@@ -106,37 +125,10 @@ export default function MultipleChoiceInput({
 			}
 		}
 	};
-	// TODO: IDK
-	// if (IDK) {
-	//     switch (status) {
-	//         case 'unchecked':
-	//             setStatus('checked');
-	//             setText('');
-	//             setIsEnabled(false);
-	//             setVariant('ampSecondary');
-	//             setAnswerObject({
-	//                 ...answerObject,
-	//                 answerId: 0,
-	//                 confidence: 0,
-	//             });
-	//             setIDKResponse(true);
-	//             break;
-	//         case 'checked':
-	//             setIsEnabled(false);
-	//             setText('');
-	//             setStatus('unchecked');
-	//             setAnswerObject({
-	//                 ...answerObject,
-	//                 answerId: 0,
-	//                 confidence: 0,
-	//             });
-	//             setIDKResponse(false);
-	//     }
-	// } else
 	return (
 		<Checkbox
 			name="answerChoice"
-			value={answer.id}
+			value={answer?.id}
 			className="label-hover-effect"
 			variant="multiChoiceAnswer"
 			colorScheme="transparent"

@@ -119,7 +119,10 @@ export default function TimedAssessment() {
 		.filter((question) => question.flagged)
 		.map((question) => question.publishedQuestionAuthoringKey);
 	const answeredQuestionIds = roundData.questionList
-		.filter((question) => question.answerList.some((answer) => answer.selected))
+		.filter(
+			(question) =>
+				question.confidence && question.confidence !== Confidence.NA,
+		)
 		.map((question) => question.publishedQuestionAuthoringKey);
 
 	const initialQuestionInFocus = findQuestionInFocus(
@@ -130,30 +133,40 @@ export default function TimedAssessment() {
 		0,
 	);
 
-	const initialSelectedAnswer = initialQuestionInFocus.answerList.find(
-		(answer) => answer.selected,
-	);
-
 	const navigate = useNavigate();
 	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>(
 		initialQuestionInFocus,
 	);
 
+	const foundAnswer = questionInFocus.answerList.find(
+		(answer) => answer.selected,
+	);
+
+	const initialSelectedAnswer = foundAnswer
+		? { id: foundAnswer.id, confidence: questionInFocus.confidence }
+		: questionInFocus.confidence === Confidence.NotSure
+		? { id: 1, confidence: Confidence.NotSure }
+		: null;
+
 	const [flaggedQuestions, setFlaggedQuestions] = useState(
 		flaggedQuestionIds.length > 0 ? new Set(flaggedQuestionIds) : new Set(),
 	);
-	const [answeredQuestions, setAnsweredQuestions] = useState(
-		answeredQuestionIds.length > 0 ? new Set(answeredQuestionIds) : new Set(),
-	);
 
-	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer>(
-		initialSelectedAnswer
-			? {
-					id: initialSelectedAnswer.id,
-					confidence: initialQuestionInFocus.confidence as Confidence,
-			  }
-			: { id: null, confidence: Confidence.NA },
+	const initialAnsweredQuestions =
+		answeredQuestionIds.length > 0
+			? new Set(answeredQuestionIds)
+			: initialSelectedAnswer
+			? new Set([questionInFocus.publishedQuestionAuthoringKey])
+			: new Set();
+
+	const [answeredQuestions, setAnsweredQuestions] = useState(
+		initialAnsweredQuestions,
 	);
+	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer>({
+		id: initialSelectedAnswer !== null ? initialSelectedAnswer.id : null,
+		confidence: questionInFocus.confidence ?? Confidence.NA,
+	});
+
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 	const [seconds, setSeconds] = useState<number | null>(
 		roundData.timeRemaining,
@@ -237,7 +250,7 @@ export default function TimedAssessment() {
 			event.clientX >= window.innerWidth ||
 			event.clientY >= window.innerHeight
 		) {
-			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put anserUpdated in the if statement
+			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put answerUpdated in the if statement
 			prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
 		}
 	};
@@ -347,11 +360,13 @@ export default function TimedAssessment() {
 
 			const a = question.answerList.find((answer) => answer.selected);
 
-			setSelectedAnswer(
-				a
-					? { id: a.id, confidence: question.confidence! }
-					: { id: null, confidence: Confidence.NA },
-			);
+			const iSa = a
+				? { id: a.id, confidence: question.confidence! }
+				: question.confidence === Confidence.NotSure
+				? { id: 1, confidence: Confidence.NotSure }
+				: { id: null, confidence: Confidence.NA };
+
+			setSelectedAnswer(iSa);
 		}
 	};
 

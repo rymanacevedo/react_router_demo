@@ -1,5 +1,8 @@
 import { Stack } from '@chakra-ui/react';
-import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
+import {
+	QuestionInFocus,
+	QuestionInFocusAnswer,
+} from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleChoiceInput, { SelectedAnswer } from './MultipleChoiceInput';
 
 type Props = {
@@ -18,6 +21,11 @@ export default function MultipleChoice({
 	hasConfidenceEnabled,
 	handleAnsweredQuestions,
 }: Props) {
+	// @ts-ignore
+	const IDK: QuestionInFocusAnswer = {
+		id: 1,
+		answerRc: "<p>I don't know</p>",
+	};
 	return (
 		<Stack minHeight={350} h="100%" marginTop={8}>
 			{questionInFocus.answerList.map((answer) => {
@@ -33,6 +41,17 @@ export default function MultipleChoice({
 					/>
 				);
 			})}
+			{hasConfidenceEnabled && (
+				// IDK
+				<MultipleChoiceInput
+					answer={IDK}
+					selectedAnswer={selectedAnswer}
+					setSelectedAnswer={setSelectedAnswer}
+					setAnswerUpdated={setAnswerUpdated}
+					hasConfidenceEnabled={hasConfidenceEnabled}
+					handleAnsweredQuestions={handleAnsweredQuestions}
+				/>
+			)}
 		</Stack>
 	);
 }
