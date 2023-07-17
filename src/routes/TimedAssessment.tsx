@@ -336,7 +336,9 @@ export default function TimedAssessment() {
 								direction="row"
 								alignItems="center"
 								justifyContent="space-between">
-								<Heading as="h2">{i18n('answer')}</Heading>
+								<Heading as="h2" fontSize="xl">
+									{i18n('answer')}
+								</Heading>
 								<Button
 									leftIcon={
 										flaggedQuestions.has(

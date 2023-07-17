@@ -22,11 +22,13 @@ const Question = ({
 	return (
 		<>
 			{review ? (
-				<Heading as="h2">
+				<Heading as="h2" fontSize="xl">
 					{i18n('ReviewQ')} {questionIndex} {i18n('of')} {numberOfQInReview}{' '}
 				</Heading>
 			) : (
-				<Heading as="h2">{i18n('question')}</Heading>
+				<Heading as="h2" fontSize="xl">
+					{i18n('question')}
+				</Heading>
 			)}
 			{questionInFocus?.introductionRc ? (
 				<Stack spacing="20px" marginTop="34px">

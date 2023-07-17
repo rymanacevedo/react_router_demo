@@ -51,7 +51,9 @@ const MultipleChoiceFeedBack = ({
 	}, [currentRoundAnswerOverLayData, revealAnswer]);
 	return (
 		<Box>
-			<Heading as="h2">{i18n('answer')}</Heading>
+			<Heading as="h2" fontSize="xl">
+				{i18n('answer')}
+			</Heading>
 			<Stack minHeight={350} h="100%" marginTop={8}>
 				{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
 					return (

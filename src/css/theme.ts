@@ -44,7 +44,7 @@ export const ampTheme = extendTheme({
 		sm: '.75rem',
 		md: '1rem',
 		lg: '1.312rem',
-		xl: '1.75rem',
+		xl: '2rem',
 		'2xl': '2.375rem',
 		'3xl': '3.188rem',
 		// small screens

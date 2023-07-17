@@ -56,7 +56,9 @@ const ModuleIntroComponent = ({
 			padding={16}
 			display={'flex'}
 			flexDirection={'column'}>
-			<Heading as="h2">{moduleData?.name}</Heading>
+			<Heading as="h2" fontSize="xl">
+				{moduleData?.name}
+			</Heading>
 			<Stack paddingTop="16px" paddingBottom="16px">
 				<RichContentComponent content={moduleData?.introductionRc} />
 
