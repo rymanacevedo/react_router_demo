@@ -3,7 +3,11 @@ import { useSelector } from 'react-redux';
 import { Grid, GridItem } from '@chakra-ui/react';
 import { LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
-import { Course } from '../../../store/slices/authoring/coursesSlice';
+import {
+	CourseContent,
+	fetchCourses,
+	selectCourseList,
+} from '../../../store/slices/authoring/coursesViewSlice';
 import { json, useLoaderData } from 'react-router-dom';
 import CourseCard from '../../ui/Authoring/CourseCard';
 import CourseFilter from '../../ui/Authoring/CourseFilters';
@@ -11,10 +15,6 @@ import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 import CourseFolderModal from '../../ui/Authoring/CourseFolderModal';
-import {
-	fetchCourses,
-	selectCourseList,
-} from '../../../store/slices/authoring/coursesSlice';
 import { store } from '../../../store/store';
 
 export const authoringLoader: LoaderFunction = async ({ params, request }) => {
@@ -63,7 +63,7 @@ const AuthoringView = () => {
 				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
 				gap={listView ? 2 : 6}
 				mb={6}>
-				{courseList.items.map((course: Course) => (
+				{courseList.items.map((course: CourseContent) => (
 					<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
 						<CourseCard {...course} listView={listView} />
 					</GridItem>

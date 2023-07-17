@@ -23,7 +23,7 @@ import {
 	copyCourse,
 	deleteCourse,
 	selectCourseActionStatus,
-} from '../../../store/slices/authoring/coursesSlice';
+} from '../../../store/slices/authoring/coursesViewSlice';
 import {
 	setShowFolderSelectionModal,
 	setSelectedCourses,

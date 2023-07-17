@@ -32,7 +32,9 @@ export const fetchCourses = createAsyncThunk(
 		{ currentPage, sortOrder }: { currentPage: number; sortOrder: string },
 		{ getState }: { getState: () => any },
 	) => {
-		const { coursesPerPage } = selectCourseList(getState()) as CourseList;
+		const { coursesPerPage } = selectCourseList(
+			getState(),
+		) as CourseContentList;
 		const user = requireUser();
 
 		const response = await getCourseList(
@@ -79,7 +81,7 @@ export const deleteCourse = createAsyncThunk(
 	},
 );
 
-export interface Course {
+export interface CourseContent {
 	uid: string;
 	name: string;
 	modifiedTime: number;
@@ -93,8 +95,8 @@ export interface Course {
 	createdTime: number;
 }
 
-export interface CourseList {
-	items: Course[] | [];
+export interface CourseContentList {
+	items: CourseContent[] | [];
 	status: 'idle' | 'loading' | 'succeeded' | 'failed';
 	error: string | null;
 	totalCount: number;
@@ -102,8 +104,8 @@ export interface CourseList {
 	pagesTotalCount: number;
 }
 
-export interface CoursesState {
-	courseList: CourseList;
+export interface CoursesViewState {
+	courseList: CourseContentList;
 	copyCourseStatus: {
 		status: 'idle' | 'loading' | 'succeeded' | 'failed';
 		error: string | null;
@@ -114,7 +116,7 @@ export interface CoursesState {
 	};
 }
 
-const initialState: CoursesState = {
+const initialState: CoursesViewState = {
 	courseList: {
 		items: [],
 		status: 'idle',
@@ -133,7 +135,7 @@ const initialState: CoursesState = {
 	},
 };
 
-export const coursesSlice = createSlice({
+export const coursesViewSlice = createSlice({
 	name: 'courses',
 	initialState,
 	reducers: {},
@@ -179,4 +181,4 @@ export const coursesSlice = createSlice({
 	},
 });
 
-export default coursesSlice.reducer;
+export default coursesViewSlice.reducer;

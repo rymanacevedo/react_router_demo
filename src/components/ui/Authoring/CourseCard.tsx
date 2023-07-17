@@ -16,9 +16,9 @@ import {
 } from '@radix-ui/react-icons';
 import { formatDate } from '../../../lib/utils';
 import CourseCardDropdownMenu from './CourseCardDropdownMenu';
-import { Course } from '../../../store/slices/authoring/coursesSlice';
+import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice';
 
-interface CourseCardProps extends Course {
+interface CourseCardProps extends CourseContent {
 	listView: boolean;
 	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
 }
