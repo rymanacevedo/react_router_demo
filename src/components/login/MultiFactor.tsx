@@ -79,6 +79,8 @@ export const mfaAction: ActionFunction = async ({ request }) => {
 			userKey: info.completeUserDataSchema.key,
 			accountDomain: info.userAccountSchema.subdomain,
 			deviceUid: info.initialUserDataSchema.deviceUid,
+			config: info.userAccountSchema.config,
+			features: info.userAccountSchema.features,
 		};
 		setUser(user);
 		return redirect('/authenticate');
