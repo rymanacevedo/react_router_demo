@@ -5,7 +5,10 @@ import { Role, RoleSchema } from './roles';
 import { redirect } from 'react-router-dom';
 import { authenticatedFetch, fetchDataPost, unauthorized } from './utils';
 import type { ForgotPasswordFields } from '../components/login/ForgotPassword';
-import { BootstrapData, BootstrapDataSchema } from '../App';
+import {
+	BootstrapData,
+	BootstrapDataSchema,
+} from '../components/login/AuthLayout';
 import { ForgotUsernameFields } from '../routes/ForgotUsername';
 
 const initialUserDataSchema = z.object({
@@ -56,8 +59,17 @@ const completeUserDataSchema = z.object({
 });
 
 const userRolesSchema = z.array(RoleSchema);
+export const ConfigSchema = z.record(z.any());
+export const FeatureSchema = z.array(
+	z.object({
+		name: z.string(),
+		description: z.string(),
+	}),
+);
 
 const userAccountSchema = z.object({
+	config: ConfigSchema,
+	features: FeatureSchema,
 	self: z.string(),
 	key: z.string(),
 	uid: z.string(),
@@ -236,23 +248,27 @@ export const getLoginInfo = async (
 		const userRoles = await response.json();
 		const roles: Role[] = userRoles.items;
 
-		response = await fetch(`${VITE_BACKEND_API}/v2/accounts/${accountKey}`, {
-			method: 'GET',
-			headers: {
-				Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
-				'Content-Type': 'application/json',
+		response = await fetch(
+			`${VITE_BACKEND_API}/v2/accounts/${accountKey}?includeConfig=true&includeFeatures=true`,
+			{
+				method: 'GET',
+				headers: {
+					Authorization: `Basic ${window.btoa(
+						`${sessionKey}:someotherstring`,
+					)}`,
+					'Content-Type': 'application/json',
+				},
 			},
-		});
+		);
 
 		const userAccount: UserAccountData = await response.json();
 
-		const data: UserInfo = {
+		return {
 			initialUserDataSchema: initialUserData,
 			completeUserDataSchema: completeUserData,
 			userRolesSchema: roles,
 			userAccountSchema: userAccount,
-		};
-		return data;
+		} as UserInfo;
 	}
 
 	// something on the backend isn't working correctly

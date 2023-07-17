@@ -2,13 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
-import { QuestionInFocusAnswer } from '../../pages/AssignmentView/AssignmentTypes';
+import {
+	Confidence,
+	QuestionInFocusAnswer,
+} from '../../pages/AssignmentView/AssignmentTypes';
+
+export type SelectedAnswer = {
+	id: number | null;
+	confidence: Confidence;
+};
 
 type MultipleChoiceInputProps = {
 	answer: QuestionInFocusAnswer;
-	selectedAnswer: number | null;
-	setSelectedAnswer: (value: number | null) => void;
+	selectedAnswer: SelectedAnswer;
+	setSelectedAnswer: (value: SelectedAnswer) => void;
 	setAnswerUpdated: (value: boolean) => void;
+	hasConfidenceEnabled: boolean;
+	handleAnsweredQuestions: (action?: string) => void;
 };
 
 export default function MultipleChoiceInput({
@@ -16,6 +26,8 @@ export default function MultipleChoiceInput({
 	selectedAnswer,
 	setSelectedAnswer,
 	setAnswerUpdated,
+	hasConfidenceEnabled,
+	handleAnsweredQuestions,
 }: MultipleChoiceInputProps) {
 	const [firstRender, setFirstRender] = useState(() => true);
 	const [status, setStatus] = useState('unchecked');
@@ -25,19 +37,24 @@ export default function MultipleChoiceInput({
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 
-	const renderSelectedAnswer = (a: number | null) => {
-		if (a === answer.id) {
-			setIsEnabled(true);
-			setText('I am sure');
-			setVariant('ampPrimary');
-			setStatus('checked');
+	const renderSelectedAnswer = (a: SelectedAnswer) => {
+		if (a.id === answer.id) {
+			if (a.confidence === Confidence.PartSure) {
+				setStatus('indeterminate');
+				setText('I am unsure');
+				setVariant('ampSecondary');
+				setIsEnabled(true);
+			}
 
-			//     TODO: check if 50% confidence is selected
-			//     if (answer.confidence === 50) {
-			//     setStatus('indeterminate');
-			//     setText('I am unsure');
-			//     setVariant('ampSecondary');
-			//     setIsEnabled(true);
+			if (a.confidence === Confidence.Sure) {
+				setIsEnabled(true);
+				setText('I am sure');
+				setVariant('ampPrimary');
+				setStatus('checked');
+			}
+			if (a.confidence === Confidence.NotSure) {
+				setStatus('checked');
+			}
 		} else {
 			setIsEnabled(false);
 			setText('');
@@ -59,54 +76,59 @@ export default function MultipleChoiceInput({
 	}, [selectedAnswer]);
 
 	const checkStatus = (a: QuestionInFocusAnswer) => {
-		// TODO: IDK
-		// if (IDK) {
-		//     switch (status) {
-		//         case 'unchecked':
-		//             setStatus('checked');
-		//             setText('');
-		//             setIsEnabled(false);
-		//             setVariant('ampSecondary');
-		//             setAnswerObject({
-		//                 ...answerObject,
-		//                 answerId: 0,
-		//                 confidence: 0,
-		//             });
-		//             setIDKResponse(true);
-		//             break;
-		//         case 'checked':
-		//             setIsEnabled(false);
-		//             setText('');
-		//             setStatus('unchecked');
-		//             setAnswerObject({
-		//                 ...answerObject,
-		//                 answerId: 0,
-		//                 confidence: 0,
-		//             });
-		//             setIDKResponse(false);
-		//     }
-		// } else
-
-		switch (status) {
-			case 'unchecked':
-				setStatus('checked');
-				setSelectedAnswer(a.id);
-				break;
-			// TODO: check if 50% confidence is selected
-			// case 'indeterminate':
-			// setStatus('checked');
-			// setSelectedAnswer(a.id);
-			// 	break;
-			case 'checked':
-				setStatus('unchecked');
-				setSelectedAnswer(null);
-				break;
+		if (hasConfidenceEnabled) {
+			// IDK
+			if (a.id === 1) {
+				switch (status) {
+					case 'unchecked':
+						setStatus('checked');
+						setSelectedAnswer({ id: a.id, confidence: Confidence.NotSure });
+						handleAnsweredQuestions();
+						break;
+					case 'checked':
+						setStatus('unchecked');
+						setSelectedAnswer({ id: null, confidence: Confidence.NA });
+						handleAnsweredQuestions('delete');
+						break;
+				}
+			} else {
+				switch (status) {
+					case 'unchecked':
+						setStatus('indeterminate');
+						setSelectedAnswer({ id: a.id, confidence: Confidence.PartSure });
+						handleAnsweredQuestions();
+						break;
+					case 'indeterminate':
+						setStatus('checked');
+						setSelectedAnswer({ id: a.id, confidence: Confidence.Sure });
+						handleAnsweredQuestions();
+						break;
+					case 'checked':
+						setStatus('unchecked');
+						setSelectedAnswer({ id: null, confidence: Confidence.NA });
+						handleAnsweredQuestions('delete');
+						break;
+				}
+			}
+		} else {
+			switch (status) {
+				case 'unchecked':
+					setStatus('checked');
+					setSelectedAnswer({ id: a.id, confidence: Confidence.Sure });
+					handleAnsweredQuestions();
+					break;
+				case 'checked':
+					setStatus('unchecked');
+					setSelectedAnswer({ id: null, confidence: Confidence.NA });
+					handleAnsweredQuestions('delete');
+					break;
+			}
 		}
 	};
 	return (
 		<Checkbox
 			name="answerChoice"
-			value={answer.id}
+			value={answer?.id}
 			className="label-hover-effect"
 			variant="multiChoiceAnswer"
 			colorScheme="transparent"

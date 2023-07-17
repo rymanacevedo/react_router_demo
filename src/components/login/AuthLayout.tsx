@@ -10,9 +10,9 @@ import { ReactComponent as HeadLogo } from '../../headLogo.svg';
 import { Box, Container, Flex, VStack } from '@chakra-ui/react';
 import { z } from 'zod';
 import { bootstrap, isBootStrapData } from '../../services/auth.reactrouter';
-import { BootstrapData } from '../../App';
 import AlertMessage from '../ui/AlertMessage';
 import { unauthorized } from '../../services/utils';
+import { InferSafeParseErrors } from './LoginForm';
 
 const AuthLayoutContextSchema = z.object({
 	accountKey: z.string().optional(),
@@ -21,8 +21,35 @@ const AuthLayoutContextSchema = z.object({
 	recaptcha: z.string(),
 	error: z.boolean(),
 });
-export type AuthLayoutContext = z.infer<typeof AuthLayoutContextSchema>;
 
+export const BootstrapDataSchema = z.object({
+	accountInfo: z.object({
+		key: z.string(),
+		abbrevName: z.string(),
+		uid: z.string(),
+		name: z.string().optional(),
+		parentUid: z.string().optional(),
+		demo: z.boolean().optional(),
+		modifiedTime: z.number().optional(),
+		allowSelfRegistration: z.boolean(),
+	}),
+	recaptchaSiteKey: z.string(),
+	items: z
+		.array(
+			z.object({
+				messageCode: z.string(),
+				message: z.string(),
+			}),
+		)
+		.optional(),
+});
+export type AuthLayoutContext = z.infer<typeof AuthLayoutContextSchema>;
+export type BootstrapData = z.infer<typeof BootstrapDataSchema>;
+type BootstrapDataErrors = InferSafeParseErrors<typeof BootstrapDataSchema>;
+
+type LoaderData<T> = {
+	errors?: T extends BootstrapData ? BootstrapDataErrors : any;
+};
 export const authLayoutLoader = async ({ request }: LoaderFunctionArgs) => {
 	const bootstrapData = (await bootstrap(request)) as BootstrapData | null;
 
@@ -34,7 +61,7 @@ export const authLayoutLoader = async ({ request }: LoaderFunctionArgs) => {
 			fields: bootstrapData,
 			errors: {
 				fieldErrors: {
-					abbrevName: [`${message}`],
+					accountInfo: [`${message}`],
 				},
 			},
 		});
@@ -44,8 +71,7 @@ export const authLayoutLoader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function AuthLayout() {
-	// TODO: add datatype for LoaderData
-	const data = useLoaderData() as BootstrapData | any;
+	const data = useLoaderData() as LoaderData<BootstrapData>;
 	const [accountKey, setAccountKey] = useState('');
 	const [abbrevNameState, setAbbrevNameState] = useState('');
 	const [accountUid, setAccountUid] = useState('');
@@ -109,8 +135,11 @@ export default function AuthLayout() {
 					{error && (
 						<AlertMessage
 							text={
-								data?.errors.fieldErrors.abbrevName ||
-								'No account info provided'
+								data?.errors?.fieldErrors?.accountInfo
+									? Array.isArray(data.errors.fieldErrors.accountInfo)
+										? data.errors.fieldErrors.accountInfo.join(', ')
+										: data.errors.fieldErrors.accountInfo
+									: 'No account info provided'
 							}
 						/>
 					)}

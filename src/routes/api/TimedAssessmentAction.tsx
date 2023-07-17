@@ -7,6 +7,7 @@ import { badRequest, getSubAccount } from '../../services/utils';
 import { postTimedAssessmentAnswer } from '../../services/learning';
 import { requireUser } from '../../utils/user';
 import { User } from '../../services/user';
+import { Confidence } from '../../components/pages/AssignmentView/AssignmentTypes';
 
 export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 	const cloneData = request.clone();
@@ -25,7 +26,11 @@ export const timedAssessmentAction: ActionFunction = async ({ request }) => {
 	) as unknown as TimedAssessmentFields;
 	let answers = [];
 
-	if (fields.answerUpdated.toString() === 'true' && fields.answerChoice) {
+	if (
+		fields.confidence !== Confidence.NotSure &&
+		fields.answerUpdated.toString() === 'true' &&
+		fields.answerChoice
+	) {
 		answers.push({
 			answerId: Number(fields.answerChoice),
 		});

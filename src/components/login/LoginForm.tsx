@@ -29,7 +29,10 @@ import { getUser, setUser } from '../../utils/user';
 import { badRequest } from '../../services/utils';
 import { Cookies } from 'react-cookie-consent';
 
-type InferSafeParseErrors<T extends z.ZodType<any, any, any>, U = string> = {
+export type InferSafeParseErrors<
+	T extends z.ZodType<any, any, any>,
+	U = string,
+> = {
 	formErrors: U[];
 	fieldErrors: {
 		[P in keyof z.infer<T>]?: U[];
@@ -97,6 +100,8 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 			userKey: info.completeUserDataSchema.key,
 			accountDomain: info.userAccountSchema.subdomain,
 			deviceUid: info.initialUserDataSchema.deviceUid,
+			config: info.userAccountSchema.config,
+			features: info.userAccountSchema.features,
 		};
 		setUser(user);
 		return redirect('/authenticate');
