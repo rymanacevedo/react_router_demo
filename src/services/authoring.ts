@@ -15,9 +15,9 @@ export const getCourseList = async (
 }> => {
 	const sort =
 		sortOrder === 'm'
-			? 'modifiedTime+asc'
+			? 'modifiedTime+desc' // ie, most recently modified
 			: sortOrder === 'c'
-			? 'createdTime+asc'
+			? 'createdTime+desc' // ie, most recently created
 			: 'name+asc';
 	const offset = (page - 1) * pageSize;
 	const url = `/v2/authoring-course-content?sort=${sort}&offset=${offset}&limit=${pageSize}`;
