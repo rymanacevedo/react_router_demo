@@ -18,26 +18,30 @@ import { formatDate } from '../../../lib/utils';
 import CourseCardDropdownMenu from './CourseCardDropdownMenu';
 import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice';
 
-interface CourseCardProps extends CourseContent {
+interface CourseCardProps {
+	courseContent: CourseContent;
 	listView: boolean;
 	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
 }
 
 const CourseCard = ({
-	status,
-	name,
-	modifiedTime,
-	modifiedUserFullName,
-	uid,
+	courseContent,
 	listView,
 	courseAlert = 'recommendations',
-	learningUnitCount,
-	moduleCount,
 }: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
 		Published: 'ampDarkSuccess',
 	};
+	const {
+		status,
+		name,
+		modifiedTime,
+		modifiedUserFullName,
+		uid,
+		learningUnitCount,
+		moduleCount,
+	} = courseContent;
 
 	const { colors } = useTheme();
 
