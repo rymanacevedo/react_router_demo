@@ -102,9 +102,9 @@ const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
 	}
 
 	return (
-		<Text fontSize={'20px'} fontWeight={'600'}>
+		<Heading as="h3" fontSize={'18px'} fontWeight={'500'}>
 			{`Round ${roundNumber}: ${phase}`}
-		</Text>
+		</Heading>
 	);
 };
 
