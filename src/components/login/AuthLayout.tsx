@@ -88,7 +88,7 @@ export default function AuthLayout() {
 				</Box>
 				<VStack
 					minH="665px"
-					p="72px"
+					p={12}
 					spacing={10}
 					w={{ base: '100%', md: '640px' }}
 					alignItems=" center"

@@ -729,7 +729,7 @@ const AssignmentReviewView = () => {
 								backgroundColor="white"
 								boxShadow="md"
 								borderRadius={24}
-								px="72px"
+								px={12}
 								py="44px"
 								w={{ base: '100%', md: '50%' }}>
 								<Question
@@ -746,7 +746,7 @@ const AssignmentReviewView = () => {
 								flexDirection="column"
 								justifyContent="space-between"
 								borderRadius={24}
-								px="72px"
+								px={12}
 								py="44px"
 								w={{ base: '100%', md: '50%' }}>
 								{tryAgain ? (

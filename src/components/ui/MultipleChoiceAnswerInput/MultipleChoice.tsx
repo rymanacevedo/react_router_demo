@@ -59,7 +59,7 @@ export const MultipleChoice = ({
 			flexDirection="column"
 			justifyContent="space-between"
 			borderRadius={24}
-			px="72px"
+			px={12}
 			py="44px">
 			{!showOverlay ? (
 				<Fade in={!showOverlay}>

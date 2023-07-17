@@ -184,7 +184,7 @@ const ReviewView = () => {
 						backgroundColor="white"
 						boxShadow="md"
 						borderRadius={24}
-						px="72px"
+						px={12}
 						py="44px"
 						w={{ base: '100%', md: '50%' }}>
 						<Question
@@ -199,7 +199,7 @@ const ReviewView = () => {
 						backgroundColor="white"
 						boxShadow="md"
 						borderRadius={24}
-						px="72px"
+						px={12}
 						py="44px"
 						w={{ base: '100%', md: '50%' }}>
 						<MultipleChoiceOverLay
@@ -250,7 +250,7 @@ const ReviewView = () => {
 					backgroundColor="white"
 					boxShadow="md"
 					borderRadius={24}
-					px="72px"
+					px={12}
 					py="30px"
 					display="flex"
 					justifyContent="space-between">
