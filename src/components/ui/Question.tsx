@@ -22,7 +22,7 @@ const Question = ({
 	return (
 		<>
 			{review ? (
-				<Heading as="h3">
+				<Heading as="h2">
 					{i18n('ReviewQ')} {questionIndex} {i18n('of')} {numberOfQInReview}{' '}
 				</Heading>
 			) : (
