@@ -1,101 +1,40 @@
-import { useState, useEffect } from 'react';
-import { Grid, GridItem, useToast } from '@chakra-ui/react';
-import { ActionFunction, LoaderFunction } from 'react-router';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Grid, GridItem } from '@chakra-ui/react';
+import { LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
-import { requireUser } from '../../../utils/user';
-import { getCourseList } from '../../../services/authoring';
-import { getSubAccount } from '../../../services/utils';
-import { json, useLoaderData, useActionData } from 'react-router-dom';
+import {
+	CourseContent,
+	fetchCourses,
+	selectCourseList,
+} from '../../../store/slices/authoring/coursesViewSlice';
+import { json, useLoaderData } from 'react-router-dom';
 import CourseCard from '../../ui/Authoring/CourseCard';
 import CourseFilter from '../../ui/Authoring/CourseFilters';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
-import { deleteCourse, copyCourse } from '../../../services/authoring';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 import CourseFolderModal from '../../ui/Authoring/CourseFolderModal';
-
-export const authoringActions: ActionFunction = async ({ request }) => {
-	const user = requireUser();
-	let formData = await request.formData();
-	let intent = formData.get('intent');
-	const courseId = formData.get('courseId')?.toString() ?? '';
-
-	if (intent === 'delete') {
-		const { response } = await deleteCourse(user, courseId);
-		const { status, statusText } = response;
-		if (response.status === 200) {
-			return json({
-				ok: true,
-				status,
-				statusText,
-				toastMessage: 'Course Deleted',
-			});
-		} else {
-			return json({
-				ok: false,
-				status,
-				statusText,
-				toastMessage: 'Course Delete Failure',
-			});
-		}
-	} else if (intent === 'copyNew' || intent === 'copyShare') {
-		const share = intent === 'copyShare' ? true : false;
-		const { response } = await copyCourse(user, courseId, share);
-		const { status, statusText } = response;
-		if (status === 200) {
-			return json({
-				ok: true,
-				status,
-				statusText,
-				toastMessage: 'Course Copied',
-			});
-		} else {
-			return json({
-				ok: false,
-				status,
-				statusText,
-				toastMessage: 'Course Copy Failure',
-			});
-		}
-	}
-};
+import { store } from '../../../store/store';
 
 export const authoringLoader: LoaderFunction = async ({ params, request }) => {
-	const user = requireUser();
-	const { courseRole, subAccount } = getSubAccount(user);
-
-	const coursesPerPage = 24;
 	const currentPage = params.page ? +params.page : 1;
 	const sortOrder = new URL(request.url).searchParams.get('sort') || 'a';
 
-	const {
-		data: { items: courseList, totalCount: coursesTotalCount },
-	} = await getCourseList(user, currentPage, coursesPerPage, sortOrder);
+	await store.dispatch(fetchCourses({ currentPage, sortOrder }));
 
 	return json({
-		courseList,
-		coursesTotalCount,
-		currentPage,
-		pagesTotalCount: Math.floor(
-			(coursesTotalCount + coursesPerPage - 1) / coursesPerPage,
-		),
-		selectedCourseKey: null,
-		subAccount,
-		courseRole,
 		sortOrder,
+		currentPage,
 	});
 };
 
 const AuthoringView = () => {
-	const actionData = useActionData() as any;
-	const {
-		courseList,
-		coursesTotalCount,
-		currentPage,
-		pagesTotalCount,
-		sortOrder,
-	} = useLoaderData() as any;
-	const toast = useToast();
+	const courseList = useSelector(selectCourseList);
+	const { sortOrder, currentPage } = useLoaderData() as {
+		sortOrder: string;
+		currentPage: number;
+	};
 	const [listView, setListView] = useState<boolean>(
 		Boolean(Cookies.get('authoring_list_view')),
 	);
@@ -108,24 +47,6 @@ const AuthoringView = () => {
 			Cookies.set('authoring_list_view', 'true');
 		}
 	};
-
-	useEffect(() => {
-		if (actionData) {
-			if (actionData.status === 200) {
-				toast({
-					title: actionData.toastMessage,
-					status: 'success',
-					duration: 4000,
-				});
-			} else {
-				toast({
-					title: actionData.toastMessage,
-					status: 'error',
-					duration: 4000,
-				});
-			}
-		}
-	}, [actionData]);
 
 	return (
 		<AuthoringLayout>
@@ -142,17 +63,21 @@ const AuthoringView = () => {
 				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
 				gap={listView ? 2 : 6}
 				mb={6}>
-				{courseList.map((course: any) => (
-					<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
-						<CourseCard {...course} listView={listView} />
+				{courseList.courseContents.map((courseContent: CourseContent) => (
+					<GridItem
+						colSpan={1}
+						w="100%"
+						color="inherit"
+						key={courseContent.uid}>
+						<CourseCard courseContent={courseContent} listView={listView} />
 					</GridItem>
 				))}
 			</Grid>
 			<PageNavigatorFooter
 				currentPage={currentPage}
-				pagesTotalCount={pagesTotalCount}
-				itemsCurrentCount={courseList.length}
-				itemsTotalCount={coursesTotalCount}
+				pagesTotalCount={courseList.pagesTotalCount}
+				itemsCurrentCount={courseList.courseContents.length}
+				itemsTotalCount={courseList.totalCount}
 				href="/authoring"
 			/>
 			<CourseFolderModal />

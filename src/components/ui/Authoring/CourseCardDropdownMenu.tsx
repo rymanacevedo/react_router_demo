@@ -13,10 +13,21 @@ import {
 	ModalHeader,
 	ModalBody,
 	ModalFooter,
+	useToast,
 } from '@chakra-ui/react';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
-import { Form } from 'react-router-dom';
-import { useFolderDispatch } from '../../providers/AuthoringFolderProvider';
+import { AppDispatch } from '../../../store/store';
+import { useRevalidator } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	copyCourse,
+	deleteCourse,
+	selectCourseActionStatus,
+} from '../../../store/slices/authoring/coursesViewSlice';
+import {
+	setShowFolderSelectionModal,
+	setSelectedCourses,
+} from '../../../store/slices/authoring/foldersSlice';
 
 interface CourseCardDropdownMenuProps {
 	uid: string;
@@ -28,17 +39,55 @@ const CourseCardDropdownMenu = ({
 	isPublished,
 }: CourseCardDropdownMenuProps) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const folderDispatch = useFolderDispatch();
+	const { copyCourseStatus, deleteCourseStatus } = useSelector(
+		selectCourseActionStatus,
+	);
+	const dispatch = useDispatch<AppDispatch>();
+	const revalidator = useRevalidator();
+	const toast = useToast();
 
 	const handleAddToFolder = () => {
-		folderDispatch({
-			type: 'ADD_SELECTED_COURSES',
-			payload: [{ uid }],
+		dispatch(setSelectedCourses([{ uid }]));
+		dispatch(setShowFolderSelectionModal(true));
+	};
+
+	const handleCourseDelete = async () => {
+		await dispatch(deleteCourse(uid));
+
+		const deleteError = deleteCourseStatus.status === 'failed';
+
+		toast({
+			title: deleteError ? 'Error Deleting Course' : 'Course Deleted',
+			status: deleteError ? 'error' : 'success',
+			duration: 4000,
 		});
-		folderDispatch({
-			type: 'SHOW_FOLDER_SELECTION_MODAL',
-			payload: true,
+
+		if (!deleteError) {
+			revalidator.revalidate();
+		}
+
+		onClose();
+	};
+
+	const handleCopyCourse = async (shareQuestions: boolean) => {
+		await dispatch(
+			copyCourse({
+				courseUid: uid,
+				shareQuestions,
+			}),
+		);
+
+		const copyError = copyCourseStatus.status === 'failed';
+
+		toast({
+			title: copyError ? 'Error Copying Course' : 'Course Copied',
+			status: copyError ? 'error' : 'success',
+			duration: 4000,
 		});
+
+		if (!copyError) {
+			revalidator.revalidate();
+		}
 	};
 
 	return (
@@ -57,18 +106,12 @@ const CourseCardDropdownMenu = ({
 				{' '}
 			</MenuButton>
 			<MenuList zIndex={3}>
-				<Form method="post">
-					<input name="courseId" defaultValue={uid} hidden />
-					<MenuItem type="submit" name="intent" value="copyNew">
-						Copy and create new
-					</MenuItem>
-				</Form>
-				<Form method="post">
-					<input name="courseId" defaultValue={uid} hidden />
-					<MenuItem type="submit" name="intent" value="copyShare">
-						Copy and share questions
-					</MenuItem>
-				</Form>
+				<MenuItem onClick={() => handleCopyCourse(false)}>
+					Copy and create new
+				</MenuItem>
+				<MenuItem onClick={() => handleCopyCourse(true)}>
+					Copy and share questions
+				</MenuItem>
 				{!isPublished && <MenuItem onClick={onOpen}>Delete</MenuItem>}
 				<MenuItem>Move</MenuItem>
 				<MenuItem onClick={handleAddToFolder}>Add to Folder</MenuItem>
@@ -84,16 +127,7 @@ const CourseCardDropdownMenu = ({
 						your account.
 					</ModalBody>
 					<ModalFooter justifyContent="flex-start" gap={2}>
-						<Form method="delete">
-							<input name="courseId" defaultValue={uid} hidden />
-							<Button
-								type="submit"
-								name="intent"
-								value="delete"
-								onClick={onClose}>
-								Delete
-							</Button>
-						</Form>
+						<Button onClick={handleCourseDelete}>Delete</Button>
 						<Button variant="ampOutline" onClick={onClose}>
 							Cancel
 						</Button>

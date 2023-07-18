@@ -16,36 +16,32 @@ import {
 } from '@radix-ui/react-icons';
 import { formatDate } from '../../../lib/utils';
 import CourseCardDropdownMenu from './CourseCardDropdownMenu';
+import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice';
 
 interface CourseCardProps {
-	status: 'Draft' | 'Published';
-	name: string;
-	uid: string;
-	modifiedTime: number;
-	modifiedUserFullName: string;
-	createdTime: number;
-	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
+	courseContent: CourseContent;
 	listView: boolean;
-	moduleCount?: number;
-	questionCount?: number;
+	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
 }
 
 const CourseCard = ({
-	status,
-	name,
-	modifiedTime,
-	modifiedUserFullName,
-	uid,
+	courseContent,
 	listView,
-	// This Data Currently Isn't Included in the API Response
 	courseAlert = 'recommendations',
-	questionCount = 0,
-	moduleCount = 0,
 }: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
 		Published: 'ampDarkSuccess',
 	};
+	const {
+		status,
+		name,
+		modifiedTime,
+		modifiedUserFullName,
+		uid,
+		learningUnitCount,
+		moduleCount,
+	} = courseContent;
 
 	const { colors } = useTheme();
 
@@ -127,7 +123,7 @@ const CourseCard = ({
 							</Text>
 							<DotFilledIcon color={colors.ampNeutral[300]} />
 							<Text fontWeight="normal" fontSize="sm">
-								{questionCount} Questions
+								{learningUnitCount} Questions
 							</Text>
 						</Flex>
 						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
