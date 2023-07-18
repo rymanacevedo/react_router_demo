@@ -86,14 +86,14 @@ const AssignmentList = () => {
 			assignment?.assignmentType === 'Assessment' &&
 			assignment?.status === 'COMPLETED'
 		) {
-			return <Text fontSize={'12px'}>{i18n('completedAssessment')}</Text>;
+			return <Text fontSize="xs">{i18n('completedAssessment')}</Text>;
 		} else if (assignment?.assignmentType === 'Assessment') {
-			return <Text fontSize={'12px'}>{i18n('assessment')}</Text>;
+			return <Text fontSize="xs">{i18n('assessment')}</Text>;
 		} else if (assignment?.assignmentType !== 'TimedAssessment') {
 			switch (assignment?.status) {
 				case 'NOT_STARTED': {
 					return (
-						<Text fontSize={'12px'}>
+						<Text fontSize="xs">
 							{assignment?.estimatedTimeToComplete &&
 								`~${
 									Math.floor(assignment?.estimatedTimeToComplete / 60) >= 1
@@ -110,7 +110,7 @@ const AssignmentList = () => {
 				}
 				case 'IN_PROGRESS': {
 					return (
-						<Text fontSize={'12px'}>
+						<Text fontSize="xs">
 							{`~${
 								Math.floor(assignment?.estimatedTimeToComplete / 60) >= 1
 									? Math.floor(assignment?.estimatedTimeToComplete / 60)
@@ -126,14 +126,14 @@ const AssignmentList = () => {
 					);
 				}
 				case 'COMPLETED': {
-					return <Text fontSize={'12px'}>{i18n('refresherAvailable')}</Text>;
+					return <Text fontSize="xs">{i18n('refresherAvailable')}</Text>;
 				}
 			}
 		} else {
 			switch (assignment.status) {
 				case 'NOT_STARTED': {
 					return (
-						<Text fontSize={'12px'}>
+						<Text fontSize="xs">
 							{assignment.estimatedTimeToComplete &&
 								`${
 									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
@@ -144,7 +144,7 @@ const AssignmentList = () => {
 					);
 				}
 				case 'COMPLETED': {
-					return <Text fontSize={'12px'}>{i18n('attempts')}</Text>;
+					return <Text fontSize="xs">{i18n('attempts')}</Text>;
 				}
 			}
 		}

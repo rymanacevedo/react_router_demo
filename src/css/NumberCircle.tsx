@@ -14,7 +14,7 @@ const NumberCircle = ({ number }: NumberCirclePropsType) => {
 			alignItems="center"
 			justifyContent="center"
 			margin="2px">
-			<Text fontSize="12px" fontWeight="bold" color="white">
+			<Text fontSize="xs" fontWeight="bold" color="white">
 				+{number}
 			</Text>
 		</Circle>

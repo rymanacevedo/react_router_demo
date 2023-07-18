@@ -137,7 +137,7 @@ export default function LoginForm() {
 						isInvalid={Boolean(data?.errors?.fieldErrors.username)}>
 						<FormLabel marginBottom={1}>
 							{i18n('username')}
-							<Text float="right" fontSize="12px">
+							<Text float="right" fontSize="xs">
 								{i18n('typicallyEmail')}
 							</Text>
 						</FormLabel>
@@ -150,7 +150,7 @@ export default function LoginForm() {
 						isInvalid={Boolean(data?.errors?.fieldErrors.password)}>
 						<FormLabel marginBottom={1}>
 							{i18n('password')}
-							<Text float="right" fontSize="12px">
+							<Text float="right" fontSize="xs">
 								{i18n('caseSensitive')}
 							</Text>
 						</FormLabel>

@@ -125,7 +125,7 @@ export default function ForgotPassword() {
 					mt={5}>
 					<FormLabel marginBottom={1} requiredIndicator={<span></span>}>
 						{i18n('username')}
-						<Text float="right" fontSize="12px">
+						<Text float="right" fontSize="xs">
 							{i18n('typicallyEmail')}
 						</Text>
 					</FormLabel>

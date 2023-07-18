@@ -66,7 +66,7 @@ const FireProgressToast = (props: FireProgressToastType) => {
 								height="40px"
 								margin="24px"
 								onClick={expandToast}>
-								<Text fontSize={'16px'} fontWeight="600">
+								<Text fontSize="md" fontWeight="600">
 									{i18n('viewMoreProgress')}
 								</Text>
 							</Button>

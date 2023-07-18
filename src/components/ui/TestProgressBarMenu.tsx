@@ -81,7 +81,7 @@ const ModuleTimeRemaining = () => {
 		}
 	};
 	return (
-		<Text fontSize={'16px'} color="ampNeutral.800">
+		<Text fontSize="md" color="ampNeutral.800">
 			{estimatedTimeRemaining()}
 		</Text>
 	);
@@ -102,7 +102,7 @@ const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
 	}
 
 	return (
-		<Heading as="h3" fontSize={'18px'} fontWeight={'500'}>
+		<Heading as="h3" fontSize="lg" fontWeight={'500'}>
 			{`Round ${roundNumber}: ${phase}`}
 		</Heading>
 	);
@@ -312,7 +312,7 @@ const TestProgressBarMenu = ({
 					onClick={() => {
 						handleMenuOpen();
 					}}>
-					<Text fontSize={'16px'} fontWeight="600">
+					<Text fontSize="md" fontWeight="600">
 						{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}
 					</Text>
 				</Button>
