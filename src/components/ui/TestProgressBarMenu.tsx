@@ -49,7 +49,7 @@ type RoundNumberType = {
 
 const ModuleTitle = ({ assignmentType, title, showType }: ModuleTitleType) => {
 	return (
-		<Heading as="h1" fontSize={'21px'}>
+		<Heading as="h1" fontSize="lg">
 			{!showType ? `${assignmentType}: ${title}` : title}
 		</Heading>
 	);
@@ -102,7 +102,7 @@ const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
 	}
 
 	return (
-		<Heading as="h3" fontSize="lg" fontWeight="medium">
+		<Heading as="h3" fontSize="lg-chakra" fontWeight="medium">
 			{`Round ${roundNumber}: ${phase}`}
 		</Heading>
 	);

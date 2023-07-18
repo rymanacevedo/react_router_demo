@@ -114,7 +114,7 @@ export default function ForgotPassword() {
 
 	return (
 		<VStack spacing={5} w={{ base: '100%', md: '358px' }}>
-			<Heading textAlign="center" fontSize="28px">
+			<Heading textAlign="center" fontSize="2.5xl">
 				{i18n('enterUsername')}
 			</Heading>
 			<Form method="post" noValidate>

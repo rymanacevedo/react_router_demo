@@ -29,7 +29,7 @@ const PageNavigatorButton = ({
 			) : text === '>' ? (
 				<ChevronRightIcon />
 			) : (
-				<Text fontSize={'md'} fontWeight={'normal'}>
+				<Text fontSize="md" fontWeight="normal">
 					{text}
 				</Text>
 			)}

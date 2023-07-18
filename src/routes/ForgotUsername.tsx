@@ -120,7 +120,7 @@ export default function ForgotUsername() {
 
 	return (
 		<>
-			<Heading textAlign="center" fontSize="28px">
+			<Heading textAlign="center" fontSize="2.5xl">
 				{i18n('pleaseEnterEmailAddress')}
 			</Heading>
 			<Form method="post">

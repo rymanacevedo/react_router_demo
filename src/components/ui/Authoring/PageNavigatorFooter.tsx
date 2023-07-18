@@ -20,7 +20,7 @@ const PageNavigatorFooter = ({
 	return (
 		<Flex paddingTop={8}>
 			{itemsCurrentCount > 0 && (
-				<Text fontSize={'md'}>
+				<Text fontSize="md">
 					Showing {itemsCurrentCount} of {itemsTotalCount}
 				</Text>
 			)}

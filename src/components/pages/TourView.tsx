@@ -61,7 +61,7 @@ function Step1Modal({
 							/>
 						</Center>
 
-						<ModalHeader pl="0" fontSize={24}>
+						<ModalHeader pl="0" fontSize="2xl-chakra">
 							{i18n('step1ModalTitle')}
 						</ModalHeader>
 						<Text>{i18n('step1ModalContent')}</Text>

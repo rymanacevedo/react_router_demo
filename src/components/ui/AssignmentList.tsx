@@ -246,8 +246,8 @@ const AssignmentList = () => {
 										color: 'ampPrimary.300',
 										cursor: 'pointer',
 									}}
-									fontSize={'21px'}
-									fontWeight={'bold'}>
+									fontSize="lg"
+									fontWeight="bold">
 									{curriculum.name}
 								</Text>
 								{getAssignmentText(assignment)}
