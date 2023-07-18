@@ -63,7 +63,7 @@ const AuthoringView = () => {
 				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
 				gap={listView ? 2 : 6}
 				mb={6}>
-				{courseList.items.map((courseContent: CourseContent) => (
+				{courseList.courseContents.map((courseContent: CourseContent) => (
 					<GridItem
 						colSpan={1}
 						w="100%"
@@ -76,7 +76,7 @@ const AuthoringView = () => {
 			<PageNavigatorFooter
 				currentPage={currentPage}
 				pagesTotalCount={courseList.pagesTotalCount}
-				itemsCurrentCount={courseList.items.length}
+				itemsCurrentCount={courseList.courseContents.length}
 				itemsTotalCount={courseList.totalCount}
 				href="/authoring"
 			/>

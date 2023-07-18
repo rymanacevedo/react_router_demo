@@ -96,7 +96,7 @@ export interface CourseContent {
 }
 
 export interface CourseContentList {
-	items: CourseContent[] | [];
+	courseContents: CourseContent[] | [];
 	status: 'idle' | 'loading' | 'succeeded' | 'failed';
 	error: string | null;
 	totalCount: number;
@@ -118,7 +118,7 @@ export interface CoursesViewState {
 
 const initialState: CoursesViewState = {
 	courseList: {
-		items: [],
+		courseContents: [],
 		status: 'idle',
 		totalCount: 0,
 		error: null,
@@ -148,7 +148,7 @@ export const coursesViewSlice = createSlice({
 				const { items, totalCount } = action.payload;
 				const { coursesPerPage } = state.courseList;
 				state.courseList.status = 'succeeded';
-				state.courseList.items = items;
+				state.courseList.courseContents = items;
 				state.courseList.totalCount = totalCount;
 				state.courseList.pagesTotalCount = Math.floor(
 					(totalCount + coursesPerPage - 1) / coursesPerPage,
