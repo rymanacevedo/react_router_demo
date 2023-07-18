@@ -261,7 +261,7 @@ const ReviewView = () => {
 						{i18n('previousBtn')}
 					</Button>
 					<Text
-						fontWeight={600}
+						fontWeight="semibold"
 						fontSize="md"
 						color={'#7E8A9B'}
 						marginTop={'10px'}>

@@ -172,7 +172,7 @@ const ReviewQuestions = ({
 									height={76}
 									display="flex"
 									justifyContent="space-between">
-									<Box as="span" flex="1" textAlign="left" fontWeight={'bold'}>
+									<Box as="span" flex="1" textAlign="left" fontWeight="bold">
 										{isExpanded ? (
 											`${transformedQuestion.answerHistory.length} ${i18n(
 												'attempts',

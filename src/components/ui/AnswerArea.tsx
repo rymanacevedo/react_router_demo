@@ -193,12 +193,7 @@ export default function AnswerArea({
 					<PopoverBody style={{ padding: 0 }}>
 						<Stack direction={['column', 'row']}>
 							<Box>
-								<Heading
-									style={{ fontWeight: 'normal' }}
-									mt={4}
-									mb={4}
-									as="h3"
-									size="md">
+								<Heading fontWeight="normal" mt={4} mb={4} as="h3" size="md">
 									Click <strong>once</strong> if you are <strong>unsure</strong>
 								</Heading>
 								<img
@@ -211,12 +206,7 @@ export default function AnswerArea({
 								/>
 							</Box>
 							<Box>
-								<Heading
-									style={{ fontWeight: 'normal' }}
-									mt={4}
-									mb={4}
-									as="h3"
-									size="md">
+								<Heading fontWeight="normal" mt={4} mb={4} as="h3" size="md">
 									Click <strong>twice</strong> if you are <strong>sure</strong>
 								</Heading>
 								<img

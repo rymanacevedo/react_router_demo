@@ -102,7 +102,7 @@ const RoundNumberAndPhase = ({ roundNumber, roundPhase }: RoundNumberType) => {
 	}
 
 	return (
-		<Heading as="h3" fontSize="lg" fontWeight={'500'}>
+		<Heading as="h3" fontSize="lg" fontWeight="medium">
 			{`Round ${roundNumber}: ${phase}`}
 		</Heading>
 	);
@@ -312,7 +312,7 @@ const TestProgressBarMenu = ({
 					onClick={() => {
 						handleMenuOpen();
 					}}>
-					<Text fontSize="md" fontWeight="600">
+					<Text fontSize="md" fontWeight="semibold">
 						{isMenuOpen ? i18n('hideProgress') : i18n('showProgress')}
 					</Text>
 				</Button>

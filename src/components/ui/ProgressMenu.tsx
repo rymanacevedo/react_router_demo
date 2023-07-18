@@ -99,34 +99,34 @@ const ProgressMenu = (props: ProgressMenuType) => {
 						/>
 						<HStack marginTop="12px">
 							<VStack>
-								<Text fontSize="xs" fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('mastered')}
 								</Text>{' '}
-								<Text fontSize="md" fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{dataSource?.masteredQuestionCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
-								<Text fontSize="xs" fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('incorrect')}
 								</Text>{' '}
-								<Text fontSize="md" fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{dataSource?.misinformedCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
-								<Text fontSize="xs" fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('learning')}
 								</Text>{' '}
-								<Text fontSize="md" fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{Number(learningCount())}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
-								<Text fontSize="xs" fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('unseen')}
 								</Text>{' '}
-								<Text fontSize="md" fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{dataSource?.unseenCount}
 								</Text>
 							</VStack>
