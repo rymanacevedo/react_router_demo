@@ -40,9 +40,6 @@ export const ampTheme = extendTheme({
 	},
 	fontSizes: {
 		// large screens
-		xs: '.75rem',
-		sm: '.75rem',
-		md: '1rem',
 		lg: '1.312rem',
 		xl: '2rem',
 		'2xl': '2.375rem',

@@ -131,7 +131,7 @@ const WhatYouNeedToKnowComponent = ({
 			<Collapse in={!isOpen} animateOpacity>
 				<VStack marginTop={'16px'} display={isInReviewView ? 'none' : 'flex'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
-						<Text float="left" fontSize="sm">
+						<Text float="left" fontSize="xs">
 							{i18n('wasThisExplanationHelpful')}
 						</Text>
 						<Button
