@@ -74,7 +74,11 @@ const FolderDetailsView = () => {
 				mb={6}>
 				{folderDetails.courseContents.map((course: CourseContent) => (
 					<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
-						<CourseCard courseContent={course} listView={listView} />
+						<CourseCard
+							courseContent={course}
+							listView={listView}
+							folderUid={folderDetails.uid}
+						/>
 					</GridItem>
 				))}
 			</Grid>

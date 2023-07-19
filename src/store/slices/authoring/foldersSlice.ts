@@ -48,6 +48,28 @@ export const fetchFolderDetails = createAsyncThunk(
 	},
 );
 
+export const addCourseToFolder = createAsyncThunk(
+	'courses/addCourseToFolder',
+	async ({
+		folderUid,
+		courseUid,
+	}: {
+		folderUid: string;
+		courseUid: string;
+	}) => {
+		const user = requireUser();
+		const body = {
+			items: [
+				{
+					uid: courseUid,
+				},
+			],
+		};
+		const response = await addCoursesToFolder(user, folderUid, body);
+		return response;
+	},
+);
+
 export interface FoldersState {
 	selectedCourses: { uid: string }[];
 	selectedFolders: { uid: string }[];
@@ -61,6 +83,10 @@ export interface FoldersState {
 		status: 'idle' | 'loading' | 'succeeded' | 'failed';
 		totalCount: number;
 		pagesTotalCount: number;
+		addCourseToFolderStatus: {
+			status: 'idle' | 'loading' | 'succeeded' | 'failed';
+			error: string | null;
+		};
 	};
 }
 
@@ -77,6 +103,10 @@ const initialState: FoldersState = {
 		status: 'idle',
 		totalCount: 0,
 		pagesTotalCount: 0,
+		addCourseToFolderStatus: {
+			status: 'idle',
+			error: null,
+		},
 	},
 };
 
@@ -96,7 +126,15 @@ export const foldersSlice = createSlice({
 		setSubmittingCourses: (state, action) => {
 			state.submittingCourses = action.payload;
 		},
-		resetFoldersState: () => initialState,
+		resetFoldersState: (state) => {
+			return {
+				selectedCourses: initialState.selectedCourses,
+				selectedFolders: initialState.selectedFolders,
+				showFolderSelectionModal: initialState.showFolderSelectionModal,
+				submittingCourses: initialState.submittingCourses,
+				folderDetails: state.folderDetails,
+			};
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -115,6 +153,16 @@ export const foldersSlice = createSlice({
 					(totalCount + coursesPerPage - 1) / coursesPerPage,
 				);
 			})
+			.addCase(addCourseToFolder.pending, (state) => {
+				state.folderDetails.addCourseToFolderStatus.status = 'loading';
+			})
+			.addCase(addCourseToFolder.fulfilled, (state) => {
+				state.folderDetails.addCourseToFolderStatus.status = 'succeeded';
+			})
+			.addCase(addCourseToFolder.rejected, (state) => {
+				state.folderDetails.addCourseToFolderStatus.status = 'failed';
+				state.folderDetails.addCourseToFolderStatus.error = 'Error has occured';
+			});
 	},
 });
 

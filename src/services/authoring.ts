@@ -69,6 +69,7 @@ export const getFolder = async (
 	data: {
 		name: string;
 		description: string;
+		uid: string;
 	};
 	response: Response;
 }> => {
