@@ -64,6 +64,7 @@ const FolderDetailsView = () => {
 						listView={listView}
 						handleListView={handleListFilter}
 						sortOrder={sortOrder}
+						breadCrumb={folderDetails.name}
 					/>
 				}
 			/>
