@@ -10,6 +10,7 @@ import {
 	Button,
 	Badge,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 import FolderCardDropdownMenu from './FolderCardDropdownMenu';
 
 interface FolderCardProps {
@@ -75,7 +76,13 @@ const FolderCard = ({
 					justifyContent="space-between"
 					alignItems="center">
 					<Badge variant="ampSecondary">{usageCount} Courses</Badge>
-					<Button variant="ampOutline" fontSize="sm" size="sm">
+					<Button
+						to={`/authoring/folder/${uid}`}
+						textDecoration="none"
+						as={RouterLink}
+						variant="ampOutline"
+						fontSize="sm"
+						size="sm">
 						View
 					</Button>
 				</CardFooter>
