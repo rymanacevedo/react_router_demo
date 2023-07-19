@@ -2,7 +2,7 @@ import { defineStyleConfig } from '@chakra-ui/react';
 
 const Heading = defineStyleConfig({
 	baseStyle: {
-		fontWeight: 500,
+		fontWeight: 'medium',
 	},
 	sizes: {
 		'4xl': {

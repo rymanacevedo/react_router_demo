@@ -39,16 +39,17 @@ export const ampTheme = extendTheme({
 		},
 	},
 	fontSizes: {
-		// large screens
-		lg: '1.3125rem',
-		'lg-chakra': '1.125',
-		xl: '2rem',
+		// chakra default sizes
 		'xl-chakra': '1.25rem',
-		'2xl': '2.375rem',
+		'lg-chakra': '1.125',
 		'2xl-chakra': '1.5rem',
+		'3xl-chakra': '1.875rem',
+		// override chakra default sizes
+		lg: '1.3125rem',
+		xl: '2rem',
+		'2xl': '2.375rem',
 		'2.5xl': '1.75rem',
 		'3xl': '3.188rem',
-		'3xl-chakra': '1.875rem',
 		// small screens
 		's-xs': '0.688rem',
 		's-sm': '0.875rem',
