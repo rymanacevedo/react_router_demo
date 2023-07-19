@@ -39,13 +39,16 @@ export const ampTheme = extendTheme({
 		},
 	},
 	fontSizes: {
-		// large screens
-		xs: '.75rem',
-		sm: '.75rem',
-		md: '1rem',
-		lg: '1.312rem',
+		// chakra default sizes
+		'xl-chakra': '1.25rem',
+		'lg-chakra': '1.125',
+		'2xl-chakra': '1.5rem',
+		'3xl-chakra': '1.875rem',
+		// override chakra default sizes
+		lg: '1.3125rem',
 		xl: '2rem',
 		'2xl': '2.375rem',
+		'2.5xl': '1.75rem',
 		'3xl': '3.188rem',
 		// small screens
 		's-xs': '0.688rem',
@@ -75,8 +78,8 @@ export const ampTheme = extendTheme({
 		27: '6.75rem',
 	},
 	fonts: {
-		heading: 'Proxima Nova, sans-serif',
-		body: 'Proxima Nova, sans-serif',
+		heading: 'Proxima-Nova, sans-serif',
+		body: 'Proxima-Nova, sans-serif',
 	},
 	colors: {
 		ampWhite: '#FFFFFF',

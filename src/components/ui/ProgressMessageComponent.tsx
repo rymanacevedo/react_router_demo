@@ -123,7 +123,7 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 				<AvatarGroup spacing="4px">
 					<Avatar bg={iconColor} icon={icon}></Avatar>
 				</AvatarGroup>
-				<Text fontSize={'16px'}>{toastText}</Text>
+				<Text fontSize="md">{toastText}</Text>
 			</HStack>
 		</Box>
 	);

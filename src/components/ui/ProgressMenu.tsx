@@ -99,34 +99,34 @@ const ProgressMenu = (props: ProgressMenuType) => {
 						/>
 						<HStack marginTop="12px">
 							<VStack>
-								<Text fontSize={'12px'} fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('mastered')}
 								</Text>{' '}
-								<Text fontSize={'16px'} fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{dataSource?.masteredQuestionCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
-								<Text fontSize={'12px'} fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('incorrect')}
 								</Text>{' '}
-								<Text fontSize={'16px'} fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{dataSource?.misinformedCount}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
-								<Text fontSize={'12px'} fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('learning')}
 								</Text>{' '}
-								<Text fontSize={'16px'} fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{Number(learningCount())}
 								</Text>
 							</VStack>
 							<VStack paddingLeft="12px">
-								<Text fontSize={'12px'} fontWeight="400">
+								<Text fontSize="xs" fontWeight="normal">
 									{i18n('unseen')}
 								</Text>{' '}
-								<Text fontSize={'16px'} fontWeight="600" w="100%">
+								<Text fontSize="md" fontWeight="semibold" w="100%">
 									{dataSource?.unseenCount}
 								</Text>
 							</VStack>
@@ -139,7 +139,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 					bg="ampSecondary.500"
 					borderBottomRadius={'12px'}
 					padding="24px">
-					<Text fontSize={'12px'} color={'ampWhite'}>
+					<Text fontSize="xs" color={'ampWhite'}>
 						{i18n('sessionTimer')}
 					</Text>
 					<CountUpTimer seconds={seconds} color={'ampWhite'} boxSize={5} />

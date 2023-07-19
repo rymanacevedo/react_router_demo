@@ -215,7 +215,7 @@ function SignUp() {
 						alignContent="center"
 						size="lg"
 						mb={'24px'}
-						fontSize={25}
+						fontSize="2xl"
 						whiteSpace="nowrap">
 						<p>{i18n('signUpText')}</p>
 					</Heading>

@@ -153,7 +153,7 @@ const StaticAssignmentView = ({
 								}}
 							/>
 							<PopoverBody p="24px" pl="0">
-								<Heading fontSize={24} as="h2" mb={3}>
+								<Heading fontSize="2xl-chakra" as="h2" mb={3}>
 									{i18n(barPopoverContent[tourStep]?.title)}
 								</Heading>
 								<Text>{i18n(barPopoverContent[tourStep]?.content)}</Text>
@@ -250,7 +250,7 @@ const StaticAssignmentView = ({
 										}}
 									/>
 									<PopoverBody p="24px" pl="0">
-										<Heading fontSize={24} as="h2" mb={3}>
+										<Heading fontSize="2xl-chakra" as="h2" mb={3}>
 											{i18n('step2PopoverTitle')}
 										</Heading>
 										<Text>{i18n('step2PopoverContent')}</Text>
@@ -323,7 +323,7 @@ const StaticAssignmentView = ({
 									}}
 								/>
 								<PopoverBody p="24px" pl="0">
-									<Heading fontSize={24} as="h2" mb={3}>
+									<Heading fontSize="2xl-chakra" as="h2" mb={3}>
 										{i18n('step6PopoverTitle')}
 									</Heading>
 									<Text>{i18n('step6PopoverContent')}</Text>

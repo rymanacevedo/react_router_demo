@@ -62,7 +62,7 @@ const ModuleIntroComponent = ({
 			<Stack paddingTop="16px" paddingBottom="16px">
 				<RichContentComponent content={moduleData?.introductionRc} />
 
-				<Text fontSize={14} paddingBottom={5} paddingTop={5}>
+				<Text fontSize="sm" paddingBottom={5} paddingTop={5}>
 					{numberOfLearningUnits}{' '}
 					{numberOfLearningUnits && numberOfLearningUnits > 1
 						? i18n('Questions')

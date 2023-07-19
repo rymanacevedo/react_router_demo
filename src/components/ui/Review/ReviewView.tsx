@@ -261,8 +261,8 @@ const ReviewView = () => {
 						{i18n('previousBtn')}
 					</Button>
 					<Text
-						fontWeight={600}
-						fontSize={16}
+						fontWeight="semibold"
+						fontSize="md"
 						color={'#7E8A9B'}
 						marginTop={'10px'}>
 						{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}

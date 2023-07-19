@@ -108,7 +108,7 @@ const WhatYouNeedToKnowComponent = ({
 												flex="1"
 												marginLeft={'24px'}
 												textAlign="left">
-												<Text fontSize={'24px'} textColor={'ampPrimary.600'}>
+												<Text fontSize="2xl" textColor={'ampPrimary.600'}>
 													{i18n('addLearn')}
 												</Text>
 											</Box>
@@ -131,7 +131,7 @@ const WhatYouNeedToKnowComponent = ({
 			<Collapse in={!isOpen} animateOpacity>
 				<VStack marginTop={'16px'} display={isInReviewView ? 'none' : 'flex'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
-						<Text float="left" fontSize="14px">
+						<Text float="left" fontSize="xs">
 							{i18n('wasThisExplanationHelpful')}
 						</Text>
 						<Button

@@ -22,7 +22,7 @@ function Footer() {
 							alt="Powered By Amplifire"
 						/>
 
-						<Text fontSize="sm" color="ampWhite">
+						<Text fontSize="xs" color="ampWhite">
 							© 2022 Knowledge Factor, Inc. All rights reserved.
 						</Text>
 					</Stack>
@@ -35,7 +35,7 @@ function Footer() {
 							alt="Powered By Amplifire"
 						/>
 
-						<Text fontSize="sm" color="ampWhite">
+						<Text color="ampWhite">
 							© 2022 Knowledge Factor, Inc. All rights reserved.
 						</Text> */}
 					</Stack>

@@ -12,7 +12,7 @@ const CountUpTimer = ({ seconds, color, boxSize }: CountUpTimerProps) => {
 	return (
 		<HStack>
 			<Icon as={LapTimerIcon} color={color} boxSize={boxSize} />
-			<Text fontSize="lg" fontWeight="600" color={color}>
+			<Text fontSize="lg" fontWeight="semibold" color={color}>
 				{convertSecondsToTime(seconds)}
 			</Text>
 		</HStack>
