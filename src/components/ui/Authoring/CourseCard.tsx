@@ -21,13 +21,19 @@ import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice'
 interface CourseCardProps {
 	courseContent: CourseContent;
 	listView: boolean;
+	folderUid?: string;
 }
 
-const CourseCard = ({ courseContent, listView }: CourseCardProps) => {
+const CourseCard = ({
+	courseContent,
+	listView,
+	folderUid,
+}: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
 		Published: 'ampDarkSuccess',
 	};
+
 	const {
 		status,
 		name,
@@ -93,7 +99,11 @@ const CourseCard = ({ courseContent, listView }: CourseCardProps) => {
 							{status}
 						</Badge>
 						{!listView && (
-							<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
+							<CourseCardDropdownMenu
+								uid={uid}
+								isPublished={isPublished}
+								folderUid={folderUid}
+							/>
 						)}
 					</Flex>
 					<Heading

@@ -61,9 +61,13 @@ export const copyCourse = createAsyncThunk(
 		{ rejectWithValue },
 	) => {
 		const user = requireUser();
-		const { response } = await fetchCopyCourse(user, courseUid, shareQuestions);
+		const { response, data } = await fetchCopyCourse(
+			user,
+			courseUid,
+			shareQuestions,
+		);
 		if (response.status === 200) {
-			return { ok: true };
+			return { ok: true, uid: data.uid };
 		}
 		return rejectWithValue("Couldn't copy course");
 	},

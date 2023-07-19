@@ -63,6 +63,9 @@ import FolderView, {
 } from './components/pages/Authoring/FoldersView';
 import NewCourseContentView from './components/pages/Authoring/NewCourseContentView';
 import { timedAssessmentAction } from './routes/api/TimedAssessmentAction';
+import FolderDetailsView, {
+	folderDetailsLoader,
+} from './components/pages/Authoring/FolderDetailsView';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -155,6 +158,16 @@ const routesJSX = (
 				action={folderActions}
 			/>
 			<Route path="authoring/new" element={<NewCourseContentView />} />
+			<Route
+				path="authoring/folder/:id"
+				element={<FolderDetailsView />}
+				loader={folderDetailsLoader}
+			/>
+			<Route
+				path="authoring/folder/:id/:page"
+				element={<FolderDetailsView />}
+				loader={folderDetailsLoader}
+			/>
 			<Route
 				path="admin"
 				element={

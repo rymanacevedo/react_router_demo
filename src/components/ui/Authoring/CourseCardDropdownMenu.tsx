@@ -25,6 +25,7 @@ import {
 	selectCourseActionStatus,
 } from '../../../store/slices/authoring/coursesViewSlice';
 import {
+	addCourseToFolder,
 	setShowFolderSelectionModal,
 	setSelectedCourses,
 } from '../../../store/slices/authoring/foldersSlice';
@@ -32,11 +33,13 @@ import {
 interface CourseCardDropdownMenuProps {
 	uid: string;
 	isPublished: boolean;
+	folderUid?: string;
 }
 
 const CourseCardDropdownMenu = ({
 	uid,
 	isPublished,
+	folderUid,
 }: CourseCardDropdownMenuProps) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { copyCourseStatus, deleteCourseStatus } = useSelector(
@@ -75,7 +78,12 @@ const CourseCardDropdownMenu = ({
 				courseUid: uid,
 				shareQuestions,
 			}),
-		);
+		).then(async (copiedCourse: any) => {
+			if (folderUid) {
+				const courseUid = copiedCourse.payload.uid;
+				await dispatch(addCourseToFolder({ folderUid, courseUid }));
+			}
+		});
 
 		const copyError = copyCourseStatus.status === 'failed';
 
@@ -113,7 +121,6 @@ const CourseCardDropdownMenu = ({
 					Copy and share questions
 				</MenuItem>
 				{!isPublished && <MenuItem onClick={onOpen}>Delete</MenuItem>}
-				<MenuItem>Move</MenuItem>
 				<MenuItem onClick={handleAddToFolder}>Add to Folder</MenuItem>
 			</MenuList>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>

@@ -62,6 +62,41 @@ export const getFolderList = async (
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
+export const getFolder = async (
+	user: User,
+	folderUid: string,
+): Promise<{
+	data: {
+		name: string;
+		description: string;
+		uid: string;
+	};
+	response: Response;
+}> => {
+	const url = `/v2/authoring-folders/${folderUid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const getFolderContent = async (
+	user: User,
+	folderUid: string,
+	page: number, // 1 based
+	pageSize: number,
+): Promise<{
+	data: {
+		items: any[];
+		totalCount: 0;
+	};
+	response: Response;
+}> => {
+	const url = `/v2/authoring-folders/${folderUid}/course-content?offset=${
+		(page - 1) * pageSize
+	}&limit=${pageSize}&sort=name+asc`;
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
 export const createFolder = async (
 	user: User,
 	body: {

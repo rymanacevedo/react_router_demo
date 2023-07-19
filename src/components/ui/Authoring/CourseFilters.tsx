@@ -1,5 +1,9 @@
 import { Flex, IconButton, Link, Text } from '@chakra-ui/react';
-import { IdCardIcon, ListBulletIcon } from '@radix-ui/react-icons';
+import {
+	IdCardIcon,
+	ListBulletIcon,
+	ChevronRightIcon,
+} from '@radix-ui/react-icons';
 import { Link as RouterLink } from 'react-router-dom';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
 
@@ -7,22 +11,40 @@ interface CourseFilterProps {
 	handleListView: () => void;
 	listView: boolean;
 	sortOrder: string;
+	breadCrumb?: string;
 }
 
 const CourseFilter = ({
 	handleListView,
 	listView,
 	sortOrder,
+	breadCrumb,
 }: CourseFilterProps) => {
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
 			<Flex alignItems="flex-start" gap={6}>
-				<Text borderBottom="2px solid" fontWeight="normal">
-					All
-				</Text>
-				<Link as={RouterLink} variant="navLink" to="/authoring/folders">
-					Folders
-				</Link>
+				{breadCrumb ? (
+					<Link as={RouterLink} variant="navLink" to="/authoring">
+						All
+					</Link>
+				) : (
+					<Text borderBottom="2px solid" fontWeight="normal">
+						All
+					</Text>
+				)}
+				<Flex alignItems="center" gap={1}>
+					<Link as={RouterLink} variant="navLink" to="/authoring/folders">
+						Folders
+					</Link>
+					{breadCrumb ? (
+						<>
+							<ChevronRightIcon />
+							<Text borderBottom="2px solid" fontWeight="normal">
+								{breadCrumb}
+							</Text>
+						</>
+					) : null}
+				</Flex>
 			</Flex>
 			<Flex gap={3}>
 				<CoursesSortDropdownMenu currentSortOrder={sortOrder} />
