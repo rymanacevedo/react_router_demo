@@ -92,7 +92,7 @@ export const getFolderContent = async (
 }> => {
 	const url = `/v2/authoring-folders/${folderUid}/course-content?offset=${
 		(page - 1) * pageSize
-	}&limit=${pageSize}`;
+	}&limit=${pageSize}&sort=name+asc`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
