@@ -21,14 +21,9 @@ import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice'
 interface CourseCardProps {
 	courseContent: CourseContent;
 	listView: boolean;
-	courseAlert?: 'unpublished_edits' | 'issues' | 'recommendations';
 }
 
-const CourseCard = ({
-	courseContent,
-	listView,
-	courseAlert = 'recommendations',
-}: CourseCardProps) => {
+const CourseCard = ({ courseContent, listView }: CourseCardProps) => {
 	const statusBadgeVariant = {
 		Draft: 'ampWarning',
 		Published: 'ampDarkSuccess',
@@ -41,6 +36,9 @@ const CourseCard = ({
 		uid,
 		learningUnitCount,
 		moduleCount,
+		hasRecommendations,
+		hasIssues,
+		hasUnpublishedEdits,
 	} = courseContent;
 
 	const { colors } = useTheme();
@@ -49,23 +47,25 @@ const CourseCard = ({
 
 	const isPublished = status === 'Published';
 
-	const alertBadgeVariant = {
-		unpublished_edits: {
-			variant: 'ampWarning',
-			icon: <Pencil2Icon />,
-			label: 'Unpublished Edits',
-		},
-		issues: {
-			variant: 'ampLightError',
-			icon: <ExclamationTriangleIcon />,
-			label: 'Issues',
-		},
-		recommendations: {
-			variant: 'ampSecondary',
-			icon: <BellIcon />,
-			label: 'Recommendations',
-		},
-	};
+	const alertBadgeVariant = hasUnpublishedEdits
+		? {
+				variant: 'ampWarning',
+				icon: <Pencil2Icon />,
+				label: 'Unpublished Edits',
+		  }
+		: hasIssues
+		? {
+				variant: 'ampLightError',
+				icon: <ExclamationTriangleIcon />,
+				label: 'Issues',
+		  }
+		: hasRecommendations
+		? {
+				variant: 'ampSecondary',
+				icon: <BellIcon />,
+				label: 'Recommendations',
+		  }
+		: {};
 
 	return (
 		<Card
@@ -137,11 +137,8 @@ const CourseCard = ({
 						alignContent="flex-end"
 						position="relative"
 						gap={listView ? 2 : 0}>
-						<Badge
-							variant={alertBadgeVariant[courseAlert].variant}
-							display="flex"
-							gap={2}>
-							{alertBadgeVariant[courseAlert].icon}
+						<Badge variant={alertBadgeVariant.variant} display="flex" gap={2}>
+							{alertBadgeVariant.icon}
 							<Text
 								as="span"
 								fontSize="inherit"
@@ -153,7 +150,7 @@ const CourseCard = ({
 									position: 'relative',
 									transition: '.6s ease',
 								}}>
-								{alertBadgeVariant[courseAlert].label}
+								{alertBadgeVariant.label}
 							</Text>
 						</Badge>
 						{listView && (
