@@ -11,9 +11,12 @@ import {
 	Heading,
 	Icon,
 	Text,
+	useToast,
 } from '@chakra-ui/react';
 import { IconProps } from '@chakra-ui/icon';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { createCourseContent } from '../../../services/authoring';
+import { requireUser } from '../../../utils/user';
 
 const CoursePlanningIcon = (props: IconProps) => (
 	<Icon width="48px" height="48px" viewBox="0 0 48 48" fill="none" {...props}>
@@ -46,7 +49,7 @@ interface NewCourseContentCardProps {
 	title: string;
 	description: string;
 	button: string;
-	href?: string;
+	onClick?: () => void;
 }
 
 const NewCourseContentCard = ({
@@ -54,7 +57,7 @@ const NewCourseContentCard = ({
 	title,
 	description,
 	button,
-	href,
+	onClick,
 }: NewCourseContentCardProps) => {
 	return (
 		<Card variant="authoringCard" alignItems="flex-start" flex="1">
@@ -72,10 +75,8 @@ const NewCourseContentCard = ({
 				<Text fontWeight="normal">{description}</Text>
 			</CardBody>
 			<CardFooter paddingTop="6">
-				{href ? (
-					<Button as={ReactRouterLink} to={href} textDecoration="none">
-						{button}
-					</Button>
+				{onClick ? (
+					<Button onClick={onClick}>{button}</Button>
 				) : (
 					<Button>{button}</Button>
 				)}
@@ -85,6 +86,23 @@ const NewCourseContentCard = ({
 };
 
 const NewCourseContentView = () => {
+	const user = requireUser();
+	const navigate = useNavigate();
+	const toast = useToast();
+
+	const handleCreateNewCourseContent = async () => {
+		const { data, response } = await createCourseContent(user);
+		if (response.status === 201) {
+			navigate(`/authoring/course/${data.uid}`);
+		} else {
+			toast({
+				title: 'Error creating new course',
+				status: 'error',
+				duration: 4000,
+			});
+		}
+	};
+
 	return (
 		<AuthoringLayout>
 			<Box>
@@ -114,7 +132,7 @@ const NewCourseContentView = () => {
 						description="Start from a blank course and add in each module and question
 							individually."
 						button="Start from scratch"
-						href="/authoring/courses/new"
+						onClick={handleCreateNewCourseContent}
 					/>
 					<NewCourseContentCard
 						badge={
