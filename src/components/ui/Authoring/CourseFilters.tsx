@@ -57,12 +57,16 @@ const CourseFilter = ({
 						<IconButton
 							aria-label="Course Card View"
 							variant={listView ? 'ghost' : 'ampSolid'}
+							height="24px"
+							width="30px"
 							icon={<IdCardIcon />}
 							onClick={handleListView}
 						/>
 						<IconButton
 							aria-label="Course List View"
 							variant={listView ? 'ampSolid' : 'ghost'}
+							height="24px"
+							width="30px"
 							onClick={handleListView}
 							icon={<ListBulletIcon />}
 						/>
