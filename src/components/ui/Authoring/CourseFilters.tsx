@@ -1,11 +1,18 @@
-import { Flex, IconButton, Link, Text } from '@chakra-ui/react';
 import {
 	IdCardIcon,
 	ListBulletIcon,
 	ChevronRightIcon,
 } from '@radix-ui/react-icons';
+import { Flex, IconButton, Link, Text, Button } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
+import {
+	selectCoursesBulkEditingEnabled,
+	enableCoursesBulkEditing,
+	setSelectedCourses,
+	enableBulkEditingFolderModal,
+} from '../../../store/slices/authoring/bulkEditingSlice';
 
 interface CourseFilterProps {
 	handleListView: () => void;
@@ -22,6 +29,9 @@ const CourseFilter = ({
 	sortOrder,
 	setSortOrder,
 }: CourseFilterProps) => {
+	const dispatch = useDispatch();
+	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
+
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
 			<Flex alignItems="flex-start" gap={6}>
@@ -49,6 +59,43 @@ const CourseFilter = ({
 				</Flex>
 			</Flex>
 			<Flex gap={3}>
+				{bulkEditingEnabled ? (
+					<>
+						<Button
+							onClick={() => dispatch(enableBulkEditingFolderModal(true))}
+							fontWeight="normal"
+							height="100%"
+							variant="outline">
+							Add to Folder
+						</Button>
+						<Button
+							onClick={() => console.log('BULK DELETE')}
+							fontWeight="normal"
+							height="100%"
+							variant="outline">
+							Delete
+						</Button>
+						<Button
+							marginRight={6}
+							onClick={() => {
+								dispatch(enableCoursesBulkEditing(false));
+								dispatch(setSelectedCourses([]));
+							}}
+							fontWeight="normal"
+							height="100%"
+							variant="outline">
+							Cancel
+						</Button>
+					</>
+				) : (
+					<Button
+						onClick={() => dispatch(enableCoursesBulkEditing(true))}
+						fontWeight="normal"
+						height="100%"
+						variant="outline">
+						Select
+					</Button>
+				)}
 				<CoursesSortDropdownMenu
 					sortOrder={sortOrder()}
 					setSortOrder={setSortOrder}

@@ -15,6 +15,7 @@ import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 import CourseFolderModal from '../../ui/Authoring/CourseFolderModal';
+import BulkEditContainer from '../../ui/Authoring/BulkEditContainer';
 import { store } from '../../../store/store';
 import {
 	courseContentsOrder,
@@ -69,20 +70,22 @@ const AuthoringView = () => {
 					/>
 				}
 			/>
-			<Grid
-				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
-				gap={listView ? 2 : 6}
-				mb={6}>
-				{courseList.courseContents.map((courseContent: CourseContent) => (
-					<GridItem
-						colSpan={1}
-						w="100%"
-						color="inherit"
-						key={courseContent.uid}>
-						<CourseCard courseContent={courseContent} listView={listView} />
-					</GridItem>
-				))}
-			</Grid>
+			<BulkEditContainer>
+				<Grid
+					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
+					gap={listView ? 2 : 6}
+					mb={6}>
+					{courseList.courseContents.map((courseContent: CourseContent) => (
+						<GridItem
+							colSpan={1}
+							w="100%"
+							color="inherit"
+							key={courseContent.uid}>
+							<CourseCard courseContent={courseContent} listView={listView} />
+						</GridItem>
+					))}
+				</Grid>
+			</BulkEditContainer>
 			<PageNavigatorFooter
 				currentPage={currentPage}
 				pagesTotalCount={courseList.pagesTotalCount}
