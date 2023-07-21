@@ -91,7 +91,7 @@ const LearningView = () => {
 		const keyToFind = selectedCourseKey || data.selectedCourseKey;
 
 		if (courseList && keyToFind) {
-			const course = courseList.find((c) => c.key === keyToFind);
+			const course = courseList.find((c: Course) => c.key === keyToFind);
 			if (course) {
 				setTitle(course.name);
 				setSelectedCourseKey(course.key);
