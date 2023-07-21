@@ -9,7 +9,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.afterEach(async ({ page }) => {
-	// await page.goto('http://localhost:3000/main/logout');
+	await page.goto('http://localhost:3000/main/logout');
+	await page.waitForURL(
+		'http://localhost:3000/main/login?abbrevName=automation_10',
+	);
 });
 
 test('is on the dashboard', async ({ page }) => {
