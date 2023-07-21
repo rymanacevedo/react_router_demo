@@ -15,25 +15,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFolderList } from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
 import { CheckIcon } from '@radix-ui/react-icons';
-import { addCoursesToFolder } from '../../../services/authoring';
+import { selectFoldersState } from '../../../store/slices/authoring/foldersSlice';
 import {
-	selectFoldersState,
-	resetFoldersState,
+	addCoursesToFolder,
+	enableBulkEditingFolderModal,
+	selectBulkEditingFolderModalEnabled,
 	setSelectedFolders,
-	setSubmittingCourses,
-} from '../../../store/slices/authoring/foldersSlice';
+	selectFolders,
+	resetBulkEditingState,
+} from '../../../store/slices/authoring/bulkEditingSlice';
+import { AppDispatch } from '../../../store/store';
 
 const CourseFolderModal = () => {
 	const user = requireUser();
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const [folders, setFolders] = useState<any>(null);
-	const {
-		showFolderSelectionModal,
-		submittingCourses,
-		selectedCourses,
-		selectedFolders,
-	} = useSelector(selectFoldersState);
+
+	const { submittingCourses } = useSelector(selectFoldersState);
+
+	const selectedFolders = useSelector(selectFolders);
 	const toast = useToast();
+	const bulkEditingFolderModalEnabled = useSelector(
+		selectBulkEditingFolderModalEnabled,
+	);
 
 	const addFolders = async () => {
 		const {
@@ -43,39 +47,31 @@ const CourseFolderModal = () => {
 	};
 
 	useEffect(() => {
-		if (showFolderSelectionModal) {
+		if (bulkEditingFolderModalEnabled) {
 			addFolders();
 		}
-	}, [showFolderSelectionModal]);
+	}, [bulkEditingFolderModalEnabled]);
 
 	const handleClose = () => {
-		dispatch(resetFoldersState());
+		dispatch(enableBulkEditingFolderModal(false));
 	};
 
 	const handleCheckboxChange = (values: string[]) => {
-		dispatch(setSelectedFolders([...values.map((value) => ({ uid: value }))]));
+		dispatch(setSelectedFolders(values));
 	};
 
 	const handleAddCoursesToFolder = async () => {
-		dispatch(setSubmittingCourses(true));
-
 		await Promise.all(
-			selectedFolders.map(async (folder) => {
-				const body = {
-					items: [...selectedCourses],
-				};
+			Object.keys(selectedFolders).map(async (folderUid: string) => {
+				const { payload } = await dispatch(addCoursesToFolder(folderUid));
 
-				const { response } = await addCoursesToFolder(user, folder.uid, body);
-
-				if (response.status === 201) {
-					dispatch(resetFoldersState());
+				if (payload.status === 201) {
 					toast({
 						title: 'Succesfully Added Course To Folder',
 						status: 'success',
 						duration: 4000,
 					});
 				} else {
-					dispatch(resetFoldersState());
 					toast({
 						title: 'Error Adding Course To Folders',
 						status: 'error',
@@ -84,11 +80,12 @@ const CourseFolderModal = () => {
 				}
 			}),
 		);
+		dispatch(resetBulkEditingState());
 	};
 
 	return (
 		<Modal
-			isOpen={showFolderSelectionModal}
+			isOpen={bulkEditingFolderModalEnabled}
 			onClose={handleClose}
 			isCentered={true}>
 			<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
