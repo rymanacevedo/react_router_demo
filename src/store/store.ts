@@ -2,11 +2,13 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import courses from './slices/authoring/coursesViewSlice';
 import folders from './slices/authoring/foldersSlice';
 import courseContent from './slices/authoring/courseContentSlice';
+import bulkEditing from './slices/authoring/bulkEditingSlice';
 
 const authoringReducer = combineReducers({
 	courses,
 	folders,
 	courseContent,
+	bulkEditing,
 });
 
 export const store = configureStore({
