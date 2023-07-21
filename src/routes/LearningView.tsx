@@ -31,10 +31,12 @@ export type CourseStatsType = {
 	learnerStartingKnowledge: number;
 };
 
-export const learningLoader: LoaderFunction = async ({ request }) => {
+export const learningLoader: LoaderFunction = async ({ request, params }) => {
 	const user = requireUser();
 	const url = new URL(request.url);
-	const selectedCourseKey = url.searchParams.get('selectedCourseKey');
+	const selectedCourseKey = url.searchParams.get('selectedCourseKey')
+		? url.searchParams.get('selectedCourseKey')
+		: params.selectedCourseKey;
 	const { courseRole, subAccount } = getSubAccount(user);
 	if (selectedCourseKey) {
 		// fetcher runs this route again, so we don't need to fetch the data again
@@ -83,24 +85,24 @@ const LearningView = () => {
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
-		if (data && !selectedCourseKey) {
-			setCourses(data.courseList);
-			setTitle(data.courseList[0].name);
-			setSelectedCourseKey(data.selectedCourseKey);
-			navigate(`/learning/${data.selectedCourseKey}`);
-		}
+		if (!data) return;
 
-		if (data.courseList && selectedCourseKey) {
-			setCourses(data.courseList);
-			const course = data.courseList.find(
-				(c: Course) => c.key === selectedCourseKey,
-			);
+		const courseList = data.courseList;
+		const keyToFind = selectedCourseKey || data.selectedCourseKey;
+
+		if (courseList && keyToFind) {
+			const course = courseList.find((c) => c.key === keyToFind);
 			if (course) {
 				setTitle(course.name);
-				navigate(`/learning/${selectedCourseKey}`);
+				setSelectedCourseKey(course.key);
+				navigate(`/learning/${course.key}`);
 			}
 		}
-	}, []);
+
+		if (!selectedCourseKey && data.courseList) {
+			setCourses(data.courseList);
+		}
+	}, [data, selectedCourseKey]);
 
 	useEffect(() => {
 		if (fetcher.data && courses) {
