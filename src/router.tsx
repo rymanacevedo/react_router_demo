@@ -66,6 +66,10 @@ import { timedAssessmentAction } from './routes/api/TimedAssessmentAction';
 import FolderDetailsView, {
 	folderDetailsLoader,
 } from './components/pages/Authoring/FolderDetailsView';
+import QuestionCards from './components/ui/TimedAssessment/QuestionCards';
+import AmpBoxWithQuestionAndAnswer, {
+	questionAnswerLoader,
+} from './components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -227,9 +231,16 @@ const routesJSX = (
 
 			<Route
 				loader={timedAssessmentLoader}
-				path="learning/timedAssessment/:assignmentUid"
-				element={<TimedAssessment />}
-			/>
+				path="learning/timedAssessment"
+				element={<TimedAssessment />}>
+				<Route path=":assignmentUid" element={<QuestionCards />}>
+					<Route
+						loader={questionAnswerLoader}
+						path=":questionId"
+						element={<AmpBoxWithQuestionAndAnswer />}
+					/>
+				</Route>
+			</Route>
 
 			<Route
 				path="learning/timedAssessment/:assignmentUid/results"

@@ -1,4 +1,4 @@
-import { LoaderFunction } from 'react-router';
+import { LoaderFunction, Outlet } from 'react-router';
 import {
 	Box,
 	Button,
@@ -496,7 +496,12 @@ export default function TimedAssessment() {
 								{i18n('finishPracticeTest')}
 							</Button>
 						</Box>
-
+						<Outlet
+							context={{
+								roundData: roundData,
+								questionInFocus: questionInFocus,
+							}}
+						/>
 						{/*QuestionArea*/}
 						<AmpBox>
 							<Question questionInFocus={questionInFocus} />
