@@ -29,12 +29,6 @@ const CoursesSortDropdownMenu = ({
 				</MenuItem>
 				<MenuItem
 					as={RouterLink}
-					to="/authoring?sort=m"
-					isDisabled={currentSortOrder === 'm'}>
-					Recently Modified
-				</MenuItem>
-				<MenuItem
-					as={RouterLink}
 					to="/authoring?sort=c"
 					isDisabled={currentSortOrder === 'c'}>
 					Recently Created
