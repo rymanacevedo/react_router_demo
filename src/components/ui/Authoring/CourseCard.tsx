@@ -107,7 +107,8 @@ const CourseCard = ({
 						)}
 					</Flex>
 					<Heading
-						fontSize={listView ? 'lg' : 'xl'}
+						fontWeight="semibold"
+						fontSize="lg"
 						as="h2"
 						noOfLines={listView ? 1 : 2}>
 						{name}
@@ -128,18 +129,18 @@ const CourseCard = ({
 						<Flex
 							marginBottom={listView ? 0 : 2}
 							marginRight={listView ? 5 : 0}>
-							<Text fontWeight="normal" fontSize="sm">
+							<Text fontWeight="normal" fontSize="xs">
 								{moduleCount} Modules
 							</Text>
 							<DotFilledIcon color={colors.ampNeutral[300]} />
-							<Text fontWeight="normal" fontSize="sm">
+							<Text fontWeight="normal" fontSize="xs">
 								{learningUnitCount} Questions
 							</Text>
 						</Flex>
-						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
+						<Text color="ampTertiaryText" fontSize="xs" fontWeight="normal">
 							Last Edited {month} {day}, {year}
 						</Text>
-						<Text color="ampTertiaryText" fontSize="sm" fontWeight="normal">
+						<Text color="ampTertiaryText" fontSize="xs" fontWeight="normal">
 							by {modifiedUserFullName}
 						</Text>
 					</Flex>

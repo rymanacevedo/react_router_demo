@@ -62,7 +62,7 @@ const FolderCard = ({
 						justifyContent="space-between"
 						position="relative"
 						height="100%">
-						<Heading fontSize="xl" as="h2" noOfLines={2}>
+						<Heading fontWeight="semibold" fontSize="lg" as="h2" noOfLines={2}>
 							{name}
 						</Heading>
 						<FolderCardDropdownMenu uid={uid} />
