@@ -25,6 +25,39 @@ export const getCourseList = async (
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
+export const getCourseContent = async (
+	user: User,
+	uid: string,
+): Promise<{
+	data: {
+		uid: string;
+		name: string;
+		descriptionHtml: string;
+	};
+	response: Response;
+}> => {
+	const url = `/v2/authoring-course-content/${uid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const createCourseContent = async (
+	user: User,
+	name?: string,
+): Promise<{
+	data: {
+		uid: string;
+		name: string;
+	};
+	response: Response;
+}> => {
+	const url = '/v2/authoring-course-content';
+	const body = {
+		name: name || 'Untitled',
+	};
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
 export const deleteCourse = async (
 	user: User,
 	courseContentUid: string,
