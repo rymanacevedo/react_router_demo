@@ -2,8 +2,14 @@ import { LoaderFunction, Outlet } from 'react-router';
 import { Box, Button, Divider, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard, { CardValues } from '../PracticeTestCard';
-import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
+import {
+	Confidence,
+	QuestionInFocus,
+	RoundData,
+} from '../../pages/AssignmentView/AssignmentTypes';
 import { useOutletContext } from 'react-router-dom';
+import { useState } from 'react';
+import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
 
 export const questionCardLoader: LoaderFunction = async () => {
 	// const user = requireUser();
@@ -25,61 +31,58 @@ export const questionCardLoader: LoaderFunction = async () => {
 	// };
 };
 export default function QuestionCards() {
-	// const {
-	// 	// ref,
-	// 	roundData,
-	// 	questionInFocus,
-	// 	answeredQuestions,
-	// 	flaggedQuestions,
-	// 	fetcher,
-	// 	moduleInfoAndQuestions,
-	// 	setSelectedAnswer,
-	// 	setQuestionInFocus,
-	// } = useOutlet();
-
 	const context = useOutletContext<any>();
-	const { t: i18n } = useTranslation();
-	const handleNavigation = (question: QuestionInFocus) => {
-		// handle if the user selects the same navigation item
-		if (!(question.id === context.questionInFocus?.id)) {
-			// const currentRef = ref.current as HTMLFormElement;
-			// let answerChoices: HTMLInputElement[] = [];
-			// for (const item of currentRef) {
-			// 	const input = item as HTMLInputElement;
-			// 	if (input.name === 'answerChoice') {
-			// 		answerChoices.push(input);
-			// 	}
-			// }
-			// const choice = answerChoices.find(
-			// 	(answerChoice) => answerChoice.indeterminate,
-			// );
-			// // const form = new FormData(currentRef);
-			// if (choice) {
-			// 	form.append('answerChoice', choice.value);
-			// }
-			// fetcher.submit(form, {
-			// 	method: 'POST',
-			// 	action: '/api/timedAssessment',
-			// });
-			// setQuestionInFocus(
-			// 	findQuestionInFocus(
-			// 		moduleInfoAndQuestions,
-			// 		roundData,
-			// 		false,
-			// 		false,
-			// 		question.displayOrder - 1,
-			// 	),
-			// );
-			// const a = question.answerList.find((answer) => answer.selected);
-			// const iSa = a
-			// 	? { id: a.id, confidence: question.confidence! }
-			// 	: question.confidence === Confidence.NotSure
-			// 	? { id: 1, confidence: Confidence.NotSure }
-			// 	: { id: null, confidence: Confidence.NA };
-			// setSelectedAnswer(iSa);
-		}
-	};
+	const {
+		questionInFocus,
+		roundData,
+	}: {
+		questionInFocus: QuestionInFocus;
+		roundData: RoundData;
+	} = context;
+	const flaggedQuestionIds: string[] = roundData.questionList
+		.filter((question) => question.flagged)
+		.map((question) => question.publishedQuestionAuthoringKey);
+	const answeredQuestionIds: string[] = roundData.questionList
+		.filter(
+			(question) =>
+				question.confidence && question.confidence !== Confidence.NA,
+		)
+		.map((question) => question.publishedQuestionAuthoringKey);
 
+	const [flaggedQuestions, setFlaggedQuestions] = useState(
+		flaggedQuestionIds.length > 0
+			? new Set<string>(flaggedQuestionIds)
+			: new Set<string>(),
+	);
+
+	const foundAnswer = questionInFocus.answerList.find(
+		(answer) => answer.selected,
+	);
+
+	const initialSelectedAnswer = foundAnswer
+		? { id: foundAnswer.id, confidence: questionInFocus.confidence }
+		: questionInFocus.confidence === Confidence.NotSure
+		? { id: 1, confidence: Confidence.NotSure }
+		: null;
+
+	const initialAnsweredQuestions =
+		answeredQuestionIds.length > 0
+			? new Set(answeredQuestionIds)
+			: initialSelectedAnswer
+			? new Set([questionInFocus.publishedQuestionAuthoringKey])
+			: new Set();
+	const [answeredQuestions, setAnsweredQuestions] = useState(
+		initialAnsweredQuestions,
+	);
+	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer>({
+		id: initialSelectedAnswer !== null ? initialSelectedAnswer.id : null,
+		confidence: context.questionInFocus.confidence ?? Confidence.NA,
+	});
+
+	const [questionTrigger, setQuestionTrigger] =
+		useState<QuestionInFocus | null>(null);
+
+	const { t: i18n } = useTranslation();
 	return (
 		<>
 			<Box
@@ -96,20 +99,20 @@ export default function QuestionCards() {
 				</Heading>
 				<Divider marginTop={1} marginBottom={1} />
 				{/*<QuestionCard />*/}
-				{context.roundData.questionList.map((question: QuestionInFocus) => {
+				{roundData.questionList.map((question: QuestionInFocus) => {
 					const values: CardValues = ['unselected'];
-					// if (
-					// 	question.publishedQuestionAuthoringKey ===
-					// 	questionInFocus.publishedQuestionAuthoringKey
-					// ) {
-					// 	values.push('selected');
-					// }
-					// if (answeredQuestions.has(question.publishedQuestionAuthoringKey)) {
-					// 	values.push('answered');
-					// }
-					// if (flaggedQuestions.has(question.publishedQuestionAuthoringKey)) {
-					// 	values.push('flagged');
-					// }
+					if (
+						question.publishedQuestionAuthoringKey ===
+						context.questionInFocus.publishedQuestionAuthoringKey
+					) {
+						values.push('selected');
+					}
+					if (answeredQuestions.has(question.publishedQuestionAuthoringKey)) {
+						values.push('answered');
+					}
+					if (flaggedQuestions.has(question.publishedQuestionAuthoringKey)) {
+						values.push('flagged');
+					}
 
 					return (
 						<PracticeTestCard
@@ -118,7 +121,11 @@ export default function QuestionCards() {
 							variant="multiPartCard"
 							values={values}
 							text={question.displayOrder.toString()}
-							onClick={() => handleNavigation(question)}
+							onClick={() => {
+								if (!(question.id === questionInFocus.id)) {
+									setQuestionTrigger(question);
+								}
+							}}
 						/>
 					);
 				})}
@@ -126,7 +133,17 @@ export default function QuestionCards() {
 					{i18n('finishPracticeTest')}
 				</Button>
 			</Box>
-			<Outlet context={context} />
+			<Outlet
+				context={{
+					...context,
+					flaggedQuestions,
+					setFlaggedQuestions,
+					selectedAnswer,
+					setSelectedAnswer,
+					setAnsweredQuestions,
+					questionTrigger,
+				}}
+			/>
 		</>
 	);
 }

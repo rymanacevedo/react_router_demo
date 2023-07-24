@@ -29,7 +29,7 @@ export default function MultipleChoiceInput({
 	hasConfidenceEnabled,
 	handleAnsweredQuestions,
 }: MultipleChoiceInputProps) {
-	const [firstRender, setFirstRender] = useState(() => true);
+	const [firstRender, setFirstRender] = useState(true);
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
 	const [isEnabled, setIsEnabled] = useState(false);
