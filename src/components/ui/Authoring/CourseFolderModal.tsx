@@ -63,7 +63,11 @@ const CourseFolderModal = () => {
 	const handleAddCoursesToFolder = async () => {
 		await Promise.all(
 			Object.keys(selectedFolders).map(async (folderUid: string) => {
-				const { payload } = await dispatch(addCoursesToFolder(folderUid));
+				const { payload } = (await dispatch(addCoursesToFolder(folderUid))) as {
+					payload: {
+						status?: number;
+					};
+				};
 
 				if (payload.status === 201) {
 					toast({
