@@ -14,17 +14,15 @@ export default function Matching({ questionInFocus }: Props) {
 			w="100%"
 			h="auto"
 			direction="column"
-			wrap="wrap"
 			maxW="1496px">
 			<Flex
 				bgColor="ampWhite"
-				w="8xl"
 				h="3xs"
 				m={6}
 				borderRadius="3xl"
 				p={12}
 				boxShadow="md">
-				<Heading as="h2" fontSize="xl">
+				<Heading as="h2" fontSize="xl" ml={67.5}>
 					{i18n('dragMatch')}
 				</Heading>
 			</Flex>
@@ -35,7 +33,7 @@ export default function Matching({ questionInFocus }: Props) {
 					bgColor="ampWhite"
 					p={12}
 					borderLeftRadius="3xl">
-					<Heading as="h2" fontSize="xl">
+					<Heading as="h2" fontSize="xl" ml={67.5}>
 						{i18n('options')}
 					</Heading>
 				</Flex>
