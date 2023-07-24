@@ -296,6 +296,9 @@ const resources = {
 			notStarted: 'Not Started',
 			inProgress: 'In Progress',
 			completed: 'Completed',
+			dragMatch: 'Drag and Match',
+			options: 'Options',
+			answers: 'Answers',
 		},
 	},
 	fr: {

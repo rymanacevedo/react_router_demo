@@ -25,6 +25,7 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import Matching from '../Matching';
 
 type Props = {
 	isInstructionalOverlayOpen: boolean;
@@ -545,41 +546,46 @@ export default function AssignmentComponent({
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 					<HStack justify="center" align="space-between">
-						<Stack
-							maxW="1496"
-							w="100%"
-							p="12px"
-							pr="0px"
-							alignItems="stretch"
-							direction={['column', 'column', 'row', 'row', 'row', 'row']}>
-							<Box
-								backgroundColor="white"
-								boxShadow="md"
-								borderRadius={24}
-								px={12}
-								py="44px"
-								w={{ base: '100%', md: '50%' }}>
-								<Question questionInFocus={questionInFocus} />
-							</Box>
-							<AnswerArea
-								isOpen={isInstructionalOverlayOpen}
-								onClose={onClose}
-								smallerThan1000={isSmallerThan1000}
-								initialFocusRef={initRef}
-								showFeedback={showFeedback}
-								questionInFocus={questionInFocus}
-								selectedAnswers={selectedAnswers}
-								setSelectedAnswers={setSelectedAnswers}
-								clearSelection={clearSelection}
-								clearSelectionState={setClearSelection}
-								currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-								continueBtnFunc={continueBtnFunc}
-								clearSelectionFunction={clearSelectionButtonFunc}
-								IDKResponse={IDKResponse}
-								setIDKResponse={setIDKResponse}
-								submitMultiSelectAnswer={submitMultiSelectAnswer}
-							/>
-						</Stack>
+						{questionInFocus.questionType !== 'Matching' && (
+							<Stack
+								maxW="1496"
+								w="100%"
+								p="12px"
+								pr="0px"
+								alignItems="stretch"
+								direction={['column', 'column', 'row', 'row', 'row', 'row']}>
+								<Box
+									backgroundColor="white"
+									boxShadow="md"
+									borderRadius={24}
+									px={12}
+									py="44px"
+									w={{ base: '100%', md: '50%' }}>
+									<Question questionInFocus={questionInFocus} />
+								</Box>
+								<AnswerArea
+									isOpen={isInstructionalOverlayOpen}
+									onClose={onClose}
+									smallerThan1000={isSmallerThan1000}
+									initialFocusRef={initRef}
+									showFeedback={showFeedback}
+									questionInFocus={questionInFocus}
+									selectedAnswers={selectedAnswers}
+									setSelectedAnswers={setSelectedAnswers}
+									clearSelection={clearSelection}
+									clearSelectionState={setClearSelection}
+									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									continueBtnFunc={continueBtnFunc}
+									clearSelectionFunction={clearSelectionButtonFunc}
+									IDKResponse={IDKResponse}
+									setIDKResponse={setIDKResponse}
+									submitMultiSelectAnswer={submitMultiSelectAnswer}
+								/>
+							</Stack>
+						)}
+						{questionInFocus.questionType === 'Matching' && (
+							<Matching questionInFocus={questionInFocus} />
+						)}
 						<ProgressMenu
 							textPrompt={textPrompt}
 							currentRoundQuestionListData={currentRoundQuestionListData}
