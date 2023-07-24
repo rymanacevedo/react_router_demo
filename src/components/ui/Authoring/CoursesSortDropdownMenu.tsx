@@ -1,13 +1,14 @@
 import { Button, MenuButton, Menu, MenuList, MenuItem } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
-import { Link as RouterLink } from 'react-router-dom';
 
 interface CoursesSortDropdownMenuProps {
-	currentSortOrder: string;
+	sortOrder: string;
+	setSortOrder: (value: string) => void;
 }
 
 const CoursesSortDropdownMenu = ({
-	currentSortOrder,
+	sortOrder,
+	setSortOrder,
 }: CoursesSortDropdownMenuProps) => {
 	return (
 		<Menu>
@@ -22,15 +23,13 @@ const CoursesSortDropdownMenu = ({
 			</MenuButton>
 			<MenuList zIndex={3}>
 				<MenuItem
-					as={RouterLink}
-					to="/authoring?sort=a"
-					isDisabled={currentSortOrder === 'a'}>
+					onClick={() => setSortOrder('a')}
+					isDisabled={sortOrder === 'a'}>
 					Alphabetical (A-Z)
 				</MenuItem>
 				<MenuItem
-					as={RouterLink}
-					to="/authoring?sort=c"
-					isDisabled={currentSortOrder === 'c'}>
+					onClick={() => setSortOrder('c')}
+					isDisabled={sortOrder === 'c'}>
 					Recently Created
 				</MenuItem>
 			</MenuList>

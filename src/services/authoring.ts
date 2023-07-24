@@ -1,6 +1,14 @@
 import { authenticatedFetch } from './utils';
 import { User } from './user';
 
+function toSortCriteria(sortOrder: string): string {
+	return sortOrder === 'm'
+		? 'modifiedTime+desc' // ie, most recently modified
+		: sortOrder === 'c'
+		? 'createdTime+desc' // ie, most recently created
+		: 'name+asc'; // defaults to alphabetical
+}
+
 export const getCourseList = async (
 	user: any,
 	page: number, // 1 based
@@ -13,12 +21,7 @@ export const getCourseList = async (
 	};
 	response: Response;
 }> => {
-	const sort =
-		sortOrder === 'm'
-			? 'modifiedTime+desc' // ie, most recently modified
-			: sortOrder === 'c'
-			? 'createdTime+desc' // ie, most recently created
-			: 'name+asc';
+	const sort = toSortCriteria(sortOrder);
 	const offset = (page - 1) * pageSize;
 	const url = `/v2/authoring-course-content?sort=${sort}&offset=${offset}&limit=${pageSize}`;
 
@@ -116,6 +119,7 @@ export const getFolderContent = async (
 	folderUid: string,
 	page: number, // 1 based
 	pageSize: number,
+	sortOrder: string,
 ): Promise<{
 	data: {
 		items: any[];
@@ -123,9 +127,10 @@ export const getFolderContent = async (
 	};
 	response: Response;
 }> => {
-	const url = `/v2/authoring-folders/${folderUid}/course-content?offset=${
+	const sort = toSortCriteria(sortOrder);
+	const url = `/v2/authoring-course-content?folderUid=${folderUid}&offset=${
 		(page - 1) * pageSize
-	}&limit=${pageSize}&sort=name+asc`;
+	}&limit=${pageSize}&sort=${sort}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
