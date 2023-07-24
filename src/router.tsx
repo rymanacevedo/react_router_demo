@@ -70,6 +70,7 @@ import QuestionCards from './components/ui/TimedAssessment/QuestionCards';
 import AmpBoxWithQuestionAndAnswer, {
 	questionAnswerLoader,
 } from './components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer';
+import Submission from './components/ui/TimedAssessment/Submission';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -234,6 +235,7 @@ const routesJSX = (
 				path="learning/timedAssessment"
 				element={<TimedAssessment />}>
 				<Route path=":assignmentUid" element={<QuestionCards />}>
+					<Route path="submission" element={<Submission />} />
 					<Route
 						loader={questionAnswerLoader}
 						path=":questionId"

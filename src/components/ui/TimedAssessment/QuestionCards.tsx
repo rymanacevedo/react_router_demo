@@ -7,7 +7,7 @@ import {
 	QuestionInFocus,
 	RoundData,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useState } from 'react';
 import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
 
@@ -32,12 +32,15 @@ export const questionCardLoader: LoaderFunction = async () => {
 };
 export default function QuestionCards() {
 	const context = useOutletContext<any>();
+	const navigate = useNavigate();
 	const {
 		questionInFocus,
 		roundData,
+		assignmentUid,
 	}: {
 		questionInFocus: QuestionInFocus;
 		roundData: RoundData;
+		assignmentUid: string;
 	} = context;
 	const flaggedQuestionIds: string[] = roundData.questionList
 		.filter((question) => question.flagged)
@@ -81,6 +84,10 @@ export default function QuestionCards() {
 
 	const [questionTrigger, setQuestionTrigger] =
 		useState<QuestionInFocus | null>(null);
+
+	const handleGoToSubmitPage = () => {
+		navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
+	};
 
 	const { t: i18n } = useTranslation();
 	return (
@@ -129,7 +136,11 @@ export default function QuestionCards() {
 						/>
 					);
 				})}
-				<Button display="block" mr="auto" ml="auto">
+				<Button
+					onClick={handleGoToSubmitPage}
+					display="block"
+					mr="auto"
+					ml="auto">
 					{i18n('finishPracticeTest')}
 				</Button>
 			</Box>
