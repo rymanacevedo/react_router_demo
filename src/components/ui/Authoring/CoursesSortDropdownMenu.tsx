@@ -16,7 +16,6 @@ const CoursesSortDropdownMenu = ({
 				as={Button}
 				variant="outline"
 				height="100%"
-				borderRadius="xl"
 				fontWeight="normal"
 				rightIcon={<ChevronDownIcon />}>
 				Sort

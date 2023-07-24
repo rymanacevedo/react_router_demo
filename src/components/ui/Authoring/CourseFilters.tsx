@@ -141,7 +141,7 @@ const CourseFilter = ({
 						border="1px solid"
 						borderColor="ampNeutral.200"
 						padding={2}
-						borderRadius="xl">
+						borderRadius="md">
 						<IconButton
 							aria-label="Course Card View"
 							variant={listView ? 'ghost' : 'ampSolid'}
