@@ -42,7 +42,7 @@ const CourseFolderModal = () => {
 	const addFolders = async () => {
 		const {
 			data: { items: folderList },
-		} = await getFolderList(user, 1, 5);
+		} = await getFolderList(user, 1, 5, 'a');
 		setFolders(folderList);
 	};
 

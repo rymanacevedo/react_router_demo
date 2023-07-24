@@ -28,6 +28,12 @@ export const [courseContentsOrder, setCourseContentsOrder] = handleCookie(
 	'a',
 );
 
+// Preferred folder list sort order
+export const [folderListOrder, setFolderListOrder] = handleCookie(
+	'amp-folders-order',
+	'a',
+);
+
 // Preferred folder course content list sort order
 export const [folderContentsOrder, setFolderContentsOrder] = handleCookie(
 	'amp-folder-contents-order',
