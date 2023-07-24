@@ -70,6 +70,20 @@ export const deleteCourse = async (
 	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE');
 };
 
+export const bulkDeleteCourse = async (
+	user: User,
+	courses: string[],
+	subAccount: string,
+): Promise<any> => {
+	const url = `/v2/authoring-course-content?subaccount=${subAccount}`;
+
+	const body = {
+		items: courses,
+	};
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE', body);
+};
+
 export const copyCourse = async (
 	user: User,
 	courseContentUid: string,

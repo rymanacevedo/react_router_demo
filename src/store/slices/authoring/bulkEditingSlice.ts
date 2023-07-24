@@ -5,7 +5,11 @@ import {
 } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 import { requireUser } from '../../../utils/user';
-import { addCoursesToFolder as fetchAddCoursesToFolder } from '../../../services/authoring';
+import { getSubAccount } from '../../../services/utils';
+import {
+	addCoursesToFolder as fetchAddCoursesToFolder,
+	bulkDeleteCourse as fetchBulkDeleteCourse,
+} from '../../../services/authoring';
 
 const selectBulkEditingState = (store: RootState) =>
 	store.authoring.bulkEditing;
@@ -23,6 +27,11 @@ export const selectBulkEditingFolderModalEnabled = createSelector(
 export const selectFolders = createSelector(
 	selectBulkEditingState,
 	({ selectedFolders }) => selectedFolders,
+);
+
+export const selectBulkDeleteStatus = createSelector(
+	selectBulkEditingState,
+	({ bulkDeleteCoursesStatus }) => bulkDeleteCoursesStatus,
 );
 
 export const addCoursesToFolder = createAsyncThunk(
@@ -47,6 +56,35 @@ export const addCoursesToFolder = createAsyncThunk(
 	},
 );
 
+export const bulkDeleteCourses = createAsyncThunk(
+	'courses/bulkDeleteCourses',
+	async (
+		_,
+		{
+			rejectWithValue,
+			getState,
+		}: { rejectWithValue: any; getState: () => any },
+	) => {
+		const user = requireUser();
+		const { subAccount } = getSubAccount(user);
+
+		const { selectedCourses } = selectBulkEditingState(getState());
+
+		const { response, data } = await fetchBulkDeleteCourse(
+			user,
+			selectedCourses,
+			subAccount,
+		);
+
+		console.log(response, data);
+
+		if (response.status === 200) {
+			return { ok: true };
+		}
+		return rejectWithValue("Couldn't delete courses");
+	},
+);
+
 interface SelectedFolder {
 	[key: string]: {
 		loading: boolean;
@@ -61,6 +99,11 @@ interface BulkEditingSliceState {
 	selectedCourses: string[];
 	selectedFolders: SelectedFolder;
 	bulkEditingFolderModalVisible: boolean;
+	bulkDeleteCoursesStatus: {
+		loading: boolean;
+		success: boolean;
+		error: null | string;
+	};
 }
 
 const initialState: BulkEditingSliceState = {
@@ -68,6 +111,11 @@ const initialState: BulkEditingSliceState = {
 	selectedCourses: [],
 	selectedFolders: {},
 	bulkEditingFolderModalVisible: false,
+	bulkDeleteCoursesStatus: {
+		loading: false,
+		success: false,
+		error: null,
+	},
 };
 
 export const bulkEditingSlice = createSlice({
@@ -117,7 +165,6 @@ export const bulkEditingSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(addCoursesToFolder.pending, (state, action) => {
-				console.log(action.meta);
 				state.selectedFolders = {
 					...state.selectedFolders,
 					[action.meta.arg]: {
@@ -146,6 +193,27 @@ export const bulkEditingSlice = createSlice({
 						error: true,
 						success: false,
 					},
+				};
+			})
+			.addCase(bulkDeleteCourses.pending, (state) => {
+				state.bulkDeleteCoursesStatus = {
+					loading: true,
+					error: null,
+					success: false,
+				};
+			})
+			.addCase(bulkDeleteCourses.fulfilled, (state) => {
+				state.bulkDeleteCoursesStatus = {
+					loading: true,
+					error: null,
+					success: true,
+				};
+			})
+			.addCase(bulkDeleteCourses.rejected, (state) => {
+				state.bulkDeleteCoursesStatus = {
+					loading: false,
+					error: 'Error Deleting Courses',
+					success: false,
 				};
 			});
 	},

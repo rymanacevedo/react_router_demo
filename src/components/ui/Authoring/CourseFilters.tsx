@@ -1,9 +1,17 @@
+import { useEffect } from 'react';
 import {
 	IdCardIcon,
 	ListBulletIcon,
 	ChevronRightIcon,
 } from '@radix-ui/react-icons';
-import { Flex, IconButton, Link, Text, Button } from '@chakra-ui/react';
+import {
+	Flex,
+	IconButton,
+	Link,
+	Text,
+	Button,
+	useToast,
+} from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
@@ -12,7 +20,11 @@ import {
 	enableCoursesBulkEditing,
 	setSelectedCourses,
 	enableBulkEditingFolderModal,
+	setSelectedFolders,
+	bulkDeleteCourses,
+	selectBulkDeleteStatus,
 } from '../../../store/slices/authoring/bulkEditingSlice';
+import { AppDispatch } from '../../../store/store';
 
 interface CourseFilterProps {
 	handleListView: () => void;
@@ -29,8 +41,26 @@ const CourseFilter = ({
 	sortOrder,
 	setSortOrder,
 }: CourseFilterProps) => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
+	const bulkDeleteStatus = useSelector(selectBulkDeleteStatus);
+	const toast = useToast();
+
+	useEffect(() => {
+		if (bulkDeleteStatus.error) {
+			toast({
+				title: bulkDeleteStatus.error,
+				status: 'error',
+				duration: 4000,
+			});
+		} else if (bulkDeleteStatus.success) {
+			toast({
+				title: 'Successfully Deleted Courses',
+				status: 'success',
+				duration: 4000,
+			});
+		}
+	}, [bulkDeleteStatus]);
 
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
@@ -69,7 +99,13 @@ const CourseFilter = ({
 							Add to Folder
 						</Button>
 						<Button
-							onClick={() => console.log('BULK DELETE')}
+							onClick={() =>
+								dispatch(bulkDeleteCourses()).then(() => {
+									dispatch(enableCoursesBulkEditing(false));
+									dispatch(setSelectedCourses([]));
+									dispatch(setSelectedFolders([]));
+								})
+							}
 							fontWeight="normal"
 							height="100%"
 							variant="outline">
