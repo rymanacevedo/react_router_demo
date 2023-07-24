@@ -546,7 +546,9 @@ export default function AssignmentComponent({
 						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 					/>
 					<HStack justify="center" align="space-between">
-						{questionInFocus.questionType !== 'Matching' && (
+						{questionInFocus.questionType === 'Matching' ? (
+							<Matching questionInFocus={questionInFocus} />
+						) : (
 							<Stack
 								maxW="1496"
 								w="100%"
@@ -582,9 +584,6 @@ export default function AssignmentComponent({
 									submitMultiSelectAnswer={submitMultiSelectAnswer}
 								/>
 							</Stack>
-						)}
-						{questionInFocus.questionType === 'Matching' && (
-							<Matching questionInFocus={questionInFocus} />
 						)}
 						<ProgressMenu
 							textPrompt={textPrompt}
