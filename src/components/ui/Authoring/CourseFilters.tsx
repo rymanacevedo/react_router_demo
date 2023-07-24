@@ -10,15 +10,17 @@ import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
 interface CourseFilterProps {
 	handleListView: () => void;
 	listView: boolean;
-	sortOrder: string;
 	breadCrumb?: string;
+	sortOrder: () => string;
+	setSortOrder: (value: string) => void;
 }
 
 const CourseFilter = ({
 	handleListView,
 	listView,
-	sortOrder,
 	breadCrumb,
+	sortOrder,
+	setSortOrder,
 }: CourseFilterProps) => {
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
@@ -47,7 +49,10 @@ const CourseFilter = ({
 				</Flex>
 			</Flex>
 			<Flex gap={3}>
-				<CoursesSortDropdownMenu currentSortOrder={sortOrder} />
+				<CoursesSortDropdownMenu
+					sortOrder={sortOrder()}
+					setSortOrder={setSortOrder}
+				/>
 				<Flex alignItems="center" gap={6}>
 					<Flex
 						border="1px solid"

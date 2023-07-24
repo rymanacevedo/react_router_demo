@@ -8,7 +8,7 @@ import {
 	fetchCourses,
 	selectCourseList,
 } from '../../../store/slices/authoring/coursesViewSlice';
-import { json, useLoaderData } from 'react-router-dom';
+import { json, useLoaderData, useNavigate } from 'react-router-dom';
 import CourseCard from '../../ui/Authoring/CourseCard';
 import CourseFilter from '../../ui/Authoring/CourseFilters';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
@@ -16,23 +16,27 @@ import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 import CourseFolderModal from '../../ui/Authoring/CourseFolderModal';
 import { store } from '../../../store/store';
+import {
+	courseContentsOrder,
+	setCourseContentsOrder,
+} from '../../../lib/authoring/cookies';
 
-export const authoringLoader: LoaderFunction = async ({ params, request }) => {
+export const authoringLoader: LoaderFunction = async ({ params }) => {
 	const currentPage = params.page ? +params.page : 1;
-	const sortOrder = new URL(request.url).searchParams.get('sort') || 'a';
 
-	await store.dispatch(fetchCourses({ currentPage, sortOrder }));
+	await store.dispatch(
+		fetchCourses({ currentPage, sortOrder: courseContentsOrder() }),
+	);
 
 	return json({
-		sortOrder,
 		currentPage,
 	});
 };
 
 const AuthoringView = () => {
+	const navigate = useNavigate();
 	const courseList = useSelector(selectCourseList);
-	const { sortOrder, currentPage } = useLoaderData() as {
-		sortOrder: string;
+	const { currentPage } = useLoaderData() as {
 		currentPage: number;
 	};
 	const [listView, setListView] = useState<boolean>(
@@ -48,6 +52,11 @@ const AuthoringView = () => {
 		}
 	};
 
+	const handleChangeCourseContentsOrder = (sortOrder: string) => {
+		setCourseContentsOrder(sortOrder);
+		navigate('/authoring');
+	};
+
 	return (
 		<AuthoringLayout>
 			<AuthoringHeader
@@ -55,7 +64,8 @@ const AuthoringView = () => {
 					<CourseFilter
 						listView={listView}
 						handleListView={handleListFilter}
-						sortOrder={sortOrder}
+						sortOrder={courseContentsOrder}
+						setSortOrder={handleChangeCourseContentsOrder}
 					/>
 				}
 			/>
