@@ -128,7 +128,7 @@ export const getFolderContent = async (
 	response: Response;
 }> => {
 	const sort = toSortCriteria(sortOrder);
-	const url = `/v2/authoring-folders/${folderUid}/course-content?offset=${
+	const url = `/v2/authoring-course-content?folderUid=${folderUid}&offset=${
 		(page - 1) * pageSize
 	}&limit=${pageSize}&sort=${sort}`;
 
