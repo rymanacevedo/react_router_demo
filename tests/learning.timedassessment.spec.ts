@@ -21,3 +21,22 @@ test('can navigate to the review and submit page', async ({ page }) => {
 	);
 	await expect(page.getByText('Review & Submit')).toBeVisible();
 });
+
+test('can navigate to each question on next question click', async ({
+	page,
+}) => {
+	await page.goto(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147824',
+	);
+	await page.waitForSelector('h1');
+	await page.getByRole('button', { name: 'Next question' }).click();
+	expect(page.url()).toBe(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147825',
+	);
+	await page.getByRole('button', { name: 'Next question' }).click();
+	expect(page.url()).toBe(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147826',
+	);
+	await page.getByRole('button', { name: 'Next question' }).click();
+	await expect(page.getByText('Review & Submit')).toBeVisible();
+});
