@@ -190,7 +190,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 
 			setSelectedAnswer(iSa);
 		} else {
-			setQuestionInFocus(null);
+			setQuestionInFocus(question);
 			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
 		}
 	};
