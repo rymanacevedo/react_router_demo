@@ -147,6 +147,12 @@ export default function TimedAssessment() {
 		navigate('results');
 	};
 
+	useEffect(() => {
+		navigate(
+			`/learning/timedAssessment/${assignmentUid}/${questionInFocus?.id.toString()}`,
+		);
+	}, []);
+
 	return (
 		<Box as="main" id="timed-assessment">
 			<Container margin={0} padding={0} maxWidth={'100vw'}>
