@@ -12,19 +12,45 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
-import { useRevalidator } from 'react-router-dom';
+import { useRevalidator, useNavigate } from 'react-router-dom';
 import { createFolder } from '../../../store/slices/authoring/foldersSlice';
+import {
+	addCoursesToFolder,
+	resetBulkEditingState,
+} from '../../../store/slices/authoring/bulkEditingSlice';
 import { AppDispatch } from '../../../store/store';
 
 interface NewFolderModalProps {
 	isOpen: boolean;
 	onClose: () => void;
+	addCourses?: boolean;
 }
 
-const NewFolderModal = ({ isOpen, onClose }: NewFolderModalProps) => {
+const NewFolderModal = ({
+	isOpen,
+	onClose,
+	addCourses,
+}: NewFolderModalProps) => {
 	const dispatch = useDispatch<AppDispatch>();
 	const toast = useToast();
 	const { revalidate } = useRevalidator();
+	const navigate = useNavigate();
+
+	const handleSubmitToast = (statusCode: number) => {
+		if (statusCode === 201) {
+			toast({
+				title: 'Sucessfully Created Folder',
+				status: 'success',
+				duration: 4000,
+			});
+		} else {
+			toast({
+				title: 'Erorr Creating Folder',
+				status: 'error',
+				duration: 4000,
+			});
+		}
+	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -37,22 +63,18 @@ const NewFolderModal = ({ isOpen, onClose }: NewFolderModalProps) => {
 
 		dispatch(createFolder({ name, description })).then(({ payload }) => {
 			onClose();
-			const { statusCode } = payload as {
+			const { statusCode, folderUid } = payload as {
 				statusCode: number;
+				folderUid: string | null;
 			};
-
-			if (statusCode === 201) {
-				toast({
-					title: 'Sucessfully Created Folder',
-					status: 'success',
-					duration: 4000,
-				});
+			if (addCourses) {
+				if (folderUid)
+					dispatch(addCoursesToFolder(folderUid)).then(() => {
+						navigate(`/authoring/folder/${folderUid}`);
+						dispatch(resetBulkEditingState());
+					});
 			} else {
-				toast({
-					title: 'Erorr Creating Folder',
-					status: 'error',
-					duration: 4000,
-				});
+				handleSubmitToast(statusCode);
 			}
 			revalidate();
 		});

@@ -56,13 +56,14 @@ export const createFolder = createAsyncThunk(
 	async ({ name, description }: { name: string; description: string }) => {
 		const user = requireUser();
 
-		const { response } = await fetchCreateFolder(user, {
+		const { response, data } = await fetchCreateFolder(user, {
 			name,
 			description,
 		});
 
 		return {
 			statusCode: response.status,
+			folderUid: data.uid,
 		};
 	},
 );
@@ -111,6 +112,7 @@ export interface FoldersState {
 		status: 'idle' | 'loading' | 'succeeded' | 'failed';
 		error: string | null;
 		statusCode: null | number;
+		folderUid: null | string;
 	};
 }
 
@@ -135,6 +137,7 @@ const initialState: FoldersState = {
 	createFolderStatus: {
 		status: 'idle',
 		error: null,
+		folderUid: null,
 		statusCode: null,
 	},
 };
@@ -204,15 +207,16 @@ export const foldersSlice = createSlice({
 			.addCase(createFolder.fulfilled, (state, action) => {
 				state.createFolderStatus = {
 					...state.createFolderStatus,
+					folderUid: action.payload.folderUid ?? null,
 					statusCode: action.payload.statusCode,
 					status: 'succeeded',
 				};
 			})
-			.addCase(createFolder.rejected, (state, action) => {
+			.addCase(createFolder.rejected, (state) => {
 				state.createFolderStatus = {
+					...state.createFolderStatus,
 					status: 'failed',
 					error: 'Error has occured',
-					statusCode: action.payload.statusCode,
 				};
 			});
 	},
