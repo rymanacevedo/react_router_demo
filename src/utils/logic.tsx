@@ -285,21 +285,40 @@ export const roundNumber = (number: number): string => {
 	}
 };
 
-export const formatTimePracticeTest = (seconds: number) => {
-	if (seconds === undefined || seconds <= 0) {
+export const estimatedTimeRemaining = (
+	time: number | undefined,
+	isPracticeTest: boolean,
+	hoursTranslation: string,
+	hourTranslation: string,
+	minutesTranslation: string,
+	minuteTranslation: string,
+) => {
+	let hour = 0;
+	let min = 0;
+
+	if (time == null || time <= 0) {
 		return '';
 	}
 
-	const totalMinutes = Math.floor(seconds / 60);
-	const hours = Math.floor(totalMinutes / 60);
-	const mins = totalMinutes % 60;
+	if (time >= 3600) {
+		hour = Math.floor(time / 3600); // Use Math.floor to get the whole number of hours
+		min = Math.ceil((time % 3600) / 60);
+		const hourText = hour > 1 ? hoursTranslation : hourTranslation;
+		const minText = min > 1 ? minutesTranslation : minuteTranslation;
 
-	const hoursLabel = hours > 1 ? 'hours' : 'hour';
-	const minutesLabel = mins > 1 ? 'minutes' : 'minute';
+		if (isPracticeTest) {
+			return `${hour} ${hourText} ${min} ${minText}`;
+		} else {
+			return `About ${hour} ${hourText} ${min} ${minText}`;
+		}
+	} else {
+		min = Math.ceil(time / 60);
+		const minText = min > 1 ? minutesTranslation : minuteTranslation;
 
-	if (hours === 0) {
-		return `${mins} ${minutesLabel} to complete`;
+		if (isPracticeTest) {
+			return `${min} ${minText}`;
+		} else {
+			return `About ${min} ${minText}`;
+		}
 	}
-
-	return `${hours} ${hoursLabel} ${mins} ${minutesLabel} to complete`;
 };

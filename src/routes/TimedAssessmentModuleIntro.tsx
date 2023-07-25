@@ -1,18 +1,19 @@
 import { Box, Button, Container, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ReviewContentRender from '../components/ui/Review/ReviewContentRender';
-import useModuleContentService from '../services/coursesServices/useModuleContentService';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { formatTimePracticeTest } from '../utils/logic';
+import { estimatedTimeRemaining } from '../utils/logic';
+import useModuleContentService from '../services/coursesServices/useModuleContentService';
 
 const TimedAssessmentModuleIntro = () => {
 	const { t: i18n } = useTranslation();
 	const { assignmentUid } = useParams();
 	const [contentString, setContentString] = useState('');
-	const { fetchModuleContent } = useModuleContentService();
 	const navigate = useNavigate();
 	const { state } = useLocation();
+
+	const { fetchModuleContent } = useModuleContentService();
 
 	useEffect(() => {
 		const fetchContent = async () => {
@@ -57,7 +58,14 @@ const TimedAssessmentModuleIntro = () => {
 					</Text>
 					<Box width={6} />
 					<Text fontSize="sm" marginBottom={15}>
-						{formatTimePracticeTest(state.estimatedTimeToComplete)}
+						{estimatedTimeRemaining(
+							state.estimatedTimeToComplete,
+							true,
+							i18n('hours'),
+							i18n('hour'),
+							i18n('minutes'),
+							i18n('minute'),
+						)}
 					</Text>
 				</Box>
 				<Button
