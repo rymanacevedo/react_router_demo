@@ -98,6 +98,7 @@ export const getFolderList = async (
 	user: User,
 	page: number, // 1 based
 	pageSize: number,
+	sortOrder: string,
 ): Promise<{
 	data: {
 		items: any[];
@@ -105,7 +106,8 @@ export const getFolderList = async (
 	};
 	response: Response;
 }> => {
-	const url = `/v2/authoring-folders?sort=name+asc&includeUsage=true&paginate=true&offset=${
+	const sort = toSortCriteria(sortOrder);
+	const url = `/v2/authoring-folders?sort=${sort}&includeUsage=true&paginate=true&offset=${
 		(page - 1) * pageSize
 	}&limit=${pageSize}`;
 
