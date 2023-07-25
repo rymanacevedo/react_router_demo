@@ -146,14 +146,17 @@ export const foldersSlice = createSlice({
 			.addCase(fetchFolderDetails.fulfilled, (state, action) => {
 				const { items, totalCount, name, uid } = action.payload;
 				const { coursesPerPage } = state.folderDetails;
-				state.folderDetails.status = 'succeeded';
-				state.folderDetails.courseContents = items;
-				state.folderDetails.totalCount = totalCount;
-				state.folderDetails.name = name;
-				state.folderDetails.uid = uid;
-				state.folderDetails.pagesTotalCount = Math.floor(
-					(totalCount + coursesPerPage - 1) / coursesPerPage,
-				);
+				state.folderDetails = {
+					...state.folderDetails,
+					status: 'succeeded',
+					courseContents: items,
+					totalCount,
+					name,
+					uid,
+					pagesTotalCount: Math.floor(
+						(totalCount + coursesPerPage - 1) / coursesPerPage,
+					),
+				};
 			})
 			.addCase(addCourseToFolder.pending, (state) => {
 				state.folderDetails.addCourseToFolderStatus.status = 'loading';
@@ -162,8 +165,10 @@ export const foldersSlice = createSlice({
 				state.folderDetails.addCourseToFolderStatus.status = 'succeeded';
 			})
 			.addCase(addCourseToFolder.rejected, (state) => {
-				state.folderDetails.addCourseToFolderStatus.status = 'failed';
-				state.folderDetails.addCourseToFolderStatus.error = 'Error has occured';
+				state.folderDetails.addCourseToFolderStatus = {
+					status: 'failed',
+					error: 'Error has occured',
+				};
 			});
 	},
 });
