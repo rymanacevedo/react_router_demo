@@ -42,16 +42,24 @@ const PageNavigator = ({
 				<PageNavigatorButton href={mkhref(previousPage)} text={'<'} />
 			)}
 			{morePreviousPages && <Text>&hellip;</Text>}
-			{previousPages.map((page) => (
-				<PageNavigatorButton href={mkhref(page)} text={page} />
+			{previousPages.map((page, idx) => (
+				<PageNavigatorButton
+					href={mkhref(page)}
+					text={page}
+					key={`prev-pages-${idx}`}
+				/>
 			))}
 			<PageNavigatorButton
 				text={currentPage}
 				href={mkhref(currentPage)}
 				variant={'outline'}
 			/>
-			{nextPages.map((page) => (
-				<PageNavigatorButton href={mkhref(page)} text={page} />
+			{nextPages.map((page, idx) => (
+				<PageNavigatorButton
+					href={mkhref(page)}
+					text={page}
+					key={`next-pages-${idx}`}
+				/>
 			))}
 			{moreNextPages && <Text>&hellip;</Text>}
 			{nextPage && <PageNavigatorButton href={mkhref(nextPage)} text={'>'} />}
