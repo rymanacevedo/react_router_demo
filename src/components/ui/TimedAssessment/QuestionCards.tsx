@@ -1,4 +1,4 @@
-import { LoaderFunction, Outlet } from 'react-router';
+import { Outlet } from 'react-router';
 import { Box, Button, Divider, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard, { CardValues } from '../PracticeTestCard';
@@ -11,25 +11,6 @@ import { useLocation, useOutletContext } from 'react-router-dom';
 import { useState } from 'react';
 import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
 
-export const questionCardLoader: LoaderFunction = async () => {
-	// const user = requireUser();
-	// const assignmentUid = params.assignmentUid!;
-	// const { subAccount } = getSubAccount(user);
-	// const { moduleData, moduleInfoAndQuestions } =
-	// 	await getFullModuleWithQuestions(user, subAccount, assignmentUid);
-	// const { data: roundData } = await getCurrentRoundTimedAssessment(
-	// 	user,
-	// 	subAccount,
-	// 	assignmentUid,
-	// );
-	//
-	// return {
-	// 	assignmentUid,
-	// 	moduleData,
-	// 	moduleInfoAndQuestions,
-	// 	roundData,
-	// };
-};
 export default function QuestionCards() {
 	const context = useOutletContext<any>();
 	const location = useLocation();
