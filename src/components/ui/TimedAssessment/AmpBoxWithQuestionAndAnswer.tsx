@@ -16,6 +16,7 @@ import { requireUser } from '../../../utils/user';
 import {
 	Confidence,
 	QuestionInFocus,
+	RoundData,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import HiddenFormInputs from './HiddenFormInputs';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
@@ -45,17 +46,23 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		startSecondsSpent,
 		assignmentUid,
 		moduleInfoAndQuestions,
-		roundData,
 		//     outlet for timed assessment stops here
 		questionTrigger,
+		setQuestionTrigger,
 		flaggedQuestions,
 		setFlaggedQuestions,
 		selectedAnswer,
 		setSelectedAnswer,
 		setAnsweredQuestions,
 	} = context;
-	const { questionInFocus }: { questionInFocus: QuestionInFocus | null } =
+	const {
+		questionInFocus,
+		roundData,
+	}: { questionInFocus: QuestionInFocus | null; roundData: RoundData } =
 		context;
+	const [questions] = useState<QuestionInFocus[]>(
+		roundData.questionList.map((question) => question),
+	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 
 	const prepareAndSubmitFormData = ({
@@ -87,18 +94,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 				action: '/api/timedAssessment',
 			});
 		}
-	};
-
-	const handleSubmit = (
-		event: any,
-		f: FetcherWithComponents<any>,
-		r: RefObject<HTMLFormElement>,
-	) => {
-		if (event) {
-			event.preventDefault();
-		}
-
-		prepareAndSubmitFormData({ currentRef: r, submitter: f });
 	};
 
 	const handleMouseLeave = async (event: MouseEvent) => {
@@ -274,7 +269,16 @@ export default function AmpBoxWithQuestionAndAnswer() {
 							: i18n('flagForReview')}
 					</Button>
 				</Stack>
-				<fetcher.Form ref={ref} onSubmit={(e) => handleSubmit(e, fetcher, ref)}>
+				<fetcher.Form
+					ref={ref}
+					onSubmit={() => {
+						if (questionInFocus) {
+							const id = Number(questionInFocus.id) + 1;
+							const findQuestion =
+								questions.find((question) => question.id === id) || null;
+							setQuestionTrigger(findQuestion);
+						}
+					}}>
 					<AnswerSelection
 						questionInFocus={questionInFocus}
 						setSelectedAnswer={setSelectedAnswer}
@@ -294,7 +298,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 					/>
 					<Divider marginTop={11} />
 					<HStack marginTop={3} justify="space-between">
-						<Button type="submit">{i18n('submitBtnText')}</Button>
+						<Button type="submit">{i18n('nextQ')}</Button>
 						<Button
 							isDisabled={!selectedAnswer.id}
 							onClick={() => {
