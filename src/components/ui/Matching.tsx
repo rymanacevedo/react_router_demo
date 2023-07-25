@@ -26,7 +26,12 @@ export default function Matching({ questionInFocus }: Props) {
 					{i18n('dragMatch')}
 				</Heading>
 			</Flex>
-			<Flex direction="row" mx={6} mb={6} boxShadow="md" borderRadius="3xl">
+			<Flex
+				direction={['column', 'column', 'column', 'row', 'row', 'row']}
+				mx={6}
+				mb={6}
+				boxShadow="md"
+				borderRadius="3xl">
 				<Flex
 					w="50%"
 					height="500px"
