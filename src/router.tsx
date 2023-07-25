@@ -69,6 +69,7 @@ import CourseContentView, {
 import FolderDetailsView, {
 	folderDetailsLoader,
 } from './components/pages/Authoring/FolderDetailsView';
+import TimedAssessmentModuleIntro from './routes/TimedAssessmentModuleIntro'; // timedAssessmentModuleIntroLoader,
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -234,8 +235,14 @@ const routesJSX = (
 			</>
 
 			<Route
+				// loader={timedAssessmentModuleIntroLoader}
+				path="learning/timedAssessment/moduleIntro/:assignmentUid"
+				element={<TimedAssessmentModuleIntro />}
+			/>
+
+			<Route
 				loader={timedAssessmentLoader}
-				path="learning/timedAssessment/:assignmentUid"
+				path="learning/timedAssessment/moduleIntro/:assignmentUid"
 				element={<TimedAssessment />}
 			/>
 
