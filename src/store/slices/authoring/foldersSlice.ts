@@ -24,6 +24,7 @@ export const fetchFolderDetails = createAsyncThunk(
 		{
 			currentPage,
 			folderUid,
+			sortOrder,
 		}: { currentPage: number; sortOrder: string; folderUid: string },
 		{ getState }: { getState: () => any },
 	) => {
@@ -38,6 +39,7 @@ export const fetchFolderDetails = createAsyncThunk(
 			folderUid,
 			currentPage,
 			coursesPerPage,
+			sortOrder,
 		);
 
 		return {

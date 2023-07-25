@@ -24,11 +24,11 @@ import {
 	deleteCourse,
 	selectCourseActionStatus,
 } from '../../../store/slices/authoring/coursesViewSlice';
+import { addCourseToFolder } from '../../../store/slices/authoring/foldersSlice';
 import {
-	addCourseToFolder,
-	setShowFolderSelectionModal,
+	enableBulkEditingFolderModal,
 	setSelectedCourses,
-} from '../../../store/slices/authoring/foldersSlice';
+} from '../../../store/slices/authoring/bulkEditingSlice';
 
 interface CourseCardDropdownMenuProps {
 	uid: string;
@@ -50,8 +50,8 @@ const CourseCardDropdownMenu = ({
 	const toast = useToast();
 
 	const handleAddToFolder = () => {
-		dispatch(setSelectedCourses([{ uid }]));
-		dispatch(setShowFolderSelectionModal(true));
+		dispatch(setSelectedCourses([uid]));
+		dispatch(enableBulkEditingFolderModal(true));
 	};
 
 	const handleCourseDelete = async () => {
