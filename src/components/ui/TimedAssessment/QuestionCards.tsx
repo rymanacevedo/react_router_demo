@@ -7,7 +7,7 @@ import {
 	QuestionInFocus,
 	RoundData,
 } from '../../pages/AssignmentView/AssignmentTypes';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useLocation, useOutletContext } from 'react-router-dom';
 import { useState } from 'react';
 import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
 
@@ -32,13 +32,13 @@ export const questionCardLoader: LoaderFunction = async () => {
 };
 export default function QuestionCards() {
 	const context = useOutletContext<any>();
-	const navigate = useNavigate();
+	const location = useLocation();
+	const showButton = !location.pathname.includes('submission');
 	const {
 		questionInFocus,
 		roundData,
-		assignmentUid,
 	}: {
-		questionInFocus: QuestionInFocus;
+		questionInFocus: QuestionInFocus | null;
 		roundData: RoundData;
 		assignmentUid: string;
 	} = context;
@@ -58,13 +58,13 @@ export default function QuestionCards() {
 			: new Set<string>(),
 	);
 
-	const foundAnswer = questionInFocus.answerList.find(
+	const foundAnswer = questionInFocus?.answerList.find(
 		(answer) => answer.selected,
 	);
 
 	const initialSelectedAnswer = foundAnswer
-		? { id: foundAnswer.id, confidence: questionInFocus.confidence }
-		: questionInFocus.confidence === Confidence.NotSure
+		? { id: foundAnswer.id, confidence: questionInFocus?.confidence }
+		: questionInFocus?.confidence === Confidence.NotSure
 		? { id: 1, confidence: Confidence.NotSure }
 		: null;
 
@@ -72,21 +72,21 @@ export default function QuestionCards() {
 		answeredQuestionIds.length > 0
 			? new Set(answeredQuestionIds)
 			: initialSelectedAnswer
-			? new Set([questionInFocus.publishedQuestionAuthoringKey])
+			? new Set([questionInFocus?.publishedQuestionAuthoringKey])
 			: new Set();
 	const [answeredQuestions, setAnsweredQuestions] = useState(
 		initialAnsweredQuestions,
 	);
 	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer>({
 		id: initialSelectedAnswer !== null ? initialSelectedAnswer.id : null,
-		confidence: context.questionInFocus.confidence ?? Confidence.NA,
+		confidence: questionInFocus?.confidence ?? Confidence.NA,
 	});
 
-	const [questionTrigger, setQuestionTrigger] =
-		useState<QuestionInFocus | null>(null);
-
+	const [questionTrigger, setQuestionTrigger] = useState<
+		QuestionInFocus | null | undefined
+	>(undefined);
 	const handleGoToSubmitPage = () => {
-		navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
+		setQuestionTrigger(null);
 	};
 
 	const { t: i18n } = useTranslation();
@@ -110,7 +110,7 @@ export default function QuestionCards() {
 					const values: CardValues = ['unselected'];
 					if (
 						question.publishedQuestionAuthoringKey ===
-						context.questionInFocus.publishedQuestionAuthoringKey
+						questionInFocus?.publishedQuestionAuthoringKey
 					) {
 						values.push('selected');
 					}
@@ -129,20 +129,22 @@ export default function QuestionCards() {
 							values={values}
 							text={question.displayOrder.toString()}
 							onClick={() => {
-								if (!(question.id === questionInFocus.id)) {
+								if (!(question.id === questionInFocus?.id)) {
 									setQuestionTrigger(question);
 								}
 							}}
 						/>
 					);
 				})}
-				<Button
-					onClick={handleGoToSubmitPage}
-					display="block"
-					mr="auto"
-					ml="auto">
-					{i18n('finishPracticeTest')}
-				</Button>
+				{showButton ? (
+					<Button
+						onClick={handleGoToSubmitPage}
+						display="block"
+						mr="auto"
+						ml="auto">
+						{i18n('finishPracticeTest')}
+					</Button>
+				) : null}
 			</Box>
 			<Outlet
 				context={{

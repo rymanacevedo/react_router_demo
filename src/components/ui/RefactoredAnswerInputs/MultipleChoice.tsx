@@ -6,7 +6,7 @@ import {
 import MultipleChoiceInput, { SelectedAnswer } from './MultipleChoiceInput';
 
 type Props = {
-	questionInFocus: QuestionInFocus;
+	questionInFocus: QuestionInFocus | null;
 	selectedAnswer: SelectedAnswer;
 	setSelectedAnswer: (value: SelectedAnswer) => void;
 	setAnswerUpdated: (value: boolean) => void;
@@ -28,7 +28,7 @@ export default function MultipleChoice({
 	};
 	return (
 		<Stack minHeight={350} h="100%" marginTop={8}>
-			{questionInFocus.answerList.map((answer) => {
+			{questionInFocus?.answerList.map((answer) => {
 				return (
 					<MultipleChoiceInput
 						key={answer.id}

@@ -7,6 +7,7 @@ import {
 	json,
 	useFetcher,
 	useLoaderData,
+	useNavigate,
 	useOutletContext,
 } from 'react-router-dom';
 import { RefObject, useEffect, useRef, useState } from 'react';
@@ -30,13 +31,13 @@ export const questionAnswerLoader: LoaderFunction = async ({ params }) => {
 };
 export default function AmpBoxWithQuestionAndAnswer() {
 	const { t: i18n } = useTranslation();
-	// const { hasConfidenceEnabled } = useLoaderData() as any;
 	const fetcher = useFetcher();
+	const navigate = useNavigate();
 	const ref = useRef<HTMLFormElement>(null);
 	const { hasConfidenceEnabled, questionId } = useLoaderData() as any;
-
+	const [firstRender, setFirstRender] = useState(true);
+	const context = useOutletContext<any>();
 	const {
-		questionInFocus,
 		setQuestionInFocus,
 		secondsSpent,
 		setSecondsSpent,
@@ -52,8 +53,9 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		selectedAnswer,
 		setSelectedAnswer,
 		setAnsweredQuestions,
-	} = useOutletContext<any>();
-
+	} = context;
+	const { questionInFocus }: { questionInFocus: QuestionInFocus | null } =
+		context;
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 
 	const prepareAndSubmitFormData = ({
@@ -63,26 +65,28 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		currentRef: RefObject<HTMLFormElement>;
 		submitter: FetcherWithComponents<any>;
 	}) => {
-		const user = requireUser();
-		let answerChoices: HTMLInputElement[] = [];
-		for (const item of currentRef.current!) {
-			const input = item as HTMLInputElement;
-			if (input.name === 'answerChoice') {
-				answerChoices.push(input);
+		if (answerUpdated) {
+			const user = requireUser();
+			let answerChoices: HTMLInputElement[] = [];
+			for (const item of currentRef.current!) {
+				const input = item as HTMLInputElement;
+				if (input.name === 'answerChoice') {
+					answerChoices.push(input);
+				}
 			}
+			const choice = answerChoices.find(
+				(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
+			);
+			const form = new FormData(currentRef.current!);
+			form.append('user', JSON.stringify(user));
+			if (choice) {
+				form.append('answerChoice', choice.value);
+			}
+			submitter.submit(form, {
+				method: 'POST',
+				action: '/api/timedAssessment',
+			});
 		}
-		const choice = answerChoices.find(
-			(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
-		);
-		const form = new FormData(currentRef.current!);
-		form.append('user', JSON.stringify(user));
-		if (choice) {
-			form.append('answerChoice', choice.value);
-		}
-		submitter.submit(form, {
-			method: 'POST',
-			action: '/api/timedAssessment',
-		});
 	};
 
 	const handleSubmit = (
@@ -94,9 +98,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			event.preventDefault();
 		}
 
-		if (!answerUpdated) {
-			return;
-		}
 		prepareAndSubmitFormData({ currentRef: r, submitter: f });
 	};
 
@@ -108,7 +109,26 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			event.clientY >= window.innerHeight
 		) {
 			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put answerUpdated in the if statement
-			prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
+			const user = requireUser();
+			let answerChoices: HTMLInputElement[] = [];
+			for (const item of ref.current!) {
+				const input = item as HTMLInputElement;
+				if (input.name === 'answerChoice') {
+					answerChoices.push(input);
+				}
+			}
+			const choice = answerChoices.find(
+				(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
+			);
+			const form = new FormData(ref.current!);
+			form.append('user', JSON.stringify(user));
+			if (choice) {
+				form.append('answerChoice', choice.value);
+			}
+			fetcher.submit(form, {
+				method: 'POST',
+				action: '/api/timedAssessment',
+			});
 		}
 	};
 
@@ -148,76 +168,64 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		};
 	}, []);
 
-	const handleNavigation = (question: QuestionInFocus) => {
-		const currentRef = ref.current as HTMLFormElement;
-		let answerChoices: HTMLInputElement[] = [];
-		for (const item of currentRef) {
-			const input = item as HTMLInputElement;
-			if (input.name === 'answerChoice') {
-				answerChoices.push(input);
-			}
+	const handleNavigation = (question: QuestionInFocus | null) => {
+		prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
+		if (question) {
+			const q = findQuestionInFocus(
+				moduleInfoAndQuestions,
+				roundData,
+				false,
+				false,
+				question.displayOrder - 1,
+			);
+			setQuestionInFocus(q);
+
+			const a = question.answerList.find((answer) => answer.selected);
+
+			const iSa = a
+				? { id: a.id, confidence: question.confidence! }
+				: question.confidence === Confidence.NotSure
+				? { id: 1, confidence: Confidence.NotSure }
+				: { id: null, confidence: Confidence.NA };
+
+			setSelectedAnswer(iSa);
+		} else {
+			setQuestionInFocus(null);
+			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
 		}
-		const choice = answerChoices.find(
-			(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
-		);
-		const form = new FormData(currentRef);
-		if (choice) {
-			form.append('answerChoice', choice.value);
-		}
-		fetcher.submit(form, {
-			method: 'POST',
-			action: '/api/timedAssessment',
-		});
-
-		const q = findQuestionInFocus(
-			moduleInfoAndQuestions,
-			roundData,
-			false,
-			false,
-			question.displayOrder - 1,
-		);
-
-		setQuestionInFocus(q);
-
-		const a = question.answerList.find((answer) => answer.selected);
-
-		const iSa = a
-			? { id: a.id, confidence: question.confidence! }
-			: question.confidence === Confidence.NotSure
-			? { id: 1, confidence: Confidence.NotSure }
-			: { id: null, confidence: Confidence.NA };
-
-		setSelectedAnswer(iSa);
 	};
 
 	useEffect(() => {
-		if (questionTrigger) {
+		if (!firstRender) {
 			handleNavigation(questionTrigger);
+		}
+		if (firstRender) {
+			setFirstRender(false);
 		}
 	}, [questionTrigger]);
 
 	const handleFlagForReview = () => {
-		setFlaggedQuestions((prevState: Set<string>) => {
+		setFlaggedQuestions((prevState: Set<string | undefined>) => {
 			const newSet = new Set(prevState);
-			if (newSet.has(questionInFocus.publishedQuestionAuthoringKey)) {
-				newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
+			if (newSet.has(questionInFocus?.publishedQuestionAuthoringKey)) {
+				newSet.delete(questionInFocus?.publishedQuestionAuthoringKey);
 			} else {
-				newSet.add(questionInFocus.publishedQuestionAuthoringKey);
+				newSet.add(questionInFocus?.publishedQuestionAuthoringKey);
 			}
 			return newSet;
 		});
 	};
 
 	const handleAnsweredQuestions = (action?: string) => {
-		setAnsweredQuestions((prevState: Set<string>) => {
+		setAnsweredQuestions((prevState: Set<string | undefined>) => {
 			const newSet = new Set(prevState);
 			if (
-				newSet.has(questionInFocus.publishedQuestionAuthoringKey) &&
+				newSet.has(questionInFocus?.publishedQuestionAuthoringKey) &&
 				action === 'delete'
 			) {
-				newSet.delete(questionInFocus.publishedQuestionAuthoringKey);
+				newSet.delete(questionInFocus?.publishedQuestionAuthoringKey);
 			} else {
-				newSet.add(questionInFocus.publishedQuestionAuthoringKey);
+				newSet.add(questionInFocus?.publishedQuestionAuthoringKey);
 			}
 			return newSet;
 		});
@@ -246,7 +254,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 					<Button
 						leftIcon={
 							flaggedQuestions.has(
-								questionInFocus.publishedQuestionAuthoringKey,
+								questionInFocus?.publishedQuestionAuthoringKey,
 							) ? (
 								<BookmarkFilledIcon />
 							) : (
@@ -256,7 +264,9 @@ export default function AmpBoxWithQuestionAndAnswer() {
 						colorScheme="ampSecondary"
 						variant="ghost"
 						onClick={handleFlagForReview}>
-						{flaggedQuestions.has(questionInFocus.publishedQuestionAuthoringKey)
+						{flaggedQuestions.has(
+							questionInFocus?.publishedQuestionAuthoringKey,
+						)
 							? i18n('flaggedForReview')
 							: i18n('flagForReview')}
 					</Button>

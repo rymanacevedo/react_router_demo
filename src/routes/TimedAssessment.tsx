@@ -101,9 +101,8 @@ export default function TimedAssessment() {
 	);
 
 	const navigate = useNavigate();
-	const [questionInFocus, setQuestionInFocus] = useState<QuestionInFocus>(
-		initialQuestionInFocus,
-	);
+	const [questionInFocus, setQuestionInFocus] =
+		useState<QuestionInFocus | null>(initialQuestionInFocus);
 
 	const [seconds, setSeconds] = useState<number | null>(
 		roundData.timeRemaining,
@@ -146,7 +145,7 @@ export default function TimedAssessment() {
 	};
 
 	useEffect(() => {
-		if (questionInFocus) {
+		if (!!questionInFocus) {
 			navigate(
 				`/learning/timedAssessment/${assignmentUid}/${questionInFocus.id.toString()}`,
 			);
