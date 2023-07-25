@@ -91,6 +91,7 @@ const LearningView = () => {
 		const keyToFind = selectedCourseKey || data.selectedCourseKey;
 
 		if (courseList && keyToFind) {
+			setCourses(data.courseList);
 			const course = courseList.find((c: Course) => c.key === keyToFind);
 			if (course) {
 				setTitle(course.name);
@@ -102,7 +103,7 @@ const LearningView = () => {
 		if (!selectedCourseKey && data.courseList) {
 			setCourses(data.courseList);
 		}
-	}, [data, selectedCourseKey]);
+	}, []);
 
 	useEffect(() => {
 		if (fetcher.data && courses) {
