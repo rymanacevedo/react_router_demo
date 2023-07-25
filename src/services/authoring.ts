@@ -1,6 +1,14 @@
 import { authenticatedFetch } from './utils';
 import { User } from './user';
 
+function toSortCriteria(sortOrder: string): string {
+	return sortOrder === 'm'
+		? 'modifiedTime+desc' // ie, most recently modified
+		: sortOrder === 'c'
+		? 'createdTime+desc' // ie, most recently created
+		: 'name+asc'; // defaults to alphabetical
+}
+
 export const getCourseList = async (
 	user: any,
 	page: number, // 1 based
@@ -13,16 +21,44 @@ export const getCourseList = async (
 	};
 	response: Response;
 }> => {
-	const sort =
-		sortOrder === 'm'
-			? 'modifiedTime+desc' // ie, most recently modified
-			: sortOrder === 'c'
-			? 'createdTime+desc' // ie, most recently created
-			: 'name+asc';
+	const sort = toSortCriteria(sortOrder);
 	const offset = (page - 1) * pageSize;
 	const url = `/v2/authoring-course-content?sort=${sort}&offset=${offset}&limit=${pageSize}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const getCourseContent = async (
+	user: User,
+	uid: string,
+): Promise<{
+	data: {
+		uid: string;
+		name: string;
+		descriptionHtml: string;
+	};
+	response: Response;
+}> => {
+	const url = `/v2/authoring-course-content/${uid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const createCourseContent = async (
+	user: User,
+	name?: string,
+): Promise<{
+	data: {
+		uid: string;
+		name: string;
+	};
+	response: Response;
+}> => {
+	const url = '/v2/authoring-course-content';
+	const body = {
+		name: name || 'Untitled',
+	};
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
 };
 
 export const deleteCourse = async (
@@ -32,6 +68,20 @@ export const deleteCourse = async (
 	const url = `/v2/authoring-course-content/${courseContentUid}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE');
+};
+
+export const bulkDeleteCourse = async (
+	user: User,
+	courses: string[],
+	subAccount: string,
+): Promise<any> => {
+	const url = `/v2/authoring-course-content?subaccount=${subAccount}`;
+
+	const body = {
+		items: courses,
+	};
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'DELETE', body);
 };
 
 export const copyCourse = async (
@@ -48,6 +98,7 @@ export const getFolderList = async (
 	user: User,
 	page: number, // 1 based
 	pageSize: number,
+	sortOrder: string,
 ): Promise<{
 	data: {
 		items: any[];
@@ -55,7 +106,8 @@ export const getFolderList = async (
 	};
 	response: Response;
 }> => {
-	const url = `/v2/authoring-folders?sort=name+asc&includeUsage=true&paginate=true&offset=${
+	const sort = toSortCriteria(sortOrder);
+	const url = `/v2/authoring-folders?sort=${sort}&includeUsage=true&paginate=true&offset=${
 		(page - 1) * pageSize
 	}&limit=${pageSize}`;
 
@@ -83,6 +135,7 @@ export const getFolderContent = async (
 	folderUid: string,
 	page: number, // 1 based
 	pageSize: number,
+	sortOrder: string,
 ): Promise<{
 	data: {
 		items: any[];
@@ -90,9 +143,10 @@ export const getFolderContent = async (
 	};
 	response: Response;
 }> => {
-	const url = `/v2/authoring-folders/${folderUid}/course-content?offset=${
+	const sort = toSortCriteria(sortOrder);
+	const url = `/v2/authoring-course-content?folderUid=${folderUid}&offset=${
 		(page - 1) * pageSize
-	}&limit=${pageSize}&sort=name+asc`;
+	}&limit=${pageSize}&sort=${sort}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };

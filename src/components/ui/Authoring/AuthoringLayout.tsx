@@ -1,20 +1,44 @@
-import { ReactNode } from 'react';
-import { Box, Container } from '@chakra-ui/react';
+import { Children, PropsWithChildren } from 'react';
+import { Box, Container, VStack } from '@chakra-ui/react';
 import ScrollToTop from './ScrollToTop';
 
-const AuthoringLayout = ({ children }: { children: ReactNode }) => {
+interface AuthoringLayoutProps {
+	stacked?: boolean;
+}
+
+const AuthoringLayout = ({
+	stacked = false,
+	children,
+}: PropsWithChildren<AuthoringLayoutProps>) => {
 	return (
 		<>
 			<ScrollToTop />
-			<Box bg="ampNeutral.100" minHeight="100vh" paddingX={6} paddingY={6}>
-				<Container
-					maxW={1440}
-					bg="ampWhite"
-					borderRadius="xl"
-					paddingY={16}
-					paddingX={24}>
-					{children}
-				</Container>
+			<Box bg="ampNeutral.100" minHeight="100vh" paddingX="6" paddingY="6">
+				{stacked ? (
+					<VStack gap="6">
+						{Children.map(children, (child) => {
+							return (
+								<Container
+									maxW="1440"
+									bg="ampWhite"
+									borderRadius="xl"
+									paddingY="16"
+									paddingX="24">
+									{child}
+								</Container>
+							);
+						})}
+					</VStack>
+				) : (
+					<Container
+						maxW="1440"
+						bg="ampWhite"
+						borderRadius="xl"
+						paddingY="16"
+						paddingX="24">
+						{children}
+					</Container>
+				)}
 			</Box>
 		</>
 	);

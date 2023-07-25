@@ -11,6 +11,7 @@ import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import FolderFilters from '../../ui/Authoring/FolderFilters';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
+import { folderListOrder } from '../../../lib/authoring/cookies';
 
 export const folderActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -81,7 +82,7 @@ export const folderLoader: LoaderFunction = async ({ params }) => {
 
 	const {
 		data: { items: folderList, totalCount: foldersTotalCount },
-	} = await getFolderList(user, currentPage, foldersPerPage);
+	} = await getFolderList(user, currentPage, foldersPerPage, folderListOrder());
 
 	return json({
 		folderList,

@@ -7,7 +7,9 @@ import {
 	Text,
 	Heading,
 	useTheme,
+	Checkbox,
 } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
 import {
 	ExclamationTriangleIcon,
 	Pencil2Icon,
@@ -17,6 +19,7 @@ import {
 import { formatDate } from '../../../lib/utils';
 import CourseCardDropdownMenu from './CourseCardDropdownMenu';
 import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice';
+import { selectCoursesBulkEditingEnabled } from '../../../store/slices/authoring/bulkEditingSlice';
 
 interface CourseCardProps {
 	courseContent: CourseContent;
@@ -46,6 +49,8 @@ const CourseCard = ({
 		hasIssues,
 		hasUnpublishedEdits,
 	} = courseContent;
+
+	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
 
 	const { colors } = useTheme();
 
@@ -93,12 +98,17 @@ const CourseCard = ({
 						alignItems="center"
 						justifyContent="space-between"
 						position="relative">
-						<Badge
-							variant={statusBadgeVariant[status]}
-							textTransform="capitalize">
-							{status}
-						</Badge>
-						{!listView && (
+						<Flex gap={3}>
+							{bulkEditingEnabled ? (
+								<Checkbox value={uid} variant="formCheckbox" />
+							) : null}
+							<Badge
+								variant={statusBadgeVariant[status]}
+								textTransform="capitalize">
+								{status}
+							</Badge>
+						</Flex>
+						{!listView && !bulkEditingEnabled && (
 							<CourseCardDropdownMenu
 								uid={uid}
 								isPublished={isPublished}
@@ -164,7 +174,7 @@ const CourseCard = ({
 								{alertBadgeVariant.label}
 							</Text>
 						</Badge>
-						{listView && (
+						{listView && !bulkEditingEnabled && (
 							<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
 						)}
 					</Flex>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { json } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 import { LoaderFunction } from 'react-router';
 import { useLoaderData, useParams } from 'react-router-dom';
 import { Cookies } from 'react-cookie-consent';
@@ -17,29 +17,32 @@ import {
 } from '../../../store/slices/authoring/foldersSlice';
 import { store } from '../../../store/store';
 import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice';
+import {
+	folderContentsOrder,
+	setFolderContentsOrder,
+} from '../../../lib/authoring/cookies';
 
-export const folderDetailsLoader: LoaderFunction = async ({
-	params,
-	request,
-}) => {
+export const folderDetailsLoader: LoaderFunction = async ({ params }) => {
 	const currentPage = params.page ? +params.page : 1;
-	const sortOrder = new URL(request.url).searchParams.get('sort') || 'a';
 	const folderUid = params.id as string;
 
 	await store.dispatch(
-		fetchFolderDetails({ currentPage, folderUid, sortOrder }),
+		fetchFolderDetails({
+			currentPage,
+			folderUid,
+			sortOrder: folderContentsOrder(),
+		}),
 	);
 
 	return json({
 		currentPage,
-		sortOrder,
 	});
 };
 
 const FolderDetailsView = () => {
-	const { currentPage, sortOrder } = useLoaderData() as {
+	const navigate = useNavigate();
+	const { currentPage } = useLoaderData() as {
 		currentPage: number;
-		sortOrder: string;
 	};
 	const { id } = useParams();
 	const folderDetails = useSelector(selectFolderDetails);
@@ -56,6 +59,11 @@ const FolderDetailsView = () => {
 		}
 	};
 
+	const handleChangeFolderContentsOrder = (sortOrder: string) => {
+		setFolderContentsOrder(sortOrder);
+		navigate(`/authoring/folder/${id}`);
+	};
+
 	return (
 		<AuthoringLayout>
 			<AuthoringHeader
@@ -63,8 +71,9 @@ const FolderDetailsView = () => {
 					<CourseFilter
 						listView={listView}
 						handleListView={handleListFilter}
-						sortOrder={sortOrder}
 						breadCrumb={folderDetails.name}
+						sortOrder={folderContentsOrder}
+						setSortOrder={handleChangeFolderContentsOrder}
 					/>
 				}
 			/>
@@ -87,7 +96,7 @@ const FolderDetailsView = () => {
 				pagesTotalCount={folderDetails.pagesTotalCount}
 				itemsCurrentCount={folderDetails.courseContents.length}
 				itemsTotalCount={folderDetails.totalCount}
-				href={`/authoring/folders/folder/${id}`}
+				href={`/authoring/folder/${id}`}
 			/>
 			<CourseFolderModal />
 		</AuthoringLayout>

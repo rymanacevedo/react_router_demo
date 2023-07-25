@@ -88,6 +88,7 @@ export const deleteCourse = createAsyncThunk(
 export interface CourseContent {
 	uid: string;
 	name: string;
+	descriptionHtml: string;
 	modifiedTime: number;
 	modifiedUserFullName: string;
 	status: 'Published' | 'Draft';
