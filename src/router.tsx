@@ -235,14 +235,13 @@ const routesJSX = (
 			</>
 
 			<Route
-				// loader={timedAssessmentModuleIntroLoader}
 				path="learning/timedAssessment/moduleIntro/:assignmentUid"
 				element={<TimedAssessmentModuleIntro />}
 			/>
 
 			<Route
 				loader={timedAssessmentLoader}
-				path="learning/timedAssessment/moduleIntro/:assignmentUid"
+				path="learning/timedAssessment/:assignmentUid"
 				element={<TimedAssessment />}
 			/>
 

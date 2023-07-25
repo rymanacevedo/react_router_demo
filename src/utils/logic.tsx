@@ -284,3 +284,22 @@ export const roundNumber = (number: number): string => {
 		return number.toFixed(1);
 	}
 };
+
+export const formatTimePracticeTest = (seconds: number) => {
+	if (seconds === undefined || seconds <= 0) {
+		return '';
+	}
+
+	const totalMinutes = Math.floor(seconds / 60);
+	const hours = Math.floor(totalMinutes / 60);
+	const mins = totalMinutes % 60;
+
+	const hoursLabel = hours > 1 ? 'hours' : 'hour';
+	const minutesLabel = mins > 1 ? 'minutes' : 'minute';
+
+	if (hours === 0) {
+		return `${mins} ${minutesLabel} to complete`;
+	}
+
+	return `${hours} ${hoursLabel} ${mins} ${minutesLabel} to complete`;
+};

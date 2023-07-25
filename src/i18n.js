@@ -296,6 +296,10 @@ const resources = {
 			notStarted: 'Not Started',
 			inProgress: 'In Progress',
 			completed: 'Completed',
+			//////////////////////////////////////////////
+			//   TimedAssessmentModuleIntro.tsx
+			//////////////////////////////////////////////
+			startPracticeTest: 'Start practice test'
 		},
 	},
 	fr: {

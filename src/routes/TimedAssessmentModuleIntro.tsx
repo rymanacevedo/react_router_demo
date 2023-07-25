@@ -1,36 +1,38 @@
-import { Box, Container } from '@chakra-ui/react';
+import { Box, Button, Container, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ReviewContentRender from '../components/ui/Review/ReviewContentRender';
 import useModuleContentService from '../services/coursesServices/useModuleContentService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { formatTimePracticeTest } from '../utils/logic';
 
 const TimedAssessmentModuleIntro = () => {
+	const { t: i18n } = useTranslation();
 	const { assignmentUid } = useParams();
 	const [contentString, setContentString] = useState('');
 	const { fetchModuleContent } = useModuleContentService();
 	const navigate = useNavigate();
+	const { state } = useLocation();
 
 	useEffect(() => {
 		const fetchContent = async () => {
 			let response = await fetchModuleContent(assignmentUid);
 			if (response.introductionRc) {
 				setContentString(response.introductionRc);
-			} else {
-				navigate(`/learning/timedAssessment/${assignmentUid}`);
 			}
 		};
 
 		fetchContent();
 	}, []);
 
-	// let htmlString =
-	// 	'<p><a data-parvus="" href="amp_resource?path=93110891-3822-41e5-bb15-45284ebe8f96/b9/b9bf72e9-a478-4ac5-bad0-c4d77bfa9050.jpg&amp;isAuthoring=true" target="_blank"><img src="amp_resource?path=93110891-3822-41e5-bb15-45284ebe8f96/b9/b9bf72e9-a478-4ac5-bad0-c4d77bfa9050.jpg&amp;isAuthoring=true" style="height:480px; width:640px" /></a></p>\n\n<p>&nbsp;</p>\n\n<p>Hey, here is some intro content with images</p>';
+	const startPracticeTestHandler = () => {
+		navigate(`/learning/timedAssessment/${state.assignmentUid}`);
+	};
 
 	return (
 		<Container
 			id={'module-intro'}
-			margin="0"
-			padding="12px"
+			padding={3}
 			maxWidth={'100vw'}
 			overflowY={'hidden'}
 			overflowX={'hidden'}>
@@ -40,12 +42,32 @@ const TimedAssessmentModuleIntro = () => {
 				}}
 				boxShadow="md"
 				overflow="hidden"
-				margin={'12px auto'}
+				margin={3}
 				borderRadius={24}
 				padding={16}
 				display={'flex'}
 				flexDirection={'column'}>
 				<ReviewContentRender content={contentString} />
+				<Box display="flex" alignItems="center">
+					<Text fontSize="sm" marginBottom={15}>
+						{state.numLearningUnits}{' '}
+						{state.numLearningUnits && state.numLearningUnits > 1
+							? i18n('Questions')
+							: i18n('Question')}
+					</Text>
+					<Box width={6} />
+					<Text fontSize="sm" marginBottom={15}>
+						{formatTimePracticeTest(state.estimatedTimeToComplete)}
+					</Text>
+				</Box>
+				<Button
+					onClick={startPracticeTestHandler}
+					display="flex"
+					justifyContent="center"
+					alignItems="center"
+					width="fit-content">
+					{i18n('startPracticeTest')}
+				</Button>
 			</Box>
 		</Container>
 	);

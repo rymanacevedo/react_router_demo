@@ -38,6 +38,7 @@ import {
 	CourseAssignmentData,
 	Curriculum,
 } from '../../lib/validator';
+import useModuleContentService from '../../services/coursesServices/useModuleContentService';
 
 export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 	const selectedCourseKey = params.selectedCourseKey!;
@@ -150,24 +151,31 @@ const AssignmentList = () => {
 		}
 	};
 
-	// const { fetchModuleContent } = useModuleContentService();
+	const { fetchModuleContent } = useModuleContentService();
 
 	const handleAssignmentClick = (assignment: AssignmentData) => async () => {
-		// let response = await fetchModuleContent(assignment.assignmentKey);
+		let response = await fetchModuleContent(assignment.assignmentKey);
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
 				// TODO: implement popup for review/retake
-				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
+			} else if (assignment.status === 'NOT_STARTED') {
+				if (response.introductionRc) {
+					navigate(
+						`/learning/timedAssessment/moduleIntro/${assignment.assignmentKey}`,
+						{
+							state: {
+								assignmentUid: assignment.assignmentUid,
+								numLearningUnits: assignment.numLearningUnits,
+								estimatedTimeToComplete: assignment.estimatedTimeToComplete,
+							},
+						},
+					);
+				} else {
+					navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
+				}
 			} else {
 				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
 			}
-			// else if (assignment.status === 'NOT_STARTED') {
-			// 	if (response.introductionRc) {
-			// 		navigate(
-			// 			`/learning/timedAssessment/moduleIntro/${assignment.assignmentKey}`,
-			// 		);
-			// 	}
-			// }
 		} else if (assignment.status === 'COMPLETED') {
 			if (refreshIsOpen) {
 				setRefreshIsOpen('');
