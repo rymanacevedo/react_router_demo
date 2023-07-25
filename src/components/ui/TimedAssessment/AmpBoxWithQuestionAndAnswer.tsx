@@ -170,7 +170,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 
 	const handleNavigation = (question: QuestionInFocus | null) => {
 		prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
-		if (question) {
+		if (!!question) {
 			const q = findQuestionInFocus(
 				moduleInfoAndQuestions,
 				roundData,
@@ -189,6 +189,9 @@ export default function AmpBoxWithQuestionAndAnswer() {
 				: { id: null, confidence: Confidence.NA };
 
 			setSelectedAnswer(iSa);
+			navigate(
+				`/learning/timedAssessment/${assignmentUid}/${questionTrigger.id.toString()}`,
+			);
 		} else {
 			setQuestionInFocus(question);
 			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);

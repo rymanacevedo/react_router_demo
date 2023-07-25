@@ -17,9 +17,11 @@ export default function QuestionCards() {
 	const showButton = !location.pathname.includes('submission');
 	const {
 		questionInFocus,
+		setQuestionTrigger,
 		roundData,
 	}: {
 		questionInFocus: QuestionInFocus | null;
+		setQuestionTrigger: (value: QuestionInFocus | null) => void;
 		roundData: RoundData;
 		assignmentUid: string;
 	} = context;
@@ -63,9 +65,6 @@ export default function QuestionCards() {
 		confidence: questionInFocus?.confidence ?? Confidence.NA,
 	});
 
-	const [questionTrigger, setQuestionTrigger] = useState<
-		QuestionInFocus | null | undefined
-	>(undefined);
 	const handleGoToSubmitPage = () => {
 		setQuestionTrigger(null);
 	};
@@ -135,7 +134,6 @@ export default function QuestionCards() {
 					selectedAnswer,
 					setSelectedAnswer,
 					setAnsweredQuestions,
-					questionTrigger,
 				}}
 			/>
 		</>

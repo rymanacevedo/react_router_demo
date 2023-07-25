@@ -103,6 +103,9 @@ export default function TimedAssessment() {
 	const navigate = useNavigate();
 	const [questionInFocus, setQuestionInFocus] =
 		useState<QuestionInFocus | null>(initialQuestionInFocus);
+	const [questionTrigger, setQuestionTrigger] = useState<
+		QuestionInFocus | null | undefined
+	>(undefined);
 
 	const [seconds, setSeconds] = useState<number | null>(
 		roundData.timeRemaining,
@@ -144,14 +147,6 @@ export default function TimedAssessment() {
 		navigate('results');
 	};
 
-	useEffect(() => {
-		if (!!questionInFocus) {
-			navigate(
-				`/learning/timedAssessment/${assignmentUid}/${questionInFocus.id.toString()}`,
-			);
-		}
-	}, [questionInFocus]);
-
 	return (
 		<Box as="main" id="timed-assessment">
 			<Container margin={0} padding={0} maxWidth={'100vw'}>
@@ -171,6 +166,8 @@ export default function TimedAssessment() {
 								roundData,
 								questionInFocus,
 								setQuestionInFocus,
+								questionTrigger,
+								setQuestionTrigger,
 								seconds,
 								setSeconds,
 								secondsSpent,
