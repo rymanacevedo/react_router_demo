@@ -9,6 +9,7 @@ import {
 	getFolderContent,
 	addCoursesToFolder,
 	getFolder,
+	createFolder as fetchCreateFolder,
 } from '../../../services/authoring';
 
 export const selectFoldersState = (store: RootState) => store.authoring.folders;
@@ -46,6 +47,22 @@ export const fetchFolderDetails = createAsyncThunk(
 			name: folderInfo.data.name,
 			uid: folderInfo.data.uid,
 			...response.data,
+		};
+	},
+);
+
+export const createFolder = createAsyncThunk(
+	'courses/createFolder',
+	async ({ name, description }: { name: string; description: string }) => {
+		const user = requireUser();
+
+		const { response } = await fetchCreateFolder(user, {
+			name,
+			description,
+		});
+
+		return {
+			statusCode: response.status,
 		};
 	},
 );
@@ -90,6 +107,11 @@ export interface FoldersState {
 			error: string | null;
 		};
 	};
+	createFolderStatus: {
+		status: 'idle' | 'loading' | 'succeeded' | 'failed';
+		error: string | null;
+		statusCode: null | number;
+	};
 }
 
 const initialState: FoldersState = {
@@ -109,6 +131,11 @@ const initialState: FoldersState = {
 			status: 'idle',
 			error: null,
 		},
+	},
+	createFolderStatus: {
+		status: 'idle',
+		error: null,
+		statusCode: null,
 	},
 };
 
@@ -135,6 +162,7 @@ export const foldersSlice = createSlice({
 				showFolderSelectionModal: initialState.showFolderSelectionModal,
 				submittingCourses: initialState.submittingCourses,
 				folderDetails: state.folderDetails,
+				createFolderStatus: initialState.createFolderStatus,
 			};
 		},
 	},
@@ -168,6 +196,23 @@ export const foldersSlice = createSlice({
 				state.folderDetails.addCourseToFolderStatus = {
 					status: 'failed',
 					error: 'Error has occured',
+				};
+			})
+			.addCase(createFolder.pending, (state) => {
+				state.createFolderStatus.status = 'loading';
+			})
+			.addCase(createFolder.fulfilled, (state, action) => {
+				state.createFolderStatus = {
+					...state.createFolderStatus,
+					statusCode: action.payload.statusCode,
+					status: 'succeeded',
+				};
+			})
+			.addCase(createFolder.rejected, (state, action) => {
+				state.createFolderStatus = {
+					status: 'failed',
+					error: 'Error has occured',
+					statusCode: action.payload.statusCode,
 				};
 			});
 	},
