@@ -6,7 +6,7 @@ import FolderCard from '../../ui/Authoring/FolderCard';
 import { requireUser } from '../../../utils/user';
 import { getFolderList } from '../../../services/authoring';
 import { getSubAccount } from '../../../services/utils';
-import { createFolder, deleteFolder } from '../../../services/authoring';
+import { deleteFolder } from '../../../services/authoring';
 import AuthoringHeader from '../../ui/Authoring/AuthoringHeader';
 import FolderFilters from '../../ui/Authoring/FolderFilters';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
@@ -18,33 +18,7 @@ export const folderActions: ActionFunction = async ({ request }) => {
 	let formData = await request.formData();
 	let intent = formData.get('intent');
 
-	if (intent === 'createFolder') {
-		const name = formData.get('name')?.toString() ?? '';
-		const description = formData.get('description')?.toString() ?? '';
-
-		const { response } = await createFolder(user, {
-			name,
-			description,
-		});
-
-		const { status, statusText } = response;
-
-		if (response.status === 201) {
-			return json({
-				ok: true,
-				status,
-				statusText,
-				toastMessage: 'Folder Created',
-			});
-		} else {
-			return json({
-				ok: false,
-				status,
-				statusText,
-				toastMessage: 'Folder Creation Failure',
-			});
-		}
-	} else if (intent === 'deleteFolder') {
+	if (intent === 'deleteFolder') {
 		const folderUid = formData.get('folderUid')?.toString();
 		if (folderUid) {
 			const { response } = await deleteFolder(user, folderUid);

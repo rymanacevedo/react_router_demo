@@ -11,10 +11,12 @@ import {
 	Text,
 	Button,
 	useToast,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
+import NewFolderModal from './NewFolderModal';
 import {
 	selectCoursesBulkEditingEnabled,
 	enableCoursesBulkEditing,
@@ -45,6 +47,7 @@ const CourseFilter = ({
 	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
 	const bulkDeleteStatus = useSelector(selectBulkDeleteStatus);
 	const toast = useToast();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	useEffect(() => {
 		if (bulkDeleteStatus.error) {
@@ -97,6 +100,13 @@ const CourseFilter = ({
 							height="100%"
 							variant="outline">
 							Add to Folder
+						</Button>
+						<Button
+							onClick={onOpen}
+							fontWeight="normal"
+							height="100%"
+							variant="outline">
+							Add to New Folder
 						</Button>
 						<Button
 							onClick={() =>
@@ -161,6 +171,7 @@ const CourseFilter = ({
 					</Flex>
 				</Flex>
 			</Flex>
+			<NewFolderModal isOpen={isOpen} onClose={onClose} addCourses={true} />
 		</Flex>
 	);
 };
