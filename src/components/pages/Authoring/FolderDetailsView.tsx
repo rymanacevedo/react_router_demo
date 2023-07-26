@@ -24,7 +24,7 @@ import {
 
 export const folderDetailsLoader: LoaderFunction = async ({ params }) => {
 	const currentPage = params.page ? +params.page : 1;
-	const folderUid = params.id as string;
+	const folderUid = params.folderId as string;
 
 	await store.dispatch(
 		fetchFolderDetails({
@@ -44,7 +44,7 @@ const FolderDetailsView = () => {
 	const { currentPage } = useLoaderData() as {
 		currentPage: number;
 	};
-	const { id } = useParams();
+	const { folderId } = useParams();
 	const folderDetails = useSelector(selectFolderDetails);
 	const [listView, setListView] = useState<boolean>(
 		Boolean(Cookies.get('authoring_list_view')),
@@ -61,7 +61,7 @@ const FolderDetailsView = () => {
 
 	const handleChangeFolderContentsOrder = (sortOrder: string) => {
 		setFolderContentsOrder(sortOrder);
-		navigate(`/authoring/folder/${id}`);
+		navigate(`/authoring/folder/${folderId}`);
 	};
 
 	return (
@@ -96,7 +96,7 @@ const FolderDetailsView = () => {
 				pagesTotalCount={folderDetails.pagesTotalCount}
 				itemsCurrentCount={folderDetails.courseContents.length}
 				itemsTotalCount={folderDetails.totalCount}
-				href={`/authoring/folder/${id}`}
+				href={`/authoring/folder/${folderId}`}
 			/>
 			<CourseFolderModal />
 		</AuthoringLayout>
