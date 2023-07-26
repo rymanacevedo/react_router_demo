@@ -35,6 +35,7 @@ import { getAnswerHistory } from '../../../services/learning';
 import { requireUser } from '../../../utils/user';
 import { badRequest, getSubAccount } from '../../../services/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
+import AmpBox from '../../standard/container/AmpBox';
 
 export const reviewViewLoader: LoaderFunction = async ({ params }) => {
 	const assignmentKey = params.assignmentKey!;
@@ -179,29 +180,15 @@ const ReviewView = () => {
 					alignItems="stretch"
 					direction={['column', 'column', 'row', 'row', 'row', 'row']}
 					spacing={19}>
-					<Box
-						id="questionBox"
-						backgroundColor="white"
-						boxShadow="md"
-						borderRadius={24}
-						px={12}
-						py="44px"
-						w={{ base: '100%', md: '50%' }}>
+					<AmpBox>
 						<Question
 							review={true}
 							questionIndex={currentQuestionIndex + 1}
 							numberOfQInReview={reviewQuestions.length}
 							questionInFocus={displayedQuestion}
 						/>
-					</Box>
-					<Box
-						id="answerBox"
-						backgroundColor="white"
-						boxShadow="md"
-						borderRadius={24}
-						px={12}
-						py="44px"
-						w={{ base: '100%', md: '50%' }}>
+					</AmpBox>
+					<AmpBox>
 						<MultipleChoiceOverLay
 							isInReviewView={true}
 							questionInFocus={
@@ -217,7 +204,7 @@ const ReviewView = () => {
 							inReview={true}
 							revealAnswer={false}
 						/>
-					</Box>
+					</AmpBox>
 				</Stack>
 				<ProgressMenu
 					textPrompt={textPrompt}

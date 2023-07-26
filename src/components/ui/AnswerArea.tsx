@@ -27,6 +27,7 @@ import { MutableRefObject } from 'react';
 
 import sure from '../../assets/sure.gif';
 import unsure from '../../assets/unsure.gif';
+import AmpBox from '../standard/container/AmpBox';
 
 type Props = {
 	isOpen: boolean;
@@ -100,7 +101,6 @@ export default function AnswerArea({
 							clearSelectionFunction={clearSelectionFunction}
 							setIDKResponse={setIDKResponse}
 							IDKResponse={IDKResponse}
-							smallerThan1000={smallerThan1000}
 							showOverlay={showFeedback}
 						/>
 					)}
@@ -114,34 +114,19 @@ export default function AnswerArea({
 							roundFeedbackData={currentRoundAnswerOverLayData}
 							continueBtnFunc={continueBtnFunc}
 							setIDKResponse={setIDKResponse}
-							smallerThan1000={smallerThan1000}
 							showFeedback={showFeedback}
 							submitMultiSelectAnswer={submitMultiSelectAnswer}
 						/>
 					)}
 					{questionInFocus?.questionType === 'Matching' && (
 						//TODO: refactor this out when we have the matching component files
-						<Box
-							style={{
-								marginTop: smallerThan1000 ? '10px' : '0px',
-							}}
-							alignItems="stretch"
-							flex={1}
-							backgroundColor="white"
-							boxShadow="md"
-							display="flex"
-							flexDirection="column"
-							justifyContent="space-between"
-							borderRadius={24}
-							px={12}
-							py="44px">
+						<AmpBox>
 							{!showFeedback ? (
 								<Fade in={!showFeedback}>
 									<Text>Under construction</Text>
 								</Fade>
 							) : (
 								<Fade in={showFeedback}>
-									{' '}
 									<MultipleChoiceOverLay
 										questionInFocus={questionInFocus}
 										selectedAnswers={selectedAnswers}
@@ -176,7 +161,7 @@ export default function AnswerArea({
 									{!showFeedback && i18n('clearSelection')}
 								</Button>
 							</HStack>
-						</Box>
+						</AmpBox>
 					)}
 				</Box>
 			</PopoverAnchor>

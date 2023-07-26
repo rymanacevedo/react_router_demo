@@ -7,8 +7,7 @@ export default function AmpBox({ children }: { children?: ReactNode }) {
 			backgroundColor="ampWhite"
 			boxShadow="md"
 			borderRadius="3xl"
-			px={18}
-			py={11}
+			p={12}
 			flex={1}
 			direction="column">
 			{children}
