@@ -196,7 +196,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	};
 
 	useEffect(() => {
-		if (!!questionTrigger) {
+		if (questionTrigger !== undefined) {
 			handleNavigation(questionTrigger);
 		}
 	}, [questionTrigger]);
@@ -238,7 +238,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	return (
 		<>
 			<AmpBox>
-				<Question questionInFocus={questionInFocus as QuestionInFocus} />
+				<Question questionInFocus={questionInFocus} />
 			</AmpBox>
 			<AmpBox>
 				<Stack
