@@ -76,6 +76,7 @@ export const ampTheme = extendTheme({
 		23: '5.75rem',
 		25: '6.25rem',
 		27: '6.75rem',
+		67.5: '16.875rem',
 	},
 	fonts: {
 		heading: 'Proxima-Nova, sans-serif',

@@ -159,6 +159,9 @@ export const createFolder = async (
 	},
 ): Promise<{
 	response: Response;
+	data: {
+		uid?: string;
+	};
 }> => {
 	const url = '/v2/authoring-folders';
 
