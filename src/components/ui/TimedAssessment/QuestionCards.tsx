@@ -2,29 +2,18 @@ import { Outlet } from 'react-router';
 import { Box, Button, Divider, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard, { CardValues } from '../PracticeTestCard';
-import {
-	Confidence,
-	QuestionInFocus,
-	RoundData,
-} from '../../pages/AssignmentView/AssignmentTypes';
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { useState } from 'react';
 import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
+import { OutletContext } from '../../../routes/TimedAssessment';
+import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus } from '../../../lib/validator';
 
 export default function QuestionCards() {
-	const context = useOutletContext<any>();
+	const context = useOutletContext<OutletContext>();
 	const location = useLocation();
 	const showButton = !location.pathname.includes('submission');
-	const {
-		questionInFocus,
-		setQuestionTrigger,
-		roundData,
-	}: {
-		questionInFocus: QuestionInFocus | null;
-		setQuestionTrigger: (value: QuestionInFocus | null) => void;
-		roundData: RoundData;
-		assignmentUid: string;
-	} = context;
+	const { questionInFocus, setQuestionTrigger, roundData } = context;
 	const flaggedQuestionIds: string[] = roundData.questionList
 		.filter((question) => question.flagged)
 		.map((question) => question.publishedQuestionAuthoringKey);
@@ -85,7 +74,6 @@ export default function QuestionCards() {
 					{i18n('practiceTestNavigation')}
 				</Heading>
 				<Divider marginTop={1} marginBottom={1} />
-				{/*<QuestionCard />*/}
 				{roundData.questionList.map((question: QuestionInFocus) => {
 					const values: CardValues = ['unselected'];
 					if (

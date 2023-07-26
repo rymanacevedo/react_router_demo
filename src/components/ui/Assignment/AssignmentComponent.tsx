@@ -7,9 +7,6 @@ import {
 	Confidence,
 	Correctness,
 	CurrentRoundAnswerOverLayData,
-	ModuleData,
-	QuestionInFocus,
-	RoundData,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerArea from '../AnswerArea';
@@ -25,6 +22,7 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
 
 type Props = {
 	isInstructionalOverlayOpen: boolean;

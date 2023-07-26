@@ -10,11 +10,11 @@ import { useTranslation } from 'react-i18next';
 import {
 	Confidence,
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiSelect from './MultiSelect';
 import MultiSelectFeedback from './MultiSelectFeedback';
+import { QuestionInFocus } from '../../../lib/validator';
 
 type Props = {
 	questionInFocus: QuestionInFocus;

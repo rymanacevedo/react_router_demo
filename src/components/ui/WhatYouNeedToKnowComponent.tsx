@@ -28,11 +28,11 @@ import {
 } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useRef, useState } from 'react';
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 import { useFetcher } from 'react-router-dom';
 import Overlay from './Overlay';
 import { ActionData } from '../login/LoginForm';
 import { QuestionFeedbackFields } from '../../routes/QuestionFeedback';
+import { QuestionInFocus } from '../../lib/validator';
 
 const WhatYouNeedToKnowComponent = ({
 	questionInFocus,

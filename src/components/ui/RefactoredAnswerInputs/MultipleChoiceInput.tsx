@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
-import {
-	Confidence,
-	QuestionInFocusAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
+import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocusAnswer } from '../../../lib/validator';
 
 export type SelectedAnswer = {
 	id: number | null;

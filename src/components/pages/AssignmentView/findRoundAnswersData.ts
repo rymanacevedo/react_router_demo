@@ -1,4 +1,4 @@
-import { QuestionInFocus } from './AssignmentTypes';
+import { QuestionInFocus } from '../../../lib/validator';
 
 export const findRoundAnswersData = (
 	QInFocusData: QuestionInFocus,

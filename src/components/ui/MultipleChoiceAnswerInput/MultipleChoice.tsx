@@ -3,11 +3,11 @@ import { Box, Button, Divider, Fade, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleChoiceAnswers from './MultipleChoiceAnswers';
 import MultipleChoiceOverLay from './MultipleChoiceFeedBack';
+import { QuestionInFocus } from '../../../lib/validator';
 
 type MultipleChoiceProps = {
 	questionInFocus: QuestionInFocus;

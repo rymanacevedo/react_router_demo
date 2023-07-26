@@ -25,11 +25,15 @@ import {
 import { getSubAccount } from '../services/utils';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import {
+	AssignmentData,
+	ConfidenceSchema,
 	ModuleData,
+	ModuleDataSchema,
 	QuestionInFocus,
+	QuestionInFocusSchema,
 	RoundData,
-} from '../components/pages/AssignmentView/AssignmentTypes';
-import { AssignmentData } from '../lib/validator';
+	RoundDataSchema,
+} from '../lib/validator';
 import { useEffect, useState } from 'react';
 import { findQuestionInFocus } from '../components/pages/AssignmentView/findQuestionInFocus';
 import useInterval from '../hooks/useInterval';
@@ -56,8 +60,32 @@ export const TimedAssessmentFieldsSchema = z.object({
 	user: UserSchema.optional(),
 });
 
-export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
+const OutletContextSchema = z.object({
+	roundData: RoundDataSchema,
+	questionInFocus: QuestionInFocusSchema,
+	setQuestionInFocus: z.function(),
+	questionTrigger: QuestionInFocusSchema,
+	setQuestionTrigger: z.function(),
+	seconds: z.number(),
+	setSeconds: z.function(),
+	secondsSpent: z.number(),
+	setSecondsSpent: z.function(),
+	startTimer: z.function(),
+	startSecondsSpent: z.function(),
+	assignmentUid: z.string(),
+	moduleInfoAndQuestions: ModuleDataSchema,
+	flaggedQuestions: z.set(z.string()),
+	setFlaggedQuestions: z.function(),
+	selectedAnswer: z.object({
+		id: z.number().nullable(),
+		confidence: ConfidenceSchema,
+	}),
+	setSelectedAnswer: z.function(),
+	setAnsweredQuestions: z.function(),
+});
 
+export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
+export type OutletContext = z.infer<typeof OutletContextSchema>;
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const hasConfidenceEnabled = user.config.showTimedAssessmentConfidence;

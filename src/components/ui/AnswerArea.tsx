@@ -1,9 +1,9 @@
 import {
 	Confidence,
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
 	SelectedAnswer,
 } from '../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus } from '../../lib/validator';
 import {
 	Box,
 	Button,

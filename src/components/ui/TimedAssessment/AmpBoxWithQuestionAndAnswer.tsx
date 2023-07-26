@@ -13,31 +13,29 @@ import {
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../../utils/user';
-import {
-	Confidence,
-	QuestionInFocus,
-	RoundData,
-} from '../../pages/AssignmentView/AssignmentTypes';
+import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 import HiddenFormInputs from './HiddenFormInputs';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 import AnswerSelection from '../AnswerSelection';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
+import { OutletContext } from '../../../routes/TimedAssessment';
+import { QuestionInFocus } from '../../../lib/validator';
 
 export const questionAnswerLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const questionId = params.questionId!;
 	const hasConfidenceEnabled = user.config.showTimedAssessmentConfidence;
 
-	return json({ hasConfidenceEnabled, questionId });
+	return json({ user, hasConfidenceEnabled, questionId });
 };
 export default function AmpBoxWithQuestionAndAnswer() {
 	const { t: i18n } = useTranslation();
 	const fetcher = useFetcher();
 	const navigate = useNavigate();
 	const ref = useRef<HTMLFormElement>(null);
-	const { hasConfidenceEnabled, questionId } = useLoaderData() as any;
+	const { user, hasConfidenceEnabled, questionId } = useLoaderData() as any;
 	const [firstRender, setFirstRender] = useState(true);
-	const context = useOutletContext<any>();
+	const context = useOutletContext<OutletContext>();
 	const {
 		setQuestionInFocus,
 		secondsSpent,
@@ -46,7 +44,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		startSecondsSpent,
 		assignmentUid,
 		moduleInfoAndQuestions,
-		//     outlet for timed assessment stops here
 		questionTrigger,
 		setQuestionTrigger,
 		flaggedQuestions,
@@ -55,11 +52,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		setSelectedAnswer,
 		setAnsweredQuestions,
 	} = context;
-	const {
-		questionInFocus,
-		roundData,
-	}: { questionInFocus: QuestionInFocus | null; roundData: RoundData } =
-		context;
+	const { questionInFocus, roundData } = context;
 	const [questions] = useState<QuestionInFocus[]>(
 		roundData.questionList.map((question) => question),
 	);
@@ -73,7 +66,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		submitter: FetcherWithComponents<any>;
 	}) => {
 		if (answerUpdated) {
-			const user = requireUser();
 			let answerChoices: HTMLInputElement[] = [];
 			for (const item of currentRef.current!) {
 				const input = item as HTMLInputElement;
@@ -104,7 +96,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			event.clientY >= window.innerHeight
 		) {
 			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put answerUpdated in the if statement
-			const user = requireUser();
 			let answerChoices: HTMLInputElement[] = [];
 			for (const item of ref.current!) {
 				const input = item as HTMLInputElement;
@@ -129,7 +120,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 
 	useEffect(() => {
 		const f = fetcher;
-		const user = requireUser();
 		const currentRef = ref.current as HTMLFormElement;
 		startTimer(true);
 		startSecondsSpent(true);
@@ -166,24 +156,26 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	const handleNavigation = (question: QuestionInFocus | null) => {
 		prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
 		if (!!question) {
-			const q = findQuestionInFocus(
-				moduleInfoAndQuestions,
-				roundData,
-				false,
-				false,
-				question.displayOrder - 1,
+			setQuestionInFocus(
+				findQuestionInFocus(
+					moduleInfoAndQuestions,
+					roundData,
+					false,
+					false,
+					question.displayOrder - 1,
+				),
 			);
-			setQuestionInFocus(q);
+			const answerInFocus = question.answerList.find(
+				(answer) => answer.selected,
+			);
 
-			const a = question.answerList.find((answer) => answer.selected);
-
-			const iSa = a
-				? { id: a.id, confidence: question.confidence! }
+			const selectedAnswerObj = answerInFocus
+				? { id: answerInFocus.id, confidence: question.confidence! }
 				: question.confidence === Confidence.NotSure
 				? { id: 1, confidence: Confidence.NotSure }
 				: { id: null, confidence: Confidence.NA };
 
-			setSelectedAnswer(iSa);
+			setSelectedAnswer(selectedAnswerObj);
 			navigate(
 				`/learning/timedAssessment/${assignmentUid}/${questionTrigger.id.toString()}`,
 			);
@@ -239,7 +231,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	return (
 		<>
 			<AmpBox>
-				<Question questionInFocus={questionInFocus} />
+				<Question questionInFocus={questionInFocus as QuestionInFocus} />
 			</AmpBox>
 			<AmpBox>
 				<Stack
@@ -274,9 +266,9 @@ export default function AmpBoxWithQuestionAndAnswer() {
 					onSubmit={() => {
 						if (questionInFocus) {
 							const id = Number(questionInFocus.id) + 1;
-							const findQuestion =
-								questions.find((question) => question.id === id) || null;
-							setQuestionTrigger(findQuestion);
+							setQuestionTrigger(
+								questions.find((question) => question.id === id) || null,
+							);
 						}
 					}}>
 					<AnswerSelection

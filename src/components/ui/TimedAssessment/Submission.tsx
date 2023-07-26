@@ -22,23 +22,24 @@ export default function Submission() {
 	} = useOutletContext<any>();
 
 	const handleNavigation = (question: QuestionInFocus) => {
-		const q = findQuestionInFocus(
-			moduleInfoAndQuestions,
-			roundData,
-			false,
-			false,
-			question.displayOrder - 1,
+		setQuestionInFocus(
+			findQuestionInFocus(
+				moduleInfoAndQuestions,
+				roundData,
+				false,
+				false,
+				question.displayOrder - 1,
+			),
 		);
-		setQuestionInFocus(q);
-		const a = question.answerList.find((answer) => answer.selected);
+		const answerInFocus = question.answerList.find((answer) => answer.selected);
 
-		const iSa = a
-			? { id: a.id, confidence: question.confidence! }
+		const selectedAnswerObj = answerInFocus
+			? { id: answerInFocus.id, confidence: question.confidence! }
 			: question.confidence === Confidence.NotSure
 			? { id: 1, confidence: Confidence.NotSure }
 			: { id: null, confidence: Confidence.NA };
 
-		setSelectedAnswer(iSa);
+		setSelectedAnswer(selectedAnswerObj);
 		navigate(
 			`/learning/timedAssessment/${assignmentUid}/${questionTrigger.id.toString()}`,
 		);

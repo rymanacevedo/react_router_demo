@@ -29,9 +29,6 @@ import {
 	Confidence,
 	Correctness,
 	CurrentRoundAnswerOverLayData,
-	ModuleData,
-	QuestionInFocus,
-	RoundData,
 	SelectedAnswer,
 } from '../AssignmentView/AssignmentTypes';
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
@@ -48,6 +45,7 @@ import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
 import { LoaderFunction } from 'react-router';
+import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
 
 const initState = {
 	self: null,

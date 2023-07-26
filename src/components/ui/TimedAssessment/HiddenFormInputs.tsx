@@ -1,5 +1,5 @@
-import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
 import { FormControl, Input } from '@chakra-ui/react';
+import { QuestionInFocus } from '../../../lib/validator';
 
 type Props = {
 	assignmentUid: string;
