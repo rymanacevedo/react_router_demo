@@ -25,13 +25,10 @@ import {
 import { getSubAccount } from '../services/utils';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import {
-	AssignmentData,
 	ConfidenceSchema,
-	ModuleData,
 	ModuleDataSchema,
 	QuestionInFocus,
 	QuestionInFocusSchema,
-	RoundData,
 	RoundDataSchema,
 } from '../lib/validator';
 import { useEffect, useState } from 'react';
@@ -84,8 +81,15 @@ const OutletContextSchema = z.object({
 	setAnsweredQuestions: z.function(),
 });
 
+const LoaderDataSchema = z.object({
+	assignmentUid: z.string(),
+	moduleInfoAndQuestions: ModuleDataSchema,
+	roundData: RoundDataSchema,
+});
+
 export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
 export type OutletContext = z.infer<typeof OutletContextSchema>;
+type LoaderData = z.infer<typeof LoaderDataSchema>;
 export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
 	const hasConfidenceEnabled = user.config.showTimedAssessmentConfidence;
@@ -112,13 +116,7 @@ export default function TimedAssessment() {
 	const { t: i18n } = useTranslation();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { assignmentUid, moduleInfoAndQuestions, roundData } =
-		useLoaderData() as {
-			assignmentUid: string;
-			assignmentData: AssignmentData;
-			moduleData: ModuleData;
-			moduleInfoAndQuestions: ModuleData;
-			roundData: RoundData;
-		};
+		useLoaderData() as LoaderData;
 
 	const initialQuestionInFocus = findQuestionInFocus(
 		moduleInfoAndQuestions,

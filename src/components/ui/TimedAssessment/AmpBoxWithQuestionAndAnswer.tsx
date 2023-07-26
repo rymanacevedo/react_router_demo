@@ -20,6 +20,16 @@ import AnswerSelection from '../AnswerSelection';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { OutletContext } from '../../../routes/TimedAssessment';
 import { QuestionInFocus } from '../../../lib/validator';
+import { UserSchema } from '../../../services/user';
+import { z } from 'zod';
+
+const LoaderDataSchema = z.object({
+	user: UserSchema,
+	hasConfidenceEnabled: z.boolean(),
+	questionId: z.string(),
+});
+
+type LoaderData = z.infer<typeof LoaderDataSchema>;
 
 export const questionAnswerLoader: LoaderFunction = async ({ params }) => {
 	const user = requireUser();
@@ -33,8 +43,8 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	const fetcher = useFetcher();
 	const navigate = useNavigate();
 	const ref = useRef<HTMLFormElement>(null);
-	const { user, hasConfidenceEnabled, questionId } = useLoaderData() as any;
-	const [firstRender, setFirstRender] = useState(true);
+	const { user, hasConfidenceEnabled, questionId } =
+		useLoaderData() as LoaderData;
 	const context = useOutletContext<OutletContext>();
 	const {
 		setQuestionInFocus,
