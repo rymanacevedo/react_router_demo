@@ -1,12 +1,11 @@
+import { Confidence, Correctness } from './AssignmentTypes';
 import {
-	Confidence,
-	Correctness,
 	LearningUnit,
 	LearningUnitQuestion,
 	ModuleData,
 	QuestionInFocus,
 	RoundData,
-} from './AssignmentTypes';
+} from '../../../lib/validator';
 
 /**
  * Finds the question in focus

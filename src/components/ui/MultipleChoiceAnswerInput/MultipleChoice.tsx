@@ -1,13 +1,14 @@
-import { Box, Button, Divider, Fade, HStack, Text } from '@chakra-ui/react';
+import { Button, Divider, Fade, HStack, Text } from '@chakra-ui/react';
 
 import { useTranslation } from 'react-i18next';
 import {
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleChoiceAnswers from './MultipleChoiceAnswers';
 import MultipleChoiceOverLay from './MultipleChoiceFeedBack';
+import { QuestionInFocus } from '../../../lib/validator';
+import AmpBox from '../../standard/container/AmpBox';
 
 type MultipleChoiceProps = {
 	questionInFocus: QuestionInFocus;
@@ -26,7 +27,6 @@ type MultipleChoiceProps = {
 	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
 	IDKResponse: boolean;
-	smallerThan1000: boolean;
 	showOverlay: boolean;
 };
 
@@ -41,26 +41,12 @@ export const MultipleChoice = ({
 	clearSelectionFunction,
 	setIDKResponse,
 	IDKResponse,
-	smallerThan1000,
 	showOverlay,
 }: MultipleChoiceProps) => {
 	const { t: i18n } = useTranslation();
 
 	return (
-		<Box
-			style={{
-				marginTop: smallerThan1000 ? '10px' : '0px',
-			}}
-			alignItems="stretch"
-			flex={1}
-			backgroundColor="white"
-			boxShadow="md"
-			display="flex"
-			flexDirection="column"
-			justifyContent="space-between"
-			borderRadius={24}
-			px={12}
-			py="44px">
+		<AmpBox>
 			{!showOverlay ? (
 				<Fade in={!showOverlay}>
 					<MultipleChoiceAnswers
@@ -106,6 +92,6 @@ export const MultipleChoice = ({
 					{!showOverlay && i18n('clearSelection')}
 				</Button>
 			</HStack>
-		</Box>
+		</AmpBox>
 	);
 };

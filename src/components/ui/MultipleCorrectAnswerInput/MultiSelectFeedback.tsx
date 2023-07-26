@@ -1,9 +1,6 @@
 import { Stack } from '@chakra-ui/react';
 
-import {
-	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
-} from '../../pages/AssignmentView/AssignmentTypes';
+import { CurrentRoundAnswerOverLayData } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerFeedback, {
 	Confidence,
 	Correctness,
@@ -12,6 +9,7 @@ import AnswerFeedbackBadge, {
 	BadgeVariantValues,
 } from '../RefactorAnswerFeedback/AnswerFeedbackBadge';
 import { useState } from 'react';
+import { QuestionInFocus } from '../../../lib/validator';
 
 const MultiSelectFeedback = ({
 	questionInFocus,

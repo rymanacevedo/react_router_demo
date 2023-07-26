@@ -1,5 +1,9 @@
 import { z } from 'zod';
 import { UserSchema } from '../services/user';
+import {
+	Confidence,
+	Correctness,
+} from '../components/pages/AssignmentView/AssignmentTypes';
 
 export const RegisterSchema = z
 	.object({
@@ -146,7 +150,7 @@ const AssignmentSchema = z.object({
 	subAccount: z.string(),
 });
 
-export const AnswerListDataSchema = z.object({
+const LearningUnitQuestionAnswerSchema = z.object({
 	self: z.string(),
 	id: z.union([z.string(), z.number()]),
 	publishedAnswerId: z.union([z.string(), z.number()]),
@@ -156,33 +160,38 @@ export const AnswerListDataSchema = z.object({
 	optionRc: z.string(),
 	isCorrect: z.boolean(),
 });
-export const QuestionSchema = z.object({
-	self: z.string(),
-	id: z.union([z.string(), z.number()]),
-	uid: z.string(),
-	versionId: z.number(),
-	questionRc: z.string(),
-	introductionRc: z.any(),
-	explanationRc: z.any(),
-	name: z.string(),
+
+// Zod schema for LearningUnitQuestion
+const LearningUnitQuestionSchema = z.object({
+	answers: z.array(LearningUnitQuestionAnswerSchema),
+	explanationRc: z.string().nullable(),
 	hasModuleIntroduction: z.boolean(),
-	answers: z.array(AnswerListDataSchema),
-	questionType: z.string(),
+	id: z.union([z.string(), z.number()]),
+	introductionRc: z.string().nullable(),
 	learningUnitId: z.number(),
 	learningUnitUid: z.string(),
-	learningUnitVersionId: z.number(),
 	learningUnitUri: z.string(),
-});
-export const LearningUnitSchema = z.object({
+	learningUnitVersionId: z.number(),
+	name: z.string(),
+	questionRc: z.string(),
+	questionType: z.string(),
 	self: z.string(),
-	id: z.number(),
 	uid: z.string(),
 	versionId: z.number(),
-	name: z.string(),
-	introductionRc: z.any(),
-	moreInformationRc: z.any(),
-	questions: z.array(QuestionSchema),
 });
+
+// Zod schema for LearningUnit
+const LearningUnitSchema = z.object({
+	id: z.number(),
+	introductionRc: z.string(),
+	moreInformationRc: z.string(),
+	name: z.string(),
+	questions: z.array(LearningUnitQuestionSchema),
+	self: z.string(),
+	uid: z.string(),
+	versionId: z.number(),
+});
+
 export const ModuleDataSchema = z.object({
 	self: z.string(),
 	key: z.string(),
@@ -246,23 +255,69 @@ export const AnswerDataSchema = z.object({
 	avatarMessage: z.null(),
 	answerList: z.array(AnswerSchema),
 });
+
+export const ConfidenceSchema = z.enum([
+	Confidence.NA,
+	Confidence.NotSure,
+	Confidence.PartSure,
+	Confidence.OneAnswerPartSure,
+	Confidence.Sure,
+]);
+
+// Zod schema for Correctness enum
+export const CorrectnessSchema = z.enum([
+	Correctness.NoAnswer,
+	Correctness.Incorrect,
+	Correctness.NoAnswerSelected,
+	Correctness.Correct,
+]);
+
 export const QuestionInFocusAnswerSchema = z.object({
 	answerRc: z.string(),
-	optionRc: z.string(),
-	publishedAnswerId: z.union([z.string(), z.number()]),
-	id: z.union([z.string(), z.number()]),
+	displayOrder: z.number(),
+	id: z.number(),
+	isCorrect: z.boolean().optional(),
+	optionRc: z.string().nullable(),
+	publishedAnswerId: z.union([z.number(), z.string()]),
+	publishedAnswerUri: z.string(),
+	publishedOptionId: z.union([z.number().nullable(), z.string().nullable()]),
+	publishedOptionUri: z.string().nullable(),
+	publishedQuestionUri: z.string(),
+	questionId: z.number(),
+	questionVersionId: z.number(),
+	selected: z.boolean(),
+	selectedOptionId: z.union([z.number().nullable(), z.string().nullable()]),
+	selectedOptionUri: z.string().nullable(),
+	self: z.string(),
+	uid: z.string(),
+	versionId: z.number(),
 });
 export const QuestionInFocusSchema = z.object({
 	id: z.union([z.string(), z.number()]),
 	questionRc: z.string(),
 	name: z.string().optional(),
-	answered: z.boolean(),
-	questionType: z.string().optional(),
-	explanationRc: z.string().optional(),
-	hasModalIntroduction: z.boolean().optional(),
-	introductionRc: z.any().optional(),
+	reviewSeconds: z.number(),
+	introductionRc: z.string().nullable(),
+	explanationRc: z.string().nullable(),
+	moreInformationRc: z.string().nullable(),
 	publishedQuestionId: z.union([z.number(), z.string()]),
 	answerList: z.array(QuestionInFocusAnswerSchema),
+	answered: z.boolean(),
+	confidence: ConfidenceSchema.nullable(), // Replace `Confidence` with the appropriate type if available
+	correctness: CorrectnessSchema.nullable(), // Replace `Correctness` with the appropriate type if available
+	difficultyScore: z.number(),
+	displayOrder: z.number(),
+	flagged: z.boolean(),
+	hasModuleIntroduction: z.boolean().optional(),
+	hideQuestionIntroImages: z.boolean(),
+	interactiveState: z.any().nullable(),
+	pointsWorth: z.number(),
+	publishedLearningUnitUri: z.string(),
+	publishedQuestionAuthoringKey: z.string(),
+	publishedQuestionUri: z.string(),
+	questionType: z.string(),
+	questionVersionId: z.number(),
+	quizSeconds: z.number(),
 });
 export const RoundDataSchema = z.object({
 	totalQuestionCount: z.any(),
@@ -274,6 +329,7 @@ export const RoundDataSchema = z.object({
 	roundNumber: z.number(),
 	roundPhase: z.string(),
 	unseenCount: z.any(),
+	timeRemaining: z.number().nullable(),
 	id: z.union([z.number(), z.string()]),
 	questionList: z.array(QuestionInFocusSchema),
 	seenCount: z.union([z.number(), z.any()]),
@@ -307,11 +363,10 @@ export const CourseStatsSchema = z.object({
 
 export type Answer = z.infer<typeof AnswerSchema>;
 export type AnswerHistory = z.infer<typeof AnswerHistorySchema>;
-export type AnswerList = z.infer<typeof AnswerListDataSchema>;
 export type AnswerData = z.infer<typeof AnswerDataSchema>;
 export type AssignmentData = z.infer<typeof AssignmentDataSchema>;
 export type LearningUnit = z.infer<typeof LearningUnitSchema>;
-export type QuestionType = z.infer<typeof QuestionSchema>;
+export type LearningUnitQuestion = z.infer<typeof LearningUnitQuestionSchema>;
 export type QuestionInFocus = z.infer<typeof QuestionInFocusSchema>;
 export type QuestionInFocusAnswer = z.infer<typeof QuestionInFocusAnswerSchema>;
 export type RoundData = z.infer<typeof RoundDataSchema>;

@@ -1,10 +1,8 @@
 import { Heading, Stack } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import ReviewContentRender from './Review/ReviewContentRender';
-import {
-	QuestionInFocus,
-	TransformedQuestion,
-} from '../pages/AssignmentView/AssignmentTypes';
+import { TransformedQuestion } from '../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus } from '../../lib/validator';
 
 const Question = ({
 	questionInFocus,

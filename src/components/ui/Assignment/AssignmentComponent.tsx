@@ -1,4 +1,4 @@
-import { Box, Container, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
+import { Container, HStack, Stack, useMediaQuery } from '@chakra-ui/react';
 import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 
@@ -7,9 +7,6 @@ import {
 	Confidence,
 	Correctness,
 	CurrentRoundAnswerOverLayData,
-	ModuleData,
-	QuestionInFocus,
-	RoundData,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerArea from '../AnswerArea';
@@ -25,7 +22,9 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../ProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
 import Matching from '../Matching';
+import AmpBox from '../../standard/container/AmpBox';
 
 type Props = {
 	isInstructionalOverlayOpen: boolean;
@@ -556,15 +555,9 @@ export default function AssignmentComponent({
 								pr="0px"
 								alignItems="stretch"
 								direction={['column', 'column', 'row', 'row', 'row', 'row']}>
-								<Box
-									backgroundColor="white"
-									boxShadow="md"
-									borderRadius={24}
-									px={12}
-									py="44px"
-									w={{ base: '100%', md: '50%' }}>
+								<AmpBox>
 									<Question questionInFocus={questionInFocus} />
-								</Box>
+								</AmpBox>
 								<AnswerArea
 									isOpen={isInstructionalOverlayOpen}
 									onClose={onClose}

@@ -29,9 +29,6 @@ import {
 	Confidence,
 	Correctness,
 	CurrentRoundAnswerOverLayData,
-	ModuleData,
-	QuestionInFocus,
-	RoundData,
 	SelectedAnswer,
 } from '../AssignmentView/AssignmentTypes';
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
@@ -48,6 +45,8 @@ import FireProgressToast from '../../ui/ProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
 import { LoaderFunction } from 'react-router';
+import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
+import AmpBox from '../../standard/container/AmpBox';
 
 const initState = {
 	self: null,
@@ -725,30 +724,15 @@ const AssignmentReviewView = () => {
 							direction={['column', 'column', 'row', 'row', 'row', 'row']}
 							spacing={6}
 							mr={6}>
-							<Box
-								backgroundColor="white"
-								boxShadow="md"
-								borderRadius={24}
-								px={12}
-								py="44px"
-								w={{ base: '100%', md: '50%' }}>
+							<AmpBox>
 								<Question
 									questionInFocus={questionInFocus}
 									review={true}
 									numberOfQInReview={numberOfQInReview}
 									questionIndex={questionIndex + 1}
 								/>
-							</Box>
-							<Box
-								backgroundColor="ampWhite"
-								boxShadow="md"
-								display="flex"
-								flexDirection="column"
-								justifyContent="space-between"
-								borderRadius={24}
-								px={12}
-								py="44px"
-								w={{ base: '100%', md: '50%' }}>
+							</AmpBox>
+							<AmpBox>
 								{tryAgain ? (
 									<Fade in={true}>
 										<MultipleChoiceAnswers
@@ -791,7 +775,7 @@ const AssignmentReviewView = () => {
 									</Button>
 									{reviewButtonsConditionRender()}
 								</HStack>
-							</Box>
+							</AmpBox>
 						</Stack>
 						<ProgressMenu
 							textPrompt={textPrompt}

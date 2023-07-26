@@ -1,7 +1,7 @@
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
 import { Box } from '@chakra-ui/react';
 import MultipleChoice from './RefactoredAnswerInputs/MultipleChoice';
 import { SelectedAnswer } from './RefactoredAnswerInputs/MultipleChoiceInput';
+import { QuestionInFocus } from '../../lib/validator';
 
 type Props = {
 	questionInFocus: QuestionInFocus | null;
