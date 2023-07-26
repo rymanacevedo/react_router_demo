@@ -1,33 +1,57 @@
 import { Box, Button, Container, Text } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ReviewContentRender from '../components/ui/Review/ReviewContentRender';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+	json,
+	LoaderFunction,
+	useLoaderData,
+	useLocation,
+	useNavigate,
+} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { estimatedTimeRemaining } from '../utils/logic';
-import useModuleContentService from '../services/coursesServices/useModuleContentService';
+import { requireUser } from '../utils/user';
+import { getSubAccount } from '../services/utils';
+import { getFullModuleWithQuestions } from '../services/learning';
+import { AssignmentData, ModuleData } from '../lib/validator';
+
+export const timedAssessmentModuleIntroLoader: LoaderFunction = async ({
+	params,
+}) => {
+	const user = requireUser();
+	const { subAccount } = getSubAccount(user);
+	const assignmentUid = params.assignmentUid!;
+	const { assignmentData, moduleData, moduleInfoAndQuestions } =
+		await getFullModuleWithQuestions(user, subAccount, assignmentUid);
+
+	console.log(assignmentData);
+	console.log(moduleData);
+	console.log(moduleInfoAndQuestions);
+	return json({
+		assignmentData,
+		moduleData,
+		moduleInfoAndQuestions,
+		assignmentUid,
+	});
+};
+
+interface TimedAssessmentModuleIntroLoaderData {
+	assignmentData: AssignmentData;
+	moduleData: ModuleData;
+	moduleInfoAndQuestions: ModuleData;
+	assignmentUid: string;
+}
 
 const TimedAssessmentModuleIntro = () => {
 	const { t: i18n } = useTranslation();
-	const { assignmentUid } = useParams();
-	const [contentString, setContentString] = useState('');
+	const { moduleInfoAndQuestions, assignmentUid } =
+		useLoaderData() as TimedAssessmentModuleIntroLoaderData;
+	const [contentString] = useState(moduleInfoAndQuestions.introductionRc);
 	const navigate = useNavigate();
 	const { state } = useLocation();
 
-	const { fetchModuleContent } = useModuleContentService();
-
-	useEffect(() => {
-		const fetchContent = async () => {
-			let response = await fetchModuleContent(assignmentUid);
-			if (response.introductionRc) {
-				setContentString(response.introductionRc);
-			}
-		};
-
-		fetchContent();
-	}, []);
-
 	const startPracticeTestHandler = () => {
-		navigate(`/learning/timedAssessment/${state.assignmentUid}`);
+		navigate(`/learning/timedAssessment/${assignmentUid}`);
 	};
 
 	return (
