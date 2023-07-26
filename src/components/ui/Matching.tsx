@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus } from '../../lib/validator';
 
 type Props = { questionInFocus: QuestionInFocus };
 //will remove es-lint disable when we start using data in this component
