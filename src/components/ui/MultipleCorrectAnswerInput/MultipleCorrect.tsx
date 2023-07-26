@@ -1,20 +1,14 @@
-import {
-	Button,
-	Divider,
-	Flex,
-	Heading,
-	HStack,
-	SlideFade,
-} from '@chakra-ui/react';
+import { Button, Divider, Heading, HStack, SlideFade } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
 	Confidence,
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocus,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiSelect from './MultiSelect';
 import MultiSelectFeedback from './MultiSelectFeedback';
+import { QuestionInFocus } from '../../../lib/validator';
+import AmpBox from '../../standard/container/AmpBox';
 
 type Props = {
 	questionInFocus: QuestionInFocus;
@@ -28,7 +22,6 @@ type Props = {
 	roundFeedbackData: CurrentRoundAnswerOverLayData;
 	continueBtnFunc: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
-	smallerThan1000: boolean;
 	showFeedback: boolean;
 	submitMultiSelectAnswer: (s: SelectedAnswer[], c: Confidence) => void;
 };
@@ -41,7 +34,6 @@ const MultipleCorrect = ({
 	roundFeedbackData,
 	continueBtnFunc,
 	setIDKResponse,
-	smallerThan1000,
 	showFeedback,
 	submitMultiSelectAnswer,
 }: Props) => {
@@ -61,15 +53,7 @@ const MultipleCorrect = ({
 	};
 
 	return (
-		<Flex
-			marginTop={smallerThan1000 ? 2 : 0}
-			maxWidth="700px"
-			backgroundColor="ampWhite"
-			boxShadow="md"
-			flexDirection="column"
-			borderRadius={24}
-			px={18}
-			py={11}>
+		<AmpBox>
 			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
 			{!showFeedback ? (
 				<MultiSelect
@@ -122,7 +106,7 @@ const MultipleCorrect = ({
 					</HStack>
 				</SlideFade>
 			)}
-		</Flex>
+		</AmpBox>
 	);
 };
 

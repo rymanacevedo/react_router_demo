@@ -8,13 +8,6 @@ test.beforeEach(async ({ page }) => {
 	await page.waitForURL('http://localhost:3000/main/learning');
 });
 
-test.afterEach(async ({ page }) => {
-	await page.goto('http://localhost:3000/main/logout');
-	await page.waitForURL(
-		'http://localhost:3000/main/login?abbrevName=automation_10',
-	);
-});
-
 test('is on the dashboard', async ({ page }) => {
 	await page.waitForURL('http://localhost:3000/main/learning/PJBRRNAKW');
 	await page.waitForSelector('h1');

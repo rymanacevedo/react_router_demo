@@ -1,9 +1,7 @@
 import { Stack } from '@chakra-ui/react';
-import {
-	QuestionInFocus,
-	SelectedAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
+import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiSelectInput from './MultiSelectInput';
+import { QuestionInFocus } from '../../../lib/validator';
 
 type MultipleCorrectAnswersProps = {
 	questionInFocus: QuestionInFocus;

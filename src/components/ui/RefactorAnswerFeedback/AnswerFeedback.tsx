@@ -1,12 +1,12 @@
 import {
 	CurrentRoundAnswerOverLayData,
-	QuestionInFocusAnswer,
 	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import { Checkbox } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import { useEffect, useState } from 'react';
 import { BadgeVariantValues } from './AnswerFeedbackBadge';
+import { QuestionInFocusAnswer } from '../../../lib/validator';
 
 export type Correctness = 'incorrect' | 'correct' | "I don't know yet";
 export type Confidence = 'idk' | 'sure' | 'unsure';
