@@ -14,8 +14,11 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { IconProps } from '@chakra-ui/icon';
-import { useNavigate } from 'react-router-dom';
-import { createCourseContent } from '../../../services/authoring';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+	addCoursesToFolder,
+	createCourseContent,
+} from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
 
 const CoursePlanningIcon = (props: IconProps) => (
@@ -88,19 +91,36 @@ const NewCourseContentCard = ({
 const NewCourseContentView = () => {
 	const user = requireUser();
 	const navigate = useNavigate();
+	const { folderId } = useParams();
 	const toast = useToast();
 
 	const handleCreateNewCourseContent = async () => {
-		const { data, response } = await createCourseContent(user);
-		if (response.status === 201) {
-			navigate(`/authoring/course/${data.uid}`);
-		} else {
+		const { data, response: responseFromCreate } = await createCourseContent(
+			user,
+		);
+		if (responseFromCreate.status !== 201) {
 			toast({
 				title: 'Error creating new course',
 				status: 'error',
 				duration: 4000,
 			});
+			return;
 		}
+		if (folderId) {
+			const { response: responseFromAdd } = await addCoursesToFolder(
+				user,
+				folderId,
+				{ items: [{ uid: data.uid }] },
+			);
+			if (responseFromAdd.status !== 201) {
+				toast({
+					title: 'Error adding new course to folder',
+					status: 'error',
+					duration: 4000,
+				});
+			}
+		}
+		navigate(`/authoring/course/${data.uid}`);
 	};
 
 	return (

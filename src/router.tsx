@@ -162,6 +162,10 @@ const routesJSX = (
 			/>
 			<Route path="authoring/new" element={<NewCourseContentView />} />
 			<Route
+				path="authoring/folder/:folderId/new"
+				element={<NewCourseContentView />}
+			/>
+			<Route
 				path="authoring/course/:uid"
 				element={<CourseContentView />}
 				loader={courseContentLoader}
