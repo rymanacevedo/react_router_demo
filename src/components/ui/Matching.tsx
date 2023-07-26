@@ -1,6 +1,6 @@
 import { Flex, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
-import { QuestionInFocus } from '../pages/AssignmentView/AssignmentTypes';
+import { QuestionInFocus } from '../../lib/validator';
 
 type Props = { questionInFocus: QuestionInFocus };
 //will remove es-lint disable when we start using data in this component
@@ -22,32 +22,30 @@ export default function Matching({ questionInFocus }: Props) {
 				borderRadius="3xl"
 				p={12}
 				boxShadow="md">
-				<Heading as="h2" fontSize="xl" ml={67.5}>
+				<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
 					{i18n('dragMatch')}
 				</Heading>
 			</Flex>
+
 			<Flex
-				direction={['column', 'column', 'column', 'row', 'row', 'row']}
+				borderRadius="3xl"
+				boxShadow="md"
+				bgColor="ampWhite"
+				h="500px"
+				p={12}
 				mx={6}
 				mb={6}
-				boxShadow="md"
-				borderRadius="3xl">
+				wrap="wrap">
 				<Flex
-					w={['100%', '100%', '100%', '50%', '50%', '50%']}
-					height="500px"
 					bgColor="ampWhite"
-					p={12}
-					borderLeftRadius="3xl">
-					<Heading as="h2" fontSize="xl" ml={67.5}>
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}>
+					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
 						{i18n('options')}
 					</Heading>
 				</Flex>
 				<Flex
-					w={['100%', '100%', '100%', '50%', '50%', '50%']}
-					height="500px"
 					bgColor="ampWhite"
-					p={12}
-					borderRightRadius="3xl">
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}>
 					<Heading as="h2" fontSize="xl">
 						{i18n('answers')}
 					</Heading>
