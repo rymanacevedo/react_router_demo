@@ -28,12 +28,17 @@ test('can navigate to each question on next question click', async ({
 	await page.goto(
 		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147824',
 	);
-	await page.waitForSelector('h1');
 	await page.getByRole('button', { name: 'Next question' }).click();
+	await page.waitForURL(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147825',
+	);
 	expect(page.url()).toBe(
 		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147825',
 	);
 	await page.getByRole('button', { name: 'Next question' }).click();
+	await page.waitForURL(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147826',
+	);
 	expect(page.url()).toBe(
 		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147826',
 	);

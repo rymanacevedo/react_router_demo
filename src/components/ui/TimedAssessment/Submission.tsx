@@ -51,7 +51,7 @@ export default function Submission() {
 	}, [questionTrigger]);
 	return (
 		<AmpBox>
-			<Heading as="h2" fontSize="2xl">
+			<Heading as="h2" fontSize="2xl" mb={6}>
 				{i18n('reviewAndSubmit')}
 			</Heading>
 

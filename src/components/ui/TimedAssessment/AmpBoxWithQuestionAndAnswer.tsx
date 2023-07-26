@@ -10,7 +10,7 @@ import {
 	useNavigate,
 	useOutletContext,
 } from 'react-router-dom';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../../utils/user';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -72,30 +72,28 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		currentRef,
 		submitter,
 	}: {
-		currentRef: RefObject<HTMLFormElement>;
+		currentRef: HTMLFormElement;
 		submitter: FetcherWithComponents<any>;
 	}) => {
-		if (answerUpdated) {
-			let answerChoices: HTMLInputElement[] = [];
-			for (const item of currentRef.current!) {
-				const input = item as HTMLInputElement;
-				if (input.name === 'answerChoice') {
-					answerChoices.push(input);
-				}
+		let answerChoices: HTMLInputElement[] = [];
+		for (const item of currentRef) {
+			const input = item as HTMLInputElement;
+			if (input.name === 'answerChoice') {
+				answerChoices.push(input);
 			}
-			const choice = answerChoices.find(
-				(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
-			);
-			const form = new FormData(currentRef.current!);
-			form.append('user', JSON.stringify(user));
-			if (choice) {
-				form.append('answerChoice', choice.value);
-			}
-			submitter.submit(form, {
-				method: 'POST',
-				action: '/api/timedAssessment',
-			});
 		}
+		const choice = answerChoices.find(
+			(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
+		);
+		const form = new FormData(currentRef);
+		form.append('user', JSON.stringify(user));
+		if (choice) {
+			form.append('answerChoice', choice.value);
+		}
+		submitter.submit(form, {
+			method: 'POST',
+			action: '/api/timedAssessment',
+		});
 	};
 
 	const handleMouseLeave = async (event: MouseEvent) => {
@@ -106,24 +104,9 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			event.clientY >= window.innerHeight
 		) {
 			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put answerUpdated in the if statement
-			let answerChoices: HTMLInputElement[] = [];
-			for (const item of ref.current!) {
-				const input = item as HTMLInputElement;
-				if (input.name === 'answerChoice') {
-					answerChoices.push(input);
-				}
-			}
-			const choice = answerChoices.find(
-				(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
-			);
-			const form = new FormData(ref.current!);
-			form.append('user', JSON.stringify(user));
-			if (choice) {
-				form.append('answerChoice', choice.value);
-			}
-			fetcher.submit(form, {
-				method: 'POST',
-				action: '/api/timedAssessment',
+			prepareAndSubmitFormData({
+				currentRef: ref.current!,
+				submitter: fetcher,
 			});
 		}
 	};
@@ -140,31 +123,13 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			startSecondsSpent(false);
 
 			if (!ref.current && f) {
-				let answerChoices: HTMLInputElement[] = [];
-				for (const item of currentRef) {
-					const input = item as HTMLInputElement;
-					if (input.name === 'answerChoice') {
-						answerChoices.push(input);
-					}
-				}
-				const choice = answerChoices.find(
-					(answerChoice) => answerChoice.indeterminate || answerChoice.checked,
-				);
-				const form = new FormData(currentRef);
-				form.append('user', JSON.stringify(user));
-				if (choice) {
-					form.append('answerChoice', choice.value);
-				}
-				f.submit(form, {
-					method: 'POST',
-					action: '/api/timedAssessment',
-				});
+				prepareAndSubmitFormData({ currentRef: currentRef, submitter: f });
 			}
 		};
 	}, []);
 
 	const handleNavigation = (question: QuestionInFocus | null) => {
-		prepareAndSubmitFormData({ currentRef: ref, submitter: fetcher });
+		prepareAndSubmitFormData({ currentRef: ref.current!, submitter: fetcher });
 		if (!!question) {
 			setQuestionInFocus(
 				findQuestionInFocus(
