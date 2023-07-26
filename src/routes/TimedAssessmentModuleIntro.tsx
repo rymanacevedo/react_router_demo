@@ -24,9 +24,6 @@ export const timedAssessmentModuleIntroLoader: LoaderFunction = async ({
 	const { assignmentData, moduleData, moduleInfoAndQuestions } =
 		await getFullModuleWithQuestions(user, subAccount, assignmentUid);
 
-	console.log(assignmentData);
-	console.log(moduleData);
-	console.log(moduleInfoAndQuestions);
 	return json({
 		assignmentData,
 		moduleData,
@@ -44,14 +41,14 @@ interface TimedAssessmentModuleIntroLoaderData {
 
 const TimedAssessmentModuleIntro = () => {
 	const { t: i18n } = useTranslation();
-	const { moduleInfoAndQuestions, assignmentUid } =
+	const { assignmentData, moduleInfoAndQuestions } =
 		useLoaderData() as TimedAssessmentModuleIntroLoaderData;
 	const [contentString] = useState(moduleInfoAndQuestions.introductionRc);
 	const navigate = useNavigate();
 	const { state } = useLocation();
 
 	const startPracticeTestHandler = () => {
-		navigate(`/learning/timedAssessment/${assignmentUid}`);
+		navigate(`/learning/timedAssessment/${assignmentData.assignmentUid}`);
 	};
 
 	return (
