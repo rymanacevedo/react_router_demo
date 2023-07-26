@@ -186,11 +186,8 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	};
 
 	useEffect(() => {
-		if (!firstRender) {
+		if (!!questionTrigger) {
 			handleNavigation(questionTrigger);
-		}
-		if (firstRender) {
-			setFirstRender(false);
 		}
 	}, [questionTrigger]);
 
