@@ -33,7 +33,7 @@ export default function Matching({ questionInFocus }: Props) {
 				boxShadow="md"
 				borderRadius="3xl">
 				<Flex
-					w="50%"
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}
 					height="500px"
 					bgColor="ampWhite"
 					p={12}
@@ -43,7 +43,7 @@ export default function Matching({ questionInFocus }: Props) {
 					</Heading>
 				</Flex>
 				<Flex
-					w="50%"
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}
 					height="500px"
 					bgColor="ampWhite"
 					p={12}
