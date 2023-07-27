@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Flex, Heading, Text, Input } from '@chakra-ui/react';
+import { Button, Flex, Heading, Text, Input, Textarea } from '@chakra-ui/react';
 import {
 	ChatBubbleIcon,
 	ChevronUpIcon,
@@ -32,6 +32,7 @@ const CourseContentView = () => {
 	const dispatch = useDispatch<AppDispatch>();
 	const courseContent = useSelector(selectCourseContent);
 	const [editingTitle, setEditingTitle] = useState(false);
+	const [editingDescription, setEditingDescription] = useState(false);
 
 	if (!courseContent) {
 		// TODO replace with error handler
@@ -83,20 +84,45 @@ const CourseContentView = () => {
 						)}
 					</Flex>
 					<Flex alignItems="center" gap="6" alignSelf="stretch">
-						<Text>
-							<VerbatimHtml
-								html={
-									courseContent?.descriptionHtml || 'Description placeholder'
-								}
+						{editingDescription ? (
+							<Textarea
+								defaultValue={courseContent?.descriptionHtml}
+								autoFocus={true}
+								variant="flushed"
+								fontSize="lg"
+								rows={5}
+								onBlur={() => {
+									dispatch(putCourseContent());
+									setEditingDescription(false);
+								}}
+								onChange={(e) => {
+									dispatch(
+										updateCourseContent({
+											descriptionHtml: e.target.value,
+										}),
+									);
+								}}
 							/>
-						</Text>
-						<Button
-							size="xs"
-							variant="ghost"
-							fontWeight="normal"
-							color="ampTertiaryText">
-							Edit
-						</Button>
+						) : (
+							<>
+								<Text>
+									<VerbatimHtml
+										html={
+											courseContent?.descriptionHtml ||
+											'Description placeholder'
+										}
+									/>
+								</Text>
+								<Button
+									size="xs"
+									variant="ghost"
+									fontWeight="normal"
+									color="ampTertiaryText"
+									onClick={() => setEditingDescription(true)}>
+									Edit
+								</Button>
+							</>
+						)}
 					</Flex>
 				</Flex>
 				<Flex width="96" alignItems="flex-end" flex="0">
