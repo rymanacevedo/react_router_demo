@@ -50,7 +50,7 @@ const ModuleIntroComponent = ({
 					{'    '}
 					{estimatedTimeToComplete &&
 						estimatedTimeToComplete > 1 &&
-						i18n('About')}
+						i18n('introAbout')}
 					{estimatedTimeRemaining(
 						estimatedTimeToComplete,
 						i18n('hours'),

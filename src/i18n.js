@@ -308,9 +308,9 @@ const resources = {
 			startPracticeTest: 'Start practice test',
 			toComplete: ' to complete',
 			//////////////////////////////////////////////
-			//   TimedAssessmentModuleIntro.tsx
+			//   ModuleIntroComponent.tsx
 			//////////////////////////////////////////////
-			about: 'About ',
+			introAbout: 'About ',
 		},
 	},
 	fr: {
