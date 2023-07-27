@@ -48,9 +48,11 @@ const ModuleIntroComponent = ({
 						: i18n('Question')}
 					{/*needed for the space between*/}
 					{'    '}
+					{estimatedTimeToComplete &&
+						estimatedTimeToComplete > 1 &&
+						i18n('About')}
 					{estimatedTimeRemaining(
 						estimatedTimeToComplete,
-						false,
 						i18n('hours'),
 						i18n('hour'),
 						i18n('minutes'),

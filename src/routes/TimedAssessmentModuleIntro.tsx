@@ -1,5 +1,4 @@
 import { Box, Button, Container, Text } from '@chakra-ui/react';
-import { useState } from 'react';
 import ReviewContentRender from '../components/ui/Review/ReviewContentRender';
 import {
 	json,
@@ -32,18 +31,17 @@ export const timedAssessmentModuleIntroLoader: LoaderFunction = async ({
 	});
 };
 
-interface TimedAssessmentModuleIntroLoaderData {
+type TimedAssessmentModuleIntroLoaderData = {
 	assignmentData: AssignmentData;
 	moduleData: ModuleData;
 	moduleInfoAndQuestions: ModuleData;
 	assignmentUid: string;
-}
+};
 
 const TimedAssessmentModuleIntro = () => {
 	const { t: i18n } = useTranslation();
 	const { assignmentData, moduleInfoAndQuestions } =
 		useLoaderData() as TimedAssessmentModuleIntroLoaderData;
-	const [contentString] = useState(moduleInfoAndQuestions.introductionRc);
 	const navigate = useNavigate();
 	const { state } = useLocation();
 
@@ -69,7 +67,7 @@ const TimedAssessmentModuleIntro = () => {
 				padding={16}
 				display={'flex'}
 				flexDirection={'column'}>
-				<ReviewContentRender content={contentString} />
+				<ReviewContentRender content={moduleInfoAndQuestions.introductionRc} />
 				<Box display="flex" alignItems="center">
 					<Text fontSize="sm" marginBottom={15}>
 						{state.numLearningUnits}{' '}
@@ -81,12 +79,12 @@ const TimedAssessmentModuleIntro = () => {
 					<Text fontSize="sm" marginBottom={15}>
 						{estimatedTimeRemaining(
 							state.estimatedTimeToComplete,
-							true,
 							i18n('hours'),
 							i18n('hour'),
 							i18n('minutes'),
 							i18n('minute'),
 						)}
+						{i18n('toComplete')}
 					</Text>
 				</Box>
 				<Button

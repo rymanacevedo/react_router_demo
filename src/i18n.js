@@ -305,7 +305,12 @@ const resources = {
 			//////////////////////////////////////////////
 			//   TimedAssessmentModuleIntro.tsx
 			//////////////////////////////////////////////
-			startPracticeTest: 'Start practice test'
+			startPracticeTest: 'Start practice test',
+			toComplete: ' to complete',
+			//////////////////////////////////////////////
+			//   TimedAssessmentModuleIntro.tsx
+			//////////////////////////////////////////////
+			about: 'About ',
 		},
 	},
 	fr: {

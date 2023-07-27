@@ -287,7 +287,6 @@ export const roundNumber = (number: number): string => {
 
 export const estimatedTimeRemaining = (
 	time: number | undefined,
-	isPracticeTest: boolean,
 	hoursTranslation: string,
 	hourTranslation: string,
 	minutesTranslation: string,
@@ -305,20 +304,10 @@ export const estimatedTimeRemaining = (
 		min = Math.ceil((time % 3600) / 60);
 		const hourText = hour > 1 ? hoursTranslation : hourTranslation;
 		const minText = min > 1 ? minutesTranslation : minuteTranslation;
-
-		if (isPracticeTest) {
-			return `${hour} ${hourText} ${min} ${minText}`;
-		} else {
-			return `About ${hour} ${hourText} ${min} ${minText}`;
-		}
+		return `${hour} ${hourText} ${min} ${minText}`;
 	} else {
 		min = Math.ceil(time / 60);
 		const minText = min > 1 ? minutesTranslation : minuteTranslation;
-
-		if (isPracticeTest) {
-			return `${min} ${minText}`;
-		} else {
-			return `About ${min} ${minText}`;
-		}
+		return `${min} ${minText}`;
 	}
 };
