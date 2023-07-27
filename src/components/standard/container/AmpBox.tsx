@@ -1,16 +1,17 @@
-import { Flex } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { Flex, FlexProps, forwardRef } from '@chakra-ui/react';
 
-export default function AmpBox({ children }: { children?: ReactNode }) {
-	return (
-		<Flex
-			backgroundColor="ampWhite"
-			boxShadow="md"
-			borderRadius="3xl"
-			p={12}
-			flex={1}
-			direction="column">
-			{children}
-		</Flex>
-	);
-}
+const AmpBox = forwardRef<FlexProps, 'div'>((props, ref) => (
+	<Flex
+		backgroundColor="ampWhite"
+		boxShadow="md"
+		borderRadius="3xl"
+		p={12}
+		flex={1}
+		direction="column"
+		ref={ref}
+		{...props}>
+		{props.children}
+	</Flex>
+));
+
+export default AmpBox;
