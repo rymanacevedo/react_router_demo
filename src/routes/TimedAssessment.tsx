@@ -59,7 +59,7 @@ export const TimedAssessmentFieldsSchema = z.object({
 
 const OutletContextSchema = z.object({
 	roundData: RoundDataSchema,
-	questionInFocus: QuestionInFocusSchema,
+	questionInFocus: QuestionInFocusSchema.nullable(),
 	setQuestionInFocus: z.function(),
 	questionTrigger: QuestionInFocusSchema,
 	setQuestionTrigger: z.function(),
