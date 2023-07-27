@@ -1,4 +1,5 @@
-import { Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Button, Flex, Heading, Text, Input } from '@chakra-ui/react';
 import {
 	ChatBubbleIcon,
 	ChevronUpIcon,
@@ -6,15 +7,16 @@ import {
 	MagnifyingGlassIcon,
 	PlusIcon,
 } from '@radix-ui/react-icons';
-import React from 'react';
 import { LoaderFunction } from 'react-router';
-import { store } from '../../../store/store';
+import { AppDispatch, store } from '../../../store/store';
 import {
 	fetchCourseContent,
 	selectCourseContent,
+	updateCourseContent,
+	putCourseContent,
 } from '../../../store/slices/authoring/courseContentSlice';
 import { json } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import VerbatimHtml from '../../ui/Authoring/VerbatimHtml';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 
@@ -27,7 +29,9 @@ export const courseContentLoader: LoaderFunction = async ({ params }) => {
 };
 
 const CourseContentView = () => {
+	const dispatch = useDispatch<AppDispatch>();
 	const courseContent = useSelector(selectCourseContent);
+	const [editingTitle, setEditingTitle] = useState(false);
 
 	if (!courseContent) {
 		// TODO replace with error handler
@@ -46,19 +50,40 @@ const CourseContentView = () => {
 					alignSelf="stretch"
 					flex="1">
 					<Flex alignItems="center" gap="6" alignSelf="stretch">
-						<Heading flex="1">
-							{courseContent?.name || 'Title placeholder'}
-						</Heading>
-						<Button
-							size="xs"
-							variant="ghost"
-							fontWeight="normal"
-							color="ampTertiaryText">
-							Edit
-						</Button>
+						{editingTitle ? (
+							<Input
+								defaultValue={courseContent?.name}
+								variant="flushed"
+								fontSize="4xl"
+								autoFocus={true}
+								onBlur={() => {
+									dispatch(putCourseContent());
+									setEditingTitle(false);
+								}}
+								onChange={(e) => {
+									dispatch(
+										updateCourseContent({
+											name: e.target.value,
+										}),
+									);
+								}}
+							/>
+						) : (
+							<>
+								<Heading>{courseContent?.name || 'Title placeholder'}</Heading>
+								<Button
+									size="xs"
+									variant="ghost"
+									fontWeight="normal"
+									color="ampTertiaryText"
+									onClick={() => setEditingTitle(true)}>
+									Edit
+								</Button>
+							</>
+						)}
 					</Flex>
 					<Flex alignItems="center" gap="6" alignSelf="stretch">
-						<Text flex="1">
+						<Text>
 							<VerbatimHtml
 								html={
 									courseContent?.descriptionHtml || 'Description placeholder'
