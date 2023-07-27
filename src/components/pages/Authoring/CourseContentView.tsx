@@ -70,11 +70,20 @@ const CourseContentView = () => {
 									setEditingTitle(false);
 								}}
 								onChange={(e) => {
-									dispatch(
-										updateCourseContent({
-											name: e.target.value,
-										}),
-									);
+									const name = e.target.value.trim();
+									if (name) {
+										dispatch(
+											updateCourseContent({
+												name,
+											}),
+										);
+									} else {
+										dispatch(
+											updateCourseContent({
+												name: 'Untitled',
+											}),
+										);
+									}
 								}}
 							/>
 						) : (
