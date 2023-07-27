@@ -57,14 +57,9 @@ export const courseContentSlice = createSlice({
 				state.status = 'loading';
 			})
 			.addCase(fetchCourseContent.fulfilled, (state, action) => {
-				const { uid, name, descriptionHtml } = action.payload;
 				state.status = 'succeeded';
-				state.uid = uid;
-				state.courseContent = {
-					uid: uid,
-					name: name,
-					descriptionHtml: descriptionHtml,
-				} as CourseContent;
+				state.uid = action.payload.uid;
+				state.courseContent = action.payload as CourseContent;
 			})
 			.addCase(fetchCourseContent.rejected, (state) => {
 				state.status = 'failed';
