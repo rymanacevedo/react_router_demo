@@ -21,6 +21,7 @@ import {
 	folderContentsOrder,
 	setFolderContentsOrder,
 } from '../../../lib/authoring/cookies';
+import BulkEditContainer from '../../ui/Authoring/BulkEditContainer';
 
 export const folderDetailsLoader: LoaderFunction = async ({ params }) => {
 	const currentPage = params.page ? +params.page : 1;
@@ -77,20 +78,22 @@ const FolderDetailsView = () => {
 					/>
 				}
 			/>
-			<Grid
-				templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
-				gap={listView ? 2 : 6}
-				mb={6}>
-				{folderDetails.courseContents.map((course: CourseContent) => (
-					<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
-						<CourseCard
-							courseContent={course}
-							listView={listView}
-							folderUid={folderDetails.uid}
-						/>
-					</GridItem>
-				))}
-			</Grid>
+			<BulkEditContainer>
+				<Grid
+					templateColumns={listView ? '1fr' : 'repeat(3, minmax(0, 1fr))'}
+					gap={listView ? 2 : 6}
+					mb={6}>
+					{folderDetails.courseContents.map((course: CourseContent) => (
+						<GridItem colSpan={1} w="100%" color="inherit" key={course.uid}>
+							<CourseCard
+								courseContent={course}
+								listView={listView}
+								folderUid={folderDetails.uid}
+							/>
+						</GridItem>
+					))}
+				</Grid>
+			</BulkEditContainer>
 			<PageNavigatorFooter
 				currentPage={currentPage}
 				pagesTotalCount={folderDetails.pagesTotalCount}
