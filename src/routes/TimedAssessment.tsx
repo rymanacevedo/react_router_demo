@@ -79,6 +79,7 @@ const OutletContextSchema = z.object({
 	}),
 	setSelectedAnswer: z.function(),
 	setAnsweredQuestions: z.function(),
+	handleNavigation: z.function(),
 });
 
 const LoaderDataSchema = z.object({
