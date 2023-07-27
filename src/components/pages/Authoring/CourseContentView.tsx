@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { Button, Flex, Heading, Text, Input, Textarea } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Heading,
+	Text,
+	Input,
+	Textarea,
+} from '@chakra-ui/react';
 import {
 	ChatBubbleIcon,
 	ChevronUpIcon,
@@ -105,14 +113,14 @@ const CourseContentView = () => {
 							/>
 						) : (
 							<>
-								<Text>
+								<Box fontSize="lg">
 									<VerbatimHtml
 										html={
 											courseContent?.descriptionHtml ||
 											'Description placeholder'
 										}
 									/>
-								</Text>
+								</Box>
 								<Button
 									size="xs"
 									variant="ghost"
