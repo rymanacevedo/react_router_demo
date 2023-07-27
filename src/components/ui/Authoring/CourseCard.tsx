@@ -168,22 +168,27 @@ const CourseCard = ({
 							alignContent="flex-end"
 							position="relative"
 							gap={listView ? 2 : 0}>
-							<Badge variant={alertBadgeVariant.variant} display="flex" gap={2}>
-								{alertBadgeVariant.icon}
-								<Text
-									as="span"
-									fontSize="inherit"
-									position="absolute"
-									opacity={0}
-									color="inherit"
-									_groupHover={{
-										opacity: 1,
-										position: 'relative',
-										transition: '.6s ease',
-									}}>
-									{alertBadgeVariant.label}
-								</Text>
-							</Badge>
+							{alertBadgeVariant.variant ? (
+								<Badge
+									variant={alertBadgeVariant.variant}
+									display="flex"
+									gap={2}>
+									{alertBadgeVariant.icon}
+									<Text
+										as="span"
+										fontSize="inherit"
+										position="absolute"
+										opacity={0}
+										color="inherit"
+										_groupHover={{
+											opacity: 1,
+											position: 'relative',
+											transition: '.6s ease',
+										}}>
+										{alertBadgeVariant.label}
+									</Text>
+								</Badge>
+							) : null}
 							{listView && !bulkEditingEnabled && (
 								<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
 							)}
