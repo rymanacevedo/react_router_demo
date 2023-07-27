@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import { Box, Button, Divider, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import PracticeTestCard, { CardValues } from '../PracticeTestCard';
@@ -8,12 +8,21 @@ import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
 import { OutletContext } from '../../../routes/TimedAssessment';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 import { QuestionInFocus } from '../../../lib/validator';
+import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 
 export default function QuestionCards() {
 	const context = useOutletContext<OutletContext>();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const showButton = !location.pathname.includes('submission');
-	const { questionInFocus, setQuestionTrigger, roundData } = context;
+	const {
+		questionInFocus,
+		setQuestionInFocus,
+		setQuestionTrigger,
+		roundData,
+		moduleInfoAndQuestions,
+		assignmentUid,
+	} = context;
 	const flaggedQuestionIds: string[] = roundData.questionList
 		.filter((question) => question.flagged)
 		.map((question) => question.publishedQuestionAuthoringKey);
@@ -56,6 +65,30 @@ export default function QuestionCards() {
 
 	const handleGoToSubmitPage = () => {
 		setQuestionTrigger(null);
+	};
+
+	const handleNavigation = (question: QuestionInFocus) => {
+		setQuestionInFocus(
+			findQuestionInFocus(
+				moduleInfoAndQuestions,
+				roundData,
+				false,
+				false,
+				question.displayOrder - 1,
+			),
+		);
+		const answerInFocus = question.answerList.find((answer) => answer.selected);
+
+		const selectedAnswerObj = answerInFocus
+			? { id: answerInFocus.id, confidence: question.confidence! }
+			: question.confidence === Confidence.NotSure
+			? { id: 1, confidence: Confidence.NotSure }
+			: { id: null, confidence: Confidence.NA };
+
+		setSelectedAnswer(selectedAnswerObj);
+		navigate(
+			`/learning/timedAssessment/${assignmentUid}/${question.id.toString()}`,
+		);
 	};
 
 	const { t: i18n } = useTranslation();
@@ -122,6 +155,7 @@ export default function QuestionCards() {
 					selectedAnswer,
 					setSelectedAnswer,
 					setAnsweredQuestions,
+					handleNavigation,
 				}}
 			/>
 		</>

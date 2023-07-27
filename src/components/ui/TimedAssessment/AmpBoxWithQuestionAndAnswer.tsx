@@ -17,7 +17,6 @@ import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 import HiddenFormInputs from './HiddenFormInputs';
 import { BookmarkFilledIcon, BookmarkIcon } from '@radix-ui/react-icons';
 import AnswerSelection from '../AnswerSelection';
-import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
 import { OutletContext } from '../../../routes/TimedAssessment';
 import { QuestionInFocus } from '../../../lib/validator';
 import { UserSchema } from '../../../services/user';
@@ -53,7 +52,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		startTimer,
 		startSecondsSpent,
 		assignmentUid,
-		moduleInfoAndQuestions,
 		questionTrigger,
 		setQuestionTrigger,
 		flaggedQuestions,
@@ -61,10 +59,11 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		selectedAnswer,
 		setSelectedAnswer,
 		setAnsweredQuestions,
+		handleNavigation,
 	} = context;
 	const { questionInFocus, roundData } = context;
-	const [questions] = useState<QuestionInFocus[]>(
-		roundData.questionList.map((question) => question),
+	const questions: QuestionInFocus[] = roundData.questionList.map(
+		(question: QuestionInFocus) => question,
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 
@@ -128,40 +127,15 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		};
 	}, []);
 
-	const handleNavigation = (question: QuestionInFocus | null) => {
-		prepareAndSubmitFormData({ currentRef: ref.current!, submitter: fetcher });
-		if (!!question) {
-			setQuestionInFocus(
-				findQuestionInFocus(
-					moduleInfoAndQuestions,
-					roundData,
-					false,
-					false,
-					question.displayOrder - 1,
-				),
-			);
-			const answerInFocus = question.answerList.find(
-				(answer) => answer.selected,
-			);
-
-			const selectedAnswerObj = answerInFocus
-				? { id: answerInFocus.id, confidence: question.confidence! }
-				: question.confidence === Confidence.NotSure
-				? { id: 1, confidence: Confidence.NotSure }
-				: { id: null, confidence: Confidence.NA };
-
-			setSelectedAnswer(selectedAnswerObj);
-			navigate(
-				`/learning/timedAssessment/${assignmentUid}/${questionTrigger.id.toString()}`,
-			);
-		} else {
-			setQuestionInFocus(question);
-			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
-		}
-	};
-
 	useEffect(() => {
-		if (questionTrigger !== undefined) {
+		if (questionTrigger === null) {
+			setQuestionInFocus(questionTrigger);
+			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
+		} else if (questionTrigger) {
+			prepareAndSubmitFormData({
+				currentRef: ref.current!,
+				submitter: fetcher,
+			});
 			handleNavigation(questionTrigger);
 		}
 	}, [questionTrigger]);
@@ -216,7 +190,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 					<Button
 						leftIcon={
 							flaggedQuestions.has(
-								questionInFocus?.publishedQuestionAuthoringKey,
+								questionInFocus!.publishedQuestionAuthoringKey,
 							) ? (
 								<BookmarkFilledIcon />
 							) : (
@@ -227,7 +201,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 						variant="ghost"
 						onClick={handleFlagForReview}>
 						{flaggedQuestions.has(
-							questionInFocus?.publishedQuestionAuthoringKey,
+							questionInFocus!.publishedQuestionAuthoringKey,
 						)
 							? i18n('flaggedForReview')
 							: i18n('flagForReview')}
@@ -255,7 +229,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 						assignmentUid={assignmentUid}
 						answerUpdated={answerUpdated}
 						flaggedQuestions={flaggedQuestions}
-						questionInFocus={questionInFocus}
+						questionInFocus={questionInFocus!}
 						selectedAnswer={selectedAnswer}
 						secondsSpent={secondsSpent}
 						questionId={questionId}
