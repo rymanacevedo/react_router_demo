@@ -14,14 +14,14 @@ import {
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-	Text,
-	VStack,
-	Tabs,
+	Tab,
 	TabIndicator,
 	TabList,
-	TabPanels,
-	Tab,
 	TabPanel,
+	TabPanels,
+	Tabs,
+	Text,
+	VStack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
@@ -153,7 +153,11 @@ const AssignmentList = () => {
 	const handleAssignmentClick = (assignment: AssignmentData) => () => {
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
-				// TODO: implement popup for review/retake
+				if (refreshIsOpen) {
+					setRefreshIsOpen('');
+				} else {
+					setRefreshIsOpen(assignment.assignmentKey);
+				}
 			} else {
 				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
 			}
@@ -265,12 +269,34 @@ const AssignmentList = () => {
 				</PopoverTrigger>
 				<PopoverContent marginRight={'200px'}>
 					<Box position="fixed" top="0px" left="20px">
-						{' '}
 						<PopoverArrow position="fixed" top="0" left="0" />
-					</Box>{' '}
+					</Box>
 					<ButtonGroup size="lg" w="100%">
 						<VStack>
-							{assignment.assignmentType !== 'Assessment' && (
+							{assignment.assignmentType === 'TimedAssessment' ? (
+								<>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={() =>
+											navigate(
+												`/learning/timedAssessment/${assignment.assignmentUid}?retake=true`,
+											)
+										}>
+										Retake Practice Test
+									</Button>
+									<Button
+										w="320px"
+										variant="ghost"
+										onClick={() =>
+											navigate(
+												`/learning/timedAssessment/${assignment.assignmentUid}/results`,
+											)
+										}>
+										Results
+									</Button>
+								</>
+							) : assignment.assignmentType !== 'Assessment' ? (
 								<>
 									<Button
 										w="320px"
@@ -291,7 +317,7 @@ const AssignmentList = () => {
 										{i18n('smartRefresher')}
 									</Button>
 								</>
-							)}
+							) : null}
 						</VStack>
 					</ButtonGroup>
 				</PopoverContent>

@@ -60,8 +60,11 @@ export const getAssignmentContent = async (
 	user: User,
 	subAccount: string,
 	assignmentKey: string | undefined,
+	includeTimePerLU: boolean,
 ): Promise<{ data: AssignmentData; response: Response }> => {
-	const url = `/v2/assignments/${assignmentKey}?includeTimePerLU=true&subaccount=${subAccount}`;
+	const url = `/v2/assignments/${assignmentKey}?subaccount=${subAccount}${
+		includeTimePerLU ? '&includeTimePerLU=true' : ''
+	}`;
 
 	return authenticatedFetch<AssignmentData>(url, user.sessionKey);
 };
@@ -91,6 +94,7 @@ export const getModuleContent = async (
 		user,
 		subAccount,
 		assignmentKey,
+		true,
 	);
 
 	if (assignmentData.items) {
@@ -137,10 +141,19 @@ export const getFullModuleWithQuestions = async (
 	return { assignmentData, moduleData, moduleInfoAndQuestions };
 };
 
+export const postRetakeTimedAssessment = async (
+	user: User,
+	subAccount: string,
+	assignmentKey: string,
+): Promise<{ data: any; response: Response }> => {
+	const url = `/v2/timed-assessments/${assignmentKey}/retake?subaccount=QJN4KBQ6D`;
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', {});
+};
+
 export const getCurrentRoundTimedAssessment = async (
 	user: User,
 	subAccount: string,
-	assignmentKey: string | undefined,
+	assignmentKey: string,
 ): Promise<{ data: RoundData; response: Response }> => {
 	const url = `/v2/timed-assessments/${assignmentKey}/current-round?extraTime=0&subaccount=${subAccount}`;
 
@@ -149,7 +162,7 @@ export const getCurrentRoundTimedAssessment = async (
 export const getCurrentRound = async (
 	user: User,
 	subAccount: string,
-	assignmentKey: string | undefined,
+	assignmentKey: string,
 ): Promise<{ data: RoundData; response: Response }> => {
 	const url = `/v2/assignments/${assignmentKey}/current-round?isWebApp=true&subaccount=${subAccount}`;
 
