@@ -118,6 +118,12 @@ const NewCourseContentView = () => {
 					status: 'error',
 					duration: 4000,
 				});
+			} else {
+				toast({
+					title: 'Adding new course to folder',
+					status: 'success',
+					duration: 4000,
+				});
 			}
 		}
 		navigate(`/authoring/course/${data.uid}`);
