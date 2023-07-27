@@ -100,7 +100,8 @@ const CourseCard = ({
 							as={RouterLink}
 							to={`/authoring/course/${uid}`}
 							textDecoration="none"
-							color="ampPrimaryText">
+							color="ampPrimaryText"
+							pointerEvents={bulkEditingEnabled ? 'none' : 'auto'}>
 							<Heading
 								fontWeight="semibold"
 								fontSize="lg"
