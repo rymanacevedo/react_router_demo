@@ -1,6 +1,7 @@
 import { Flex, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { QuestionInFocus } from '../../lib/validator';
+import AmpBox from '../standard/container/AmpBox';
 
 type Props = { questionInFocus: QuestionInFocus };
 //will remove es-lint disable when we start using data in this component
@@ -15,39 +16,28 @@ export default function Matching({ questionInFocus }: Props) {
 			h="auto"
 			direction="column"
 			maxW="1496px">
-			<Flex
-				bgColor="ampWhite"
-				h="3xs"
-				m={6}
-				borderRadius="3xl"
-				p={12}
-				boxShadow="md">
-				<Heading as="h2" fontSize="xl" ml={67.5}>
+			<AmpBox minH="3xs" m={6}>
+				<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
 					{i18n('dragMatch')}
 				</Heading>
-			</Flex>
-			<Flex direction="row" mx={6} mb={6} boxShadow="md" borderRadius="3xl">
+			</AmpBox>
+
+			<AmpBox minH="500px" mx={6} mb={6} direction="row" wrap="wrap">
 				<Flex
-					w="50%"
-					height="500px"
 					bgColor="ampWhite"
-					p={12}
-					borderLeftRadius="3xl">
-					<Heading as="h2" fontSize="xl" ml={67.5}>
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}>
+					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
 						{i18n('options')}
 					</Heading>
 				</Flex>
 				<Flex
-					w="50%"
-					height="500px"
 					bgColor="ampWhite"
-					p={12}
-					borderRightRadius="3xl">
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}>
 					<Heading as="h2" fontSize="xl">
 						{i18n('answers')}
 					</Heading>
 				</Flex>
-			</Flex>
+			</AmpBox>
 		</Flex>
 	);
 }
