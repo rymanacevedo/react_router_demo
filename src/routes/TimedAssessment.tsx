@@ -204,7 +204,7 @@ export default function TimedAssessment() {
 	}, [seconds]);
 
 	const handleResultsNavigation = () => {
-		navigate('results');
+		navigate(`/learning/timedAssessment/${assignmentUid}/results`);
 	};
 
 	useEffect(() => {
