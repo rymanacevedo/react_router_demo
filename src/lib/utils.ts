@@ -53,3 +53,7 @@ export function formatDate(date: Date | string | number) {
 		year,
 	};
 }
+
+export function timestamp() {
+	return new Date().toISOString();
+}

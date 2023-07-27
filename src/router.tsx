@@ -167,17 +167,21 @@ const routesJSX = (
 			/>
 			<Route path="authoring/new" element={<NewCourseContentView />} />
 			<Route
+				path="authoring/folder/:folderId/new"
+				element={<NewCourseContentView />}
+			/>
+			<Route
 				path="authoring/course/:uid"
 				element={<CourseContentView />}
 				loader={courseContentLoader}
 			/>
 			<Route
-				path="authoring/folder/:id"
+				path="authoring/folder/:folderId"
 				element={<FolderDetailsView />}
 				loader={folderDetailsLoader}
 			/>
 			<Route
-				path="authoring/folder/:id/:page"
+				path="authoring/folder/:folderId/:page"
 				element={<FolderDetailsView />}
 				loader={folderDetailsLoader}
 			/>
