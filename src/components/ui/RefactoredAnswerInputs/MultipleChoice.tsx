@@ -1,12 +1,9 @@
 import { Stack } from '@chakra-ui/react';
-import {
-	QuestionInFocus,
-	QuestionInFocusAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleChoiceInput, { SelectedAnswer } from './MultipleChoiceInput';
+import { QuestionInFocus } from '../../../lib/validator';
 
 type Props = {
-	questionInFocus: QuestionInFocus;
+	questionInFocus: QuestionInFocus | null;
 	selectedAnswer: SelectedAnswer;
 	setSelectedAnswer: (value: SelectedAnswer) => void;
 	setAnswerUpdated: (value: boolean) => void;
@@ -28,7 +25,7 @@ export default function MultipleChoice({
 	};
 	return (
 		<Stack minHeight={350} h="100%" marginTop={8}>
-			{questionInFocus.answerList.map((answer) => {
+			{questionInFocus?.answerList.map((answer) => {
 				return (
 					<MultipleChoiceInput
 						key={answer.id}

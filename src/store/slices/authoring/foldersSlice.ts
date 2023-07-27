@@ -9,6 +9,7 @@ import {
 	getFolderContent,
 	addCoursesToFolder,
 	getFolder,
+	createFolder as fetchCreateFolder,
 } from '../../../services/authoring';
 
 export const selectFoldersState = (store: RootState) => store.authoring.folders;
@@ -46,6 +47,23 @@ export const fetchFolderDetails = createAsyncThunk(
 			name: folderInfo.data.name,
 			uid: folderInfo.data.uid,
 			...response.data,
+		};
+	},
+);
+
+export const createFolder = createAsyncThunk(
+	'courses/createFolder',
+	async ({ name, description }: { name: string; description: string }) => {
+		const user = requireUser();
+
+		const { response, data } = await fetchCreateFolder(user, {
+			name,
+			description,
+		});
+
+		return {
+			statusCode: response.status,
+			folderUid: data.uid,
 		};
 	},
 );
@@ -90,6 +108,12 @@ export interface FoldersState {
 			error: string | null;
 		};
 	};
+	createFolderStatus: {
+		status: 'idle' | 'loading' | 'succeeded' | 'failed';
+		error: string | null;
+		statusCode: null | number;
+		folderUid: null | string;
+	};
 }
 
 const initialState: FoldersState = {
@@ -109,6 +133,12 @@ const initialState: FoldersState = {
 			status: 'idle',
 			error: null,
 		},
+	},
+	createFolderStatus: {
+		status: 'idle',
+		error: null,
+		folderUid: null,
+		statusCode: null,
 	},
 };
 
@@ -135,6 +165,7 @@ export const foldersSlice = createSlice({
 				showFolderSelectionModal: initialState.showFolderSelectionModal,
 				submittingCourses: initialState.submittingCourses,
 				folderDetails: state.folderDetails,
+				createFolderStatus: initialState.createFolderStatus,
 			};
 		},
 	},
@@ -146,14 +177,17 @@ export const foldersSlice = createSlice({
 			.addCase(fetchFolderDetails.fulfilled, (state, action) => {
 				const { items, totalCount, name, uid } = action.payload;
 				const { coursesPerPage } = state.folderDetails;
-				state.folderDetails.status = 'succeeded';
-				state.folderDetails.courseContents = items;
-				state.folderDetails.totalCount = totalCount;
-				state.folderDetails.name = name;
-				state.folderDetails.uid = uid;
-				state.folderDetails.pagesTotalCount = Math.floor(
-					(totalCount + coursesPerPage - 1) / coursesPerPage,
-				);
+				state.folderDetails = {
+					...state.folderDetails,
+					status: 'succeeded',
+					courseContents: items,
+					totalCount,
+					name,
+					uid,
+					pagesTotalCount: Math.floor(
+						(totalCount + coursesPerPage - 1) / coursesPerPage,
+					),
+				};
 			})
 			.addCase(addCourseToFolder.pending, (state) => {
 				state.folderDetails.addCourseToFolderStatus.status = 'loading';
@@ -162,8 +196,28 @@ export const foldersSlice = createSlice({
 				state.folderDetails.addCourseToFolderStatus.status = 'succeeded';
 			})
 			.addCase(addCourseToFolder.rejected, (state) => {
-				state.folderDetails.addCourseToFolderStatus.status = 'failed';
-				state.folderDetails.addCourseToFolderStatus.error = 'Error has occured';
+				state.folderDetails.addCourseToFolderStatus = {
+					status: 'failed',
+					error: 'Error has occured',
+				};
+			})
+			.addCase(createFolder.pending, (state) => {
+				state.createFolderStatus.status = 'loading';
+			})
+			.addCase(createFolder.fulfilled, (state, action) => {
+				state.createFolderStatus = {
+					...state.createFolderStatus,
+					folderUid: action.payload.folderUid ?? null,
+					statusCode: action.payload.statusCode,
+					status: 'succeeded',
+				};
+			})
+			.addCase(createFolder.rejected, (state) => {
+				state.createFolderStatus = {
+					...state.createFolderStatus,
+					status: 'failed',
+					error: 'Error has occured',
+				};
 			});
 	},
 });

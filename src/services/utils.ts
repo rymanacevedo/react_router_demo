@@ -103,14 +103,17 @@ export const fetchDataPut = async <T extends unknown>(
 
 export const fetchDelete = async <T extends unknown>(
 	url: string,
+	body: any,
 	sessionKey: string,
 ): Promise<{ data: T; response: Response }> => {
+	const deleteBody = body && { body: JSON.stringify(body) };
 	const response = await fetch(url, {
 		method: 'DELETE',
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Basic ${window.btoa(`${sessionKey}:someotherstring`)}`,
 		},
+		...deleteBody,
 	});
 	const data = new Object() as T;
 
@@ -148,7 +151,7 @@ export const authenticatedFetch = async <T extends unknown>(
 			const newUrl = replaceOrigin(url, VITE_BACKEND_API);
 			return fetchCallbackGet(newUrl, sessionKey);
 		}
-		return fetchDelete<T>(`${VITE_BACKEND_API}${url}`, sessionKey);
+		return fetchDelete<T>(`${VITE_BACKEND_API}${url}`, body, sessionKey);
 	}
 
 	throw new Error('Invalid method, not supported');

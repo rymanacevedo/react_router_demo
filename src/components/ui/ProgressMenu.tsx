@@ -11,10 +11,8 @@ import {
 import ProgressMessageComponent from './ProgressMessageComponent';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
-import {
-	CurrentRoundAnswerOverLayData,
-	RoundData,
-} from '../pages/AssignmentView/AssignmentTypes';
+import { CurrentRoundAnswerOverLayData } from '../pages/AssignmentView/AssignmentTypes';
+import { RoundData } from '../../lib/validator';
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressMenuType = {

@@ -1,8 +1,8 @@
 import { Box, Heading, Stack } from '@chakra-ui/react';
 import AnswerFeedback from './MultiChoiceAnswerFeedback';
 import { useEffect, useState } from 'react';
-import { QuestionInFocus } from '../../pages/AssignmentView/AssignmentTypes';
 import { useTranslation } from 'react-i18next';
+import { QuestionInFocus } from '../../../lib/validator';
 
 export interface Answer {
 	answerId: number | string;

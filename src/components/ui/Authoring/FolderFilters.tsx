@@ -1,24 +1,12 @@
-import {
-	Flex,
-	Button,
-	useDisclosure,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	Text,
-	Input,
-	Textarea,
-	Link,
-} from '@chakra-ui/react';
+import { Flex, Button, useDisclosure, Text, Link } from '@chakra-ui/react';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { Link as RouterLink, Form, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
 import {
 	folderListOrder,
 	setFolderListOrder,
 } from '../../../lib/authoring/cookies';
+import NewFolderModal from './NewFolderModal';
 
 const FolderFilters = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,37 +34,7 @@ const FolderFilters = () => {
 					setSortOrder={handleChangeFoldersOrder}
 				/>
 			</Flex>
-			<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
-				<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
-				<ModalContent>
-					<ModalHeader>
-						<Text as="h3">Create New Folder</Text>
-					</ModalHeader>
-					<ModalBody>
-						<Form method="post">
-							<Text as="label" display="block" mb={6}>
-								Folder Name
-								<Input placeholder="Name" name="name" />
-							</Text>
-							<Text as="label" display="block" mb={6}>
-								Folder Description
-								<Textarea placeholder="Description" name="description" />
-							</Text>
-							<Button
-								type="submit"
-								name="intent"
-								value="createFolder"
-								onClick={onClose}
-								marginRight={4}>
-								Create
-							</Button>
-							<Button variant="ampOutline" onClick={onClose}>
-								Cancel
-							</Button>
-						</Form>
-					</ModalBody>
-				</ModalContent>
-			</Modal>
+			<NewFolderModal isOpen={isOpen} onClose={onClose} />
 		</Flex>
 	);
 };

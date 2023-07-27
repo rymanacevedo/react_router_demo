@@ -3,8 +3,8 @@ import {
 	AvatarGroup,
 	Box,
 	Button,
-	HStack,
 	Heading,
+	HStack,
 	Stack,
 	Text,
 } from '@chakra-ui/react';
@@ -12,15 +12,10 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import RichContentComponent from '../ui/RichContentComponent';
 import CompleteIcon from '../ui/Icons/CompleteIcon';
+import { ModuleData } from '../../lib/validator';
 
 type ModuleOutroType = {
-	moduleData: {
-		outroLink: string | null;
-		outroButtonText: string | null;
-		name: string | null;
-		introductionRc: string | null;
-		outroRc: string | null;
-	};
+	moduleData: ModuleData;
 	action?: () => void;
 };
 const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
