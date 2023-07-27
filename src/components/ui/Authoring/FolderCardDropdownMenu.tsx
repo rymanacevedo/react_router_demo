@@ -14,14 +14,21 @@ import {
 	Button,
 	Text,
 } from '@chakra-ui/react';
-import { Form } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { useDispatch } from 'react-redux';
+import {
+	enableCoursesBulkEditing,
+	setSelectedFolders,
+} from '../../../store/slices/authoring/bulkEditingSlice';
 
 interface FolderCardDropdownMenuProps {
 	uid: string;
 }
 
 const FolderCardDropdownMenu = ({ uid }: FolderCardDropdownMenuProps) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -42,7 +49,14 @@ const FolderCardDropdownMenu = ({ uid }: FolderCardDropdownMenuProps) => {
 			<MenuList zIndex={3}>
 				<MenuItem onClick={onOpen}>Delete</MenuItem>
 				<MenuItem>Duplicate</MenuItem>
-				<MenuItem>Add Courses</MenuItem>
+				<MenuItem
+					onClick={() => {
+						dispatch(enableCoursesBulkEditing(true));
+						dispatch(setSelectedFolders([uid]));
+						navigate('/authoring?addToFolder=true');
+					}}>
+					Add Courses
+				</MenuItem>
 			</MenuList>
 			<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
 				<ModalOverlay background="rgba(41, 61, 89, 0.8)" />

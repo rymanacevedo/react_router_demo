@@ -13,7 +13,12 @@ import {
 	useToast,
 	useDisclosure,
 } from '@chakra-ui/react';
-import { Link as RouterLink, useRevalidator } from 'react-router-dom';
+import {
+	Link as RouterLink,
+	useSearchParams,
+	useNavigate,
+	useRevalidator,
+} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
 import NewFolderModal from './NewFolderModal';
@@ -25,6 +30,8 @@ import {
 	setSelectedFolders,
 	bulkDeleteCourses,
 	selectBulkDeleteStatus,
+	addCoursesToFolder,
+	selectFolders,
 } from '../../../store/slices/authoring/bulkEditingSlice';
 import { AppDispatch } from '../../../store/store';
 
@@ -43,10 +50,16 @@ const CourseFilter = ({
 	sortOrder,
 	setSortOrder,
 }: CourseFilterProps) => {
+	const navigate = useNavigate();
 	const dispatch = useDispatch<AppDispatch>();
 	const { revalidate } = useRevalidator();
+	const [searchParams] = useSearchParams();
 	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
 	const bulkDeleteStatus = useSelector(selectBulkDeleteStatus);
+	const selectedFolders = useSelector(selectFolders);
+	const addingToFolderParam = searchParams.get('addToFolder') === 'true';
+	const addingToFolder =
+		Object.keys(selectedFolders).length > 0 && addingToFolderParam;
 	const toast = useToast();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -66,6 +79,31 @@ const CourseFilter = ({
 			revalidate();
 		}
 	}, [bulkDeleteStatus]);
+
+	const handleAddCoursesToSelectedFolder = async () => {
+		const folderUid = Object.keys(selectedFolders)[0];
+		const { payload } = (await dispatch(addCoursesToFolder(folderUid))) as {
+			payload: {
+				status?: number;
+			};
+		};
+
+		if (payload.status === 201) {
+			navigate(`/authoring/folder/${folderUid}`);
+			toast({
+				title: 'Succesfully Added Courses To Folder',
+				status: 'success',
+				duration: 4000,
+			});
+		} else {
+			toast({
+				title: 'Error Adding Courses To Folders',
+				status: 'error',
+				duration: 4000,
+			});
+		}
+		dispatch(enableCoursesBulkEditing(false));
+	};
 
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
@@ -97,32 +135,40 @@ const CourseFilter = ({
 				{bulkEditingEnabled ? (
 					<>
 						<Button
-							onClick={() => dispatch(enableBulkEditingFolderModal(true))}
+							onClick={() =>
+								addingToFolder
+									? handleAddCoursesToSelectedFolder()
+									: dispatch(enableBulkEditingFolderModal(true))
+							}
 							fontWeight="normal"
 							height="100%"
 							variant="outline">
 							Add to Folder
 						</Button>
-						<Button
-							onClick={onOpen}
-							fontWeight="normal"
-							height="100%"
-							variant="outline">
-							Add to New Folder
-						</Button>
-						<Button
-							onClick={() =>
-								dispatch(bulkDeleteCourses()).then(() => {
-									dispatch(enableCoursesBulkEditing(false));
-									dispatch(setSelectedCourses([]));
-									dispatch(setSelectedFolders([]));
-								})
-							}
-							fontWeight="normal"
-							height="100%"
-							variant="outline">
-							Delete
-						</Button>
+						{addingToFolder ? null : (
+							<>
+								<Button
+									onClick={onOpen}
+									fontWeight="normal"
+									height="100%"
+									variant="outline">
+									Add to New Folder
+								</Button>
+								<Button
+									onClick={() =>
+										dispatch(bulkDeleteCourses()).then(() => {
+											dispatch(enableCoursesBulkEditing(false));
+											dispatch(setSelectedCourses([]));
+											dispatch(setSelectedFolders([]));
+										})
+									}
+									fontWeight="normal"
+									height="100%"
+									variant="outline">
+									Delete
+								</Button>
+							</>
+						)}
 						<Button
 							marginRight={6}
 							onClick={() => {
