@@ -8,6 +8,19 @@ test.beforeEach(async ({ page }) => {
 	await page.waitForURL('http://localhost:3000/main/learning');
 });
 
+test('can navigate to  timedassesment that is completed and retake it', async ({
+	page,
+}) => {
+	await page.goto('http://localhost:3000/main/learning/V7Q3RMLLU');
+	await page.waitForSelector('[role=list]');
+	await page.locator('li').nth(0).click();
+	await page.getByRole('button', { name: 'Retake Practice Test' }).click();
+	await page.waitForSelector('h1');
+	await expect(
+		page.getByText('Practice Test: TA Module MultiQuestion'),
+	).toBeVisible();
+});
+
 test('can navigate to the review and submit page', async ({ page }) => {
 	await page.goto('http://localhost:3000/main/learning/AHWCREU2G');
 	await page.waitForSelector('[role=list]');
