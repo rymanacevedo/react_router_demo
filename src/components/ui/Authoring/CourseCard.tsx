@@ -58,7 +58,7 @@ const CourseCard = ({
 	const isPublished = status === 'Published';
 
 	return (
-		<LinkBox>
+		<LinkBox height="100%">
 			<Card
 				variant="authoringCard"
 				direction={listView ? 'row' : 'column'}
