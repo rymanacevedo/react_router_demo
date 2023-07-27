@@ -64,7 +64,7 @@ const FireProgressToast = (props: FireProgressToastType) => {
 								bg="ampWhite"
 								width="325px"
 								height="40px"
-								margin="24px"
+								margin={6}
 								onClick={expandToast}>
 								<Text fontSize="md" fontWeight="semibold">
 									{i18n('viewMoreProgress')}

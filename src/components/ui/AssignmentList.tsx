@@ -235,11 +235,11 @@ const AssignmentList = () => {
 					<PopoverAnchor>
 						<ListItem
 							height={'44px'}
-							padding={'4px'}
+							padding={1}
 							w="100%"
 							key={curriculum.name}
 							onClick={handleAssignmentClick(assignment)}>
-							<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+							<HStack justifyContent={'space-between'} paddingBottom={2.5}>
 								<Text
 									_hover={{
 										textDecoration: 'underline',

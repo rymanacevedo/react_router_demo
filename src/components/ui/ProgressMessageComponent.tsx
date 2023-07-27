@@ -108,9 +108,9 @@ const ProgressMessageComponent = (props: ProgressMessageComponentPropsType) => {
 	return (
 		<Box
 			bg={bgColor}
-			borderRadius={'12px'}
+			borderRadius="xl"
 			padding={isMenuOpen ? '30px 20px 30px 20px' : '10px 20px 30px 20px'}
-			margin="24px">
+			margin={6}>
 			{!isMenuOpen && (
 				<div
 					className="close"
