@@ -13,6 +13,7 @@ import { requireUser } from '../utils/user';
 import { getSubAccount } from '../services/utils';
 import { getFullModuleWithQuestions } from '../services/learning';
 import { AssignmentData, ModuleData } from '../lib/validator';
+import AmpBox from '../components/standard/container/AmpBox';
 
 export const timedAssessmentModuleIntroLoader: LoaderFunction = async ({
 	params,
@@ -56,17 +57,7 @@ const TimedAssessmentModuleIntro = () => {
 			maxWidth={'100vw'}
 			overflowY={'hidden'}
 			overflowX={'hidden'}>
-			<Box
-				style={{
-					backgroundColor: 'white',
-				}}
-				boxShadow="md"
-				overflow="hidden"
-				margin={3}
-				borderRadius={24}
-				padding={16}
-				display={'flex'}
-				flexDirection={'column'}>
+			<AmpBox>
 				<ReviewContentRender content={moduleInfoAndQuestions.introductionRc} />
 				<Box display="flex" alignItems="center">
 					<Text fontSize="sm" marginBottom={15}>
@@ -95,7 +86,7 @@ const TimedAssessmentModuleIntro = () => {
 					width="fit-content">
 					{i18n('startPracticeTest')}
 				</Button>
-			</Box>
+			</AmpBox>
 		</Container>
 	);
 };
