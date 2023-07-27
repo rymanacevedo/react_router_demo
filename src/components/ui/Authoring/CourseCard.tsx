@@ -12,17 +12,13 @@ import {
 	LinkOverlay,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import {
-	ExclamationTriangleIcon,
-	Pencil2Icon,
-	BellIcon,
-	DotFilledIcon,
-} from '@radix-ui/react-icons';
+import { DotFilledIcon } from '@radix-ui/react-icons';
 import { Link as RouterLink } from 'react-router-dom';
 import { formatDate } from '../../../lib/utils';
 import CourseCardDropdownMenu from './CourseCardDropdownMenu';
 import { CourseContent } from '../../../store/slices/authoring/coursesViewSlice';
 import { selectCoursesBulkEditingEnabled } from '../../../store/slices/authoring/bulkEditingSlice';
+import CourseAlertBadge from './CourseAlertBadge';
 
 interface CourseCardProps {
 	courseContent: CourseContent;
@@ -60,26 +56,6 @@ const CourseCard = ({
 	const { month, day, year } = formatDate(modifiedTime);
 
 	const isPublished = status === 'Published';
-
-	const alertBadgeVariant = hasUnpublishedEdits
-		? {
-				variant: 'ampWarning',
-				icon: <Pencil2Icon />,
-				label: 'Unpublished Edits',
-		  }
-		: hasIssues
-		? {
-				variant: 'ampLightError',
-				icon: <ExclamationTriangleIcon />,
-				label: 'Issues',
-		  }
-		: hasRecommendations
-		? {
-				variant: 'ampSecondary',
-				icon: <BellIcon />,
-				label: 'Recommendations',
-		  }
-		: {};
 
 	return (
 		<LinkBox>
@@ -168,27 +144,11 @@ const CourseCard = ({
 							alignContent="flex-end"
 							position="relative"
 							gap={listView ? 2 : 0}>
-							{alertBadgeVariant.variant ? (
-								<Badge
-									variant={alertBadgeVariant.variant}
-									display="flex"
-									gap={2}>
-									{alertBadgeVariant.icon}
-									<Text
-										as="span"
-										fontSize="inherit"
-										position="absolute"
-										opacity={0}
-										color="inherit"
-										_groupHover={{
-											opacity: 1,
-											position: 'relative',
-											transition: '.6s ease',
-										}}>
-										{alertBadgeVariant.label}
-									</Text>
-								</Badge>
-							) : null}
+							<CourseAlertBadge
+								hasUnpublishedEdits={hasUnpublishedEdits}
+								hasIssues={hasIssues}
+								hasRecommendations={hasRecommendations}
+							/>
 							{listView && !bulkEditingEnabled && (
 								<CourseCardDropdownMenu uid={uid} isPublished={isPublished} />
 							)}
