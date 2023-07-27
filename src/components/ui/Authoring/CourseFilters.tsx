@@ -13,7 +13,7 @@ import {
 	useToast,
 	useDisclosure,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useRevalidator } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import CoursesSortDropdownMenu from './CoursesSortDropdownMenu';
 import NewFolderModal from './NewFolderModal';
@@ -44,6 +44,7 @@ const CourseFilter = ({
 	setSortOrder,
 }: CourseFilterProps) => {
 	const dispatch = useDispatch<AppDispatch>();
+	const { revalidate } = useRevalidator();
 	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
 	const bulkDeleteStatus = useSelector(selectBulkDeleteStatus);
 	const toast = useToast();
@@ -62,6 +63,7 @@ const CourseFilter = ({
 				status: 'success',
 				duration: 4000,
 			});
+			revalidate();
 		}
 	}, [bulkDeleteStatus]);
 
