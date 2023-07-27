@@ -3,10 +3,13 @@ import {
 	createAsyncThunk,
 	createSelector,
 } from '@reduxjs/toolkit';
-import { getCourseContent } from '../../../services/authoring';
+import {
+	getCourseContent,
+	updateCourseContent as fetchUpdateCourseContent,
+} from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
 import { RootState } from '../../store';
-import { CourseContent } from './coursesViewSlice'; // TODO move type to file
+import { CourseContent } from './coursesViewSlice';
 
 const selectCourseContentState = (store: RootState) =>
 	store.authoring.courseContent;
@@ -33,6 +36,25 @@ export const fetchCourseContent = createAsyncThunk(
 	},
 );
 
+export const putCourseContent = createAsyncThunk(
+	'course/putCourseContent',
+	async (
+		_,
+		{
+			rejectWithValue,
+			getState,
+		}: { rejectWithValue: any; getState: () => any },
+	) => {
+		const user = requireUser();
+		const courseContent = selectCourseContent(getState()) as CourseContent;
+		const response = await fetchUpdateCourseContent(user, courseContent);
+		if (response.response.status !== 200) {
+			return rejectWithValue('Course content not available');
+		}
+		return response.data;
+	},
+);
+
 export interface CourseContentState {
 	uid: string | null;
 	courseContent: CourseContent | null;
@@ -50,29 +72,44 @@ const initialState: CourseContentState = {
 export const courseContentSlice = createSlice({
 	name: 'course',
 	initialState,
-	reducers: {},
+	reducers: {
+		updateCourseContent: (state, action) => {
+			state.courseContent = {
+				...state.courseContent,
+				...action.payload,
+			};
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchCourseContent.pending, (state) => {
 				state.status = 'loading';
 			})
 			.addCase(fetchCourseContent.fulfilled, (state, action) => {
-				const { uid, name, descriptionHtml } = action.payload;
 				state.status = 'succeeded';
-				state.uid = uid;
-				state.courseContent = {
-					uid: uid,
-					name: name,
-					descriptionHtml: descriptionHtml,
-				} as CourseContent;
+				state.uid = action.payload.uid;
+				state.courseContent = action.payload as CourseContent;
 			})
 			.addCase(fetchCourseContent.rejected, (state) => {
 				state.status = 'failed';
 				state.error = 'Error has occurred';
 				state.uid = null;
 				state.courseContent = null;
+			})
+			.addCase(putCourseContent.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(putCourseContent.fulfilled, (state, action) => {
+				state.status = 'succeeded';
+				state.courseContent = action.payload;
+			})
+			.addCase(putCourseContent.rejected, (state) => {
+				state.status = 'failed';
+				state.error = 'Error has occurred';
 			});
 	},
 });
+
+export const { updateCourseContent } = courseContentSlice.actions;
 
 export default courseContentSlice.reducer;

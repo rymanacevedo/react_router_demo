@@ -1,5 +1,6 @@
 import { authenticatedFetch } from './utils';
 import { User } from './user';
+import { CourseContent } from '../store/slices/authoring/coursesViewSlice';
 
 function toSortCriteria(sortOrder: string): string {
 	return sortOrder === 'm'
@@ -59,6 +60,18 @@ export const createCourseContent = async (
 		name: name || 'Untitled',
 	};
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
+export const updateCourseContent = async (
+	user: User,
+	courseContent: CourseContent,
+): Promise<{
+	data: CourseContent;
+	response: Response;
+}> => {
+	const url = `/v2/authoring-course-content/${courseContent.uid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'PUT', courseContent);
 };
 
 export const deleteCourse = async (
