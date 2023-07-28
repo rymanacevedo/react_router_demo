@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import {
 	Modal,
 	ModalContent,
@@ -35,6 +35,7 @@ const NewFolderModal = ({
 	const toast = useToast();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
+	const [disabledButton, setDisableButton] = useState(true);
 
 	const handleSubmitToast = (statusCode: number) => {
 		if (statusCode === 201) {
@@ -80,8 +81,13 @@ const NewFolderModal = ({
 		});
 	};
 
+	const handleClose = () => {
+		onClose();
+		setDisableButton(true);
+	};
+
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+		<Modal isOpen={isOpen} onClose={handleClose} isCentered={true}>
 			<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
 			<ModalContent>
 				<ModalHeader>
@@ -106,16 +112,26 @@ const NewFolderModal = ({
 							<Text as="span" color="ampError.600">
 								*
 							</Text>
-							<Input placeholder="Name" name="name" />
+							<Input
+								placeholder="Name"
+								name="name"
+								onChange={(e) =>
+									setDisableButton(e.target.value.trim().length <= 0)
+								}
+							/>
 						</Text>
 						<Text as="label" display="block" fontWeight="semibold" mb={6}>
 							Folder Description
 							<Textarea placeholder="Description" name="description" />
 						</Text>
-						<Button type="submit" variant="ampOutline" marginRight={4}>
+						<Button
+							type="submit"
+							variant="ampOutline"
+							marginRight={4}
+							isDisabled={disabledButton}>
 							Create
 						</Button>
-						<Button variant="ampOutline" border="none" onClick={onClose}>
+						<Button variant="ampOutline" border="none" onClick={handleClose}>
 							Cancel
 						</Button>
 					</form>
