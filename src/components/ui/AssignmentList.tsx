@@ -160,7 +160,11 @@ const AssignmentList = () => {
 		);
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
-				// TODO: implement popup for review/retake
+				if (refreshIsOpen) {
+					setRefreshIsOpen('');
+				} else {
+					setRefreshIsOpen(assignment.assignmentKey);
+				}
 			} else if (assignment.status === 'NOT_STARTED') {
 				if (moduleInfoAndQuestions.introductionRc) {
 					navigate(
@@ -175,11 +179,6 @@ const AssignmentList = () => {
 					);
 				} else {
 					navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
-				}
-				if (refreshIsOpen) {
-					setRefreshIsOpen('');
-				} else {
-					setRefreshIsOpen(assignment.assignmentKey);
 				}
 			} else {
 				navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);

@@ -145,8 +145,8 @@ export const postRetakeTimedAssessment = async (
 	user: User,
 	subAccount: string,
 	assignmentKey: string,
-): Promise<{ data: any; response: Response }> => {
-	const url = `/v2/timed-assessments/${assignmentKey}/retake?subaccount=QJN4KBQ6D`;
+): Promise<{ data: AssignmentData; response: Response }> => {
+	const url = `/v2/timed-assessments/${assignmentKey}/retake?subaccount=${subAccount}`;
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', {});
 };
 
