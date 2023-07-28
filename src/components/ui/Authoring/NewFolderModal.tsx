@@ -62,23 +62,25 @@ const NewFolderModal = ({
 			'description',
 		) as HTMLInputElement;
 
-		dispatch(createFolder({ name, description })).then(({ payload }) => {
-			onClose();
-			const { statusCode, folderUid } = payload as {
-				statusCode: number;
-				folderUid: string | null;
-			};
-			if (addCourses) {
-				if (folderUid)
-					dispatch(addCoursesToFolder(folderUid)).then(() => {
-						navigate(`/authoring/folder/${folderUid}`);
-						dispatch(resetBulkEditingState());
-					});
-			} else {
-				handleSubmitToast(statusCode);
-			}
-			revalidate();
-		});
+		dispatch(createFolder({ name: name.trim(), description })).then(
+			({ payload }) => {
+				onClose();
+				const { statusCode, folderUid } = payload as {
+					statusCode: number;
+					folderUid: string | null;
+				};
+				if (addCourses) {
+					if (folderUid)
+						dispatch(addCoursesToFolder(folderUid)).then(() => {
+							navigate(`/authoring/folder/${folderUid}`);
+							dispatch(resetBulkEditingState());
+						});
+				} else {
+					handleSubmitToast(statusCode);
+				}
+				revalidate();
+			},
+		);
 	};
 
 	const handleClose = () => {
