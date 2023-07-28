@@ -117,25 +117,25 @@ const LearningView = () => {
 	return (
 		<Container
 			id={'learning-dash-main'}
-			margin="24px"
-			padding="24px"
+			margin={6}
+			padding={6}
 			maxW="100%"
 			minH="80vh"
 			width={''}
 			overflowY={'hidden'}
 			overflowX={'hidden'}
-			borderRadius="24px"
+			borderRadius="3xl"
 			bg="ampWhite"
 			boxShadow={
 				'0px 100px 80px rgba(0, 0, 0, 0.04), 0px 6.6501px 5.32008px rgba(0, 0, 0, 0.0161557), 0px 2.76726px 2.21381px rgba(0, 0, 0, 0.0112458)'
 			}>
-			<Heading as="h1" marginBottom="24px" margin="12px">
+			<Heading as="h1" marginBottom={6} margin={3}>
 				{title}
 			</Heading>
 			<HStack
 				justifyContent={'space-between'}
-				margin="12px"
-				marginBottom="24px"
+				margin={3}
+				marginBottom={6}
 				width="100%"
 				maxWidth={'800px'}>
 				<Heading as="h2" fontSize="xl">

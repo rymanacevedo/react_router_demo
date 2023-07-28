@@ -30,6 +30,7 @@ import {
 	getAssignments,
 	getCourseStats,
 	getCurriculaCourseList,
+	getFullModuleWithQuestions,
 } from '../../services/learning';
 import { requireUser } from '../../utils/user';
 import { getSubAccount, serverError } from '../../services/utils';
@@ -72,12 +73,13 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		});
 	}
 
-	return json({ assignments, courseStats });
+	return json({ assignments, courseStats, user, subAccount });
 };
 
 const AssignmentList = () => {
 	const { t: i18n } = useTranslation();
-	const { assignments } = useLoaderData() as CourseAssignmentData;
+	const { assignments, user, subAccount } =
+		useLoaderData() as CourseAssignmentData;
 	const [refreshIsOpen, setRefreshIsOpen] = useState('');
 	const fetcher = useFetcher();
 	const navigate = useNavigate();
@@ -150,9 +152,30 @@ const AssignmentList = () => {
 		}
 	};
 
-	const handleAssignmentClick = (assignment: AssignmentData) => () => {
+	const handleAssignmentClick = (assignment: AssignmentData) => async () => {
+		const { moduleInfoAndQuestions } = await getFullModuleWithQuestions(
+			user,
+			subAccount,
+			assignment.assignmentUid,
+		);
 		if (assignment.assignmentType === 'TimedAssessment') {
 			if (assignment.status === 'COMPLETED') {
+				// TODO: implement popup for review/retake
+			} else if (assignment.status === 'NOT_STARTED') {
+				if (moduleInfoAndQuestions.introductionRc) {
+					navigate(
+						`/learning/timedAssessment/moduleIntro/${assignment.assignmentKey}`,
+						{
+							state: {
+								assignmentUid: assignment.assignmentUid,
+								numLearningUnits: assignment.numLearningUnits,
+								estimatedTimeToComplete: assignment.estimatedTimeToComplete,
+							},
+						},
+					);
+				} else {
+					navigate(`/learning/timedAssessment/${assignment.assignmentUid}`);
+				}
 				if (refreshIsOpen) {
 					setRefreshIsOpen('');
 				} else {
@@ -239,11 +262,11 @@ const AssignmentList = () => {
 					<PopoverAnchor>
 						<ListItem
 							height={'44px'}
-							padding={'4px'}
+							padding={1}
 							w="100%"
 							key={curriculum.name}
 							onClick={handleAssignmentClick(assignment)}>
-							<HStack justifyContent={'space-between'} paddingBottom={'10px'}>
+							<HStack justifyContent={'space-between'} paddingBottom={2.5}>
 								<Text
 									_hover={{
 										textDecoration: 'underline',

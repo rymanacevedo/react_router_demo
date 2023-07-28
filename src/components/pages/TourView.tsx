@@ -48,10 +48,10 @@ function Step1Modal({
 				<ModalOverlay bg="rgba(41, 61, 89, 0.8)" backdropFilter="auto" />
 				<ModalContent
 					display={tourStep === 1 ? 'block' : 'none'}
-					p="24px"
+					p={6}
 					w="720px">
 					<ModalCloseButton onClick={handleClose} />
-					<ModalBody p="24px">
+					<ModalBody p={6}>
 						<Center>
 							<Image
 								align="center"

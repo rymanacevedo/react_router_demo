@@ -765,7 +765,7 @@ const AssignmentReviewView = () => {
 								<HStack
 									justifyContent={'space-between'}
 									display={'flex'}
-									marginTop={'12px'}>
+									marginTop={3}>
 									<Button
 										display={showExplanation ? 'none' : ''}
 										onClick={onOpen}

@@ -143,7 +143,7 @@ export default function AnswerArea({
 							<HStack
 								justifyContent={'space-between'}
 								display={'flex'}
-								marginTop={'12px'}>
+								marginTop={3}>
 								<Button
 									onClick={continueBtnFunc}
 									variant={'ampSolid'}

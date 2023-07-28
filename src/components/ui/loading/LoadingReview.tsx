@@ -19,13 +19,13 @@ const LoadingReview = () => {
 			overflowX={'hidden'}>
 			<Stack
 				w="100%"
-				p="12px"
+				p={3}
 				direction={['column', 'column', 'row', 'row', 'row', 'row']}
 				justifyContent={'center'}
 				alignItems={'center'}>
 				<Box
 					backgroundColor="white"
-					margin="6px"
+					margin={1.5}
 					h={isSmallerThan1000 ? '745px' : '100%'}
 					boxShadow="2xl"
 					w="100%"

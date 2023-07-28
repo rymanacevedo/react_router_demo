@@ -171,11 +171,11 @@ const ReviewView = () => {
 				currentQuestion={undefined}
 				currentRoundAnswerOverLayData={undefined}
 			/>
-			<HStack justify="center" align="space-between" marginTop="4px">
+			<HStack justify="center" align="space-between" marginTop={1}>
 				<Stack
 					maxW="1496"
 					w="100%"
-					p="12px"
+					p={3}
 					pr="0px"
 					alignItems="stretch"
 					direction={['column', 'column', 'row', 'row', 'row', 'row']}
@@ -214,7 +214,7 @@ const ReviewView = () => {
 			</HStack>
 			<VStack
 				marginLeft={'13px'}
-				p="12px"
+				p={3}
 				rounded="md"
 				shadow="md"
 				display={'flex'}
@@ -251,7 +251,7 @@ const ReviewView = () => {
 						fontWeight="semibold"
 						fontSize="md"
 						color={'#7E8A9B'}
-						marginTop={'10px'}>
+						marginTop={2.5}>
 						{i18n('reviewing')} {questionIndex + 1} {i18n('of')}{' '}
 						{reviewQuestions.length}
 					</Text>

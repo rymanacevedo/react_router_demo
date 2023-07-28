@@ -69,7 +69,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 				}}
 				boxShadow="2xl"
 				h="600px"
-				marginRight="12px"
+				marginRight={3}
 				w={isMenuOpen ? '345px' : '0px'}
 				display={isMenuOpen ? 'flex' : 'none'}
 				borderRadius={24}
@@ -80,22 +80,22 @@ const ProgressMenu = (props: ProgressMenuType) => {
 						textPrompt={textPrompt}
 						isMenuOpen={isMenuOpen}
 					/>
-					<Divider borderWidth="1px" width="297px" marginLeft="24px" />
-					<Box padding="24px">
+					<Divider borderWidth="1px" width="297px" marginLeft={6} />
+					<Box padding={6}>
 						<Heading as="h3" size="lg">
 							The road to mastery
 						</Heading>
 						<Progress
 							colorScheme="green"
-							marginTop="12px"
+							marginTop={3}
 							size="lg"
 							height="24px"
 							value={progressPercent}
-							borderRadius="24px"
+							borderRadius="3xl"
 							variant="ampDarkSuccess"
 							bg="ampSuccess.50"
 						/>
-						<HStack marginTop="12px">
+						<HStack marginTop={3}>
 							<VStack>
 								<Text fontSize="xs" fontWeight="normal">
 									{i18n('mastered')}
@@ -104,7 +104,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 									{dataSource?.masteredQuestionCount}
 								</Text>
 							</VStack>
-							<VStack paddingLeft="12px">
+							<VStack paddingLeft={3}>
 								<Text fontSize="xs" fontWeight="normal">
 									{i18n('incorrect')}
 								</Text>{' '}
@@ -112,7 +112,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 									{dataSource?.misinformedCount}
 								</Text>
 							</VStack>
-							<VStack paddingLeft="12px">
+							<VStack paddingLeft={3}>
 								<Text fontSize="xs" fontWeight="normal">
 									{i18n('learning')}
 								</Text>{' '}
@@ -120,7 +120,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 									{Number(learningCount())}
 								</Text>
 							</VStack>
-							<VStack paddingLeft="12px">
+							<VStack paddingLeft={3}>
 								<Text fontSize="xs" fontWeight="normal">
 									{i18n('unseen')}
 								</Text>{' '}
@@ -135,8 +135,8 @@ const ProgressMenu = (props: ProgressMenuType) => {
 					h="92px"
 					w="100%"
 					bg="ampSecondary.500"
-					borderBottomRadius={'12px'}
-					padding="24px">
+					borderBottomRadius="xl"
+					padding={6}>
 					<Text fontSize="xs" color={'ampWhite'}>
 						{i18n('sessionTimer')}
 					</Text>

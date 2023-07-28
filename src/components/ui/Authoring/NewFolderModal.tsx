@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import {
 	Modal,
 	ModalContent,
@@ -35,6 +35,7 @@ const NewFolderModal = ({
 	const toast = useToast();
 	const { revalidate } = useRevalidator();
 	const navigate = useNavigate();
+	const [disabledButton, setDisableButton] = useState(true);
 
 	const handleSubmitToast = (statusCode: number) => {
 		if (statusCode === 201) {
@@ -61,46 +62,78 @@ const NewFolderModal = ({
 			'description',
 		) as HTMLInputElement;
 
-		dispatch(createFolder({ name, description })).then(({ payload }) => {
-			onClose();
-			const { statusCode, folderUid } = payload as {
-				statusCode: number;
-				folderUid: string | null;
-			};
-			if (addCourses) {
-				if (folderUid)
-					dispatch(addCoursesToFolder(folderUid)).then(() => {
-						navigate(`/authoring/folder/${folderUid}`);
-						dispatch(resetBulkEditingState());
-					});
-			} else {
-				handleSubmitToast(statusCode);
-			}
-			revalidate();
-		});
+		dispatch(createFolder({ name: name.trim(), description })).then(
+			({ payload }) => {
+				onClose();
+				const { statusCode, folderUid } = payload as {
+					statusCode: number;
+					folderUid: string | null;
+				};
+				if (addCourses) {
+					if (folderUid)
+						dispatch(addCoursesToFolder(folderUid)).then(() => {
+							navigate(`/authoring/folder/${folderUid}`);
+							dispatch(resetBulkEditingState());
+						});
+				} else {
+					handleSubmitToast(statusCode);
+				}
+				revalidate();
+			},
+		);
+	};
+
+	const handleClose = () => {
+		onClose();
+		setDisableButton(true);
 	};
 
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+		<Modal isOpen={isOpen} onClose={handleClose} isCentered={true}>
 			<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
 			<ModalContent>
 				<ModalHeader>
-					<Text as="h3">Create New Folder</Text>
+					<Text
+						fontSize="lg"
+						fontWeight="semibold"
+						color="ampSecondaryText"
+						as="h3">
+						Create New Folder
+					</Text>
+					<Text fontSize="xs" fontWeight="normal">
+						Required
+						<Text as="span" color="ampError.600">
+							*
+						</Text>
+					</Text>
 				</ModalHeader>
 				<ModalBody>
 					<form onSubmit={handleSubmit}>
-						<Text as="label" display="block" mb={6}>
+						<Text as="label" fontWeight="semibold" display="block" mb={6}>
 							Folder Name
-							<Input placeholder="Name" name="name" />
+							<Text as="span" color="ampError.600">
+								*
+							</Text>
+							<Input
+								placeholder="Name"
+								name="name"
+								onChange={(e) =>
+									setDisableButton(e.target.value.trim().length <= 0)
+								}
+							/>
 						</Text>
-						<Text as="label" display="block" mb={6}>
+						<Text as="label" display="block" fontWeight="semibold" mb={6}>
 							Folder Description
 							<Textarea placeholder="Description" name="description" />
 						</Text>
-						<Button type="submit" marginRight={4}>
+						<Button
+							type="submit"
+							variant="ampOutline"
+							marginRight={4}
+							isDisabled={disabledButton}>
 							Create
 						</Button>
-						<Button variant="ampOutline" onClick={onClose}>
+						<Button variant="ampOutline" border="none" onClick={handleClose}>
 							Cancel
 						</Button>
 					</form>

@@ -73,10 +73,7 @@ export const MultipleChoice = ({
 				</Fade>
 			)}
 			<Divider marginTop="43px" />
-			<HStack
-				justifyContent={'space-between'}
-				display={'flex'}
-				marginTop={'12px'}>
+			<HStack justifyContent={'space-between'} display={'flex'} marginTop={3}>
 				<Button
 					onClick={onClick}
 					variant={'ampSolid'}

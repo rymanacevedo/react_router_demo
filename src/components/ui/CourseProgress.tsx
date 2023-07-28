@@ -27,11 +27,11 @@ const CourseProgress = () => {
 				w={435}
 				h="fit-content"
 				bg="ampNeutral.50"
-				borderRadius="12px"
+				borderRadius="xl"
 				p={4}
-				marginLeft="36px"
+				marginLeft={9}
 				marginTop={16}>
-				<Heading size={'lg'} marginLeft={'8px'} marginTop={'8px'}>
+				<Heading size={'lg'} marginLeft={2} marginTop={2}>
 					{i18n('courseProgress')}
 				</Heading>
 
@@ -55,8 +55,8 @@ const CourseProgress = () => {
 					<Divider
 						width="220%"
 						position="sticky"
-						marginTop="8px"
-						marginLeft="12px"
+						marginTop={2}
+						marginLeft={3}
 					/>
 					<Tbody>
 						<Tr>
