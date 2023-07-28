@@ -331,8 +331,7 @@ const TestProgressBarMenu = ({
 				height={'70px'}
 				bg={'transparent'}
 				justifyContent={isSmallerThan1000 ? '' : 'space-between'}
-				paddingLeft="24px"
-				paddingRight="24px"
+				px={6}
 				flexDirection={isSmallerThan1000 ? 'column' : 'initial'}>
 				<VStack
 					align={'left'}

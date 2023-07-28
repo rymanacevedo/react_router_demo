@@ -59,7 +59,7 @@ const ModuleIntroComponent = ({
 			<Heading as="h2" fontSize="xl">
 				{moduleData?.name}
 			</Heading>
-			<Stack paddingTop="16px" paddingBottom="16px">
+			<Stack py={4}>
 				<RichContentComponent content={moduleData?.introductionRc} />
 
 				<Text fontSize="sm" paddingBottom={5} paddingTop={5}>

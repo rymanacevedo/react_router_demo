@@ -551,7 +551,7 @@ export default function AssignmentComponent({
 							<Stack
 								maxW="1496"
 								w="100%"
-								p="12px"
+								p={3}
 								pr="0px"
 								alignItems="stretch"
 								direction={['column', 'column', 'row', 'row', 'row', 'row']}>

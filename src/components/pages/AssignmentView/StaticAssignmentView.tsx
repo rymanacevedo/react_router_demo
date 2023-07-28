@@ -137,7 +137,7 @@ const StaticAssignmentView = ({
 					</PopoverTrigger>
 					<Box style={{ position: 'relative', zIndex: barIndex }}>
 						<PopoverContent
-							p="24px"
+							p={6}
 							w={isSmallerThan1000 ? '100vw' : '560px'}
 							h="auto">
 							<Box
@@ -147,12 +147,12 @@ const StaticAssignmentView = ({
 								<PopoverArrow position="fixed" top="0" left="0" />
 							</Box>
 							<PopoverCloseButton
-								p="24px"
+								p={6}
 								onClick={() => {
 									nav(-1);
 								}}
 							/>
-							<PopoverBody p="24px" pl="0">
+							<PopoverBody p={6} pl="0">
 								<Heading fontSize="2xl-chakra" as="h2" mb={3}>
 									{i18n(barPopoverContent[tourStep]?.title)}
 								</Heading>
@@ -188,7 +188,7 @@ const StaticAssignmentView = ({
 					<Stack
 						maxW="1496"
 						w="100%"
-						p="12px"
+						p={3}
 						pr="0px"
 						alignItems="stretch"
 						direction={['column', 'column', 'row', 'row', 'row', 'row']}>
@@ -239,17 +239,17 @@ const StaticAssignmentView = ({
 									zIndex: tourStep === 2 ? ansIndex : 'unset',
 								}}>
 								<PopoverContent
-									p="24px"
+									p={6}
 									w={isSmallerThan1000 ? '100vw' : '560px'}
 									h="auto">
 									<PopoverArrow />
 									<PopoverCloseButton
-										p="24px"
+										p={6}
 										onClick={() => {
 											nav(-1);
 										}}
 									/>
-									<PopoverBody p="24px" pl="0">
+									<PopoverBody p={6} pl="0">
 										<Heading fontSize="2xl-chakra" as="h2" mb={3}>
 											{i18n('step2PopoverTitle')}
 										</Heading>
@@ -310,19 +310,19 @@ const StaticAssignmentView = ({
 						</PopoverTrigger>
 						<Box style={{ position: 'relative', zIndex: menuIndex }}>
 							<PopoverContent
-								p="24px"
+								p={6}
 								w={isSmallerThan1000 ? '100vw' : '560px'}
 								h="auto">
 								<Box position="fixed" top="40px" left="555px">
 									<PopoverArrow position="fixed" top="0" left="0" />
 								</Box>
 								<PopoverCloseButton
-									p="24px"
+									p={6}
 									onClick={() => {
 										nav(-1);
 									}}
 								/>
-								<PopoverBody p="24px" pl="0">
+								<PopoverBody p={6} pl="0">
 									<Heading fontSize="2xl-chakra" as="h2" mb={3}>
 										{i18n('step6PopoverTitle')}
 									</Heading>

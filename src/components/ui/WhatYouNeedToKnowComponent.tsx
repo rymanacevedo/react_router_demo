@@ -75,7 +75,7 @@ const WhatYouNeedToKnowComponent = ({
 			<Heading as="h2" fontSize="xl">
 				{i18n('whatYouNeedToKnow')}
 			</Heading>
-			<Stack paddingTop={'16px'} paddingBottom={'16px'}>
+			<Stack py={4}>
 				<ReviewContentRender content={questionInFocus?.explanationRc} />
 			</Stack>
 			{questionInFocus?.moreInformationRc?.length && (
@@ -103,11 +103,7 @@ const WhatYouNeedToKnowComponent = ({
 													}}
 												/>
 											)}
-											<Box
-												as="span"
-												flex="1"
-												marginLeft={'24px'}
-												textAlign="left">
+											<Box as="span" flex="1" marginLeft={6} textAlign="left">
 												<Text fontSize="2xl" textColor={'ampPrimary.600'}>
 													{i18n('addLearn')}
 												</Text>
@@ -123,13 +119,13 @@ const WhatYouNeedToKnowComponent = ({
 							)}
 						</AccordionItem>
 					</Accordion>
-					<Stack paddingTop={'16px'} paddingBottom={'16px'}></Stack>
+					<Stack py={4}></Stack>
 				</>
 			)}
 
 			{!isInReviewView && <Divider />}
 			<Collapse in={!isOpen} animateOpacity>
-				<VStack marginTop={'16px'} display={isInReviewView ? 'none' : 'flex'}>
+				<VStack marginTop={4} display={isInReviewView ? 'none' : 'flex'}>
 					<HStack justifyContent={'space-between'} width="100%" spacing="20px">
 						<Text float="left" fontSize="xs">
 							{i18n('wasThisExplanationHelpful')}
@@ -150,7 +146,7 @@ const WhatYouNeedToKnowComponent = ({
 							<Button variant="ampOutline">
 								<Text>{i18n('yes')}</Text>
 							</Button>
-							<Button marginLeft="16px" variant="ampOutline">
+							<Button marginLeft={4} variant="ampOutline">
 								<Text>{i18n('no')}</Text>
 							</Button>
 						</Box>
@@ -168,10 +164,10 @@ const WhatYouNeedToKnowComponent = ({
 					position="relative"
 					color="black"
 					bg="ampNeutral.50"
-					borderRadius={'12px'}
+					borderRadius="xl"
 					boxSizing="border-box"
-					p="24px"
-					marginTop={'16px'}>
+					p={6}
+					marginTop={4}>
 					<Heading as="h3" size="md">
 						{i18n('leaveFeedbackText')}
 					</Heading>
@@ -190,7 +186,7 @@ const WhatYouNeedToKnowComponent = ({
 							<RadioGroup
 								id="feedbackType"
 								name="feedbackType"
-								marginTop={'16px'}
+								marginTop={4}
 								onChange={setRadioValue}
 								value={radioValue}>
 								<HStack spacing={40}>
@@ -219,7 +215,7 @@ const WhatYouNeedToKnowComponent = ({
 								name="feedback"
 								maxLength={500}
 								bg="ampWhite"
-								marginTop="16px"
+								marginTop={4}
 								minHeight="150px"
 								placeholder={'Type your comments here (500 character limit).'}
 							/>
@@ -274,7 +270,7 @@ const WhatYouNeedToKnowComponent = ({
 							/>
 						</FormControl>
 
-						<ButtonGroup width="100%" marginTop={'16px'}>
+						<ButtonGroup width="100%" marginTop={4}>
 							<Button type="submit" variant="ampSolid">
 								<Text>{i18n('submitBtnText')}</Text>
 							</Button>

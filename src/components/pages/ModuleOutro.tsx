@@ -38,11 +38,11 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 			padding={16}
 			display={'flex'}
 			flexDirection={'column'}>
-			<Stack paddingTop="16px" paddingBottom="16px">
+			<Stack py={4}>
 				<HStack
 					bg={'ampSuccess.50'}
-					borderRadius={'12px'}
-					marginBottom={'20px'}
+					borderRadius="xl"
+					marginBottom={5}
 					p={'30px 20px 30px 20px'}>
 					<AvatarGroup spacing="4px">
 						<Avatar bg={'ampSuccess.500'} icon={<CompleteIcon />}></Avatar>
@@ -56,7 +56,7 @@ const ModuleOutro = ({ moduleData, action }: ModuleOutroType) => {
 			{moduleData?.outroLink?.length && moduleData?.outroButtonText?.length && (
 				<Button
 					width="200px"
-					marginTop={'10px'}
+					marginTop={2.5}
 					onClick={handleClick}
 					variant={'ampOutline'}>
 					<Text>{moduleData?.outroButtonText}</Text>

@@ -42,7 +42,7 @@ const ModuleIntroView = () => {
 			<Container
 				id={'module-into'}
 				margin="0"
-				padding="12px"
+				padding={3}
 				maxWidth={'100vw'}
 				overflowY={'hidden'}
 				overflowX={'hidden'}>
