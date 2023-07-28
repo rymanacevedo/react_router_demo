@@ -75,7 +75,9 @@ const TimedAssessmentModuleIntro = () => {
 							i18n('minutes'),
 							i18n('minute'),
 						)}
-						{i18n('toComplete')}
+						{state.estimatedTimeToComplete && state.estimatedTimeToComplete > 1
+							? i18n('toComplete')
+							: null}
 					</Text>
 				</Box>
 				<Button
