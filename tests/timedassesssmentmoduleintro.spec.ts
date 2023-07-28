@@ -45,11 +45,6 @@ test.describe('TimedAssessmentModuleIntro', () => {
 		page,
 	}) => {
 		//TODO: add untimed practice test
-		await page.goto('http://localhost:3000/main/learning/V7Q3RMLLU');
-		await page.waitForSelector('[role=list]');
-		const pTag = await page.waitForSelector('text="TA Module MultiQuestion"');
-		await pTag.click();
-
 		await page.goto(
 			'http://localhost:3000/main/learning/timedAssessment/f764037d-863e-493e-a9ab-f7afe0d61a55/147824',
 		);
