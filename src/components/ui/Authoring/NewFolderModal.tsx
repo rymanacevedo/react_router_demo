@@ -85,22 +85,37 @@ const NewFolderModal = ({
 			<ModalOverlay background="rgba(41, 61, 89, 0.8)" />
 			<ModalContent>
 				<ModalHeader>
-					<Text as="h3">Create New Folder</Text>
+					<Text
+						fontSize="lg"
+						fontWeight="semibold"
+						color="ampSecondaryText"
+						as="h3">
+						Create New Folder
+					</Text>
+					<Text fontSize="xs" fontWeight="normal">
+						Required
+						<Text as="span" color="ampError.600">
+							*
+						</Text>
+					</Text>
 				</ModalHeader>
 				<ModalBody>
 					<form onSubmit={handleSubmit}>
-						<Text as="label" display="block" mb={6}>
+						<Text as="label" fontWeight="semibold" display="block" mb={6}>
 							Folder Name
+							<Text as="span" color="ampError.600">
+								*
+							</Text>
 							<Input placeholder="Name" name="name" />
 						</Text>
-						<Text as="label" display="block" mb={6}>
+						<Text as="label" display="block" fontWeight="semibold" mb={6}>
 							Folder Description
 							<Textarea placeholder="Description" name="description" />
 						</Text>
-						<Button type="submit" marginRight={4}>
+						<Button type="submit" variant="ampOutline" marginRight={4}>
 							Create
 						</Button>
-						<Button variant="ampOutline" onClick={onClose}>
+						<Button variant="ampOutline" border="none" onClick={onClose}>
 							Cancel
 						</Button>
 					</form>
