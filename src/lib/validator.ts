@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserSchema } from '../services/user';
 import {
 	Confidence,
 	Correctness,
@@ -145,6 +146,8 @@ const RootSchema = z.object({
 
 const AssignmentSchema = z.object({
 	assignments: RootSchema,
+	user: UserSchema,
+	subAccount: z.string(),
 });
 
 const LearningUnitQuestionAnswerSchema = z.object({

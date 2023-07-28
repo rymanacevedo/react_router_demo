@@ -284,3 +284,30 @@ export const roundNumber = (number: number): string => {
 		return number.toFixed(1);
 	}
 };
+
+export const estimatedTimeRemaining = (
+	time: number | undefined,
+	hoursTranslation: string,
+	hourTranslation: string,
+	minutesTranslation: string,
+	minuteTranslation: string,
+) => {
+	let hour = 0;
+	let min = 0;
+
+	if (time == null || time <= 0) {
+		return '';
+	}
+
+	if (time >= 3600) {
+		hour = Math.floor(time / 3600); // Use Math.floor to get the whole number of hours
+		min = Math.ceil((time % 3600) / 60);
+		const hourText = hour > 1 ? hoursTranslation : hourTranslation;
+		const minText = min > 1 ? minutesTranslation : minuteTranslation;
+		return `${hour} ${hourText} ${min} ${minText}`;
+	} else {
+		min = Math.ceil(time / 60);
+		const minText = min > 1 ? minutesTranslation : minuteTranslation;
+		return `${min} ${minText}`;
+	}
+};

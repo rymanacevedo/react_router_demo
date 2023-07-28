@@ -69,6 +69,9 @@ import CourseContentView, {
 import FolderDetailsView, {
 	folderDetailsLoader,
 } from './components/pages/Authoring/FolderDetailsView';
+import TimedAssessmentModuleIntro, {
+	timedAssessmentModuleIntroLoader,
+} from './routes/TimedAssessmentModuleIntro';
 import QuestionCards from './components/ui/TimedAssessment/QuestionCards';
 import AmpBoxWithQuestionAndAnswer, {
 	questionAnswerLoader,
@@ -241,6 +244,12 @@ const routesJSX = (
 					<Route key={path} path={path} element={<TourView />} />
 				))}
 			</>
+
+			<Route
+				loader={timedAssessmentModuleIntroLoader}
+				path="learning/timedAssessment/moduleIntro/:assignmentUid"
+				element={<TimedAssessmentModuleIntro />}
+			/>
 
 			<Route
 				loader={timedAssessmentLoader}

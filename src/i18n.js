@@ -302,6 +302,15 @@ const resources = {
 			dragMatch: 'Drag and Match',
 			options: 'Options',
 			answers: 'Answers',
+			//////////////////////////////////////////////
+			//   TimedAssessmentModuleIntro.tsx
+			//////////////////////////////////////////////
+			startPracticeTest: 'Start practice test',
+			toComplete: ' to complete',
+			//////////////////////////////////////////////
+			//   ModuleIntroComponent.tsx
+			//////////////////////////////////////////////
+			introAbout: 'About ',
 		},
 	},
 	fr: {

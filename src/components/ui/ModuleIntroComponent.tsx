@@ -1,6 +1,7 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
 import { useTranslation } from 'react-i18next';
+import { estimatedTimeRemaining } from '../../utils/logic';
 
 type ModuleIntroComponentType = {
 	moduleData: {
@@ -21,29 +22,7 @@ const ModuleIntroComponent = ({
 	review,
 }: ModuleIntroComponentType) => {
 	const { t: i18n } = useTranslation();
-	const estimatedTimeRemaining = () => {
-		const time = estimatedTimeToComplete;
-		let hour = 0;
-		let min = 0;
 
-		if (time == null || time <= 0) {
-			return '';
-		}
-
-		if (time >= 3600) {
-			// over an hour
-			hour = time / 3600;
-			min = Math.ceil((time % 3600) / 60);
-			const hourText = hour > 1 ? i18n('hours') : i18n('hour');
-			const minText = min > 1 ? i18n('minutes') : i18n('minute');
-			return `About ${hour} ${hourText} ${min} ${minText}`;
-		} else {
-			// under one hour
-			min = Math.ceil(time / 60);
-			const minText = min > 1 ? i18n('minutes') : i18n('minute');
-			return `About ${min} ${minText}`;
-		}
-	};
 	return (
 		<Box
 			style={{
@@ -69,7 +48,16 @@ const ModuleIntroComponent = ({
 						: i18n('Question')}
 					{/*needed for the space between*/}
 					{'    '}
-					{estimatedTimeRemaining()}
+					{estimatedTimeToComplete &&
+						estimatedTimeToComplete > 1 &&
+						i18n('introAbout')}
+					{estimatedTimeRemaining(
+						estimatedTimeToComplete,
+						i18n('hours'),
+						i18n('hour'),
+						i18n('minutes'),
+						i18n('minute'),
+					)}
 				</Text>
 			</Stack>
 
