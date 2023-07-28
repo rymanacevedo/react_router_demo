@@ -283,7 +283,7 @@ const AssignmentList = () => {
 												`/learning/timedAssessment/${assignment.assignmentUid}?retake=true`,
 											)
 										}>
-										Retake Practice Test
+										{i18n('retakePracticeTest')}
 									</Button>
 									<Button
 										w="320px"
@@ -293,7 +293,7 @@ const AssignmentList = () => {
 												`/learning/timedAssessment/${assignment.assignmentUid}/results`,
 											)
 										}>
-										Results
+										{i18n('results')}
 									</Button>
 								</>
 							) : assignment.assignmentType !== 'Assessment' ? (
