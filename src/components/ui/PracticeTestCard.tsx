@@ -26,10 +26,8 @@ export default function PracticeTestCard({
 	const isSelected = cardValues.includes('selected');
 	return (
 		<ChakraCard
-			marginRight={1}
-			marginLeft={1}
-			marginBottom={2}
-			marginTop={2}
+			mx={1}
+			my={2}
 			display={'inline-flex'}
 			key={variant}
 			variant={variant}

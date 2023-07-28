@@ -75,7 +75,7 @@ const WhatYouNeedToKnowComponent = ({
 			<Heading as="h2" fontSize="xl">
 				{i18n('whatYouNeedToKnow')}
 			</Heading>
-			<Stack paddingTop={4} paddingBottom={4}>
+			<Stack py={4}>
 				<ReviewContentRender content={questionInFocus?.explanationRc} />
 			</Stack>
 			{questionInFocus?.moreInformationRc?.length && (
