@@ -21,6 +21,7 @@ import { requireUser } from '../utils/user';
 import {
 	getCurrentRoundTimedAssessment,
 	getFullModuleWithQuestions,
+	postRetakeTimedAssessment,
 } from '../services/learning';
 import { getSubAccount } from '../services/utils';
 import { useLoaderData, useNavigate } from 'react-router-dom';
@@ -91,18 +92,51 @@ const LoaderDataSchema = z.object({
 export type TimedAssessmentFields = z.infer<typeof TimedAssessmentFieldsSchema>;
 export type OutletContext = z.infer<typeof OutletContextSchema>;
 type LoaderData = z.infer<typeof LoaderDataSchema>;
-export const timedAssessmentLoader: LoaderFunction = async ({ params }) => {
+export const timedAssessmentLoader: LoaderFunction = async ({
+	params,
+	request,
+}) => {
 	const user = requireUser();
-	const hasConfidenceEnabled = user.config.showTimedAssessmentConfidence;
-	const assignmentUid = params.assignmentUid!;
 	const { subAccount } = getSubAccount(user);
-	const { assignmentData, moduleData, moduleInfoAndQuestions } =
-		await getFullModuleWithQuestions(user, subAccount, assignmentUid);
+	const url = new URL(request.url);
+	const assignmentUid = params.assignmentUid!;
+	const hasConfidenceEnabled = user.config.showTimedAssessmentConfidence;
+	const isRetake = url.searchParams.get('retake') === 'true';
+
+	if (isRetake) {
+		const { data } = await postRetakeTimedAssessment(
+			user,
+			subAccount,
+			assignmentUid,
+		);
+
+		const { data: roundData } = await getCurrentRoundTimedAssessment(
+			user,
+			subAccount,
+			data.assignmentUid,
+		);
+
+		const { assignmentData, moduleData, moduleInfoAndQuestions } =
+			await getFullModuleWithQuestions(user, subAccount, data.assignmentUid);
+
+		return {
+			assignmentUid: data.assignmentUid,
+			assignmentData,
+			moduleData,
+			moduleInfoAndQuestions,
+			roundData,
+			hasConfidenceEnabled,
+		};
+	}
 	const { data: roundData } = await getCurrentRoundTimedAssessment(
 		user,
 		subAccount,
 		assignmentUid,
 	);
+
+	const { assignmentData, moduleData, moduleInfoAndQuestions } =
+		await getFullModuleWithQuestions(user, subAccount, assignmentUid);
+
 	return {
 		assignmentUid,
 		assignmentData,
@@ -171,12 +205,12 @@ export default function TimedAssessment() {
 	}, [seconds]);
 
 	const handleResultsNavigation = () => {
-		navigate('results');
+		navigate(`/learning/timedAssessment/${assignmentUid}/results`);
 	};
 
 	useEffect(() => {
 		navigate(
-			`/learning/timedAssessment/${assignmentUid}/${questionInFocus?.id.toString()}`,
+			`/learning/timedAssessment/${assignmentUid}/${questionInFocus!.id.toString()}`,
 		);
 	}, []);
 

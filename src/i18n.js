@@ -186,6 +186,8 @@ const resources = {
 			nextQ: 'Next Question',
 			completeMod: "Congratulations, you've completed this module!",
 			selectAllthatApply: 'Select all that apply',
+         retakePracticeTest: 'Retake Practice Test',
+         results: 'Results',
 			/////////////////////////////////////////////
 			//   LearningReviewView.tsx
 			//////////////////////////////////////////////
