@@ -1,4 +1,4 @@
-import { Tag, Icon, Center } from '@chakra-ui/react';
+import { Center, Icon, Tag } from '@chakra-ui/react';
 import {
 	CheckIcon,
 	Cross1Icon,
@@ -26,7 +26,6 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 				return (
 					<Icon as={CheckIcon} boxSize={size === 'lg' ? '25px' : '12px'} />
 				);
-				break;
 			}
 			case 'ampNeutralFilled': {
 				return (
@@ -35,20 +34,17 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 						boxSize={size === 'lg' ? '25px' : '12px'}
 					/>
 				);
-				break;
 			}
 			case 'ampWarningOutline': {
 				return (
 					<Icon as={MinusIcon} boxSize={size === 'lg' ? '25px' : '12px'} />
 				);
-				break;
 			}
 			case 'ampDarkErrorOutline':
 			case 'ampDarkError': {
 				return (
 					<Icon as={Cross1Icon} boxSize={size === 'lg' ? '24px' : '13px'} />
 				);
-				break;
 			}
 		}
 	};
@@ -61,11 +57,9 @@ function AmpChip({ variant, size }: InterfaceAmpChip): JSX.Element {
 			variant={variant}
 			padding={0}
 			border={
-				Boolean(
-					variant === 'ampDarkSuccessOutline' ||
-						'ampWarningOutline' ||
-						'ampDarkErrorOutline',
-				)
+				variant === 'ampDarkSuccessOutline' ||
+				variant === 'ampWarningOutline' ||
+				variant === 'ampDarkErrorOutline'
 					? size === 'lg'
 						? '2px'
 						: '1px'

@@ -24,49 +24,34 @@ function AmpMicroChip({ variant }: AmpChip): JSX.Element {
 	const getDot = () => {
 		switch (variant) {
 			case 'ampDarkSuccessOutlineDot': {
-				return (
-					<Circle size={'6px'} margin="0 auto" bg="ampSuccess.500"></Circle>
-				);
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampSuccess.500" />;
 			}
 			case 'ampDarkSuccessDot': {
-				return <Circle size={'6px'} margin="0 auto" bg="ampWhite"></Circle>;
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampWhite" />;
 			}
 			case 'ampNeutralFilledDot': {
-				return <Circle size={'6px'} margin="0 auto" bg="ampWhite"></Circle>;
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampWhite" />;
 			}
 			case 'ampWarningOutlineDot': {
-				return (
-					<Circle size={'6px'} margin="0 auto" bg="ampWarning.600"></Circle>
-				);
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampWarning.600" />;
 			}
 			case 'ampDarkErrorOutlineDot': {
-				return <Circle size={'6px'} margin="0 auto" bg="ampError.700"></Circle>;
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampError.700" />;
 			}
 			case 'ampDarkErrorDot': {
-				return <Circle size={'6px'} margin="0 auto" bg="ampWhite"></Circle>;
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampWhite" />;
 			}
 			case 'ampSecondaryDot': {
-				return (
-					<Circle size={'6px'} margin="0 auto" bg="ampSecondary.500"></Circle>
-				);
-				break;
+				return <Circle size={'6px'} margin="0 auto" bg="ampSecondary.500" />;
 			}
 		}
 	};
 	return (
 		<Tag
 			border={
-				Boolean(
-					variant === 'ampDarkSuccessOutline' ||
-						'ampWarningOutline' ||
-						'ampDarkErrorOutline',
-				)
+				variant === 'ampDarkSuccessOutline' ||
+				variant === 'ampWarningOutline' ||
+				variant === 'ampDarkErrorOutline'
 					? '1px'
 					: '1px'
 			}
