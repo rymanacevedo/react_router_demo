@@ -27,9 +27,13 @@ test('can navigate to a course', async ({ page }) => {
 
 test('can go to a course, then navigate to a lesson', async ({ page }) => {
 	await page.goto('http://localhost:3000/main/learning/2XSHRUSHM');
-	await page.waitForSelector('role=list');
-	await page.locator('li').nth(1).click();
-	await page.waitForSelector('h1');
+	await page
+		.getByRole('tabpanel', { name: 'All Modules' })
+		.getByText('Multiplication', { exact: true })
+		.click();
+	await page.waitForURL(
+		'http://localhost:3000/main/learning/assignment/EM8JMRN2S/tour',
+	);
 	const h1Element = page.locator('h1');
 	const h1Text = await h1Element.innerText();
 	expect(h1Text).toBe('Module: a new module');
