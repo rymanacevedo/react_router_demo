@@ -48,13 +48,7 @@ function AmpMicroChip({ variant }: AmpChip): JSX.Element {
 	};
 	return (
 		<Tag
-			border={
-				variant === 'ampDarkSuccessOutline' ||
-				variant === 'ampWarningOutline' ||
-				variant === 'ampDarkErrorOutline'
-					? '1px'
-					: '1px'
-			}
+			border="1px"
 			borderRadius="30"
 			variant={variant}
 			minHeight={'12px !important'}
