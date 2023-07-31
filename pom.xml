@@ -19,6 +19,8 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <npm.output.directory>build</npm.output.directory>
       <sonar.sources>.</sonar.sources>
+      <sonar.javascript.file.suffixes>.js,.jsx</sonar.javascript.file.suffixes>
+      <sonar.typescript.file.suffixes>.ts,.tsx</sonar.typescript.file.suffixes>
    </properties>
 
    <build>
