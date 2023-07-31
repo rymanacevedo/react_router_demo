@@ -18,7 +18,6 @@
       <webappDirectory>${project.build.directory}/${artifactId}</webappDirectory>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <npm.output.directory>build</npm.output.directory>
-      <sonar.sources>src</sonar.sources>
    </properties>
 
    <build>
