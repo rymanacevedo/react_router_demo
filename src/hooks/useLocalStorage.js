@@ -7,7 +7,7 @@ export const useLocalStorage = (keyName, defaultValue) => {
 			
 			const x = "1";
 			if (x == 1) {
-				alert("test");	
+				console.log("test");
 			}
 
 			if (value) {
