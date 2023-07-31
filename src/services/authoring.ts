@@ -3,7 +3,7 @@ import { User } from './user';
 import { CourseContent } from '../store/slices/authoring/coursesViewSlice';
 
 function toSortCriteria(sortOrder: string): string {
-	return sortOrder == 'm'
+	return sortOrder === 'm'
 		? 'modifiedTime+desc' // ie, most recently modified
 		: sortOrder === 'c'
 		? 'createdTime+desc' // ie, most recently created
