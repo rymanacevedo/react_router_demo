@@ -22,7 +22,15 @@ import { User } from '../services/user';
 import QuickStart from './ui/QuickStart';
 import CustomMenuButton from './ui/CustomMenuButton';
 
-const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
+type Tab = {
+	id: string;
+	name: string;
+	key: string;
+	role: string;
+	navlink: string;
+};
+
+const Header = ({ user, tabs }: { user: User; tabs: Tab[] }) => {
 	const location = useLocation();
 	const fetcher = useFetcher();
 	const inAssignment = location.pathname.indexOf('assignment');

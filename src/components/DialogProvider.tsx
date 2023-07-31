@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 import DataServiceExceptionComponent from './ui/DataServiceExceptionComponent';
 import { useFetcher } from 'react-router-dom';
 
@@ -12,7 +12,11 @@ const DialogContext = createContext<DialogProviderType | null>({
 	setShowAlert: () => {},
 });
 
-const DialogProvider = ({ children }: any) => {
+type DialogProviderProps = {
+	children: ReactNode; // Define the type for children as ReactNode
+};
+
+const DialogProvider = ({ children }: DialogProviderProps) => {
 	const [showAlert, setShowAlert] = useState(false);
 	const fetcher = useFetcher();
 	return (

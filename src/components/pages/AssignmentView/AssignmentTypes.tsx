@@ -22,7 +22,7 @@ export type AnswerHistory = {
 };
 
 export type AnswerData = {
-	answerDate: string;
+	answerDate: string | null;
 	answerList: SelectedAnswer[];
 	avatarMessage: any;
 	completionAlgorithmType: any;
@@ -127,7 +127,7 @@ export type CurrentRoundAnswerOverLayData = {
 	questionsMastered: number;
 	questionSeconds: number;
 	reviewSeconds: number;
-	answerDate: string;
+	answerDate: string | null;
 	correctness: Correctness | null;
 	confidence: Confidence | null;
 	correctAnswerIds: number[];

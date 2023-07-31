@@ -64,7 +64,7 @@ const initState = {
 	questionsMastered: 0,
 	questionSeconds: 0,
 	reviewSeconds: 0,
-	answerDate: '',
+	answerDate: null,
 	correctness: null,
 	confidence: null,
 	correctAnswerIds: [],
@@ -77,10 +77,14 @@ export const assignmentReviewLoader: LoaderFunction = ({ params }) => {
 	return json(params);
 };
 
+type AssignmentReviewViewLoaderData = {
+	assignmentKey: string;
+};
+
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { selectedCourseKey } = useQuizContext();
-	const { assignmentKey } = useLoaderData() as any;
+	const { assignmentKey } = useLoaderData() as AssignmentReviewViewLoaderData;
 	const {
 		message,
 		handleMessage,
@@ -175,7 +179,7 @@ const AssignmentReviewView = () => {
 	});
 
 	const [answerData, setAnswerData] = useState<AnswerData>({
-		answerDate: '',
+		answerDate: null,
 		answerList: [],
 		avatarMessage: null,
 		completionAlgorithmType: null,
@@ -250,6 +254,7 @@ const AssignmentReviewView = () => {
 		questionId?: number;
 		payload?: any;
 	}) => {
+		console.log(lastRevQDataArg);
 		if (lastRevQDataArg?.roundId) {
 			await putCurrentRound(
 				lastRevQDataArg?.roundId,
