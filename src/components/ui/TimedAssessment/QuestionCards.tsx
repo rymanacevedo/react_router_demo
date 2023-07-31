@@ -130,7 +130,7 @@ export default function QuestionCards() {
 							values={values}
 							text={question.displayOrder.toString()}
 							onClick={() => {
-								if (!(question.id === questionInFocus?.id)) {
+								if (question.id !== questionInFocus?.id) {
 									setQuestionTrigger(question);
 								}
 							}}

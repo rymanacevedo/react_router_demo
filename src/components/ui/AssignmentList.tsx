@@ -199,15 +199,6 @@ const AssignmentList = () => {
 					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
 				},
 			});
-		} else if (
-			assignment.assignmentType !== 'TimedAssessment' &&
-			assignment.status === 'IN_PROGRESS'
-		) {
-			navigate(`/learning/assignment/${assignment.assignmentKey}`, {
-				state: {
-					estimatedTimeToComplete: assignment.estimatedTimeToComplete,
-				},
-			});
 		} else {
 			navigate(`/learning/assignment/${assignment.assignmentKey}`, {
 				state: {
