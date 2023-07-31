@@ -64,7 +64,7 @@ const initState = {
 	questionsMastered: 0,
 	questionSeconds: 0,
 	reviewSeconds: 0,
-	answerDate: null,
+	answerDate: '',
 	correctness: null,
 	confidence: null,
 	correctAnswerIds: [],
@@ -179,7 +179,7 @@ const AssignmentReviewView = () => {
 	});
 
 	const [answerData, setAnswerData] = useState<AnswerData>({
-		answerDate: null,
+		answerDate: '',
 		answerList: [],
 		avatarMessage: null,
 		completionAlgorithmType: null,
