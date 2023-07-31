@@ -252,9 +252,8 @@ const AssignmentReviewView = () => {
 	const putReviewInfo = async (lastRevQDataArg?: {
 		roundId?: number;
 		questionId?: number;
-		payload?: any;
+		payload?: AnswerData;
 	}) => {
-		console.log(lastRevQDataArg);
 		if (lastRevQDataArg?.roundId) {
 			await putCurrentRound(
 				lastRevQDataArg?.roundId,

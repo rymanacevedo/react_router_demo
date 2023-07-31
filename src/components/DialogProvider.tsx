@@ -13,7 +13,7 @@ const DialogContext = createContext<DialogProviderType | null>({
 });
 
 type DialogProviderProps = {
-	children: ReactNode; // Define the type for children as ReactNode
+	children: ReactNode;
 };
 
 const DialogProvider = ({ children }: DialogProviderProps) => {
