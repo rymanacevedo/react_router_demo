@@ -56,7 +56,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		questionTrigger,
 		setQuestionTrigger,
 		flaggedQuestions,
-		setFlaggedQuestions,
+		toggleFlaggedQuestion,
 		selectedAnswer,
 		setSelectedAnswer,
 		setAnsweredQuestions,
@@ -141,18 +141,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		}
 	}, [questionTrigger]);
 
-	const handleFlagForReview = () => {
-		setFlaggedQuestions((prevState: Set<string | undefined>) => {
-			const newSet = new Set(prevState);
-			if (newSet.has(questionInFocus?.publishedQuestionAuthoringKey)) {
-				newSet.delete(questionInFocus?.publishedQuestionAuthoringKey);
-			} else {
-				newSet.add(questionInFocus?.publishedQuestionAuthoringKey);
-			}
-			return newSet;
-		});
-	};
-
 	const handleAnsweredQuestions = (action?: string) => {
 		setAnsweredQuestions((prevState: Set<string | undefined>) => {
 			const newSet = new Set(prevState);
@@ -200,7 +188,11 @@ export default function AmpBoxWithQuestionAndAnswer() {
 						}
 						colorScheme="ampSecondary"
 						variant="ghost"
-						onClick={handleFlagForReview}>
+						onClick={() =>
+							toggleFlaggedQuestion(
+								questionInFocus?.publishedQuestionAuthoringKey,
+							)
+						}>
 						{flaggedQuestions.has(
 							questionInFocus!.publishedQuestionAuthoringKey,
 						)

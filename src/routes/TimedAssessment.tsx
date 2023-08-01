@@ -73,7 +73,7 @@ const OutletContextSchema = z.object({
 	assignmentUid: z.string(),
 	moduleInfoAndQuestions: ModuleDataSchema,
 	flaggedQuestions: z.set(z.string()),
-	setFlaggedQuestions: z.function(),
+	toggleFlaggedQuestion: z.function(),
 	selectedAnswer: z.object({
 		id: z.number().nullable(),
 		confidence: ConfidenceSchema,

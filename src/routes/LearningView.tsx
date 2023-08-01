@@ -14,6 +14,7 @@ import {
 import { getSubAccount } from '../services/utils';
 import { useEffect, useState } from 'react';
 import { useQuizContext } from '../hooks/useQuizContext';
+import useArray from '../hooks/useArray';
 
 export type Course = {
 	key: string;
@@ -81,15 +82,15 @@ const LearningView = () => {
 	const navigate = useNavigate();
 	const { selectedCourseKey, setSelectedCourseKey } = useQuizContext();
 	const [title, setTitle] = useState<string>('');
-	const [courses, setCourses] = useState<Course[]>([]);
+	const { array: courses, set } = useArray<Course>([]);
 	const { t: i18n } = useTranslation();
 
 	useEffect(() => {
 		if (!data) return;
-		const keyToFind = selectedCourseKey || data.selectedCourseKey;
+		const keyToFind: string = selectedCourseKey || data.selectedCourseKey;
 
 		if (data.courseList && keyToFind) {
-			setCourses(data.courseList);
+			set(data.courseList);
 			const course = data.courseList.find((c: Course) => c.key === keyToFind);
 			if (course) {
 				setTitle(course.name);
@@ -99,7 +100,7 @@ const LearningView = () => {
 		}
 
 		if (!selectedCourseKey && data.courseList) {
-			setCourses(data.courseList);
+			set(data.courseList);
 		}
 	}, []);
 
