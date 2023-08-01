@@ -21,6 +21,7 @@ import { OutletContext } from '../../../routes/TimedAssessment';
 import { QuestionInFocus } from '../../../lib/validator';
 import { UserSchema } from '../../../services/user';
 import { z } from 'zod';
+import useArray from '../../../hooks/useArray';
 
 const LoaderDataSchema = z.object({
 	user: UserSchema,
@@ -62,8 +63,8 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		handleNavigation,
 	} = context;
 	const { questionInFocus, roundData } = context;
-	const questions: QuestionInFocus[] = roundData.questionList.map(
-		(question: QuestionInFocus) => question,
+	const { array: questions } = useArray<QuestionInFocus>(
+		roundData.questionList.map((question: QuestionInFocus) => question),
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 
