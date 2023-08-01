@@ -7,6 +7,7 @@ import {
 	getCourseContent,
 	getCourseContentTree,
 	createModule as fetchCreateModule,
+	updateModule as fetchUpdateModule,
 	updateCourseContent as fetchUpdateCourseContent,
 } from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
@@ -90,6 +91,21 @@ export const createModule = createAsyncThunk(
 	},
 );
 
+export const updateModule = createAsyncThunk(
+	'course/updateModule',
+	async (
+		{ moduleUid, updates }: { moduleUid: string; updates: any },
+		{ rejectWithValue },
+	) => {
+		const user = requireUser();
+		const response = await fetchUpdateModule(user, moduleUid, updates);
+		if (response.response.status !== 200) {
+			return rejectWithValue('Course content not available');
+		}
+		return response.data;
+	},
+);
+
 export interface Module {
 	uid: string;
 	name: string;
@@ -148,6 +164,7 @@ export interface CourseContentTree {
 	};
 	modules: Module[];
 }
+
 export interface CourseContentState {
 	uid: string | null;
 	courseContent: CourseContent | null;
@@ -202,6 +219,7 @@ export const courseContentSlice = createSlice({
 			.addCase(putCourseContent.rejected, (state) => {
 				state.status = 'failed';
 				state.error = 'Error has occurred';
+			})
 			.addCase(createModule.pending, (state) => {
 				state.status = 'loading';
 			})
@@ -213,6 +231,15 @@ export const courseContentSlice = createSlice({
 				state.status = 'failed';
 				state.error = 'Error has occurred';
 			})
+			.addCase(updateModule.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(updateModule.fulfilled, (state) => {
+				state.status = 'succeeded';
+			})
+			.addCase(updateModule.rejected, (state) => {
+				state.status = 'failed';
+				state.error = 'Error has occurred';
 			});
 	},
 });

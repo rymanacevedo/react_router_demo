@@ -77,6 +77,19 @@ export const createModule = async (
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
 };
 
+export const updateModule = async (
+	user: User,
+	moduleUid: string,
+	moduleData: any,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = `/v2/authoring-modules/${moduleUid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'PUT', moduleData);
+};
+
 export const createCourseContent = async (
 	user: User,
 	name?: string,
