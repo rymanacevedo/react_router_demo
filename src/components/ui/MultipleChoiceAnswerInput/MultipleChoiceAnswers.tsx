@@ -20,10 +20,16 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse,
 }: {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: any;
-	setSelectedAnswers: any;
-	clearSelection: any;
-	setClearSelection: any;
+	selectedAnswers: SelectedAnswer[];
+	setSelectedAnswers: (
+		value:
+			| SelectedAnswer[]
+			| ((prevState: SelectedAnswer[]) => SelectedAnswer[]),
+	) => void;
+	clearSelection: boolean;
+	setClearSelection: (
+		value: ((prevState: boolean) => boolean) | boolean,
+	) => void;
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse: boolean;
 }) => {
