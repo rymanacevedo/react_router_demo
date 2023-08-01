@@ -45,6 +45,18 @@ export const getCourseContent = async (
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
+export const getCourseContentTree = async (
+	user: User,
+	uid: string,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = `/v2/authoring-course-content/${uid}/tree`;
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
 export const createCourseContent = async (
 	user: User,
 	name?: string,
