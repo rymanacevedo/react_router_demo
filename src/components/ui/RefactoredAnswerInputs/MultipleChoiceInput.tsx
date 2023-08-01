@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Checkbox, SlideFade, useUpdateEffect } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
@@ -60,9 +60,12 @@ export default function MultipleChoiceInput({
 		}
 	};
 
+	useEffect(() => {
+		renderSelectedAnswer(selectedAnswer);
+	}, [selectedAnswer]);
+
 	useUpdateEffect(() => {
 		setAnswerUpdated(true);
-		renderSelectedAnswer(selectedAnswer);
 	}, [selectedAnswer]);
 
 	const checkStatus = (a: QuestionInFocusAnswer) => {
