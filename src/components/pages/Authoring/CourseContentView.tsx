@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Button,
@@ -69,6 +69,12 @@ const CourseContentView = () => {
 									dispatch(putCourseContent());
 									setEditingTitle(false);
 								}}
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') {
+										dispatch(putCourseContent());
+										setEditingTitle(false);
+									}
+								}}
 								onChange={(e) => {
 									const name = e.target.value.trim();
 									if (name) {
@@ -111,6 +117,12 @@ const CourseContentView = () => {
 								onBlur={() => {
 									dispatch(putCourseContent());
 									setEditingDescription(false);
+								}}
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') {
+										dispatch(putCourseContent());
+										setEditingDescription(false);
+									}
 								}}
 								onChange={(e) => {
 									dispatch(
