@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
 	json,
 	LoaderFunctionArgs,
@@ -13,6 +13,7 @@ import { bootstrap, isBootStrapData } from '../../services/auth.reactrouter';
 import AlertMessage from '../ui/AlertMessage';
 import { unauthorized } from '../../services/utils';
 import { InferSafeParseErrors } from './LoginForm';
+import useEffectOnce from '../../hooks/useEffectOnce';
 
 const AuthLayoutContextSchema = z.object({
 	accountKey: z.string().optional(),
@@ -79,7 +80,7 @@ export default function AuthLayout() {
 	const [selfRegistration, setSelfRegistration] = useState(false);
 	const [error, setError] = useState(false);
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		if (data && isBootStrapData(data)) {
 			const { key, abbrevName, uid, allowSelfRegistration } = data.accountInfo;
 			const { recaptchaSiteKey } = data;
@@ -100,7 +101,7 @@ export default function AuthLayout() {
 			setSelfRegistration(false);
 			setError(false);
 		};
-	}, []);
+	});
 
 	return (
 		<Container maxW="container.xl" centerContent>

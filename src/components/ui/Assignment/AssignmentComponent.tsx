@@ -25,6 +25,7 @@ import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
 import Matching from '../Matching';
 import AmpBox from '../../standard/container/AmpBox';
+import useEffectOnce from '../../../hooks/useEffectOnce';
 
 type Props = {
 	isInstructionalOverlayOpen: boolean;
@@ -267,10 +268,10 @@ export default function AssignmentComponent({
 		});
 	};
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		startTimer();
 		incrimentTwoFastReviewsInLu();
-	}, []);
+	});
 
 	const submitAnswer = () => {
 		setAnswerData((answerDataArg: AnswerData) => {

@@ -21,6 +21,8 @@ import { OutletContext } from '../../../routes/TimedAssessment';
 import { QuestionInFocus } from '../../../lib/validator';
 import { UserSchema } from '../../../services/user';
 import { z } from 'zod';
+import useArray from '../../../hooks/useArray';
+import useEffectOnce from '../../../hooks/useEffectOnce';
 
 const LoaderDataSchema = z.object({
 	user: UserSchema,
@@ -55,15 +57,15 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		questionTrigger,
 		setQuestionTrigger,
 		flaggedQuestions,
-		setFlaggedQuestions,
+		toggleFlaggedQuestion,
 		selectedAnswer,
 		setSelectedAnswer,
 		setAnsweredQuestions,
 		handleNavigation,
 	} = context;
 	const { questionInFocus, roundData } = context;
-	const questions: QuestionInFocus[] = roundData.questionList.map(
-		(question: QuestionInFocus) => question,
+	const { array: questions } = useArray<QuestionInFocus>(
+		roundData.questionList.map((question: QuestionInFocus) => question),
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
 
@@ -110,7 +112,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		}
 	};
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		const f = fetcher;
 		const currentRef = ref.current as HTMLFormElement;
 		startTimer(true);
@@ -125,7 +127,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 				prepareAndSubmitFormData({ currentRef: currentRef, submitter: f });
 			}
 		};
-	}, []);
+	});
 
 	useEffect(() => {
 		if (questionTrigger === null) {
@@ -139,18 +141,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			handleNavigation(questionTrigger);
 		}
 	}, [questionTrigger]);
-
-	const handleFlagForReview = () => {
-		setFlaggedQuestions((prevState: Set<string | undefined>) => {
-			const newSet = new Set(prevState);
-			if (newSet.has(questionInFocus?.publishedQuestionAuthoringKey)) {
-				newSet.delete(questionInFocus?.publishedQuestionAuthoringKey);
-			} else {
-				newSet.add(questionInFocus?.publishedQuestionAuthoringKey);
-			}
-			return newSet;
-		});
-	};
 
 	const handleAnsweredQuestions = (action?: string) => {
 		setAnsweredQuestions((prevState: Set<string | undefined>) => {
@@ -199,7 +189,11 @@ export default function AmpBoxWithQuestionAndAnswer() {
 						}
 						colorScheme="ampSecondary"
 						variant="ghost"
-						onClick={handleFlagForReview}>
+						onClick={() =>
+							toggleFlaggedQuestion(
+								questionInFocus?.publishedQuestionAuthoringKey,
+							)
+						}>
 						{flaggedQuestions.has(
 							questionInFocus!.publishedQuestionAuthoringKey,
 						)

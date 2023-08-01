@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Badge, Checkbox, SlideFade, useUpdateEffect } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -27,7 +27,6 @@ export default function MultipleChoiceInput({
 	hasConfidenceEnabled,
 	handleAnsweredQuestions,
 }: MultipleChoiceInputProps) {
-	const [firstRender, setFirstRender] = useState(true);
 	const [status, setStatus] = useState('unchecked');
 	const [text, setText] = useState('');
 	const [isEnabled, setIsEnabled] = useState(false);
@@ -61,15 +60,8 @@ export default function MultipleChoiceInput({
 		}
 	};
 
-	useEffect(() => {
-		// strict mode makes me do this :(
-		if (!firstRender) {
-			setAnswerUpdated(true);
-		}
-
-		if (firstRender) {
-			setFirstRender(false);
-		}
+	useUpdateEffect(() => {
+		setAnswerUpdated(true);
 		renderSelectedAnswer(selectedAnswer);
 	}, [selectedAnswer]);
 

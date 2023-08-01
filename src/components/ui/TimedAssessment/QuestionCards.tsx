@@ -9,6 +9,8 @@ import { OutletContext } from '../../../routes/TimedAssessment';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 import { QuestionInFocus } from '../../../lib/validator';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
+import useSet from '../../../hooks/useSet';
+import useArray from '../../../hooks/useArray';
 
 export default function QuestionCards() {
 	const context = useOutletContext<OutletContext>();
@@ -23,21 +25,26 @@ export default function QuestionCards() {
 		moduleInfoAndQuestions,
 		assignmentUid,
 	} = context;
-	const flaggedQuestionIds: string[] = roundData.questionList
-		.filter((question) => question.flagged)
-		.map((question) => question.publishedQuestionAuthoringKey);
-	const answeredQuestionIds: string[] = roundData.questionList
-		.filter(
-			(question) =>
-				question.confidence && question.confidence !== Confidence.NA,
-		)
-		.map((question) => question.publishedQuestionAuthoringKey);
-
-	const [flaggedQuestions, setFlaggedQuestions] = useState(
-		flaggedQuestionIds.length > 0
-			? new Set<string>(flaggedQuestionIds)
-			: new Set<string>(),
+	const { array: flaggedQuestionIds } = useArray<string>(
+		roundData.questionList
+			.filter((question) => question.flagged)
+			.map((question) => question.publishedQuestionAuthoringKey),
 	);
+	const { array: answeredQuestionIds } = useArray<string>(
+		roundData.questionList
+			.filter(
+				(question) =>
+					question.confidence && question.confidence !== Confidence.NA,
+			)
+			.map((question) => question.publishedQuestionAuthoringKey),
+	);
+
+	const { set: flaggedQuestions, toggle: toggleFlaggedQuestion } =
+		useSet<string>(
+			flaggedQuestionIds.length > 0
+				? new Set<string>(flaggedQuestionIds)
+				: new Set<string>(),
+		);
 
 	const foundAnswer = questionInFocus?.answerList.find(
 		(answer) => answer.selected,
@@ -48,15 +55,14 @@ export default function QuestionCards() {
 		: questionInFocus?.confidence === Confidence.NotSure
 		? { id: 1, confidence: Confidence.NotSure }
 		: null;
-
-	const initialAnsweredQuestions =
+	const { set: answeredQuestions, setValues: setAnsweredQuestions } = useSet<
+		string | undefined
+	>(
 		answeredQuestionIds.length > 0
 			? new Set(answeredQuestionIds)
 			: initialSelectedAnswer
 			? new Set([questionInFocus?.publishedQuestionAuthoringKey])
-			: new Set();
-	const [answeredQuestions, setAnsweredQuestions] = useState(
-		initialAnsweredQuestions,
+			: new Set(),
 	);
 	const [selectedAnswer, setSelectedAnswer] = useState<SelectedAnswer>({
 		id: initialSelectedAnswer !== null ? initialSelectedAnswer.id : null,
@@ -151,7 +157,7 @@ export default function QuestionCards() {
 				context={{
 					...context,
 					flaggedQuestions,
-					setFlaggedQuestions,
+					toggleFlaggedQuestion,
 					selectedAnswer,
 					setSelectedAnswer,
 					setAnsweredQuestions,

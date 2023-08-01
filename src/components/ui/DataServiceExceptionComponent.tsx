@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import React, { Dispatch, SetStateAction, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -11,6 +11,7 @@ import {
 	Button,
 } from '@chakra-ui/react';
 import { FetcherWithComponents } from 'react-router-dom';
+import useEffectOnce from '../../hooks/useEffectOnce';
 
 type Props = {
 	isOpen: boolean;
@@ -30,14 +31,14 @@ const DataServiceExceptionComponent = ({
 		fetcher.load('/logout');
 	};
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		const currentRef = ref.current;
 		return () => {
 			if (currentRef) {
 				currentRef.reset();
 			}
 		};
-	}, []);
+	});
 
 	return (
 		<>
