@@ -21,14 +21,7 @@ import CourseHome from './ui/CourseHome';
 import { User } from '../services/user';
 import QuickStart from './ui/QuickStart';
 import CustomMenuButton from './ui/CustomMenuButton';
-
-type Tab = {
-	id: string;
-	name: string;
-	key: string;
-	role: string;
-	navlink: string;
-};
+import { Tab } from '../services/roles';
 
 const Header = ({ user, tabs }: { user: User; tabs: Tab[] }) => {
 	const location = useLocation();

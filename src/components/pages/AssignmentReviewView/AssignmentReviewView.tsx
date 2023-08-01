@@ -77,14 +77,14 @@ export const assignmentReviewLoader: LoaderFunction = ({ params }) => {
 	return json(params);
 };
 
-type AssignmentReviewViewLoaderData = {
+type LoaderData = {
 	assignmentKey: string;
 };
 
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { selectedCourseKey } = useQuizContext();
-	const { assignmentKey } = useLoaderData() as AssignmentReviewViewLoaderData;
+	const { assignmentKey } = useLoaderData() as LoaderData;
 	const {
 		message,
 		handleMessage,
