@@ -15,6 +15,7 @@ import { getSubAccount } from '../services/utils';
 import { useEffect, useState } from 'react';
 import { useQuizContext } from '../hooks/useQuizContext';
 import useArray from '../hooks/useArray';
+import useEffectOnce from '../hooks/useEffectOnce';
 
 export type Course = {
 	key: string;
@@ -85,7 +86,7 @@ const LearningView = () => {
 	const { array: courses, set } = useArray<Course>([]);
 	const { t: i18n } = useTranslation();
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		if (!data) return;
 		const keyToFind: string = selectedCourseKey || data.selectedCourseKey;
 
@@ -102,7 +103,7 @@ const LearningView = () => {
 		if (!selectedCourseKey && data.courseList) {
 			set(data.courseList);
 		}
-	}, []);
+	});
 
 	useEffect(() => {
 		if (fetcher.data && courses) {

@@ -38,6 +38,7 @@ import useInterval from '../hooks/useInterval';
 import RedIcon from '../components/ui/Icons/RedIcon';
 import { z } from 'zod';
 import { UserSchema } from '../services/user';
+import useEffectOnce from '../hooks/useEffectOnce';
 
 export const TimedAssessmentFieldsSchema = z.object({
 	answerUpdated: z.boolean(),
@@ -208,11 +209,11 @@ export default function TimedAssessment() {
 		navigate(`/learning/timedAssessment/${assignmentUid}/results`);
 	};
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		navigate(
 			`/learning/timedAssessment/${assignmentUid}/${questionInFocus!.id.toString()}`,
 		);
-	}, []);
+	});
 
 	return (
 		<Box as="main" id="timed-assessment">

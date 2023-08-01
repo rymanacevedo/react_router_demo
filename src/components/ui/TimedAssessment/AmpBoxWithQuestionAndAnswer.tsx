@@ -22,6 +22,7 @@ import { QuestionInFocus } from '../../../lib/validator';
 import { UserSchema } from '../../../services/user';
 import { z } from 'zod';
 import useArray from '../../../hooks/useArray';
+import useEffectOnce from '../../../hooks/useEffectOnce';
 
 const LoaderDataSchema = z.object({
 	user: UserSchema,
@@ -111,7 +112,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		}
 	};
 
-	useEffect(() => {
+	useEffectOnce(() => {
 		const f = fetcher;
 		const currentRef = ref.current as HTMLFormElement;
 		startTimer(true);
@@ -126,7 +127,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 				prepareAndSubmitFormData({ currentRef: currentRef, submitter: f });
 			}
 		};
-	}, []);
+	});
 
 	useEffect(() => {
 		if (questionTrigger === null) {

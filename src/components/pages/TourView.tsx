@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import {
 	Button,
@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import Step1ModalGraphic from '../../introImage.svg';
 import { Cookies } from 'react-cookie-consent';
 import StaticAssignmentView from './AssignmentView/StaticAssignmentView';
+import useEffectOnce from '../../hooks/useEffectOnce';
 
 type Step1ModalProps = {
 	tourStep: number;
@@ -103,11 +104,11 @@ const TourView = () => {
 	const [ansIndex, setAnsIndex] = useState(0);
 	const [barIndex, setBarIndex] = useState(0);
 	const nav = useNavigate();
-	useEffect(() => {
+	useEffectOnce(() => {
 		Cookies.set('seen_tour', window.btoa('seen_tour'), {
 			path: '/',
 		});
-	}, []);
+	});
 
 	return (
 		<>

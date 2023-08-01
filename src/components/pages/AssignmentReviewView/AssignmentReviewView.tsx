@@ -47,6 +47,7 @@ import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
 import { LoaderFunction } from 'react-router';
 import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
 import AmpBox from '../../standard/container/AmpBox';
+import useEffectOnce from '../../../hooks/useEffectOnce';
 
 const initState = {
 	self: null,
@@ -366,15 +367,6 @@ const AssignmentReviewView = () => {
 	}
 
 	useEffect(() => {
-		// Clean up function to add the stored value when the component unmounts if user is not done with review
-		return () => {
-			if (proceedDownDesiredPathRef.current) {
-				handleBeforeUnload();
-			}
-		};
-	}, []);
-
-	useEffect(() => {
 		// Register a listener for the beforeunload event
 		window.addEventListener('beforeunload', handleBeforeUnload);
 
@@ -438,9 +430,17 @@ const AssignmentReviewView = () => {
 
 		return () => clearInterval(intervalRef.current);
 	};
-	useEffect(() => {
+
+	useEffectOnce(() => {
 		startTimer();
-	}, []);
+
+		// Clean up function to add the stored value when the component unmounts if user is not done with review
+		return () => {
+			if (proceedDownDesiredPathRef.current) {
+				handleBeforeUnload();
+			}
+		};
+	});
 
 	useEffect(() => {
 		if (
