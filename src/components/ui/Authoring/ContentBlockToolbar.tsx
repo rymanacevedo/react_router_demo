@@ -27,7 +27,8 @@ const ToolbarButton = ({ label, icon }: ToolbarButtonProps) => {
 const ContentBlockToolbar = () => {
 	return (
 		<Flex
-			padding={4}
+			paddingY={1}
+			paddingX={4}
 			borderColor="ampNeutral.400"
 			borderRadius="xl"
 			borderWidth="1px"
