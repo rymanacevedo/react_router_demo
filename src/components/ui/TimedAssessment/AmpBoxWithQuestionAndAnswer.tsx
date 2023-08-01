@@ -23,6 +23,7 @@ import { UserSchema } from '../../../services/user';
 import { z } from 'zod';
 import useArray from '../../../hooks/useArray';
 import useEffectOnce from '../../../hooks/useEffectOnce';
+import usePageLeave from '../../../hooks/usePageLeave';
 
 const LoaderDataSchema = z.object({
 	user: UserSchema,
@@ -97,32 +98,21 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		});
 	};
 
-	const handleMouseLeave = async (event: MouseEvent) => {
-		if (
-			event.clientY <= 0 ||
-			event.clientX <= 0 ||
-			event.clientX >= window.innerWidth ||
-			event.clientY >= window.innerHeight
-		) {
-			// WARNING handle events CAN'T see state changes for some weird reason. bug possibly? hence why I can't put answerUpdated in the if statement
-			prepareAndSubmitFormData({
-				currentRef: ref.current!,
-				submitter: fetcher,
-			});
-		}
-	};
+	usePageLeave(() => {
+		prepareAndSubmitFormData({
+			currentRef: ref.current!,
+			submitter: fetcher,
+		});
+	});
 
 	useEffectOnce(() => {
 		const f = fetcher;
 		const currentRef = ref.current as HTMLFormElement;
 		startTimer(true);
 		startSecondsSpent(true);
-		window.addEventListener('mouseout', handleMouseLeave);
 		return () => {
-			window.removeEventListener('mouseout', handleMouseLeave);
 			startTimer(false); // Stop the timer when the component unmounts
 			startSecondsSpent(false);
-
 			if (!ref.current && f) {
 				prepareAndSubmitFormData({ currentRef: currentRef, submitter: f });
 			}
