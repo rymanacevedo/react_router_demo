@@ -78,10 +78,14 @@ export const assignmentReviewLoader: LoaderFunction = ({ params }) => {
 	return json(params);
 };
 
+type LoaderData = {
+	assignmentKey: string;
+};
+
 const AssignmentReviewView = () => {
 	const { handleMenuOpen } = useProgressMenuContext();
 	const { selectedCourseKey } = useQuizContext();
-	const { assignmentKey } = useLoaderData() as any;
+	const { assignmentKey } = useLoaderData() as LoaderData;
 	const {
 		message,
 		handleMessage,
@@ -249,7 +253,7 @@ const AssignmentReviewView = () => {
 	const putReviewInfo = async (lastRevQDataArg?: {
 		roundId?: number;
 		questionId?: number;
-		payload?: any;
+		payload?: AnswerData;
 	}) => {
 		if (lastRevQDataArg?.roundId) {
 			await putCurrentRound(

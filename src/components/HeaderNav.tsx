@@ -21,8 +21,9 @@ import CourseHome from './ui/CourseHome';
 import { User } from '../services/user';
 import QuickStart from './ui/QuickStart';
 import CustomMenuButton from './ui/CustomMenuButton';
+import { Tab } from '../services/roles';
 
-const Header = ({ user, tabs }: { user: User; tabs: any[] }) => {
+const Header = ({ user, tabs }: { user: User; tabs: Tab[] }) => {
 	const location = useLocation();
 	const fetcher = useFetcher();
 	const inAssignment = location.pathname.indexOf('assignment');
