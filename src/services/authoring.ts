@@ -1,6 +1,7 @@
 import { authenticatedFetch } from './utils';
 import { User } from './user';
 import { CourseContent } from '../store/slices/authoring/coursesViewSlice';
+import { Module } from '../store/slices/authoring/moduleSlice';
 
 function toSortCriteria(sortOrder: string): string {
 	return sortOrder === 'm'
@@ -249,4 +250,14 @@ export const addCoursesToFolder = async (
 	const url = `/v2/authoring-folders/${folderUid}/course-content`;
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
+export const getModule = async (
+	user: User,
+	moduleUid: string,
+	revision: number,
+): Promise<{ data: Module; response: Response }> => {
+	const url = `/v2/authoring-modules/${moduleUid}?revision=${revision}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'GET');
 };
