@@ -9,6 +9,7 @@ import { OutletContext } from '../../../routes/TimedAssessment';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 import { QuestionInFocus } from '../../../lib/validator';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
+import useSet from '../../../hooks/useSet';
 
 export default function QuestionCards() {
 	const context = useOutletContext<OutletContext>();
@@ -33,11 +34,12 @@ export default function QuestionCards() {
 		)
 		.map((question) => question.publishedQuestionAuthoringKey);
 
-	const [flaggedQuestions, setFlaggedQuestions] = useState(
-		flaggedQuestionIds.length > 0
-			? new Set<string>(flaggedQuestionIds)
-			: new Set<string>(),
-	);
+	const { set: flaggedQuestions, setValues: setFlaggedQuestions } =
+		useSet<string>(
+			flaggedQuestionIds.length > 0
+				? new Set<string>(flaggedQuestionIds)
+				: new Set<string>(),
+		);
 
 	const foundAnswer = questionInFocus?.answerList.find(
 		(answer) => answer.selected,
