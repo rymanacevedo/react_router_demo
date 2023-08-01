@@ -23,8 +23,8 @@ export default function LoadingAssignmentView() {
 				padding={5}
 				borderBottom={'1px'}
 				borderBottomColor="ampSecondary.300">
-				<Skeleton height="20px" width={'235px'} />
-				<Skeleton height="20px" width={'110px'} />
+				<Skeleton height={5} width={'235px'} />
+				<Skeleton height={5} width={'110px'} />
 			</Stack>
 			<Stack
 				w="100%"
@@ -42,7 +42,7 @@ export default function LoadingAssignmentView() {
 					overflow="hidden"
 					borderRadius={24}
 					p={12}>
-					<Skeleton height="20px" width={'235px'} />
+					<Skeleton height={5} width={'235px'} />
 					<SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="5" />
 				</Box>
 				<Box
@@ -57,29 +57,29 @@ export default function LoadingAssignmentView() {
 					overflow="hidden"
 					borderRadius={24}
 					p={12}>
-					<Skeleton height="20px" width={'235px'} />
+					<Skeleton height={5} width={'235px'} />
 					<HStack marginTop={5}>
 						<SkeletonCircle marginRight={4} size="10" />
 						<Box style={{ flex: 1 }}>
-							<Skeleton height="20px" width={'250px'} />
+							<Skeleton height={5} width={'250px'} />
 						</Box>
 					</HStack>
 					<HStack marginTop={5}>
 						<SkeletonCircle marginRight={4} size="10" />
 						<Box style={{ flex: 1 }}>
-							<Skeleton height="20px" width={'250px'} />
+							<Skeleton height={5} width={'250px'} />
 						</Box>
 					</HStack>
 					<HStack marginTop={5}>
 						<SkeletonCircle marginRight={4} size="10" />
 						<Box style={{ flex: 1 }}>
-							<Skeleton height="20px" width={'250px'} />
+							<Skeleton height={5} width={'250px'} />
 						</Box>
 					</HStack>
 					<HStack marginTop={5}>
 						<SkeletonCircle marginRight={4} size="10" />
 						<Box style={{ flex: 1 }}>
-							<Skeleton height="20px" width={'250px'} />
+							<Skeleton height={5} width={'250px'} />
 						</Box>
 					</HStack>
 				</Box>

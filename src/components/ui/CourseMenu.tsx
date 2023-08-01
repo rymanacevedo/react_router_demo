@@ -42,7 +42,7 @@ const CourseMenu = ({
 					variant="ampOutline">
 					{i18n('changeCourse')}
 				</MenuButton>
-				<MenuList minWidth="240px" maxHeight="25rem" overflowY="scroll">
+				<MenuList minWidth={60} maxHeight="25rem" overflowY="scroll">
 					<MenuOptionGroup
 						onChange={handleCourseChange}
 						defaultChecked={true}

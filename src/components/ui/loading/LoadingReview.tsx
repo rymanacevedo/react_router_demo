@@ -32,7 +32,7 @@ const LoadingReview = () => {
 					overflow="hidden"
 					borderRadius={24}
 					p={12}>
-					<Skeleton height="20px" width={'235px'} />
+					<Skeleton height={5} width={'235px'} />
 					<SkeletonText
 						mt="4"
 						noOfLines={14}
