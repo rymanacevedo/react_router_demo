@@ -89,7 +89,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 							colorScheme="green"
 							marginTop={3}
 							size="lg"
-							height="24px"
+							height={6}
 							value={progressPercent}
 							borderRadius="3xl"
 							variant="ampDarkSuccess"

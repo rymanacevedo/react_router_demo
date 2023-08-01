@@ -63,7 +63,7 @@ const FireProgressToast = (props: FireProgressToastType) => {
 								borderColor={'ampPrimary.300'}
 								bg="ampWhite"
 								width="325px"
-								height="40px"
+								height={10}
 								margin={6}
 								onClick={expandToast}>
 								<Text fontSize="md" fontWeight="semibold">
