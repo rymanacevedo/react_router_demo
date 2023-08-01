@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
-import MultiChoiceOverLayIcon from './MultiChoiceOverLayIcon';
+import MultiChoiceOverLayIcon from './CustomOverlayIcon';
 import {
 	CurrentRoundAnswerOverLayData,
 	SelectedAnswer,

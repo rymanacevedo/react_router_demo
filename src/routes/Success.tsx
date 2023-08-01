@@ -25,7 +25,7 @@ export const successLoader: LoaderFunction = async ({ request }) => {
 
 export default function Success() {
 	const { t: i18n } = useTranslation();
-	const context = useOutletContext() as AuthLayoutContext;
+	const context = useOutletContext<AuthLayoutContext>();
 	const { message, obsfucatedEmail } = useLoaderData() as any;
 
 	const forgotUsernameSuccess = (
