@@ -27,6 +27,7 @@ import { json } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import VerbatimHtml from '../../ui/Authoring/VerbatimHtml';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
+import AddModule from '../../ui/Authoring/AddModule';
 
 export const courseContentLoader: LoaderFunction = async ({ params }) => {
 	const uid = params.uid;
@@ -221,17 +222,7 @@ const CourseContentView = () => {
 							</Button>
 						</Flex>
 					</Flex>
-					<Text>None</Text>
-					<Button
-						variant="outline"
-						color="ampPrimary.600"
-						paddingX="6"
-						paddingY="2"
-						fontWeight="semibold"
-						rightIcon={<PlusIcon fill="ampPrimary.600" />}
-						aria-label="Add new module">
-						Add module
-					</Button>
+					<AddModule courseUid={courseContent.uid} />
 				</Flex>
 				<Flex direction="column" gap="6">
 					<Heading color="ampTertiaryText">Unassigned content</Heading>

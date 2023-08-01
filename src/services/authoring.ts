@@ -57,6 +57,26 @@ export const getCourseContentTree = async (
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
+export const createModule = async (
+	user: User,
+	parentUid: string,
+	name: string,
+	type: string,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = '/v2/authoring-modules';
+
+	const body = {
+		parentUid,
+		name,
+		type,
+	};
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
 export const createCourseContent = async (
 	user: User,
 	name?: string,
