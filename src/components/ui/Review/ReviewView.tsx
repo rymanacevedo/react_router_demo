@@ -25,7 +25,7 @@ import {
 	useNavigate,
 } from 'react-router-dom';
 import { useQuizContext } from '../../../hooks/useQuizContext';
-import FireProgressToast from '../ProgressToast';
+import FireProgressToast from '../FireProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
 import WhatYouNeedToKnowComponent from '../WhatYouNeedToKnowComponent';

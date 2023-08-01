@@ -41,7 +41,7 @@ import MultipleChoiceAnswers from '../../ui/MultipleChoiceAnswerInput/MultipleCh
 import { findDateData } from '../../../utils/logic';
 import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
-import FireProgressToast from '../../ui/ProgressToast';
+import FireProgressToast from '../../ui/FireProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
 import { LoaderFunction } from 'react-router';
@@ -286,7 +286,7 @@ const AssignmentReviewView = () => {
 			} else {
 				let res = await fetchModuleQuestions(assignmentKey);
 				moduleQuestionsResponse = res;
-				updateModuleLearningUnitsData(res, assignmentKey as string);
+				updateModuleLearningUnitsData(res, assignmentKey);
 			}
 
 			if (moduleQuestionsResponse && currentRoundQuestionsResponse) {

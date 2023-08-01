@@ -19,7 +19,7 @@ import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFo
 import { useNavigate } from 'react-router-dom';
 import LoadingAssignmentView from '../loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
-import FireProgressToast from '../ProgressToast';
+import FireProgressToast from '../FireProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
 import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
@@ -184,12 +184,12 @@ export default function AssignmentComponent({
 	const fetchModuleQuestionsData = async () => {
 		try {
 			let currentRoundQuestionsResponse = await getCurrentRound(assignmentKey);
-			let moduleQuestionsResponse = {} as ModuleData;
+			let moduleQuestionsResponse: ModuleData;
 			if (moduleLearningUnitsData.assignmentKey === assignmentKey) {
 				moduleQuestionsResponse = moduleLearningUnitsData.data as ModuleData;
 			} else {
 				let res = await fetchModuleQuestions(assignmentKey);
-				moduleQuestionsResponse = res;
+				moduleQuestionsResponse = res as ModuleData;
 				updateModuleLearningUnitsData(res, assignmentKey);
 			}
 
