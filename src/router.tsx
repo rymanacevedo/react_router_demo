@@ -77,6 +77,9 @@ import AmpBoxWithQuestionAndAnswer, {
 	questionAnswerLoader,
 } from './components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer';
 import Submission from './components/ui/TimedAssessment/Submission';
+import ModuleView, {
+	moduleLoader,
+} from './components/pages/Authoring/ModuleView';
 
 const routesJSX = (
 	<Route path="/" id="root" loader={appLoader} element={<App />}>
@@ -177,6 +180,11 @@ const routesJSX = (
 				path="authoring/course/:uid"
 				element={<CourseContentView />}
 				loader={courseContentLoader}
+			/>
+			<Route
+				path="authoring/module/:moduleId"
+				element={<ModuleView />}
+				loader={moduleLoader}
 			/>
 			<Route
 				path="authoring/folder/:folderId"

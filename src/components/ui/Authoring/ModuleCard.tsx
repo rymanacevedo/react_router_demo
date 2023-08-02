@@ -31,6 +31,7 @@ import { updateModule } from '../../../store/slices/authoring/courseContentSlice
 import { AppDispatch } from '../../../store/store';
 import { useRevalidator } from 'react-router-dom';
 import { Module } from '../../../store/slices/authoring/courseContentSlice';
+import { moduleTypeToLabel } from './ModuleTypeBadge';
 
 interface ModuleCardProps {
 	module: Module;
@@ -103,7 +104,7 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
 						)}
 
 						<Flex flexDirection="row" alignItems="center" gap={2}>
-							<Badge flexGrow="0">{type}</Badge>
+							<Badge flexGrow="0">{moduleTypeToLabel(type)}</Badge>
 							<Text fontSize="sm" fontWeight="normal">
 								{children.length} Questions
 							</Text>
@@ -117,6 +118,7 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
 					<Button
 						textDecoration="none"
 						as={RouterLink}
+						to={`/authoring/module/${uid}`}
 						variant="ampOutline"
 						fontSize="sm"
 						size="sm">
