@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Button,
@@ -27,6 +27,12 @@ import { json } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import VerbatimHtml from '../../ui/Authoring/VerbatimHtml';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
+import {
+	DEFAULT_COURSE_CONTENT_DESCRIPTION,
+	DEFAULT_COURSE_CONTENT_NAME,
+} from '../../../lib/authoring/constants';
+import CourseModuleList from '../../ui/Authoring/CourseModuleList';
+import AddModule from '../../ui/Authoring/AddModule';
 
 export const courseContentLoader: LoaderFunction = async ({ params }) => {
 	const uid = params.uid;
@@ -69,6 +75,12 @@ const CourseContentView = () => {
 									dispatch(putCourseContent());
 									setEditingTitle(false);
 								}}
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') {
+										dispatch(putCourseContent());
+										setEditingTitle(false);
+									}
+								}}
 								onChange={(e) => {
 									const name = e.target.value.trim();
 									if (name) {
@@ -80,7 +92,7 @@ const CourseContentView = () => {
 									} else {
 										dispatch(
 											updateCourseContent({
-												name: 'Untitled',
+												name: DEFAULT_COURSE_CONTENT_NAME,
 											}),
 										);
 									}
@@ -88,7 +100,9 @@ const CourseContentView = () => {
 							/>
 						) : (
 							<>
-								<Heading>{courseContent?.name || 'Title placeholder'}</Heading>
+								<Heading>
+									{courseContent?.name || DEFAULT_COURSE_CONTENT_NAME}
+								</Heading>
 								<Button
 									size="xs"
 									variant="ghost"
@@ -112,6 +126,12 @@ const CourseContentView = () => {
 									dispatch(putCourseContent());
 									setEditingDescription(false);
 								}}
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') {
+										dispatch(putCourseContent());
+										setEditingDescription(false);
+									}
+								}}
 								onChange={(e) => {
 									dispatch(
 										updateCourseContent({
@@ -126,7 +146,7 @@ const CourseContentView = () => {
 									<VerbatimHtml
 										html={
 											courseContent?.descriptionHtml ||
-											'Description placeholder'
+											DEFAULT_COURSE_CONTENT_DESCRIPTION
 										}
 									/>
 								</Box>
@@ -221,17 +241,8 @@ const CourseContentView = () => {
 							</Button>
 						</Flex>
 					</Flex>
-					<Text>None</Text>
-					<Button
-						variant="outline"
-						color="ampPrimary.600"
-						paddingX="6"
-						paddingY="2"
-						fontWeight="semibold"
-						rightIcon={<PlusIcon fill="ampPrimary.600" />}
-						aria-label="Add new module">
-						Add module
-					</Button>
+					<CourseModuleList />
+					<AddModule courseUid={courseContent.uid} />
 				</Flex>
 				<Flex direction="column" gap="6">
 					<Heading color="ampTertiaryText">Unassigned content</Heading>

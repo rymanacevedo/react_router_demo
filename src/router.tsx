@@ -53,7 +53,9 @@ import FolderDetailsView, {
 } from './components/pages/Authoring/FolderDetailsView';
 import { timedAssessmentModuleIntroLoader } from './routes/TimedAssessmentModuleIntro';
 import { questionAnswerLoader } from './components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer';
-
+import ModuleView, {
+	moduleLoader,
+} from './components/pages/Authoring/ModuleView';
 const routesJSX = (
 	<Route
 		path="/"
@@ -197,6 +199,11 @@ const routesJSX = (
 				path="authoring/course/:uid"
 				element={<CourseContentView />}
 				loader={courseContentLoader}
+			/>
+			<Route
+				path="authoring/module/:moduleId"
+				element={<ModuleView />}
+				loader={moduleLoader}
 			/>
 			<Route
 				path="authoring/folder/:folderId"

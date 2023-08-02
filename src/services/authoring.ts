@@ -1,6 +1,8 @@
 import { authenticatedFetch } from './utils';
 import { User } from './user';
 import { CourseContent } from '../store/slices/authoring/coursesViewSlice';
+import { DEFAULT_COURSE_CONTENT_NAME } from '../lib/authoring/constants';
+import { Module } from '../store/slices/authoring/moduleSlice';
 
 function toSortCriteria(sortOrder: string): string {
 	return sortOrder === 'm'
@@ -45,6 +47,51 @@ export const getCourseContent = async (
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
+export const getCourseContentTree = async (
+	user: User,
+	uid: string,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = `/v2/authoring-course-content/${uid}/tree`;
+
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
+export const createModule = async (
+	user: User,
+	parentUid: string,
+	name: string,
+	type: string,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = '/v2/authoring-modules';
+
+	const body = {
+		parentUid,
+		name,
+		type,
+	};
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
+export const updateModule = async (
+	user: User,
+	moduleUid: string,
+	moduleData: any,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = `/v2/authoring-modules/${moduleUid}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'PUT', moduleData);
+};
+
 export const createCourseContent = async (
 	user: User,
 	name?: string,
@@ -57,7 +104,7 @@ export const createCourseContent = async (
 }> => {
 	const url = '/v2/authoring-course-content';
 	const body = {
-		name: name || 'Untitled',
+		name: name || DEFAULT_COURSE_CONTENT_NAME,
 	};
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
 };
@@ -204,4 +251,14 @@ export const addCoursesToFolder = async (
 	const url = `/v2/authoring-folders/${folderUid}/course-content`;
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
+export const getModule = async (
+	user: User,
+	moduleUid: string,
+	revision: number,
+): Promise<{ data: Module; response: Response }> => {
+	const url = `/v2/authoring-modules/${moduleUid}?revision=${revision}`;
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'GET');
 };
