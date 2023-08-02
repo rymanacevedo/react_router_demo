@@ -118,6 +118,7 @@ const ModuleCard = ({ module }: ModuleCardProps) => {
 					<Button
 						textDecoration="none"
 						as={RouterLink}
+						to={`/authoring/module/${uid}`}
 						variant="ampOutline"
 						fontSize="sm"
 						size="sm">
