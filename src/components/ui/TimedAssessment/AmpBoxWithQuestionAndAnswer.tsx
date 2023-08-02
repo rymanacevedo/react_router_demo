@@ -171,7 +171,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 					<Button
 						leftIcon={
 							flaggedQuestions.has(
-								questionInFocus!.publishedQuestionAuthoringKey,
+								questionInFocus?.publishedQuestionAuthoringKey,
 							) ? (
 								<BookmarkFilledIcon />
 							) : (
@@ -186,7 +186,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 							)
 						}>
 						{flaggedQuestions.has(
-							questionInFocus!.publishedQuestionAuthoringKey,
+							questionInFocus?.publishedQuestionAuthoringKey,
 						)
 							? i18n('flaggedForReview')
 							: i18n('flagForReview')}
@@ -214,7 +214,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 						assignmentUid={assignmentUid}
 						answerUpdated={answerUpdated}
 						flaggedQuestions={flaggedQuestions}
-						questionInFocus={questionInFocus!}
+						questionInFocus={questionInFocus}
 						selectedAnswer={selectedAnswer}
 						secondsSpent={secondsSpent}
 						questionId={questionId}

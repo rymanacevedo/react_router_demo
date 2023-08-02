@@ -35,28 +35,36 @@ export default function MultipleChoiceInput({
 	const isChecked = status === 'checked';
 
 	const renderSelectedAnswer = (a: SelectedAnswer) => {
-		if (a.id === answer.id) {
+		// Reset values
+		setIsEnabled(false);
+		setText('');
+		setVariant('');
+		setStatus('unchecked');
+		if (a.id !== answer.id) return;
+
+		if (hasConfidenceEnabled) {
 			if (a.confidence === Confidence.PartSure) {
 				setStatus('indeterminate');
 				setText('I am unsure');
 				setVariant('ampSecondary');
 				setIsEnabled(true);
-			}
-
-			if (a.confidence === Confidence.Sure) {
+			} else if (a.confidence === Confidence.Sure) {
 				setIsEnabled(true);
 				setText('I am sure');
 				setVariant('ampPrimary');
 				setStatus('checked');
-			}
-			if (a.confidence === Confidence.NotSure) {
+			} else if (a.confidence === Confidence.NotSure) {
+				// IDK
 				setStatus('checked');
 			}
-		} else {
-			setIsEnabled(false);
-			setText('');
-			setVariant('');
-			setStatus('unchecked');
+			return;
+		}
+
+		if (
+			a.confidence === Confidence.Sure ||
+			a.confidence === Confidence.NotSure
+		) {
+			setStatus('checked');
 		}
 	};
 
@@ -121,7 +129,7 @@ export default function MultipleChoiceInput({
 	return (
 		<Checkbox
 			name="answerChoice"
-			value={answer?.id}
+			value={answer.id}
 			className="label-hover-effect"
 			variant="multiChoiceAnswer"
 			colorScheme="transparent"

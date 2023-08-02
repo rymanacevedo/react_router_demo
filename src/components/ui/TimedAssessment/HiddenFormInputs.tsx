@@ -5,7 +5,7 @@ type Props = {
 	assignmentUid: string;
 	answerUpdated: boolean;
 	flaggedQuestions: Set<string | undefined>;
-	questionInFocus: QuestionInFocus;
+	questionInFocus: QuestionInFocus | null;
 	selectedAnswer: any;
 	secondsSpent: number;
 	questionId: string;
@@ -35,13 +35,13 @@ export default function HiddenFormInputs({
 			id: 'flagged',
 			name: 'flagged',
 			value: flaggedQuestions
-				.has(questionInFocus.publishedQuestionAuthoringKey)
+				.has(questionInFocus?.publishedQuestionAuthoringKey)
 				.toString(),
 		},
 		{
 			id: 'questionType',
 			name: 'questionType',
-			value: questionInFocus.questionType,
+			value: questionInFocus?.questionType,
 		},
 		{
 			id: 'questionId',
