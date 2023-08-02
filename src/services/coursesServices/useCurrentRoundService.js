@@ -24,7 +24,7 @@ const useCurrentRoundService = () => {
 			const response = await axios({
 				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}/current-round?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
@@ -49,7 +49,7 @@ const useCurrentRoundService = () => {
 			const response = await axios({
 				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}/current-round?isWebApp=true&skipreview=true&subaccount=${subaccount}`,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
@@ -75,7 +75,7 @@ const useCurrentRoundService = () => {
 			const response = await axios({
 				url: `${VITE_BACKEND_API}/v2/rounds/${roundId}/questions/${roundQuestionId}/response?isWebApp=true&subaccount=${subaccount}`,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
