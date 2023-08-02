@@ -58,3 +58,24 @@ test('can navigate to each question on next question click', async ({
 	await page.getByRole('button', { name: 'Next question' }).click();
 	await expect(page.getByText('Review & Submit')).toBeVisible();
 });
+test('can answer a question, finish practice test, then return to the next question', async ({
+	page,
+}) => {
+	await page.goto(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147824',
+	);
+	await page.waitForSelector('h1');
+	await page.locator('label').filter({ hasText: 'correct' }).click();
+	await page.getByRole('button', { name: 'Finish practice test' }).click();
+	await page.waitForURL(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/submission',
+	);
+	await page.getByRole('button', { name: 'Return to questions' }).click();
+
+	await page.waitForURL(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147825',
+	);
+	expect(page.url()).toBe(
+		'http://localhost:3000/main/learning/timedAssessment/f2c0cef1-e4eb-44ae-9dd9-ce3899724194/147825',
+	);
+});
