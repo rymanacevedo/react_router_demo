@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import {initReactI18next} from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // the translations
@@ -186,8 +186,9 @@ const resources = {
 			nextQ: 'Next Question',
 			completeMod: "Congratulations, you've completed this module!",
 			selectAllthatApply: 'Select all that apply',
-         retakePracticeTest: 'Retake Practice Test',
-         results: 'Results',
+			retakePracticeTest: 'Retake Practice Test',
+			results: 'Results',
+			learningStatsTable: 'Learning Stats',
 			/////////////////////////////////////////////
 			//   LearningReviewView.tsx
 			//////////////////////////////////////////////
