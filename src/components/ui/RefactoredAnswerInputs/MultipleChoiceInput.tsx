@@ -54,6 +54,7 @@ export default function MultipleChoiceInput({
 				setVariant('ampPrimary');
 				setStatus('checked');
 			} else if (a.confidence === Confidence.NotSure) {
+				// IDK
 				setStatus('checked');
 			}
 			return;
