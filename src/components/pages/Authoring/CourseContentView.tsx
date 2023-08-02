@@ -15,13 +15,14 @@ import {
 	MagnifyingGlassIcon,
 	PlusIcon,
 } from '@radix-ui/react-icons';
-import { LoaderFunction } from 'react-router';
+import { LoaderFunction, useRevalidator } from 'react-router';
 import { AppDispatch, store } from '../../../store/store';
 import {
 	fetchCourseContent,
 	selectCourseContent,
 	updateCourseContent,
 	putCourseContent,
+	createSection,
 } from '../../../store/slices/authoring/courseContentSlice';
 import { json } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -43,6 +44,7 @@ const CourseContentView = () => {
 	const courseContent = useSelector(selectCourseContent);
 	const [editingTitle, setEditingTitle] = useState(false);
 	const [editingDescription, setEditingDescription] = useState(false);
+	const { revalidate } = useRevalidator();
 
 	if (!courseContent) {
 		// TODO replace with error handler
@@ -227,7 +229,17 @@ const CourseContentView = () => {
 								variant="outline"
 								color="ampPrimary.600"
 								rightIcon={<PlusIcon fill="ampPrimary.600" />}
-								aria-label="Add new section">
+								aria-label="Add new section"
+								onClick={() =>
+									dispatch(
+										createSection({
+											name: 'Untitled Section',
+											courseContentUid: courseContent.uid,
+										}),
+									).then(() => {
+										revalidate();
+									})
+								}>
 								Add section
 							</Button>
 							<Button height="100%" variant="outline" aria-label="Hide modules">
