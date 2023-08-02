@@ -1,6 +1,7 @@
 import { authenticatedFetch } from './utils';
 import { User } from './user';
 import { CourseContent } from '../store/slices/authoring/coursesViewSlice';
+import { DEFAULT_COURSE_CONTENT_NAME } from '../lib/authoring/constants';
 import { Module } from '../store/slices/authoring/moduleSlice';
 
 function toSortCriteria(sortOrder: string): string {
@@ -103,7 +104,7 @@ export const createCourseContent = async (
 }> => {
 	const url = '/v2/authoring-course-content';
 	const body = {
-		name: name || 'Untitled',
+		name: name || DEFAULT_COURSE_CONTENT_NAME,
 	};
 	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
 };
