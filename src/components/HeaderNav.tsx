@@ -22,7 +22,7 @@ import { User } from '../services/user';
 import QuickStart from './ui/QuickStart';
 import CustomMenuButton from './ui/CustomMenuButton';
 import { Tab } from '../services/roles';
-import ampLogoWhite from '../assets/ampLogoWhite.svg';
+import ampLogoWhite from '../ampLogoWhite.svg';
 
 const Header = ({ user, tabs }: { user: User; tabs: Tab[] }) => {
 	const location = useLocation();
