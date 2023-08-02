@@ -8,12 +8,12 @@ import { Cookies } from 'react-cookie-consent';
  * @param defaultValue the cookie's default value
  * @param options See https://github.com/js-cookie/js-cookie
  */
-const handleCookie = (key: string, defaultValue: string, options = {}) =>
+export const handleCookie = (key: string, defaultValue: string, options = {}) =>
 	[
 		() => {
 			return (Cookies.get(key) as string) || defaultValue;
 		},
-		(value: string) => {
+		(value: string | null) => {
 			if (value === null || value == defaultValue) {
 				Cookies.remove(key);
 			} else {
