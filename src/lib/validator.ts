@@ -357,8 +357,16 @@ const RootCourseStatsSchema = z.object({
 	learnerStartingKnowledge: z.number(),
 });
 
+const RootCourseProgressStatsSchema = z.object({
+	startedTime: z.number(),
+	status: z.string(),
+	completedModuleCount: z.number(),
+	totalModuleCount: z.number(),
+});
+
 export const CourseStatsSchema = z.object({
 	courseStats: RootCourseStatsSchema,
+	courseProgressStats: RootCourseProgressStatsSchema,
 });
 
 export type Answer = z.infer<typeof AnswerSchema>;
@@ -374,3 +382,6 @@ export type ModuleData = z.infer<typeof ModuleDataSchema>;
 export type RootData = z.infer<typeof RootSchema>;
 export type CourseAssignmentData = z.infer<typeof AssignmentSchema>;
 export type CourseStatsData = z.infer<typeof CourseStatsSchema>;
+export type CourseProgressStatsType = z.infer<
+	typeof RootCourseProgressStatsSchema
+>;

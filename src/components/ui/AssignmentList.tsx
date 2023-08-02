@@ -28,6 +28,7 @@ import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 import { LoaderFunction } from 'react-router';
 import {
 	getAssignments,
+	getCourseProgressStats,
 	getCourseStats,
 	getCurriculaCourseList,
 	getFullModuleWithQuestions,
@@ -61,6 +62,12 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		user.userKey,
 	);
 
+	const { data: courseProgressStats } = await getCourseProgressStats(
+		user,
+		selectedCourseKey,
+		user.userKey,
+	);
+
 	if (assignments.items) {
 		// eslint-disable-next-line @typescript-eslint/no-throw-literal
 		throw serverError({
@@ -73,7 +80,13 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		});
 	}
 
-	return json({ assignments, courseStats, user, subAccount });
+	return json({
+		assignments,
+		courseStats,
+		user,
+		subAccount,
+		courseProgressStats,
+	});
 };
 
 const AssignmentList = () => {
