@@ -1,17 +1,25 @@
 import { useSelector } from 'react-redux';
-import { selectCourseContentTree } from '../../../store/slices/authoring/courseContentSlice';
 import ModuleCard from './ModuleCard';
-import { Module } from '../../../store/slices/authoring/courseContentSlice';
+import SectionCard from './SectionCard';
+import {
+	selectCourseContentTree,
+	Module,
+	Section,
+} from '../../../store/slices/authoring/courseContentSlice';
 
 const CourseModuleList = () => {
 	const courseContentTree = useSelector(selectCourseContentTree);
+	const sections = courseContentTree?.sections || [];
+	const modules = courseContentTree?.modules || [];
 
 	return (
 		<>
-			{courseContentTree?.modules &&
-				courseContentTree.modules.map((module: Module) => (
-					<ModuleCard module={module} />
-				))}
+			{sections.map((section: Section) => (
+				<SectionCard section={section} />
+			))}
+			{sections.length <= 0 &&
+				modules &&
+				modules.map((module: Module) => <ModuleCard module={module} />)}
 		</>
 	);
 };

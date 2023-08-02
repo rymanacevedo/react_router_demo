@@ -92,6 +92,24 @@ export const updateModule = async (
 	return authenticatedFetch<any>(url, user.sessionKey, 'PUT', moduleData);
 };
 
+export const createSection = async (
+	user: User,
+	courseContentUid: string,
+	name: string,
+): Promise<{
+	data: any;
+	response: Response;
+}> => {
+	const url = '/v2/authoring-sections';
+
+	const body = {
+		courseContentUid,
+		name,
+	};
+
+	return authenticatedFetch<any>(url, user.sessionKey, 'POST', body);
+};
+
 export const createCourseContent = async (
 	user: User,
 	name?: string,

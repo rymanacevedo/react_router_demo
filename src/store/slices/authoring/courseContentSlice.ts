@@ -9,6 +9,7 @@ import {
 	createModule as fetchCreateModule,
 	updateModule as fetchUpdateModule,
 	updateCourseContent as fetchUpdateCourseContent,
+	createSection as fetchCreateSection,
 } from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
 import { RootState } from '../../store';
@@ -106,6 +107,21 @@ export const updateModule = createAsyncThunk(
 	},
 );
 
+export const createSection = createAsyncThunk(
+	'course/createSection',
+	async (
+		{ courseContentUid, name }: { courseContentUid: string; name: string },
+		{ rejectWithValue },
+	) => {
+		const user = requireUser();
+		const response = await fetchCreateSection(user, courseContentUid, name);
+		if (response.response.status !== 200) {
+			return rejectWithValue('Course content not available');
+		}
+		return response.data;
+	},
+);
+
 export interface Module {
 	uid: string;
 	name: string;
@@ -149,19 +165,21 @@ export interface Module {
 	];
 }
 
+export interface Section {
+	uid: string;
+	name: string;
+	modifiedTime: number;
+	modifiedUserFullName: string;
+	modules: Module[];
+}
+
 export interface CourseContentTree {
 	uid: string;
 	name: string;
 	modifiedTime: number;
 	modifiedUserFullName: string;
 	status: string;
-	sections: {
-		uid: string;
-		name: string;
-		modifiedTime: number;
-		modifiedUserFullName: string;
-		modules: Module[];
-	};
+	sections: Section[];
 	modules: Module[];
 }
 
@@ -228,6 +246,17 @@ export const courseContentSlice = createSlice({
 				state.courseContent = action.payload;
 			})
 			.addCase(createModule.rejected, (state) => {
+				state.status = 'failed';
+				state.error = 'Error has occurred';
+			})
+			.addCase(createSection.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(createSection.fulfilled, (state, action) => {
+				state.status = 'succeeded';
+				state.courseContent = action.payload;
+			})
+			.addCase(createSection.rejected, (state) => {
 				state.status = 'failed';
 				state.error = 'Error has occurred';
 			})
