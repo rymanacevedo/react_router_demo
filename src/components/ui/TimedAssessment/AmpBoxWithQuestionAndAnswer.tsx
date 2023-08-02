@@ -1,16 +1,22 @@
 import AmpBox from '../../standard/container/AmpBox';
 import Question from '../Question';
-import { Button, Divider, Heading, HStack, Stack } from '@chakra-ui/react';
+import {
+	Button,
+	Divider,
+	Heading,
+	HStack,
+	Stack,
+	useUpdateEffect,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import {
 	FetcherWithComponents,
 	json,
 	useFetcher,
 	useLoaderData,
-	useNavigate,
 	useOutletContext,
 } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../../utils/user';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -43,13 +49,11 @@ export const questionAnswerLoader: LoaderFunction = async ({ params }) => {
 export default function AmpBoxWithQuestionAndAnswer() {
 	const { t: i18n } = useTranslation();
 	const fetcher = useFetcher();
-	const navigate = useNavigate();
 	const ref = useRef<HTMLFormElement>(null);
 	const { user, hasConfidenceEnabled, questionId } =
 		useLoaderData() as LoaderData;
 	const context = useOutletContext<OutletContext>();
 	const {
-		setQuestionInFocus,
 		secondsSpent,
 		setSecondsSpent,
 		startTimer,
@@ -119,18 +123,22 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		};
 	});
 
-	useEffect(() => {
-		if (questionTrigger === null) {
-			setQuestionInFocus(questionTrigger);
-			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
-		} else if (questionTrigger) {
+	useUpdateEffect(() => {
+		if (!!questionTrigger) {
 			prepareAndSubmitFormData({
 				currentRef: ref.current!,
 				submitter: fetcher,
 			});
-			handleNavigation(questionTrigger);
 		}
+		handleNavigation(questionTrigger);
 	}, [questionTrigger]);
+
+	useUpdateEffect(() => {
+		if (fetcher.data) {
+			setSecondsSpent(0);
+			setAnswerUpdated(false);
+		}
+	}, [fetcher.data]);
 
 	const handleAnsweredQuestions = (action?: string) => {
 		setAnsweredQuestions((prevState: Set<string | undefined>) => {
@@ -146,13 +154,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			return newSet;
 		});
 	};
-
-	useEffect(() => {
-		if (fetcher.data) {
-			setSecondsSpent(0);
-			setAnswerUpdated(false);
-		}
-	}, [fetcher.data]);
 
 	return (
 		<>

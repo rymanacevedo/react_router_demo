@@ -1,5 +1,4 @@
 import { redirect } from 'react-router-dom';
-import { Suspense } from 'react';
 import { getUser, removeUser } from '../utils/user';
 
 export const logoutAction = () => {
@@ -25,7 +24,3 @@ export const logoutLoader = async () => {
 	}
 	return redirect('/login');
 };
-
-export default function Logout() {
-	return <Suspense fallback={<h1>Logging out...</h1>} />;
-}

@@ -73,28 +73,35 @@ export default function QuestionCards() {
 		setQuestionTrigger(null);
 	};
 
-	const handleNavigation = (question: QuestionInFocus) => {
-		setQuestionInFocus(
-			findQuestionInFocus(
-				moduleInfoAndQuestions,
-				roundData,
-				false,
-				false,
-				question.displayOrder - 1,
-			),
-		);
-		const answerInFocus = question.answerList.find((answer) => answer.selected);
+	const handleNavigation = (question: QuestionInFocus | null) => {
+		if (!!question) {
+			setQuestionInFocus(
+				findQuestionInFocus(
+					moduleInfoAndQuestions,
+					roundData,
+					false,
+					false,
+					question.displayOrder - 1,
+				),
+			);
+			const answerInFocus = question.answerList.find(
+				(answer) => answer.selected,
+			);
 
-		const selectedAnswerObj = answerInFocus
-			? { id: answerInFocus.id, confidence: question.confidence! }
-			: question.confidence === Confidence.NotSure
-			? { id: 1, confidence: Confidence.NotSure }
-			: { id: null, confidence: Confidence.NA };
+			const selectedAnswerObj = answerInFocus
+				? { id: answerInFocus.id, confidence: question.confidence! }
+				: question.confidence === Confidence.NotSure
+				? { id: 1, confidence: Confidence.NotSure }
+				: { id: null, confidence: Confidence.NA };
 
-		setSelectedAnswer(selectedAnswerObj);
-		navigate(
-			`/learning/timedAssessment/${assignmentUid}/${question.id.toString()}`,
-		);
+			setSelectedAnswer(selectedAnswerObj);
+			navigate(
+				`/learning/timedAssessment/${assignmentUid}/${question.id.toString()}`,
+			);
+		} else {
+			setQuestionInFocus(question);
+			navigate(`/learning/timedAssessment/${assignmentUid}/submission`);
+		}
 	};
 
 	const { t: i18n } = useTranslation();

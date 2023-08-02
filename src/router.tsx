@@ -3,48 +3,31 @@ import {
 	createRoutesFromElements,
 	Route,
 } from 'react-router-dom';
-import App, { appLoader } from './App';
+import { appLoader } from './App';
 import { AuthProvider } from './hooks/useAuth';
-import Logout, { logoutAction, logoutLoader } from './routes/Logout';
-import Authenticate from './routes/Authenticate';
-import AuthLayout, { authLayoutLoader } from './components/login/AuthLayout';
-import LoginForm, {
-	loginAction,
-	loginLoader,
-} from './components/login/LoginForm';
-import MultiFactor, {
-	mfaAction,
-	mfaLoader,
-} from './components/login/MultiFactor';
-import ForgotPassword, {
-	forgotPasswordAction,
-} from './components/login/ForgotPassword';
-import ForgotUsername, { forgotUsernameAction } from './routes/ForgotUsername';
-import SignUp, { signupAction, signupLoader } from './routes/SignUp';
-import Register, { registerAction } from './routes/Register';
+import { logoutAction, logoutLoader } from './routes/Logout';
+import { authLayoutLoader } from './components/login/AuthLayout';
+import { loginAction, loginLoader } from './components/login/LoginForm';
+import { mfaAction, mfaLoader } from './components/login/MultiFactor';
+import { forgotPasswordAction } from './components/login/ForgotPassword';
+import { forgotUsernameAction } from './routes/ForgotUsername';
+import { signupAction, signupLoader } from './routes/SignUp';
+import { registerAction } from './routes/Register';
 import DialogProvider from './components/DialogProvider';
 import { ProgressMenuContextProvider } from './hooks/useProgressMenuContext';
 import { QuizProvider } from './hooks/useQuizContext';
 import ProtectedRoute, { protectedRouteLoader } from './routes/ProtectedRoute';
 import Page from './components/pages/Page';
-import LearningView, { learningLoader } from './routes/LearningView';
-import AssignmentReviewView, {
-	assignmentReviewLoader,
-} from './components/pages/AssignmentReviewView/AssignmentReviewView';
-import ModuleIntroView from './components/pages/ModuleIntroView';
-import Review, { reviewLoader } from './components/pages/Review';
-import AssignmentView, {
-	assignmentViewLoader,
-} from './components/pages/AssignmentView/AssignmentView';
-import TourView from './components/pages/TourView';
+import { learningLoader } from './routes/LearningView';
+import { assignmentReviewLoader } from './components/pages/AssignmentReviewView/AssignmentReviewView';
+import { reviewLoader } from './components/pages/Review';
+import { assignmentViewLoader } from './components/pages/AssignmentView/AssignmentView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
-import ReviewView, {
-	reviewViewLoader,
-} from './components/ui/Review/ReviewView';
+import { reviewViewLoader } from './components/ui/Review/ReviewView';
 import TimedAssessment, {
 	timedAssessmentLoader,
 } from './routes/TimedAssessment';
-import Success, { successLoader } from './routes/Success';
+import { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
 import { preSignUpLoader } from './routes/SignUpLoader';
 import AssignmentList, {
@@ -56,7 +39,6 @@ import AuthoringView, {
 } from './components/pages/Authoring/AuthoringView';
 import CourseProgress from './components/ui/CourseProgress';
 import { Flex } from '@chakra-ui/react';
-import TimedAssessmentResults from './routes/TimedAssessmentResults';
 import FolderView, {
 	folderActions,
 	folderLoader,
@@ -69,26 +51,25 @@ import CourseContentView, {
 import FolderDetailsView, {
 	folderDetailsLoader,
 } from './components/pages/Authoring/FolderDetailsView';
-import TimedAssessmentModuleIntro, {
-	timedAssessmentModuleIntroLoader,
-} from './routes/TimedAssessmentModuleIntro';
-import QuestionCards from './components/ui/TimedAssessment/QuestionCards';
-import AmpBoxWithQuestionAndAnswer, {
-	questionAnswerLoader,
-} from './components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer';
-import Submission from './components/ui/TimedAssessment/Submission';
+import { timedAssessmentModuleIntroLoader } from './routes/TimedAssessmentModuleIntro';
+import { questionAnswerLoader } from './components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer';
 import ModuleView, {
 	moduleLoader,
 } from './components/pages/Authoring/ModuleView';
-
 const routesJSX = (
-	<Route path="/" id="root" loader={appLoader} element={<App />}>
+	<Route
+		path="/"
+		id="root"
+		loader={appLoader}
+		lazy={async () => {
+			const Module = await import('./App');
+			return { Component: Module.default };
+		}}>
 		<Route
 			loader={logoutLoader}
 			action={logoutAction}
-			id={'logout'}
+			id="logout"
 			path="/logout"
-			element={<Logout />}
 		/>
 		<Route
 			path="/keep-alive"
@@ -98,42 +79,80 @@ const routesJSX = (
 		<Route path="/api/refresher" action={refresherAction} />
 		<Route path="/api/timedAssessment" action={timedAssessmentAction} />
 		<Route path="/feedback" action={questionFeedbackAction} />
-		<Route path="/authenticate" element={<Authenticate />} />
+		<Route
+			path="/authenticate"
+			lazy={async () => {
+				const Module = await import('./routes/Authenticate');
+				return { Component: Module.default };
+			}}
+		/>
 		<Route
 			shouldRevalidate={() => false}
 			loader={authLayoutLoader}
-			element={<AuthLayout />}>
+			lazy={async () => {
+				const Module = await import('./components/login/AuthLayout');
+				return { Component: Module.default };
+			}}>
 			<Route
 				path="login"
 				loader={loginLoader}
 				action={loginAction}
-				element={<LoginForm />}
+				lazy={async () => {
+					const Module = await import('./components/login/LoginForm');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				loader={mfaLoader}
 				action={mfaAction}
 				path="mfa"
-				element={<MultiFactor />}
+				lazy={async () => {
+					const Module = await import('./components/login/MultiFactor');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				path="forgot-password"
-				element={<ForgotPassword />}
 				action={forgotPasswordAction}
+				lazy={async () => {
+					const Module = await import('./components/login/ForgotPassword');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				action={forgotUsernameAction}
 				path="forgot-username"
-				element={<ForgotUsername />}
+				lazy={async () => {
+					const Module = await import('./routes/ForgotUsername');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route path="signup/:abbrevName/:userAltKey" loader={preSignUpLoader} />
 			<Route
 				path="signup"
 				action={signupAction}
 				loader={signupLoader}
-				element={<SignUp />}
+				lazy={async () => {
+					const Module = await import('./routes/SignUp');
+					return { Component: Module.default };
+				}}
 			/>
-			<Route action={registerAction} path="register" element={<Register />} />
-			<Route path="success" loader={successLoader} element={<Success />} />
+			<Route
+				action={registerAction}
+				path="register"
+				lazy={async () => {
+					const Module = await import('./routes/Register');
+					return { Component: Module.default };
+				}}
+			/>
+			<Route
+				path="success"
+				loader={successLoader}
+				lazy={async () => {
+					const Module = await import('./routes/Success');
+					return { Component: Module.default };
+				}}
+			/>
 		</Route>
 
 		<Route
@@ -206,7 +225,13 @@ const routesJSX = (
 					/>
 				}
 			/>
-			<Route loader={learningLoader} path="learning" element={<LearningView />}>
+			<Route
+				loader={learningLoader}
+				path="learning"
+				lazy={async () => {
+					const Module = await import('./routes/LearningView');
+					return { Component: Module.default };
+				}}>
 				<Route
 					loader={assignmentListLoader}
 					path=":selectedCourseKey"
@@ -221,61 +246,119 @@ const routesJSX = (
 			<Route
 				path="learning/assignmentReview/:assignmentKey"
 				loader={assignmentReviewLoader}
-				element={<AssignmentReviewView />}
+				lazy={async () => {
+					const Module = await import(
+						'./components/pages/AssignmentReviewView/AssignmentReviewView'
+					);
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				loader={reviewViewLoader}
 				path="learning/review/:assignmentKey/:questionId"
-				element={<ReviewView />}
+				lazy={async () => {
+					const Module = await import('./components/ui/Review/ReviewView');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				path="learning/moduleIntro/:assignmentKey"
-				element={<ModuleIntroView />}
+				lazy={async () => {
+					const Module = await import('./components/pages/ModuleIntroView');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				loader={reviewLoader}
 				path="learning/review/:assignmentKey"
-				element={<Review />}
+				lazy={async () => {
+					const Module = await import('./components/pages/Review');
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				loader={assignmentViewLoader}
 				path="learning/assignment/:assignmentKey"
-				element={<AssignmentView />}
+				lazy={async () => {
+					const Module = await import(
+						'./components/pages/AssignmentView/AssignmentView'
+					);
+					return { Component: Module.default };
+				}}
 			/>
 			<Route
 				path="learning/assignment/:assignmentKey/outro"
-				element={<ModuleIntroView />}
+				lazy={async () => {
+					const Module = await import('./components/pages/ModuleIntroView');
+					return { Component: Module.default };
+				}}
 			/>
-
 			<>
 				{['learning/assignment/:assignmentKey/tour', 'tour'].map((path) => (
-					<Route key={path} path={path} element={<TourView />} />
+					<Route
+						key={path}
+						path={path}
+						lazy={async () => {
+							const Module = await import('./components/pages/TourView');
+							return { Component: Module.default };
+						}}
+					/>
 				))}
 			</>
 
 			<Route
 				loader={timedAssessmentModuleIntroLoader}
 				path="learning/timedAssessment/moduleIntro/:assignmentUid"
-				element={<TimedAssessmentModuleIntro />}
+				lazy={async () => {
+					const Module = await import('./routes/TimedAssessmentModuleIntro');
+					return { Component: Module.default };
+				}}
 			/>
 
 			<Route
 				loader={timedAssessmentLoader}
 				path="learning/timedAssessment"
-				element={<TimedAssessment />}>
-				<Route path=":assignmentUid" element={<QuestionCards />}>
-					<Route path="submission" element={<Submission />} />
+				element={<TimedAssessment />}
+				lazy={async () => {
+					const Module = await import('./routes/TimedAssessment');
+					return { Component: Module.default };
+				}}>
+				<Route
+					path=":assignmentUid"
+					lazy={async () => {
+						const Module = await import(
+							'./components/ui/TimedAssessment/QuestionCards'
+						);
+						return { Component: Module.default };
+					}}>
+					<Route
+						path="submission"
+						lazy={async () => {
+							const Module = await import(
+								'./components/ui/TimedAssessment/Submission'
+							);
+							return { Component: Module.default };
+						}}
+					/>
 					<Route
 						loader={questionAnswerLoader}
 						path=":questionId"
-						element={<AmpBoxWithQuestionAndAnswer />}
+						lazy={async () => {
+							const Module = await import(
+								'./components/ui/TimedAssessment/AmpBoxWithQuestionAndAnswer'
+							);
+							return { Component: Module.default };
+						}}
 					/>
 				</Route>
 			</Route>
 
 			<Route
 				path="learning/timedAssessment/:assignmentUid/results"
-				element={<TimedAssessmentResults />}
+				lazy={async () => {
+					const Module = await import('./routes/TimedAssessmentResults');
+					return { Component: Module.default };
+				}}
 			/>
 
 			<Route
