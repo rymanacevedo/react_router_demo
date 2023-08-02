@@ -25,7 +25,7 @@ const useModuleContentService = () => {
 				method: 'GET',
 				url: `${VITE_BACKEND_API}/v2/assignments/${assignmentKey}?includeTimePerLU=true&subaccount=${subaccount}`,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
@@ -55,7 +55,7 @@ const useModuleContentService = () => {
 				method: 'POST',
 				url: url,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
@@ -81,7 +81,7 @@ const useModuleContentService = () => {
 				method: 'GET',
 				url: assignmentsData.moduleUri,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
@@ -106,7 +106,7 @@ const useModuleContentService = () => {
 				method: 'GET',
 				url: `${moduleContent.self}?deep=true&subaccount=${subaccount}&answerKey=true`,
 				headers: {
-					Authorization: `Basic ${window.base64.encode(
+					Authorization: `Basic ${window.btoa(
 						`${user.sessionKey}:someotherstring`,
 					)}`,
 					'Content-type': 'application/json',
