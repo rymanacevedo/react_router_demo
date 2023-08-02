@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox, useUpdateEffect } from '@chakra-ui/react';
+import { Badge, Checkbox, SlideFade, useUpdateEffect } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -28,23 +28,42 @@ export default function MultipleChoiceInput({
 	handleAnsweredQuestions,
 }: MultipleChoiceInputProps) {
 	const [status, setStatus] = useState('unchecked');
+	const [text, setText] = useState('');
+	const [isEnabled, setIsEnabled] = useState(false);
+	const [variant, setVariant] = useState('');
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 
 	const renderSelectedAnswer = (a: SelectedAnswer) => {
-		if (a.id === answer.id) {
+		// Reset values
+		setIsEnabled(false);
+		setText('');
+		setVariant('');
+		setStatus('unchecked');
+		if (a.id !== answer.id) return;
+
+		if (hasConfidenceEnabled) {
 			if (a.confidence === Confidence.PartSure) {
 				setStatus('indeterminate');
-			} else if (
-				a.confidence === Confidence.Sure ||
-				a.confidence === Confidence.NotSure
-			) {
+				setText('I am unsure');
+				setVariant('ampSecondary');
+				setIsEnabled(true);
+			} else if (a.confidence === Confidence.Sure) {
+				setIsEnabled(true);
+				setText('I am sure');
+				setVariant('ampPrimary');
 				setStatus('checked');
-			} else {
-				setStatus('unchecked');
+			} else if (a.confidence === Confidence.NotSure) {
+				setStatus('checked');
 			}
-		} else {
-			setStatus('unchecked');
+			return;
+		}
+
+		if (
+			a.confidence === Confidence.Sure ||
+			a.confidence === Confidence.NotSure
+		) {
+			setStatus('checked');
 		}
 	};
 
@@ -120,7 +139,23 @@ export default function MultipleChoiceInput({
 			isChecked={isChecked}
 			isIndeterminate={isIndeterminate}
 			onChange={() => checkStatus(answer)}>
-			<RichContentComponent content={answer.answerRc} />
+			<SlideFade in={isEnabled}>
+				<Badge variant={variant}>{text}</Badge>
+			</SlideFade>
+			<RichContentComponent
+				style={{
+					position: 'relative',
+					top: 5,
+					bottom: 0,
+					left: 0,
+					right: 0,
+					transform: `${
+						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
+					}`,
+					transition: 'transform 0.3s ease-in-out',
+				}}
+				content={answer.answerRc}
+			/>
 		</Checkbox>
 	);
 }
