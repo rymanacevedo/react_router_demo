@@ -41,7 +41,7 @@ export default function MultipleChoiceInput({
 			) {
 				setStatus('checked');
 			} else {
-				setStatus('unchecked'); // Assuming you want to set to 'unchecked' if none of the above conditions are met.
+				setStatus('unchecked');
 			}
 		} else {
 			setStatus('unchecked');
