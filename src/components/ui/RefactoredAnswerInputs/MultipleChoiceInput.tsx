@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Checkbox, SlideFade, useUpdateEffect } from '@chakra-ui/react';
+import { Checkbox, useUpdateEffect } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from '../MultipleChoiceAnswerInput/MultiChoiceIcon';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -28,9 +28,6 @@ export default function MultipleChoiceInput({
 	handleAnsweredQuestions,
 }: MultipleChoiceInputProps) {
 	const [status, setStatus] = useState('unchecked');
-	const [text, setText] = useState('');
-	const [isEnabled, setIsEnabled] = useState(false);
-	const [variant, setVariant] = useState('');
 	const isIndeterminate = status === 'indeterminate';
 	const isChecked = status === 'checked';
 
@@ -38,24 +35,15 @@ export default function MultipleChoiceInput({
 		if (a.id === answer.id) {
 			if (a.confidence === Confidence.PartSure) {
 				setStatus('indeterminate');
-				setText('I am unsure');
-				setVariant('ampSecondary');
-				setIsEnabled(true);
-			}
-
-			if (a.confidence === Confidence.Sure) {
-				setIsEnabled(true);
-				setText('I am sure');
-				setVariant('ampPrimary');
+			} else if (
+				a.confidence === Confidence.Sure ||
+				a.confidence === Confidence.NotSure
+			) {
 				setStatus('checked');
-			}
-			if (a.confidence === Confidence.NotSure) {
-				setStatus('checked');
+			} else {
+				setStatus('unchecked'); // Assuming you want to set to 'unchecked' if none of the above conditions are met.
 			}
 		} else {
-			setIsEnabled(false);
-			setText('');
-			setVariant('');
 			setStatus('unchecked');
 		}
 	};
@@ -121,7 +109,7 @@ export default function MultipleChoiceInput({
 	return (
 		<Checkbox
 			name="answerChoice"
-			value={answer?.id}
+			value={answer.id}
 			className="label-hover-effect"
 			variant="multiChoiceAnswer"
 			colorScheme="transparent"
@@ -132,23 +120,7 @@ export default function MultipleChoiceInput({
 			isChecked={isChecked}
 			isIndeterminate={isIndeterminate}
 			onChange={() => checkStatus(answer)}>
-			<SlideFade in={isEnabled}>
-				<Badge variant={variant}>{text}</Badge>
-			</SlideFade>
-			<RichContentComponent
-				style={{
-					position: 'relative',
-					top: 5,
-					bottom: 0,
-					left: 0,
-					right: 0,
-					transform: `${
-						isEnabled ? 'translateY(0px)' : 'translateY(-16.7812px)'
-					}`,
-					transition: 'transform 0.3s ease-in-out',
-				}}
-				content={answer.answerRc}
-			/>
+			<RichContentComponent content={answer.answerRc} />
 		</Checkbox>
 	);
 }
