@@ -1,6 +1,7 @@
 import { redirect } from 'react-router-dom';
 import { Suspense } from 'react';
 import { getUser, removeUser } from '../utils/user';
+import { setSessionKey } from '../lib/auth/cookies';
 
 export const logoutAction = () => {
 	const user = getUser();
@@ -9,6 +10,7 @@ export const logoutAction = () => {
 		// TODO: error handling if logout fails
 		// await logoutSession(user.sessionKey);
 		removeUser();
+		setSessionKey(null);
 		return redirect(`/login?abbrevName=${accountDomain}`);
 	}
 	return redirect('/login');
@@ -21,6 +23,7 @@ export const logoutLoader = async () => {
 		// TODO: error handling if logout fails
 		// await logoutSession(user.sessionKey);
 		removeUser();
+		setSessionKey(null);
 		return redirect(`/login?abbrevName=${accountDomain}`);
 	}
 	return redirect('/login');
