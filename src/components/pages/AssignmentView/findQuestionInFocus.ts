@@ -92,7 +92,7 @@ export const findQuestionInFocus = (
 		return questionList[questionIndex];
 	} else {
 		const firstUnansweredQuestion = questionList.find(
-			(question) => question.confidence === Confidence.NA,
+			(question) => question.confidence === Confidence.NA || !question.answered,
 		);
 		return firstUnansweredQuestion || questionList[0];
 	}
