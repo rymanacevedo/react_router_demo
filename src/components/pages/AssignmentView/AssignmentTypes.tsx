@@ -1,8 +1,8 @@
 export type SelectedAnswer = {
 	answerId: number | string;
+	selectedOptionId: string | number | null;
+	self: string;
 	confidence?: number;
-	selectedOptionId: number;
-	self: any;
 	answerConfidence?: string;
 };
 
