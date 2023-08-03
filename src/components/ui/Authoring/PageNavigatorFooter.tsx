@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flex, Spacer, Text } from '@chakra-ui/react';
 import PageNavigator from './PageNavigator';
+import { ITEMS_PER_PAGE } from '../../../lib/authoring/constants';
 
 interface PageNavigatorFooterProps {
 	currentPage: number;
@@ -17,16 +18,14 @@ const PageNavigatorFooter = ({
 	itemsTotalCount,
 	href,
 }: PageNavigatorFooterProps) => {
-	const perPage = 24;
-
 	return (
 		<Flex paddingTop={8}>
 			{itemsCurrentCount > 0 && (
 				<Text fontSize="md">
-					Showing {Math.floor(perPage * (currentPage - 1) + 1)} -{' '}
+					Showing {Math.floor(ITEMS_PER_PAGE * (currentPage - 1) + 1)} -{' '}
 					{currentPage === pagesTotalCount
 						? itemsTotalCount
-						: currentPage * perPage}{' '}
+						: currentPage * ITEMS_PER_PAGE}{' '}
 					of {itemsTotalCount}
 				</Text>
 			)}

@@ -10,6 +10,7 @@ import {
 } from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
 import { RootState } from '../../store';
+import { ITEMS_PER_PAGE } from '../../../lib/authoring/constants';
 
 const selectCoursesState = (store: RootState) => store.authoring.courses;
 
@@ -127,7 +128,7 @@ const initialState: CoursesViewState = {
 		status: 'idle',
 		totalCount: 0,
 		error: null,
-		coursesPerPage: 24,
+		coursesPerPage: ITEMS_PER_PAGE,
 		pagesTotalCount: 1,
 	},
 	copyCourseStatus: {

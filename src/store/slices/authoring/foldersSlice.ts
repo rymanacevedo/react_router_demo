@@ -11,6 +11,7 @@ import {
 	getFolder,
 	createFolder as fetchCreateFolder,
 } from '../../../services/authoring';
+import { ITEMS_PER_PAGE } from '../../../lib/authoring/constants';
 
 export const selectFoldersState = (store: RootState) => store.authoring.folders;
 
@@ -125,7 +126,7 @@ const initialState: FoldersState = {
 		name: '',
 		uid: '',
 		courseContents: [],
-		coursesPerPage: 24,
+		coursesPerPage: ITEMS_PER_PAGE,
 		status: 'idle',
 		totalCount: 0,
 		pagesTotalCount: 0,
