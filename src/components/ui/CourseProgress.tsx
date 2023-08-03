@@ -20,7 +20,6 @@ const CourseProgress = () => {
 
 	const { courseStats, courseProgressStats } =
 		useLoaderData() as CourseStatsData;
-	console.log(courseProgressStats);
 	return (
 		<Box
 			w={435}

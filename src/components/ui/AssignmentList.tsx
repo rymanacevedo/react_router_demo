@@ -56,6 +56,22 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		subAccount,
 	);
 
+	const calculateLearningTime = (data) => {
+		let totalTime = 0;
+
+		data.displayCurriculum.children.forEach((module) => {
+			module.assignments.forEach((assignment) => {
+				if (assignment.assignmentType === 'Learning') {
+					totalTime += assignment.estimatedTimeToComplete;
+				}
+			});
+		});
+
+		return totalTime;
+	};
+
+	console.log(calculateLearningTime(assignments));
+
 	const { data: courseStats } = await getCourseStats(
 		user,
 		selectedCourseKey,
