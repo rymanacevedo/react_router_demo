@@ -2,6 +2,7 @@ import {
 	Box,
 	Heading,
 	Table,
+	TableCaption,
 	Tbody,
 	Td,
 	Th,
@@ -37,7 +38,7 @@ const CourseProgress = () => {
 				estimatedLearningTimeLeft={estimatedLearningTimeLeft}
 			/>
 			<Table variant="unstyled" size="sm">
-				{/* <TableCaption>{i18n('learningStatsTable')}</TableCaption> */}
+				<TableCaption>{i18n('learningStatsTable')}</TableCaption>
 				<Thead
 					borderWidth={1}
 					borderColor="lightgray"
