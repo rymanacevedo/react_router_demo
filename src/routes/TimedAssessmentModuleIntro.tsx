@@ -51,12 +51,7 @@ const TimedAssessmentModuleIntro = () => {
 	};
 
 	return (
-		<Container
-			id={'module-intro'}
-			padding={3}
-			maxWidth={'1014px'}
-			overflowY={'hidden'}
-			overflowX={'hidden'}>
+		<Container id={'module-intro'} maxWidth={'990px'} padding={0} marginTop={3}>
 			<AmpBox>
 				<ReviewContentRender content={moduleInfoAndQuestions.introductionRc} />
 				<Box display="flex" alignItems="center">
