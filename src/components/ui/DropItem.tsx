@@ -18,7 +18,7 @@ const DropItem = () => {
 				paddingRight={6}
 				py={2.5}
 				w="398px">
-				<Center>
+				<Center w="100%">
 					<Text
 						color="ampTertiaryText"
 						fontSize="xs"
