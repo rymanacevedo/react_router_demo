@@ -54,7 +54,7 @@ const TimedAssessmentModuleIntro = () => {
 		<Container
 			id={'module-intro'}
 			padding={3}
-			maxWidth={'100vw'}
+			maxWidth={'1014px'}
 			overflowY={'hidden'}
 			overflowX={'hidden'}>
 			<AmpBox>
