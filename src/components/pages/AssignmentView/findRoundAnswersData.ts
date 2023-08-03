@@ -1,37 +1,32 @@
 import { QuestionInFocus } from '../../../lib/validator';
+import { SelectedAnswer } from './AssignmentTypes';
 
-export const findRoundAnswersData = (
-	QInFocusData: QuestionInFocus,
-	correctAnsIds?: boolean,
-) => {
+export const findSelectedAnswers = (questionInFocus: QuestionInFocus) => {
+	const chosenAnswers: SelectedAnswer[] = questionInFocus.answerList
+		.filter((answer) => answer.selected)
+		.map((answer) => ({
+			answerId: answer.id,
+			selectedOptionId: answer.selectedOptionId,
+			self: answer.self,
+		}));
+
+	const selectedAnswers: SelectedAnswer[] = chosenAnswers.map((item) => {
+		const confidenceValue =
+			chosenAnswers.length === 1 && questionInFocus.confidence === 'Sure'
+				? 100
+				: 50;
+		return { ...item, confidence: confidenceValue };
+	});
+
+	return selectedAnswers;
+};
+
+export const findRoundAnswersData = (questionInFocus: QuestionInFocus) => {
 	const correctAnswerIds: number[] = [];
-	const answersChosen = QInFocusData.answerList
-		.map((answer) => {
-			if (answer.isCorrect) {
-				correctAnswerIds.push(answer.id);
-			}
-			if (answer.selected) {
-				return {
-					answerId: answer.id,
-					selectedOptionId: answer.selectedOptionId
-						? answer.selectedOptionId
-						: 0,
-					self: answer.self,
-				};
-			} else {
-				return null;
-			}
-		})
-		.filter((item: any) => item !== null);
-	if (!correctAnsIds) {
-		return answersChosen.map((item: any) => {
-			if (answersChosen.length === 1 && QInFocusData.confidence === 'Sure') {
-				return { ...item, confidence: 100 };
-			} else {
-				return { ...item, confidence: 50 };
-			}
-		});
-	} else {
-		return correctAnswerIds;
-	}
+	questionInFocus.answerList.forEach((answer) => {
+		if (answer.isCorrect) {
+			correctAnswerIds.push(answer.id);
+		}
+	});
+	return correctAnswerIds;
 };
