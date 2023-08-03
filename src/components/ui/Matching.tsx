@@ -28,17 +28,17 @@ export default function Matching({ questionInFocus }: Props) {
 					bgColor="ampWhite"
 					w={['100%', '100%', '100%', '50%', '50%', '50%']}
 					direction="column">
-					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
+					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]} mb={6}>
 						{i18n('options')}
 					</Heading>
 					<Flex
 						p={4}
 						w="400px"
-						h="400px"
+						h="auto"
 						direction="column"
 						bgColor="ampNeutral.50"
 						borderRadius="xl"
-						ml={[0, 0, 0, 67.5]}>
+						ml={[0, 0, 0, 30]}>
 						<DragItem />
 						<DragItem />
 						<DragItem />
