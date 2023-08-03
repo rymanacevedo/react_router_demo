@@ -17,11 +17,17 @@ const PageNavigatorFooter = ({
 	itemsTotalCount,
 	href,
 }: PageNavigatorFooterProps) => {
+	const perPage = 24;
+
 	return (
 		<Flex paddingTop={8}>
 			{itemsCurrentCount > 0 && (
 				<Text fontSize="md">
-					Showing {itemsCurrentCount} of {itemsTotalCount}
+					Showing {Math.floor(perPage * (currentPage - 1) + 1)} -{' '}
+					{currentPage === pagesTotalCount
+						? itemsTotalCount
+						: currentPage * perPage}{' '}
+					of {itemsTotalCount}
 				</Text>
 			)}
 			<Spacer />
