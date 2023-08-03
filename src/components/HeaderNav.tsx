@@ -96,8 +96,13 @@ const Header = ({ user, tabs }: { user: User; tabs: Tab[] }) => {
 			overflow="hidden">
 			<Box maxH={'60px'} as="nav" bg="bg-surface" boxShadow={'sm'}>
 				<Container maxH={'60px'} maxW={'100%'} py={{ base: '0', lg: '0' }}>
-					<Flex as="nav" maxH={'60px'} w="full">
-						<Image alt="Amplifire Logo" src={ampLogoWhite} marginLeft={6} />
+					<Flex
+						as="nav"
+						maxH={'60px'} // hardcoded per Andrew's request
+						w="full"
+						justifyContent="space-between"
+						alignItems="center">
+						<Image alt="Amplifire Logo" src={ampLogoWhite} height={'40px'} />
 						{(inAssignment > -1 || inReview > -1 || inPracticeTest > -1) &&
 						isLargerThan992 ? (
 							<CourseHome />
