@@ -12,6 +12,7 @@ const CourseHome = () => {
 	return (
 		<Center h="60px">
 			<Link
+				marginLeft={5}
 				as={ReactRouterLink}
 				to="/learning"
 				textDecoration="none"
