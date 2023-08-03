@@ -64,7 +64,6 @@ const CourseProgressStats = ({
 			</Flex>
 			<Flex justifyContent="space-between" marginBottom={2}>
 				<Text>{i18n('estimatedTimeLeft')}</Text>
-				{/* TODO: do the calculation */}
 				<Text>{`~${computeTime(estimatedLearningTimeLeft)} ${computeTimeString(
 					estimatedLearningTimeLeft,
 					i18n('minutes'),
