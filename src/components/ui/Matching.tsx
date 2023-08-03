@@ -2,6 +2,7 @@ import { Flex, Heading } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { QuestionInFocus } from '../../lib/validator';
 import AmpBox from '../standard/container/AmpBox';
+import DragItem from './DragItem';
 
 type Props = { questionInFocus: QuestionInFocus };
 //will remove es-lint disable when we start using data in this component
@@ -25,10 +26,23 @@ export default function Matching({ questionInFocus }: Props) {
 			<AmpBox minH="500px" mx={6} mb={6} direction="row" wrap="wrap">
 				<Flex
 					bgColor="ampWhite"
-					w={['100%', '100%', '100%', '50%', '50%', '50%']}>
-					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}
+					direction="column">
+					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]} mb={6}>
 						{i18n('options')}
 					</Heading>
+					<Flex
+						p={4}
+						w="400px"
+						h="auto"
+						direction="column"
+						bgColor="ampNeutral.50"
+						borderRadius="xl"
+						ml={[0, 0, 0, 30]}>
+						<DragItem />
+						<DragItem />
+						<DragItem />
+					</Flex>
 				</Flex>
 				<Flex
 					bgColor="ampWhite"
