@@ -322,7 +322,6 @@ const resources = {
 			moduleProgress: 'Module Progress',
 			estimatedTimeLeft: 'Estimated time left',
 			complete: 'Complete',
-			of: 'of'
 		},
 	},
 	fr: {

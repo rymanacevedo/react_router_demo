@@ -18,7 +18,7 @@ import CourseProgressStats from './CourseProgressStats';
 const CourseProgress = () => {
 	const { t: i18n } = useTranslation();
 
-	const { courseStats, courseProgressStats } =
+	const { courseStats, courseProgressStats, estimatedLearningTimeLeft } =
 		useLoaderData() as CourseStatsData;
 	return (
 		<Box
@@ -32,7 +32,10 @@ const CourseProgress = () => {
 			<Heading fontSize="lg" marginLeft={2} marginTop={2}>
 				{i18n('courseProgress')}
 			</Heading>
-			<CourseProgressStats courseProgressStats={courseProgressStats} />
+			<CourseProgressStats
+				courseProgressStats={courseProgressStats}
+				estimatedLearningTimeLeft={estimatedLearningTimeLeft}
+			/>
 			<Table variant="unstyled" size="sm">
 				{/* <TableCaption>{i18n('learningStatsTable')}</TableCaption> */}
 				<Thead

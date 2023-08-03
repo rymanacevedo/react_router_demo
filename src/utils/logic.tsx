@@ -15,6 +15,7 @@ import {
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
+import { RootData } from '../lib/validator';
 
 export const findDateData = () => {
 	const now = new Date();
@@ -322,4 +323,34 @@ export const formatTimestamp = (timestamp: number): string => {
 	};
 
 	return date.toLocaleDateString('en-US', options);
+};
+
+export const calculateLearningTimeLeft = (data: RootData) => {
+	let totalTime = 0;
+
+	data.displayCurriculum.children.forEach((module) => {
+		module.assignments?.forEach((assignment) => {
+			if (assignment.assignmentType === 'Learning') {
+				totalTime += assignment.estimatedTimeToComplete;
+			}
+		});
+	});
+
+	return totalTime;
+};
+
+export const computeTime = (estimatedTimeToComplete: number) => {
+	return Math.floor(estimatedTimeToComplete / 60) >= 1
+		? Math.floor(estimatedTimeToComplete / 60)
+		: '1';
+};
+
+export const computeTimeString = (
+	estimatedTimeToComplete: number,
+	minutesTranslation: string,
+	minuteTranslation: string,
+) => {
+	return Math.floor(estimatedTimeToComplete / 60) > 1
+		? minutesTranslation
+		: minuteTranslation;
 };

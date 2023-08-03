@@ -367,6 +367,7 @@ const RootCourseProgressStatsSchema = z.object({
 export const CourseStatsSchema = z.object({
 	courseStats: RootCourseStatsSchema,
 	courseProgressStats: RootCourseProgressStatsSchema,
+	estimatedLearningTimeLeft: z.number(),
 });
 
 export type Answer = z.infer<typeof AnswerSchema>;

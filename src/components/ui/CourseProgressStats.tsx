@@ -3,14 +3,20 @@ import { Badge, Box, Flex, Text } from '@chakra-ui/react';
 import { CheckIcon, LapTimerIcon, StopwatchIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { CourseProgressStatsType } from '../../lib/validator';
-import { formatTimestamp } from '../../utils/logic';
+import {
+	computeTime,
+	computeTimeString,
+	formatTimestamp,
+} from '../../utils/logic';
 
 type CourseProgressStatsPropsType = {
 	courseProgressStats: CourseProgressStatsType;
+	estimatedLearningTimeLeft: number;
 };
 
 const CourseProgressStats = ({
 	courseProgressStats,
+	estimatedLearningTimeLeft,
 }: CourseProgressStatsPropsType) => {
 	const { t: i18n } = useTranslation();
 
@@ -59,7 +65,11 @@ const CourseProgressStats = ({
 			<Flex justifyContent="space-between" marginBottom={2}>
 				<Text>{i18n('estimatedTimeLeft')}</Text>
 				{/* TODO: do the calculation */}
-				<Text>~35 minutes</Text>
+				<Text>{`~${computeTime(estimatedLearningTimeLeft)} ${computeTimeString(
+					estimatedLearningTimeLeft,
+					i18n('minutes'),
+					i18n('minute'),
+				)}`}</Text>
 			</Flex>
 		</Box>
 	);
