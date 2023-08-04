@@ -17,9 +17,9 @@ export default function Matching({ questionInFocus }: Props) {
 	};
 
 	const tasks = [
-		{ id: 'A', title: 'Learn Brain Science' },
-		{ id: 'B', title: 'Make a quis' },
-		{ id: 'C', title: 'Profit' },
+		{ id: 1, title: 'Learn Brain Science' },
+		{ id: 2, title: 'Make a quis' },
+		{ id: 3, title: 'Profit' },
 	];
 
 	return (
