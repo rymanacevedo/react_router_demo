@@ -13,7 +13,7 @@ const DropItem = () => {
 				borderRadius="md"
 				maxH="200px"
 				h="60px"
-				mb={4}
+				mb={12}
 				paddingLeft={4}
 				paddingRight={6}
 				py={2.5}
