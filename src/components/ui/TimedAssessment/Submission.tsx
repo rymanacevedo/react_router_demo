@@ -17,8 +17,6 @@ export default function Submission() {
 		roundData,
 	} = useOutletContext<OutletContext>();
 
-	console.log(roundData);
-
 	useEffect(() => {
 		if (!!questionTrigger) {
 			handleNavigation(questionTrigger);

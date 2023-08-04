@@ -4,6 +4,7 @@ import { Box, Icon } from '@chakra-ui/react';
 import { createQuestionArray, QuestionStatus } from '../../../utils/logic';
 import { RoundData } from '../../../lib/validator';
 import { BookmarkFilledIcon } from '@radix-ui/react-icons';
+import { useTranslation } from 'react-i18next';
 
 type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
@@ -12,9 +13,10 @@ type TimedAssessmentReviewTablePropsType = {
 const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
+	const { t: i18n } = useTranslation();
 	const columns = [
 		{
-			title: '  Question',
+			title: i18n('question'),
 			dataIndex: 'question',
 			key: 'question',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
@@ -22,7 +24,7 @@ const TimedAssessmentReviewTable = ({
 			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
-			title: 'Status',
+			title: i18n('status'),
 			dataIndex: 'answered',
 			key: 'status',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
@@ -30,7 +32,7 @@ const TimedAssessmentReviewTable = ({
 			render: (answered: boolean) => (answered ? 'Answered' : 'Not Answered'),
 		},
 		{
-			title: 'Flagged',
+			title: i18n('flagged'),
 			dataIndex: 'flagged',
 			key: 'flagged',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
