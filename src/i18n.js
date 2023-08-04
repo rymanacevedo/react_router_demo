@@ -314,6 +314,14 @@ const resources = {
 			//   ModuleIntroComponent.tsx
 			//////////////////////////////////////////////
 			introAbout: 'About ',
+			//////////////////////////////////////////////
+			//   CourseProgressStats.tsx
+			//////////////////////////////////////////////
+			startedOn: 'Started on',
+			courseStats: 'Course Stats',
+			moduleProgress: 'Module Progress',
+			estimatedTimeLeft: 'Estimated time left',
+			complete: 'Complete',
 		},
 	},
 	fr: {
