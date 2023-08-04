@@ -1,7 +1,11 @@
 import { Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { DragHandleDots2Icon } from '@radix-ui/react-icons';
 
-const DragItem = () => {
+type Task = {
+	id: number;
+	title: string;
+};
+const DragItem = ({ id, title }: Task) => {
 	return (
 		<Flex
 			bgGradient="linear(to-b, ampWhite 74.71%, #E5E5E6 100% )"
@@ -13,11 +17,12 @@ const DragItem = () => {
 			paddingLeft={4}
 			paddingRight={6}
 			py={2.5}
-			w="366px">
+			w="366px"
+			data-taskId={id}>
 			<HStack>
 				<Icon w={6} h={6} color="ampSecondary.500" as={DragHandleDots2Icon} />
 				<Text color="ampSecondary.500" fontSize="lg">
-					Frontal Lobe
+					{title}
 				</Text>
 			</HStack>
 		</Flex>
