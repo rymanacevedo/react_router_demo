@@ -1,4 +1,4 @@
-.ant-table-thead .ant-table-cell {
+.review-table .ant-table-thead .ant-table-cell {
     background-color: transparent !important;
 }
 
@@ -7,7 +7,7 @@
     font-weight: bold;
 }
 
-.ant-table-column-sorters {
+.review-table .ant-table-column-sorters {
     display: flex !important;
     flex-direction: row-reverse;
 }
