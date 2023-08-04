@@ -1,18 +1,8 @@
 .review-table .ant-table-thead .ant-table-cell {
-    background-color: transparent !important;
+    background-color: transparent;
 }
 
 .review-table .ant-table-thead > tr > th {
     color: #246997;
     font-weight: bold;
 }
-
-.review-table .ant-table-column-sorters {
-    display: flex !important;
-    flex-direction: row-reverse;
-}
-
-.ant-table-column-sorter.ant-table-column-sorter-full {
-    margin-right: 5px !important;
-}
-  
