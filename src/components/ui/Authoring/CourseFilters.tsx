@@ -32,6 +32,7 @@ import {
 	selectBulkDeleteStatus,
 	addCoursesToFolder,
 	selectFolders,
+	selectSelectedCourses,
 } from '../../../store/slices/authoring/bulkEditingSlice';
 import { AppDispatch } from '../../../store/store';
 
@@ -57,6 +58,7 @@ const CourseFilter = ({
 	const bulkEditingEnabled = useSelector(selectCoursesBulkEditingEnabled);
 	const bulkDeleteStatus = useSelector(selectBulkDeleteStatus);
 	const selectedFolders = useSelector(selectFolders);
+	const selectedCourses = useSelector(selectSelectedCourses);
 	const addingToFolderParam = searchParams.get('addToFolder') === 'true';
 	const addingToFolder =
 		Object.keys(selectedFolders).length > 0 && addingToFolderParam;
@@ -142,7 +144,8 @@ const CourseFilter = ({
 							}
 							fontWeight="normal"
 							height="100%"
-							variant="outline">
+							variant="outline"
+							isDisabled={selectedCourses.length <= 0}>
 							Add to Folder
 						</Button>
 						{addingToFolder ? null : (
@@ -151,7 +154,8 @@ const CourseFilter = ({
 									onClick={onOpen}
 									fontWeight="normal"
 									height="100%"
-									variant="outline">
+									variant="outline"
+									isDisabled={selectedCourses.length <= 0}>
 									Add to New Folder
 								</Button>
 								<Button
@@ -164,7 +168,8 @@ const CourseFilter = ({
 									}
 									fontWeight="normal"
 									height="100%"
-									variant="outline">
+									variant="outline"
+									isDisabled={selectedCourses.length <= 0}>
 									Delete
 								</Button>
 							</>
