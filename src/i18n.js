@@ -326,7 +326,9 @@ const resources = {
 			//   TimedAssessmentReviewTable.tsx
 			//////////////////////////////////////////////
 			status: 'Status',
-			flagged: 'Flagged'
+			flagged: 'Flagged',
+			answered: 'Answered',
+			notAnswered: 'Not Answered'
 		},
 	},
 	fr: {
