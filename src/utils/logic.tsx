@@ -15,7 +15,7 @@ import {
 } from '../components/pages/AssignmentView/AssignmentTypes';
 import CustomCircle from '../css/CustomCircle';
 import NumberCircle from '../css/NumberCircle';
-import { RootData } from '../lib/validator';
+import { RootData, RoundData, QuestionInFocus } from '../lib/validator';
 
 export const findDateData = () => {
 	const now = new Date();
@@ -353,4 +353,24 @@ export const computeTimeString = (
 	return Math.floor(estimatedTimeToComplete / 60) > 1
 		? minutesTranslation
 		: minuteTranslation;
+};
+
+export type QuestionStatus = {
+	key: string;
+	question: string;
+	status: boolean;
+	flagged: boolean;
+};
+
+export const createQuestionArray = (data: RoundData): QuestionStatus[] => {
+	return data.questionList.map(
+		(question: QuestionInFocus, index: number): QuestionStatus => {
+			return {
+				key: String(index + 1),
+				question: String(index + 1),
+				status: question.answered,
+				flagged: question.flagged,
+			};
+		},
+	);
 };

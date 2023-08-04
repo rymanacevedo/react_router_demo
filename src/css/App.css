@@ -45,3 +45,22 @@ body,
     color: #257CB5;
     transition: all 300ms ease;
 }
+
+.ant-table-thead .ant-table-cell {
+    background-color: transparent !important;
+}
+
+.review-table .ant-table-thead > tr > th {
+    color: #246997;
+    font-weight: bold;
+}
+
+.ant-table-column-sorters {
+    display: flex !important;
+    flex-direction: row-reverse;
+}
+
+.ant-table-column-sorter.ant-table-column-sorter-full {
+    margin-right: 5px !important;
+}
+  
