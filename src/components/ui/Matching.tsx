@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { QuestionInFocus } from '../../lib/validator';
 import AmpBox from '../standard/container/AmpBox';
 import DragItem from './DragItem';
+import DropItem from './DropItem';
 
 type Props = { questionInFocus: QuestionInFocus };
 //will remove es-lint disable when we start using data in this component
@@ -23,12 +24,12 @@ export default function Matching({ questionInFocus }: Props) {
 				</Heading>
 			</AmpBox>
 
-			<AmpBox minH="500px" mx={6} mb={6} direction="row" wrap="wrap">
+			<AmpBox h="auto" mx={6} mb={6} direction="row" wrap="wrap">
 				<Flex
 					bgColor="ampWhite"
 					w={['100%', '100%', '100%', '50%', '50%', '50%']}
 					direction="column">
-					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]} mb={6}>
+					<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]} mb={10}>
 						{i18n('options')}
 					</Heading>
 					<Flex
@@ -46,10 +47,23 @@ export default function Matching({ questionInFocus }: Props) {
 				</Flex>
 				<Flex
 					bgColor="ampWhite"
-					w={['100%', '100%', '100%', '50%', '50%', '50%']}>
-					<Heading as="h2" fontSize="xl">
+					w={['100%', '100%', '100%', '50%', '50%', '50%']}
+					direction="column">
+					<Heading as="h2" fontSize="xl" mb={10}>
 						{i18n('answers')}
 					</Heading>
+					<Flex
+						px={4}
+						pb={4}
+						pt={0}
+						w="500px"
+						h="auto"
+						direction="column"
+						borderRadius="xl">
+						<DropItem />
+						<DropItem />
+						<DropItem />
+					</Flex>
 				</Flex>
 			</AmpBox>
 		</Flex>
