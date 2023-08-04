@@ -64,7 +64,28 @@ const CourseCard = ({
 				direction={listView ? 'row' : 'column'}
 				justifyContent="space-between"
 				role="group"
-				height="100%">
+				height="100%"
+				sx={{
+					_before: {
+						content: "''",
+						opacity: 0,
+						border: '2px solid',
+						position: 'absolute',
+						top: '-2px',
+						left: '-2px',
+						borderColor: 'ampSecondary.200',
+						borderRadius: 'xl',
+						transition: 'opacity 0.3s ease',
+						width: '100%',
+						height: '100%',
+						pointerEvents: 'none',
+					},
+				}}
+				_hover={{
+					_before: {
+						opacity: 1,
+					},
+				}}>
 				<CardHeader
 					width="100%"
 					marginBottom={listView ? 0 : 4}
