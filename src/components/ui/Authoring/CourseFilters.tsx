@@ -109,9 +109,14 @@ const CourseFilter = ({
 
 	return (
 		<Flex marginBottom={6} justifyContent="space-between">
-			<Flex alignItems="flex-start" gap={6}>
+			<Flex alignItems="center" gap={6}>
 				{breadCrumb ? (
-					<Link as={RouterLink} variant="navLink" to="/authoring">
+					<Link
+						borderBottom="2px solid"
+						borderColor="transparent"
+						as={RouterLink}
+						variant="navLink"
+						to="/authoring">
 						All
 					</Link>
 				) : (
@@ -120,7 +125,12 @@ const CourseFilter = ({
 					</Text>
 				)}
 				<Flex alignItems="center" gap={1}>
-					<Link as={RouterLink} variant="navLink" to="/authoring/folders">
+					<Link
+						as={RouterLink}
+						variant="navLink"
+						to="/authoring/folders"
+						borderBottom="2px solid"
+						borderColor="transparent">
 						Folders
 					</Link>
 					{breadCrumb ? (
