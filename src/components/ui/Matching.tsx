@@ -1,26 +1,48 @@
+import { useState } from 'react';
 import { Flex, Heading } from '@chakra-ui/react';
-import { DragDropContext, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from './StricModeDroppable';
 import { useTranslation } from 'react-i18next';
 import { QuestionInFocus } from '../../lib/validator';
 import AmpBox from '../standard/container/AmpBox';
+
 import DragItem from './DragItem';
 import DropItem from './DropItem';
 
 type Props = { questionInFocus: QuestionInFocus };
-//will remove es-lint disable when we start using data in this component
-// eslint-disable-next-line
+
 export default function Matching({ questionInFocus }: Props) {
 	const { t: i18n } = useTranslation();
-	const onDragEnd = (result: any) => {
-		console.log(result);
-	};
+	const initialOptions = questionInFocus.answerList.map((obj) => ({
+		publishedOptionId: obj.publishedOptionId,
+		optionRc: obj.optionRc,
+	}));
 
-	const tasks = [
-		{ id: 1, title: 'Learn Brain Science' },
-		{ id: 2, title: 'Make a quis' },
-		{ id: 3, title: 'Profit' },
-	];
+	const initialAnswers = questionInFocus.answerList.map((obj) => ({
+		publishedAnswerId: obj.publishedAnswerId,
+		answerRc: obj.answerRc,
+	}));
+
+	const [options] = useState(initialOptions);
+	const [droppedItems, setDroppedItems] = useState(
+		Array(initialOptions.length).fill(null),
+	);
+
+	//this function is just a placeholder for now, the source and destination logic wil be in another story
+	const handleDragEnd = (result: any) => {
+		if (!result.destination) return;
+
+		const { source, destination } = result;
+
+		if (
+			source.droppableId === 'draggableItems' &&
+			destination.droppableId === 'dropTargets'
+		) {
+			const newDroppedItems = [...droppedItems];
+			newDroppedItems[destination.index] = options[source.index];
+			setDroppedItems(newDroppedItems);
+		}
+	};
 
 	return (
 		<Flex
@@ -36,7 +58,7 @@ export default function Matching({ questionInFocus }: Props) {
 			</AmpBox>
 
 			<AmpBox h="auto" mx={6} mb={6} direction="row" wrap="wrap">
-				<DragDropContext onDragEnd={onDragEnd}>
+				<DragDropContext onDragEnd={handleDragEnd}>
 					<Flex
 						bgColor="ampWhite"
 						w={['100%', '100%', '100%', '50%', '50%', '50%']}
@@ -52,24 +74,17 @@ export default function Matching({ questionInFocus }: Props) {
 							bgColor="ampNeutral.50"
 							borderRadius="xl"
 							ml={[0, 0, 0, 30]}>
-							<StrictModeDroppable droppableId="tasks">
+							<StrictModeDroppable droppableId="draggableItems">
 								{(provided) => (
 									<div ref={provided.innerRef} {...provided.droppableProps}>
-										{tasks.map((task, index) => (
-											<Draggable
-												key={task.id}
-												draggableId={task.id.toString()}
-												index={index}>
-												{/* eslint-disable-next-line @typescript-eslint/no-shadow */}
-												{(provided) => (
-													<div
-														{...provided.draggableProps}
-														{...provided.dragHandleProps}
-														ref={provided.innerRef}>
-														<DragItem id={task.id} title={task.title} />
-													</div>
-												)}
-											</Draggable>
+										{options.map((option, index) => (
+											<DragItem
+												key={option.publishedOptionId!.toString()}
+												keyToUse={option.publishedOptionId!.toString()}
+												draggableId={option.publishedOptionId!.toString()}
+												index={index}
+												option={option}
+											/>
 										))}
 										{provided.placeholder}
 									</div>
@@ -92,9 +107,19 @@ export default function Matching({ questionInFocus }: Props) {
 							h="auto"
 							direction="column"
 							borderRadius="xl">
-							<DropItem />
-							<DropItem />
-							<DropItem />
+							<StrictModeDroppable droppableId="dropTargets">
+								{(provided) => (
+									<div ref={provided.innerRef} {...provided.droppableProps}>
+										{initialAnswers.map((answer) => (
+											<DropItem
+												key={answer.publishedAnswerId}
+												title={answer.answerRc}
+											/>
+										))}
+										{provided.placeholder}
+									</div>
+								)}
+							</StrictModeDroppable>
 						</Flex>
 					</Flex>
 				</DragDropContext>

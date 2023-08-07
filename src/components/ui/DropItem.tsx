@@ -1,10 +1,18 @@
 import { Center, Flex, Text } from '@chakra-ui/react';
+import RichContentComponent from './RichContentComponent';
+import { useTranslation } from 'react-i18next';
 
-const DropItem = () => {
+type DropItemProps = {
+	title: string | null;
+};
+
+const DropItem = ({ title }: DropItemProps) => {
+	const { t: i18n } = useTranslation();
+
 	return (
 		<>
-			<Text fontSize="lg" fontWeight="normal" mb={4}>
-				Storing Memories Permanently
+			<Text as="div" fontSize="lg" fontWeight="normal" mb={4}>
+				{<RichContentComponent content={title} />}
 			</Text>
 			<Flex
 				bgColor="ampWhite"
@@ -20,11 +28,11 @@ const DropItem = () => {
 				w="398px">
 				<Center w="100%">
 					<Text
+						border="2px solid #FBE8AB"
 						color="ampTertiaryText"
 						fontSize="xs"
-						fontWeight="semibold"
-						border="2px solid #FBE8AB">
-						Drag a selection here
+						fontWeight="semibold">
+						{i18n('dragHere')}
 					</Text>
 				</Center>
 			</Flex>

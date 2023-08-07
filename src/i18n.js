@@ -278,9 +278,9 @@ const resources = {
 			continueToResults: 'Continue to results',
 			yourPracticeTestIsComplete: 'Your practice test is complete',
 			youHaveRunOutOfTime: 'You have run out of time!',
-         returnToQuestions: 'Return to questions',
-         reviewAndSubmit: 'Review & Submit',
-         submitAndFinish: 'Submit and finish',
+			returnToQuestions: 'Return to questions',
+			reviewAndSubmit: 'Review & Submit',
+			submitAndFinish: 'Submit and finish',
 			//////////////////////////////////////////////
 			//   ReviewView.tsx
 			//////////////////////////////////////////////
@@ -314,6 +314,7 @@ const resources = {
 			//   ModuleIntroComponent.tsx
 			//////////////////////////////////////////////
 			introAbout: 'About ',
+			dragHere: 'Drag a selection here',
 		},
 	},
 	fr: {
