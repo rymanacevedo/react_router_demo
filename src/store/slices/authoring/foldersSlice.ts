@@ -96,6 +96,9 @@ export interface FoldersState {
 	selectedFolders: { uid: string }[];
 	showFolderSelectionModal: boolean;
 	submittingCourses: boolean;
+	foldersList: {
+		foldersPerPage: number;
+	};
 	folderDetails: {
 		name: string;
 		uid: string;
@@ -122,6 +125,9 @@ const initialState: FoldersState = {
 	selectedFolders: [],
 	showFolderSelectionModal: false,
 	submittingCourses: false,
+	foldersList: {
+		foldersPerPage: ITEMS_PER_PAGE,
+	},
 	folderDetails: {
 		name: '',
 		uid: '',
@@ -165,6 +171,7 @@ export const foldersSlice = createSlice({
 				selectedFolders: initialState.selectedFolders,
 				showFolderSelectionModal: initialState.showFolderSelectionModal,
 				submittingCourses: initialState.submittingCourses,
+				foldersList: state.foldersList,
 				folderDetails: state.folderDetails,
 				createFolderStatus: initialState.createFolderStatus,
 			};
