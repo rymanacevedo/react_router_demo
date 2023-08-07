@@ -4,12 +4,11 @@ import { StrictModeDroppable } from './StricModeDroppable';
 import { useTranslation } from 'react-i18next';
 import { QuestionInFocus } from '../../lib/validator';
 import AmpBox from '../standard/container/AmpBox';
-
 import DragItem from './DragItem';
 import DropItem from './DropItem';
 import useArray from '../../hooks/useArray';
 
-type Props = { questionInFocus: QuestionInFocus };
+type MatchingProps = { questionInFocus: QuestionInFocus };
 type InitialOptions = {
 	publishedOptionId: string | number | null;
 	optionRc: string | null;
@@ -20,7 +19,7 @@ type InitialAnswers = {
 	answerRc: string | null;
 };
 
-export default function Matching({ questionInFocus }: Props) {
+export default function Matching({ questionInFocus }: MatchingProps) {
 	const { t: i18n } = useTranslation();
 	const { array: initialOptions } = useArray<InitialOptions>(
 		questionInFocus.answerList.map((obj) => ({
@@ -63,7 +62,7 @@ export default function Matching({ questionInFocus }: Props) {
 			direction="column"
 			maxW="1496px">
 			<AmpBox minH="3xs" m={6}>
-				<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]}>
+				<Heading as="h2" fontSize="xl" ml="12.375rem">
 					{i18n('dragMatch')}
 				</Heading>
 			</AmpBox>
@@ -74,7 +73,7 @@ export default function Matching({ questionInFocus }: Props) {
 						bgColor="ampWhite"
 						w={['100%', '100%', '100%', '50%', '50%', '50%']}
 						direction="column">
-						<Heading as="h2" fontSize="xl" ml={[0, 0, 0, 67.5]} mb={10}>
+						<Heading as="h2" fontSize="xl" ml="12.375rem" mb={10}>
 							{i18n('options')}
 						</Heading>
 						<Flex
@@ -84,7 +83,7 @@ export default function Matching({ questionInFocus }: Props) {
 							direction="column"
 							bgColor="ampNeutral.50"
 							borderRadius="xl"
-							ml={[0, 0, 0, 67.5]}>
+							ml="12.375rem">
 							<StrictModeDroppable droppableId="draggableItems">
 								{(provided) => (
 									<div ref={provided.innerRef} {...provided.droppableProps}>
