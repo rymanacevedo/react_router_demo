@@ -1,4 +1,4 @@
-import { Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Icon } from '@chakra-ui/react';
 import { DragHandleDots2Icon } from '@radix-ui/react-icons';
 import { Draggable } from 'react-beautiful-dnd';
 import RichContentComponent from './RichContentComponent';
@@ -40,9 +40,9 @@ const DragItem = ({ index, option, keyToUse }: DragItemProps) => {
 							color="ampSecondary.500"
 							as={DragHandleDots2Icon}
 						/>
-						<Text as="div" color="ampSecondary.500" fontSize="lg">
+						<Box color="ampSecondary.500" fontSize="lg">
 							{<RichContentComponent content={option.optionRc} />}
-						</Text>
+						</Box>
 					</HStack>
 				</Flex>
 			)}

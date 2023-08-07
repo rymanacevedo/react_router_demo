@@ -1,4 +1,4 @@
-import { Center, Flex, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Text } from '@chakra-ui/react';
 import RichContentComponent from './RichContentComponent';
 import { useTranslation } from 'react-i18next';
 
@@ -11,9 +11,9 @@ const DropItem = ({ title }: DropItemProps) => {
 
 	return (
 		<>
-			<Text as="div" fontSize="lg" fontWeight="normal" mb={4}>
+			<Box fontSize="lg" fontWeight="normal" mb={4}>
 				{<RichContentComponent content={title} />}
-			</Text>
+			</Box>
 			<Flex
 				bgColor="ampWhite"
 				border="1.5px dashed"
