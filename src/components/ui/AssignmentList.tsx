@@ -28,6 +28,7 @@ import { json, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 import { LoaderFunction } from 'react-router';
 import {
 	getAssignments,
+	getCourseProgressStats,
 	getCourseStats,
 	getCurriculaCourseList,
 	getFullModuleWithQuestions,
@@ -39,6 +40,11 @@ import {
 	CourseAssignmentData,
 	Curriculum,
 } from '../../lib/validator';
+import {
+	calculateLearningTimeLeft,
+	computeTime,
+	computeTimeString,
+} from '../../utils/logic';
 
 export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 	const selectedCourseKey = params.selectedCourseKey!;
@@ -61,6 +67,14 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		user.userKey,
 	);
 
+	const { data: courseProgressStats } = await getCourseProgressStats(
+		user,
+		selectedCourseKey,
+		user.userKey,
+	);
+
+	const estimatedLearningTimeLeft = calculateLearningTimeLeft(assignments);
+
 	if (assignments.items) {
 		// eslint-disable-next-line @typescript-eslint/no-throw-literal
 		throw serverError({
@@ -73,7 +87,14 @@ export const assignmentListLoader: LoaderFunction = async ({ params }) => {
 		});
 	}
 
-	return json({ assignments, courseStats, user, subAccount });
+	return json({
+		assignments,
+		courseStats,
+		user,
+		subAccount,
+		courseProgressStats,
+		estimatedLearningTimeLeft,
+	});
 };
 
 const AssignmentList = () => {
@@ -97,33 +118,26 @@ const AssignmentList = () => {
 					return (
 						<Text fontSize="xs">
 							{assignment?.estimatedTimeToComplete &&
-								`~${
-									Math.floor(assignment?.estimatedTimeToComplete / 60) >= 1
-										? Math.floor(assignment?.estimatedTimeToComplete / 60)
-										: '1'
-								}
-							${
-								Math.floor(assignment?.estimatedTimeToComplete / 60) > 1
-									? i18n('mins')
-									: i18n('min')
-							}`}
+								`~${computeTime(
+									assignment.estimatedTimeToComplete,
+								)} ${computeTimeString(
+									assignment.estimatedTimeToComplete,
+									i18n('minutes'),
+									i18n('minute'),
+								)}`}
 						</Text>
 					);
 				}
 				case 'IN_PROGRESS': {
 					return (
 						<Text fontSize="xs">
-							{`~${
-								Math.floor(assignment?.estimatedTimeToComplete / 60) >= 1
-									? Math.floor(assignment?.estimatedTimeToComplete / 60)
-									: '1'
-							}
-							${
-								Math.floor(assignment?.estimatedTimeToComplete / 60) > 1
-									? i18n('mins')
-									: i18n('min')
-							}
-							left`}
+							{`~${computeTime(
+								assignment.estimatedTimeToComplete,
+							)} ${computeTimeString(
+								assignment.estimatedTimeToComplete,
+								i18n('minutes'),
+								i18n('minute'),
+							)} left`}
 						</Text>
 					);
 				}
@@ -137,11 +151,9 @@ const AssignmentList = () => {
 					return (
 						<Text fontSize="xs">
 							{assignment.estimatedTimeToComplete &&
-								`${
-									Math.floor(assignment.estimatedTimeToComplete / 60) >= 1
-										? Math.floor(assignment.estimatedTimeToComplete / 60)
-										: '1'
-								}	${i18n('minToComplete')}`}
+								`${computeTime(assignment.estimatedTimeToComplete)}	${i18n(
+									'minToComplete',
+								)}`}
 						</Text>
 					);
 				}

@@ -14,12 +14,13 @@ import { useTranslation } from 'react-i18next';
 import { useLoaderData } from 'react-router';
 import { CourseStatsData } from '../../lib/validator';
 import { formatTime, roundNumber } from '../../utils/logic';
+import CourseProgressStats from './CourseProgressStats';
 
 const CourseProgress = () => {
 	const { t: i18n } = useTranslation();
 
-	const { courseStats } = useLoaderData() as CourseStatsData;
-
+	const { courseStats, courseProgressStats, estimatedLearningTimeLeft } =
+		useLoaderData() as CourseStatsData;
 	return (
 		<Box
 			w={435}
@@ -32,7 +33,10 @@ const CourseProgress = () => {
 			<Heading fontSize="lg" marginLeft={2} marginTop={2}>
 				{i18n('courseProgress')}
 			</Heading>
-
+			<CourseProgressStats
+				courseProgressStats={courseProgressStats}
+				estimatedLearningTimeLeft={estimatedLearningTimeLeft}
+			/>
 			<Table variant="unstyled" size="sm">
 				<TableCaption>{i18n('learningStatsTable')}</TableCaption>
 				<Thead
