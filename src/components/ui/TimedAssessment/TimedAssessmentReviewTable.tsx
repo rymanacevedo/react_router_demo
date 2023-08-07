@@ -1,13 +1,20 @@
 import React from 'react';
 import { Box, Icon } from '@chakra-ui/react';
-import { createQuestionArray } from '../../../utils/logic';
-import { RoundData } from '../../../lib/validator';
+import { QuestionInFocus, RoundData } from '../../../lib/validator';
 import { BookmarkFilledIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { AmpTable } from '../../../css/theme';
+import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 
 type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
+};
+
+export type QuestionStatus = {
+	key: string;
+	question: string;
+	status: boolean;
+	flagged: boolean;
 };
 
 const TimedAssessmentReviewTable = ({
@@ -38,6 +45,19 @@ const TimedAssessmentReviewTable = ({
 				) : null,
 		},
 	];
+
+	const createQuestionArray = (data: RoundData): QuestionStatus[] => {
+		return data.questionList.map(
+			(question: QuestionInFocus, index: number): QuestionStatus => {
+				return {
+					key: String(index + 1),
+					question: String(index + 1),
+					status: question.confidence !== Confidence.NA,
+					flagged: question.flagged,
+				};
+			},
+		);
+	};
 
 	return (
 		<Box width={600} marginTop={10}>
