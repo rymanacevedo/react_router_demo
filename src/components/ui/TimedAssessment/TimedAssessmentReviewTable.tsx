@@ -5,11 +5,22 @@ import { createQuestionArray } from '../../../utils/logic';
 import { RoundData } from '../../../lib/validator';
 import { BookmarkFilledIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
-import '../../../css/Table.css';
+import styled from 'styled-components';
 
 type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
 };
+
+const StyledTable = styled(Table)`
+	&.review-table .ant-table-thead .ant-table-cell {
+		background-color: transparent;
+	}
+
+	&.review-table .ant-table-thead > tr > th {
+		color: ${({ theme }) => theme.colors.ampSecondary[600]};
+		font-weight: bold;
+	}
+`;
 
 const TimedAssessmentReviewTable = ({
 	roundData,
@@ -24,7 +35,7 @@ const TimedAssessmentReviewTable = ({
 		},
 		{
 			title: i18n('status'),
-			dataIndex: 'answered',
+			dataIndex: 'status',
 			key: 'status',
 			render: (answered: boolean) =>
 				answered ? i18n('answered') : i18n('notAnswered'),
@@ -44,7 +55,7 @@ const TimedAssessmentReviewTable = ({
 
 	return (
 		<Box width={600} marginTop={10}>
-			<Table
+			<StyledTable
 				columns={columns}
 				dataSource={createQuestionArray(roundData)}
 				pagination={false}

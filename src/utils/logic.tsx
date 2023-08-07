@@ -368,7 +368,7 @@ export const createQuestionArray = (data: RoundData): QuestionStatus[] => {
 			return {
 				key: String(index + 1),
 				question: String(index + 1),
-				status: question.answered,
+				status: question.confidence !== Confidence.NA,
 				flagged: question.flagged,
 			};
 		},
