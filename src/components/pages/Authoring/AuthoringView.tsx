@@ -91,6 +91,7 @@ const AuthoringView = () => {
 				pagesTotalCount={courseList.pagesTotalCount}
 				itemsCurrentCount={courseList.courseContents.length}
 				itemsTotalCount={courseList.totalCount}
+				itemsPerPage={courseList.coursesPerPage}
 				href="/authoring"
 			/>
 			<CourseFolderModal />
