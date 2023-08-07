@@ -20,6 +20,11 @@ export const selectFolderDetails = createSelector(
 	({ folderDetails }) => folderDetails,
 );
 
+export const selectFoldersList = createSelector(
+	selectFoldersState,
+	({ foldersList }) => foldersList,
+);
+
 export const fetchFolderDetails = createAsyncThunk(
 	'courses/fetchFolderDetails',
 	async (
