@@ -5,6 +5,7 @@ import { BookmarkFilledIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { AmpTable } from '../../../css/theme';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
+import useArray from '../../../hooks/useArray';
 
 type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
@@ -17,38 +18,44 @@ export type QuestionStatus = {
 	flagged: boolean;
 };
 
+export type Columns = {
+	title: string;
+	dataIndex: string;
+	key: string;
+	render?: (value: string | boolean) => JSX.Element | null;
+};
+
 const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
 	const { t: i18n } = useTranslation();
-	const columns = [
+	const columns = useArray<Columns>([
 		{
 			title: i18n('question'),
 			dataIndex: 'question',
 			key: 'question',
-			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
+			render: (text) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
 			title: i18n('status'),
 			dataIndex: 'status',
 			key: 'status',
-			render: (answered: boolean) =>
-				answered ? i18n('answered') : i18n('notAnswered'),
+			render: (answered) => (answered ? i18n('answered') : i18n('notAnswered')),
 		},
 		{
 			title: i18n('flagged'),
 			dataIndex: 'flagged',
 			key: 'flagged',
-			render: (flagged: boolean) =>
+			render: (flagged) =>
 				flagged ? (
 					<Icon as={BookmarkFilledIcon} w={6} h={6} color="ampSecondary.500" />
 				) : null,
 		},
-	];
+	]);
 
-	const createQuestionArray = (data: RoundData): QuestionStatus[] => {
-		return data.questionList.map(
-			(question: QuestionInFocus, index: number): QuestionStatus => {
+	const dataSource = useArray<QuestionStatus>(
+		roundData.questionList.map(
+			(question: QuestionInFocus, index: number): any => {
 				return {
 					key: String(index + 1),
 					question: String(index + 1),
@@ -56,14 +63,14 @@ const TimedAssessmentReviewTable = ({
 					flagged: question.flagged,
 				};
 			},
-		);
-	};
+		),
+	);
 
 	return (
 		<Box width={600} marginTop={10}>
 			<AmpTable
-				columns={columns}
-				dataSource={createQuestionArray(roundData)}
+				columns={columns.array}
+				dataSource={dataSource.array}
 				pagination={false}
 			/>
 		</Box>
