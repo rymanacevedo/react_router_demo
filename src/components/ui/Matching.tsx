@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Flex, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { StrictModeDroppable } from './StricModeDroppable';
 import { useTranslation } from 'react-i18next';
@@ -8,25 +7,37 @@ import AmpBox from '../standard/container/AmpBox';
 
 import DragItem from './DragItem';
 import DropItem from './DropItem';
+import useArray from '../../hooks/useArray';
 
 type Props = { questionInFocus: QuestionInFocus };
+type InitialOptions = {
+	publishedOptionId: string | number | null;
+	optionRc: string | null;
+};
+
+type InitialAnswers = {
+	publishedAnswerId: string | number | null;
+	answerRc: string | null;
+};
 
 export default function Matching({ questionInFocus }: Props) {
 	const { t: i18n } = useTranslation();
-	const initialOptions = questionInFocus.answerList.map((obj) => ({
-		publishedOptionId: obj.publishedOptionId,
-		optionRc: obj.optionRc,
-	}));
-
-	const initialAnswers = questionInFocus.answerList.map((obj) => ({
-		publishedAnswerId: obj.publishedAnswerId,
-		answerRc: obj.answerRc,
-	}));
-
-	const [options] = useState(initialOptions);
-	const [droppedItems, setDroppedItems] = useState(
-		Array(initialOptions.length).fill(null),
+	const { array: initialOptions } = useArray<InitialOptions>(
+		questionInFocus.answerList.map((obj) => ({
+			publishedOptionId: obj.publishedOptionId,
+			optionRc: obj.optionRc,
+		})),
 	);
+
+	const { array: initialAnswers } = useArray<InitialAnswers>(
+		questionInFocus.answerList.map((obj) => ({
+			publishedAnswerId: obj.publishedAnswerId,
+			answerRc: obj.answerRc,
+		})),
+	);
+
+	const { array: droppedItems, set: setDroppedItems } =
+		useArray<InitialOptions>([]);
 
 	//this function is just a placeholder for now, the source and destination logic wil be in another story
 	const handleDragEnd = (result: any) => {
@@ -39,7 +50,7 @@ export default function Matching({ questionInFocus }: Props) {
 			destination.droppableId === 'dropTargets'
 		) {
 			const newDroppedItems = [...droppedItems];
-			newDroppedItems[destination.index] = options[source.index];
+			newDroppedItems[destination.index] = initialOptions[source.index];
 			setDroppedItems(newDroppedItems);
 		}
 	};
@@ -73,11 +84,11 @@ export default function Matching({ questionInFocus }: Props) {
 							direction="column"
 							bgColor="ampNeutral.50"
 							borderRadius="xl"
-							ml={[0, 0, 0, 30]}>
+							ml={[0, 0, 0, 67.5]}>
 							<StrictModeDroppable droppableId="draggableItems">
 								{(provided) => (
 									<div ref={provided.innerRef} {...provided.droppableProps}>
-										{options.map((option, index) => (
+										{initialOptions.map((option, index) => (
 											<DragItem
 												key={option.publishedOptionId!.toString()}
 												keyToUse={option.publishedOptionId!.toString()}
@@ -109,15 +120,15 @@ export default function Matching({ questionInFocus }: Props) {
 							borderRadius="xl">
 							<StrictModeDroppable droppableId="dropTargets">
 								{(provided) => (
-									<div ref={provided.innerRef} {...provided.droppableProps}>
-										{initialAnswers.map((answer) => (
+									<Box ref={provided.innerRef} {...provided.droppableProps}>
+										{initialAnswers.map((answer: InitialAnswers) => (
 											<DropItem
 												key={answer.publishedAnswerId}
 												title={answer.answerRc}
 											/>
 										))}
 										{provided.placeholder}
-									</div>
+									</Box>
 								)}
 							</StrictModeDroppable>
 						</Flex>
