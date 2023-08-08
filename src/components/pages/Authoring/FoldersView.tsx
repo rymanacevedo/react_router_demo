@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Grid, GridItem, useToast } from '@chakra-ui/react';
 import { LoaderFunction, ActionFunction } from 'react-router';
+import { useSelector } from 'react-redux';
 import { json, useLoaderData, useActionData } from 'react-router-dom';
 import FolderCard from '../../ui/Authoring/FolderCard';
 import { requireUser } from '../../../utils/user';
@@ -12,6 +13,7 @@ import FolderFilters from '../../ui/Authoring/FolderFilters';
 import PageNavigatorFooter from '../../ui/Authoring/PageNavigatorFooter';
 import AuthoringLayout from '../../ui/Authoring/AuthoringLayout';
 import { folderListOrder } from '../../../lib/authoring/cookies';
+import { selectFoldersList } from '../../../store/slices/authoring/foldersSlice';
 
 export const folderActions: ActionFunction = async ({ request }) => {
 	const user = requireUser();
@@ -81,6 +83,7 @@ export interface Folder {
 const FolderView = () => {
 	const { folderList, foldersTotalCount, currentPage, pagesTotalCount } =
 		useLoaderData() as any;
+	const { foldersPerPage } = useSelector(selectFoldersList);
 	const actionData = useActionData() as any;
 	const toast = useToast();
 
@@ -125,6 +128,7 @@ const FolderView = () => {
 				pagesTotalCount={pagesTotalCount}
 				itemsCurrentCount={folderList.length}
 				itemsTotalCount={foldersTotalCount}
+				itemsPerPage={foldersPerPage}
 				href="/authoring/folders"
 			/>
 		</AuthoringLayout>

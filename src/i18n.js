@@ -326,6 +326,12 @@ const resources = {
 			//   Matching.tsx
 			//////////////////////////////////////////////
 			dragHere: 'Drag a selection here',
+			//   TimedAssessmentReviewTable.tsx
+			//////////////////////////////////////////////
+			status: 'Status',
+			flagged: 'Flagged',
+			answered: 'Answered',
+			notAnswered: 'Not Answered',
 		},
 	},
 	fr: {

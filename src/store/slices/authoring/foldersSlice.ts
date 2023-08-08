@@ -11,12 +11,18 @@ import {
 	getFolder,
 	createFolder as fetchCreateFolder,
 } from '../../../services/authoring';
+import { ITEMS_PER_PAGE } from '../../../lib/authoring/constants';
 
 export const selectFoldersState = (store: RootState) => store.authoring.folders;
 
 export const selectFolderDetails = createSelector(
 	selectFoldersState,
 	({ folderDetails }) => folderDetails,
+);
+
+export const selectFoldersList = createSelector(
+	selectFoldersState,
+	({ foldersList }) => foldersList,
 );
 
 export const fetchFolderDetails = createAsyncThunk(
@@ -95,6 +101,9 @@ export interface FoldersState {
 	selectedFolders: { uid: string }[];
 	showFolderSelectionModal: boolean;
 	submittingCourses: boolean;
+	foldersList: {
+		foldersPerPage: number;
+	};
 	folderDetails: {
 		name: string;
 		uid: string;
@@ -121,11 +130,14 @@ const initialState: FoldersState = {
 	selectedFolders: [],
 	showFolderSelectionModal: false,
 	submittingCourses: false,
+	foldersList: {
+		foldersPerPage: ITEMS_PER_PAGE,
+	},
 	folderDetails: {
 		name: '',
 		uid: '',
 		courseContents: [],
-		coursesPerPage: 24,
+		coursesPerPage: ITEMS_PER_PAGE,
 		status: 'idle',
 		totalCount: 0,
 		pagesTotalCount: 0,
@@ -164,6 +176,7 @@ export const foldersSlice = createSlice({
 				selectedFolders: initialState.selectedFolders,
 				showFolderSelectionModal: initialState.showFolderSelectionModal,
 				submittingCourses: initialState.submittingCourses,
+				foldersList: state.foldersList,
 				folderDetails: state.folderDetails,
 				createFolderStatus: initialState.createFolderStatus,
 			};

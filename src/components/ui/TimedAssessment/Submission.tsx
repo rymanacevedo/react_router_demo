@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { OutletContext } from '../../../routes/TimedAssessment';
 import { findQuestionInFocus } from '../../pages/AssignmentView/findQuestionInFocus';
+import TimedAssessmentReviewTable from './TimedAssessmentReviewTable';
 
 export default function Submission() {
 	const { t: i18n } = useTranslation();
@@ -45,6 +46,7 @@ export default function Submission() {
 					{i18n('returnToQuestions')}
 				</Button>
 			</ButtonGroup>
+			<TimedAssessmentReviewTable roundData={roundData} />
 		</AmpBox>
 	);
 }
