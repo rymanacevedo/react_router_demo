@@ -11,7 +11,7 @@ type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
 };
 
-type QuestionStatus = {
+export type QuestionStatus = {
 	key: string;
 	question: string;
 	status: boolean;
