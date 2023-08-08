@@ -60,6 +60,7 @@ export const TimedAssessmentFieldsSchema = z.object({
 });
 
 const OutletContextSchema = z.object({
+	answeredQuestions: z.set(z.string().optional()),
 	roundData: RoundDataSchema,
 	questionInFocus: QuestionInFocusSchema.nullable(),
 	setQuestionInFocus: z.function(),
