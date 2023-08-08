@@ -22,6 +22,7 @@ export type Columns = {
 	title: string;
 	dataIndex: string;
 	key: string;
+	sorter?: (a: QuestionStatus, b: QuestionStatus) => number;
 	render?: (value: string | boolean) => React.ReactElement | null;
 };
 
@@ -34,18 +35,24 @@ const TimedAssessmentReviewTable = ({
 			title: i18n('question'),
 			dataIndex: 'question',
 			key: 'question',
+			sorter: (a: QuestionStatus, b: QuestionStatus) =>
+				a.question.localeCompare(b.question),
 			render: (text) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
 			title: i18n('status'),
 			dataIndex: 'status',
 			key: 'status',
+			sorter: (a: QuestionStatus, b: QuestionStatus) =>
+				a.status === b.status ? 0 : a.status ? 1 : -1,
 			render: (answered) => (answered ? i18n('answered') : i18n('notAnswered')),
 		},
 		{
 			title: i18n('flagged'),
 			dataIndex: 'flagged',
 			key: 'flagged',
+			sorter: (a: QuestionStatus, b: QuestionStatus) =>
+				a.flagged === b.flagged ? 0 : a.flagged ? 1 : -1,
 			render: (flagged) =>
 				flagged ? (
 					<Icon as={BookmarkFilledIcon} w={6} h={6} color="ampSecondary.500" />
