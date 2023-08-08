@@ -23,6 +23,12 @@ const Badge = defineStyleConfig({
 				color: 'ampBlack',
 			};
 		},
+		ampDarkSecondary: () => {
+			return {
+				background: 'ampSecondary.500',
+				color: 'white',
+			};
+		},
 		ampNeutral: () => {
 			return {
 				background: 'ampNeutral.50',
@@ -53,6 +59,12 @@ const Badge = defineStyleConfig({
 				color: 'ampWarning.800',
 			};
 		},
+		ampDarkWarning: () => {
+			return {
+				background: 'ampWarning.700',
+				color: 'white',
+			};
+		},
 		ampWarningOutline: () => {
 			return {
 				background: 'ampWarning.100',
@@ -65,6 +77,12 @@ const Badge = defineStyleConfig({
 			return {
 				background: 'ampError.100',
 				color: 'ampError.700',
+			};
+		},
+		ampDarkLightError: () => {
+			return {
+				background: 'ampError.500',
+				color: 'white',
 			};
 		},
 		ampInfo: () => {
