@@ -163,6 +163,7 @@ export default function QuestionCards() {
 			<Outlet
 				context={{
 					...context,
+					answeredQuestions,
 					flaggedQuestions,
 					toggleFlaggedQuestion,
 					selectedAnswer,

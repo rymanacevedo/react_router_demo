@@ -4,7 +4,8 @@ import { QuestionInFocus, RoundData } from '../../../lib/validator';
 import { BookmarkFilledIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { AmpTable } from '../../../css/theme';
-import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
+import { useOutletContext } from 'react-router';
+import { OutletContext } from '../../../routes/TimedAssessment';
 
 type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
@@ -20,6 +21,9 @@ type QuestionStatus = {
 const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
+	const context = useOutletContext<OutletContext>();
+	const { flaggedQuestions, answeredQuestions } = context;
+
 	const { t: i18n } = useTranslation();
 	const columns = [
 		{
@@ -51,16 +55,22 @@ const TimedAssessmentReviewTable = ({
 			return {
 				key: String(index + 1),
 				question: String(index + 1),
-				status: question.confidence !== Confidence.NA,
-				flagged: question.flagged,
+				status: answeredQuestions?.has(question.publishedQuestionAuthoringKey),
+				flagged: flaggedQuestions.has(question.publishedQuestionAuthoringKey),
 			};
 		},
 	);
 
 	return (
-		<Box width={600} marginTop={10}>
-			<AmpTable columns={columns} dataSource={dataSource} pagination={false} />
-		</Box>
+		<>
+			<Box width={600} marginTop={10}>
+				<AmpTable
+					columns={columns}
+					dataSource={dataSource}
+					pagination={false}
+				/>
+			</Box>
+		</>
 	);
 };
 
