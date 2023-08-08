@@ -12,7 +12,7 @@ const DropItem = ({ title }: DropItemProps) => {
 	return (
 		<>
 			<Box mb={4}>
-				<RichContentComponent content={title || ''} />
+				<RichContentComponent content={title} />
 			</Box>
 			<Flex
 				bgColor="ampWhite"

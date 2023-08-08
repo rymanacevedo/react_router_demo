@@ -40,7 +40,7 @@ const DragItem = ({ index, option, keyToUse }: DragItemProps) => {
 							as={DragHandleDots2Icon}
 						/>
 
-						<RichContentComponent content={option.optionRc || ''} />
+						<RichContentComponent content={option.optionRc} />
 					</HStack>
 				</Flex>
 			)}

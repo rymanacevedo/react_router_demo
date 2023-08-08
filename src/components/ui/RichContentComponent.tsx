@@ -1,9 +1,9 @@
-import { Box, BoxProps } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 type RichContentComponentProps = {
 	content: any;
-	style?: BoxProps['style'];
-} & BoxProps;
+	style?: any;
+};
 
 const RichContentComponent = ({
 	content,
