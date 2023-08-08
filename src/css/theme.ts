@@ -254,6 +254,6 @@ export const AmpTable = styled(Table)<TableProps<QuestionStatus>>`
 	}
 
 	.ant-table-column-sorter.ant-table-column-sorter-full {
-		margin-right: 5px !important;
+		margin-right: 5px;
 	}
 `;
