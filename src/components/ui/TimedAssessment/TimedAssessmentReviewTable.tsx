@@ -22,7 +22,7 @@ export type Columns = {
 	title: string;
 	dataIndex: string;
 	key: string;
-	render?: (value: string | boolean) => JSX.Element | null;
+	render?: (value: string | boolean) => React.ReactElement | null;
 };
 
 const TimedAssessmentReviewTable = ({
@@ -54,16 +54,14 @@ const TimedAssessmentReviewTable = ({
 	]);
 
 	const dataSource = useArray<QuestionStatus>(
-		roundData.questionList.map(
-			(question: QuestionInFocus, index: number): any => {
-				return {
-					key: String(index + 1),
-					question: String(index + 1),
-					status: question.confidence !== Confidence.NA,
-					flagged: question.flagged,
-				};
-			},
-		),
+		roundData.questionList.map((question: QuestionInFocus, index: number) => {
+			return {
+				key: String(index + 1),
+				question: String(index + 1),
+				status: question.confidence !== Confidence.NA,
+				flagged: question.flagged,
+			};
+		}),
 	);
 
 	return (
