@@ -27,5 +27,9 @@ export default function useArray<T>(defaultValue: T[]) {
 		setArray([]);
 	}
 
-	return { array, set: setArray, push, filter, update, remove, clear };
+	function fill(value: T) {
+		setArray((a) => a.fill(value));
+	}
+
+	return { array, set: setArray, push, filter, update, remove, clear, fill };
 }

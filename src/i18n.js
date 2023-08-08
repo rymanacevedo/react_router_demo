@@ -278,9 +278,9 @@ const resources = {
 			continueToResults: 'Continue to results',
 			yourPracticeTestIsComplete: 'Your practice test is complete',
 			youHaveRunOutOfTime: 'You have run out of time!',
-         returnToQuestions: 'Return to questions',
-         reviewAndSubmit: 'Review & Submit',
-         submitAndFinish: 'Submit and finish',
+			returnToQuestions: 'Return to questions',
+			reviewAndSubmit: 'Review & Submit',
+			submitAndFinish: 'Submit and finish',
 			//////////////////////////////////////////////
 			//   ReviewView.tsx
 			//////////////////////////////////////////////
@@ -323,12 +323,15 @@ const resources = {
 			estimatedTimeLeft: 'Estimated time left',
 			complete: 'Complete',
 			//////////////////////////////////////////////
+			//   Matching.tsx
+			//////////////////////////////////////////////
+			dragHere: 'Drag a selection here',
 			//   TimedAssessmentReviewTable.tsx
 			//////////////////////////////////////////////
 			status: 'Status',
 			flagged: 'Flagged',
 			answered: 'Answered',
-			notAnswered: 'Not Answered'
+			notAnswered: 'Not Answered',
 		},
 	},
 	fr: {
