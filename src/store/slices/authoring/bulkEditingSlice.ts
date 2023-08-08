@@ -34,6 +34,11 @@ export const selectBulkDeleteStatus = createSelector(
 	({ bulkDeleteCoursesStatus }) => bulkDeleteCoursesStatus,
 );
 
+export const selectSelectedCourses = createSelector(
+	selectBulkEditingState,
+	({ selectedCourses }) => selectedCourses,
+);
+
 export const addCoursesToFolder = createAsyncThunk(
 	'courses/addCourseToFolder',
 	async (folderUid: string, { getState }: { getState: () => any }) => {

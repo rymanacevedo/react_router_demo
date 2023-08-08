@@ -1,12 +1,15 @@
 import { Box } from '@chakra-ui/react';
 
+type RichContentComponentProps = {
+	content: any;
+	style?: any;
+};
+
 const RichContentComponent = ({
 	content,
 	style,
-}: {
-	content: any;
-	style?: any;
-}) => {
+	...props
+}: RichContentComponentProps) => {
 	const unsanitize = (dirty: string) => ({
 		__html: dirty,
 	});
@@ -82,6 +85,7 @@ const RichContentComponent = ({
 		<Box
 			style={{ ...style }}
 			dangerouslySetInnerHTML={unsanitize(fixContentSrcUrls(content))}
+			{...props}
 		/>
 	);
 };

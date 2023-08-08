@@ -3,6 +3,7 @@ import { User } from './user';
 import {
 	AnswerData,
 	AssignmentData,
+	CourseProgressStatsType,
 	ModuleData,
 	RootData,
 	RoundData,
@@ -247,4 +248,16 @@ export const postTimedAssessmentAnswer = async (
 		secondsSpent: parsedFields.secondsSpent,
 	};
 	return authenticatedFetch(url, user.sessionKey, 'POST', body);
+};
+
+export const getCourseProgressStats = async (
+	user: User,
+	courseKey: string,
+	learnerKey: string,
+): Promise<{
+	data: CourseProgressStatsType;
+	response: Response;
+}> => {
+	const url = `${VITE_BACKEND_API}/v2/courses/${courseKey}/progress/${learnerKey}`;
+	return authenticatedFetch<any>(url, user.sessionKey, 'GET');
 };

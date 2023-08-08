@@ -99,6 +99,7 @@ const FolderDetailsView = () => {
 				pagesTotalCount={folderDetails.pagesTotalCount}
 				itemsCurrentCount={folderDetails.courseContents.length}
 				itemsTotalCount={folderDetails.totalCount}
+				itemsPerPage={folderDetails.coursesPerPage}
 				href={`/authoring/folder/${folderId}`}
 			/>
 			<CourseFolderModal />
