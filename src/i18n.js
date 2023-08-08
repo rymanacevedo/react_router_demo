@@ -322,6 +322,13 @@ const resources = {
 			moduleProgress: 'Module Progress',
 			estimatedTimeLeft: 'Estimated time left',
 			complete: 'Complete',
+			//////////////////////////////////////////////
+			//   TimedAssessmentReviewTable.tsx
+			//////////////////////////////////////////////
+			status: 'Status',
+			flagged: 'Flagged',
+			answered: 'Answered',
+			notAnswered: 'Not Answered'
 		},
 	},
 	fr: {

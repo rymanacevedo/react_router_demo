@@ -7,6 +7,8 @@ import { Link } from './Link';
 import { Divider } from './Divider';
 import Heading from './Heading';
 import { Card } from './Card';
+import styled from 'styled-components';
+import { Table } from 'antd';
 
 export const ampTheme = extendTheme({
 	styles: {
@@ -234,3 +236,14 @@ export const ampTheme = extendTheme({
 		},
 	},
 });
+
+export const AmpTable = styled(Table)`
+	.ant-table-thead .ant-table-cell {
+		background-color: transparent;
+	}
+
+	.ant-table-thead > tr > th {
+		color: ${({ theme }) => theme.colors.ampSecondary[600]};
+		font-weight: bold;
+	}
+`;
