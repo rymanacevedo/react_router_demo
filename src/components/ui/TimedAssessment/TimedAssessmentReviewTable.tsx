@@ -4,14 +4,14 @@ import { QuestionInFocus, RoundData } from '../../../lib/validator';
 import { BookmarkFilledIcon } from '@radix-ui/react-icons';
 import { useTranslation } from 'react-i18next';
 import { AmpTable } from '../../../css/theme';
-import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
-import useArray from '../../../hooks/useArray';
+import { useOutletContext } from 'react-router';
+import { OutletContext } from '../../../routes/TimedAssessment';
 
 type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
 };
 
-export type QuestionStatus = {
+type QuestionStatus = {
 	key: string;
 	question: string;
 	status: boolean;
@@ -29,15 +29,18 @@ export type Columns = {
 const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
+	const context = useOutletContext<OutletContext>();
+	const { flaggedQuestions, answeredQuestions } = context;
+
 	const { t: i18n } = useTranslation();
-	const columns = useArray<Columns>([
+	const columns = [
 		{
 			title: i18n('question'),
 			dataIndex: 'question',
 			key: 'question',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
 				a.question.localeCompare(b.question),
-			render: (text) => <Box paddingLeft={4}>{text}</Box>,
+			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
 			title: i18n('status'),
@@ -45,7 +48,8 @@ const TimedAssessmentReviewTable = ({
 			key: 'status',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
 				a.status === b.status ? 0 : a.status ? 1 : -1,
-			render: (answered) => (answered ? i18n('answered') : i18n('notAnswered')),
+			render: (answered: boolean) =>
+				answered ? i18n('answered') : i18n('notAnswered'),
 		},
 		{
 			title: i18n('flagged'),
@@ -53,32 +57,34 @@ const TimedAssessmentReviewTable = ({
 			key: 'flagged',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
 				a.flagged === b.flagged ? 0 : a.flagged ? 1 : -1,
-			render: (flagged) =>
+			render: (flagged: boolean) =>
 				flagged ? (
 					<Icon as={BookmarkFilledIcon} w={6} h={6} color="ampSecondary.500" />
 				) : null,
 		},
-	]);
+	];
 
-	const dataSource = useArray<QuestionStatus>(
-		roundData.questionList.map((question: QuestionInFocus, index: number) => {
+	const dataSource = roundData.questionList.map(
+		(question: QuestionInFocus, index: number): QuestionStatus => {
 			return {
 				key: String(index + 1),
 				question: String(index + 1),
-				status: question.confidence !== Confidence.NA,
-				flagged: question.flagged,
+				status: answeredQuestions?.has(question.publishedQuestionAuthoringKey),
+				flagged: flaggedQuestions.has(question.publishedQuestionAuthoringKey),
 			};
-		}),
+		},
 	);
 
 	return (
-		<Box width={600} marginTop={10}>
-			<AmpTable
-				columns={columns.array}
-				dataSource={dataSource.array}
-				pagination={false}
-			/>
-		</Box>
+		<>
+			<Box width={600} marginTop={10}>
+				<AmpTable
+					columns={columns}
+					dataSource={dataSource}
+					pagination={false}
+				/>
+			</Box>
+		</>
 	);
 };
 
