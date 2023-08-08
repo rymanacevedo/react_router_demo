@@ -18,14 +18,6 @@ export type QuestionStatus = {
 	flagged: boolean;
 };
 
-export type Columns = {
-	title: string;
-	dataIndex: string;
-	key: string;
-	sorter?: (a: QuestionStatus, b: QuestionStatus) => number;
-	render?: (value: string | boolean) => React.ReactElement | null;
-};
-
 const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
