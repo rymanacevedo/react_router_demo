@@ -6,7 +6,7 @@ import {
 	createSlice,
 } from '@reduxjs/toolkit';
 import { requireUser } from '../../../utils/user';
-import { getModule } from '../../../services/authoring';
+import { getModule, updateModule } from '../../../services/authoring';
 
 export interface Module {
 	uid: string;
@@ -44,14 +44,30 @@ export const selectModule = createSelector(
 
 export const fetchModule = createAsyncThunk(
 	'module/fetchModule',
-	async (
-		{ moduleUid, revision }: { moduleUid: string; revision: number },
-		{ rejectWithValue },
-	) => {
+	async ({ moduleUid }: { moduleUid: string }, { rejectWithValue }) => {
 		const user = requireUser();
-		const response = await getModule(user, moduleUid, revision);
+		const response = await getModule(user, moduleUid);
 		if (response.response.status !== 200) {
 			return rejectWithValue('Module not available');
+		}
+		return response.data;
+	},
+);
+
+export const putModuleContent = createAsyncThunk(
+	'module/putModuleContent',
+	async (
+		_,
+		{
+			rejectWithValue,
+			getState,
+		}: { rejectWithValue: any; getState: () => any },
+	) => {
+		const user = requireUser();
+		const module = selectModule(getState()) as Module;
+		const response = await updateModule(user, module.uid, module);
+		if (response.response.status !== 200) {
+			return rejectWithValue('Unable to update module');
 		}
 		return response.data;
 	},
@@ -83,10 +99,20 @@ export const moduleSlice = createSlice({
 				state.error = 'Error has occurred';
 				state.moduleUid = null;
 				state.module = null;
+			})
+			.addCase(putModuleContent.pending, (state) => {
+				state.status = 'loading';
+			})
+			.addCase(putModuleContent.fulfilled, (state) => {
+				state.status = 'succeeded';
+			})
+			.addCase(putModuleContent.rejected, (state, action) => {
+				state.status = 'failed';
+				state.module = action.payload as Module;
 			});
 	},
 });
 
-export default moduleSlice.reducer;
+export const { updateAuthoringModule } = moduleSlice.actions;
 
-// END
+export default moduleSlice.reducer;

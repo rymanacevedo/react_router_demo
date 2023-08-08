@@ -274,9 +274,9 @@ export const addCoursesToFolder = async (
 export const getModule = async (
 	user: User,
 	moduleUid: string,
-	revision: number,
+	//revision: number,
 ): Promise<{ data: Module; response: Response }> => {
-	const url = `/v2/authoring-modules/${moduleUid}?revision=${revision}`;
+	const url = `/v2/authoring-modules/${moduleUid}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'GET');
 };
