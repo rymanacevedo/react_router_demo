@@ -11,13 +11,12 @@ import {
 import ProgressMessageComponent from './ProgressMessageComponent';
 import CountUpTimer from './CountUpTimer';
 import { useTranslation } from 'react-i18next';
-import { CurrentRoundAnswerOverLayData } from '../pages/AssignmentView/AssignmentTypes';
-import { RoundData } from '../../lib/validator';
+import { AnswerData, RoundData } from '../../lib/validator';
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 
 type ProgressMenuType = {
-	currentRoundQuestionListData: RoundData | undefined;
-	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData | undefined;
+	currentRoundQuestionListData?: RoundData;
+	currentRoundAnswerOverLayData?: AnswerData;
 	textPrompt?: string;
 };
 
@@ -41,6 +40,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 		: 0;
 
 	const seenCount = () => {
+		if (!dataSource) return 0;
 		return (
 			dataSource?.notSureCount +
 			dataSource?.uninformedCount +
@@ -50,6 +50,7 @@ const ProgressMenu = (props: ProgressMenuType) => {
 	};
 
 	const learningCount = () => {
+		if (!dataSource) return 0;
 		return seenCount() - dataSource?.misinformedCount;
 	};
 

@@ -28,7 +28,6 @@ import {
 	CurrentRoundAnswerOverLayData,
 	CurrentRoundQuestionListData,
 	QuestionInFocus,
-	SelectedAnswer,
 } from './AssignmentTypes';
 
 import {
@@ -39,6 +38,7 @@ import {
 } from './mockAssignmentData';
 
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
+import { Answer } from '../../../lib/validator';
 
 const StaticAssignmentView = ({
 	tourStep,
@@ -52,7 +52,7 @@ const StaticAssignmentView = ({
 	const { t: i18n } = useTranslation();
 	const [isSmallerThan1000] = useMediaQuery('(max-width: 1000px)');
 	const { isMenuOpen, handleMenuOpen } = useProgressMenuContext();
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+	const [selectedAnswers, setSelectedAnswers] = useState<Answer[]>([]);
 	const [questionData] = useState(questionDataMock);
 	const [menuIndex, setMenuIndex] = useState(0);
 

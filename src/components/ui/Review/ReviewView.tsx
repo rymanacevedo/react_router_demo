@@ -13,7 +13,6 @@ import ProgressMenu from '../ProgressMenu';
 import {
 	Item,
 	QuestionInFocus,
-	SelectedAnswer,
 	TransformedQuestion,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import TestProgressBarMenu from '../TestProgressBarMenu';
@@ -36,6 +35,7 @@ import { requireUser } from '../../../utils/user';
 import { badRequest, getSubAccount } from '../../../services/utils';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import AmpBox from '../../standard/container/AmpBox';
+import { Answer } from '../../../lib/validator';
 
 export const reviewViewLoader: LoaderFunction = async ({ params }) => {
 	const assignmentKey = params.assignmentKey!;
@@ -75,7 +75,7 @@ const ReviewView = () => {
 	const { selectedCourseKey } = useQuizContext();
 	const [isToastOpen, setIsToastOpen] = useState<boolean>(false);
 	const [textPrompt] = useState<string>('');
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+	const [selectedAnswers, setSelectedAnswers] = useState<Answer[]>([]);
 	const [clearSelection, setClearSelection] = useState(false);
 	const [displayedQuestion, setDisplayedQuestion] =
 		useState<TransformedQuestion>(reviewQuestions[questionIndex]);
@@ -206,11 +206,7 @@ const ReviewView = () => {
 						/>
 					</AmpBox>
 				</Stack>
-				<ProgressMenu
-					textPrompt={textPrompt}
-					currentRoundQuestionListData={undefined}
-					currentRoundAnswerOverLayData={undefined}
-				/>
+				<ProgressMenu textPrompt={textPrompt} />
 			</HStack>
 			<VStack
 				marginLeft={'13px'}

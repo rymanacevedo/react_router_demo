@@ -3,15 +3,12 @@ import { Badge, Checkbox, Flex, SlideFade, Text } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import MultiChoiceOverLayIcon from './CustomOverlayIcon';
 import {
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
-import {
 	CheckIcon,
 	Cross1Icon,
 	MinusCircledIcon,
 	QuestionMarkCircledIcon,
 } from '@radix-ui/react-icons';
+import { Answer, AnswerData } from '../../../lib/validator';
 
 const MultiChoiceAnswerFeedback = ({
 	questionText,
@@ -28,7 +25,7 @@ const MultiChoiceAnswerFeedback = ({
 	questionAnswerId: number | string;
 	selectedAnswers?: any[];
 	IDK?: boolean;
-	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
+	currentRoundAnswerOverLayData?: AnswerData;
 	wasCorrectAnswerChosen?: boolean;
 	inReview?: boolean;
 	revealAnswer?: boolean;
@@ -44,7 +41,7 @@ const MultiChoiceAnswerFeedback = ({
 	const choseIDK = IDK && selectedAnswers?.length === 0;
 
 	function checkSelectedAnswers(
-		selectedAnswersArg: SelectedAnswer[],
+		selectedAnswersArg: Answer[],
 		questionAnswerIdArg: string | number,
 	) {
 		const match = selectedAnswersArg.find(

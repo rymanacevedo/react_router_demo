@@ -21,31 +21,6 @@ export type AnswerHistory = {
 	correctness: Correctness | null;
 };
 
-export type AnswerData = {
-	answerDate: string;
-	answerList: SelectedAnswer[];
-	avatarMessage: any;
-	completionAlgorithmType: any;
-	completionPercentage: number;
-	confidence: Confidence | null;
-	correctAnswerIds: any;
-	correctness: Correctness | null;
-	informedCount: number;
-	masteredQuestionCount: number;
-	misinformedCount: number;
-	moduleComplete: boolean;
-	notSureCount: number;
-	onceCorrectCount: number;
-	questionSeconds: number;
-	questionsMastered: number;
-	reviewSeconds: number;
-	self: any;
-	totalQuestionCount: number;
-	twiceCorrectCount: number;
-	uninformedCount: number;
-	unseenCount: number;
-};
-
 export type QuestionInFocusAnswer = {
 	answerRc: string;
 	displayOrder: number;

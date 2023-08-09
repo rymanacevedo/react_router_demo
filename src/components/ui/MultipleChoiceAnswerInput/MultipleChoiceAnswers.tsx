@@ -1,15 +1,6 @@
-import { Box, Heading, Stack } from '@chakra-ui/react';
-import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
+import { Stack } from '@chakra-ui/react';
 import MultipleChoiceInput from './MultipleChoiceInput';
-import { useTranslation } from 'react-i18next';
-import { QuestionInFocus } from '../../../lib/validator';
-
-export interface Answer {
-	answerId: number | string;
-	confidence: number;
-	selectedOptionId: number;
-	self: string;
-}
+import { Answer, QuestionInFocus } from '../../../lib/validator';
 
 const MultipleChoiceAnswers = ({
 	questionInFocus,
@@ -20,11 +11,9 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse,
 }: {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: SelectedAnswer[];
+	selectedAnswers: Answer[];
 	setSelectedAnswers: (
-		value:
-			| SelectedAnswer[]
-			| ((prevState: SelectedAnswer[]) => SelectedAnswer[]),
+		value: Answer[] | ((prevState: Answer[]) => Answer[]),
 	) => void;
 	clearSelection: boolean;
 	setClearSelection: (
@@ -33,8 +22,7 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse: boolean;
 }) => {
-	const { t: i18n } = useTranslation();
-	const addAnswer = (answer: SelectedAnswer) => {
+	const addAnswer = (answer: Answer) => {
 		if (answer.answerId) {
 			setSelectedAnswers((prevAnswers: any[]) => {
 				let currentAnswer = prevAnswers.find((a) => a.confidence === 100);
@@ -65,38 +53,33 @@ const MultipleChoiceAnswers = ({
 	};
 
 	return (
-		<Box>
-			<Heading as="h2" size="xl">
-				{i18n('answer')}
-			</Heading>
-			<Stack minHeight={350} h="100%" marginTop={8}>
-				{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
-					return (
-						<MultipleChoiceInput
-							key={answer.id}
-							questionText={answer.answerRc}
-							questionAnswerId={answer.id}
-							addAnswer={addAnswer}
-							selectedAnswers={selectedAnswers}
-							IDK={false}
-							setIDKResponse={setIDKResponse}
-						/>
-					);
-				})}
-				<MultipleChoiceInput
-					questionText={"I don't know yet"}
-					questionAnswerId={''}
-					addAnswer={() => {
-						setSelectedAnswers([]);
-					}}
-					selectedAnswers={selectedAnswers}
-					IDK={true}
-					clearSelection={clearSelection}
-					setClearSelection={setClearSelection}
-					setIDKResponse={setIDKResponse}
-				/>
-			</Stack>
-		</Box>
+		<Stack minHeight={350} h="100%" marginTop={8}>
+			{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
+				return (
+					<MultipleChoiceInput
+						key={answer.id}
+						questionText={answer.answerRc}
+						questionAnswerId={answer.id}
+						addAnswer={addAnswer}
+						selectedAnswers={selectedAnswers}
+						IDK={false}
+						setIDKResponse={setIDKResponse}
+					/>
+				);
+			})}
+			<MultipleChoiceInput
+				questionText={"I don't know yet"}
+				questionAnswerId={''}
+				addAnswer={() => {
+					setSelectedAnswers([]);
+				}}
+				selectedAnswers={selectedAnswers}
+				IDK={true}
+				clearSelection={clearSelection}
+				setClearSelection={setClearSelection}
+				setIDKResponse={setIDKResponse}
+			/>
+		</Stack>
 	);
 };
 

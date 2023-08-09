@@ -1,28 +1,22 @@
-import { Button, Divider, Fade, HStack, Text } from '@chakra-ui/react';
+import { Button, Divider, Fade, Heading, HStack, Text } from '@chakra-ui/react';
 
 import { useTranslation } from 'react-i18next';
-import {
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
 import MultipleChoiceAnswers from './MultipleChoiceAnswers';
 import MultipleChoiceOverLay from './MultipleChoiceFeedBack';
-import { QuestionInFocus } from '../../../lib/validator';
+import { Answer, AnswerData, QuestionInFocus } from '../../../lib/validator';
 import AmpBox from '../../standard/container/AmpBox';
 
 type MultipleChoiceProps = {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: SelectedAnswer[];
+	selectedAnswers: Answer[];
 	selectedAnswersState: (
-		value:
-			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
-			| SelectedAnswer[],
+		value: ((prevState: Answer[]) => Answer[]) | Answer[],
 	) => void;
 	clearSelection: boolean;
 	clearSelectionState: (
 		value: ((prevState: boolean) => boolean) | boolean,
 	) => void;
-	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
+	currentRoundAnswerOverLayData: AnswerData;
 	onClick: () => void;
 	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
@@ -47,6 +41,9 @@ export const MultipleChoice = ({
 
 	return (
 		<AmpBox>
+			<Heading as="h2" fontSize="xl">
+				{i18n('answer')}
+			</Heading>
 			{!showOverlay ? (
 				<Fade in={!showOverlay}>
 					<MultipleChoiceAnswers
@@ -61,7 +58,6 @@ export const MultipleChoice = ({
 				</Fade>
 			) : (
 				<Fade in={showOverlay}>
-					{' '}
 					<MultipleChoiceOverLay
 						questionInFocus={questionInFocus}
 						selectedAnswers={selectedAnswers}

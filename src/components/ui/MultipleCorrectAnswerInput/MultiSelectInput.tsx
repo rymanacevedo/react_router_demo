@@ -1,7 +1,7 @@
 import { Checkbox } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
-import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { Answer } from '../../../lib/validator';
 
 const MultiSelectInput = ({
 	questionText,
@@ -12,8 +12,8 @@ const MultiSelectInput = ({
 }: {
 	questionText: string;
 	questionAnswerId: number | string;
-	toggleAnswer: (answer: SelectedAnswer) => void;
-	selectedAnswers?: SelectedAnswer[];
+	toggleAnswer: (answer: Answer) => void;
+	selectedAnswers?: Answer[];
 	isDisabled?: boolean;
 }) => {
 	const [isChecked, setIsChecked] = useState(false);

@@ -6,6 +6,7 @@ import {
 	Container,
 	Divider,
 	Fade,
+	Heading,
 	HStack,
 	Modal,
 	ModalCloseButton,
@@ -24,13 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { json, useLoaderData, useNavigate } from 'react-router-dom';
 import useModuleContentService from '../../../services/coursesServices/useModuleContentService';
 import MultipleChoiceOverLay from '../../ui/MultipleChoiceAnswerInput/MultipleChoiceFeedBack';
-import {
-	AnswerData,
-	Confidence,
-	Correctness,
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
-} from '../AssignmentView/AssignmentTypes';
+import { Confidence, Correctness } from '../AssignmentView/AssignmentTypes';
 import { findQuestionInFocus } from '../AssignmentView/findQuestionInFocus';
 import useCurrentRoundService from '../../../services/coursesServices/useCurrentRoundService';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -43,11 +38,21 @@ import LoadingAssignmentView from '../../ui/loading/LoadingAssignmentView';
 import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../../ui/FireProgressToast';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
-import { findRoundAnswersData } from '../AssignmentView/findRoundAnswersData';
+import {
+	findRoundAnswersData,
+	findSelectedAnswers,
+} from '../AssignmentView/findRoundAnswersData';
 import { LoaderFunction } from 'react-router';
-import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
+import {
+	Answer,
+	AnswerData,
+	ModuleData,
+	QuestionInFocus,
+	RoundData,
+} from '../../../lib/validator';
 import AmpBox from '../../standard/container/AmpBox';
 import useEffectOnce from '../../../hooks/useEffectOnce';
+import QuestionMultiSelect from '../../ui/MultipleCorrectAnswerInput/QuestionMultiSelect';
 
 const initState = {
 	self: null,
@@ -72,6 +77,7 @@ const initState = {
 	moduleComplete: false,
 	avatarMessage: null,
 	answerList: [],
+	id: 0,
 };
 
 export const assignmentReviewLoader: LoaderFunction = ({ params }) => {
@@ -147,11 +153,10 @@ const AssignmentReviewView = () => {
 	const [tryAgain, setTryAgain] = useState(false);
 	const [revealAnswer, setRevealAnswer] = useState(false);
 
-	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
-		useState<RoundData>();
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+	const [roundData, setRoundData] = useState<RoundData>();
+	const [selectedAnswers, setSelectedAnswers] = useState<Answer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
-		useState<CurrentRoundAnswerOverLayData>(initState);
+		useState<AnswerData>(initState);
 	const [questionData, setQuestionData] = useState<ModuleData>({
 		accountUri: '',
 		children: null,
@@ -186,7 +191,7 @@ const AssignmentReviewView = () => {
 		completionAlgorithmType: null,
 		completionPercentage: 0,
 		confidence: null,
-		correctAnswerIds: null,
+		correctAnswerIds: [],
 		correctness: null,
 		informedCount: 0,
 		masteredQuestionCount: 0,
@@ -262,18 +267,13 @@ const AssignmentReviewView = () => {
 				lastRevQDataArg?.payload,
 			);
 		} else {
-			await putCurrentRound(
-				currentRoundQuestionListData?.id,
-				questionInFocus?.id,
-				{
-					...answerData,
-					answerDate: null,
-					answerList: null,
-					questionSeconds: questionSecondsHistory,
-					reviewSeconds:
-						Number(questionSecondsRef.current) + Number(storedTime),
-				},
-			);
+			await putCurrentRound(roundData?.id, questionInFocus?.id, {
+				...answerData,
+				answerDate: null,
+				answerList: null,
+				questionSeconds: questionSecondsHistory,
+				reviewSeconds: Number(questionSecondsRef.current) + Number(storedTime),
+			});
 		}
 	};
 
@@ -321,15 +321,15 @@ const AssignmentReviewView = () => {
 				);
 				setQuestionSecondsHistory(foundQuestionInFocus?.quizSeconds);
 
-				setSelectedAnswers(findRoundAnswersData(foundQuestionInFocus));
+				setSelectedAnswers(findSelectedAnswers(foundQuestionInFocus));
 				setCurrentRoundAnswerOverLayData((prevState) => {
 					return {
 						...prevState,
-						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus, true),
+						correctAnswerIds: findRoundAnswersData(foundQuestionInFocus),
 					};
 				});
 				setQuestionData(moduleQuestionsResponse);
-				setCurrentRoundQuestionListData(currentRoundQuestionsResponse);
+				setRoundData(currentRoundQuestionsResponse);
 				setQuestionInFocus(foundQuestionInFocus);
 
 				if (
@@ -380,7 +380,7 @@ const AssignmentReviewView = () => {
 		};
 	}, [setLocalQuestionReviewHistory]);
 
-	const numberOfQInReview = currentRoundQuestionListData?.questionList?.filter(
+	const numberOfQInReview = roundData?.questionList?.filter(
 		(q: QuestionInFocus) => {
 			if (viewCorrect) {
 				return (
@@ -477,7 +477,7 @@ const AssignmentReviewView = () => {
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
 			const overLayData = await putCurrentRound(
-				currentRoundQuestionListData?.id,
+				roundData?.id,
 				questionInFocus?.id,
 				answerData,
 			);
@@ -487,7 +487,7 @@ const AssignmentReviewView = () => {
 				setAnswerSubmitted(true);
 			}
 		};
-		if (currentRoundQuestionListData?.id && questionInFocus?.id && answerData) {
+		if (roundData?.id && questionInFocus?.id && answerData) {
 			putCurrentRoundRes();
 		}
 
@@ -542,7 +542,7 @@ const AssignmentReviewView = () => {
 	};
 	const handleReviewCorrect = () => {
 		setLastRevQData({
-			roundId: Number(currentRoundQuestionListData?.id),
+			roundId: Number(roundData?.id),
 			questionId: Number(questionInFocus?.id),
 			payload: {
 				...answerData,
@@ -687,9 +687,13 @@ const AssignmentReviewView = () => {
 		}
 	};
 
+	function showAnswers(data: AnswerData, selectedAnswer?: Answer) {
+		return data.correctAnswerIds.includes(Number(selectedAnswer?.answerId));
+	}
+
 	return (
 		<main id="learning-assignment">
-			{currentRoundQuestionListData ? (
+			{roundData ? (
 				<Container
 					id={'learning-assignment'}
 					margin="0"
@@ -706,7 +710,7 @@ const AssignmentReviewView = () => {
 					<TestProgressBarMenu
 						isInReviewView={false}
 						questionData={questionData}
-						currentRoundQuestionListData={currentRoundQuestionListData}
+						currentRoundQuestionListData={roundData}
 						currentQuestion={questionInFocus}
 						inReview={true}
 						questionIndex={questionIndex}
@@ -737,7 +741,28 @@ const AssignmentReviewView = () => {
 								/>
 							</AmpBox>
 							<AmpBox>
-								{tryAgain ? (
+								<Heading as="h2" fontSize="xl" mb={2}>
+									{i18n('answer')}
+								</Heading>
+								{!(
+									questionInFocus.correctness === Correctness.Correct ||
+									questionInFocus.correctness === Correctness.NoAnswerSelected
+								) && questionInFocus.questionType === 'MultipleCorrect' ? (
+									<Text color="ampError.700" fontWeight="semibold">
+										You missed one or more of the correct answer choices.
+									</Text>
+								) : null}
+
+								{questionInFocus.questionType === 'MultipleCorrect' ? (
+									<QuestionMultiSelect
+										showFeedback={true}
+										questionInFocus={questionInFocus}
+										selectedAnswers={selectedAnswers}
+										setIDKResponse={setIDKResponse}
+										answerData={currentRoundAnswerOverLayData}
+										validator={showAnswers}
+									/>
+								) : tryAgain ? (
 									<Fade in={true}>
 										<MultipleChoiceAnswers
 											questionInFocus={questionInFocus}
@@ -783,7 +808,7 @@ const AssignmentReviewView = () => {
 						</Stack>
 						<ProgressMenu
 							textPrompt={textPrompt}
-							currentRoundQuestionListData={currentRoundQuestionListData}
+							currentRoundQuestionListData={roundData}
 							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
 						/>
 					</HStack>
@@ -834,9 +859,7 @@ const AssignmentReviewView = () => {
 													Number(numberOfQInReview) === questionIndex + 1,
 												) &&
 													numberOfQInReview &&
-													numberOfQInReview <
-														currentRoundQuestionListData?.questionList
-															?.length &&
+													numberOfQInReview < roundData?.questionList?.length &&
 													!viewCorrect && (
 														<Button
 															onClick={handleReviewCorrect}
