@@ -8,7 +8,8 @@ import { Divider } from './Divider';
 import Heading from './Heading';
 import { Card } from './Card';
 import styled from 'styled-components';
-import { Table } from 'antd';
+import { Table, TableProps } from 'antd';
+import { QuestionStatus } from '../components/ui/TimedAssessment/TimedAssessmentReviewTable';
 
 export const ampTheme = extendTheme({
 	styles: {
@@ -237,7 +238,7 @@ export const ampTheme = extendTheme({
 	},
 });
 
-export const AmpTable = styled(Table)`
+export const AmpTable = styled(Table)<TableProps<QuestionStatus>>`
 	.ant-table-thead .ant-table-cell {
 		background-color: transparent;
 	}
@@ -245,5 +246,14 @@ export const AmpTable = styled(Table)`
 	.ant-table-thead > tr > th {
 		color: ${({ theme }) => theme.colors.ampSecondary[600]};
 		font-weight: bold;
+	}
+
+	.ant-table-column-sorters {
+		display: flex;
+		flex-direction: row-reverse;
+	}
+
+	.ant-table-column-sorter.ant-table-column-sorter-full {
+		margin-right: 5px;
 	}
 `;

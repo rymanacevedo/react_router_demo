@@ -11,7 +11,7 @@ type TimedAssessmentReviewTablePropsType = {
 	roundData: RoundData;
 };
 
-type QuestionStatus = {
+export type QuestionStatus = {
 	key: string;
 	question: string;
 	status: boolean;
@@ -30,12 +30,16 @@ const TimedAssessmentReviewTable = ({
 			title: i18n('question'),
 			dataIndex: 'question',
 			key: 'question',
+			sorter: (a: QuestionStatus, b: QuestionStatus) =>
+				a.question.localeCompare(b.question),
 			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
 			title: i18n('status'),
 			dataIndex: 'status',
 			key: 'status',
+			sorter: (a: QuestionStatus, b: QuestionStatus) =>
+				a.status === b.status ? 0 : a.status ? 1 : -1,
 			render: (answered: boolean) =>
 				answered ? i18n('answered') : i18n('notAnswered'),
 		},
@@ -43,6 +47,8 @@ const TimedAssessmentReviewTable = ({
 			title: i18n('flagged'),
 			dataIndex: 'flagged',
 			key: 'flagged',
+			sorter: (a: QuestionStatus, b: QuestionStatus) =>
+				a.flagged === b.flagged ? 0 : a.flagged ? 1 : -1,
 			render: (flagged: boolean) =>
 				flagged ? (
 					<Icon as={BookmarkFilledIcon} w={6} h={6} color="ampSecondary.500" />
