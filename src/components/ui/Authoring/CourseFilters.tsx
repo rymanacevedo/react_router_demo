@@ -37,6 +37,8 @@ import {
 import { AppDispatch } from '../../../store/store';
 import CoursesFilterButton from './CoursesFilterButton';
 import CoursesFilterModal from './CoursesFilterModal';
+import CoursesSearchControl from './CoursesSearchControl';
+import { updateCourseListSearch } from '../../../store/slices/authoring/coursesViewSlice';
 
 interface CourseFilterProps {
 	handleListView: () => void;
@@ -216,6 +218,16 @@ const CourseFilter = ({
 						Select
 					</Button>
 				)}
+				<CoursesSearchControl
+					onChange={(text: string) => {
+						dispatch(updateCourseListSearch({ criteria: text.trim() || null }));
+						navigate('/authoring');
+					}}
+					onClose={() => {
+						dispatch(updateCourseListSearch({ criteria: null }));
+						navigate('/authoring');
+					}}
+				/>
 				<CoursesFilterButton onClick={onFilterOpen} />
 				<CoursesSortDropdownMenu
 					sortOrder={sortOrder()}
