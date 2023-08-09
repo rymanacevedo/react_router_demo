@@ -16,7 +16,7 @@ import {
 	useLoaderData,
 	useOutletContext,
 } from 'react-router-dom';
-import { MutableRefObject, useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../../utils/user';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -77,7 +77,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 
 	const submitRef = useCallback(
 		(node: HTMLFormElement | null) => {
-			(ref as MutableRefObject<HTMLFormElement | null>).current = node;
+			ref.current = node;
 		},
 		[answeredQuestions, flaggedQuestions],
 	);
