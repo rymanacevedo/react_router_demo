@@ -62,6 +62,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		questionTrigger,
 		setQuestionTrigger,
 		flaggedQuestions,
+		answeredQuestions,
 		toggleFlaggedQuestion,
 		selectedAnswer,
 		setSelectedAnswer,
@@ -78,7 +79,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		(node: HTMLFormElement | null) => {
 			(ref as MutableRefObject<HTMLFormElement | null>).current = node;
 		},
-		[selectedAnswer],
+		[answeredQuestions, flaggedQuestions],
 	);
 
 	const prepareAndSubmitFormData = ({
