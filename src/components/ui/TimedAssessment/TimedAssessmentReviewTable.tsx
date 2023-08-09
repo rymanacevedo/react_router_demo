@@ -12,8 +12,9 @@ type TimedAssessmentReviewTablePropsType = {
 };
 
 export type QuestionStatus = {
+	questionData: QuestionInFocus;
 	key: string;
-	question: string;
+	questionIndex: string;
 	status: boolean;
 	flagged: boolean;
 };
@@ -22,16 +23,16 @@ const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
 	const context = useOutletContext<OutletContext>();
-	const { flaggedQuestions, answeredQuestions } = context;
+	const { flaggedQuestions, answeredQuestions, setQuestionTrigger } = context;
 
 	const { t: i18n } = useTranslation();
 	const columns = [
 		{
 			title: i18n('question'),
-			dataIndex: 'question',
-			key: 'question',
+			dataIndex: 'questionIndex',
+			key: 'questionIndex',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
-				a.question.localeCompare(b.question),
+				a.questionIndex.localeCompare(b.questionIndex),
 			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
@@ -59,13 +60,19 @@ const TimedAssessmentReviewTable = ({
 	const dataSource = roundData.questionList.map(
 		(question: QuestionInFocus, index: number): QuestionStatus => {
 			return {
+				questionData: question,
 				key: String(index + 1),
-				question: String(index + 1),
+				questionIndex: String(index + 1),
 				status: answeredQuestions?.has(question.publishedQuestionAuthoringKey),
 				flagged: flaggedQuestions.has(question.publishedQuestionAuthoringKey),
 			};
 		},
 	);
+
+	const handleRowMouseEvents = (event: React.MouseEvent<HTMLElement>) => {
+		event.currentTarget.style.cursor =
+			event.type === 'mouseenter' ? 'pointer' : 'auto';
+	};
 
 	return (
 		<>
@@ -74,6 +81,15 @@ const TimedAssessmentReviewTable = ({
 					columns={columns}
 					dataSource={dataSource}
 					pagination={false}
+					onRow={(record: QuestionStatus) => {
+						return {
+							onClick: () => {
+								setQuestionTrigger(record.questionData);
+							},
+							onMouseEnter: handleRowMouseEvents,
+							onMouseLeave: handleRowMouseEvents,
+						};
+					}}
 				/>
 			</Box>
 		</>
