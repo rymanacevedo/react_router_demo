@@ -1,52 +1,38 @@
-import {
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
 import { Checkbox } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import { useEffect, useState } from 'react';
 import { BadgeVariantValues } from './AnswerFeedbackBadge';
-import { QuestionInFocusAnswer } from '../../../lib/validator';
+import {
+	Answer,
+	AnswerData,
+	QuestionInFocusAnswer,
+} from '../../../lib/validator';
 
 export type Correctness = 'incorrect' | 'correct' | "I don't know yet";
 export type Confidence = 'idk' | 'sure' | 'unsure';
 type Props = {
-	roundFeedbackData: CurrentRoundAnswerOverLayData;
+	answerData: AnswerData;
+	selectedAnswers: Answer[];
 	answer: QuestionInFocusAnswer;
 	setBadge: (badge: BadgeVariantValues | undefined) => void;
 	setConfidence: (status: Confidence | null) => void;
 	setCorrectness: (correctness: Correctness | null) => void;
+	validator: (answerData: AnswerData, selectedAnswer?: Answer) => boolean;
 };
 
 export default function AnswerFeedback({
-	roundFeedbackData,
+	answerData,
+	selectedAnswers,
 	answer,
 	setBadge,
 	setConfidence,
 	setCorrectness,
+	validator,
 }: Props) {
-	const [match, setMatch] = useState<SelectedAnswer | null>(null);
+	const [match, setMatch] = useState<Answer | null>(null);
 	const [checkbox, setCheckbox] = useState('multiSelect');
-
-	function isEveryAnswerCorrect(roundData: CurrentRoundAnswerOverLayData) {
-		const correctAnswerIds = roundData.correctAnswerIds;
-		if (!correctAnswerIds)
-			throw Error('No correct answer ids, are you in review?');
-
-		if (roundData.correctAnswerIds.length !== roundData.answerList.length) {
-			return false;
-		}
-
-		if (roundData.correctAnswerIds.length === 1) {
-			return roundData.correctAnswerIds[0] === roundData.answerList[0].answerId;
-		}
-
-		return correctAnswerIds.every((id: number) =>
-			roundData.answerList.map((a) => a.answerId).includes(id),
-		);
-	}
 	// TODO: optimize this so it's not being called on every render
-	const checkSelectedAnswer = (selectedAnswer: SelectedAnswer | null) => {
+	const checkSelectedAnswer = (selectedAnswer: Answer | null) => {
 		let badgeVariant: BadgeVariantValues | undefined = undefined;
 		let confidence: Confidence | null = null;
 		let correctnessText: Correctness | null = null;
@@ -61,7 +47,7 @@ export default function AnswerFeedback({
 				correctness: correctnessText,
 			};
 		}
-		const isCorrect = isEveryAnswerCorrect(roundFeedbackData);
+		const isCorrect = validator(answerData, selectedAnswer);
 		if (isCorrect && selectedAnswer.confidence === 100) {
 			badgeVariant = 'ampDarkSuccess';
 			confidence = 'sure';
@@ -112,12 +98,21 @@ export default function AnswerFeedback({
 	};
 
 	useEffect(() => {
-		const m = roundFeedbackData.answerList.find((selectedAnswer) => {
-			return Number(selectedAnswer.answerId) === answer.id;
-		});
-		if (!m) return setMatch(null);
-		setMatch(m);
-	}, [roundFeedbackData, answer]);
+		if (answerData && answerData.answerList.length) {
+			const m = answerData.answerList.find((selectedAnswer) => {
+				return Number(selectedAnswer.answerId) === answer.id;
+			});
+			if (!m) return setMatch(null);
+			setMatch(m);
+		} else {
+			const m = selectedAnswers.find((selectedAnswer) => {
+				return Number(selectedAnswer.answerId) === answer.id;
+			});
+
+			if (!m) return setMatch(null);
+			setMatch(m);
+		}
+	}, [answerData]);
 
 	useEffect(() => {
 		const {
@@ -139,10 +134,14 @@ export default function AnswerFeedback({
 			variant={checkbox}
 			size="xxl"
 			value={answer.id}
-			isChecked={match !== null && match.answerId === answer.id}>
+			isChecked={
+				match !== null &&
+				match.answerId === answer.id &&
+				checkbox !== 'multiSelect'
+			}>
 			<RichContentComponent
 				style={{
-					color: roundFeedbackData.correctAnswerIds ? '#6D758D' : 'inherit',
+					color: answerData.correctAnswerIds ? '#6D758D' : 'inherit',
 				}}
 				content={answer.answerRc}
 			/>

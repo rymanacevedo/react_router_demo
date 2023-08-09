@@ -1,7 +1,6 @@
-import { Box, Heading, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import AnswerFeedback from './MultiChoiceAnswerFeedback';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { QuestionInFocus } from '../../../lib/validator';
 
 export interface Answer {
@@ -29,7 +28,6 @@ const MultipleChoiceFeedBack = ({
 	inReview?: boolean;
 	revealAnswer?: boolean;
 }) => {
-	const { t: i18n } = useTranslation();
 	const [wasCorrectAnswerChosen, setWasCorrectAnswerChosen] = useState(false);
 	useEffect(() => {
 		if (isInReviewView) {
@@ -50,38 +48,33 @@ const MultipleChoiceFeedBack = ({
 		}
 	}, [currentRoundAnswerOverLayData, revealAnswer]);
 	return (
-		<Box>
-			<Heading as="h2" fontSize="xl">
-				{i18n('answer')}
-			</Heading>
-			<Stack minHeight={350} h="100%" marginTop={8}>
-				{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
-					return (
-						<AnswerFeedback
-							isInReviewView={isInReviewView}
-							key={answer.id}
-							questionText={answer.answerRc}
-							questionAnswerId={answer.id}
-							selectedAnswers={selectedAnswers}
-							currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-							wasCorrectAnswerChosen={wasCorrectAnswerChosen}
-							inReview={inReview}
-							revealAnswer={revealAnswer}
-						/>
-					);
-				})}
-				<AnswerFeedback
-					questionText={"I don't know yet"}
-					questionAnswerId={''}
-					selectedAnswers={selectedAnswers}
-					IDK={true}
-					currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
-					wasCorrectAnswerChosen={wasCorrectAnswerChosen}
-					inReview={inReview}
-					revealAnswer={revealAnswer}
-				/>
-			</Stack>
-		</Box>
+		<Stack minHeight={350} h="100%" marginTop={8}>
+			{questionInFocus?.answerList?.slice(0, 10).map((answer) => {
+				return (
+					<AnswerFeedback
+						isInReviewView={isInReviewView}
+						key={answer.id}
+						questionText={answer.answerRc}
+						questionAnswerId={answer.id}
+						selectedAnswers={selectedAnswers}
+						currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+						wasCorrectAnswerChosen={wasCorrectAnswerChosen}
+						inReview={inReview}
+						revealAnswer={revealAnswer}
+					/>
+				);
+			})}
+			<AnswerFeedback
+				questionText={"I don't know yet"}
+				questionAnswerId={''}
+				selectedAnswers={selectedAnswers}
+				IDK={true}
+				currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+				wasCorrectAnswerChosen={wasCorrectAnswerChosen}
+				inReview={inReview}
+				revealAnswer={revealAnswer}
+			/>
+		</Stack>
 	);
 };
 
