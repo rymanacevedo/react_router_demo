@@ -57,7 +57,10 @@ export const fetchCourses = createAsyncThunk(
 			currentPage: number;
 			sortOrder: string;
 		},
-		{ getState }: { getState: () => any },
+		{
+			rejectWithValue,
+			getState,
+		}: { rejectWithValue: (message: string) => any; getState: () => any },
 	) => {
 		const { coursesPerPage } = selectCourseList(
 			getState(),
@@ -86,7 +89,7 @@ export const fetchCourses = createAsyncThunk(
 			? filter.creatorUids.join(',')
 			: null;
 
-		const response = await getCourseList(
+		const { response, data } = await getCourseList(
 			user,
 			currentPage,
 			coursesPerPage,
@@ -96,7 +99,11 @@ export const fetchCourses = createAsyncThunk(
 			authors,
 		);
 
-		return response.data;
+		if (response.status == 200) {
+			return data;
+		}
+
+		return rejectWithValue('Unable to get course contents');
 	},
 );
 
@@ -264,6 +271,8 @@ export const coursesViewSlice = createSlice({
 				);
 			})
 			.addCase(fetchCourses.rejected, (state) => {
+				state.courseList.courseContents = [];
+				state.courseList.totalCount = 0;
 				state.courseList.status = 'failed';
 				state.courseList.error = 'Error has occured';
 			})
