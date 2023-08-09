@@ -12,6 +12,7 @@ type TimedAssessmentReviewTablePropsType = {
 };
 
 export type QuestionStatus = {
+	questionData: QuestionInFocus;
 	key: string;
 	question: string;
 	status: boolean;
@@ -22,7 +23,7 @@ const TimedAssessmentReviewTable = ({
 	roundData,
 }: TimedAssessmentReviewTablePropsType) => {
 	const context = useOutletContext<OutletContext>();
-	const { flaggedQuestions, answeredQuestions } = context;
+	const { flaggedQuestions, answeredQuestions, setQuestionTrigger } = context;
 
 	const { t: i18n } = useTranslation();
 	const columns = [
@@ -59,6 +60,7 @@ const TimedAssessmentReviewTable = ({
 	const dataSource = roundData.questionList.map(
 		(question: QuestionInFocus, index: number): QuestionStatus => {
 			return {
+				questionData: question,
 				key: String(index + 1),
 				question: String(index + 1),
 				status: answeredQuestions?.has(question.publishedQuestionAuthoringKey),
@@ -74,6 +76,19 @@ const TimedAssessmentReviewTable = ({
 					columns={columns}
 					dataSource={dataSource}
 					pagination={false}
+					onRow={(record: QuestionStatus) => {
+						return {
+							onClick: () => {
+								setQuestionTrigger(record.questionData);
+							},
+							onMouseEnter: (event) => {
+								event.currentTarget.style.cursor = 'pointer';
+							},
+							onMouseLeave: (event) => {
+								event.currentTarget.style.cursor = 'auto';
+							},
+						};
+					}}
 				/>
 			</Box>
 		</>
