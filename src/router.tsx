@@ -24,9 +24,7 @@ import { reviewLoader } from './components/pages/Review';
 import { assignmentViewLoader } from './components/pages/AssignmentView/AssignmentView';
 import { keepAliveAction, keepAliveLoader } from './routes/KeepAlive';
 import { reviewViewLoader } from './components/ui/Review/ReviewView';
-import TimedAssessment, {
-	timedAssessmentLoader,
-} from './routes/TimedAssessment';
+import { timedAssessmentLoader } from './routes/TimedAssessment';
 import { successLoader } from './routes/Success';
 import { questionFeedbackAction } from './routes/QuestionFeedback';
 import { preSignUpLoader } from './routes/SignUpLoader';
@@ -56,6 +54,7 @@ import { questionAnswerLoader } from './components/ui/TimedAssessment/AmpBoxWith
 import ModuleView, {
 	moduleLoader,
 } from './components/pages/Authoring/ModuleView';
+
 const routesJSX = (
 	<Route
 		path="/"
@@ -318,7 +317,6 @@ const routesJSX = (
 			<Route
 				loader={timedAssessmentLoader}
 				path="learning/timedAssessment"
-				element={<TimedAssessment />}
 				lazy={async () => {
 					const Module = await import('./routes/TimedAssessment');
 					return { Component: Module.default };
