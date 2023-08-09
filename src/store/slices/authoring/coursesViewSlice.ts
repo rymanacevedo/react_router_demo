@@ -30,6 +30,11 @@ export const selectCourseListFilter = createSelector(
 	({ courseListFilter }) => courseListFilter,
 );
 
+export const selectCourseListSearchState = createSelector(
+	selectCoursesState,
+	({ courseListSearch }) => courseListSearch,
+);
+
 export const selectCourseActionStatus = createSelector(
 	selectCoursesState,
 	({ copyCourseStatus, deleteCourseStatus }) => ({
@@ -66,6 +71,7 @@ export const fetchCourses = createAsyncThunk(
 			getState(),
 		) as CourseContentList;
 		const filter = selectCourseListFilter(getState());
+		const searchState = selectCourseListSearchState(getState());
 		const user = requireUser();
 
 		const allStatuses = filter.isDraft === filter.isPublished;
@@ -97,6 +103,7 @@ export const fetchCourses = createAsyncThunk(
 			status,
 			alerts,
 			authors,
+			searchState.criteria,
 		);
 
 		if (response.status == 200) {
@@ -168,6 +175,10 @@ export interface CourseContentList {
 	pagesTotalCount: number;
 }
 
+export interface CourseContentListSearchState {
+	criteria: string | null;
+}
+
 export interface CourseContentListFilterState {
 	count: number;
 	isPublished: boolean;
@@ -194,6 +205,7 @@ export interface CoursesViewState {
 	creators: CreatorsState;
 	courseList: CourseContentList;
 	courseListFilter: CourseContentListFilterState;
+	courseListSearch: CourseContentListSearchState;
 	copyCourseStatus: {
 		status: 'idle' | 'loading' | 'succeeded' | 'failed';
 		error: string | null;
@@ -227,6 +239,9 @@ const initialState: CoursesViewState = {
 		hasUnpublishedEdits: false,
 		creatorUids: [],
 	},
+	courseListSearch: {
+		criteria: null,
+	},
 	copyCourseStatus: {
 		status: 'idle',
 		error: null,
@@ -253,6 +268,12 @@ export const coursesViewSlice = createSlice({
 				+state.courseListFilter.hasIssues +
 				+state.courseListFilter.hasUnpublishedEdits +
 				state.courseListFilter.creatorUids.length;
+		},
+		updateCourseListSearch: (state, action) => {
+			state.courseListSearch = {
+				...state.courseListSearch,
+				...action.payload,
+			};
 		},
 	},
 	extraReducers: (builder) => {
@@ -312,6 +333,7 @@ export const coursesViewSlice = createSlice({
 	},
 });
 
-export const { updateCourseListFilter } = coursesViewSlice.actions;
+export const { updateCourseListFilter, updateCourseListSearch } =
+	coursesViewSlice.actions;
 
 export default coursesViewSlice.reducer;

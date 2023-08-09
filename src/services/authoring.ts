@@ -30,6 +30,7 @@ export const getCourseList = async (
 	status: string | null,
 	alerts: string | null,
 	authors: string | null,
+	search: string | null,
 ): Promise<{
 	data: {
 		items: any[];
@@ -49,7 +50,10 @@ export const getCourseList = async (
 	if (authors) {
 		url += '&authors=' + authors;
 	}
-
+	if (search) {
+		url +=
+			'&advancedSearchFields=name&advancedSearch=' + encodeURIComponent(search);
+	}
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
 
