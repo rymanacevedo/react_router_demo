@@ -5,6 +5,7 @@ import { LoaderFunction } from 'react-router';
 import { Cookies } from 'react-cookie-consent';
 import {
 	CourseContent,
+	fetchCreators,
 	fetchCourses,
 	selectCourseList,
 } from '../../../store/slices/authoring/coursesViewSlice';
@@ -28,6 +29,8 @@ export const authoringLoader: LoaderFunction = async ({ params }) => {
 	await store.dispatch(
 		fetchCourses({ currentPage, sortOrder: courseContentsOrder() }),
 	);
+
+	await store.dispatch(fetchCreators());
 
 	return json({
 		currentPage,

@@ -1,14 +1,14 @@
 import { Badge, Text } from '@chakra-ui/react';
 import {
-	ExclamationTriangleIcon,
-	Pencil2Icon,
-	BellIcon,
-} from '@radix-ui/react-icons';
+	ALERT_BADGE_HAS_ISSUES,
+	ALERT_BADGE_HAS_RECOMMENDATIONS,
+	ALERT_BADGE_HAS_UNPUBLISHED_EDITS,
+} from '../../../lib/authoring/constants';
 
 interface CourseAlertBadgeProps {
-	hasUnpublishedEdits: boolean;
-	hasIssues: boolean;
-	hasRecommendations: boolean;
+	hasUnpublishedEdits?: boolean;
+	hasIssues?: boolean;
+	hasRecommendations?: boolean;
 }
 
 const CourseAlertBadge = ({
@@ -18,21 +18,21 @@ const CourseAlertBadge = ({
 }: CourseAlertBadgeProps) => {
 	const alertBadgeVariant = hasUnpublishedEdits
 		? {
-				variant: 'ampWarning',
-				icon: <Pencil2Icon />,
-				label: 'Unpublished Edits',
+				variant: ALERT_BADGE_HAS_UNPUBLISHED_EDITS.unselectedVariant,
+				icon: <ALERT_BADGE_HAS_UNPUBLISHED_EDITS.icon />,
+				label: ALERT_BADGE_HAS_UNPUBLISHED_EDITS.label,
 		  }
 		: hasIssues
 		? {
-				variant: 'ampLightError',
-				icon: <ExclamationTriangleIcon />,
-				label: 'Issues',
+				variant: ALERT_BADGE_HAS_ISSUES.unselectedVariant,
+				icon: <ALERT_BADGE_HAS_ISSUES.icon />,
+				label: ALERT_BADGE_HAS_ISSUES.label,
 		  }
 		: hasRecommendations
 		? {
-				variant: 'ampSecondary',
-				icon: <BellIcon />,
-				label: 'Recommendations',
+				variant: ALERT_BADGE_HAS_RECOMMENDATIONS.unselectedVariant,
+				icon: <ALERT_BADGE_HAS_RECOMMENDATIONS.icon />,
+				label: ALERT_BADGE_HAS_RECOMMENDATIONS.label,
 		  }
 		: {};
 

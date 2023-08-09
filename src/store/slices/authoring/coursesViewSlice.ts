@@ -7,6 +7,7 @@ import {
 	getCourseList,
 	copyCourse as fetchCopyCourse,
 	deleteCourse as fetchDeleteCourse,
+	getCreators,
 } from '../../../services/authoring';
 import { requireUser } from '../../../utils/user';
 import { RootState } from '../../store';
@@ -14,9 +15,19 @@ import { ITEMS_PER_PAGE } from '../../../lib/authoring/constants';
 
 const selectCoursesState = (store: RootState) => store.authoring.courses;
 
+export const selectCreators = createSelector(
+	selectCoursesState,
+	({ creators }) => creators,
+);
+
 export const selectCourseList = createSelector(
 	selectCoursesState,
 	({ courseList }) => courseList,
+);
+
+export const selectCourseListFilter = createSelector(
+	selectCoursesState,
+	({ courseListFilter }) => courseListFilter,
 );
 
 export const selectCourseActionStatus = createSelector(
@@ -27,22 +38,62 @@ export const selectCourseActionStatus = createSelector(
 	}),
 );
 
+export const fetchCreators = createAsyncThunk(
+	'courses/fetchCreators',
+	async () => {
+		const user = requireUser();
+		const result = await getCreators(user);
+		return result.response.status === 200 ? result.data.items : [];
+	},
+);
+
 export const fetchCourses = createAsyncThunk(
 	'courses/fetchCourses',
 	async (
-		{ currentPage, sortOrder }: { currentPage: number; sortOrder: string },
+		{
+			currentPage,
+			sortOrder,
+		}: {
+			currentPage: number;
+			sortOrder: string;
+		},
 		{ getState }: { getState: () => any },
 	) => {
 		const { coursesPerPage } = selectCourseList(
 			getState(),
 		) as CourseContentList;
+		const filter = selectCourseListFilter(getState());
 		const user = requireUser();
+
+		const allStatuses = filter.isDraft === filter.isPublished;
+		const status = allStatuses ? null : filter.isDraft ? 'Draft' : 'Published';
+
+		const allAlerts =
+			filter.hasIssues &&
+			filter.hasRecommendations &&
+			filter.hasUnpublishedEdits;
+		let alerts = allAlerts
+			? null
+			: [
+					filter.hasUnpublishedEdits && 'UnpublishedEdits',
+					filter.hasIssues && 'Issues',
+					filter.hasRecommendations && 'Recommendations',
+			  ]
+					.filter((e) => e)
+					.join(',');
+
+		const authors = filter.creatorUids.length
+			? filter.creatorUids.join(',')
+			: null;
 
 		const response = await getCourseList(
 			user,
 			currentPage,
 			coursesPerPage,
 			sortOrder,
+			status,
+			alerts,
+			authors,
 		);
 
 		return response.data;
@@ -110,8 +161,32 @@ export interface CourseContentList {
 	pagesTotalCount: number;
 }
 
+export interface CourseContentListFilterState {
+	count: number;
+	isPublished: boolean;
+	isDraft: boolean;
+	hasRecommendations: boolean;
+	hasIssues: boolean;
+	hasUnpublishedEdits: boolean;
+	creatorUids: string[];
+}
+
+export interface Creator {
+	uid: string;
+	firstName: string;
+	lastName: string;
+}
+
+export interface CreatorsState {
+	creators: Creator[];
+	status: 'idle' | 'loading' | 'succeeded' | 'failed';
+	error: string | null;
+}
+
 export interface CoursesViewState {
+	creators: CreatorsState;
 	courseList: CourseContentList;
+	courseListFilter: CourseContentListFilterState;
 	copyCourseStatus: {
 		status: 'idle' | 'loading' | 'succeeded' | 'failed';
 		error: string | null;
@@ -123,6 +198,11 @@ export interface CoursesViewState {
 }
 
 const initialState: CoursesViewState = {
+	creators: {
+		creators: [],
+		status: 'idle',
+		error: null,
+	},
 	courseList: {
 		courseContents: [],
 		status: 'idle',
@@ -130,6 +210,15 @@ const initialState: CoursesViewState = {
 		error: null,
 		coursesPerPage: ITEMS_PER_PAGE,
 		pagesTotalCount: 1,
+	},
+	courseListFilter: {
+		count: 0,
+		isPublished: false,
+		isDraft: false,
+		hasIssues: false,
+		hasRecommendations: false,
+		hasUnpublishedEdits: false,
+		creatorUids: [],
 	},
 	copyCourseStatus: {
 		status: 'idle',
@@ -144,7 +233,21 @@ const initialState: CoursesViewState = {
 export const coursesViewSlice = createSlice({
 	name: 'courses',
 	initialState,
-	reducers: {},
+	reducers: {
+		updateCourseListFilter: (state, action) => {
+			state.courseListFilter = {
+				...state.courseListFilter,
+				...action.payload,
+			};
+			state.courseListFilter.count =
+				+state.courseListFilter.isPublished +
+				+state.courseListFilter.isDraft +
+				+state.courseListFilter.hasRecommendations +
+				+state.courseListFilter.hasIssues +
+				+state.courseListFilter.hasUnpublishedEdits +
+				state.courseListFilter.creatorUids.length;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchCourses.pending, (state) => {
@@ -183,8 +286,23 @@ export const coursesViewSlice = createSlice({
 			.addCase(deleteCourse.rejected, (state) => {
 				state.deleteCourseStatus.status = 'failed';
 				state.deleteCourseStatus.error = 'Error has occured';
+			})
+			.addCase(fetchCreators.pending, (state) => {
+				state.creators.status = 'loading';
+			})
+			.addCase(fetchCreators.fulfilled, (state, action) => {
+				const items = action.payload;
+				state.creators.creators = items;
+				state.creators.status = 'succeeded';
+			})
+			.addCase(fetchCreators.rejected, (state) => {
+				state.creators.creators = [];
+				state.creators.status = 'failed';
+				state.creators.error = 'Error loading creators';
 			});
 	},
 });
+
+export const { updateCourseListFilter } = coursesViewSlice.actions;
 
 export default coursesViewSlice.reducer;
