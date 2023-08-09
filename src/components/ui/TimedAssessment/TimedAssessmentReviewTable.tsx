@@ -14,7 +14,7 @@ type TimedAssessmentReviewTablePropsType = {
 export type QuestionStatus = {
 	questionData: QuestionInFocus;
 	key: string;
-	question: string;
+	questionIndex: string;
 	status: boolean;
 	flagged: boolean;
 };
@@ -29,10 +29,10 @@ const TimedAssessmentReviewTable = ({
 	const columns = [
 		{
 			title: i18n('question'),
-			dataIndex: 'question',
-			key: 'question',
+			dataIndex: 'questionIndex',
+			key: 'questionIndex',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
-				a.question.localeCompare(b.question),
+				a.questionIndex.localeCompare(b.questionIndex),
 			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
@@ -62,7 +62,7 @@ const TimedAssessmentReviewTable = ({
 			return {
 				questionData: question,
 				key: String(index + 1),
-				question: String(index + 1),
+				questionIndex: String(index + 1),
 				status: answeredQuestions?.has(question.publishedQuestionAuthoringKey),
 				flagged: flaggedQuestions.has(question.publishedQuestionAuthoringKey),
 			};
