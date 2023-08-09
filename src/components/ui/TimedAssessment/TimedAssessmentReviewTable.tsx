@@ -69,6 +69,11 @@ const TimedAssessmentReviewTable = ({
 		},
 	);
 
+	const handleRowMouseEvents = (event: React.MouseEvent<HTMLElement>) => {
+		event.currentTarget.style.cursor =
+			event.type === 'mouseenter' ? 'pointer' : 'auto';
+	};
+
 	return (
 		<>
 			<Box width={600} marginTop={10}>
@@ -81,12 +86,8 @@ const TimedAssessmentReviewTable = ({
 							onClick: () => {
 								setQuestionTrigger(record.questionData);
 							},
-							onMouseEnter: (event) => {
-								event.currentTarget.style.cursor = 'pointer';
-							},
-							onMouseLeave: (event) => {
-								event.currentTarget.style.cursor = 'auto';
-							},
+							onMouseEnter: handleRowMouseEvents,
+							onMouseLeave: handleRowMouseEvents,
 						};
 					}}
 				/>
