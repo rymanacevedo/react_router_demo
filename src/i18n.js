@@ -332,6 +332,10 @@ const resources = {
 			flagged: 'Flagged',
 			answered: 'Answered',
 			notAnswered: 'Not Answered',
+			//////////////////////////////////////////////
+			//   AssignmentReviewView.tsx
+			//////////////////////////////////////////////
+			youMissedOneOrMoreAnswers: 'You missed one or more of the correct answer choices.'
 		},
 	},
 	fr: {

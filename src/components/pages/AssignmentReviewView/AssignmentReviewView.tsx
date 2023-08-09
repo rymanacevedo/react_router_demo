@@ -749,7 +749,7 @@ const AssignmentReviewView = () => {
 									questionInFocus.correctness === Correctness.NoAnswerSelected
 								) && questionInFocus.questionType === 'MultipleCorrect' ? (
 									<Text color="ampError.700" fontWeight="semibold">
-										You missed one or more of the correct answer choices.
+										i18n('youMissedOneOrMoreAnswers')
 									</Text>
 								) : null}
 
