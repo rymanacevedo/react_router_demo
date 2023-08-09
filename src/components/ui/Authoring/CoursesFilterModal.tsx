@@ -17,7 +17,6 @@ import CoursesFilterBadge from './CoursesFilterBadge';
 import React, { useState } from 'react';
 import {
 	ALERT_BADGE_HAS_ISSUES,
-	ALERT_BADGE_HAS_RECOMMENDATIONS,
 	ALERT_BADGE_HAS_UNPUBLISHED_EDITS,
 	STATUS_BADGE_DRAFT,
 	STATUS_BADGE_PUBLISHED,
@@ -210,16 +209,6 @@ const CoursesFilterModal = ({ isOpen, onClose }: CourseFilterModalProps) => {
 								}
 								label={ALERT_BADGE_HAS_ISSUES.label}
 								icon={ALERT_BADGE_HAS_ISSUES.icon}
-							/>
-							<FilterBadgeButton
-								onClick={() => setHasRecommendations(!hasRecommendations)}
-								variant={
-									hasRecommendations
-										? ALERT_BADGE_HAS_RECOMMENDATIONS.selectedVariant
-										: ALERT_BADGE_HAS_RECOMMENDATIONS.unselectedVariant
-								}
-								label={ALERT_BADGE_HAS_RECOMMENDATIONS.label}
-								icon={ALERT_BADGE_HAS_RECOMMENDATIONS.icon}
 							/>
 						</Flex>
 					</Flex>
