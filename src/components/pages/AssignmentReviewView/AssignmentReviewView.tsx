@@ -628,6 +628,10 @@ const AssignmentReviewView = () => {
 		return 'none';
 	};
 
+	const showAnswers = (data: AnswerData, selectedAnswer?: Answer) => {
+		return data.correctAnswerIds.includes(Number(selectedAnswer?.answerId));
+	};
+
 	const reviewButtonsConditionRender = () => {
 		if (revealAnswer || questionInFocus?.correctness === 'Correct') {
 			return;
@@ -686,10 +690,6 @@ const AssignmentReviewView = () => {
 			}
 		}
 	};
-
-	function showAnswers(data: AnswerData, selectedAnswer?: Answer) {
-		return data.correctAnswerIds.includes(Number(selectedAnswer?.answerId));
-	}
 
 	return (
 		<main id="learning-assignment">
