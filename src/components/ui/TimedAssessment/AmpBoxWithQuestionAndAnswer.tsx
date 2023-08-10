@@ -16,7 +16,7 @@ import {
 	useLoaderData,
 	useOutletContext,
 } from 'react-router-dom';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../../utils/user';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -126,7 +126,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		};
 	});
 
-	useUpdateEffect(() => {
+	useEffect(() => {
 		const f = fetcher;
 		const currentRef = ref.current!;
 		return () => {
