@@ -1,6 +1,7 @@
 import { Stack } from '@chakra-ui/react';
 import MultipleChoiceInput from './MultipleChoiceInput';
 import { Answer, QuestionInFocus } from '../../../lib/validator';
+import { useTranslation } from 'react-i18next';
 
 const MultipleChoiceAnswers = ({
 	questionInFocus,
@@ -22,9 +23,10 @@ const MultipleChoiceAnswers = ({
 	setIDKResponse: (Arg0: boolean) => void;
 	IDKResponse: boolean;
 }) => {
+	const { t: i18n } = useTranslation();
 	const addAnswer = (answer: Answer) => {
 		if (answer.answerId) {
-			setSelectedAnswers((prevAnswers: any[]) => {
+			setSelectedAnswers((prevAnswers: Answer[]) => {
 				let currentAnswer = prevAnswers.find((a) => a.confidence === 100);
 				if (answer.confidence === 100) {
 					return [answer];
@@ -68,7 +70,7 @@ const MultipleChoiceAnswers = ({
 				);
 			})}
 			<MultipleChoiceInput
-				questionText={"I don't know yet"}
+				questionText={i18n('iDontKnowYet')}
 				questionAnswerId={''}
 				addAnswer={() => {
 					setSelectedAnswers([]);

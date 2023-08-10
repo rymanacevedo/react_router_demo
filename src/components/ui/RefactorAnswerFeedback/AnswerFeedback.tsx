@@ -98,18 +98,18 @@ export default function AnswerFeedback({
 	};
 
 	useEffect(() => {
-		let m;
+		let matcher;
 		if (answerData && answerData.answerList.length) {
-			m = answerData.answerList.find((selectedAnswer) => {
+			matcher = answerData.answerList.find((selectedAnswer) => {
 				return Number(selectedAnswer.answerId) === answer.id;
 			});
 		} else {
-			m = selectedAnswers.find((selectedAnswer) => {
+			matcher = selectedAnswers.find((selectedAnswer) => {
 				return Number(selectedAnswer.answerId) === answer.id;
 			});
 		}
-		if (!m) return setMatch(null);
-		setMatch(m);
+		if (!matcher) return setMatch(null);
+		setMatch(matcher);
 	}, [answerData]);
 
 	useEffect(() => {

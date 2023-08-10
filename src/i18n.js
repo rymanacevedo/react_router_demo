@@ -211,6 +211,7 @@ const resources = {
 			iAmSure: 'I am sure',
 			iAmUnsure: 'I am unsure',
 			iDontKnow: "I don't know",
+			iDontKnowYet: "I don't know yet",
 			//////////////////////////////////////////////
 			//   DataServiceExceptionComponent.tsx
 			//////////////////////////////////////////////
