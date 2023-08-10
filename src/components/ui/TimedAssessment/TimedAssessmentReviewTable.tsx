@@ -32,7 +32,8 @@ const TimedAssessmentReviewTable = ({
 			dataIndex: 'questionIndex',
 			key: 'questionIndex',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
-				a.questionIndex.localeCompare(b.questionIndex),
+				parseInt(a.questionIndex) - parseInt(b.questionIndex),
+
 			render: (text: string) => <Box paddingLeft={4}>{text}</Box>,
 		},
 		{
@@ -40,7 +41,8 @@ const TimedAssessmentReviewTable = ({
 			dataIndex: 'status',
 			key: 'status',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
-				a.status === b.status ? 0 : a.status ? 1 : -1,
+				a.status === b.status ? 0 : a.status ? -1 : 1,
+
 			render: (answered: boolean) =>
 				answered ? i18n('answered') : i18n('notAnswered'),
 		},
