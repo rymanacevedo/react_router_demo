@@ -30,6 +30,11 @@ export const selectCourseListFilter = createSelector(
 	({ courseListFilter }) => courseListFilter,
 );
 
+export const selectCourseListSearchState = createSelector(
+	selectCoursesState,
+	({ courseListSearch }) => courseListSearch,
+);
+
 export const selectCourseActionStatus = createSelector(
 	selectCoursesState,
 	({ copyCourseStatus, deleteCourseStatus }) => ({
@@ -57,12 +62,16 @@ export const fetchCourses = createAsyncThunk(
 			currentPage: number;
 			sortOrder: string;
 		},
-		{ getState }: { getState: () => any },
+		{
+			rejectWithValue,
+			getState,
+		}: { rejectWithValue: (message: string) => any; getState: () => any },
 	) => {
 		const { coursesPerPage } = selectCourseList(
 			getState(),
 		) as CourseContentList;
 		const filter = selectCourseListFilter(getState());
+		const searchState = selectCourseListSearchState(getState());
 		const user = requireUser();
 
 		const allStatuses = filter.isDraft === filter.isPublished;
@@ -86,7 +95,7 @@ export const fetchCourses = createAsyncThunk(
 			? filter.creatorUids.join(',')
 			: null;
 
-		const response = await getCourseList(
+		const { response, data } = await getCourseList(
 			user,
 			currentPage,
 			coursesPerPage,
@@ -94,9 +103,14 @@ export const fetchCourses = createAsyncThunk(
 			status,
 			alerts,
 			authors,
+			searchState.criteria,
 		);
 
-		return response.data;
+		if (response.status == 200) {
+			return data;
+		}
+
+		return rejectWithValue('Unable to get course contents');
 	},
 );
 
@@ -161,6 +175,10 @@ export interface CourseContentList {
 	pagesTotalCount: number;
 }
 
+export interface CourseContentListSearchState {
+	criteria: string | null;
+}
+
 export interface CourseContentListFilterState {
 	count: number;
 	isPublished: boolean;
@@ -187,6 +205,7 @@ export interface CoursesViewState {
 	creators: CreatorsState;
 	courseList: CourseContentList;
 	courseListFilter: CourseContentListFilterState;
+	courseListSearch: CourseContentListSearchState;
 	copyCourseStatus: {
 		status: 'idle' | 'loading' | 'succeeded' | 'failed';
 		error: string | null;
@@ -220,6 +239,9 @@ const initialState: CoursesViewState = {
 		hasUnpublishedEdits: false,
 		creatorUids: [],
 	},
+	courseListSearch: {
+		criteria: null,
+	},
 	copyCourseStatus: {
 		status: 'idle',
 		error: null,
@@ -247,6 +269,12 @@ export const coursesViewSlice = createSlice({
 				+state.courseListFilter.hasUnpublishedEdits +
 				state.courseListFilter.creatorUids.length;
 		},
+		updateCourseListSearch: (state, action) => {
+			state.courseListSearch = {
+				...state.courseListSearch,
+				...action.payload,
+			};
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -264,6 +292,8 @@ export const coursesViewSlice = createSlice({
 				);
 			})
 			.addCase(fetchCourses.rejected, (state) => {
+				state.courseList.courseContents = [];
+				state.courseList.totalCount = 0;
 				state.courseList.status = 'failed';
 				state.courseList.error = 'Error has occured';
 			})
@@ -303,6 +333,7 @@ export const coursesViewSlice = createSlice({
 	},
 });
 
-export const { updateCourseListFilter } = coursesViewSlice.actions;
+export const { updateCourseListFilter, updateCourseListSearch } =
+	coursesViewSlice.actions;
 
 export default coursesViewSlice.reducer;
