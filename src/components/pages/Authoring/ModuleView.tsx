@@ -21,11 +21,13 @@ import { json } from 'react-router-dom';
 import ModuleTypeBadge from '../../ui/Authoring/ModuleTypeBadge';
 import {
 	fetchModule,
+	updateAuthoringModule,
 	selectModule,
+	putModuleContent,
 } from '../../../store/slices/authoring/moduleSlice';
 import { AuthoringContentBlock } from '../../../store/slices/authoring/contentBlockSlice';
-import { store } from '../../../store/store';
-import { useSelector } from 'react-redux';
+import { AppDispatch, store } from '../../../store/store';
+import { useSelector, useDispatch } from 'react-redux';
 import ContentBlockToolbar from '../../ui/Authoring/ContentBlockToolbar';
 import AuthoringOutlineButton from '../../ui/Authoring/AuthoringOutlineButton';
 import EditButton from '../../ui/Authoring/EditButton';
@@ -33,7 +35,12 @@ import EditButton from '../../ui/Authoring/EditButton';
 export const moduleLoader: LoaderFunction = async ({ params }) => {
 	const moduleUid = params.moduleId; // TODO use "uid" and not "id" everywhere!
 	if (moduleUid) {
-		await store.dispatch(fetchModule({ moduleUid, revision: 1 }));
+		await store.dispatch(
+			fetchModule({
+				moduleUid,
+				//revision: 1
+			}),
+		);
 		// TODO get course content associated with the module
 	}
 	return json({
@@ -42,6 +49,7 @@ export const moduleLoader: LoaderFunction = async ({ params }) => {
 };
 
 const ModuleView = () => {
+	const dispatch = useDispatch<AppDispatch>();
 	const module = useSelector(selectModule);
 	const [editingTitle, setEditingTitle] = useState(false);
 	const [editingDescription, setEditingDescription] = useState(false);
@@ -84,18 +92,36 @@ const ModuleView = () => {
 								fontSize="4xl"
 								autoFocus={true}
 								onBlur={() => {
-									// TODO save updated name
+									dispatch(putModuleContent());
 									setEditingTitle(false);
 								}}
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') {
+										dispatch(putModuleContent());
+										setEditingTitle(false);
+									}
+								}}
 								onChange={(e) => {
-									// TODO update name in store
-									console.log(e.target.value); // new name value
+									const name = e.target.value.trim();
+									if (name) {
+										dispatch(
+											updateAuthoringModule({
+												name,
+											}),
+										);
+									} else {
+										dispatch(
+											updateAuthoringModule({
+												name: 'Test',
+											}),
+										);
+									}
 								}}
 							/>
 						) : (
 							<>
 								<Heading>{module.name ?? 'Name placeholder'}</Heading>
-								<EditButton />
+								<EditButton onClick={() => setEditingTitle(true)} />
 							</>
 						)}
 					</Flex>
@@ -108,12 +134,21 @@ const ModuleView = () => {
 								fontSize="lg"
 								rows={5}
 								onBlur={() => {
-									// TODO save updated description
+									dispatch(putModuleContent());
 									setEditingDescription(false);
 								}}
+								onKeyUp={(e) => {
+									if (e.key === 'Enter') {
+										dispatch(putModuleContent());
+										setEditingDescription(false);
+									}
+								}}
 								onChange={(e) => {
-									// TODO update description in store
-									console.log(e.target.value);
+									dispatch(
+										updateAuthoringModule({
+											descriptionHtml: e.target.value,
+										}),
+									);
 								}}
 							/>
 						) : (
@@ -123,7 +158,7 @@ const ModuleView = () => {
 										html={module.descriptionHtml ?? 'Description placeholder'}
 									/>
 								</Box>
-								<EditButton />
+								<EditButton onClick={() => setEditingDescription(true)} />
 							</>
 						)}
 					</Flex>

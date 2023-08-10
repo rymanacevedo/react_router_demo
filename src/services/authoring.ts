@@ -12,11 +12,24 @@ function toSortCriteria(sortOrder: string): string {
 		: 'name+asc'; // defaults to alphabetical
 }
 
+export const getCreators = async (
+	user: any,
+): Promise<{
+	data: { items: { uid: string; firstName: string; lastName: string }[] };
+	response: Response;
+}> => {
+	let url = '/v2/authoring-course-content/created-by';
+	return authenticatedFetch<any>(url, user.sessionKey);
+};
+
 export const getCourseList = async (
 	user: any,
 	page: number, // 1 based
 	pageSize: number,
 	sortOrder: string,
+	status: string | null,
+	alerts: string | null,
+	authors: string | null,
 ): Promise<{
 	data: {
 		items: any[];
@@ -26,7 +39,16 @@ export const getCourseList = async (
 }> => {
 	const sort = toSortCriteria(sortOrder);
 	const offset = (page - 1) * pageSize;
-	const url = `/v2/authoring-course-content?sort=${sort}&offset=${offset}&limit=${pageSize}`;
+	let url = `/v2/authoring-course-content?sort=${sort}&offset=${offset}&limit=${pageSize}`;
+	if (status) {
+		url += '&status=' + status;
+	}
+	if (alerts) {
+		url += '&alerts=' + alerts;
+	}
+	if (authors) {
+		url += '&authors=' + authors;
+	}
 
 	return authenticatedFetch<any>(url, user.sessionKey);
 };
@@ -274,9 +296,9 @@ export const addCoursesToFolder = async (
 export const getModule = async (
 	user: User,
 	moduleUid: string,
-	revision: number,
+	//revision: number,
 ): Promise<{ data: Module; response: Response }> => {
-	const url = `/v2/authoring-modules/${moduleUid}?revision=${revision}`;
+	const url = `/v2/authoring-modules/${moduleUid}`;
 
 	return authenticatedFetch<any>(url, user.sessionKey, 'GET');
 };

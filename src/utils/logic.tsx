@@ -313,7 +313,11 @@ export const estimatedTimeRemaining = (
 	}
 };
 
-export const formatTimestamp = (timestamp: number): string => {
+export const formatTimestamp = (timestamp: number | null): string => {
+	if (timestamp === null) {
+		return 'n/a';
+	}
+
 	const date = new Date(timestamp);
 
 	const options: Intl.DateTimeFormatOptions = {

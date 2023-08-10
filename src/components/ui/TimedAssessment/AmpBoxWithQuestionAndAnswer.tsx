@@ -16,7 +16,7 @@ import {
 	useLoaderData,
 	useOutletContext,
 } from 'react-router-dom';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { LoaderFunction } from 'react-router';
 import { requireUser } from '../../../utils/user';
 import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
@@ -49,7 +49,7 @@ export const questionAnswerLoader: LoaderFunction = async ({ params }) => {
 export default function AmpBoxWithQuestionAndAnswer() {
 	const { t: i18n } = useTranslation();
 	const fetcher = useFetcher();
-	const ref = useRef<HTMLFormElement>(null);
+	const ref = useRef<HTMLFormElement | null>(null);
 	const { user, hasConfidenceEnabled, questionId } =
 		useLoaderData() as LoaderData;
 	const context = useOutletContext<OutletContext>();
@@ -62,6 +62,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		questionTrigger,
 		setQuestionTrigger,
 		flaggedQuestions,
+		answeredQuestions,
 		toggleFlaggedQuestion,
 		selectedAnswer,
 		setSelectedAnswer,
@@ -73,6 +74,13 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		roundData.questionList.map((question: QuestionInFocus) => question),
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
+
+	const submitRef = useCallback(
+		(node: HTMLFormElement | null) => {
+			ref.current = node;
+		},
+		[answeredQuestions, flaggedQuestions],
+	);
 
 	const prepareAndSubmitFormData = ({
 		currentRef,
@@ -110,18 +118,23 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	});
 
 	useEffectOnce(() => {
-		const f = fetcher;
-		const currentRef = ref.current as HTMLFormElement;
 		startTimer(true);
 		startSecondsSpent(true);
 		return () => {
 			startTimer(false); // Stop the timer when the component unmounts
 			startSecondsSpent(false);
+		};
+	});
+
+	useUpdateEffect(() => {
+		const f = fetcher;
+		const currentRef = ref.current!;
+		return () => {
 			if (!ref.current && f) {
 				prepareAndSubmitFormData({ currentRef: currentRef, submitter: f });
 			}
 		};
-	});
+	}, [submitRef]);
 
 	useUpdateEffect(() => {
 		if (!!questionTrigger) {
@@ -193,7 +206,7 @@ export default function AmpBoxWithQuestionAndAnswer() {
 					</Button>
 				</Stack>
 				<fetcher.Form
-					ref={ref}
+					ref={submitRef}
 					onSubmit={() => {
 						if (questionInFocus) {
 							const id = Number(questionInFocus.id) + 1;

@@ -35,6 +35,8 @@ import {
 	selectSelectedCourses,
 } from '../../../store/slices/authoring/bulkEditingSlice';
 import { AppDispatch } from '../../../store/store';
+import CoursesFilterButton from './CoursesFilterButton';
+import CoursesFilterModal from './CoursesFilterModal';
 
 interface CourseFilterProps {
 	handleListView: () => void;
@@ -63,7 +65,16 @@ const CourseFilter = ({
 	const addingToFolder =
 		Object.keys(selectedFolders).length > 0 && addingToFolderParam;
 	const toast = useToast();
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const {
+		isOpen: isNewFolderOpen,
+		onOpen: onNewFolderOpen,
+		onClose: onNewFolderClose,
+	} = useDisclosure();
+	const {
+		isOpen: isFilterOpen,
+		onOpen: onFilterOpen,
+		onClose: onFilterClose,
+	} = useDisclosure();
 
 	useEffect(() => {
 		if (bulkDeleteStatus.error) {
@@ -161,7 +172,7 @@ const CourseFilter = ({
 						{addingToFolder ? null : (
 							<>
 								<Button
-									onClick={onOpen}
+									onClick={onNewFolderOpen}
 									fontWeight="normal"
 									height="100%"
 									variant="outline"
@@ -205,6 +216,7 @@ const CourseFilter = ({
 						Select
 					</Button>
 				)}
+				<CoursesFilterButton onClick={onFilterOpen} />
 				<CoursesSortDropdownMenu
 					sortOrder={sortOrder()}
 					setSortOrder={setSortOrder}
@@ -234,7 +246,12 @@ const CourseFilter = ({
 					</Flex>
 				</Flex>
 			</Flex>
-			<NewFolderModal isOpen={isOpen} onClose={onClose} addCourses={true} />
+			<NewFolderModal
+				isOpen={isNewFolderOpen}
+				onClose={onNewFolderClose}
+				addCourses={true}
+			/>
+			<CoursesFilterModal isOpen={isFilterOpen} onClose={onFilterClose} />
 		</Flex>
 	);
 };
