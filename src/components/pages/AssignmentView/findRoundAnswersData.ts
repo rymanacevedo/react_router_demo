@@ -16,8 +16,6 @@ export const findSelectedAnswers = (questionInFocus: QuestionInFocus) => {
 			confidenceValue = 100;
 		} else if (questionInFocus.confidence === Confidence.PartSure) {
 			confidenceValue = 50;
-		} else if (questionInFocus.confidence === Confidence.NA) {
-			confidenceValue = 0;
 		}
 		return { ...item, confidence: confidenceValue };
 	});
