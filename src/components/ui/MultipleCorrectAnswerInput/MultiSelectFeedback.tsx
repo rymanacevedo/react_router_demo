@@ -1,6 +1,4 @@
 import { Stack } from '@chakra-ui/react';
-
-import { CurrentRoundAnswerOverLayData } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerFeedback, {
 	Confidence,
 	Correctness,
@@ -9,14 +7,25 @@ import AnswerFeedbackBadge, {
 	BadgeVariantValues,
 } from '../RefactorAnswerFeedback/AnswerFeedbackBadge';
 import { useState } from 'react';
-import { QuestionInFocus } from '../../../lib/validator';
+import {
+	Answer,
+	AnswerData,
+	QuestionInFocus,
+	RoundData,
+} from '../../../lib/validator';
 
 const MultiSelectFeedback = ({
 	questionInFocus,
-	roundFeedbackData,
+	answerData,
+	roundData,
+	selectedAnswers,
+	validator,
 }: {
 	questionInFocus: QuestionInFocus;
-	roundFeedbackData: CurrentRoundAnswerOverLayData;
+	answerData: AnswerData;
+	roundData?: RoundData;
+	selectedAnswers: Answer[];
+	validator: (answerData: AnswerData, selectedAnswer?: Answer) => boolean;
 }) => {
 	const [variant, setVariant] = useState<BadgeVariantValues | undefined>(
 		undefined,
@@ -29,20 +38,25 @@ const MultiSelectFeedback = ({
 				{questionInFocus.answerList.map((answer) => {
 					return (
 						<AnswerFeedback
-							roundFeedbackData={roundFeedbackData}
+							key={answer.id}
+							answerData={answerData}
 							answer={answer}
 							setBadge={setVariant}
 							setConfidence={setConfidence}
 							setCorrectness={setCorrectness}
+							selectedAnswers={selectedAnswers}
+							validator={validator}
 						/>
 					);
 				})}
 			</Stack>
-			<AnswerFeedbackBadge
-				confidence={confidence}
-				variant={variant}
-				correctness={correctness}
-			/>
+			{!!roundData ? (
+				<AnswerFeedbackBadge
+					confidence={confidence}
+					variant={variant}
+					correctness={correctness}
+				/>
+			) : null}
 		</>
 	);
 };

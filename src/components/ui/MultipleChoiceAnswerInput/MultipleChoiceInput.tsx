@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Badge, Checkbox, SlideFade } from '@chakra-ui/react';
 import RichContentComponent from '../RichContentComponent';
 import CustomIcon from './MultiChoiceIcon';
-import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
+import { Answer } from '../../../lib/validator';
 
 const MultipleChoiceInput = ({
 	questionText,
@@ -18,7 +18,7 @@ const MultipleChoiceInput = ({
 	questionText: string;
 	questionAnswerId: number | string;
 	addAnswer: (answerObject: any) => void;
-	selectedAnswers?: SelectedAnswer[];
+	selectedAnswers?: Answer[];
 	IDK?: boolean;
 	clearSelection?: boolean;
 	setClearSelection?: (arg: boolean) => void;
@@ -43,7 +43,7 @@ const MultipleChoiceInput = ({
 	}, [answerObject]);
 
 	function checkSelectedAnswers(
-		selectedAnswersArg: SelectedAnswer[],
+		selectedAnswersArg: Answer[],
 		questionAnswerIdArg: string | number,
 	) {
 		const match = selectedAnswersArg.find(

@@ -211,6 +211,7 @@ const resources = {
 			iAmSure: 'I am sure',
 			iAmUnsure: 'I am unsure',
 			iDontKnow: "I don't know",
+			iDontKnowYet: "I don't know yet",
 			//////////////////////////////////////////////
 			//   DataServiceExceptionComponent.tsx
 			//////////////////////////////////////////////
@@ -332,6 +333,10 @@ const resources = {
 			flagged: 'Flagged',
 			answered: 'Answered',
 			notAnswered: 'Not Answered',
+			//////////////////////////////////////////////
+			//   AssignmentReviewView.tsx
+			//////////////////////////////////////////////
+			youMissedOneOrMoreAnswers: 'You missed one or more of the correct answer choices.'
 		},
 	},
 	fr: {

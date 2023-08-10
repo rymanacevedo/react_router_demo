@@ -1,15 +1,12 @@
 import { Stack } from '@chakra-ui/react';
-import { SelectedAnswer } from '../../pages/AssignmentView/AssignmentTypes';
 import MultiSelectInput from './MultiSelectInput';
-import { QuestionInFocus } from '../../../lib/validator';
+import { Answer, QuestionInFocus } from '../../../lib/validator';
 
 type MultipleCorrectAnswersProps = {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers?: SelectedAnswer[];
-	setSelectedAnswers: (
-		value:
-			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
-			| SelectedAnswer[],
+	selectedAnswers?: Answer[];
+	setSelectedAnswers?: (
+		value: ((prevState: Answer[]) => Answer[]) | Answer[],
 	) => void;
 	setIDKResponse: (value: boolean) => void;
 	IDKResponse?: boolean;
@@ -20,9 +17,9 @@ const MultiSelect = ({
 	selectedAnswers,
 	setSelectedAnswers,
 }: MultipleCorrectAnswersProps) => {
-	const toggleAnswer = (answer: SelectedAnswer) => {
-		if (answer.answerId) {
-			setSelectedAnswers((prevState: SelectedAnswer[]) => {
+	const toggleAnswer = (answer: Answer) => {
+		if (answer.answerId && setSelectedAnswers) {
+			setSelectedAnswers((prevState: Answer[]) => {
 				const updatedSelectedAnswers = [...(prevState || [])];
 				const index = updatedSelectedAnswers.findIndex(
 					(a) => a.answerId === answer.answerId,

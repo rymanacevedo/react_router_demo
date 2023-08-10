@@ -1,29 +1,28 @@
 import { Button, Divider, Heading, HStack, SlideFade } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { Confidence } from '../../pages/AssignmentView/AssignmentTypes';
 import {
-	Confidence,
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
-} from '../../pages/AssignmentView/AssignmentTypes';
-import MultiSelect from './MultiSelect';
-import MultiSelectFeedback from './MultiSelectFeedback';
-import { QuestionInFocus } from '../../../lib/validator';
+	Answer,
+	AnswerData,
+	QuestionInFocus,
+	RoundData,
+} from '../../../lib/validator';
 import AmpBox from '../../standard/container/AmpBox';
+import QuestionMultiSelect from './QuestionMultiSelect';
 
 type Props = {
 	questionInFocus: QuestionInFocus;
-	selectedAnswers: SelectedAnswer[];
+	selectedAnswers: Answer[];
 	setSelectedAnswers: (
-		value:
-			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
-			| SelectedAnswer[],
+		value: ((prevState: Answer[]) => Answer[]) | Answer[],
 	) => void;
 	clearSelectionFunction: () => void;
-	roundFeedbackData: CurrentRoundAnswerOverLayData;
+	answerData: AnswerData;
+	roundData?: RoundData;
 	continueBtnFunc: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
 	showFeedback: boolean;
-	submitMultiSelectAnswer: (s: SelectedAnswer[], c: Confidence) => void;
+	submitMultiSelectAnswer: (s: Answer[], c: Confidence) => void;
 };
 
 const MultipleCorrect = ({
@@ -31,7 +30,8 @@ const MultipleCorrect = ({
 	selectedAnswers,
 	setSelectedAnswers,
 	clearSelectionFunction,
-	roundFeedbackData,
+	answerData,
+	roundData,
 	continueBtnFunc,
 	setIDKResponse,
 	showFeedback,
@@ -42,32 +42,49 @@ const MultipleCorrect = ({
 		if (confidence === Confidence.NA) {
 			submitMultiSelectAnswer(selectedAnswers, confidence);
 		} else {
-			const s: SelectedAnswer[] = selectedAnswers.map((answer) => {
+			const a: Answer[] = selectedAnswers.map((answer) => {
 				return {
 					...answer,
 					confidence: confidence === Confidence.PartSure ? 50 : 100,
 				};
 			});
-			submitMultiSelectAnswer(s, confidence);
+			submitMultiSelectAnswer(a, confidence);
 		}
 	};
+	function isEveryAnswerCorrect(data: AnswerData) {
+		const correctAnswerIds = data.correctAnswerIds;
+		if (!correctAnswerIds)
+			throw Error('No correct answer ids, are you in review?');
+
+		if (
+			correctAnswerIds &&
+			correctAnswerIds.length !== data.answerList.length
+		) {
+			return false;
+		}
+
+		if (correctAnswerIds && correctAnswerIds.length === 1) {
+			return correctAnswerIds[0] === data.answerList[0].answerId;
+		}
+
+		return correctAnswerIds.every((id: number) =>
+			data.answerList.map((a) => a.answerId).includes(id),
+		);
+	}
 
 	return (
 		<AmpBox>
 			<Heading as="h3">{i18n('selectAllthatApply')}</Heading>
-			{!showFeedback ? (
-				<MultiSelect
-					questionInFocus={questionInFocus}
-					selectedAnswers={selectedAnswers}
-					setSelectedAnswers={setSelectedAnswers}
-					setIDKResponse={setIDKResponse}
-				/>
-			) : (
-				<MultiSelectFeedback
-					questionInFocus={questionInFocus}
-					roundFeedbackData={roundFeedbackData}
-				/>
-			)}
+			<QuestionMultiSelect
+				showFeedback={showFeedback}
+				questionInFocus={questionInFocus}
+				selectedAnswers={selectedAnswers}
+				setSelectedAnswers={setSelectedAnswers}
+				setIDKResponse={setIDKResponse}
+				answerData={answerData}
+				roundData={roundData}
+				validator={isEveryAnswerCorrect}
+			/>
 			<Divider marginTop={11} />
 			{!showFeedback ? (
 				<SlideFade in={!showFeedback} unmountOnExit={true}>

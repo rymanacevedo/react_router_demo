@@ -3,11 +3,8 @@ import Question from '../Question';
 import ProgressMenu from '../ProgressMenu';
 
 import {
-	AnswerData,
 	Confidence,
 	Correctness,
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
 } from '../../pages/AssignmentView/AssignmentTypes';
 import AnswerArea from '../AnswerArea';
 import { useEffect, useRef, useState } from 'react';
@@ -22,7 +19,13 @@ import { useQuizContext } from '../../../hooks/useQuizContext';
 import FireProgressToast from '../FireProgressToast';
 import ModuleOutro from '../../pages/ModuleOutro';
 import { useProgressMenuContext } from '../../../hooks/useProgressMenuContext';
-import { ModuleData, QuestionInFocus, RoundData } from '../../../lib/validator';
+import {
+	Answer,
+	AnswerData,
+	ModuleData,
+	QuestionInFocus,
+	RoundData,
+} from '../../../lib/validator';
 import Matching from '../Matching';
 import AmpBox from '../../standard/container/AmpBox';
 import useEffectOnce from '../../../hooks/useEffectOnce';
@@ -86,7 +89,7 @@ export default function AssignmentComponent({
 		completionAlgorithmType: null,
 		completionPercentage: 0,
 		confidence: null,
-		correctAnswerIds: null,
+		correctAnswerIds: [],
 		correctness: null,
 		informedCount: 0,
 		masteredQuestionCount: 0,
@@ -139,9 +142,9 @@ export default function AssignmentComponent({
 	const [currentRoundQuestionListData, setCurrentRoundQuestionListData] =
 		useState<RoundData>();
 
-	const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
+	const [selectedAnswers, setSelectedAnswers] = useState<Answer[]>([]);
 	const [currentRoundAnswerOverLayData, setCurrentRoundAnswerOverLayData] =
-		useState<CurrentRoundAnswerOverLayData>(initState);
+		useState<AnswerData>(initState);
 	const [showFeedback, setShowFeedback] = useState(false);
 	const [questionData, setQuestionData] = useState<ModuleData>({
 		accountUri: '',
@@ -284,13 +287,13 @@ export default function AssignmentComponent({
 		});
 	};
 
-	const submitMultiSelectAnswer = (s: SelectedAnswer[], c: Confidence) => {
+	const submitMultiSelectAnswer = (a: Answer[], c: Confidence) => {
 		setAnswerData((answerDataArg: AnswerData) => {
 			return {
 				...answerDataArg,
 				answerDate: findDateData(),
 				questionSeconds: questionSecondsRef.current,
-				answerList: [...s],
+				answerList: [...a],
 				confidence: c,
 			};
 		});
@@ -313,7 +316,7 @@ export default function AssignmentComponent({
 
 	useEffect(() => {
 		const putCurrentRoundRes = async () => {
-			const feedbackData: CurrentRoundAnswerOverLayData = await putCurrentRound(
+			const feedbackData: AnswerData = await putCurrentRound(
 				currentRoundQuestionListData?.id,
 				questionInFocus.id,
 				answerData,
@@ -571,6 +574,7 @@ export default function AssignmentComponent({
 									clearSelection={clearSelection}
 									clearSelectionState={setClearSelection}
 									currentRoundAnswerOverLayData={currentRoundAnswerOverLayData}
+									roundData={currentRoundQuestionListData}
 									continueBtnFunc={continueBtnFunc}
 									clearSelectionFunction={clearSelectionButtonFunc}
 									IDKResponse={IDKResponse}

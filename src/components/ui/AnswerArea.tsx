@@ -1,9 +1,10 @@
+import { Confidence } from '../pages/AssignmentView/AssignmentTypes';
 import {
-	Confidence,
-	CurrentRoundAnswerOverLayData,
-	SelectedAnswer,
-} from '../pages/AssignmentView/AssignmentTypes';
-import { QuestionInFocus } from '../../lib/validator';
+	Answer,
+	AnswerData,
+	QuestionInFocus,
+	RoundData,
+} from '../../lib/validator';
 import {
 	Box,
 	Button,
@@ -33,17 +34,16 @@ type Props = {
 	isOpen: boolean;
 	onClose: () => void;
 	questionInFocus: QuestionInFocus | null;
-	selectedAnswers: SelectedAnswer[];
+	selectedAnswers: Answer[];
 	setSelectedAnswers: (
-		value:
-			| ((prevState: SelectedAnswer[]) => SelectedAnswer[])
-			| SelectedAnswer[],
+		value: ((prevState: Answer[]) => Answer[]) | Answer[],
 	) => void;
 	clearSelection: boolean;
 	clearSelectionState: (
 		value: ((prevState: boolean) => boolean) | boolean,
 	) => void;
-	currentRoundAnswerOverLayData: CurrentRoundAnswerOverLayData;
+	currentRoundAnswerOverLayData: AnswerData;
+	roundData?: RoundData;
 	continueBtnFunc: () => void;
 	clearSelectionFunction: () => void;
 	setIDKResponse: (value: ((prevState: boolean) => boolean) | boolean) => void;
@@ -51,7 +51,7 @@ type Props = {
 	smallerThan1000: boolean;
 	showFeedback: boolean;
 	initialFocusRef: MutableRefObject<null>;
-	submitMultiSelectAnswer: (s: SelectedAnswer[], c: Confidence) => void;
+	submitMultiSelectAnswer: (s: Answer[], c: Confidence) => void;
 };
 
 export default function AnswerArea({
@@ -63,6 +63,7 @@ export default function AnswerArea({
 	clearSelection,
 	clearSelectionState,
 	currentRoundAnswerOverLayData,
+	roundData,
 	continueBtnFunc,
 	clearSelectionFunction,
 	setIDKResponse,
@@ -111,7 +112,8 @@ export default function AnswerArea({
 							selectedAnswers={selectedAnswers}
 							setSelectedAnswers={setSelectedAnswers}
 							clearSelectionFunction={clearSelectionFunction}
-							roundFeedbackData={currentRoundAnswerOverLayData}
+							roundData={roundData}
+							answerData={currentRoundAnswerOverLayData}
 							continueBtnFunc={continueBtnFunc}
 							setIDKResponse={setIDKResponse}
 							showFeedback={showFeedback}

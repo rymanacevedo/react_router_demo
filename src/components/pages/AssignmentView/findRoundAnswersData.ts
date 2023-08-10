@@ -1,37 +1,36 @@
-import { QuestionInFocus } from '../../../lib/validator';
+import { Answer, QuestionInFocus } from '../../../lib/validator';
+import { Confidence } from './AssignmentTypes';
 
-export const findRoundAnswersData = (
-	QInFocusData: QuestionInFocus,
-	correctAnsIds?: boolean,
-) => {
+export const findSelectedAnswers = (questionInFocus: QuestionInFocus) => {
+	const chosenAnswers: Answer[] = questionInFocus.answerList
+		.filter((answer) => answer.selected)
+		.map((answer) => ({
+			answerId: answer.id,
+			selectedOptionId: answer.selectedOptionId,
+			self: answer.self,
+		}));
+
+	const selectedAnswers: Answer[] = chosenAnswers.map((item) => {
+		let confidenceValue = 0;
+		if (questionInFocus.confidence === Confidence.Sure) {
+			confidenceValue = 100;
+		} else if (questionInFocus.confidence === Confidence.PartSure) {
+			confidenceValue = 50;
+		} else if (questionInFocus.confidence === Confidence.NA) {
+			confidenceValue = 0;
+		}
+		return { ...item, confidence: confidenceValue };
+	});
+
+	return selectedAnswers;
+};
+
+export const findRoundAnswersData = (questionInFocus: QuestionInFocus) => {
 	const correctAnswerIds: number[] = [];
-	const answersChosen = QInFocusData.answerList
-		.map((answer) => {
-			if (answer.isCorrect) {
-				correctAnswerIds.push(answer.id);
-			}
-			if (answer.selected) {
-				return {
-					answerId: answer.id,
-					selectedOptionId: answer.selectedOptionId
-						? answer.selectedOptionId
-						: 0,
-					self: answer.self,
-				};
-			} else {
-				return null;
-			}
-		})
-		.filter((item: any) => item !== null);
-	if (!correctAnsIds) {
-		return answersChosen.map((item: any) => {
-			if (answersChosen.length === 1 && QInFocusData.confidence === 'Sure') {
-				return { ...item, confidence: 100 };
-			} else {
-				return { ...item, confidence: 50 };
-			}
-		});
-	} else {
-		return correctAnswerIds;
-	}
+	questionInFocus.answerList.forEach((answer) => {
+		if (answer.isCorrect) {
+			correctAnswerIds.push(answer.id);
+		}
+	});
+	return correctAnswerIds;
 };

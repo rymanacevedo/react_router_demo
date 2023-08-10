@@ -15,16 +15,16 @@ import { ChevronDownIcon, EnterIcon, ExitIcon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
 import {
 	AnswerHistory,
-	CurrentRoundAnswerOverLayData,
 	QuestionInFocus,
 } from '../pages/AssignmentView/AssignmentTypes';
 import { useProgressMenuContext } from '../../hooks/useProgressMenuContext';
 import { Icons } from './Review/ReviewQuestions';
+import { AnswerData } from '../../lib/validator';
 
 type ProgressBarMenu = {
 	questionData: any;
 	currentRoundQuestionListData: any;
-	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
+	currentRoundAnswerOverLayData?: AnswerData;
 	currentQuestion: any;
 	inReview?: boolean;
 	questionIndex?: number;
@@ -118,7 +118,7 @@ type AnswerHistoryType = {
 	currentQuestion: any;
 	questionList: any;
 	inReview?: boolean;
-	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData;
+	currentRoundAnswerOverLayData?: AnswerData;
 	questionIndex?: number;
 	viewCorrect?: boolean;
 };
@@ -129,7 +129,7 @@ const variantFunc = (
 	questionList: QuestionInFocus[],
 	wrongAnswers: QuestionInFocus[],
 	inReview?: boolean,
-	currentRoundAnswerOverLayData?: CurrentRoundAnswerOverLayData,
+	currentRoundAnswerOverLayData?: AnswerData,
 	questionIndex?: number,
 ) => {
 	type LookupType = {
