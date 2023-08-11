@@ -51,7 +51,7 @@ const TimedAssessmentReviewTable = ({
 			dataIndex: 'flagged',
 			key: 'flagged',
 			sorter: (a: QuestionStatus, b: QuestionStatus) =>
-				a.flagged === b.flagged ? 0 : a.flagged ? 1 : -1,
+				a.flagged === b.flagged ? 0 : a.flagged ? -1 : 1,
 			render: (flagged: boolean) =>
 				flagged ? (
 					<Icon as={BookmarkFilledIcon} w={6} h={6} color="ampSecondary.500" />
