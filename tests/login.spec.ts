@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from "./baseFixtures.js";
 
 test('login', async ({ page }) => {
 	await page.goto('http://localhost:3000/main/login');

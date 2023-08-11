@@ -51,3 +51,13 @@ Assign values to the variables.\
 Add .env file to .gitignore.
 
 **Do not commit values in .env file to git repository**
+
+### `npm run coverage:text` and `npm run coverage:html`
+
+Creates e2e tests coverage report in text and html formats. Must be run after `e2e` or `e2e-stage` commands.\
+HTML report is available in folder `coverage/index.html` and can be open by any browser.
+
+### `npm run nyc:clear`
+Removes `.nyc_output` folder contents.\
+When playwright runs tests, raw json files are created in `.nyc_output` folder. NYC uses those files to create report coverage.\
+To get correct test coverage report, folder `.nyc_output` should be emty before evry test run.

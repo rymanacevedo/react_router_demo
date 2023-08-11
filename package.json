@@ -41,8 +41,11 @@
     "fix": "eslint --fix --ignore-path .gitignore --ext .js,.jsx,.tsx,.ts src/",
     "prepare": "cd .. && husky install main/.husky",
     "test": "vitest",
-    "e2e": "npx playwright test",
-    "e2e-stage": "TEST_ENV=stage npx playwright test",
+    "e2e": "npm run nyc:clear & npx playwright test",
+    "e2e-stage": "npm run nyc:clear & TEST_ENV=stage npx playwright test",
+    "coverage:text": "npx nyc report --report-dir ./coverage --temp-dir .nyc_output --reporter=text --exclude-after-remap false",
+    "coverage:html": "npx nyc report --reporter=html",
+    "nyc:clear": "rm -r .nyc_output/*",
     "prestart": "rm -rf node_modules/.cache/"
   },
   "devDependencies": {
@@ -69,6 +72,7 @@
     "typescript": "^4.8.4",
     "vite": "^4.3.9",
     "vite-plugin-eslint": "^1.8.1",
+    "vite-plugin-istanbul": "^5.0.0",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.31.0"
