@@ -52,7 +52,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	const ref = useRef<HTMLFormElement | null>(null);
 	const { user, hasConfidenceEnabled, questionId } =
 		useLoaderData() as LoaderData;
-	const context = useOutletContext<OutletContext>();
 	const {
 		secondsSpent,
 		setSecondsSpent,
@@ -61,6 +60,8 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		assignmentUid,
 		questionTrigger,
 		setQuestionTrigger,
+		questionInFocus,
+		roundData,
 		flaggedQuestions,
 		answeredQuestions,
 		toggleFlaggedQuestion,
@@ -68,19 +69,12 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		setSelectedAnswer,
 		setAnsweredQuestions,
 		handleNavigation,
-	} = context;
-	const { questionInFocus, roundData } = context;
+	} = useOutletContext<OutletContext>();
+
 	const { array: questions } = useArray<QuestionInFocus>(
 		roundData.questionList.map((question: QuestionInFocus) => question),
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
-
-	const submitRef = useCallback(
-		(node: HTMLFormElement | null) => {
-			ref.current = node;
-		},
-		[answeredQuestions, flaggedQuestions],
-	);
 
 	const prepareAndSubmitFormData = ({
 		currentRef,
@@ -109,6 +103,13 @@ export default function AmpBoxWithQuestionAndAnswer() {
 			action: '/api/timedAssessment',
 		});
 	};
+
+	const submitRef = useCallback(
+		(node: HTMLFormElement | null) => {
+			ref.current = node;
+		},
+		[answeredQuestions, flaggedQuestions],
+	);
 
 	usePageLeave(() => {
 		prepareAndSubmitFormData({
