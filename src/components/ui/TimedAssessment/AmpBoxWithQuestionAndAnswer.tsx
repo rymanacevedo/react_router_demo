@@ -29,6 +29,7 @@ import { UserSchema } from '../../../services/user';
 import { z } from 'zod';
 import useArray from '../../../hooks/useArray';
 import useEffectOnce from '../../../hooks/useEffectOnce';
+import usePageLeave from '../../../hooks/usePageLeave';
 
 const LoaderDataSchema = z.object({
 	user: UserSchema,
@@ -110,12 +111,12 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		[answeredQuestions, flaggedQuestions],
 	);
 
-	// usePageLeave(() => {
-	// 	prepareAndSubmitFormData({
-	// 		currentRef: ref.current!,
-	// 		submitter: fetcher,
-	// 	});
-	// });
+	usePageLeave(() => {
+		prepareAndSubmitFormData({
+			currentRef: ref.current!,
+			submitter: fetcher,
+		});
+	});
 
 	useEffectOnce(() => {
 		startTimer(true);
