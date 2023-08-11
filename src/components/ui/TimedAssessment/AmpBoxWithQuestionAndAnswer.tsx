@@ -29,7 +29,6 @@ import { UserSchema } from '../../../services/user';
 import { z } from 'zod';
 import useArray from '../../../hooks/useArray';
 import useEffectOnce from '../../../hooks/useEffectOnce';
-import usePageLeave from '../../../hooks/usePageLeave';
 
 const LoaderDataSchema = z.object({
 	user: UserSchema,
@@ -52,7 +51,6 @@ export default function AmpBoxWithQuestionAndAnswer() {
 	const ref = useRef<HTMLFormElement | null>(null);
 	const { user, hasConfidenceEnabled, questionId } =
 		useLoaderData() as LoaderData;
-	const context = useOutletContext<OutletContext>();
 	const {
 		secondsSpent,
 		setSecondsSpent,
@@ -61,6 +59,8 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		assignmentUid,
 		questionTrigger,
 		setQuestionTrigger,
+		questionInFocus,
+		roundData,
 		flaggedQuestions,
 		answeredQuestions,
 		toggleFlaggedQuestion,
@@ -68,19 +68,12 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		setSelectedAnswer,
 		setAnsweredQuestions,
 		handleNavigation,
-	} = context;
-	const { questionInFocus, roundData } = context;
+	} = useOutletContext<OutletContext>();
+
 	const { array: questions } = useArray<QuestionInFocus>(
 		roundData.questionList.map((question: QuestionInFocus) => question),
 	);
 	const [answerUpdated, setAnswerUpdated] = useState(false);
-
-	const submitRef = useCallback(
-		(node: HTMLFormElement | null) => {
-			ref.current = node;
-		},
-		[answeredQuestions, flaggedQuestions],
-	);
 
 	const prepareAndSubmitFormData = ({
 		currentRef,
@@ -110,12 +103,19 @@ export default function AmpBoxWithQuestionAndAnswer() {
 		});
 	};
 
-	usePageLeave(() => {
-		prepareAndSubmitFormData({
-			currentRef: ref.current!,
-			submitter: fetcher,
-		});
-	});
+	const submitRef = useCallback(
+		(node: HTMLFormElement | null) => {
+			ref.current = node;
+		},
+		[answeredQuestions, flaggedQuestions],
+	);
+
+	// usePageLeave(() => {
+	// 	prepareAndSubmitFormData({
+	// 		currentRef: ref.current!,
+	// 		submitter: fetcher,
+	// 	});
+	// });
 
 	useEffectOnce(() => {
 		startTimer(true);

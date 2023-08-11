@@ -1,12 +1,13 @@
 import { FormControl, Input } from '@chakra-ui/react';
 import { QuestionInFocus } from '../../../lib/validator';
+import { SelectedAnswer } from '../RefactoredAnswerInputs/MultipleChoiceInput';
 
 type Props = {
 	assignmentUid: string;
 	answerUpdated: boolean;
 	flaggedQuestions: Set<string | undefined>;
 	questionInFocus: QuestionInFocus | null;
-	selectedAnswer: any;
+	selectedAnswer: SelectedAnswer;
 	secondsSpent: number;
 	questionId: string;
 };
@@ -34,14 +35,18 @@ export default function HiddenFormInputs({
 		{
 			id: 'flagged',
 			name: 'flagged',
-			value: flaggedQuestions
-				.has(questionInFocus?.publishedQuestionAuthoringKey)
-				.toString(),
+			value: flaggedQuestions.has(
+				questionInFocus?.publishedQuestionAuthoringKey,
+			)
+				? flaggedQuestions
+						.has(questionInFocus?.publishedQuestionAuthoringKey)
+						.toString()
+				: 'false',
 		},
 		{
 			id: 'questionType',
 			name: 'questionType',
-			value: questionInFocus?.questionType,
+			value: questionInFocus?.questionType || '',
 		},
 		{
 			id: 'questionId',
