@@ -4,6 +4,7 @@ import viteTsconfigPaths from "vite-tsconfig-paths";
 import svgrPlugin from "vite-plugin-svgr";
 // import eslint from "vite-plugin-eslint";
 import fs from 'fs/promises';
+import istanbul from "vite-plugin-istanbul";
 
 export default defineConfig(({ mode }) => {
    process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
@@ -36,6 +37,13 @@ export default defineConfig(({ mode }) => {
          react(),
          viteTsconfigPaths(),
          svgrPlugin(),
+         istanbul({
+            include: "src/*",
+            exclude: ["node_modules", "test/"],
+            extension: [".js", ".jsx", ".ts", ".tsx"],
+            requireEnv: false,
+            forceBuildInstrument: true,
+          }),
       ],
       test: {
          environment: 'jsdom',

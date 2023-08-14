@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from "./baseFixtures.js";
 
 test.describe('TimedAssessmentModuleIntro', () => {
 	test.beforeEach(async ({ page }) => {
